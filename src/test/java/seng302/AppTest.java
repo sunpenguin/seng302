@@ -4,7 +4,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 /**
- * hi
+ * HI
  */
 public class AppTest 
 {
