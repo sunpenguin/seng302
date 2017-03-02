@@ -6,6 +6,9 @@ public class App
 
     public static void main( String[] args )
     {
-        System.out.println( "Welcome to AI with kourosh" );
+        Boat boat1 = new Boat("New Zealand Emirates");
+        Boat boat2 = new Boat("Oracle");
+        System.out.println( boat1.toString());
+        System.out.println( boat2.toString());
     }
 }
