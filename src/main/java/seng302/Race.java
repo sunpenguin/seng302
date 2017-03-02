@@ -1,13 +1,15 @@
 package seng302;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 
 /**
  * A class to represent an individual race.
  */
 public class Race {
 
-    private ArrayList<Boat> startingList = new ArrayList<Boat>();
+    private ArrayList<Boat> startingList = new ArrayList<>();
 
     void addBoat(Boat boatToAdd) {
         boolean nameDifferent = true;
@@ -25,6 +27,10 @@ public class Race {
         }
     }
 
+    void randomiseOrder(){
+        long seed = System.nanoTime();
+        Collections.shuffle(this.startingList, new Random(seed));
+    }
 
     void viewBoats() {
         for (Boat boat : startingList) {

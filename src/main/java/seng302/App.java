@@ -3,7 +3,6 @@ package seng302;
 public class App 
 {
 
-
     public static void main( String[] args )
     {
 //        Boat boat1 = new Boat("Emirates", "New Zealand");
@@ -22,7 +21,7 @@ public class App
         Race raceTest = new Race();
         raceTest.addBoat(boat1);
         raceTest.addBoat(boat2);
-
+        raceTest.randomiseOrder();
         raceTest.viewBoats();
     }
 }

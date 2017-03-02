@@ -8,6 +8,7 @@ public class Boat {
 
     private String boatName;
     private String teamName;
+    private int speed;
 
     public Boat(String boatName, String teamName) {
         this.boatName = boatName;
@@ -22,7 +23,7 @@ public class Boat {
         this.boatName = name;
     }
 
-    public String getTeamName() {
+    String getTeamName() {
         return teamName;
     }
 
