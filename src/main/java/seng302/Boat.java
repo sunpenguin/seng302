@@ -6,24 +6,35 @@ package seng302;
 
 public class Boat {
 
-    private String name;
+    private String boatName;
+    private String teamName;
 
-    public Boat(String name) {
-        this.name = name;
+    public Boat(String boatName, String teamName) {
+        this.boatName = boatName;
+        this.teamName = teamName;
     }
 
-    String getName() {
-        return name;
+    String getBoatName() {
+        return boatName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBoatName(String name) {
+        this.boatName = name;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
     @Override
     public String toString() {
         return "Boat{" +
-                "name='" + name + '\'' +
+                "boatName='" + boatName + '\'' +
+                ", teamName='" + teamName + '\'' +
                 '}';
     }
 }
