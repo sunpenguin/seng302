@@ -8,7 +8,7 @@ public class App
     {
         Boat boat1 = new Boat("New Zealand Emirates");
         Boat boat2 = new Boat("Oracle");
-        System.out.println( boat1.toString());
-        System.out.println( boat2.toString());
+        System.out.println( boat1.getName());
+        System.out.println( boat2.getName());
     }
 }
