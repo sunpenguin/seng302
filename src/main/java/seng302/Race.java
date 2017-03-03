@@ -11,12 +11,15 @@ public class Race {
 
     private ArrayList<Boat> startingList = new ArrayList<>();
 
+    public ArrayList<Boat> getStartingList() {
+        return startingList;
+    }
+
     void addBoat(Boat boatToAdd) {
         boolean nameDifferent = true;
 
         for (Boat boatToCheck : startingList) {
-            if ((boatToCheck.getBoatName().equals(boatToAdd.getBoatName()))
-                    || (boatToCheck.getTeamName().equals(boatToAdd.getTeamName()))) {
+            if (boatToCheck.getBoatName().equals(boatToAdd.getBoatName())) {
                 nameDifferent = false;
                 System.out.println("Error, this boat is already in the race.");
             }
