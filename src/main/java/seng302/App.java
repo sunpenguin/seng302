@@ -1,8 +1,6 @@
 package seng302;
 
 import java.util.ArrayList;
-import java.util.Collections;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -10,10 +8,12 @@ import java.io.IOException;
 
 public class App {
 
+    /**
+     * The main method for the application
+     */
     public static void main(String[] args) {
 
         ArrayList<Boat> ac35 = new ArrayList<>();
-
 
         Boat emirates = new Boat("Emirates", "New Zealand");
         Boat oracle = new Boat("Oracle", "USA");
@@ -28,7 +28,6 @@ public class App {
         ac35.add(groupama);
         ac35.add(landRover);
         ac35.add(softBank);
-
 
         ArrayList<String> courseList = new ArrayList<>();
 
