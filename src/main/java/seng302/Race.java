@@ -2,7 +2,7 @@ package seng302;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
+
 
 /**
  * A class to represent an individual race.
@@ -31,13 +31,21 @@ public class Race {
     }
 
     void randomiseOrder(){
-        long seed = System.nanoTime();
-        Collections.shuffle(this.startingList, new Random(seed));
+        Collections.shuffle(this.startingList);
     }
 
     void viewBoats() {
         for (Boat boat : startingList) {
             System.out.printf("%s %s\n", boat.getTeamName(), boat.getBoatName());
+        }
+    }
+
+    /**
+     * Displays the finishing order of the race to the user
+     */
+    void viewFinishOrder() {
+        for (int i = 0; i < startingList.size(); i++){
+            System.out.println(i+1 + ". " + startingList.get(i).getTeamName() + " " + startingList.get(i).getBoatName());
         }
     }
 
