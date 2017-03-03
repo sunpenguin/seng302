@@ -7,11 +7,11 @@ import java.util.Collections;
 /**
  * A class to represent an individual race.
  */
-public class Race {
+class Race {
 
     private ArrayList<Boat> startingList = new ArrayList<>();
 
-    public ArrayList<Boat> getStartingList() {
+    ArrayList<Boat> getStartingList() {
         return startingList;
     }
 
