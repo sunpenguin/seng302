@@ -1,5 +1,10 @@
 package seng302;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -8,14 +13,44 @@ import java.util.ArrayList;
  */
 public class Course {
 
+    private String courseFilePath;
+
     ArrayList<Mark> marks = new ArrayList<>();
 
     /**
      * A constructor for the Course class
-     * @param marks An arrayList of marks for the course
+     * @param courseFilePath file path to a course definition
      */
-    public Course(ArrayList<Mark> marks) {
-        this.marks = marks;
+    Course(String courseFilePath) {
+        this.courseFilePath = courseFilePath;
+        constructCourse();
+    }
+
+    /**
+     * Construct the course by reading the file given to the constructor
+     * and creating the marks
+     */
+    private void constructCourse() {
+        try {
+            BufferedReader b = new BufferedReader(new FileReader(courseFilePath));
+
+            String courseMarkName;
+
+            while ((courseMarkName = b.readLine()) != null) {
+                marks.add(new Mark(courseMarkName));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * A getter for the marks in the course
+     * @return the Arraylist of marks
+     */
+    ArrayList<Mark> getMarks() {
+        return marks;
     }
 
     /**

@@ -8,16 +8,14 @@ import java.util.Collections;
  */
 public class Mark {
 
-        private ArrayList<Boat> boats = new ArrayList<>();
-        private String markName;
+    private ArrayList<Boat> boats = new ArrayList<>();
+    private String markName;
 
     /**
      * Constructor for the Mark class
-     * @param boats The list of passing through the marks
      * @param markName The name of the mark
      */
-    public Mark(ArrayList<Boat> boats, String markName) {
-            this.boats = boats;
+    Mark(String markName) {
             this.markName = markName;
         }
 
@@ -29,11 +27,11 @@ public class Mark {
             return boats;
         }
 
-        public void setBoats(ArrayList<Boat> boats) {
+    void setBoats(ArrayList<Boat> boats) {
             this.boats = boats;
         }
 
-        public String getMarkName() {
+    String getMarkName() {
             return markName;
         }
 
