@@ -10,6 +10,7 @@ public class Boat {
     private String teamName;
     private int speed;
 
+
     /**
      * A constructor for the Boat class
      * @param boatName The name of the boat
@@ -20,6 +21,7 @@ public class Boat {
         this.teamName = teamName;
     }
 
+
     /**
      * A getter for the name of the boat
      * @return The boatName
@@ -27,6 +29,7 @@ public class Boat {
     String getBoatName() {
         return boatName;
     }
+
 
     /**
      * A setter for the name of the boat
@@ -36,6 +39,7 @@ public class Boat {
         this.boatName = name;
     }
 
+
     /**
      * A getter for the team name that the boat belongs to
      * @return The teamName
@@ -44,6 +48,7 @@ public class Boat {
         return teamName;
     }
 
+
     /**
      * A setter for the team name that the boat belongs to
      * @param name The name that the teamName variable will be set to
@@ -51,6 +56,7 @@ public class Boat {
     public void setTeamName(String name) {
         this.teamName = name;
     }
+
 
     /**
      * An overidden toString for the boat objects which displays all of the boats variables

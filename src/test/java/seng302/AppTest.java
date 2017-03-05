@@ -12,12 +12,12 @@ import static org.junit.Assert.*;
  */
 public class AppTest 
 {
-
     @Test
     public void testBoatName() {
         Boat testboat = new Boat("Enterprise", "Starfleet");
         assertSame(testboat.getBoatName(), "Enterprise");
     }
+
 
     @Test
     // test to check that new boats added to a race cannot have the same name as any others
@@ -34,6 +34,4 @@ public class AppTest
 
         assertEquals(raceTest.getStartingList().size(), 1);
     }
-
-
 }

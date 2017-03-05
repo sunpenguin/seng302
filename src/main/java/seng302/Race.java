@@ -18,7 +18,7 @@ class Race {
      * @param startingList Arraylist holding all entered boats
      * @param course Course object
      */
-    public Race(ArrayList<Boat> startingList, Course course) {
+    Race(ArrayList<Boat> startingList, Course course) {
         this.startingList = startingList;
         this.course = course;
     }
@@ -97,6 +97,7 @@ class Race {
         }
     }
 
+
     /**
      * Displays the finishing order of the race to the user.
      */
@@ -112,10 +113,8 @@ class Race {
      */
     void runRace(){
         System.out.println("Start");
-        for(int i = 1; i < course.marks.size(); i++){
-            course.marks.get(i).displayBoatOrder();
+        for(int i = 1; i < course.getMarks().size(); i++){
+            course.getMarks().get(i).displayBoatOrder();
         }
-
     }
-
 }

@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public class Course {
 
     private String courseFilePath;
+    private ArrayList<Mark> marks = new ArrayList<>();
 
-    ArrayList<Mark> marks = new ArrayList<>();
 
     /**
      * A constructor for the Course class
@@ -25,6 +25,7 @@ public class Course {
         this.courseFilePath = courseFilePath;
         constructCourse();
     }
+
 
     /**
      * Construct the course by reading the file given to the constructor
@@ -45,6 +46,7 @@ public class Course {
         }
     }
 
+
     /**
      * A getter for the marks in the course
      * @return the Arraylist of marks
@@ -52,6 +54,7 @@ public class Course {
     ArrayList<Mark> getMarks() {
         return marks;
     }
+
 
     /**
      * A method which displays all of the marks included in this course
@@ -61,5 +64,4 @@ public class Course {
             System.out.println(mark.getMarkName());
         }
     }
-
 }
