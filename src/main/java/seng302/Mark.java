@@ -10,14 +10,25 @@ public class Mark {
 
     private ArrayList<Boat> boats = new ArrayList<>();
     private String markName;
+    private float markLength;
 
 
     /**
      * Constructor for the Mark class
      * @param markName The name of the mark
      */
-    Mark(String markName) {
+    Mark(String markName, float markLength) {
             this.markName = markName;
+            this.markLength = markLength;
+    }
+
+
+    /**
+     * Getter for the length of the leg ending at this mark
+     * @return the length of the leg
+     */
+    float getMarkLength() {
+        return markLength;
     }
 
 

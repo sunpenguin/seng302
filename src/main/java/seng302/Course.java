@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * A class which represents a course that is used in a race event
  */
-public class Course {
+class Course {
 
     private String courseFilePath;
     private ArrayList<Mark> marks = new ArrayList<>();
@@ -32,15 +32,29 @@ public class Course {
      * and creating the marks
      */
     private void constructCourse() {
-        try {
-            BufferedReader b = new BufferedReader(new FileReader(courseFilePath));
+//        try {
+//            BufferedReader b = new BufferedReader(new FileReader(courseFilePath));
+//
+//            String courseMarkName;
+//
+//            while ((courseMarkName = b.readLine()) != null) {
+//                marks.add(new Mark(courseMarkName));
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-            String courseMarkName;
+        String csvFile = courseFilePath;
+        String line;
+        String csvSplitBy = ",";
 
-            while ((courseMarkName = b.readLine()) != null) {
-                marks.add(new Mark(courseMarkName));
+        try (BufferedReader b = new BufferedReader(new FileReader(csvFile))) {
+            while ((line = b.readLine()) != null) {
+                String[] markInfo = line.split(csvSplitBy);
+
+                marks.add(new Mark(markInfo[0], Float.parseFloat(markInfo[1]))); // TODO add the distance too
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,9 +73,9 @@ public class Course {
     /**
      * A method which displays all of the marks included in this course
      */
-    public void displayCourse(){
+    void displayCourse(){
         for(Mark mark : marks){
-            System.out.println(mark.getMarkName());
+            System.out.printf("Markname: %s, Length of leg: %.2f\n", mark.getMarkName(), mark.getMarkLength());
         }
     }
 }

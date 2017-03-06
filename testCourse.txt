@@ -1,6 +1,5 @@
-start
-mark_1
-leeward
-windward
-leeward
-finish
+mark_1,100.0
+leeward,100.0
+windward,100.0
+leeward,100.0
+finish,100.0

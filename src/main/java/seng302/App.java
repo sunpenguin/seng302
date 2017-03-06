@@ -20,20 +20,24 @@ public class App {
 
         ac35.add(emirates);
         ac35.add(oracle);
-        ac35.add(artemis);
-        ac35.add(groupama);
-        ac35.add(landRover);
-        ac35.add(softBank);
+//        ac35.add(artemis);
+//        ac35.add(groupama);
+//        ac35.add(landRover);
+//        ac35.add(softBank);
 
-        // create a new Course, and then set each mark in the course to have the boats from ac35
-        Course course = new Course("testCourse.txt");
+//        // create a new Course, and then set each mark in the course to have the boats from ac35
+//        Course course = new Course("testCourse.txt");
+//
+//        for (Mark mark : course.getMarks()) {
+//            mark.setBoats(ac35);
+//        }
+//
+//        Race race = new Race(ac35, course);
+//        race.runRace();
 
-        for (Mark mark : course.getMarks()) {
-            mark.setBoats(ac35);
-        }
 
-        Race race = new Race(ac35, course);
-        race.runRace();
+        Course testCourse = new Course("testCourse.txt");
+        testCourse.displayCourse();
     }
 }
 
