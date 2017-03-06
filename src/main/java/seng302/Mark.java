@@ -12,6 +12,7 @@ public class Mark {
     private String markName;
     private float markDistance;
     private float distanceFromStart;
+    private int markPosition;
 
 
     /**
@@ -19,10 +20,21 @@ public class Mark {
      * @param markName The name of the mark
      * @param markDistance The distance of the leg
      */
-    Mark(String markName, float markDistance, float distanceFromStart) {
+    Mark(String markName, float markDistance, float distanceFromStart, int markPosition) {
             this.markName = markName;
             this.markDistance = markDistance;
             this.distanceFromStart = distanceFromStart;
+            this.markPosition = markPosition;
+    }
+
+
+    /**
+     * Getter for the mark's position in the course.
+     * If markPosition = 1, then it is the first mark.
+     * @return the mark position.
+     */
+    int getMarkPosition() {
+        return markPosition;
     }
 
 

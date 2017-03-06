@@ -11,11 +11,25 @@ public class App {
 
         FileReader fileReader = new FileReader();
         ArrayList<Boat> ac35 = fileReader.readBoatListFile("testAc35.txt");
-//        System.out.println(ac35);
+
+        System.out.println("-----------------------------COMPETITORS---------------------------------------");
+        for (Boat boat : ac35) {
+            System.out.printf("Boatname: %s, Teamname: %s\n", boat.getBoatName(), boat.getTeamName());
+        }
+        System.out.println("-------------------------------------------------------------------------------");
 
         Course testCourse = new Course("testCourse.txt");
+        System.out.println("--------------------------COURSE DESCRIPTION-----------------------------------");
         testCourse.displayCourse();
+        System.out.println("-------------------------------------------------------------------------------");
 
+        Race race = new Race(ac35, testCourse);
+
+        System.out.println("----------------------------------STARTING---------------------------------------");
+        for (Boat boat : ac35) {
+            boat.viewPlaceOnCourse();
+        }
+        System.out.println("---------------------------------------------------------------------------------");
     }
 }
 

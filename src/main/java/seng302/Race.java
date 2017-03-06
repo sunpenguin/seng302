@@ -21,8 +21,17 @@ class Race {
     Race(ArrayList<Boat> startingList, Course course) {
         this.startingList = startingList;
         this.course = course;
+        setCourseForBoats();
     }
 
+
+    private void setCourseForBoats() {
+        for (Boat boat : startingList) {
+            boat.setMarkList(course.getMarks());
+            boat.setCurrentMark(new Mark("Start", 0, 0, 0));
+            boat.setNextMark(boat.getMarkList().get(0));
+        }
+    }
 
     /**
      * Starting list getter.

@@ -32,31 +32,20 @@ class Course {
      * and creating the marks
      */
     private void constructCourse() {
-//        try {
-//            BufferedReader b = new BufferedReader(new FileReader(courseFilePath));
-//
-//            String courseMarkName;
-//
-//            while ((courseMarkName = b.readLine()) != null) {
-//                marks.add(new Mark(courseMarkName));
-//            }
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
         String csvFile = courseFilePath;
         String line;
         String csvSplitBy = ",";
         float markDistance;
         float distanceFromStart = 0; // Initialise to 0, add to this as marks are read from file
+        int markPosition =  1; // the first mark added is in position 1
 
         try (BufferedReader b = new BufferedReader(new FileReader(csvFile))) {
             while ((line = b.readLine()) != null) {
                 String[] markInfo = line.split(csvSplitBy);
                 markDistance = Float.parseFloat(markInfo[1]);
                 distanceFromStart += markDistance;
-                marks.add(new Mark(markInfo[0], markDistance, distanceFromStart));
+                marks.add(new Mark(markInfo[0], markDistance, distanceFromStart, markPosition));
+                markPosition += 1; // Update mark position for next mark to be added to the course
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,8 +67,8 @@ class Course {
      */
     void displayCourse(){
         for(Mark mark : marks){
-            System.out.printf("Markname: %s, Length of leg: %.2f, Distance from start to end of leg: %.2f\n",
-                    mark.getMarkName(), mark.getmarkDistance(), mark.getDistanceFromStart());
+            System.out.printf("Markname: %s, Length of leg: %.2f, Distance from start to end of leg: %.2f, Position in course: %d\n",
+                    mark.getMarkName(), mark.getmarkDistance(), mark.getDistanceFromStart(), mark.getMarkPosition());
         }
     }
 }
