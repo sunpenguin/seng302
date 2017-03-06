@@ -48,12 +48,15 @@ class Course {
         String csvFile = courseFilePath;
         String line;
         String csvSplitBy = ",";
+        float markDistance;
+        float distanceFromStart = 0; // Initialise to 0, add to this as marks are read from file
 
         try (BufferedReader b = new BufferedReader(new FileReader(csvFile))) {
             while ((line = b.readLine()) != null) {
                 String[] markInfo = line.split(csvSplitBy);
-
-                marks.add(new Mark(markInfo[0], Float.parseFloat(markInfo[1]))); // TODO add the distance too
+                markDistance = Float.parseFloat(markInfo[1]);
+                distanceFromStart += markDistance;
+                marks.add(new Mark(markInfo[0], markDistance, distanceFromStart));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,7 +78,8 @@ class Course {
      */
     void displayCourse(){
         for(Mark mark : marks){
-            System.out.printf("Markname: %s, Length of leg: %.2f\n", mark.getMarkName(), mark.getMarkLength());
+            System.out.printf("Markname: %s, Length of leg: %.2f, Distance from start to end of leg: %.2f\n",
+                    mark.getMarkName(), mark.getmarkDistance(), mark.getDistanceFromStart());
         }
     }
 }

@@ -10,16 +10,19 @@ public class Mark {
 
     private ArrayList<Boat> boats = new ArrayList<>();
     private String markName;
-    private float markLength;
+    private float markDistance;
+    private float distanceFromStart;
 
 
     /**
      * Constructor for the Mark class
      * @param markName The name of the mark
+     * @param markDistance The distance of the leg
      */
-    Mark(String markName, float markLength) {
+    Mark(String markName, float markDistance, float distanceFromStart) {
             this.markName = markName;
-            this.markLength = markLength;
+            this.markDistance = markDistance;
+            this.distanceFromStart = distanceFromStart;
     }
 
 
@@ -27,10 +30,19 @@ public class Mark {
      * Getter for the length of the leg ending at this mark
      * @return the length of the leg
      */
-    float getMarkLength() {
-        return markLength;
+    float getmarkDistance() {
+        return markDistance;
     }
 
+
+    /**
+     * Getter for the distance from the start to the end of the current leg.
+     * Use to decide if a boat has passed the mark.
+     * @return the distance from the start to the end of the leg.
+     */
+    float getDistanceFromStart() {
+        return distanceFromStart;
+    }
 
     /**
      * A getter to return the variable boats from the Mark
