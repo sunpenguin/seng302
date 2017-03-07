@@ -24,10 +24,13 @@ public class App {
         System.out.println("-------------------------------------------------------------------------------");
 
         Race race = new Race(ac35, testCourse);
+        float speed = 40;
 
         System.out.println("----------------------------------STARTING---------------------------------------");
         for (Boat boat : ac35) {
             boat.viewPlaceOnCourse();
+            boat.setSpeed(speed);
+            speed += 5;
         }
         System.out.println("---------------------------------------------------------------------------------");
 

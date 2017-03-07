@@ -10,11 +10,11 @@ public class Boat {
 
     private String boatName;
     private String teamName;
-    private int speed;
+    private double speed;
     private ArrayList<Mark> markList = new ArrayList<>();
     private Mark currentMark;
     private Mark nextMark;
-    private float position;
+    private double position;
     private boolean finished = false;
 
 
@@ -118,11 +118,11 @@ public class Boat {
     }
 
 
-    int getSpeed() {
+    double getSpeed() {
         return speed;
     }
 
-    void setSpeed(int speed) {
+    void setSpeed(double speed) {
         this.speed = speed;
     }
 
@@ -130,11 +130,11 @@ public class Boat {
         return currentMark;
     }
 
-    float getPosition() {
+    double getPosition() {
         return position;
     }
 
-    void setPosition(float position) {
+    void setPosition(double position) {
         this.position = position;
     }
 

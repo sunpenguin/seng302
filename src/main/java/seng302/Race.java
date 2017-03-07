@@ -118,9 +118,15 @@ class Race {
      * Displays the finishing order of the race to the user.
      */
     void viewFinishOrder() {
-        for (int i = 0; i < startingList.size(); i++) {
-            System.out.println(i + 1 + ". " + startingList.get(i).getTeamName() + " " + startingList.get(i).getBoatName());
+        System.out.println("Finish order:");
+        for (int i = 0; i < finishedList.size(); i++) {
+            System.out.println(i + 1 + ". " + finishedList.get(i).getTeamName() + " " + finishedList.get(i).getBoatName());
         }
+    }
+
+
+    double knotsToMetersPerSecond(double knots) {
+        return ((knots * 1.852)/3.6);
     }
 
 
@@ -128,8 +134,7 @@ class Race {
         for (Boat boat : startingList) {
             if (!(boat.isFinished())){
                 Mark nextMark = boat.getNextMark();
-                float boatPosition = boat.getPosition();
-
+                double boatPosition = boat.getPosition();
                 if (boatPosition >= nextMark.getDistanceFromStart()){
                     boat.setCurrentMark(boat.getNextMark());
                     int i = boat.getMarkList().indexOf(boat.getNextMark());
@@ -142,9 +147,10 @@ class Race {
                     }
                     System.out.printf("%s has passed mark: %s\n", boat.getBoatName(), boat.getCurrentMark().getMarkName());
                 }
-                boat.setPosition(boat.getPosition() + 10);
+                boat.setPosition(boat.getPosition() + 0.1 * knotsToMetersPerSecond(boat.getSpeed()));
             }
         }
+
     }
 
 
@@ -153,16 +159,19 @@ class Race {
      */
     void runRace() {
         System.out.println("Start");
+        int loopTime = 100;
 
         while (finishedList.size() < startingList.size()) {
+            final long startTime = System.currentTimeMillis();
             checkBoatPostions();
+            final long endTime = System.currentTimeMillis();
             try {
-                Thread.sleep(100);
+                Thread.sleep(loopTime - (endTime - startTime));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        System.out.println(finishedList);
+        viewFinishOrder();
         System.exit(0);
     }
 }
