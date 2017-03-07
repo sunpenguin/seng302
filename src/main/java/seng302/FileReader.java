@@ -9,6 +9,7 @@ import java.util.ArrayList;
  */
 class FileReader {
 
+
     /**
      * Method to return an ArrayList of boats to compete in a race
      * @param fileName The name of the file with a list of boats

@@ -187,6 +187,6 @@ class Race {
             }
         }
         viewFinishOrder();
-        System.exit(0);
+        //System.exit(0);
     }
 }

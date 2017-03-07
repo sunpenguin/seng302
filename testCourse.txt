@@ -1,6 +1,6 @@
 Start,0.0,90
-mark_1,100.0,0
-leeward,100.0,180
-windward,100.0,0
-leeward,100.0,270
-finish,100.0,-1
+mark_1,200.0,0
+leeward,200.0,180
+windward,200.0,0
+leeward,200.0,270
+finish,200.0,-1

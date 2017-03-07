@@ -57,6 +57,7 @@ public class Boat {
         this.currentMark = currentMark;
     }
 
+
     /**
      * Getter for a boats list of marks
      * @return the list of marks
@@ -84,10 +85,19 @@ public class Boat {
     }
 
 
+    /**
+     * A getter for the heading of the boat
+     * @return The heading of the boat
+     */
     public int getHeading() {
         return heading;
     }
 
+
+    /**
+     * A setter for the heading of the boat
+     * @param heading The value the boat heading will be set to
+     */
     public void setHeading(int heading) {
         this.heading = heading;
     }
@@ -110,13 +120,23 @@ public class Boat {
     }
 
 
+    /**
+     * Checks the value of the boolean finished
+     * @return The value of finished
+     */
     boolean isFinished() {
         return finished;
     }
 
+
+    /**
+     * A setter of the value of finished
+     * @param finished the value finished will be set to
+     */
     void setFinished(boolean finished) {
         this.finished = finished;
     }
+
 
     /**
      * A setter for the team name that the boat belongs to
@@ -127,26 +147,54 @@ public class Boat {
     }
 
 
+    /**
+     * A getter for the speed of the boat
+     * @return The speed of the boat
+     */
     double getSpeed() {
         return speed;
     }
 
+
+    /**
+     * A getter for the speed of the boat
+     * @param speed the speed of the boat
+     */
     void setSpeed(double speed) {
         this.speed = speed;
     }
 
+
+    /**
+     * returns the mark that the boat has most recently passed
+     * @return the mark the boat has most recently passed
+     */
     Mark getCurrentMark() {
         return currentMark;
     }
 
+
+    /**
+     * A getter for the position of the boat
+     * @return the position the boat is from the start of the race
+     */
     double getPosition() {
         return position;
     }
 
+
+    /**
+     * Sets the position that the boat is at
+     * @param position The value position will be set to
+     */
     void setPosition(double position) {
         this.position = position;
     }
 
+
+    /**
+     * A method to display where the boat currently is on the course
+     */
     void viewPlaceOnCourse () {
         System.out.printf("%s -> Current mark: %s, Next mark: %s\n",
                 boatName, currentMark.getMarkName(), nextMark.getMarkName());

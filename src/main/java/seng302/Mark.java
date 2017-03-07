@@ -30,10 +30,19 @@ public class Mark {
     }
 
 
+    /**
+     * A getter for the marks heading
+     * @return The heading of the mark
+     */
     public int getMarkHeading() {
         return markHeading;
     }
 
+
+    /**
+     * A setter for the heading of the mark
+     * @param markHeading The value the marks heading will be set to
+     */
     public void setMarkHeading(int markHeading) {
         this.markHeading = markHeading;
     }
