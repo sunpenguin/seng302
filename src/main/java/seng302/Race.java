@@ -30,8 +30,8 @@ class Race {
     private void setCourseForBoats() {
         for (Boat boat : startingList) {
             boat.setMarkList(course.getMarks());
-            boat.setCurrentMark(new Mark("Start", 0, 0, 0));
-            boat.setNextMark(boat.getMarkList().get(0));
+            boat.setCurrentMark(boat.getMarkList().get(0));
+            boat.setNextMark(boat.getMarkList().get(1));
         }
     }
 
@@ -125,6 +125,15 @@ class Race {
     }
 
 
+    void viewStartingList() {
+        System.out.println("Starting List:");
+
+        for (Boat boat : startingList) {
+            System.out.printf("Boatname: %s, Teamname: %s, Speed: %.2f\n", boat.getBoatName(), boat.getTeamName(), boat.getSpeed());
+        }
+    }
+
+
     double knotsToMetersPerSecond(double knots) {
         return ((knots * 1.852)/3.6);
     }
@@ -137,6 +146,7 @@ class Race {
                 double boatPosition = boat.getPosition();
                 if (boatPosition >= nextMark.getDistanceFromStart()){
                     boat.setCurrentMark(boat.getNextMark());
+                    boat.setHeading(boat.getCurrentMark().getMarkHeading());
                     int i = boat.getMarkList().indexOf(boat.getNextMark());
 
                     if (i < boat.getMarkList().size() - 1) {
@@ -145,7 +155,12 @@ class Race {
                         boat.setFinished(true);
                         finishedList.add(boat);
                     }
-                    System.out.printf("%s has passed mark: %s\n", boat.getBoatName(), boat.getCurrentMark().getMarkName());
+                    if (boat.getCurrentMark().getMarkHeading() != -1) {
+                        System.out.printf("%s has passed mark: %s with heading %d degrees\n",
+                                boat.getBoatName(), boat.getCurrentMark().getMarkName(), boat.getHeading());
+                    } else {
+                        System.out.printf("%s has finished the race!! :)\n", boat.getBoatName());
+                    }
                 }
                 boat.setPosition(boat.getPosition() + 0.1 * knotsToMetersPerSecond(boat.getSpeed()));
             }

@@ -16,6 +16,7 @@ public class Boat {
     private Mark nextMark;
     private double position;
     private boolean finished = false;
+    private int heading;
 
 
     /**
@@ -82,6 +83,14 @@ public class Boat {
         return boatName;
     }
 
+
+    public int getHeading() {
+        return heading;
+    }
+
+    public void setHeading(int heading) {
+        this.heading = heading;
+    }
 
     /**
      * A setter for the name of the boat

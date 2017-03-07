@@ -13,6 +13,7 @@ public class Mark {
     private float markDistance;
     private float distanceFromStart;
     private int markPosition;
+    private int markHeading;
 
 
     /**
@@ -20,13 +21,22 @@ public class Mark {
      * @param markName The name of the mark
      * @param markDistance The distance of the leg
      */
-    Mark(String markName, float markDistance, float distanceFromStart, int markPosition) {
+    Mark(String markName, float markDistance, float distanceFromStart, int markPosition, int markHeading) {
             this.markName = markName;
             this.markDistance = markDistance;
             this.distanceFromStart = distanceFromStart;
             this.markPosition = markPosition;
+            this.markHeading = markHeading;
     }
 
+
+    public int getMarkHeading() {
+        return markHeading;
+    }
+
+    public void setMarkHeading(int markHeading) {
+        this.markHeading = markHeading;
+    }
 
     /**
      * Getter for the mark's position in the course.

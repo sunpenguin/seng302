@@ -38,13 +38,16 @@ class Course {
         float markDistance;
         float distanceFromStart = 0; // Initialise to 0, add to this as marks are read from file
         int markPosition =  1; // the first mark added is in position 1
+        int markHeading;
 
         try (BufferedReader b = new BufferedReader(new FileReader(csvFile))) {
+
             while ((line = b.readLine()) != null) {
                 String[] markInfo = line.split(csvSplitBy);
                 markDistance = Float.parseFloat(markInfo[1]);
+                markHeading = Integer.parseInt(markInfo[2]);
                 distanceFromStart += markDistance;
-                marks.add(new Mark(markInfo[0], markDistance, distanceFromStart, markPosition));
+                marks.add(new Mark(markInfo[0], markDistance, distanceFromStart, markPosition, markHeading));
                 markPosition += 1; // Update mark position for next mark to be added to the course
             }
         } catch (IOException e) {
