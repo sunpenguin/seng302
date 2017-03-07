@@ -10,7 +10,7 @@ public class App {
     public static void main(String[] args) {
 
         FileReader fileReader = new FileReader();
-        ArrayList<Boat> ac35 = fileReader.readBoatListFile("testAc35.txt");
+        ArrayList<Boat> ac35 = fileReader.readBoatListFile("testAc35_1.txt");
 
         System.out.println("-----------------------------COMPETITORS---------------------------------------");
         for (Boat boat : ac35) {
@@ -30,6 +30,9 @@ public class App {
             boat.viewPlaceOnCourse();
         }
         System.out.println("---------------------------------------------------------------------------------");
+
+        race.runRace();
+
     }
 }
 

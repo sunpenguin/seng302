@@ -14,6 +14,8 @@ public class Boat {
     private ArrayList<Mark> markList = new ArrayList<>();
     private Mark currentMark;
     private Mark nextMark;
+    private float position;
+    private boolean finished = false;
 
 
     /**
@@ -99,14 +101,42 @@ public class Boat {
     }
 
 
+    boolean isFinished() {
+        return finished;
+    }
+
+    void setFinished(boolean finished) {
+        this.finished = finished;
+    }
+
     /**
      * A setter for the team name that the boat belongs to
      * @param name The name that the teamName variable will be set to
      */
-    public void setTeamName(String name) {
+    void setTeamName(String name) {
         this.teamName = name;
     }
 
+
+    int getSpeed() {
+        return speed;
+    }
+
+    void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    Mark getCurrentMark() {
+        return currentMark;
+    }
+
+    float getPosition() {
+        return position;
+    }
+
+    void setPosition(float position) {
+        this.position = position;
+    }
 
     void viewPlaceOnCourse () {
         System.out.printf("%s -> Current mark: %s, Next mark: %s\n",

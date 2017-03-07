@@ -96,9 +96,7 @@ public class Mark {
      * A method which displays the order the boats passed through the mark
      */
     void displayBoatOrder(){
-        Collections.shuffle(boats);
         System.out.println(markName);
-
         for(int i = 0; i < boats.size(); i++){
             System.out.println(i+1 + ". " + boats.get(i).getTeamName() + " " + boats.get(i).getBoatName());
         }

@@ -11,12 +11,14 @@ class Race {
 
     private ArrayList<Boat> startingList = new ArrayList<>();
     private Course course;
+    private ArrayList<Boat> finishedList = new ArrayList<>();
 
 
     /**
      * Race class constructor.
+     *
      * @param startingList Arraylist holding all entered boats
-     * @param course Course object
+     * @param course       Course object
      */
     Race(ArrayList<Boat> startingList, Course course) {
         this.startingList = startingList;
@@ -35,6 +37,7 @@ class Race {
 
     /**
      * Starting list getter.
+     *
      * @return Arraylist holding all entered boats
      */
     ArrayList<Boat> getStartingList() {
@@ -44,6 +47,7 @@ class Race {
 
     /**
      * Starting list setter.
+     *
      * @param startingList Arraylist holding all entered boats
      */
     public void setStartingList(ArrayList<Boat> startingList) {
@@ -53,6 +57,7 @@ class Race {
 
     /**
      * Course getter.
+     *
      * @return Course object
      */
     public Course getCourse() {
@@ -62,6 +67,7 @@ class Race {
 
     /**
      * Course setter.
+     *
      * @param course Course object
      */
     public void setCourse(Course course) {
@@ -71,6 +77,7 @@ class Race {
 
     /**
      * Add a new Boat to the starting list of boats.
+     *
      * @param boatToAdd Boat object
      */
     void addBoat(Boat boatToAdd) {
@@ -92,7 +99,7 @@ class Race {
     /**
      * Shuffles the starting list of boats.
      */
-    void randomiseOrder(){
+    void randomiseOrder() {
         Collections.shuffle(this.startingList);
     }
 
@@ -111,8 +118,32 @@ class Race {
      * Displays the finishing order of the race to the user.
      */
     void viewFinishOrder() {
-        for (int i = 0; i < startingList.size(); i++){
-            System.out.println(i+1 + ". " + startingList.get(i).getTeamName() + " " + startingList.get(i).getBoatName());
+        for (int i = 0; i < startingList.size(); i++) {
+            System.out.println(i + 1 + ". " + startingList.get(i).getTeamName() + " " + startingList.get(i).getBoatName());
+        }
+    }
+
+
+    private void checkBoatPostions() {
+        for (Boat boat : startingList) {
+            if (!(boat.isFinished())){
+                Mark nextMark = boat.getNextMark();
+                float boatPosition = boat.getPosition();
+
+                if (boatPosition >= nextMark.getDistanceFromStart()){
+                    boat.setCurrentMark(boat.getNextMark());
+                    int i = boat.getMarkList().indexOf(boat.getNextMark());
+
+                    if (i < boat.getMarkList().size() - 1) {
+                        boat.setNextMark(boat.getMarkList().get(i + 1));
+                    } else {
+                        boat.setFinished(true);
+                        finishedList.add(boat);
+                    }
+                    System.out.printf("%s has passed mark: %s\n", boat.getBoatName(), boat.getCurrentMark().getMarkName());
+                }
+                boat.setPosition(boat.getPosition() + 10);
+            }
         }
     }
 
@@ -120,10 +151,18 @@ class Race {
     /**
      * Display each boat in the race and their position at each mark.
      */
-    void runRace(){
+    void runRace() {
         System.out.println("Start");
-        for(int i = 1; i < course.getMarks().size(); i++){
-            course.getMarks().get(i).displayBoatOrder();
+
+        while (finishedList.size() < startingList.size()) {
+            checkBoatPostions();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+        System.out.println(finishedList);
+        System.exit(0);
     }
 }

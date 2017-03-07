@@ -1,6 +1,1 @@
 Emirates,New Zealand
-Oracle,USA
-Artemis,Sweden
-Groupama,France
-Land Rover,Britain
-SoftBank,Japan
