@@ -8,16 +8,10 @@ import static org.junit.Assert.*;
 
 
 /**
- * HI
+ * A test class for the App class
  */
 public class AppTest 
 {
-    @Test
-    public void testBoatName() {
-        Boat testboat = new Boat("Enterprise", "Starfleet");
-        assertSame(testboat.getBoatName(), "Enterprise");
-    }
-
 
     @Test
     // test to check that new boats added to a race cannot have the same name as any others
