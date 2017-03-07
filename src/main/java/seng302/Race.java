@@ -27,6 +27,11 @@ class Race {
     }
 
 
+    /**
+     * Called in Race constructor.
+     * Set up the course marks for each boat in the race as well as set the
+     * current(starting mark) and next mark.
+     */
     private void setCourseForBoats() {
         for (Boat boat : startingList) {
             boat.setMarkList(course.getMarks());
@@ -117,7 +122,7 @@ class Race {
     /**
      * Displays the finishing order of the race to the user.
      */
-    void viewFinishOrder() {
+    private void viewFinishOrder() {
         System.out.println("Finish order:");
         for (int i = 0; i < finishedList.size(); i++) {
             System.out.println(i + 1 + ". " + finishedList.get(i).getTeamName() + " " + finishedList.get(i).getBoatName());
@@ -125,6 +130,10 @@ class Race {
     }
 
 
+    /**
+     * Print out the list of starting boats in a race.
+     * For each boat, print: Boat name, Team name, current speed.
+     */
     void viewStartingList() {
         System.out.println("Starting List:");
 
@@ -134,11 +143,25 @@ class Race {
     }
 
 
+    /**
+     * Convert a value given in knots to meters per second.
+     * @param knots speed in knots.
+     * @return speed in meters per second.
+     */
     double knotsToMetersPerSecond(double knots) {
         return ((knots * 1.852)/3.6);
     }
 
 
+    /**
+     * Check the positions of each boat in the race that is still racing
+     * and update the positions based on boat speeds.
+     * If a boat passes a mark(not the finish) its current and next mark
+     * will be updated and it's new heading as well as the mark it passed
+     * will be reported.
+     * If a boat crosses the finish, this will be reported and the boat
+     * will be added to the finishers list.
+     */
     private void checkBoatPostions() {
         for (Boat boat : startingList) {
             if (!(boat.isFinished())){
@@ -156,10 +179,10 @@ class Race {
                         finishedList.add(boat);
                     }
                     if (boat.getCurrentMark().getMarkHeading() != -1) {
-                        System.out.printf("%s has passed mark: %s with heading %d degrees\n",
+                        System.out.printf("%s has passed mark: %s with heading %d degrees\n\n",
                                 boat.getBoatName(), boat.getCurrentMark().getMarkName(), boat.getHeading());
                     } else {
-                        System.out.printf("%s has finished the race!! :)\n", boat.getBoatName());
+                        System.out.printf("%s has finished the race!! :)\n\n", boat.getBoatName());
                     }
                 }
                 boat.setPosition(boat.getPosition() + 0.1 * knotsToMetersPerSecond(boat.getSpeed()));
