@@ -24,7 +24,20 @@ class FileReader {
             while ((line = b.readLine()) != null) {
                 String[] boatInfo = line.split(csvSplitBy);
 
-                boatList.add(new Boat(boatInfo[0], boatInfo[1])); //files take form: boatName,teamName
+                // Check next boat does not have the same name as any other in the file
+                boolean duplicateName = false;
+
+                for (Boat boat : boatList) {
+                    if (boatInfo[0].equals(boat.getBoatName())) {
+                        System.out.printf("There is a boat with the name '%s' in the list already.\n" +
+                                        "The boat '%s %s' has not been added to the race\n",
+                                boatInfo[0], boatInfo[0], boatInfo[1]);
+                        duplicateName = true;
+                    }
+                }
+                if (duplicateName == false) {
+                    boatList.add(new Boat(boatInfo[0], boatInfo[1])); //files take form: boatName,teamName
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

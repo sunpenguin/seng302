@@ -1,5 +1,5 @@
 Emirates,New Zealand
-Oracle,USA
+Emirates,USA
 Artemis,Sweden
 Groupama,France
 Land Rover,Britain

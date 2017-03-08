@@ -13,6 +13,7 @@ public class App {
         //This assumes correct input
         Scanner sc = new Scanner(System.in);
         System.out.println("Please enter how long you would like the race to take in minutes");
+
         double scaledTime;
         double time = sc.nextDouble();
         scaledTime = 1/time;
@@ -21,7 +22,9 @@ public class App {
         ArrayList<Boat> ac35 = fileReader.readBoatListFile("testAc35_1.txt");
         Course testCourse = new Course("testCourse.txt");
         Race race = new Race(ac35, testCourse);
+
         double speed = 0.539957 * 60 * scaledTime;
+
         for (Boat boat : ac35) {
             boat.setSpeed(speed);
             speed += 0;
