@@ -125,7 +125,7 @@ class Race {
     private void viewFinishOrder() {
         System.out.println("Finish order:");
         for (int i = 0; i < finishedList.size(); i++) {
-            System.out.println(i + 1 + ". " + finishedList.get(i).getTeamName() + " " + finishedList.get(i).getBoatName());
+            System.out.println(i + 1 + ". " + finishedList.get(i).getBoatName() + " " + finishedList.get(i).getTeamName());
         }
     }
 

@@ -45,6 +45,8 @@ public class App {
                 process = false;
             } catch (InputMismatchException e){
                 System.out.println("The input is invalid, please try again");
+            } catch (IndexOutOfBoundsException e){
+                System.out.println("You have selected too many boats! :(");
             }
         }
     }
