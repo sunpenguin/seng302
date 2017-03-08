@@ -37,7 +37,7 @@ class Course {
         String csvSplitBy = ",";
         float markDistance;
         float distanceFromStart = 0; // Initialise to 0, add to this as marks are read from file
-        int markPosition =  1; // the first mark added is in position 1
+        int markPosition =  0; // the first mark added is in position 0 as it is the start
         int markHeading;
 
         try (BufferedReader b = new BufferedReader(new FileReader(csvFile))) {

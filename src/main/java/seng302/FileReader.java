@@ -26,17 +26,19 @@ class FileReader {
 
                 // Check next boat does not have the same name as any other in the file
                 boolean duplicateName = false;
+                String boatName = boatInfo[0];
+                String teamName = boatInfo[1];
 
                 for (Boat boat : boatList) {
-                    if (boatInfo[0].equals(boat.getBoatName())) {
+                    if (boatName.equals(boat.getBoatName())) {
                         System.out.printf("There is a boat with the name '%s' in the list already.\n" +
                                         "The boat '%s %s' has not been added to the race\n",
-                                boatInfo[0], boatInfo[0], boatInfo[1]);
+                                boatName, boatName, teamName);
                         duplicateName = true;
                     }
                 }
                 if (duplicateName == false) {
-                    boatList.add(new Boat(boatInfo[0], boatInfo[1])); //files take form: boatName,teamName
+                    boatList.add(new Boat(boatName, teamName)); //files take form: boatName,teamName
                 }
             }
         } catch (IOException e) {

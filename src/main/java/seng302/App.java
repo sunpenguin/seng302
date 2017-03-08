@@ -27,14 +27,14 @@ public class App {
                 Course testCourse = new Course("testCourse.txt");
                 Race race = new Race(ac35, testCourse);
 
-                double speed = 0.539957 * 60 * scaledTime;
+                double speed = 0.539957 * 60 * scaledTime; // 1 km/h = 0.54 knots
 
                 for (Boat boat : ac35) {
                     boat.setSpeed(speed);
-                    speed += 0;
+                    speed += 0; // All boats set to same speed
                 }
 
-                System.out.println("-----------------------------COMPETITORS---------------------------------------");
+                System.out.println("-----------------------------STARTING LIST-------------------------------------");
                 race.viewStartingList();
                 System.out.println("-------------------------------------------------------------------------------");
 
@@ -48,7 +48,6 @@ public class App {
                 System.out.println("The input is invalid, please try again");
             }
         }
-
     }
 }
 

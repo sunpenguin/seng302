@@ -182,7 +182,7 @@ class Race {
                         System.out.printf("%s has passed mark: %s with heading %d degrees\n\n",
                                 boat.getBoatName(), boat.getCurrentMark().getMarkName(), boat.getHeading());
                     } else {
-                        System.out.printf("%s has finished the race!)\n\n", boat.getBoatName());
+                        System.out.printf("%s has finished the race!\n\n", boat.getBoatName());
                     }
                 }
                 boat.setPosition(boat.getPosition() + 0.1 * knotsToMetersPerSecond(boat.getSpeed()));
