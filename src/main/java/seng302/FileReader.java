@@ -37,7 +37,7 @@ class FileReader {
                         duplicateName = true;
                     }
                 }
-                if (duplicateName == false) {
+                if (!duplicateName) {
                     boatList.add(new Boat(boatName, teamName)); //files take form: boatName,teamName
                 }
             }

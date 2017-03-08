@@ -1,10 +1,8 @@
 package seng302;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -69,9 +67,11 @@ class Course {
      * A method which displays all of the marks included in this course
      */
     void displayCourse(){
+        System.out.println("--------------------------COURSE DESCRIPTION-----------------------------------");
         for(Mark mark : marks){
             System.out.printf("Markname: %s, Length of leg: %.2f, Distance from start to end of leg: %.2f, Position in course: %d\n",
                     mark.getMarkName(), mark.getmarkDistance(), mark.getDistanceFromStart(), mark.getMarkPosition());
         }
+        System.out.println("-------------------------------------------------------------------------------");
     }
 }

@@ -136,10 +136,15 @@ class Race {
      */
     void viewStartingList() {
         System.out.println("Starting List:");
+        System.out.println("-----------------------------STARTING LIST-------------------------------------");
+
+
+
 
         for (Boat boat : startingList) {
             System.out.printf("Boatname: %s, Teamname: %s, Speed: %.2f\n", boat.getBoatName(), boat.getTeamName(), boat.getSpeed());
         }
+        System.out.println("-------------------------------------------------------------------------------");
     }
 
 

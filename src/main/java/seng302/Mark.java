@@ -1,7 +1,6 @@
 package seng302;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  *  A class that represents a mark on the race course
