@@ -153,7 +153,7 @@ class Race {
      * @param knots speed in knots.
      * @return speed in meters per second.
      */
-    double knotsToMetersPerSecond(double knots) {
+    static double knotsToMetersPerSecond(double knots) {
         return ((knots * 1.852)/3.6);
     }
 
@@ -202,7 +202,7 @@ class Race {
      */
     void runRace() {
         System.out.println("Start");
-        int loopTime = 100;
+        int loopTime = 100; // Boats are checked and updated 10 times per second
 
         while (finishedList.size() < startingList.size()) {
             final long startTime = System.currentTimeMillis();

@@ -33,7 +33,7 @@ public class Mark {
      * A getter for the marks heading
      * @return The heading of the mark
      */
-    public int getMarkHeading() {
+    int getMarkHeading() {
         return markHeading;
     }
 
@@ -42,7 +42,7 @@ public class Mark {
      * A setter for the heading of the mark
      * @param markHeading The value the marks heading will be set to
      */
-    public void setMarkHeading(int markHeading) {
+    void setMarkHeading(int markHeading) {
         this.markHeading = markHeading;
     }
 
@@ -73,6 +73,7 @@ public class Mark {
     float getDistanceFromStart() {
         return distanceFromStart;
     }
+
 
     /**
      * A getter to return the variable boats from the Mark

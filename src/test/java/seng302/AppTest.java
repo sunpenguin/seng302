@@ -1,9 +1,7 @@
 package seng302;
 
 import org.junit.Test;
-
 import java.util.ArrayList;
-
 import static org.junit.Assert.*;
 
 
