@@ -40,7 +40,7 @@ public class App {
 
                 for (Boat boat : raceList) {
                     boat.setSpeed(speed);
-                    speed += 0; // All boats set to same speed
+                    speed += 5;
                 }
 
                 race.viewStartingList();
