@@ -19,7 +19,7 @@ public class AppTest
 
         ArrayList<Boat> boatsToRace = new ArrayList<>();
 
-        Race raceTest = new Race(boatsToRace, new Course("testCourse.txt"));
+        Race raceTest = new Race(boatsToRace, new Course("/testCourse.txt"));
 
         raceTest.addBoat(boat1);
         raceTest.addBoat(boat2);

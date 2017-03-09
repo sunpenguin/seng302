@@ -1,8 +1,7 @@
 package seng302;
 
-import java.io.BufferedReader;
+import java.io.*;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -38,8 +37,10 @@ class Course {
         int markPosition =  0; // the first mark added is in position 0 as it is the start
         int markHeading;
 
-        try (BufferedReader b = new BufferedReader(new FileReader(csvFile))) {
+        InputStream f = Course.class.getClass().getResourceAsStream(csvFile);
 
+//        try (BufferedReader b = new BufferedReader(new FileReader(csvFile))) {
+        try (BufferedReader b = new BufferedReader(new InputStreamReader(f))) {
             while ((line = b.readLine()) != null) {
                 String[] markInfo = line.split(csvSplitBy);
                 markDistance = Float.parseFloat(markInfo[1]);

@@ -28,10 +28,10 @@ public class App {
                 int numBoats = sc.nextInt();
 
                 FileReader fileReader = new FileReader();
-                ArrayList<Boat> ac35 = fileReader.readBoatListFile("testAc35_1.txt");
+                ArrayList<Boat> ac35 = fileReader.readBoatListFile("/testAc35_1.txt");
                 Collections.shuffle(ac35); // shuffle the list so that different boats race each time
 
-                Course testCourse = new Course("testCourse.txt");
+                Course testCourse = new Course("/testCourse.txt");
 
                 ArrayList<Boat> raceList = new ArrayList<>(ac35.subList(0, numBoats));
                 Race race = new Race(raceList, testCourse);

@@ -2,6 +2,8 @@ package seng302;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
@@ -20,7 +22,10 @@ class FileReader {
         String line;
         String csvSplitBy = ",";
 
-        try (BufferedReader b = new BufferedReader(new java.io.FileReader(fileName))) {
+
+        InputStream f = FileReader.class.getClass().getResourceAsStream(fileName);
+
+        try (BufferedReader b = new BufferedReader(new InputStreamReader(f))) {
             while ((line = b.readLine()) != null) {
                 String[] boatInfo = line.split(csvSplitBy);
 
