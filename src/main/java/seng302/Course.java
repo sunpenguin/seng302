@@ -39,7 +39,6 @@ class Course {
 
         InputStream f = Course.class.getClass().getResourceAsStream(csvFile);
 
-//        try (BufferedReader b = new BufferedReader(new FileReader(csvFile))) {
         try (BufferedReader b = new BufferedReader(new InputStreamReader(f))) {
             while ((line = b.readLine()) != null) {
                 String[] markInfo = line.split(csvSplitBy);

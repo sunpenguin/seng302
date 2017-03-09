@@ -13,7 +13,7 @@ public class FileReaderTest {
     @Test
     public void testReadBoatListFile() {
         FileReader testFileReader = new FileReader();
-        ArrayList<Boat> testList = new ArrayList<>(testFileReader.readBoatListFile("testAc35.txt"));
+        ArrayList<Boat> testList = new ArrayList<>(testFileReader.readBoatListFile("/testAc35.txt"));
 
         Boat testBoat = testList.get(0);
 
