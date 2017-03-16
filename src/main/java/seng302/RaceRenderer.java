@@ -1,44 +1,44 @@
 package seng302;
 
-import com.sun.xml.internal.bind.v2.runtime.Coordinator;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * Created by dhl25 on 16/03/17.
+ * Class that takes a Race and a Group and draws the Race on the Group.
  */
 public class RaceRenderer {
 
     private Group group;
     private Race race;
 
-    private HashMap<String, Circle> boats = new HashMap<>();
-    private final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
-            Arrays.asList(Color.BLACK, Color.BEIGE, Color.BLUE, Color.YELLOW, Color.RED, Color.HONEYDEW));
+    private HashMap<String, Circle> boats;
 
+    /**
+     * Constructor for RaceRenderer, takes a Race and Group as parameters.
+     *
+     * @param race the race containing the boats to be drawn
+     * @param group the group to be drawn on
+     */
     public RaceRenderer(Race race, Group group) {
-        final double BOAT_RADIUS = 10.0;
         this.race = race;
         this.group = group;
+        boats = new HashMap<>();
+        final double BOAT_RADIUS = 10.0;
+        final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
+                Arrays.asList(Color.BLACK, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
         for (int i = 0; i < race.getStartingList().size(); i++) {
             boats.put(race.getStartingList().get(i).getBoatName(), new Circle(BOAT_RADIUS, BOAT_COLOURS.get(i)));
         }
     }
 
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
+    /**
+     * Draws boats in the Race on the Group.
+     */
     public void renderBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
@@ -50,6 +50,11 @@ public class RaceRenderer {
         }
     }
 
+    /**
+     * Converts the latitude / longitude coordinates to pixel coordinates.
+     * @param coord Coordinates to be converted
+     * @return x and y pixel coordinates of the given coordinates
+     */
     private ArrayList<Double> convertCoordPixel(Coordinate coord) {
         ArrayList<Double> pixels = new ArrayList<>();
         double pixelWidth = group.getLayoutX();
@@ -59,9 +64,9 @@ public class RaceRenderer {
         double coordWidth = (maxCoord.getLatitude() - minCoord.getLatitude());
         double coordHeight = (maxCoord.getLongitude() - minCoord.getLongitude());
         double widthRatio = (pixelWidth / coordWidth);
-        double heigtRatio = (pixelHeight / coordHeight);
+        double heightRatio = (pixelHeight / coordHeight);
         double pixelX = coord.getLatitude / widthRatio;
-        double pixelY = coord.getLongitude / heigtRatio;
+        double pixelY = coord.getLongitude / heightRatio;
         pixels.add(pixelX);
         pixels.add(pixelY);
         return pixels;
