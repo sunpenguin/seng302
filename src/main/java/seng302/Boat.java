@@ -1,5 +1,7 @@
 package seng302;
 
+import sun.plugin.dom.core.CoreConstants;
+
 import java.util.ArrayList;
 
 /**
@@ -18,6 +20,7 @@ public class Boat {
     private boolean finished = false;
     private int heading;
 
+    private Coordinate boatCoordinates;
 
     /**
      * A constructor for the Boat class
@@ -29,6 +32,23 @@ public class Boat {
         this.teamName = teamName;
     }
 
+
+    /**
+     * Getter for the boat's coordinates
+     * @return the coordinates
+     */
+    public Coordinate getBoatCoordinates() {
+        return this.boatCoordinates;
+    }
+
+
+    /**
+     * Setter for boat's coordinates
+     * @param coordinates the coordinates
+     */
+    public void setBoatCoordinates(Coordinate coordinates) {
+        this.boatCoordinates = coordinates;
+    }
 
     /**
      * Setter for the next mark the boat must pass
