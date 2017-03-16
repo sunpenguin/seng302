@@ -14,8 +14,8 @@ public class Boat {
     private String teamName;
     private double speed;
     private ArrayList<Mark> markList = new ArrayList<>();
-    private Mark currentMark;
-    private Mark nextMark;
+    private CompoundMark currentCompoundMark;
+    private CompoundMark nextCompoundMark;
     private double position;
     private boolean finished = false;
     private int heading;
@@ -51,32 +51,41 @@ public class Boat {
     }
 
     /**
-     * Setter for the next mark the boat must pass
-     * @param nextMark The mark
+     * Setter for the next CompoundMark the boat must pass
+     * @param nextCompoundMark The next CompoundMark to pass
      */
-    void setNextMark(Mark nextMark) {
-        this.nextMark = nextMark;
+    void setNextCompoundMark(CompoundMark nextCompoundMark) {
+        this.nextCompoundMark = nextCompoundMark;
     }
 
 
     /**
-     * Getter for the next mark the boat must pass
-     * @return the next mark
+     * Getter for the next CompoundMark the boat must pass
+     * @return the next CompoundMark to pass
      */
-    Mark getNextMark() {
-        return nextMark;
+    CompoundMark getNextCompoundMark() {
+        return nextCompoundMark;
     }
 
 
     /**
-     * Setter for the current mark.
+     * Setter for the current CompoundMark.
      * Called when a race is created to set each boat's current mark
      * to the first mark on the course.
+     * @param currentCompoundMark the most recently passed CompoundMark.
      */
-    void setCurrentMark(Mark currentMark) {
-        this.currentMark = currentMark;
+    void setCurrentCompoundMark(CompoundMark currentCompoundMark) {
+        this.currentCompoundMark = currentCompoundMark;
     }
 
+
+    /**
+     * Getter for the current CompoundMark.
+     * @return the most recently passed CompoundMark.
+     */
+    CompoundMark getCurrentCompoundMark() {
+        return this.currentCompoundMark;
+    }
 
     /**
      * Getter for a boats list of marks
@@ -185,14 +194,6 @@ public class Boat {
     }
 
 
-    /**
-     * returns the mark that the boat has most recently passed
-     * @return the mark the boat has most recently passed
-     */
-    Mark getCurrentMark() {
-        return currentMark;
-    }
-
 
     /**
      * A getter for the position of the boat
@@ -217,7 +218,7 @@ public class Boat {
      */
     void viewPlaceOnCourse () {
         System.out.printf("%s -> Current mark: %s, Next mark: %s\n",
-                boatName, currentMark.getMarkName(), nextMark.getMarkName());
+                boatName, currentCompoundMark.getName(), nextCompoundMark.getName());
     }
 
 

@@ -196,6 +196,14 @@ class Race {
 //
 //    }
 
+    public void updateBoats(double time) {
+        for (Boat boat : startingList) {
+            if (!(boat.isFinished())) {
+
+            }
+        }
+    }
+
 
 //    /**
 //     * Display each boat in the race and their position at each mark.
