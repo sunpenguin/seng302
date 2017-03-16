@@ -19,45 +19,6 @@ import java.util.Arrays;
  */
 public class XMLCourseParser {
 
-
-//    public static Course constructCourse(File file) {
-//        ArrayList<CompoundMark> compoundsMarks = new ArrayList<>();
-//        Course course = new Course(compoundsMarks);
-//        try {
-//            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-//            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-//            Document doc = dBuilder.parse(file);
-//            doc.getDocumentElement().normalize();
-//            NodeList compoundNodes = doc.getElementsByTagName("compoundMark");
-//            for(int i = 0; i < compoundNodes.getLength(); i++){
-//                Node nNode = compoundNodes.item(i);
-//                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-//                    ArrayList<Mark> marks = new ArrayList<>();
-//                    Element compoundElement = (Element) nNode;
-//                    String compoundMarkName = compoundElement.getElementsByTagName("name").item(0).getTextContent();
-//                    NodeList markList = compoundElement.getElementsByTagName("mark");
-//                    for (int j = 0; j < markList.getLength(); j++){
-//                            Element markElement = (Element) nNode;
-//                            String markName = markElement.getElementsByTagName("markName").item(0).getTextContent();
-//                            double markLatitude = Double.parseDouble(markElement.getElementsByTagName("markLatitude").item(0).getTextContent());
-//                            double markLongitude = Double.parseDouble(markElement.getElementsByTagName("markLongitude").item(0).getTextContent());
-//                            Mark mark = new Mark(markName, new Coordinate(markLongitude, markLatitude));
-//                            marks.add(mark);
-//                    }
-//                    CompoundMark compoundMark = new CompoundMark(compoundMarkName, marks);
-//                    compoundsMarks.add(compoundMark);
-//                    System.out.println(compoundMark.getName() + compoundMark.getMarks());
-//                }
-//            }
-//            course.setCompoundMarks(compoundsMarks);
-//            return course;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return course;
-//    }
-//    }
-
     /**
      * Creates a new Course by parsing a XML file.
      *
@@ -74,22 +35,24 @@ public class XMLCourseParser {
         final int TOP_RIGHT_INDEX = 1;
         final int BOTTOM_LEFT_INDEX = 2;
         final int BOTTOM_RIGHT_INDEX = 3;
-
+        // Gets file ready for parsing
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(file);
         doc.getDocumentElement().normalize();
+        // creates all Compound Marks
         NodeList compoundNodes = doc.getElementsByTagName(COMPOUND_MARK_TAG);
         ArrayList<CompoundMark> compoundMarks = new ArrayList<>();
-        for(int i = 0; i < compoundNodes.getLength(); i++) { // creates all Compound Marks
+        for(int i = 0; i < compoundNodes.getLength(); i++) {
             Node compoundMarkNode = compoundNodes.item(i);
             if (compoundMarkNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element compoundMarkElement = (Element) compoundMarkNode;
                 compoundMarks.add(parseCompoundMark(compoundMarkElement));
             }
         }
+        // parses boundaries
         Element boundaryElements = (Element) doc.getElementsByTagName(BOUNDARY_TAG).item(0);
-        ArrayList<Coordinate> boundaries = parseBoundaries(boundaryElements); // parses boundaries
+        ArrayList<Coordinate> boundaries = parseBoundaries(boundaryElements);
         return new Course(compoundMarks, boundaries.get(TOP_LEFT_INDEX), boundaries.get(TOP_RIGHT_INDEX),
                 boundaries.get(BOTTOM_LEFT_INDEX), boundaries.get(BOTTOM_RIGHT_INDEX));
     }
