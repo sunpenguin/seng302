@@ -29,14 +29,14 @@ class Race {
 
     /**
      * Called in Race constructor.
-     * Set up the course marks for each boat in the race as well as set the
-     * current(starting mark) and next mark.
+     * Set up the course CompoundMarks for each boat in the race as well as set the
+     * current(starting CompoundMark) and next CompoundMark.
      */
     private void setCourseForBoats() {
         for (Boat boat : startingList) {
-            boat.setMarkList(course.getMarks());
-            boat.setCurrentMark(boat.getMarkList().get(0));
-            boat.setNextMark(boat.getMarkList().get(1));
+            boat.setCompoundMarkList(course.getCompoundMarks());
+            boat.setCurrentCompoundMark(boat.getCompoundMarkList().get(0));
+            boat.setNextCompoundMark(boat.getCompoundMarkList().get(1));
         }
     }
 
@@ -195,6 +195,22 @@ class Race {
 //        }
 //
 //    }
+
+    public void updateBoats(float time) {
+        for (Boat boat : startingList) {
+            if (!(boat.isFinished())) {
+                CompoundMark nextCompoundMark = boat.getNextCompoundMark();
+                Coordinate markCoordinate = nextCompoundMark.getMarks().get(0).getMarkCoordinates();
+                Coordinate boatCoordinates = boat.getBoatCoordinates();
+                if (nextCompoundMark.getMarks().size() == 1) { //that is a mark
+                    // check if the boat has passed the mark
+                } else {
+                    // the compound mark is a gate, check if it has passed it
+                }
+
+            }
+        }
+    }
 
 
 //    /**

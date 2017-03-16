@@ -8,31 +8,32 @@ import java.util.ArrayList;
 public class Mark {
 
     private String markName;
-    private double latitude;
-    private double longitude;
+    private Coordinate markCoordinates;
 
 
-    public Mark(String markName, double latitude, double longitude) {
+    public Mark(String markName, Coordinate coordinates) {
         this.markName = markName;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.markCoordinates = coordinates;
     }
 
-    public double getLatitude() {
-        return latitude;
+
+    /**
+     * Getter for the mark's coordinates
+     * @return the coordinates
+     */
+    public Coordinate getMarkCoordinates() {
+        return this.markCoordinates;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+
+    /**
+     * Setter for mark's coordinates
+     * @param coordinates the coordinates
+     */
+    public void setMarkCoordinates(Coordinate coordinates) {
+        this.markCoordinates = coordinates;
     }
 
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
 
     /**
      * Getter for the mark name
@@ -52,7 +53,5 @@ public class Mark {
     public void setMarkName(String markName) {
         this.markName = markName;
     }
-
-
 }
 
