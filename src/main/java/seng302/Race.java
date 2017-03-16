@@ -196,9 +196,17 @@ class Race {
 //
 //    }
 
-    public void updateBoats(double time) {
+    public void updateBoats(float time) {
         for (Boat boat : startingList) {
             if (!(boat.isFinished())) {
+                CompoundMark nextCompoundMark = boat.getNextCompoundMark();
+                Coordinate markCoordinate = nextCompoundMark.getMarks().get(0).getMarkCoordinates();
+                Coordinate boatCoordinates = boat.getBoatCoordinates();
+                if (nextCompoundMark.getMarks().size() == 1) { //that is a mark
+                    // check if the boat has passed the mark
+                } else {
+                    // the compound mark is a gate, check if it has passed it
+                }
 
             }
         }

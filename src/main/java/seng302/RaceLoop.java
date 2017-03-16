@@ -24,12 +24,10 @@ public class RaceLoop extends AnimationTimer {
             return;
         }
 
-        float secondsElapsed = (currentTime - previousTime) / 1e9f;
+        float milliSecondsElapsed = (currentTime - previousTime) / 1e6f; //converting from nanoseconds to milllseconds
         previousTime = currentTime;
 
-        race.updateBoats(secondsElapsed);
+        race.updateBoats(milliSecondsElapsed);
         renderer.renderBoats();
         }
     }
-
-}
