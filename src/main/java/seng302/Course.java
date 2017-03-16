@@ -11,7 +11,7 @@ import java.util.ArrayList;
 class Course {
 
     private String courseFilePath;
-    private ArrayList<Mark> marks = new ArrayList<>();
+    private ArrayList<CompoundMark> compoundMarks = new ArrayList<>();
 
 
 //    /**
@@ -55,11 +55,11 @@ class Course {
 
 
     /**
-     * A getter for the marks in the course
-     * @return the Arraylist of marks
+     * A getter for the CompoundMarks in the course
+     * @return the Arraylist of CompoundMarks
      */
-    ArrayList<Mark> getMarks() {
-        return marks;
+    ArrayList<CompoundMark> getCompoundMarks() {
+        return compoundMarks;
     }
 
 

@@ -13,7 +13,7 @@ public class Boat {
     private String boatName;
     private String teamName;
     private double speed;
-    private ArrayList<Mark> markList = new ArrayList<>();
+    private ArrayList<CompoundMark> compoundMarkList = new ArrayList<>();
     private CompoundMark currentCompoundMark;
     private CompoundMark nextCompoundMark;
     private double position;
@@ -89,19 +89,19 @@ public class Boat {
 
     /**
      * Getter for a boats list of marks
-     * @return the list of marks
+     * @return the list of CompoundMarks
      */
-    ArrayList<Mark> getMarkList() {
-        return this.markList;
+    ArrayList<CompoundMark> getCompoundMarkList() {
+        return this.compoundMarkList;
     }
 
 
     /**
      * Setter for a boats list of marks
-     * @param markList the list of marks
+     * @param compoundMarkList the list of CompoundMarks
      */
-    void setMarkList(ArrayList<Mark> markList) {
-        this.markList = markList;
+    void setCompoundMarkList(ArrayList<CompoundMark> compoundMarkList) {
+        this.compoundMarkList = compoundMarkList;
     }
 
 
