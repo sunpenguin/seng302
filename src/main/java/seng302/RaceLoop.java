@@ -17,19 +17,18 @@ public class RaceLoop extends AnimationTimer {
     }
 
     @Override
-    public void handle(long currentTime)
-    {
+    public void handle(long currentTime) {
         if (previousTime == 0) {
             previousTime = currentTime;
             return;
         }
 
-        float secondsElapsed = (currentTime - previousTime) / 1e9f;
+        double milliSecondsElapsed = (currentTime - previousTime) / 1e6f;
         previousTime = currentTime;
 
-        race.updateBoats(secondsElapsed);
+        race.updateBoats(milliSecondsElapsed);
         renderer.renderBoats();
-        }
     }
-
 }
+
+

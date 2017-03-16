@@ -1,4 +1,5 @@
 <course>
+
   <compoundMark>
     <name>Start</name>
     <mark>
@@ -18,8 +19,10 @@
     <name>Leeward</name>
     <mark>
       <markName>Leeward1</markName>
-      <markLongitude>64.854304</markLongitude>
-      <markLatitude>32.296577</markLatitude>
+      <coordinate>
+        <coordinateLongitude>64.854304</coordinateLongitude>
+        <coordinateLatitude>32.296577</coordinateLatitude>
+      </coordinate>
     </mark>
     <mark>
       <markName>Leeward2</markName>
@@ -27,6 +30,14 @@
       <markLatitude>32.293771</markLatitude>
     </mark>
 
+  </compoundMark>
+  <compoundMark>
+    <name>Leeward</name>
+    <mark>
+      <markName>Leeward1</markName>
+      <markLongitude>64.855242</markLongitude>
+      <markLatitude>32.293771</markLatitude>
+    </mark>
   </compoundMark>
 
 

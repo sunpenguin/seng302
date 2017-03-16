@@ -10,21 +10,17 @@ import java.util.ArrayList;
  */
 class Course {
 
-    private String courseFilePath;
-    private ArrayList<Mark> marks = new ArrayList<>();
+    private ArrayList<CompoundMark> compoundMarks = new ArrayList<>();
 
+    public Course(ArrayList<CompoundMark> marks) {
+        this.compoundMarks = marks;
+    }
 
-//    /**
-//     * A constructor for the Course class
-//     * @param courseFilePath file path to a course definition
-//     */
-//    Course(String courseFilePath) {
-//        this.courseFilePath = courseFilePath;
-//        constructCourse();
-//    }
+    public void setCompoundMarks(ArrayList<CompoundMark> marks) {
+        this.compoundMarks = marks;
+    }
 
-
-//    /**
+    //    /**
 //     * Construct the course by reading the file given to the constructor
 //     * and creating the marks
 //     */
