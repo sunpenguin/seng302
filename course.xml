@@ -1,0 +1,33 @@
+<course>
+  <compoundMark>
+    <name>Start</name>
+    <mark>
+      <markName>Start1</markName>
+      <markLongitude>64.854304</markLongitude>
+      <markLatitude>32.296577</markLatitude>
+    </mark>
+    <mark>
+      <markName>Start2</markName>
+      <markLongitude>64.855242</markLongitude>
+      <markLatitude>32.293771</markLatitude>
+    </mark>
+
+  </compoundMark>
+
+  <compoundMark>
+    <name>Leeward</name>
+    <mark>
+      <markName>Leeward1</markName>
+      <markLongitude>64.854304</markLongitude>
+      <markLatitude>32.296577</markLatitude>
+    </mark>
+    <mark>
+      <markName>Leeward2</markName>
+      <markLongitude>64.855242</markLongitude>
+      <markLatitude>32.293771</markLatitude>
+    </mark>
+
+  </compoundMark>
+
+
+</course>

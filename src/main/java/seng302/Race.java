@@ -157,64 +157,64 @@ class Race {
         return ((knots * 1.852)/3.6);
     }
 
+//
+//    /**
+//     * Check the positions of each boat in the race that is still racing
+//     * and update the positions based on boat speeds.
+//     * If a boat passes a mark(not the finish) its current and next mark
+//     * will be updated and it's new heading as well as the mark it passed
+//     * will be reported.
+//     * If a boat crosses the finish, this will be reported and the boat
+//     * will be added to the finishers list.
+//     */
+//    private void checkBoatPostions() {
+//        for (Boat boat : startingList) {
+//            if (!(boat.isFinished())){
+//                Mark nextMark = boat.getNextMark();
+//                double boatPosition = boat.getPosition();
+//                if (boatPosition >= nextMark.getDistanceFromStart()){
+//                    boat.setCurrentMark(boat.getNextMark());
+//                    boat.setHeading(boat.getCurrentMark().getMarkHeading());
+//                    int i = boat.getMarkList().indexOf(boat.getNextMark());
+//
+//                    if (i < boat.getMarkList().size() - 1) {
+//                        boat.setNextMark(boat.getMarkList().get(i + 1));
+//                    } else {
+//                        boat.setFinished(true);
+//                        finishedList.add(boat);
+//                    }
+//                    if (boat.getCurrentMark().getMarkHeading() != -1) {
+//                        System.out.printf("%s has passed mark: %s with heading %d degrees\n\n",
+//                                boat.getBoatName(), boat.getCurrentMark().getMarkName(), boat.getHeading());
+//                    } else {
+//                        System.out.printf("%s has finished the race!\n\n", boat.getBoatName());
+//                    }
+//                }
+//                boat.setPosition(boat.getPosition() + 0.1 * knotsToMetersPerSecond(boat.getSpeed()));
+//            }
+//        }
+//
+//    }
 
-    /**
-     * Check the positions of each boat in the race that is still racing
-     * and update the positions based on boat speeds.
-     * If a boat passes a mark(not the finish) its current and next mark
-     * will be updated and it's new heading as well as the mark it passed
-     * will be reported.
-     * If a boat crosses the finish, this will be reported and the boat
-     * will be added to the finishers list.
-     */
-    private void checkBoatPostions() {
-        for (Boat boat : startingList) {
-            if (!(boat.isFinished())){
-                Mark nextMark = boat.getNextMark();
-                double boatPosition = boat.getPosition();
-                if (boatPosition >= nextMark.getDistanceFromStart()){
-                    boat.setCurrentMark(boat.getNextMark());
-                    boat.setHeading(boat.getCurrentMark().getMarkHeading());
-                    int i = boat.getMarkList().indexOf(boat.getNextMark());
 
-                    if (i < boat.getMarkList().size() - 1) {
-                        boat.setNextMark(boat.getMarkList().get(i + 1));
-                    } else {
-                        boat.setFinished(true);
-                        finishedList.add(boat);
-                    }
-                    if (boat.getCurrentMark().getMarkHeading() != -1) {
-                        System.out.printf("%s has passed mark: %s with heading %d degrees\n\n",
-                                boat.getBoatName(), boat.getCurrentMark().getMarkName(), boat.getHeading());
-                    } else {
-                        System.out.printf("%s has finished the race!\n\n", boat.getBoatName());
-                    }
-                }
-                boat.setPosition(boat.getPosition() + 0.1 * knotsToMetersPerSecond(boat.getSpeed()));
-            }
-        }
-
-    }
-
-
-    /**
-     * Display each boat in the race and their position at each mark.
-     */
-    void runRace() {
-        System.out.println("Start");
-        int loopTime = 100; // Boats are checked and updated 10 times per second
-
-        while (finishedList.size() < startingList.size()) {
-            final long startTime = System.currentTimeMillis();
-            checkBoatPostions();
-            final long endTime = System.currentTimeMillis();
-            try {
-                Thread.sleep(loopTime - (endTime - startTime));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        viewFinishOrder();
-        //System.exit(0);
-    }
+//    /**
+//     * Display each boat in the race and their position at each mark.
+//     */
+//    void runRace() {
+//        System.out.println("Start");
+//        int loopTime = 100; // Boats are checked and updated 10 times per second
+//
+//        while (finishedList.size() < startingList.size()) {
+//            final long startTime = System.currentTimeMillis();
+//            checkBoatPostions();
+//            final long endTime = System.currentTimeMillis();
+//            try {
+//                Thread.sleep(loopTime - (endTime - startTime));
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        viewFinishOrder();
+//        //System.exit(0);
+//    }
 }
