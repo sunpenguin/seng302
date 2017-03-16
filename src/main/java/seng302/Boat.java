@@ -1,5 +1,7 @@
 package seng302;
 
+import sun.plugin.dom.core.CoreConstants;
+
 import java.util.ArrayList;
 
 /**
@@ -11,13 +13,14 @@ public class Boat {
     private String boatName;
     private String teamName;
     private double speed;
-    private ArrayList<Mark> markList = new ArrayList<>();
-    private Mark currentMark;
-    private Mark nextMark;
+    private ArrayList<CompoundMark> compoundMarkList = new ArrayList<>();
+    private CompoundMark currentCompoundMark;
+    private CompoundMark nextCompoundMark;
     private double position;
     private boolean finished = false;
     private int heading;
 
+    private Coordinate boatCoordinates;
 
     /**
      * A constructor for the Boat class
@@ -31,48 +34,74 @@ public class Boat {
 
 
     /**
-     * Setter for the next mark the boat must pass
-     * @param nextMark The mark
+     * Getter for the boat's coordinates
+     * @return the coordinates
      */
-    void setNextMark(Mark nextMark) {
-        this.nextMark = nextMark;
+    public Coordinate getBoatCoordinates() {
+        return this.boatCoordinates;
     }
 
 
     /**
-     * Getter for the next mark the boat must pass
-     * @return the next mark
+     * Setter for boat's coordinates
+     * @param coordinates the coordinates
      */
-    Mark getNextMark() {
-        return nextMark;
+    public void setBoatCoordinates(Coordinate coordinates) {
+        this.boatCoordinates = coordinates;
+    }
+
+    /**
+     * Setter for the next CompoundMark the boat must pass
+     * @param nextCompoundMark The next CompoundMark to pass
+     */
+    void setNextCompoundMark(CompoundMark nextCompoundMark) {
+        this.nextCompoundMark = nextCompoundMark;
     }
 
 
     /**
-     * Setter for the current mark.
+     * Getter for the next CompoundMark the boat must pass
+     * @return the next CompoundMark to pass
+     */
+    CompoundMark getNextCompoundMark() {
+        return nextCompoundMark;
+    }
+
+
+    /**
+     * Setter for the current CompoundMark.
      * Called when a race is created to set each boat's current mark
      * to the first mark on the course.
+     * @param currentCompoundMark the most recently passed CompoundMark.
      */
-    void setCurrentMark(Mark currentMark) {
-        this.currentMark = currentMark;
+    void setCurrentCompoundMark(CompoundMark currentCompoundMark) {
+        this.currentCompoundMark = currentCompoundMark;
     }
 
+
+    /**
+     * Getter for the current CompoundMark.
+     * @return the most recently passed CompoundMark.
+     */
+    CompoundMark getCurrentCompoundMark() {
+        return this.currentCompoundMark;
+    }
 
     /**
      * Getter for a boats list of marks
-     * @return the list of marks
+     * @return the list of CompoundMarks
      */
-    ArrayList<Mark> getMarkList() {
-        return this.markList;
+    ArrayList<CompoundMark> getCompoundMarkList() {
+        return this.compoundMarkList;
     }
 
 
     /**
      * Setter for a boats list of marks
-     * @param markList the list of marks
+     * @param compoundMarkList the list of CompoundMarks
      */
-    void setMarkList(ArrayList<Mark> markList) {
-        this.markList = markList;
+    void setCompoundMarkList(ArrayList<CompoundMark> compoundMarkList) {
+        this.compoundMarkList = compoundMarkList;
     }
 
 
@@ -165,14 +194,6 @@ public class Boat {
     }
 
 
-    /**
-     * returns the mark that the boat has most recently passed
-     * @return the mark the boat has most recently passed
-     */
-    Mark getCurrentMark() {
-        return currentMark;
-    }
-
 
     /**
      * A getter for the position of the boat
@@ -197,7 +218,7 @@ public class Boat {
      */
     void viewPlaceOnCourse () {
         System.out.printf("%s -> Current mark: %s, Next mark: %s\n",
-                boatName, currentMark.getMarkName(), nextMark.getMarkName());
+                boatName, currentCompoundMark.getName(), nextCompoundMark.getName());
     }
 
 

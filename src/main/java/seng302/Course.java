@@ -20,7 +20,7 @@ class Course {
         this.compoundMarks = marks;
     }
 
-    //    /**
+//    /**
 //     * Construct the course by reading the file given to the constructor
 //     * and creating the marks
 //     */
@@ -51,11 +51,11 @@ class Course {
 
 
     /**
-     * A getter for the marks in the course
-     * @return the Arraylist of marks
+     * A getter for the CompoundMarks in the course
+     * @return the Arraylist of CompoundMarks
      */
-    ArrayList<Mark> getMarks() {
-        return marks;
+    ArrayList<CompoundMark> getCompoundMarks() {
+        return compoundMarks;
     }
 
 
