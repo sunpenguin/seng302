@@ -28,7 +28,7 @@ public class App extends Application {
         primaryStage.setMinWidth(1280);
         primaryStage.show();
 
-        mainWindowController.start();
+//        mainWindowController.start();
     }
 
     public static void main(String[] args) {
