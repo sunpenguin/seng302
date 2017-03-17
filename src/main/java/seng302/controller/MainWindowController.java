@@ -2,9 +2,9 @@ package seng302.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import seng302.*;
 
 
 /**
@@ -13,6 +13,9 @@ import javafx.scene.shape.Circle;
 public class MainWindowController {
     @FXML
     private Group group;
+    private Race race;
+    private RaceLoop raceLoop;
+    private RaceRenderer raceRenderer;
 
     @FXML
     @SuppressWarnings("unused")
@@ -21,6 +24,7 @@ public class MainWindowController {
         c.setCenterX(0);
         c.setCenterY(0);
         group.getChildren().add(c);
+        race = new Race();
     }
 
     public void closeProgram() {

@@ -4,42 +4,93 @@
     <name>Start</name>
     <mark>
       <markName>Start1</markName>
-      <logitude>64.854304</logitude>
+      <logitude>-64.854304</logitude>
       <latitude>32.296577</latitude>
     </mark>
     <mark>
       <markName>Start2</markName>
-      <logitude>64.855242</logitude>
+      <logitude>-64.855242</logitude>
       <latitude>32.293771</latitude>
     </mark>
-
   </compoundMark>
 
+
   <compoundMark>
-    <name>Leeward</name>
+    <name>Mark</name>
     <mark>
-      <markName>Leeward1</markName>
+      <markName>Mark1</markName>
+      <longitude>-64.843983</longitude>
+      <latitude>32.293039</latitude>
+    </mark>
+  </compoundMark>
+
+
+  <compoundMark>
+    <name>Northern Gate</name>
+    <mark>
+      <markName>Northern gate 1</markName>
       <coordinate>
-        <coordinateLongitude>64.854304</coordinateLongitude>
-        <coordinateLatitude>32.296577</coordinateLatitude>
+        <coordinateLongitude>-64.835249</coordinateLongitude>
+        <coordinateLatitude>32.309693</coordinateLatitude>
       </coordinate>
     </mark>
     <mark>
-      <markName>Leeward2</markName>
-      <logitude>64.855242</logitude>
-      <latitude>32.293771</latitude>
+      <markName>Northern gate 2</markName>
+      <logitude>-64.831785</logitude>
+      <latitude>32.308046</latitude>
     </mark>
-
   </compoundMark>
+
+
   <compoundMark>
-    <name>Leeward</name>
+    <name>Southern Gate</name>
     <mark>
-      <markName>Leeward1</markName>
-      <longitude>64.855242</longitude>
-      <latitude>32.293771</latitude>
+      <markName>Southern gate 1</markName>
+      <coordinate>
+        <coordinateLongitude>-64.850045</coordinateLongitude>
+        <coordinateLatitude>32.284680</coordinateLatitude>
+      </coordinate>
+    </mark>
+    <mark>
+      <markName>Southern gate 2</markName>
+      <logitude>-64.847591</logitude>
+      <latitude>32.280164</latitude>
     </mark>
   </compoundMark>
 
+
+  <compoundMark>
+    <name>Northern Gate</name>
+    <mark>
+      <markName>Northern gate 1</markName>
+      <coordinate>
+        <coordinateLongitude>-64.835249</coordinateLongitude>
+        <coordinateLatitude>32.309693</coordinateLatitude>
+      </coordinate>
+    </mark>
+    <mark>
+      <markName>Northern gate 2</markName>
+      <logitude>-64.831785</logitude>
+      <latitude>32.308046</latitude>
+    </mark>
+  </compoundMark>
+
+
+  <compoundMark>
+    <name>Finish</name>
+    <mark>
+      <markName>Finish1</markName>
+      <longitude>-64.839291</longitude>
+      <latitude>32.317379</latitude>
+    </mark>
+    <mark>
+      <markName>Finish2</markName>
+      <longitude>-64.836260</longitude>
+      <latitude>32.317257</latitude>
+    </mark>
+  </compoundMark>
+
+    <!--
   <boundaries>
     <topLeft>
       <longitude>0.0</longitude>
@@ -58,6 +109,6 @@
       <latitude>0.0</latitude>
     </bottomRight>
   </boundaries>
-
+  -->
 
 </course>

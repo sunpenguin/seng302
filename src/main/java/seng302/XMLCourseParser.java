@@ -112,4 +112,37 @@ public class XMLCourseParser {
         return boundries;
     }
 
+
+    public static ArrayList<Boat> parseBoats(File file) throws ParserConfigurationException, IOException, SAXException {
+        final String BOATS_TAG = "boats";
+        final String BOAT_TAG = "boat";
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document doc = builder.parse(file);
+        doc.getDocumentElement().normalize();
+        Element boatsElement = (Element) doc.getElementsByTagName(BOATS_TAG).item(0);
+        NodeList boatNodes = boatsElement.getElementsByTagName(BOAT_TAG);
+        ArrayList<Boat> boats = new ArrayList<>();
+        for (int i = 0; i < boatNodes.getLength(); i++) {
+            Node boatNode = boatNodes.item(i);
+            if (boatNode.getNodeType() == Node.ELEMENT_NODE) {
+                Element boatElement = (Element) boatNode;
+                boats.add(parseBoat(boatElement));
+            }
+        }
+        return boats;
+    }
+
+    private static Boat parseBoat(Element boatElement) {
+        final String SPEED_TAG = "";
+        final String BOAT_NAME_TAG = "";
+        final String TEAM_NAME_TAG = "";
+        double speed = Double.parseDouble(boatElement.getElementsByTagName(SPEED_TAG).item(0).getTextContent());
+        String boatName = boatElement.getElementsByTagName(BOAT_NAME_TAG).item(0).getTextContent();
+        String teamName = boatElement.getElementsByTagName(TEAM_NAME_TAG).item(0).getTextContent();
+        return new Boat(boatName, teamName, speed);
+    }
+
+
 }

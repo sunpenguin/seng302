@@ -30,6 +30,12 @@ public class Boat {
         this.teamName = teamName;
     }
 
+    public Boat(String boatName, String teamName, double speed) {
+        this.boatName = boatName;
+        this.teamName = teamName;
+        this.speed = speed;
+    }
+
 
     /**
      * Getter for the boat's coordinates
