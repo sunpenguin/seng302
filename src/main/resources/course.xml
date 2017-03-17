@@ -4,12 +4,12 @@
     <name>Start</name>
     <mark>
       <markName>Start1</markName>
-      <logitude>-64.854304</logitude>
+      <longitude>-64.854304</longitude>
       <latitude>32.296577</latitude>
     </mark>
     <mark>
       <markName>Start2</markName>
-      <logitude>-64.855242</logitude>
+      <longitude>-64.855242</longitude>
       <latitude>32.293771</latitude>
     </mark>
   </compoundMark>
@@ -30,13 +30,13 @@
     <mark>
       <markName>Northern gate 1</markName>
       <coordinate>
-        <coordinateLongitude>-64.835249</coordinateLongitude>
-        <coordinateLatitude>32.309693</coordinateLatitude>
+        <longitude>-64.835249</longitude>
+        <latitude>32.309693</latitude>
       </coordinate>
     </mark>
     <mark>
       <markName>Northern gate 2</markName>
-      <logitude>-64.831785</logitude>
+      <longitude>-64.831785</longitude>
       <latitude>32.308046</latitude>
     </mark>
   </compoundMark>
@@ -47,13 +47,13 @@
     <mark>
       <markName>Southern gate 1</markName>
       <coordinate>
-        <coordinateLongitude>-64.850045</coordinateLongitude>
-        <coordinateLatitude>32.284680</coordinateLatitude>
+        <longitude>-64.850045</longitude>
+        <latitude>32.284680</latitude>
       </coordinate>
     </mark>
     <mark>
       <markName>Southern gate 2</markName>
-      <logitude>-64.847591</logitude>
+      <longitude>-64.847591</longitude>
       <latitude>32.280164</latitude>
     </mark>
   </compoundMark>
@@ -64,13 +64,13 @@
     <mark>
       <markName>Northern gate 1</markName>
       <coordinate>
-        <coordinateLongitude>-64.835249</coordinateLongitude>
-        <coordinateLatitude>32.309693</coordinateLatitude>
+        <longitude>-64.835249</longitude>
+        <latitude>32.309693</latitude>
       </coordinate>
     </mark>
     <mark>
       <markName>Northern gate 2</markName>
-      <logitude>-64.831785</logitude>
+      <longitude>-64.831785</longitude>
       <latitude>32.308046</latitude>
     </mark>
   </compoundMark>

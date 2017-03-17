@@ -15,6 +15,10 @@ public class Course {
         this.compoundMarks = marks;
     }
 
+    public Course(ArrayList<CompoundMark> marks) {
+        this.compoundMarks = marks;
+    }
+
 //    /**
 //     * A constructor for the Course class
 //     * @param courseFilePath file path to a course definition

@@ -2,9 +2,13 @@ package seng302.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import org.xml.sax.SAXException;
 import seng302.*;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 
 /**
@@ -20,11 +24,23 @@ public class MainWindowController {
     @FXML
     @SuppressWarnings("unused")
     private void initialize() {
-        Circle c = new Circle(10, Color.RED);
-        c.setCenterX(0);
-        c.setCenterY(0);
-        group.getChildren().add(c);
-        race = new Race();
+//        Circle c = new Circle(10, Color.RED);
+//        c.setCenterX(0);
+//        c.setCenterY(0);
+//        group.getChildren().add(c);
+
+        try {
+            Course course = XMLParser.parseCourse(new File("/home/cosc/student/dhl25/Documents/seng302/team-18/src/main/resources/course.xml"));
+            ArrayList<Boat> boats = XMLParser.parseBoats(new File("/home/cosc/student/dhl25/Documents/seng302/team-18/src/main/resources/boats.xml"));
+            race = new Race(boats, course);
+            System.out.println(race.getStartingList());
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
     }
 
     public void closeProgram() {

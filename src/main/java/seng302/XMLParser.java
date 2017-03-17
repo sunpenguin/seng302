@@ -17,7 +17,7 @@ import java.util.Arrays;
 /**
  * Class for parsing XML files which represent Courses into a Course class.
  */
-public class XMLCourseParser {
+public class XMLParser {
 
     /**
      * Creates a new Course by parsing a XML file.
@@ -51,10 +51,11 @@ public class XMLCourseParser {
             }
         }
         // parses boundaries
-        Element boundaryElements = (Element) doc.getElementsByTagName(BOUNDARY_TAG).item(0);
-        ArrayList<Coordinate> boundaries = parseBoundaries(boundaryElements);
-        return new Course(compoundMarks, boundaries.get(TOP_LEFT_INDEX), boundaries.get(TOP_RIGHT_INDEX),
-                boundaries.get(BOTTOM_LEFT_INDEX), boundaries.get(BOTTOM_RIGHT_INDEX));
+//        Element boundaryElements = (Element) doc.getElementsByTagName(BOUNDARY_TAG).item(0);
+//        ArrayList<Coordinate> boundaries = parseBoundaries(boundaryElements);
+//        return new Course(compoundMarks, boundaries.get(TOP_LEFT_INDEX), boundaries.get(TOP_RIGHT_INDEX),
+//                boundaries.get(BOTTOM_LEFT_INDEX), boundaries.get(BOTTOM_RIGHT_INDEX));
+        return new Course(compoundMarks);
     }
 
     /**
@@ -135,9 +136,9 @@ public class XMLCourseParser {
     }
 
     private static Boat parseBoat(Element boatElement) {
-        final String SPEED_TAG = "";
-        final String BOAT_NAME_TAG = "";
-        final String TEAM_NAME_TAG = "";
+        final String SPEED_TAG = "speed";
+        final String BOAT_NAME_TAG = "boatname";
+        final String TEAM_NAME_TAG = "teamname";
         double speed = Double.parseDouble(boatElement.getElementsByTagName(SPEED_TAG).item(0).getTextContent());
         String boatName = boatElement.getElementsByTagName(BOAT_NAME_TAG).item(0).getTextContent();
         String teamName = boatElement.getElementsByTagName(TEAM_NAME_TAG).item(0).getTextContent();

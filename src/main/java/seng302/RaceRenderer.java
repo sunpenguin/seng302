@@ -36,40 +36,41 @@ public class RaceRenderer {
         }
     }
 
+
     /**
      * Draws boats in the Race on the Group.
      */
-    public void renderBoats() {
-        for (int i = 0; i < race.getStartingList().size(); i++) {
-            Boat boat = race.getStartingList().get(i);
-            Coordinate boatCoordinates = boat.getBoatCoordinates();
-            ArrayList<Double> pixels = convertCoordPixel(boatCoordinates);
-            Circle boatImage = boats.get(boat.getBoatName());
-            boatImage.setCenterX(pixels.get(0));
-            boatImage.setCenterY(pixels.get(1));
-        }
-    }
-
-    /**
-     * Converts the latitude / longitude coordinates to pixel coordinates.
-     * @param coord Coordinates to be converted
-     * @return x and y pixel coordinates of the given coordinates
-     */
-    private ArrayList<Double> convertCoordPixel(Coordinate coord) {
-        ArrayList<Double> pixels = new ArrayList<>();
-        double pixelWidth = group.getLayoutX();
-        double pixelHeight = group.getLayoutY();
-        double courseWidth =
-                GPSCalculations.GPSxy(race.getCourse().getMaxX()) - GPSCalculations.GPSxy(race.getCourse().getMinX());
-        double courseHeight =
-                GPSCalculations.GPSxy(race.getCourse().getMaxY()) - GPSCalculations.GPSxy(race.getCourse().getMinY());
-        double widthRatio = pixelWidth / courseWidth;
-        double heightRatio = pixelHeight / courseHeight;
-        double pixelX = coord.getLatitude() / widthRatio;
-        double pixelY = coord.getLongitude() / heightRatio;
-        pixels.add(pixelX);
-        pixels.add(pixelY);
-        return pixels;
-    }
-
+//    public void renderBoats() {
+//        for (int i = 0; i < race.getStartingList().size(); i++) {
+//            Boat boat = race.getStartingList().get(i);
+//            Coordinate boatCoordinates = boat.getBoatCoordinates();
+//            ArrayList<Double> pixels = convertCoordPixel(boatCoordinates);
+//            Circle boatImage = boats.get(boat.getBoatName());
+//            boatImage.setCenterX(pixels.get(0));
+//            boatImage.setCenterY(pixels.get(1));
+//        }
+//    }
+//
+//    /**
+//     * Converts the latitude / longitude coordinates to pixel coordinates.
+//     * @param coord Coordinates to be converted
+//     * @return x and y pixel coordinates of the given coordinates
+//     */
+//    private ArrayList<Double> convertCoordPixel(Coordinate coord) {
+//        ArrayList<Double> pixels = new ArrayList<>();
+//        double pixelWidth = group.getLayoutX();
+//        double pixelHeight = group.getLayoutY();
+//        double courseWidth =
+//                GPSCalculations.GPSxy(race.getCourse().getMaxX()) - GPSCalculations.GPSxy(race.getCourse().getMinX());
+//        double courseHeight =
+//                GPSCalculations.GPSxy(race.getCourse().getMaxY()) - GPSCalculations.GPSxy(race.getCourse().getMinY());
+//        double widthRatio = pixelWidth / courseWidth;
+//        double heightRatio = pixelHeight / courseHeight;
+//        double pixelX = coord.getLatitude() / widthRatio;
+//        double pixelY = coord.getLongitude() / heightRatio;
+//        pixels.add(pixelX);
+//        pixels.add(pixelY);
+//        return pixels;
+//    }
+//
 }
