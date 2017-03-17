@@ -20,7 +20,7 @@ class Race {
      * @param startingList Arraylist holding all entered boats
      * @param course       Course object
      */
-    Race(ArrayList<Boat> startingList, Course course) {
+    public Race(ArrayList<Boat> startingList, Course course) {
         this.startingList = startingList;
         this.course = course;
         setCourseForBoats();
@@ -45,7 +45,7 @@ class Race {
      *
      * @return Arraylist holding all entered boats
      */
-    ArrayList<Boat> getStartingList() {
+    public ArrayList<Boat> getStartingList() {
         return startingList;
     }
 
@@ -85,7 +85,7 @@ class Race {
      *
      * @param boatToAdd Boat object
      */
-    void addBoat(Boat boatToAdd) {
+    public void addBoat(Boat boatToAdd) {
         boolean nameDifferent = true;
 
         for (Boat boatToCheck : startingList) {
@@ -104,7 +104,7 @@ class Race {
     /**
      * Shuffles the starting list of boats.
      */
-    void randomiseOrder() {
+    public void randomiseOrder() {
         Collections.shuffle(this.startingList);
     }
 
@@ -112,7 +112,7 @@ class Race {
     /**
      * Displays team and boat names of each boat in the starting list..
      */
-    void viewBoats() {
+    public void viewBoats() {
         for (Boat boat : startingList) {
             System.out.printf("%s %s\n", boat.getTeamName(), boat.getBoatName());
         }
@@ -134,13 +134,9 @@ class Race {
      * Print out the list of starting boats in a race.
      * For each boat, print: Boat name, Team name, current speed.
      */
-    void viewStartingList() {
+    public void viewStartingList() {
         System.out.println("Starting List:");
         System.out.println("-----------------------------STARTING LIST-------------------------------------");
-
-
-
-
         for (Boat boat : startingList) {
             System.out.printf("Boatname: %s, Teamname: %s, Speed: %.2f\n", boat.getBoatName(), boat.getTeamName(), boat.getSpeed());
         }
@@ -153,7 +149,7 @@ class Race {
      * @param knots speed in knots.
      * @return speed in meters per second.
      */
-    static double knotsToMetersPerSecond(double knots) {
+    public static double knotsToMetersPerSecond(double knots) {
         return ((knots * 1.852)/3.6);
     }
 
@@ -196,9 +192,17 @@ class Race {
 //
 //    }
 
-    public void updateBoats(double time) {
+    public void updateBoats(float time) {
         for (Boat boat : startingList) {
             if (!(boat.isFinished())) {
+                CompoundMark nextCompoundMark = boat.getNextCompoundMark();
+                Coordinate markCoordinate = nextCompoundMark.getMarks().get(0).getMarkCoordinates();
+                Coordinate boatCoordinates = boat.getBoatCoordinates();
+                if (nextCompoundMark.getMarks().size() == 1) { //that is a mark
+                    // check if the boat has passed the mark
+                } else {
+                    // the compound mark is a gate, check if it has passed it
+                }
 
             }
         }

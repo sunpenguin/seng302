@@ -1,7 +1,5 @@
 package seng302;
 
-import sun.plugin.dom.core.CoreConstants;
-
 import java.util.ArrayList;
 
 /**
@@ -54,7 +52,7 @@ public class Boat {
      * Setter for the next CompoundMark the boat must pass
      * @param nextCompoundMark The next CompoundMark to pass
      */
-    void setNextCompoundMark(CompoundMark nextCompoundMark) {
+    public void setNextCompoundMark(CompoundMark nextCompoundMark) {
         this.nextCompoundMark = nextCompoundMark;
     }
 
@@ -63,7 +61,7 @@ public class Boat {
      * Getter for the next CompoundMark the boat must pass
      * @return the next CompoundMark to pass
      */
-    CompoundMark getNextCompoundMark() {
+    public CompoundMark getNextCompoundMark() {
         return nextCompoundMark;
     }
 
@@ -74,7 +72,7 @@ public class Boat {
      * to the first mark on the course.
      * @param currentCompoundMark the most recently passed CompoundMark.
      */
-    void setCurrentCompoundMark(CompoundMark currentCompoundMark) {
+    public void setCurrentCompoundMark(CompoundMark currentCompoundMark) {
         this.currentCompoundMark = currentCompoundMark;
     }
 
@@ -83,7 +81,7 @@ public class Boat {
      * Getter for the current CompoundMark.
      * @return the most recently passed CompoundMark.
      */
-    CompoundMark getCurrentCompoundMark() {
+    public CompoundMark getCurrentCompoundMark() {
         return this.currentCompoundMark;
     }
 
@@ -91,7 +89,7 @@ public class Boat {
      * Getter for a boats list of marks
      * @return the list of CompoundMarks
      */
-    ArrayList<CompoundMark> getCompoundMarkList() {
+    public ArrayList<CompoundMark> getCompoundMarkList() {
         return this.compoundMarkList;
     }
 
@@ -100,7 +98,7 @@ public class Boat {
      * Setter for a boats list of marks
      * @param compoundMarkList the list of CompoundMarks
      */
-    void setCompoundMarkList(ArrayList<CompoundMark> compoundMarkList) {
+    public void setCompoundMarkList(ArrayList<CompoundMark> compoundMarkList) {
         this.compoundMarkList = compoundMarkList;
     }
 
@@ -109,7 +107,7 @@ public class Boat {
      * A getter for the name of the boat
      * @return The boatName
      */
-    String getBoatName() {
+    public String getBoatName() {
         return boatName;
     }
 
@@ -144,7 +142,7 @@ public class Boat {
      * A getter for the team name that the boat belongs to
      * @return The teamName
      */
-    String getTeamName() {
+    public String getTeamName() {
         return teamName;
     }
 
@@ -153,7 +151,7 @@ public class Boat {
      * Checks the value of the boolean finished
      * @return The value of finished
      */
-    boolean isFinished() {
+    public boolean isFinished() {
         return finished;
     }
 
@@ -162,7 +160,7 @@ public class Boat {
      * A setter of the value of finished
      * @param finished the value finished will be set to
      */
-    void setFinished(boolean finished) {
+    public void setFinished(boolean finished) {
         this.finished = finished;
     }
 
@@ -171,7 +169,7 @@ public class Boat {
      * A setter for the team name that the boat belongs to
      * @param name The name that the teamName variable will be set to
      */
-    void setTeamName(String name) {
+    public void setTeamName(String name) {
         this.teamName = name;
     }
 
@@ -180,7 +178,7 @@ public class Boat {
      * A getter for the speed of the boat
      * @return The speed of the boat
      */
-    double getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
@@ -189,7 +187,7 @@ public class Boat {
      * A getter for the speed of the boat
      * @param speed the speed of the boat
      */
-    void setSpeed(double speed) {
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
 
@@ -199,7 +197,7 @@ public class Boat {
      * A getter for the position of the boat
      * @return the position the boat is from the start of the race
      */
-    double getPosition() {
+    public double getPosition() {
         return position;
     }
 
@@ -208,7 +206,7 @@ public class Boat {
      * Sets the position that the boat is at
      * @param position The value position will be set to
      */
-    void setPosition(double position) {
+    public void setPosition(double position) {
         this.position = position;
     }
 
@@ -216,7 +214,7 @@ public class Boat {
     /**
      * A method to display where the boat currently is on the course
      */
-    void viewPlaceOnCourse () {
+    public void viewPlaceOnCourse() {
         System.out.printf("%s -> Current mark: %s, Next mark: %s\n",
                 boatName, currentCompoundMark.getName(), nextCompoundMark.getName());
     }

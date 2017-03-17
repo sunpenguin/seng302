@@ -40,7 +40,7 @@ public class Mark {
      *
      * @return the name of the mark
      */
-    String getMarkName() {
+    public String getMarkName() {
         return markName;
     }
 

@@ -17,7 +17,7 @@ class FileReader {
      * @param fileName The name of the file with a list of boats
      * @return an ArrayList of Boat objects.
      */
-    ArrayList<Boat> readBoatListFile(String fileName) {
+    public ArrayList<Boat> readBoatListFile(String fileName) {
         ArrayList<Boat> boatList = new ArrayList<>();
         String line;
         String csvSplitBy = ",";
