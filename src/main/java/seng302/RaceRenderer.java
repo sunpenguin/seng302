@@ -62,9 +62,9 @@ public class RaceRenderer {
     private void renderMark(Mark mark) {
         Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
         Coordinate coordinate = mark.getMarkCoordinates();
-        ArrayList<Double> pixelCoordinates = convertCoordPixel(coordinate);
-        rectangle.setX(pixelCoordinates.get(0));
-        rectangle.setY(pixelCoordinates.get(1));
+        XYPair pixelCoordinates = convertCoordPixel(coordinate);
+        rectangle.setX(pixelCoordinates.getX());
+        rectangle.setY(pixelCoordinates.getY());
         group.getChildren().add(rectangle);
     }
 
@@ -75,9 +75,9 @@ public class RaceRenderer {
             Mark mark = compoundMark.getMarks().get(i);
             Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
             Coordinate coordinate = mark.getMarkCoordinates();
-            ArrayList<Double> pixelCoordinates = convertCoordPixel(coordinate);
-            rectangle.setX(pixelCoordinates.get(0));
-            rectangle.setY(pixelCoordinates.get(1));
+            XYPair pixelCoordinates = convertCoordPixel(coordinate);
+            rectangle.setX(pixelCoordinates.getX());
+            rectangle.setY(pixelCoordinates.getY());
             endPoints.add(rectangle);
             group.getChildren().add(rectangle);
         }
@@ -95,10 +95,10 @@ public class RaceRenderer {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getBoatCoordinates();
-            ArrayList<Double> pixels = convertCoordPixel(boatCoordinates);
+            XYPair pixels = convertCoordPixel(boatCoordinates);
             Circle boatImage = boats.get(boat.getBoatName());
-            boatImage.setCenterX(pixels.get(0));
-            boatImage.setCenterY(pixels.get(1));
+            boatImage.setCenterX(pixels.getX());
+            boatImage.setCenterY(pixels.getY());
         }
     }
 
@@ -107,36 +107,19 @@ public class RaceRenderer {
      * @param coord Coordinates to be converted
      * @return x and y pixel coordinates of the given coordinates
      */
-    private ArrayList<Double> convertCoordPixel(Coordinate coord) {
+    private XYPair convertCoordPixel(Coordinate coord) {
         ArrayList<Double> pixels = new ArrayList<>();
-//        double pixelWidth = group.getParent().prefWidth();
-//        double pixelHeight = group.getParent().prefHeight();
         double pixelWidth = 1280.0;
         double pixelHeight = 720.0;
-//        System.out.println("pix " + pixelHeight);
-//        System.out.println("pix " + pixelWidth);
-
         GPSCalculations gps = new GPSCalculations();
         gps.findMinMaxPoints(race.getCourse());
-
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
-//        System.out.println("course " + courseHeight);
-//        System.out.println("course " + courseWidth);
-
         XYPair xy = GPSCalculations.GPSxy(coord);
         double widthRatio = (courseWidth - (gps.getMaxX() - xy.getX())) / courseWidth;
         double heightRatio = (courseHeight - (gps.getMaxY() - xy.getY())) / courseHeight;
-//        System.out.println("ratio " + widthRatio);
-//        System.out.println("ratio " + heightRatio);
-
-        double pixelX = pixelWidth * widthRatio;
-        double pixelY = pixelHeight * heightRatio;
-
-        pixels.add(pixelX);
-        pixels.add(pixelY);
         System.out.println("pix = " + pixels);
-        return pixels;
+        return new XYPair(pixelWidth * widthRatio, pixelHeight * heightRatio * -1);
     }
 
 }

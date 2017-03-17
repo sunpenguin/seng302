@@ -30,13 +30,15 @@ public class XMLParser {
      */
     public static Course parseCourse(File file) throws ParserConfigurationException, IOException, SAXException {
         final String COMPOUND_MARK_TAG = "compoundMark"; // declaring things as final is fun
+        final String COURSE_TAG = "course";
         // Gets file ready for parsing
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(file);
         doc.getDocumentElement().normalize();
         // creates all Compound Marks
-        NodeList compoundNodes = doc.getElementsByTagName(COMPOUND_MARK_TAG);
+        Element courseElement = (Element) doc.getElementsByTagName(COURSE_TAG).item(0);
+        NodeList compoundNodes = courseElement.getElementsByTagName(COMPOUND_MARK_TAG);
         ArrayList<CompoundMark> compoundMarks = new ArrayList<>();
         for(int i = 0; i < compoundNodes.getLength(); i++) {
             Node compoundMarkNode = compoundNodes.item(i);
@@ -77,7 +79,7 @@ public class XMLParser {
             String longString = markElement.getElementsByTagName(LONGITUDE_TAG).item(0).getTextContent();
             double markLatitude = Double.parseDouble(latString);
             double markLongitude = Double.parseDouble(longString);
-            Mark mark = new Mark(markName, new Coordinate(markLongitude, markLatitude));
+            Mark mark = new Mark(markName, new Coordinate(markLatitude, markLongitude));
             marks.add(mark);
         }
         return new CompoundMark(name, marks);
