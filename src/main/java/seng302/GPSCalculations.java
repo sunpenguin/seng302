@@ -11,7 +11,7 @@ public class GPSCalculations {
     private double maxX = -(Double.MAX_VALUE);
     private double minY = Double.MAX_VALUE;
     private double maxY = -(Double.MAX_VALUE);
-
+    private static int i = 0;
 
     /**
      * Given 2 sets of GPS coordinates in signed decimal degrees, return the distance
@@ -147,7 +147,7 @@ public class GPSCalculations {
 
         double earthRadius = 6371e3; // meters
         double aspectLat = Math.cos(32.308046); // Aspect ratio, use a latitude that is the mean of all given
-
+        System.out.println(i++ + " " + point.getLongitude());
         double x = earthRadius * Math.toRadians(point.getLongitude()) * aspectLat;
         double y = earthRadius * Math.toRadians(point.getLatitude());
 

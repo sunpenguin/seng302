@@ -30,13 +30,14 @@ public class MainWindowController {
 //        c.setCenterY(0);
 //        group.getChildren().add(c);
 
-        Line line = new Line(0, 0, 20, 20);
-        group.getChildren().add(line);
 
         try {
             Course course = XMLParser.parseCourse(new File("/home/cosc/student/dhl25/Documents/seng302/team-18/src/main/resources/course.xml"));
             ArrayList<Boat> boats = XMLParser.parseBoats(new File("/home/cosc/student/dhl25/Documents/seng302/team-18/src/main/resources/boats.xml"));
             race = new Race(boats, course);
+            RaceRenderer rr = new RaceRenderer(race, group);
+            rr.renderCourse();
+            rr.renderBoats();
             System.out.println(race.getStartingList());
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
