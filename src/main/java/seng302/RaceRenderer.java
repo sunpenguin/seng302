@@ -36,10 +36,10 @@ public class RaceRenderer {
         }
     }
 
-
-    /**
-     * Draws boats in the Race on the Group.
-     */
+//
+//    /**
+//     * Draws boats in the Race on the Group.
+//     */
 //    public void renderBoats() {
 //        for (int i = 0; i < race.getStartingList().size(); i++) {
 //            Boat boat = race.getStartingList().get(i);
@@ -72,5 +72,5 @@ public class RaceRenderer {
 //        pixels.add(pixelY);
 //        return pixels;
 //    }
-//
+
 }
