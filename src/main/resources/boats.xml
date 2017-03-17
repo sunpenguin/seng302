@@ -1,0 +1,32 @@
+<boats>
+  <boat>
+    <boatname>Emirates</boatname>
+    <teamname>New Zealand</teamname>
+    <speed>70</speed>
+  </boat>
+  <boat>
+    <boatname>Oracle</boatname>
+    <teamname>USA</teamname>
+    <speed>65</speed>
+  </boat>
+  <boat>
+    <boatname>Artemis</boatname>
+    <teamname>Sweden</teamname>
+    <speed>60</speed>
+  </boat>
+  <boat>
+    <boatname>Groupama</boatname>
+    <teamname>France</teamname>
+    <speed>55</speed>
+  </boat>
+  <boat>
+    <boatname>Land Rover</boatname>
+    <teamname>Britain</teamname>
+    <speed>50</speed>
+  </boat>
+  <boat>
+    <boatname>SoftBank</boatname>
+    <teamname>Japan</teamname>
+    <speed>45</speed>
+  </boat>
+</boats>
