@@ -35,10 +35,12 @@ public class MainWindowController {
             Course course = XMLParser.parseCourse(new File("/home/cosc/student/dhl25/Documents/seng302/team-18/src/main/resources/course.xml"));
             ArrayList<Boat> boats = XMLParser.parseBoats(new File("/home/cosc/student/dhl25/Documents/seng302/team-18/src/main/resources/boats.xml"));
             race = new Race(boats, course);
+            race.LOL();
             RaceRenderer rr = new RaceRenderer(race, group);
             rr.renderCourse();
             rr.renderBoats();
-            System.out.println(race.getStartingList());
+            System.out.println(group.getChildren().size());
+            System.out.println(group.getChildren());
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {

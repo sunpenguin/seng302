@@ -30,11 +30,6 @@ public class XMLParser {
      */
     public static Course parseCourse(File file) throws ParserConfigurationException, IOException, SAXException {
         final String COMPOUND_MARK_TAG = "compoundMark"; // declaring things as final is fun
-        final String BOUNDARY_TAG = "boundaries";
-        final int TOP_LEFT_INDEX = 0;
-        final int TOP_RIGHT_INDEX = 1;
-        final int BOTTOM_LEFT_INDEX = 2;
-        final int BOTTOM_RIGHT_INDEX = 3;
         // Gets file ready for parsing
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -75,7 +70,6 @@ public class XMLParser {
         NodeList markList = compoundMarkElement.getElementsByTagName(MARK_TAG);
         ArrayList<Mark> marks = new ArrayList<>();
         for (int i = 0; i < markList.getLength(); i++) {
-            marks = new ArrayList<>();
             Node markNode = markList.item(i);
             Element markElement = (Element) markNode;
             String markName = markElement.getElementsByTagName(MARK_NAME_TAG).item(0).getTextContent();

@@ -9,6 +9,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Class that takes a Race and a Group and draws the Race on the Group.
@@ -17,10 +18,9 @@ public class RaceRenderer {
 
     private Group group;
     private Race race;
-
     private HashMap<String, Circle> boats;
     final private Color MARK_COLOR = Color.BLACK;
-    final private double MARK_SIZE = 10;
+    final private double MARK_SIZE = 10.0;
 
     /**
      * Constructor for RaceRenderer, takes a Race and Group as parameters.
@@ -36,7 +36,9 @@ public class RaceRenderer {
         final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
                 Arrays.asList(Color.CORNSILK, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
         for (int i = 0; i < race.getStartingList().size(); i++) {
-            boats.put(race.getStartingList().get(i).getBoatName(), new Circle(BOAT_RADIUS, BOAT_COLOURS.get(i)));
+            Circle boat = new Circle(BOAT_RADIUS, BOAT_COLOURS.get(i));
+            boats.put(race.getStartingList().get(i).getBoatName(), boat);
+            this.group.getChildren().add(boat);
         }
     }
 
@@ -47,6 +49,7 @@ public class RaceRenderer {
         ArrayList<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
         for (int i = 0 ; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
+            System.out.println(compoundMark.getMarks().get(0).getMarkName());
             if (compoundMark.getMarks().size() == SINGLE_MARK_SIZE) {
                 renderMark(compoundMark.getMarks().get(0));
             } else if (compoundMark.getMarks().size() == GATE_SIZE) {
@@ -60,8 +63,8 @@ public class RaceRenderer {
         Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
         Coordinate coordinate = mark.getMarkCoordinates();
         ArrayList<Double> pixelCoordinates = convertCoordPixel(coordinate);
-        rectangle.setWidth(pixelCoordinates.get(0));
-        rectangle.setHeight(pixelCoordinates.get(1));
+        rectangle.setX(pixelCoordinates.get(0));
+        rectangle.setY(pixelCoordinates.get(1));
         group.getChildren().add(rectangle);
     }
 
@@ -73,8 +76,8 @@ public class RaceRenderer {
             Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
             Coordinate coordinate = mark.getMarkCoordinates();
             ArrayList<Double> pixelCoordinates = convertCoordPixel(coordinate);
-            rectangle.setWidth(pixelCoordinates.get(0));
-            rectangle.setHeight(pixelCoordinates.get(1));
+            rectangle.setX(pixelCoordinates.get(0));
+            rectangle.setY(pixelCoordinates.get(1));
             endPoints.add(rectangle);
             group.getChildren().add(rectangle);
         }
@@ -106,19 +109,33 @@ public class RaceRenderer {
      */
     private ArrayList<Double> convertCoordPixel(Coordinate coord) {
         ArrayList<Double> pixels = new ArrayList<>();
-        double pixelWidth = group.getLayoutX();
-        double pixelHeight = group.getLayoutY();
+//        double pixelWidth = group.getParent().prefWidth();
+//        double pixelHeight = group.getParent().prefHeight();
+        double pixelWidth = 1280.0;
+        double pixelHeight = 720.0;
+//        System.out.println("pix " + pixelHeight);
+//        System.out.println("pix " + pixelWidth);
+
         GPSCalculations gps = new GPSCalculations();
         gps.findMinMaxPoints(race.getCourse());
+
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
-        double widthRatio = pixelWidth / courseWidth;
-        double heightRatio = pixelHeight / courseHeight;
+//        System.out.println("course " + courseHeight);
+//        System.out.println("course " + courseWidth);
+
         XYPair xy = GPSCalculations.GPSxy(coord);
-        double pixelX = xy.getX() / widthRatio;
-        double pixelY = xy.getY() / heightRatio;
+        double widthRatio = (courseWidth - (gps.getMaxX() - xy.getX())) / courseWidth;
+        double heightRatio = (courseHeight - (gps.getMaxY() - xy.getY())) / courseHeight;
+//        System.out.println("ratio " + widthRatio);
+//        System.out.println("ratio " + heightRatio);
+
+        double pixelX = pixelWidth * widthRatio;
+        double pixelY = pixelHeight * heightRatio;
+
         pixels.add(pixelX);
         pixels.add(pixelY);
+        System.out.println("pix = " + pixels);
         return pixels;
     }
 

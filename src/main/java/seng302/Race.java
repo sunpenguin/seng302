@@ -26,6 +26,12 @@ public class Race {
         setCourseForBoats();
     }
 
+    public void LOL() {
+        for (Boat b : startingList) {
+            b.setBoatCoordinates(course.getCompoundMarks().get(0).getMarks().get(0).getMarkCoordinates());
+        }
+    }
+
 
     /**
      * Called in Race constructor.
