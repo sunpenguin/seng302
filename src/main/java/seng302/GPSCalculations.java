@@ -128,7 +128,7 @@ public class GPSCalculations {
         double bearingY = Math.cos(lat2) * Math.sin(long2 - long1);
 
         double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2),
-                                 Math.sqrt((Math.cos(lat1) + bearingX) * (Math.cos(lat1) + bearingX) + bearingY * bearingY));
+                Math.sqrt((Math.cos(lat1) + bearingX) * (Math.cos(lat1) + bearingX) + bearingY * bearingY));
 
         double long3 = long1 + Math.atan2(bearingY, Math.cos(lat1) + bearingX);
 
