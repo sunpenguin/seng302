@@ -13,8 +13,8 @@ import java.util.ArrayList;
  */
 public class XMLReaderTest {
 
-    private File boatFile = new File("/home/cosc/student/csl62/Desktop/Seng302/team-18/src/main/resources/boats.xml");
-    private File courseFile = new File("/home/cosc/student/csl62/Desktop/Seng302/team-18/src/main/resources/course.xml");
+    private File boatFile = new File("/home/cosc/student/jth102/302/project302/team-18/src/main/resources/boats.xml");
+    private File courseFile = new File("/home/cosc/student/jth102/302/project302/team-18/src/main/resources/course.xml");
 
     @Test
     public void testParseBoats() throws IOException, SAXException, ParserConfigurationException {
@@ -34,7 +34,12 @@ public class XMLReaderTest {
         ArrayList<CompoundMark> compoundMarks = course.getCompoundMarks();
         CompoundMark compoundMark = compoundMarks.get(0);
         assertEquals(compoundMark.getName(), "Start");
+        assertEquals(compoundMark.getMarks().size(), 2);
+        assertEquals(compoundMarks.size(), 6);
 
+        CompoundMark compoundMark1 = compoundMarks.get(3);
+        assertEquals(compoundMark1.getMarks().size(), 2);
+        assertEquals(compoundMark1.getMarks().get(1).getMarkName(), "Southern gate 2");
     }
 
 }
