@@ -9,6 +9,8 @@ public class CompoundMark {
 
     private String name;
     private ArrayList<Mark> marks;
+    public static int GATE_SIZE = 2;
+    public static int MARK_SIZE = 1;
 
     public CompoundMark(String name, ArrayList<Mark> marks) {
         this.name = name;
@@ -29,5 +31,16 @@ public class CompoundMark {
 
     public void setMarks(ArrayList<Mark> marks) {
         this.marks = marks;
+    }
+
+    public Coordinate getMidCoordinate() {
+        if (marks.size() == GATE_SIZE) {
+            return GPSCalculations.GPSMidpoint(marks.get(0).getMarkCoordinates(), marks.get(1).getMarkCoordinates());
+        } else if (marks.size() == MARK_SIZE) {
+            return marks.get(0).getMarkCoordinates();
+        } else {
+            return null;
+        }
+
     }
 }

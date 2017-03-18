@@ -132,7 +132,7 @@ public class GPSCalculations {
         double long3 = long1 + Math.atan2(bearingY, Math.cos(lat1) + bearingX);
 
 
-        return new Coordinate(lat3, long3); // NOTE: latitude not computing correctly!!!
+        return new Coordinate(lat3, long3); // TODO NOTE: latitude not computing correctly!!!
     }
 
 
@@ -142,14 +142,33 @@ public class GPSCalculations {
      * Source: http://stackoverflow.com/questions/16266809/convert-from-latitude-longitude-to-x-y
      * @param point The coordinates to convert
      */
-    public static XYPair GPSxy (Coordinate point) {
-
+    public static XYPair GPSxy(Coordinate point) {
         double earthRadius = 6371e3; // meters
-        double aspectLat = Math.cos(32.308046); // Aspect ratio, use a latitude that is the mean of all given
+        double aspectLat = Math.cos(32.308046); // TODO Aspect ratio, use a latitude that is the mean of all given
         double x = earthRadius * Math.toRadians(point.getLongitude()) * aspectLat;
         double y = earthRadius * Math.toRadians(point.getLatitude());
-
         return new XYPair(x, y);
+    }
+
+    public static Coordinate XYToCoordinate(XYPair point) {
+        double earthRadius = 6371e3; // meters
+        double aspectLat = Math.cos(32.308046); // TODO Aspect ratio, use a latitude that is the mean of all given
+        double latitude = Math.toDegrees(point.getY() / earthRadius);
+        double longitude = Math.toDegrees(point.getY() / earthRadius) / aspectLat;
+        return new Coordinate(latitude, longitude);
+    }
+
+
+    public static double findAngle(Coordinate departure, Coordinate destination) {
+        XYPair origin = GPSCalculations.GPSxy(departure);
+        XYPair target = GPSCalculations.GPSxy(destination);
+        double angle = Math.toDegrees(Math.atan2(target.getY() - origin.getY(), target.getX() - origin.getX())) - 90;
+        if (angle < 0) {
+            angle += 360;
+        } else if (angle > 360) {
+            angle -= 360;
+        }
+        return 360 - angle;
     }
 }
 

@@ -1,6 +1,7 @@
 package seng302;
 
 import javafx.scene.Group;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -21,6 +22,7 @@ public class RaceRenderer {
     private HashMap<String, Circle> boats;
     final private Color MARK_COLOR = Color.BLACK;
     final private double MARK_SIZE = 10.0;
+    final double PADDING = 15.0;
 
     /**
      * Constructor for RaceRenderer, takes a Race and Group as parameters.
@@ -49,7 +51,6 @@ public class RaceRenderer {
         ArrayList<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
         for (int i = 0 ; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
-            System.out.println(compoundMark.getMarks().get(0).getMarkName());
             if (compoundMark.getMarks().size() == SINGLE_MARK_SIZE) {
                 renderMark(compoundMark.getMarks().get(0));
             } else if (compoundMark.getMarks().size() == GATE_SIZE) {
@@ -94,8 +95,11 @@ public class RaceRenderer {
     public void renderBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
-            Coordinate boatCoordinates = boat.getBoatCoordinates();
+            Coordinate boatCoordinates = boat.getCoordinate();
             XYPair pixels = convertCoordPixel(boatCoordinates);
+            System.out.println("pix x = " + pixels.getX());
+            System.out.println("pix y = " + pixels.getY());
+            System.out.println();
             Circle boatImage = boats.get(boat.getBoatName());
             boatImage.setCenterX(pixels.getX());
             boatImage.setCenterY(pixels.getY());
@@ -108,18 +112,33 @@ public class RaceRenderer {
      * @return x and y pixel coordinates of the given coordinates
      */
     private XYPair convertCoordPixel(Coordinate coord) {
-        ArrayList<Double> pixels = new ArrayList<>();
-        double pixelWidth = 1280.0;
-        double pixelHeight = 720.0;
+        double pixelWidth = 1280.0 - PADDING * 2; // TODO get size of screen
+        double pixelHeight = 720.0 - PADDING * 2;
+//        double pixelHeight = group.getLayoutY() - PADDING * 2;
+//        double pixelWidth = group.getParent().getBoundsInLocal().getWidth() - PADDING * 2;
+//        double pixelHeight = group.getParent().getBoundsInLocal().getHeight() - PADDING * 2;
+//        System.out.println(group.getParent().getBoundsInLocal().getWidth());
+//        System.out.println(group.getParent().getBoundsInParent().getWidth());
+//        System.out.println(pixelWidth);
+//        System.out.println();
+
         GPSCalculations gps = new GPSCalculations();
         gps.findMinMaxPoints(race.getCourse());
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
-        XYPair xy = GPSCalculations.GPSxy(coord);
-        double widthRatio = (courseWidth - (gps.getMaxX() - xy.getX())) / courseWidth;
-        double heightRatio = (courseHeight - (gps.getMaxY() - xy.getY())) / courseHeight;
-        System.out.println("pix = " + pixels);
-        return new XYPair(pixelWidth * widthRatio, pixelHeight * heightRatio * -1);
+
+
+        XYPair planeCoordinates = GPSCalculations.GPSxy(coord);
+        double widthRatio = (courseWidth - (gps.getMaxX() - planeCoordinates.getX())) / courseWidth;
+        double heightRatio = (courseHeight - (gps.getMaxY() - planeCoordinates.getY())) / courseHeight;
+        System.out.println("course width = " + courseWidth);
+        System.out.println("gps.getMaxX = " + gps.getMaxX());
+        System.out.println("planeCoordinates.getX = " + planeCoordinates.getX());
+        System.out.println("width ratio = " + widthRatio);
+        System.out.println();
+//        System.out.println("height ratio = " + heightRatio);
+
+        return new XYPair(pixelWidth * widthRatio + PADDING, (pixelHeight * heightRatio + PADDING) * -1);
     }
 
 }

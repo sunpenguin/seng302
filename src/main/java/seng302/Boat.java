@@ -11,14 +11,15 @@ public class Boat {
     private String boatName;
     private String teamName;
     private double speed;
-    private ArrayList<CompoundMark> compoundMarkList = new ArrayList<>();
-    private CompoundMark currentCompoundMark;
-    private CompoundMark nextCompoundMark;
+//    private ArrayList<CompoundMark> compoundMarkList = new ArrayList<>();
+//    private CompoundMark currentCompoundMark;
+//    private CompoundMark nextCompoundMark;
+    private Leg currentLeg;
     private double position;
     private boolean finished = false;
     private int heading;
+    private Coordinate coordinate;
 
-    private Coordinate boatCoordinates;
 
     /**
      * A constructor for the Boat class
@@ -37,76 +38,59 @@ public class Boat {
     }
 
 
-    /**
-     * Getter for the boat's coordinates
-     * @return the coordinates
-     */
-    public Coordinate getBoatCoordinates() {
-        return this.boatCoordinates;
-    }
+//    /**
+//     * Setter for the next CompoundMark the boat must pass
+//     * @param nextCompoundMark The next CompoundMark to pass
+//     */
+//    public void setNextCompoundMark(CompoundMark nextCompoundMark) {
+//        this.nextCompoundMark = nextCompoundMark;
+//    }
+//
+//
+//    /**
+//     * Getter for the next CompoundMark the boat must pass
+//     * @return the next CompoundMark to pass
+//     */
+//    public CompoundMark getNextCompoundMark() {
+//        return nextCompoundMark;
+//    }
 
 
-    /**
-     * Setter for boat's coordinates
-     * @param coordinates the coordinates
-     */
-    public void setBoatCoordinates(Coordinate coordinates) {
-        this.boatCoordinates = coordinates;
-    }
+//    /**
+//     * Setter for the current CompoundMark.
+//     * Called when a race is created to set each boat's current mark
+//     * to the first mark on the course.
+//     * @param currentCompoundMark the most recently passed CompoundMark.
+//     */
+//    public void setCurrentCompoundMark(CompoundMark currentCompoundMark) {
+//        this.currentCompoundMark = currentCompoundMark;
+//    }
+//
+//
+//    /**
+//     * Getter for the current CompoundMark.
+//     * @return the most recently passed CompoundMark.
+//     */
+//    public CompoundMark getCurrentCompoundMark() {
+//        return this.currentCompoundMark;
+//    }
 
-    /**
-     * Setter for the next CompoundMark the boat must pass
-     * @param nextCompoundMark The next CompoundMark to pass
-     */
-    public void setNextCompoundMark(CompoundMark nextCompoundMark) {
-        this.nextCompoundMark = nextCompoundMark;
-    }
-
-
-    /**
-     * Getter for the next CompoundMark the boat must pass
-     * @return the next CompoundMark to pass
-     */
-    public CompoundMark getNextCompoundMark() {
-        return nextCompoundMark;
-    }
-
-
-    /**
-     * Setter for the current CompoundMark.
-     * Called when a race is created to set each boat's current mark
-     * to the first mark on the course.
-     * @param currentCompoundMark the most recently passed CompoundMark.
-     */
-    public void setCurrentCompoundMark(CompoundMark currentCompoundMark) {
-        this.currentCompoundMark = currentCompoundMark;
-    }
-
-
-    /**
-     * Getter for the current CompoundMark.
-     * @return the most recently passed CompoundMark.
-     */
-    public CompoundMark getCurrentCompoundMark() {
-        return this.currentCompoundMark;
-    }
-
-    /**
-     * Getter for a boats list of marks
-     * @return the list of CompoundMarks
-     */
-    public ArrayList<CompoundMark> getCompoundMarkList() {
-        return this.compoundMarkList;
-    }
-
-
-    /**
-     * Setter for a boats list of marks
-     * @param compoundMarkList the list of CompoundMarks
-     */
-    public void setCompoundMarkList(ArrayList<CompoundMark> compoundMarkList) {
-        this.compoundMarkList = compoundMarkList;
-    }
+//    /**
+//     * Getter for a boats list of marks
+//     * @return the list of CompoundMarks
+//     */
+//    public ArrayList<CompoundMark> getCompoundMarkList() {
+//        return this.compoundMarkList;
+//    }
+//
+//
+//    /**
+//     * Setter for a boats list of marks
+//     * @param compoundMarkList the list of CompoundMarks
+//     */
+//    public void setCompoundMarkList(ArrayList<CompoundMark> compoundMarkList) {
+//        this.compoundMarkList = compoundMarkList;
+//    }
 
 
     /**
@@ -190,7 +174,7 @@ public class Boat {
 
 
     /**
-     * A getter for the speed of the boat
+     * A setter for the speed of the boat
      * @param speed the speed of the boat
      */
     public void setSpeed(double speed) {
@@ -217,13 +201,13 @@ public class Boat {
     }
 
 
-    /**
-     * A method to display where the boat currently is on the course
-     */
-    public void viewPlaceOnCourse() {
-        System.out.printf("%s -> Current mark: %s, Next mark: %s\n",
-                boatName, currentCompoundMark.getName(), nextCompoundMark.getName());
-    }
+//    /**
+//     * A method to display where the boat currently is on the course
+//     */
+//    public void viewPlaceOnCourse() {
+//        System.out.printf("%s -> Current mark: %s, Next mark: %s\n",
+//                boatName, currentCompoundMark.getName(), nextCompoundMark.getName());
+//    }
 
 
     /**
@@ -236,5 +220,21 @@ public class Boat {
                 "boatName='" + boatName + '\'' +
                 ", teamName='" + teamName + '\'' +
                 '}';
+    }
+
+    public Leg getCurrentLeg() {
+        return currentLeg;
+    }
+
+    public void setCurrentLeg(Leg currentLeg) {
+        this.currentLeg = currentLeg;
+    }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
+
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
     }
 }

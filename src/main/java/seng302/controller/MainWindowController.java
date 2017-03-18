@@ -38,9 +38,10 @@ public class MainWindowController {
             race.LOL();
             RaceRenderer rr = new RaceRenderer(race, group);
             rr.renderCourse();
-            rr.renderBoats();
-            System.out.println(group.getChildren().size());
-            System.out.println(group.getChildren());
+//            rr.renderBoats();
+            RaceLoop rl = new RaceLoop(race, rr);
+            rl.handle(System.nanoTime());
+            rl.handle(System.nanoTime());
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {

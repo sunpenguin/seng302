@@ -28,7 +28,7 @@ public class Race {
 
     public void LOL() {
         for (Boat b : startingList) {
-            b.setBoatCoordinates(course.getCompoundMarks().get(0).getMarks().get(0).getMarkCoordinates());
+            b.setCoordinate(course.getCompoundMarks().get(0).getMarks().get(0).getMarkCoordinates());
         }
     }
 
@@ -40,9 +40,10 @@ public class Race {
      */
     private void setCourseForBoats() {
         for (Boat boat : startingList) {
-            boat.setCompoundMarkList(course.getCompoundMarks());
-            boat.setCurrentCompoundMark(boat.getCompoundMarkList().get(0));
-            boat.setNextCompoundMark(boat.getCompoundMarkList().get(1));
+//            boat.setCompoundMarkList(course.getCompoundMarks());
+//            boat.setCurrentCompoundMark(boat.getCompoundMarkList().get(0));
+//            boat.setNextCompoundMark(boat.getCompoundMarkList().get(1));
+            boat.setCurrentLeg(course.getLegs().get(0));
         }
     }
 
@@ -198,21 +199,53 @@ public class Race {
 //
 //    }
 
-    public void updateBoats(float time) {
+//    public void updateBoats(float time) {
+//        for (Boat boat : startingList) {
+//            if (!(boat.isFinished())) {
+//                CompoundMark nextCompoundMark = boat.getNextCompoundMark();
+//                Coordinate markCoordinate = nextCompoundMark.getMarks().get(0).getMarkCoordinates();
+//                Coordinate boatCoordinates = boat.getBoatCoordinates();
+//                if (nextCompoundMark.getMarks().size() == 1) { //that is a mark
+//                    // check if the boat has passed the mark
+//                } else {
+//                    // the compound mark is a gate, check if it has passed it
+//                }
+//
+//            }
+//        }
+//    }
+
+    public void updateBoats(double time) {
         for (Boat boat : startingList) {
             if (!(boat.isFinished())) {
-                CompoundMark nextCompoundMark = boat.getNextCompoundMark();
-                Coordinate markCoordinate = nextCompoundMark.getMarks().get(0).getMarkCoordinates();
-                Coordinate boatCoordinates = boat.getBoatCoordinates();
-                if (nextCompoundMark.getMarks().size() == 1) { //that is a mark
-                    // check if the boat has passed the mark
-                } else {
-                    // the compound mark is a gate, check if it has passed it
-                }
-
+                updateBoat(boat, time);
             }
         }
     }
+
+
+    private void updateBoat(Boat boat, double time) {
+        XYPair currentCoordinate = GPSCalculations.GPSxy(boat.getCoordinate());
+        double speed = boat.getSpeed() * 1000 / 3600; // meters per second
+        double distanceTravelled = speed * time;
+        double angle = 450 - boat.getCurrentLeg().getHeading();
+        if (angle > 360) {
+            angle -= 360;
+        } else if (angle < 0) {
+            angle += 360;
+        }
+        System.out.println("angle = " + angle);
+        System.out.println("distance travelled  = " + distanceTravelled);
+        double nextX = currentCoordinate.getX() + distanceTravelled * Math.cos(angle);
+        double nextY = currentCoordinate.getY() + distanceTravelled * Math.sin(angle);
+        XYPair nextCoordinate = new XYPair(nextX, nextY);
+        System.out.println();
+        System.out.println("Current = " + currentCoordinate.getX() + "    " + currentCoordinate.getY());
+        System.out.println("next = " + nextCoordinate.getX() + "    " + nextCoordinate.getY());
+        System.out.println();
+        boat.setCoordinate(GPSCalculations.XYToCoordinate(nextCoordinate));
+    }
+
 
 
 //    /**

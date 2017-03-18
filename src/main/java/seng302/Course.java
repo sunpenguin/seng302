@@ -8,15 +8,17 @@ import java.util.ArrayList;
  */
 public class Course {
 
-    private ArrayList<CompoundMark> compoundMarks = new ArrayList<>();
+    private ArrayList<CompoundMark> compoundMarks;
+    private ArrayList<Leg> legs;
 
-    public Course(ArrayList<CompoundMark> marks,
-                  Coordinate topLeft, Coordinate topRight, Coordinate bottomLeft, Coordinate bottomRight) {
-        this.compoundMarks = marks;
-    }
 
     public Course(ArrayList<CompoundMark> marks) {
+
         this.compoundMarks = marks;
+        legs = new ArrayList<>();
+        for (int i = 0 ; i < marks.size() - 1; i++) {
+            legs.add(new Leg(marks.get(i), marks.get(i + 1)));
+        }
     }
 
 //    /**
@@ -67,6 +69,10 @@ public class Course {
         return compoundMarks;
     }
 
+
+    public ArrayList<Leg> getLegs() {
+        return legs;
+    }
 
 //    /**
 //     * A method which displays all of the marks included in this course
