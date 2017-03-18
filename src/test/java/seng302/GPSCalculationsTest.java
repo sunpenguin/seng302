@@ -1,6 +1,11 @@
 package seng302;
 
 import org.junit.Test;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import static org.junit.Assert.*;
 
@@ -10,28 +15,27 @@ import static org.junit.Assert.*;
 public class GPSCalculationsTest {
 
     @Test
-    public void findMinMaxPointstest() {
+    public void findMinMaxPointstest() throws IOException, SAXException, ParserConfigurationException {
 
-//        ArrayList<CompoundMark> compoundMarks = new ArrayList<>();
-//
-//        ArrayList<Mark> startMarks = new ArrayList<>();
-//        startMarks.add(new Mark("Start1", new Coordinate(32.296577, -64.854304)));
-//        startMarks.add(new Mark("Start2", new Coordinate(32.293771, -64.855242)));
-//        compoundMarks.add(new CompoundMark("Start1", startMarks));
-//
-//        Course courseTest = new Course(compoundMarks);
-//
-//        GPSCalculations g = new GPSCalculations();
-//        g.findMinMaxPoints(courseTest);
-//
-//        double minX = g.getMinX();
-//        double maxX = g.getMaxX();
-//        double minY = g.getMinY();
-//        double maxY = g.getMaxY();
-//
-//        assertEquals(minX, -4527163, 1);
-//        assertEquals(maxX, -4527098, 1);
-//        assertEquals(minY, 3590903, 1);
-//        assertEquals(maxY, 3591215, 1);
+        Course testCourse = XMLParser.parseCourse(new File("/home/cosc/student/jth102/302/project302/team-18/src/main/resources/course.xml"));
+
+
+        GPSCalculations g = new GPSCalculations();
+        g.findMinMaxPoints(testCourse);
+
+        double minX = g.getMinX();
+        double maxX = g.getMaxX();
+        double minY = g.getMinY();
+        double maxY = g.getMaxY();
+
+        XYPair expectedMinXCoord = GPSCalculations.GPSxy(new Coordinate(32.293771, -64.855242));
+        XYPair expectedMaxXCoord = GPSCalculations.GPSxy(new Coordinate(32.308046, -64.831785));
+        XYPair expectedMinYCoord = GPSCalculations.GPSxy(new Coordinate(32.280164, -64.847591));
+        XYPair expectedMaxYCoord = GPSCalculations.GPSxy(new Coordinate(32.317379, -64.839291));
+
+        assertEquals(minX, expectedMinXCoord.getX(), 1);
+        assertEquals(maxX, expectedMaxXCoord.getX(), 1);
+        assertEquals(minY, expectedMinYCoord.getY(), 1);
+        assertEquals(maxY, expectedMaxYCoord.getY(), 1);
     }
 }

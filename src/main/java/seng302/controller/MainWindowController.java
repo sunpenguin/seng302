@@ -33,8 +33,8 @@ public class MainWindowController {
 
         try {
             // TODO remember to change the path of the xml files
-            Course course = XMLParser.parseCourse(new File("/home/cosc/student/dhl25/Documents/seng302/team-18/src/main/resources/course.xml"));
-            ArrayList<Boat> boats = XMLParser.parseBoats(new File("/home/cosc/student/dhl25/Documents/seng302/team-18/src/main/resources/boats.xml"));
+            Course course = XMLParser.parseCourse(new File("/home/cosc/student/jth102/302/project302/team-18/src/main/resources/course.xml"));
+            ArrayList<Boat> boats = XMLParser.parseBoats(new File("/home/cosc/student/jth102/302/project302/team-18/src/main/resources/boats.xml"));
             race = new Race(boats, course);
             race.LOL(); // sets intial coordinates of boats
             RaceRenderer rr = new RaceRenderer(race, group);
