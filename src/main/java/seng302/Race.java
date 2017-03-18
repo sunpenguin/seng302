@@ -215,7 +215,7 @@ public class Race {
 //        }
 //    }
 
-    public void updateBoats(double time) {
+    public void updateBoats(double time) { // time in seconds
         for (Boat boat : startingList) {
             if (!(boat.isFinished())) {
                 updateBoat(boat, time);
@@ -227,8 +227,8 @@ public class Race {
     private void updateBoat(Boat boat, double time) {
         XYPair currentCoordinate = GPSCalculations.GPSxy(boat.getCoordinate());
         double speed = boat.getSpeed() * 1000 / 3600; // meters per second
-        double distanceTravelled = speed * time;
-        double angle = 450 - boat.getCurrentLeg().getHeading();
+        double distanceTravelled = speed * time; // meters
+        double angle = 450 - boat.getCurrentLeg().getHeading(); // convert heading to actual angle
         if (angle > 360) {
             angle -= 360;
         } else if (angle < 0) {

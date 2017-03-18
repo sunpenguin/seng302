@@ -32,16 +32,17 @@ public class MainWindowController {
 
 
         try {
+            // TODO remember to change the path of the xml files
             Course course = XMLParser.parseCourse(new File("/home/cosc/student/dhl25/Documents/seng302/team-18/src/main/resources/course.xml"));
             ArrayList<Boat> boats = XMLParser.parseBoats(new File("/home/cosc/student/dhl25/Documents/seng302/team-18/src/main/resources/boats.xml"));
             race = new Race(boats, course);
-            race.LOL();
+            race.LOL(); // sets intial coordinates of boats
             RaceRenderer rr = new RaceRenderer(race, group);
             rr.renderCourse();
 //            rr.renderBoats();
             RaceLoop rl = new RaceLoop(race, rr);
-            rl.handle(System.nanoTime());
-            rl.handle(System.nanoTime());
+            rl.handle(System.nanoTime()); // first time its called it does nothing
+            rl.handle(System.nanoTime()); // this is when the magic happens
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {
