@@ -1,5 +1,6 @@
 package seng302;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -14,13 +15,18 @@ import static org.junit.Assert.*;
  */
 public class GPSCalculationsTest {
 
+    private Course testCourse;
+    private GPSCalculations g = new GPSCalculations();
+
+    @Before
+    public void setUpTestCourse() throws IOException, SAXException, ParserConfigurationException {
+        testCourse = XMLParser.parseCourse(new File("/home/cosc/student/jth102/302/project302/team-18/src/main/resources/course.xml"));
+    }
+
+
     @Test
     public void findMinMaxPointstest() throws IOException, SAXException, ParserConfigurationException {
 
-        Course testCourse = XMLParser.parseCourse(new File("/home/cosc/student/jth102/302/project302/team-18/src/main/resources/course.xml"));
-
-
-        GPSCalculations g = new GPSCalculations();
         g.findMinMaxPoints(testCourse);
 
         double minX = g.getMinX();
@@ -37,5 +43,23 @@ public class GPSCalculationsTest {
         assertEquals(maxX, expectedMaxXCoord.getX(), 1);
         assertEquals(minY, expectedMinYCoord.getY(), 1);
         assertEquals(maxY, expectedMaxYCoord.getY(), 1);
+    }
+
+    @Test
+    public void XYtoGPSConversionTest() {
+        // Get the coordinates of the first Mark in the second CompoundMark
+        Coordinate testCoordinate = testCourse.getCompoundMarks().get(1).getMarks().get(0).getMarkCoordinates();
+
+        // Convert GPS coordinates to cartesian coordinates
+        XYPair testCoordinateXY = GPSCalculations.GPSxy(testCoordinate);
+
+        // Convert the cartesian coordinates back to GPS coordinates
+        Coordinate testCoordinate1 = GPSCalculations.XYToCoordinate(testCoordinateXY);
+
+        // Check that the 2 sets of GPS coordinates are the same within a delta of 1
+        System.out.printf("Original lat: %.6f | New lat: %.6f\n", testCoordinate.getLatitude(), testCoordinate1.getLatitude());
+        assertEquals(testCoordinate.getLatitude(), testCoordinate1.getLatitude(), 0.000001);
+        System.out.printf("Original long: %.6f | New long: %.6f\n", testCoordinate.getLongitude(), testCoordinate1.getLongitude());
+        assertEquals(testCoordinate.getLongitude(), testCoordinate1.getLongitude(), 1);
     }
 }
