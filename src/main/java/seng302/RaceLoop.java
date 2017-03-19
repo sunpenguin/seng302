@@ -31,11 +31,11 @@ public class RaceLoop extends AnimationTimer {
         double secondsElapsed = (currentTime - previousTime) / 1e9f; //converting from nanoseconds to seconds
         System.out.println("seconds elapsed = " + secondsElapsed);
         previousTime = currentTime;
-        System.out.println(1);
+//        System.out.println(1);
         race.updateBoats(secondsElapsed);
-        System.out.println(2);
+//        System.out.println(2);
         renderer.renderBoats();
-        System.out.println(3);
+//        System.out.println(3);
     }
 }
 

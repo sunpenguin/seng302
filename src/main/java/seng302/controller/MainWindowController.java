@@ -2,10 +2,8 @@ package seng302.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.shape.Line;
 import org.xml.sax.SAXException;
 import seng302.*;
-
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
@@ -33,16 +31,17 @@ public class MainWindowController {
 
         try {
             // TODO remember to change the path of the xml files
-            Course course = XMLParser.parseCourse(new File("/home/cosc/student/jth102/302/project302/team-18/src/main/resources/course.xml"));
-            ArrayList<Boat> boats = XMLParser.parseBoats(new File("/home/cosc/student/jth102/302/project302/team-18/src/main/resources/boats.xml"));
+            Course course = XMLParser.parseCourse(new File("/home/cosc/student/csl62/Desktop/Seng302/team-18/src/main/resources/course.xml"));
+            ArrayList<Boat> boats = XMLParser.parseBoats(new File("/home/cosc/student/csl62/Desktop/Seng302/team-18/src/main/resources/boats.xml"));
             race = new Race(boats, course);
-            race.LOL(); // sets intial coordinates of boats
+            race.setStartingCoordintes(); // sets intial coordinates of boats
             RaceRenderer rr = new RaceRenderer(race, group);
             rr.renderCourse();
-//            rr.renderBoats();
+//          rr.renderBoats();
             RaceLoop rl = new RaceLoop(race, rr);
-            rl.handle(System.nanoTime()); // first time its called it does nothing
-            rl.handle(System.nanoTime()); // this is when the magic happens
+            rl.start();
+//            rl.handle(System.nanoTime()); // first time its called it does nothing
+//            rl.handle(System.nanoTime()); // this is when the magic happens
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {

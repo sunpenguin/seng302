@@ -17,7 +17,7 @@ public class Course {
         this.compoundMarks = marks;
         legs = new ArrayList<>();
         for (int i = 0 ; i < marks.size() - 1; i++) {
-            legs.add(new Leg(marks.get(i), marks.get(i + 1)));
+            legs.add(new Leg(marks.get(i), marks.get(i + 1), i));
         }
     }
 

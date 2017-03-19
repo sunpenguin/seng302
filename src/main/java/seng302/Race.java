@@ -26,9 +26,12 @@ public class Race {
         setCourseForBoats();
     }
 
-    public void LOL() {
+    public void setStartingCoordintes() {
         for (Boat b : startingList) {
-            b.setCoordinate(course.getCompoundMarks().get(0).getMarks().get(0).getMarkCoordinates());
+            Coordinate start1 = course.getCompoundMarks().get(0).getMarks().get(0).getMarkCoordinates();
+            Coordinate start2 = course.getCompoundMarks().get(0).getMarks().get(1).getMarkCoordinates();
+            Coordinate midPoint = GPSCalculations.GPSMidpoint(start1, start2);
+            b.setCoordinate(midPoint);
         }
     }
 
@@ -44,6 +47,8 @@ public class Race {
 //            boat.setCurrentCompoundMark(boat.getCompoundMarkList().get(0));
 //            boat.setNextCompoundMark(boat.getCompoundMarkList().get(1));
             boat.setCurrentLeg(course.getLegs().get(0));
+            boat.setNextLeg(course.getLegs().get(1));
+            System.out.println(course.getLegs().get(0).getHeading());
         }
     }
 
@@ -225,24 +230,37 @@ public class Race {
 
 
     private void updateBoat(Boat boat, double time) {
+        if (boat.getBoatName().equals("Emirates")) {
+            System.out.printf("Boats dist: %.2f | Mark dist: %.2f\n", boat.getDistanceTravelled(), boat.getCurrentLeg().getDistance());
+        }
+        if (boat.getCurrentLeg().getDistance() < boat.getDistanceTravelled()){
+            if (boat.getCurrentLeg().getLegNumber() < (course.getLegs().size() - 1)) {
+                boat.setNextLeg(course.getLegs().get(boat.getCurrentLeg().getLegNumber() + 1)); // set  next leg if current leg is not the last
+            }
+            boat.setCurrentLeg(boat.getNextLeg());
+            boat.setDistanceTravelled(0);
+
+        }
         XYPair currentCoordinate = GPSCalculations.GPSxy(boat.getCoordinate());
         double speed = boat.getSpeed() * 1000 / 3600; // meters per second
         double distanceTravelled = speed * time; // meters
+        boat.setDistanceTravelled(boat.getDistanceTravelled() + distanceTravelled);
         double angle = 450 - boat.getCurrentLeg().getHeading(); // convert heading to actual angle
         if (angle > 360) {
             angle -= 360;
         } else if (angle < 0) {
             angle += 360;
         }
-        System.out.println("angle = " + angle);
-        System.out.println("distance travelled  = " + distanceTravelled);
-        double nextX = currentCoordinate.getX() + distanceTravelled * Math.cos(angle);
-        double nextY = currentCoordinate.getY() + distanceTravelled * Math.sin(angle);
+//        System.out.printf("BoatCurrentHeading: %f\n", boat.getCurrentLeg().getHeading());
+//        System.out.println("angle = " + angle);
+//        System.out.println("distance travelled  = " + distanceTravelled);
+        double nextX = currentCoordinate.getX() + distanceTravelled * Math.cos(Math.toRadians(angle));
+        double nextY = currentCoordinate.getY() + distanceTravelled * Math.sin(Math.toRadians(angle));
         XYPair nextCoordinate = new XYPair(nextX, nextY);
-        System.out.println();
-        System.out.println("Current = " + currentCoordinate.getX() + "    " + currentCoordinate.getY());
-        System.out.println("next = " + nextCoordinate.getX() + "    " + nextCoordinate.getY());
-        System.out.println();
+//        System.out.println();
+//        System.out.println("Current = " + currentCoordinate.getX() + "    " + currentCoordinate.getY());
+//        System.out.println("next = " + nextCoordinate.getX() + "    " + nextCoordinate.getY());
+//        System.out.println();
         boat.setCoordinate(GPSCalculations.XYToCoordinate(nextCoordinate));
     }
 

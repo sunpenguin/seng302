@@ -97,8 +97,8 @@ public class RaceRenderer {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
             XYPair pixels = convertCoordPixel(boatCoordinates);
-            System.out.println("pix x = " + pixels.getX());
-            System.out.println("pix y = " + pixels.getY());
+//            System.out.println("pix x = " + pixels.getX());
+//            System.out.println("pix y = " + pixels.getY());
             System.out.println();
             Circle boatImage = boats.get(boat.getBoatName());
             boatImage.setCenterX(pixels.getX());
@@ -112,7 +112,7 @@ public class RaceRenderer {
      * @return x and y pixel coordinates of the given coordinates
      */
     private XYPair convertCoordPixel(Coordinate coord) {
-        double pixelWidth = 1280 - PADDING * 2; // TODO get size of screen
+        double pixelWidth = 500 - PADDING * 2; // TODO get size of screen
         double pixelHeight = 720.0 - PADDING * 2;
 //        double pixelHeight = group.getLayoutY() - PADDING * 2;
 //        double pixelWidth = group.getParent().getBoundsInLocal().getWidth() - PADDING * 2;
@@ -131,11 +131,11 @@ public class RaceRenderer {
         XYPair planeCoordinates = GPSCalculations.GPSxy(coord);
         double widthRatio = (courseWidth - (gps.getMaxX() - planeCoordinates.getX())) / courseWidth;
         double heightRatio = (courseHeight - (gps.getMaxY() - planeCoordinates.getY())) / courseHeight;
-        System.out.println("course width = " + courseWidth);
-        System.out.println("gps.getMaxX = " + gps.getMaxX());
-        System.out.println("planeCoordinates.getX = " + planeCoordinates.getX());
-        System.out.println("width ratio = " + widthRatio);
-        System.out.println();
+//        System.out.println("course width = " + courseWidth);
+//        System.out.println("gps.getMaxX = " + gps.getMaxX());
+//        System.out.println("planeCoordinates.getX = " + planeCoordinates.getX());
+//        System.out.println("width ratio = " + widthRatio);
+//        System.out.println();
 //        System.out.println("height ratio = " + heightRatio);
 
         return new XYPair(pixelWidth * widthRatio + PADDING, (pixelHeight * heightRatio + PADDING) * -1);

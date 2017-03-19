@@ -8,12 +8,22 @@ public class Leg {
     private CompoundMark departure;
     private double heading;
     private double distance;
+    private int legNumber;
 
-    public Leg(CompoundMark departure, CompoundMark destination) {
+    public Leg(CompoundMark departure, CompoundMark destination, int legNumber) {
         this.destination = destination;
         this.departure = departure;
         this.heading = GPSCalculations.findAngle(departure.getMidCoordinate(), destination.getMidCoordinate());
-        this.distance = GPSCalculations.GPSDistance(departure.getMidCoordinate(), destination.getMidCoordinate());
+        this.legNumber = legNumber;
+
+        XYPair departureXY = GPSCalculations.GPSxy(departure.getMidCoordinate());
+        XYPair destinationXY = GPSCalculations.GPSxy(destination.getMidCoordinate());
+
+        double diffXSquared = (departureXY.getX() - destinationXY.getX()) * (departureXY.getX() - destinationXY.getX());
+        double diffYSquared = (departureXY.getY() - destinationXY.getY()) * (departureXY.getY() - destinationXY.getY());
+        this.distance = Math.sqrt(diffXSquared + diffYSquared);
+
+//        this.distance = GPSCalculations.GPSDistance(departure.getMidCoordinate(), destination.getMidCoordinate());
     }
 
     public CompoundMark getDestination() {
@@ -30,5 +40,9 @@ public class Leg {
 
     public double getDistance() {
         return distance;
+    }
+
+    public int getLegNumber() {
+        return legNumber;
     }
 }

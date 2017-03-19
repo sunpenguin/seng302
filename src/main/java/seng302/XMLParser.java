@@ -131,6 +131,7 @@ public class XMLParser {
         return boats;
     }
 
+
     private static Boat parseBoat(Element boatElement) {
         final String SPEED_TAG = "speed";
         final String BOAT_NAME_TAG = "boatname";

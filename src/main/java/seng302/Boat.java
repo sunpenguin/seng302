@@ -15,10 +15,13 @@ public class Boat {
 //    private CompoundMark currentCompoundMark;
 //    private CompoundMark nextCompoundMark;
     private Leg currentLeg;
+    private Leg nextLeg;
     private double position;
     private boolean finished = false;
     private int heading;
     private Coordinate coordinate;
+    private double distanceTravelled;
+
 
 
     /**
@@ -37,8 +40,16 @@ public class Boat {
         this.speed = speed;
     }
 
+    public double getDistanceTravelled() {
+        return distanceTravelled;
+    }
 
-//    /**
+    public void setDistanceTravelled(double distanceTravelled) {
+        this.distanceTravelled = distanceTravelled;
+    }
+
+
+    //    /**
 //     * Setter for the next CompoundMark the boat must pass
 //     * @param nextCompoundMark The next CompoundMark to pass
 //     */
@@ -220,6 +231,14 @@ public class Boat {
                 "boatName='" + boatName + '\'' +
                 ", teamName='" + teamName + '\'' +
                 '}';
+    }
+
+    public Leg getNextLeg() {
+        return nextLeg;
+    }
+
+    public void setNextLeg(Leg nextLeg) {
+        this.nextLeg = nextLeg;
     }
 
     public Leg getCurrentLeg() {
