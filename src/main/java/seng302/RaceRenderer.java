@@ -7,6 +7,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class RaceRenderer {
         boats = new HashMap<>();
         final double BOAT_RADIUS = 10.0;
         final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
-                Arrays.asList(Color.CORNSILK, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
+                Arrays.asList(Color.DODGERBLUE, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Circle boat = new Circle(BOAT_RADIUS, BOAT_COLOURS.get(i));
             boats.put(race.getStartingList().get(i).getBoatName(), boat);
@@ -64,24 +65,29 @@ public class RaceRenderer {
         Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
         Coordinate coordinate = mark.getMarkCoordinates();
         XYPair pixelCoordinates = convertCoordPixel(coordinate);
-        rectangle.setX(pixelCoordinates.getX());
-        rectangle.setY(pixelCoordinates.getY());
+        rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
+        rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
         group.getChildren().add(rectangle);
     }
 
 
     private void renderGate(CompoundMark compoundMark) {
-        ArrayList<Rectangle> endPoints = new ArrayList<>();
+
+        ArrayList<XYPair> endPoints = new ArrayList<>();
+
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
             Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
             Coordinate coordinate = mark.getMarkCoordinates();
             XYPair pixelCoordinates = convertCoordPixel(coordinate);
-            rectangle.setX(pixelCoordinates.getX());
-            rectangle.setY(pixelCoordinates.getY());
-            endPoints.add(rectangle);
+            rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
+            rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
+
+            endPoints.add(pixelCoordinates);
+
             group.getChildren().add(rectangle);
         }
+
         Line line = new Line(
                 endPoints.get(0).getX(), endPoints.get(0).getY(),
                 endPoints.get(1).getX(), endPoints.get(1).getY());
@@ -112,7 +118,7 @@ public class RaceRenderer {
      * @return x and y pixel coordinates of the given coordinates
      */
     private XYPair convertCoordPixel(Coordinate coord) {
-        double pixelWidth = 500 - PADDING * 2; // TODO get size of screen
+        double pixelWidth = 1280 - PADDING * 2; // TODO get size of screen
         double pixelHeight = 720.0 - PADDING * 2;
 //        double pixelHeight = group.getLayoutY() - PADDING * 2;
 //        double pixelWidth = group.getParent().getBoundsInLocal().getWidth() - PADDING * 2;
