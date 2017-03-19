@@ -112,7 +112,7 @@ public class RaceRenderer {
      * @return x and y pixel coordinates of the given coordinates
      */
     private XYPair convertCoordPixel(Coordinate coord) {
-        double pixelWidth = 1280.0 - PADDING * 2; // TODO get size of screen
+        double pixelWidth = 1280 - PADDING * 2; // TODO get size of screen
         double pixelHeight = 720.0 - PADDING * 2;
 //        double pixelHeight = group.getLayoutY() - PADDING * 2;
 //        double pixelWidth = group.getParent().getBoundsInLocal().getWidth() - PADDING * 2;

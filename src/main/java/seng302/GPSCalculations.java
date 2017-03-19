@@ -153,8 +153,6 @@ public class GPSCalculations {
     public static Coordinate XYToCoordinate(XYPair point) {
         double earthRadius = 6371e3; // meters
         double aspectLat = Math.cos(32.308046); // TODO Aspect ratio, use a latitude that is the mean of all given
-//        double latitude = Math.toDegrees(point.getY() / earthRadius);
-//        double longitude = Math.toDegrees(point.getY() / earthRadius) / aspectLat;
 
         double latitude = Math.toDegrees(point.getY() / earthRadius);
         double longitude = Math.toDegrees((point.getX() / earthRadius) / aspectLat);

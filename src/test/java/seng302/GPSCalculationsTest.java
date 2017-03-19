@@ -57,9 +57,9 @@ public class GPSCalculationsTest {
         Coordinate testCoordinate1 = GPSCalculations.XYToCoordinate(testCoordinateXY);
 
         // Check that the 2 sets of GPS coordinates are the same within a delta of 1
-        System.out.printf("Original lat: %.6f | New lat: %.6f\n", testCoordinate.getLatitude(), testCoordinate1.getLatitude());
+//        System.out.printf("Original lat: %.6f | New lat: %.6f\n", testCoordinate.getLatitude(), testCoordinate1.getLatitude());
         assertEquals(testCoordinate.getLatitude(), testCoordinate1.getLatitude(), 0.000001);
-        System.out.printf("Original long: %.6f | New long: %.6f\n", testCoordinate.getLongitude(), testCoordinate1.getLongitude());
-        assertEquals(testCoordinate.getLongitude(), testCoordinate1.getLongitude(), 1);
+//        System.out.printf("Original long: %.6f | New long: %.6f\n", testCoordinate.getLongitude(), testCoordinate1.getLongitude());
+        assertEquals(testCoordinate.getLongitude(), testCoordinate1.getLongitude(), 0.000001);
     }
 }
