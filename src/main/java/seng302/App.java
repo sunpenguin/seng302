@@ -40,9 +40,10 @@ public class App extends Application {
 
         Coordinate start1 = new Coordinate(start1Lat, start1Long);
         Coordinate start2 = new Coordinate(start2Lat, start2Long);
-
+        Coordinate test = GPSCalculations.GPSMidpoint(start1, start2);
+        System.out.println(test.getLatitude() + " " +  test.getLongitude());
         System.out.println(GPSCalculations.GPSDistance(start1, start2));
-
+        System.out.println(GPSCalculations.GPSMidpoint(start1, start2));
         XYPair start1XY = GPSCalculations.GPSxy(start1);
         XYPair start2XY = GPSCalculations.GPSxy(start2);
 

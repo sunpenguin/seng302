@@ -123,16 +123,22 @@ public class GPSCalculations {
         double lat2 = point2.getLatitude();
         double long2 = point2.getLongitude();
 
-        double bearingX = Math.cos(lat2) * Math.cos(long2 - long1);
-        double bearingY = Math.cos(lat2) * Math.sin(long2 - long1);
+        double dLon = Math.toRadians(long2 - long1);
 
-        double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2),
-                Math.sqrt((Math.cos(lat1) + bearingX) * (Math.cos(lat1) + bearingX) + bearingY * bearingY));
+        //convert to radians
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+        long1 = Math.toRadians(long1);
 
-        double long3 = long1 + Math.atan2(bearingY, Math.cos(lat1) + bearingX);
+        double Bx = Math.cos(lat2) * Math.cos(dLon);
+        double By = Math.cos(lat2) * Math.sin(dLon);
+        double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
+        double long3 = long1 + Math.atan2(By, Math.cos(lat1) + Bx);
 
+        long3 = Math.toDegrees(long3);
+        lat3 = Math.toDegrees(lat3);
 
-        return new Coordinate(lat3, long3); // TODO NOTE: latitude not computing correctly!!!
+        return new Coordinate(lat3, long3);
     }
 
 
