@@ -22,38 +22,12 @@ public class App extends Application {
         primaryStage.setScene(new Scene(root, 1280, 720));
         primaryStage.setMinHeight(720);
         primaryStage.setMinWidth(1280);
+
         primaryStage.show();
 
     }
 
     public static void main(String[] args) {
-        double start1Lat =  32.296577;
-        double start1Long = -64.854304;
-
-        double start2Lat = 32.293771;
-        double start2Long = -64.855242;
-
-        Coordinate start1 = new Coordinate(start1Lat, start1Long);
-        Coordinate start2 = new Coordinate(start2Lat, start2Long);
-        Coordinate test = GPSCalculations.GPSMidpoint(start1, start2);
-        System.out.println(test.getLatitude() + " " +  test.getLongitude());
-        System.out.println(GPSCalculations.GPSDistance(start1, start2));
-        System.out.println(GPSCalculations.GPSMidpoint(start1, start2));
-        XYPair start1XY = GPSCalculations.GPSxy(start1);
-        XYPair start2XY = GPSCalculations.GPSxy(start2);
-
-        GPSCalculations.coordinateToCoordinate(start1, 90, 120);
-
-        double diffX = start1XY.getX() - start2XY.getX();
-        double diffY = start1XY.getY() - start2XY.getY();
-
-        System.out.printf("Start1| x:%.2f, y:%.2f\n", start1XY.getX(), start1XY.getY());
-        System.out.printf("Start2| x:%.2f, y:%.2f\n", start2XY.getX(), start2XY.getY());
-        System.out.printf("Differences| x:%.2f, y:%.2f\n", diffX, diffY);
-        System.out.println("--------------------------------------------------------------------------------------'");
-
-        System.out.println(Math.sqrt((diffX * diffX) + (diffY * diffY)));
-
         launch(args);
     }
 }

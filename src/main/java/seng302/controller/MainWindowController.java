@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -22,6 +23,10 @@ import java.util.ArrayList;
 public class MainWindowController {
     @FXML
     private Group group;
+
+    @FXML
+    private Label timerLabel;
+
     @FXML
     private TableView tableView;
     private Race race;
@@ -38,18 +43,18 @@ public class MainWindowController {
 
 
         try {
-            // TODO remember to change the path of the xml files
             Course course = XMLParser.parseCourse(new File("src/main/resources/course.xml"));
             ArrayList<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml"));
             race = new Race(boats, course);
             race.setStartingCoordintes(); // sets intial coordinates of boats
             RaceRenderer rr = new RaceRenderer(race, group);
             rr.renderCourse();
-//          rr.renderBoats();
+
+            RaceTimer raceClock = new RaceTimer(group, timerLabel);
+            raceClock.start();
+
             RaceLoop rl = new RaceLoop(race, rr);
             rl.start();
-//            rl.handle(System.nanoTime()); // first time its called it does nothing
-//            rl.handle(System.nanoTime()); // this is when the magic happens
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {
