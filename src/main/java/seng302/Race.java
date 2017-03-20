@@ -48,7 +48,9 @@ public class Race {
 //            boat.setNextCompoundMark(boat.getCompoundMarkList().get(1));
             boat.setCurrentLeg(course.getLegs().get(0));
             boat.setNextLeg(course.getLegs().get(1));
-            System.out.println(course.getLegs().get(0).getHeading());
+//            System.out.println(course.getLegs().get(0).getHeading());
+            boat.setHasRounded(false);
+            boat.setNextDestination(boat.getCurrentLeg().getDestination().getMidCoordinate());
         }
     }
 
@@ -105,37 +107,51 @@ public class Race {
 
     public void updateBoats(double time) { // time in seconds
         for (Boat boat : startingList) {
-            if (!(boat.isFinished())) {
+            if (!finishedList.contains(boat)) {
                 updateBoat(boat, time);
-                boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(),
-                        boat.getCurrentLeg().getDestination().getMidCoordinate()));
+//                boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getCurrentLeg().getDestination().getMidCoordinate()));
+
             }
         }
     }
 
 
     private void updateBoat(Boat boat, double time) {
-        System.out.println(boat.getHeading());
-
-        if (boat.getBoatName().equals("Emirates")) {
-            System.out.printf("Boats dist: %.2f | Mark dist: %.2f\n", boat.getDistanceTravelled(), boat.getCurrentLeg().getDistance());
-        }
-        if ((Math.abs(boat.getCurrentLeg().getDestination().getMidCoordinate().getLongitude() - boat.getCoordinate().getLongitude())
+//        System.out.println(boat.getHeading());
+//        if (boat.getBoatName().equals("Emirates")) {
+//            System.out.printf("Boats dist: %.2f | Mark dist: %.2f\n", boat.getDistanceTravelled(), boat.getCurrentLeg().getDistance());
+//        }
+        if ((Math.abs(boat.getNextDestination().getLongitude() - boat.getCoordinate().getLongitude())
                 < 0.0001)
-                && (Math.abs(boat.getCurrentLeg().getDestination().getMidCoordinate().getLatitude() - boat.getCoordinate().getLatitude())
+                && (Math.abs(boat.getNextDestination().getLatitude() - boat.getCoordinate().getLatitude())
                 < 0.0001)) {
-            if (boat.getCurrentLeg().getLegNumber() < (course.getLegs().size() - 1)) {
-                boat.setNextLeg(course.getLegs().get(boat.getCurrentLeg().getLegNumber() + 1)); // set  next leg if current leg is not the last
+            Leg nextLeg = course.getNextLeg(boat.getCurrentLeg());
+            if (nextLeg.equals(boat.getCurrentLeg())) {
+                finishedList.add(boat);
+//                return;
             }
-            boat.setCurrentLeg(boat.getNextLeg());
-            boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(),
-                    boat.getCurrentLeg().getDestination().getMidCoordinate()));
+            if (boat.getCurrentLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE) {
+                if (!boat.getNextDestination().equals(nextLeg.getDeparture().getMarks().get(0).getMarkCoordinates())) {
+                    boat.setNextDestination(nextLeg.getDeparture().getMarks().get(0).getMarkCoordinates());
+                } else {
+                    boat.setNextDestination(nextLeg.getDestination().getMidCoordinate());
+                    boat.setCurrentLeg(nextLeg);
+                }
+            } else {
+                boat.setNextDestination(nextLeg.getDestination().getMidCoordinate());
+                boat.setCurrentLeg(nextLeg);
+            }
 
         }
+        boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getNextDestination()));
         double speed = boat.getSpeed() * 1000 / 3600; // meters per second
         double distanceTravelled = speed * time; // meters
         Coordinate nextCoordinate = GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled);
         boat.setCoordinate(nextCoordinate);
 
+    }
+
+    public ArrayList<Boat> getFinishedList() {
+        return finishedList;
     }
 }

@@ -105,7 +105,7 @@ public class RaceRenderer {
             XYPair pixels = convertCoordPixel(boatCoordinates);
 //            System.out.println("pix x = " + pixels.getX());
 //            System.out.println("pix y = " + pixels.getY());
-            System.out.println();
+//            System.out.println();
             Circle boatImage = boats.get(boat.getBoatName());
             boatImage.setCenterX(pixels.getX());
             boatImage.setCenterY(pixels.getY());

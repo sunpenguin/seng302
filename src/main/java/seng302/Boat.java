@@ -17,6 +17,8 @@ public class Boat {
     private double heading;
     private Coordinate coordinate;
     private double distanceTravelled;
+    private Coordinate nextDestination;
+    private boolean hasRounded;
 
 
 
@@ -198,5 +200,21 @@ public class Boat {
 
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
+    }
+
+    public Coordinate getNextDestination() {
+        return nextDestination;
+    }
+
+    public void setNextDestination(Coordinate nextDestination) {
+        this.nextDestination = nextDestination;
+    }
+
+    public boolean hasRounded() {
+        return hasRounded;
+    }
+
+    public void setHasRounded(boolean hasRounded) {
+        this.hasRounded = hasRounded;
     }
 }

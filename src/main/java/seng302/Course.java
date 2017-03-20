@@ -35,4 +35,12 @@ public class Course {
     public ArrayList<Leg> getLegs() {
         return legs;
     }
+
+
+    public Leg getNextLeg(Leg leg) {
+        if (leg.getLegNumber() + 1 >= legs.size()) {
+            return leg;
+        }
+        return legs.get(leg.getLegNumber() + 1);
+    }
 }

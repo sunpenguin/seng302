@@ -11,6 +11,7 @@ public class CompoundMark {
     private ArrayList<Mark> marks;
     public static int GATE_SIZE = 2;
     public static int MARK_SIZE = 1;
+    private ArrayList<Boat> passed = new ArrayList<>();
 
     public CompoundMark(String name, ArrayList<Mark> marks) {
         this.name = name;

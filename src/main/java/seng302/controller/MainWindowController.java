@@ -1,9 +1,15 @@
 package seng302.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.xml.sax.SAXException;
 import seng302.*;
+
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +22,8 @@ import java.util.ArrayList;
 public class MainWindowController {
     @FXML
     private Group group;
+    @FXML
+    private TableView tableView;
     private Race race;
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
@@ -31,8 +39,8 @@ public class MainWindowController {
 
         try {
             // TODO remember to change the path of the xml files
-            Course course = XMLParser.parseCourse(new File("/home/cosc/student/hqi19/Documents/team-18/src/main/resources/course.xml"));
-            ArrayList<Boat> boats = XMLParser.parseBoats(new File("/home/cosc/student/hqi19/Documents/team-18/src/main/resources/boats.xml"));
+            Course course = XMLParser.parseCourse(new File("src/main/resources/course.xml"));
+            ArrayList<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml"));
             race = new Race(boats, course);
             race.setStartingCoordintes(); // sets intial coordinates of boats
             RaceRenderer rr = new RaceRenderer(race, group);
@@ -49,6 +57,16 @@ public class MainWindowController {
         } catch (SAXException e) {
             e.printStackTrace();
         }
+
+        ObservableList<Boat> boats = FXCollections.observableArrayList();
+        boats.addAll(race.getStartingList());
+        tableView.setItems(boats);
+        TableColumn<Boat, String> boatPos = new TableColumn("Position");
+        boatPos.setCellValueFactory(new PropertyValueFactory<Boat, String>("boatName"));
+        TableColumn<Boat, String> boatName = new TableColumn("Name");
+        boatName.setCellValueFactory(new PropertyValueFactory<Boat, String>("boatName"));
+        tableView.getColumns().setAll(boatName);
+
     }
 
     public void closeProgram() {

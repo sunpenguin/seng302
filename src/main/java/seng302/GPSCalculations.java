@@ -280,7 +280,7 @@ public class GPSCalculations {
         double earthRadius = 6371e3; // meters
 //        double aspectLat = Math.cos(32.308046); // TODO Aspect ratio, use a latitude that is the mean of all given
         double aspectLat = Math.cos(aveLat);
-        System.out.println(aveLat);
+//        System.out.println(aveLat);
         double x = earthRadius * Math.toRadians(point.getLongitude()) * aspectLat;
         double y = earthRadius * Math.toRadians(point.getLatitude());
         return new XYPair(x, y);
@@ -290,7 +290,7 @@ public class GPSCalculations {
         double earthRadius = 6371e3; // meters
 //        double aspectLat = Math.cos(32.308046); // TODO Aspect ratio, use a latitude that is the mean of all given
         double aspectLat = Math.cos(aveLat);
-        System.out.println(aveLat);
+//        System.out.println(aveLat);
         double latitude = Math.toDegrees(point.getY() / earthRadius);
         double longitude = Math.toDegrees((point.getX() / earthRadius) / aspectLat);
         return new Coordinate(latitude, longitude);
