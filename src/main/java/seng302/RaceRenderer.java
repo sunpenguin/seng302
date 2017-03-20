@@ -123,7 +123,7 @@ public class RaceRenderer {
 //        double pixelHeight = group.getLayoutY() - PADDING * 2;
 //        double pixelWidth = group.getParent().getBoundsInLocal().getWidth() - PADDING * 2;
 //        double pixelHeight = group.getParent().getBoundsInLocal().getHeight() - PADDING * 2;
-        GPSCalculations gps = new GPSCalculations();
+        GPSCalculations gps = new GPSCalculations(race.getCourse());
         gps.findMinMaxPoints(race.getCourse());
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
