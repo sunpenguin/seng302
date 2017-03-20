@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 public class GPSCalculationsTest {
 
     private Course testCourse;
-    private GPSCalculations g = new GPSCalculations();
+    private GPSCalculations g = new GPSCalculations(testCourse);
 
     @Before
     public void setUpTestCourse() throws IOException, SAXException, ParserConfigurationException {

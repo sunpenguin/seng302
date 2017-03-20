@@ -128,7 +128,7 @@ public class RaceRenderer {
 //        System.out.println(pixelWidth);
 //        System.out.println();
 
-        GPSCalculations gps = new GPSCalculations();
+        GPSCalculations gps = new GPSCalculations(race.getCourse());
         gps.findMinMaxPoints(race.getCourse());
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
