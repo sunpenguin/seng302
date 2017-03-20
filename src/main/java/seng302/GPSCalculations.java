@@ -147,6 +147,20 @@ public class GPSCalculations {
         return earthRadius * c;
     }
 
+    public static Coordinate coordinateToCoordinate(Coordinate initialCoord, double bearing, double distance){
+
+        double bR = Math.toRadians(bearing);
+        double lat1R = Math.toRadians(initialCoord.getLatitude());
+        double lon1R = Math.toRadians(initialCoord.getLongitude());
+        double dR = (distance/1000.0) / 6371.0;
+
+        double a = Math.sin(dR) * Math.cos(lat1R);
+        double lat2 = Math.asin(Math.sin(lat1R) * Math.cos(dR) + a * Math.cos(bR));
+        double lon2 = lon1R
+                + Math.atan2(Math.sin(bR) * a, Math.cos(dR) - Math.sin(lat1R) * Math.sin(lat2));
+        return new Coordinate(Math.toDegrees(lat2), Math.toDegrees(lon2));
+    }
+
 
     public void findMinMaxPoints(Course course) {
 
@@ -172,6 +186,17 @@ public class GPSCalculations {
                 }
             }
         }
+    }
+
+    public static double retrieveHeading(Coordinate c1, Coordinate c2){
+        double lon1 = Math.toRadians(c1.getLongitude());
+        double lat1 = Math.toRadians(c1.getLatitude());
+        double lon2 = Math.toRadians(c2.getLongitude());
+        double lat2 = Math.toRadians(c2.getLatitude());
+
+        double x = Math.cos(lat2) * Math.sin(lon2 - lon1);
+        double y = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+        return Math.toDegrees(Math.atan2(x, y));
     }
 
 

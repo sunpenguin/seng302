@@ -6,12 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import seng302.controller.MainWindowController;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+
 
 public class App extends Application {
 
@@ -28,7 +24,6 @@ public class App extends Application {
         primaryStage.setMinWidth(1280);
         primaryStage.show();
 
-//        mainWindowController.start();
     }
 
     public static void main(String[] args) {
@@ -46,6 +41,8 @@ public class App extends Application {
         System.out.println(GPSCalculations.GPSMidpoint(start1, start2));
         XYPair start1XY = GPSCalculations.GPSxy(start1);
         XYPair start2XY = GPSCalculations.GPSxy(start2);
+
+        GPSCalculations.coordinateToCoordinate(start1, 90, 120);
 
         double diffX = start1XY.getX() - start2XY.getX();
         double diffY = start1XY.getY() - start2XY.getY();

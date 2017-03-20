@@ -123,26 +123,13 @@ public class RaceRenderer {
 //        double pixelHeight = group.getLayoutY() - PADDING * 2;
 //        double pixelWidth = group.getParent().getBoundsInLocal().getWidth() - PADDING * 2;
 //        double pixelHeight = group.getParent().getBoundsInLocal().getHeight() - PADDING * 2;
-//        System.out.println(group.getParent().getBoundsInLocal().getWidth());
-//        System.out.println(group.getParent().getBoundsInParent().getWidth());
-//        System.out.println(pixelWidth);
-//        System.out.println();
-
-        GPSCalculations gps = new GPSCalculations(race.getCourse());
+        GPSCalculations gps = new GPSCalculations();
         gps.findMinMaxPoints(race.getCourse());
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
-
-
         XYPair planeCoordinates = GPSCalculations.GPSxy(coord);
         double widthRatio = (courseWidth - (gps.getMaxX() - planeCoordinates.getX())) / courseWidth;
         double heightRatio = (courseHeight - (gps.getMaxY() - planeCoordinates.getY())) / courseHeight;
-//        System.out.println("course width = " + courseWidth);
-//        System.out.println("gps.getMaxX = " + gps.getMaxX());
-//        System.out.println("planeCoordinates.getX = " + planeCoordinates.getX());
-//        System.out.println("width ratio = " + widthRatio);
-//        System.out.println();
-//        System.out.println("height ratio = " + heightRatio);
 
         return new XYPair(pixelWidth * widthRatio + PADDING, (pixelHeight * heightRatio + PADDING) * -1);
     }

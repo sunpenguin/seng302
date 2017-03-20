@@ -23,7 +23,6 @@ public class Leg {
         double diffYSquared = (departureXY.getY() - destinationXY.getY()) * (departureXY.getY() - destinationXY.getY());
         this.distance = Math.sqrt(diffXSquared + diffYSquared);
 
-//        this.distance = GPSCalculations.GPSDistance(departure.getMidCoordinate(), destination.getMidCoordinate());
     }
 
     public CompoundMark getDestination() {

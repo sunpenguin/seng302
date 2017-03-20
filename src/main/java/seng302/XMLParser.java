@@ -47,11 +47,6 @@ public class XMLParser {
                 compoundMarks.add(parseCompoundMark(compoundMarkElement));
             }
         }
-        // parses boundaries
-//        Element boundaryElements = (Element) doc.getElementsByTagName(BOUNDARY_TAG).item(0);
-//        ArrayList<Coordinate> boundaries = parseBoundaries(boundaryElements);
-//        return new Course(compoundMarks, boundaries.get(TOP_LEFT_INDEX), boundaries.get(TOP_RIGHT_INDEX),
-//                boundaries.get(BOTTOM_LEFT_INDEX), boundaries.get(BOTTOM_RIGHT_INDEX));
         return new Course(compoundMarks);
     }
 
