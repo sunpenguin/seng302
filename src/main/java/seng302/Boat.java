@@ -1,6 +1,5 @@
 package seng302;
 
-import java.util.ArrayList;
 
 /**
  * A class which represents a boat in the text based Application
@@ -11,14 +10,11 @@ public class Boat {
     private String boatName;
     private String teamName;
     private double speed;
-//    private ArrayList<CompoundMark> compoundMarkList = new ArrayList<>();
-//    private CompoundMark currentCompoundMark;
-//    private CompoundMark nextCompoundMark;
     private Leg currentLeg;
     private Leg nextLeg;
     private double position;
     private boolean finished = false;
-    private int heading;
+    private double heading;
     private Coordinate coordinate;
     private double distanceTravelled;
 
@@ -49,59 +45,6 @@ public class Boat {
     }
 
 
-    //    /**
-//     * Setter for the next CompoundMark the boat must pass
-//     * @param nextCompoundMark The next CompoundMark to pass
-//     */
-//    public void setNextCompoundMark(CompoundMark nextCompoundMark) {
-//        this.nextCompoundMark = nextCompoundMark;
-//    }
-//
-//
-//    /**
-//     * Getter for the next CompoundMark the boat must pass
-//     * @return the next CompoundMark to pass
-//     */
-//    public CompoundMark getNextCompoundMark() {
-//        return nextCompoundMark;
-//    }
-
-
-//    /**
-//     * Setter for the current CompoundMark.
-//     * Called when a race is created to set each boat's current mark
-//     * to the first mark on the course.
-//     * @param currentCompoundMark the most recently passed CompoundMark.
-//     */
-//    public void setCurrentCompoundMark(CompoundMark currentCompoundMark) {
-//        this.currentCompoundMark = currentCompoundMark;
-//    }
-//
-//
-//    /**
-//     * Getter for the current CompoundMark.
-//     * @return the most recently passed CompoundMark.
-//     */
-//    public CompoundMark getCurrentCompoundMark() {
-//        return this.currentCompoundMark;
-//    }
-
-//    /**
-//     * Getter for a boats list of marks
-//     * @return the list of CompoundMarks
-//     */
-//    public ArrayList<CompoundMark> getCompoundMarkList() {
-//        return this.compoundMarkList;
-//    }
-//
-//
-//    /**
-//     * Setter for a boats list of marks
-//     * @param compoundMarkList the list of CompoundMarks
-//     */
-//    public void setCompoundMarkList(ArrayList<CompoundMark> compoundMarkList) {
-//        this.compoundMarkList = compoundMarkList;
-//    }
 
 
     /**
@@ -117,7 +60,7 @@ public class Boat {
      * A getter for the heading of the boat
      * @return The heading of the boat
      */
-    public int getHeading() {
+    public double getHeading() {
         return heading;
     }
 
@@ -126,7 +69,7 @@ public class Boat {
      * A setter for the heading of the boat
      * @param heading The value the boat heading will be set to
      */
-    public void setHeading(int heading) {
+    public void setHeading(double heading) {
         this.heading = heading;
     }
 
