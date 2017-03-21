@@ -12,22 +12,10 @@ public class Boat {
     private double speed;
     private Leg currentLeg;
     private double position;
-    private boolean finished = false;
     private double heading;
     private Coordinate coordinate;
     private Coordinate nextDestination;
 
-
-
-    /**
-     * A constructor for the Boat class
-     * @param boatName The name of the boat
-     * @param teamName The name of the team the boat belongs to
-     */
-    public Boat(String boatName, String teamName) {
-        this.boatName = boatName;
-        this.teamName = teamName;
-    }
 
     /**
      * A constructor for the Boat class
@@ -75,7 +63,6 @@ public class Boat {
         this.boatName = name;
     }
 
-
     /**
      * A getter for the team name that the boat belongs to
      * @return The teamName
@@ -83,25 +70,6 @@ public class Boat {
     public String getTeamName() {
         return teamName;
     }
-
-
-    /**
-     * Checks the value of the boolean finished
-     * @return The value of finished
-     */
-    public boolean isFinished() {
-        return finished;
-    }
-
-
-    /**
-     * A setter of the value of finished
-     * @param finished the value finished will be set to
-     */
-    public void setFinished(boolean finished) {
-        this.finished = finished;
-    }
-
 
     /**
      * A setter for the team name that the boat belongs to
@@ -111,7 +79,6 @@ public class Boat {
         this.teamName = name;
     }
 
-
     /**
      * A getter for the speed of the boat
      * @return The speed of the boat
@@ -119,7 +86,6 @@ public class Boat {
     public double getSpeed() {
         return speed;
     }
-
 
     /**
      * A setter for the speed of the boat
@@ -129,7 +95,6 @@ public class Boat {
         this.speed = speed;
     }
 
-
     /**
      * A getter for the position of the boat
      * @return the position the boat is from the start of the race
@@ -137,7 +102,6 @@ public class Boat {
     public double getPosition() {
         return position;
     }
-
 
     /**
      * Sets the position that the boat is at
@@ -152,26 +116,30 @@ public class Boat {
         return currentLeg;
     }
 
+
     public void setCurrentLeg(Leg currentLeg) {
         this.currentLeg = currentLeg;
     }
+
 
     public Coordinate getCoordinate() {
         return coordinate;
     }
 
+
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
+
 
     public Coordinate getNextDestination() {
         return nextDestination;
     }
 
+
     public void setNextDestination(Coordinate nextDestination) {
         this.nextDestination = nextDestination;
     }
-
 
     /**
      * An overidden toString for the boat objects which displays all of the boats variables

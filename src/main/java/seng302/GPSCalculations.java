@@ -27,8 +27,8 @@ public class GPSCalculations {
 
         for (CompoundMark cM : course.getCompoundMarks()) {
             for (Mark m : cM.getMarks()) {
-                double lat = m.getMarkCoordinates().getLatitude();
-                double lon = m.getMarkCoordinates().getLongitude();
+                double lat = m.getCoordinates().getLatitude();
+                double lon = m.getCoordinates().getLongitude();
                 XYPair xy = GPSxy(new Coordinate(lat, lon));
                 XY.add(totalMarks, xy);
                 totalMarks += 1;
@@ -184,7 +184,7 @@ public class GPSCalculations {
 
         for (CompoundMark compoundMark : course.getCompoundMarks()) {
             for (Mark mark : compoundMark.getMarks()) {
-                Coordinate markCoordinates = mark.getMarkCoordinates();
+                Coordinate markCoordinates = mark.getCoordinates();
                 XYPair markXYValues = GPSxy(markCoordinates);
 
                 double xValue = markXYValues.getX();

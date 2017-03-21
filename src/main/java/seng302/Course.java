@@ -13,7 +13,6 @@ public class Course {
 
 
     public Course(ArrayList<CompoundMark> marks) {
-
         this.compoundMarks = marks;
         legs = new ArrayList<>();
         for (int i = 0; i < marks.size() - 1; i++) {

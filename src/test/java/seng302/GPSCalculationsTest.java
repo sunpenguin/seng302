@@ -7,7 +7,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 /**
@@ -25,7 +25,7 @@ public class GPSCalculationsTest {
 
 
     @Test
-    public void findMinMaxPointstest() throws IOException, SAXException, ParserConfigurationException {
+    public void findMinMaxPointsTest() throws IOException, SAXException, ParserConfigurationException {
 
         g.findMinMaxPoints(testCourse);
 
@@ -48,7 +48,7 @@ public class GPSCalculationsTest {
     @Test
     public void XYtoGPSConversionTest() {
         // Get the coordinates of the first Mark in the second CompoundMark
-        Coordinate testCoordinate = testCourse.getCompoundMarks().get(1).getMarks().get(0).getMarkCoordinates();
+        Coordinate testCoordinate = testCourse.getCompoundMarks().get(1).getMarks().get(0).getCoordinates();
 
         // Convert GPS coordinates to cartesian coordinates
         XYPair testCoordinateXY = GPSCalculations.GPSxy(testCoordinate);

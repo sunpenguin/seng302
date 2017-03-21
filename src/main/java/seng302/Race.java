@@ -42,12 +42,12 @@ public class Race {
      */
     private void setCourseForBoats() {
         for (Boat boat : startingList) {
-            boat.setCurrentLeg(course.getLegs().get(0)); // Set Leg
-            boat.setNextDestination(boat.getCurrentLeg().getDestination().getMidCoordinate()); // Set Dest
+            // Set Leg
+            boat.setCurrentLeg(course.getLegs().get(0));
+            // Set Dest
+            boat.setNextDestination(boat.getCurrentLeg().getDestination().getMidCoordinate());
             // Set Coordinate
-            Coordinate start1 = course.getCompoundMarks().get(0).getMarks().get(0).getMarkCoordinates();
-            Coordinate start2 = course.getCompoundMarks().get(0).getMarks().get(1).getMarkCoordinates();
-            Coordinate midPoint = GPSCalculations.GPSMidpoint(start1, start2);
+            Coordinate midPoint = course.getCompoundMarks().get(0).getMidCoordinate();
             boat.setCoordinate(midPoint);
             // Set Heading
             boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getNextDestination()));
@@ -98,35 +98,42 @@ public class Race {
         }
     }
 
-
     private void updateBoat(Boat boat, double time) {
-        if ((Math.abs(boat.getNextDestination().getLongitude() - boat.getCoordinate().getLongitude())
-                < 0.0001)
-                && (Math.abs(boat.getNextDestination().getLatitude() - boat.getCoordinate().getLatitude())
-                < 0.0001)) {
+        updateHeading(boat);
+        updatePosition(boat, time);
+    }
+
+    private void updateHeading(Boat boat) {
+        if ((Math.abs(boat.getNextDestination().getLongitude() - boat.getCoordinate().getLongitude()) < 0.0001)
+                && (Math.abs(boat.getNextDestination().getLatitude() - boat.getCoordinate().getLatitude()) < 0.0001)) {
             Leg nextLeg = course.getNextLeg(boat.getCurrentLeg());
             if (nextLeg.equals(boat.getCurrentLeg())) {
                 finishedList.add(boat);
             }
             if (boat.getCurrentLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE) {
-                if (!boat.getNextDestination().equals(nextLeg.getDeparture().getMarks().get(0).getMarkCoordinates())) {
-                    boat.setNextDestination(nextLeg.getDeparture().getMarks().get(0).getMarkCoordinates());
+                if (!boat.getNextDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinates())) {
+                    boat.setNextDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinates());
                 } else {
+                    boat.getCurrentLeg().getDestination().addPassed(boat);
                     boat.setNextDestination(nextLeg.getDestination().getMidCoordinate());
                     boat.setCurrentLeg(nextLeg);
                 }
             } else {
+                boat.getCurrentLeg().getDestination().addPassed(boat);
                 boat.setNextDestination(nextLeg.getDestination().getMidCoordinate());
                 boat.setCurrentLeg(nextLeg);
             }
-
+            boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getNextDestination())); //TODO set at start
         }
-        boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getNextDestination())); //TODO set at start
-        double speed = boat.getSpeed() * 1000 / 3600; // meters per second
-        double distanceTravelled = speed * time; // meters
-        Coordinate nextCoordinate = GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled);
-        boat.setCoordinate(nextCoordinate);
+    }
 
+    private void updatePosition(Boat boat, double time) {
+        final double KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT = 1000.0 / 3600.0;
+        double speed = boat.getSpeed() * KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT;
+        double distanceTravelled = speed * time; // meters
+        Coordinate nextCoordinate =
+                GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled);
+        boat.setCoordinate(nextCoordinate);
     }
 
     public ArrayList<Boat> getFinishedList() {
