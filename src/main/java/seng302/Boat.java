@@ -11,14 +11,11 @@ public class Boat {
     private String teamName;
     private double speed;
     private Leg currentLeg;
-    private Leg nextLeg;
     private double position;
     private boolean finished = false;
     private double heading;
     private Coordinate coordinate;
-    private double distanceTravelled;
     private Coordinate nextDestination;
-    private boolean hasRounded;
 
 
 
@@ -32,22 +29,17 @@ public class Boat {
         this.teamName = teamName;
     }
 
+    /**
+     * A constructor for the Boat class
+     * @param boatName The name of the boat
+     * @param teamName The name of the team the boat belongs to
+     * @param speed The speed of the boat
+     */
     public Boat(String boatName, String teamName, double speed) {
         this.boatName = boatName;
         this.teamName = teamName;
         this.speed = speed;
     }
-
-    public double getDistanceTravelled() {
-        return distanceTravelled;
-    }
-
-    public void setDistanceTravelled(double distanceTravelled) {
-        this.distanceTravelled = distanceTravelled;
-    }
-
-
-
 
     /**
      * A getter for the name of the boat
@@ -138,7 +130,6 @@ public class Boat {
     }
 
 
-
     /**
      * A getter for the position of the boat
      * @return the position the boat is from the start of the race
@@ -156,35 +147,6 @@ public class Boat {
         this.position = position;
     }
 
-
-//    /**
-//     * A method to display where the boat currently is on the course
-//     */
-//    public void viewPlaceOnCourse() {
-//        System.out.printf("%s -> Current mark: %s, Next mark: %s\n",
-//                boatName, currentCompoundMark.getName(), nextCompoundMark.getName());
-//    }
-
-
-    /**
-     * An overidden toString for the boat objects which displays all of the boats variables
-     * @return A string showing all the boats variables
-     */
-    @Override
-    public String toString() {
-        return "Boat{" +
-                "boatName='" + boatName + '\'' +
-                ", teamName='" + teamName + '\'' +
-                '}';
-    }
-
-    public Leg getNextLeg() {
-        return nextLeg;
-    }
-
-    public void setNextLeg(Leg nextLeg) {
-        this.nextLeg = nextLeg;
-    }
 
     public Leg getCurrentLeg() {
         return currentLeg;
@@ -210,11 +172,16 @@ public class Boat {
         this.nextDestination = nextDestination;
     }
 
-    public boolean hasRounded() {
-        return hasRounded;
-    }
 
-    public void setHasRounded(boolean hasRounded) {
-        this.hasRounded = hasRounded;
+    /**
+     * An overidden toString for the boat objects which displays all of the boats variables
+     * @return A string showing all the boats variables
+     */
+    @Override
+    public String toString() {
+        return "Boat{" +
+                "boatName='" + boatName + '\'' +
+                ", teamName='" + teamName + '\'' +
+                '}';
     }
 }

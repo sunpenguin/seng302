@@ -7,7 +7,6 @@ public class XYPair {
     private double x;
     private double y;
 
-
     /**
      * Constructor for XYPair class.
      * Used to hold x, y catersian coordinates

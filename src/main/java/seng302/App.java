@@ -17,14 +17,12 @@ public class App extends Application {
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
         Parent root = loader.load(); // throws IOException
-        MainWindowController mainWindowController = loader.getController();
+//        MainWindowController mainWindowController = loader.getController();
         primaryStage.setTitle("Race Vision");
         primaryStage.setScene(new Scene(root, 1280, 720));
         primaryStage.setMinHeight(720);
         primaryStage.setMinWidth(1280);
-
         primaryStage.show();
-
     }
 
     public static void main(String[] args) {

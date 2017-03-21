@@ -80,31 +80,16 @@ public class XMLParser {
         return new CompoundMark(name, marks);
     }
 
+
     /**
-     * Creates an ArrayList of four Coordinates which represent the boundaries of the Course.
-     * Boundaries in the list will always be in the order top left, top right, bottom left, and bottom right.
+     * Creates a new ArrayList of Boat by parsing a XML file.
      *
-     * @param boundaryElements Element which contains all boundary elements
-     * @return the four Coordinates which represent the boundaries of the Course
+     * @param file
+     * @return The boats from the XML file
+     * @throws ParserConfigurationException
+     * @throws IOException
+     * @throws SAXException
      */
-    private static ArrayList<Coordinate> parseBoundaries(Element boundaryElements) {
-        final ArrayList<String> BOUNDARY_TAGS = new ArrayList<>(
-                Arrays.asList("topLeft", "topRight", "bottomLeft", "bottomRight"));
-        final String LATITUDE_TAG = "latitude";
-        final String LONGITUDE_TAG = "longitude";
-
-        ArrayList<Coordinate> boundries = new ArrayList<>();
-        for (int i = 0; i < BOUNDARY_TAGS.size(); i++) {
-            Element boundaryElement = (Element) boundaryElements.getElementsByTagName(BOUNDARY_TAGS.get(i)).item(0);
-            String latString = boundaryElement.getElementsByTagName(LATITUDE_TAG).item(0).getTextContent();
-            String longString = boundaryElement.getElementsByTagName(LONGITUDE_TAG).item(0).getTextContent();
-            Coordinate boundary = new Coordinate(Double.parseDouble(latString), Double.parseDouble(longString));
-            boundries.add(boundary);
-        }
-        return boundries;
-    }
-
-
     public static ArrayList<Boat> parseBoats(File file) throws ParserConfigurationException, IOException, SAXException {
         final String BOATS_TAG = "boats";
         final String BOAT_TAG = "boat";
@@ -126,7 +111,11 @@ public class XMLParser {
         return boats;
     }
 
-
+    /**
+     * Returns a boat given an Element containing a boat
+     * @param boatElement
+     * @return Boat contained within the Element
+     */
     private static Boat parseBoat(Element boatElement) {
         final String SPEED_TAG = "speed";
         final String BOAT_NAME_TAG = "boatname";

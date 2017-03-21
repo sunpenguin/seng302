@@ -14,8 +14,17 @@ public class Coordinate {
      * @param longitude value representing longitude
      */
     public Coordinate(double latitude, double longitude) {
-        this.latitude = latitude; // TODO check these are valid
-        this.longitude = longitude;
+
+        if (-180.0 <= longitude && longitude <= 180.0) {
+            if (-90 <= latitude && latitude <= 90.0) {
+                this.latitude = latitude; // TODO check these are valid
+                this.longitude = longitude;
+            } else {
+                System.err.println("Latitude must be between -90 and 90");
+            }
+        } else {
+            System.err.println("Longitude must be between -180 and 180");
+        }
     }
 
 

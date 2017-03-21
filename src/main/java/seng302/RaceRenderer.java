@@ -23,7 +23,7 @@ public class RaceRenderer {
     private HashMap<String, Circle> boats;
     final private Color MARK_COLOR = Color.BLACK;
     final private double MARK_SIZE = 10.0;
-    final double PADDING = 15.0;
+    final double PADDING = 60.0;
 
     /**
      * Constructor for RaceRenderer, takes a Race and Group as parameters.
@@ -38,6 +38,7 @@ public class RaceRenderer {
         final double BOAT_RADIUS = 10.0;
         final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
                 Arrays.asList(Color.DODGERBLUE, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
+
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Circle boat = new Circle(BOAT_RADIUS, BOAT_COLOURS.get(i));
             boats.put(race.getStartingList().get(i).getBoatName(), boat);
@@ -72,7 +73,6 @@ public class RaceRenderer {
 
 
     private void renderGate(CompoundMark compoundMark) {
-
         ArrayList<XYPair> endPoints = new ArrayList<>();
 
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
@@ -82,12 +82,9 @@ public class RaceRenderer {
             XYPair pixelCoordinates = convertCoordPixel(coordinate);
             rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
             rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
-
             endPoints.add(pixelCoordinates);
-
             group.getChildren().add(rectangle);
         }
-
         Line line = new Line(
                 endPoints.get(0).getX(), endPoints.get(0).getY(),
                 endPoints.get(1).getX(), endPoints.get(1).getY());
@@ -103,9 +100,6 @@ public class RaceRenderer {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
             XYPair pixels = convertCoordPixel(boatCoordinates);
-//            System.out.println("pix x = " + pixels.getX());
-//            System.out.println("pix y = " + pixels.getY());
-//            System.out.println();
             Circle boatImage = boats.get(boat.getBoatName());
             boatImage.setCenterX(pixels.getX());
             boatImage.setCenterY(pixels.getY());

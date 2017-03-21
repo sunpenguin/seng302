@@ -36,17 +36,10 @@ public class MainWindowController {
     @FXML
     @SuppressWarnings("unused")
     private void initialize() {
-//        Circle c = new Circle(10, Color.RED);
-//        c.setCenterX(0);
-//        c.setCenterY(0);
-//        group.getChildren().add(c);
-
-
         try {
             Course course = XMLParser.parseCourse(new File("src/main/resources/course.xml"));
             ArrayList<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml"));
             race = new Race(boats, course);
-            race.setStartingCoordintes(); // sets intial coordinates of boats
             RaceRenderer rr = new RaceRenderer(race, group);
             rr.renderCourse();
 
@@ -77,10 +70,5 @@ public class MainWindowController {
     public void closeProgram() {
         System.exit(0);
     }
-
-//    public void start() {
-//        graphicsContext.setFill(Color.BEIGE);
-//        graphicsContext.fillOval(20, 50, 20,20);
-//    }
 
 }
