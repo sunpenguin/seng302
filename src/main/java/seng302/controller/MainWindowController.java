@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -28,10 +29,14 @@ public class MainWindowController {
     private Label timerLabel;
 
     @FXML
+    private Button startRaceButton;
+
+    @FXML
     private TableView tableView;
     private Race race;
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
+    private RaceClock raceClock;
 
     @FXML
     @SuppressWarnings("unused")
@@ -42,12 +47,11 @@ public class MainWindowController {
             race = new Race(boats, course);
             RaceRenderer rr = new RaceRenderer(race, group);
             rr.renderCourse();
+            rr.renderBoats();
 
-            RaceTimer raceClock = new RaceTimer(group, timerLabel);
-            raceClock.start();
+            raceLoop = new RaceLoop(race, rr);
+            raceClock = new RaceClock(timerLabel);
 
-            RaceLoop rl = new RaceLoop(race, rr);
-            rl.start();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -67,8 +71,12 @@ public class MainWindowController {
 
     }
 
+    public void startRace() {
+        raceClock.start();
+        raceLoop.start();
+    }
+
     public void closeProgram() {
         System.exit(0);
     }
-
 }

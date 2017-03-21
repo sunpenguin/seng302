@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.*?>
-<?import javafx.scene.Group?>
 <?import javafx.scene.layout.*?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="720.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.controller.MainWindowController">
@@ -11,5 +10,10 @@
       <Group fx:id="group" layoutY="720.0" />
       <TableView fx:id="tableView" layoutX="720.0" layoutY="0.0" prefHeight="720.0" prefWidth="560.0" />
       <Label fx:id="timerLabel" layoutX="23.0" prefHeight="50.0" prefWidth="150.0" />
+      <Button fx:id="startRaceButton" layoutX="14.0" layoutY="680.0" mnemonicParsing="false" onAction="#startRace" text="Start">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Button>
    </children>
 </Pane>

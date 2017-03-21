@@ -12,7 +12,7 @@ import java.io.IOException;
 public class App extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage primaryStage) throws IOException, InterruptedException {
 
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
