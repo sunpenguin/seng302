@@ -2,14 +2,12 @@ package seng302;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 public class RaceClock {
 
@@ -17,7 +15,6 @@ public class RaceClock {
     private Label timerLabel;
     private double timeSeconds;
     private Duration time = Duration.ZERO;
-    private double waitTime;
 
     private String timeString;
 
@@ -44,7 +41,9 @@ public class RaceClock {
     }
 
     private void secondsToString(double pTime) {
-        timeString = String.format(" %02.0f:%02.0f", ((pTime) / 60), ((pTime) % 60));
+        pTime = (int) pTime;
+        System.out.println(pTime % 60);
+        timeString = String.format(" %02.0f:%02.0f", (Math.floor(pTime / 60)), (pTime % 60));
     }
 
 
