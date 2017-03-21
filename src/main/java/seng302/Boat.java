@@ -14,7 +14,7 @@ public class Boat {
     private double position;
     private double heading;
     private Coordinate coordinate;
-    private Coordinate nextDestination;
+    private Coordinate destination;
 
 
     /**
@@ -132,13 +132,13 @@ public class Boat {
     }
 
 
-    public Coordinate getNextDestination() {
-        return nextDestination;
+    public Coordinate getDestination() {
+        return destination;
     }
 
 
-    public void setNextDestination(Coordinate nextDestination) {
-        this.nextDestination = nextDestination;
+    public void setDestination(Coordinate destination) {
+        this.destination = destination;
     }
 
     /**
