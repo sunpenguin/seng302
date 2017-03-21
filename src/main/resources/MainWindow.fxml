@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.*?>
@@ -10,5 +11,17 @@
    <children>
       <Group fx:id="group" layoutY="720.0" />
       <TableView fx:id="tableView" layoutX="335.0" layoutY="146.0" prefHeight="462.0" prefWidth="571.0" />
+      <Polygon fx:id="arrow" fill="DODGERBLUE" layoutX="56.0" layoutY="67.0" scaleX="0.4" scaleY="0.8" stroke="BLACK" strokeType="INSIDE" visible="false">
+        <points>
+          <Double fx:value="-50.0" />
+          <Double fx:value="40.0" />
+          <Double fx:value="50.0" />
+          <Double fx:value="40.0" />
+          <Double fx:value="0.0" />
+          <Double fx:value="-60.0" />
+        </points>
+      </Polygon>
+      <Label layoutX="10.0" layoutY="97.0" text="Wind Direction:" />
+      <TextField fx:id="showWindDegree" layoutX="3.0" layoutY="128.0" prefHeight="36.0" prefWidth="134.0" />
    </children>
 </Pane>

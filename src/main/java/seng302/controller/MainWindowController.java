@@ -6,20 +6,26 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.shape.Polygon;
+import javafx.scene.transform.Rotate;
 import org.xml.sax.SAXException;
 import seng302.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
  * Created by dhl25 on 15/03/17.
  */
 public class MainWindowController {
+    private static DecimalFormat df2 = new DecimalFormat(".##");
     @FXML
     private Group group;
     @FXML
@@ -27,6 +33,11 @@ public class MainWindowController {
     private Race race;
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
+
+    @FXML
+    private Polygon arrow;
+    @FXML
+    private TextField showWindDegree;
 
     @FXML
     @SuppressWarnings("unused")
@@ -45,6 +56,7 @@ public class MainWindowController {
             race.setStartingCoordintes(); // sets intial coordinates of boats
             RaceRenderer rr = new RaceRenderer(race, group);
             rr.renderCourse();
+            rr.renderArrow();
 //          rr.renderBoats();
             RaceLoop rl = new RaceLoop(race, rr);
             rl.start();
@@ -67,6 +79,18 @@ public class MainWindowController {
         boatName.setCellValueFactory(new PropertyValueFactory<Boat, String>("boatName"));
         tableView.getColumns().setAll(boatName);
 
+        Random ran = new Random();
+        double windDegree = ran.nextDouble() * 360;
+        arrow.setRotate(windDegree);
+        showWindDegree.setText(df2.format(windDegree)+" degree");
+
+        System.out.println(arrow.getLayoutX());
+//        Polygon poly = new Polygon();
+//        poly.getPoints().addAll(new Double[]{
+//                0.0, 0.0,
+//                20.0, 10.0,
+//                10.0, 20.0 });
+//        group.getChildren().add(poly);
     }
 
     public void closeProgram() {

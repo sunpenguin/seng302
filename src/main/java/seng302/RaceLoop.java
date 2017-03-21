@@ -33,6 +33,7 @@ public class RaceLoop extends AnimationTimer {
         previousTime = currentTime;
         race.updateBoats(secondsElapsed);
         renderer.renderBoats();
+//        renderer.renderArrow();
     }
 }
 

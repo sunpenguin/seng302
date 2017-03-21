@@ -5,6 +5,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
 import java.lang.reflect.Array;
@@ -110,6 +111,26 @@ public class RaceRenderer {
             boatImage.setCenterX(pixels.getX());
             boatImage.setCenterY(pixels.getY());
         }
+    }
+
+    /**
+     * Draws a arrow showing the wind direction.
+     */
+    public void renderArrow() {
+        Polygon poly = new Polygon();
+        poly.getPoints().addAll(new Double[]{
+                0.0, 0.0,
+                -50.0, 40.0,
+                50.0, 40.0 });
+        poly.setLayoutX(56);
+        poly.setLayoutY(67);
+        poly.setVisible(true);
+        poly.setScaleX(0.4);
+        poly.setScaleY(0.8);
+//        System.out.println(poly.getLayoutX());
+//        System.out.println(poly.getLayoutY());
+        group.getChildren().add(poly);
+        System.out.println(group.getChildren().contains(poly));
     }
 
     /**
