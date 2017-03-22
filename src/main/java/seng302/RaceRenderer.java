@@ -18,7 +18,6 @@ public class RaceRenderer {
     private Group group;
     private Race race;
     private HashMap<String, Circle> boats;
-
     private HashMap<String, Text> annotationsMap = new HashMap<>();
     private HashMap<String, Boolean> visibleAnnotations = new HashMap<>();
     private ArrayList<String> annotations = new ArrayList<>();
@@ -106,10 +105,15 @@ public class RaceRenderer {
             endPoints.add(pixelCoordinates);
             group.getChildren().add(rectangle);
         }
-        Line line = new Line(
-                endPoints.get(0).getX(), endPoints.get(0).getY(),
-                endPoints.get(1).getX(), endPoints.get(1).getY());
-        group.getChildren().add(line);
+
+        if (compoundMark.getName().equals("Start") || compoundMark.getName().equals("Finish")) {
+            Line line = new Line(
+                    endPoints.get(0).getX(), endPoints.get(0).getY(),
+                    endPoints.get(1).getX(), endPoints.get(1).getY());
+            line.setFill(Color.WHITE);
+            line.setStyle("-fx-stroke: red");
+            group.getChildren().add(line);
+        }
     }
 
 
