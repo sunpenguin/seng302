@@ -16,11 +16,12 @@ import static org.junit.Assert.*;
 public class GPSCalculationsTest {
 
     private Course testCourse;
-    private GPSCalculations g = new GPSCalculations(testCourse);
+    private GPSCalculations g;
 
     @Before
-    public void setUpTestCourse() throws IOException, SAXException, ParserConfigurationException {
-        testCourse = XMLParser.parseCourse(new File("/home/cosc/student/jth102/302/project302/team-18/src/main/resources/course.xml"));
+    public void setUp() throws IOException, SAXException, ParserConfigurationException {
+        testCourse = XMLParser.parseCourse(new File("src/main/resources/course.xml"));
+        g = new GPSCalculations(testCourse);
     }
 
 

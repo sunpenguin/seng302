@@ -6,11 +6,13 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 
@@ -70,11 +72,8 @@ public class RaceRendererTest {
     @Test
     public void renderBoatsTest() {
         // Create expected
-        Group g = new Group();
-        ObservableList<Node> expected = g.getChildren();
-        Circle c = new Circle(10.0, Color.VIOLET);
-        c.setCenterX(60.0); // size of padding
-        c.setCenterY(-360.0); // size of screen / -2
+        ObservableList<Polyline> expected = FXCollections.observableArrayList();
+        Polyline c = new Polyline(); // TODO Fix this test to work with Polylines instead of Circles
         expected.add(c);
 
         // Create boat for race
@@ -105,12 +104,15 @@ public class RaceRendererTest {
         // check equality
         assertEquals(expected.size(), actual.size());
         for (int i = 0; i < expected.size(); i++) {
-            Circle act = (Circle) actual.get(i);
-            Circle exp = (Circle) expected.get(i);
-            assertEquals(exp.getCenterX(), act.getCenterX(), 0.001);
-            assertEquals(exp.getCenterY(), act.getCenterY(), 0.001);
-            assertEquals(exp.getRadius(), act.getRadius(), 0.001);
+            Polyline act = (Polyline) actual.get(i);
+            Polyline exp = expected.get(i);
+            assertEquals(exp.getLayoutX(), act.getLayoutX(), 0.001);
+            assertEquals(exp.getLayoutY(), act.getLayoutY(), 0.001);
             assertEquals(exp.getFill(), act.getFill());
+            assertEquals(exp.getPoints().size(), act.getPoints().size());
+            for (int j = 0; j < exp.getPoints().size(); j++) {
+                assertEquals(exp.getPoints().get(j), act.getPoints().get(j), 0.001);
+            }
         }
     }
 
