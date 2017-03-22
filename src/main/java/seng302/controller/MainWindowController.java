@@ -64,7 +64,10 @@ public class MainWindowController {
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         TableColumn<Boat, String> boatNameColumn = new TableColumn("Name");
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
-        tableView.getColumns().setAll(boatPositionColumn, boatNameColumn);
+        TableColumn<Boat, Integer> boatSpeedColumn = new TableColumn("Speed");
+        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
+
+        tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
     }
 
     public void closeProgram() {
