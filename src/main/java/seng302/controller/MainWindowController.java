@@ -4,10 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.xml.sax.SAXException;
 import seng302.*;
@@ -29,7 +26,7 @@ public class MainWindowController {
     private Label timerLabel;
 
     @FXML
-    private Button startRaceButton;
+    private ToggleButton playPauseToggleButton;
 
     @FXML
     private TableView tableView;
@@ -71,9 +68,15 @@ public class MainWindowController {
 
     }
 
-    public void startRace() {
-        raceClock.start();
-        raceLoop.start();
+
+    public void playPauseRace() {
+        if (playPauseToggleButton.isSelected()) {
+            raceClock.start();
+            raceLoop.start();
+        } else {
+            raceClock.stop();
+            raceLoop.stop();
+        }
     }
 
     public void closeProgram() {

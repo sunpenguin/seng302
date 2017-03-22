@@ -33,5 +33,12 @@ public class RaceLoop extends AnimationTimer {
         race.updateBoats(secondsElapsed);
         renderer.renderBoats();
     }
+
+
+    @Override
+    public void stop() {
+        super.stop();
+        previousTime = 0;
+    }
 }
 

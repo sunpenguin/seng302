@@ -40,9 +40,13 @@ public class RaceClock {
         timeline.play();
     }
 
+
+    public void stop() {
+        timeline.stop();
+    }
+
     private void secondsToString(double pTime) {
         pTime = (int) pTime;
-        System.out.println(pTime % 60);
         timeString = String.format(" %02.0f:%02.0f", (Math.floor(pTime / 60)), (pTime % 60));
     }
 
