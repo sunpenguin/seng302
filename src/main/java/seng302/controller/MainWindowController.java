@@ -1,7 +1,5 @@
 package seng302.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -23,10 +21,10 @@ import java.util.ArrayList;
 public class MainWindowController {
     @FXML
     private Group group;
-
     @FXML
     private Label timerLabel;
-
+    @FXML
+    private Label fpsLabel;
     @FXML
     private TableView tableView;
     private Race race;
@@ -46,7 +44,7 @@ public class MainWindowController {
             RaceTimer raceClock = new RaceTimer(group, timerLabel);
             raceClock.start();
 
-            RaceLoop rl = new RaceLoop(race, rr);
+            RaceLoop rl = new RaceLoop(race, rr, new FPSReporter(fpsLabel));
             rl.start();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();

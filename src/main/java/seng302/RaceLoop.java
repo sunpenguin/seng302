@@ -8,8 +8,11 @@ import javafx.animation.AnimationTimer;
  */
 public class RaceLoop extends AnimationTimer {
     private long previousTime = 0;
+    private double secondsElapsedSinceLastFpsUpdate = 0d;
+    private int framesSinceLastFpsUpdate = 0;
     private Race race;
     private RaceRenderer renderer;
+    private FPSReporter fpsReporter;
 
     /**
      * Constructor for the RaceLoop class.
@@ -17,9 +20,10 @@ public class RaceLoop extends AnimationTimer {
      * @param race the race to be updated
      * @param renderer the renderer that updates with the race
      */
-    public RaceLoop(Race race, RaceRenderer renderer) {
+    public RaceLoop(Race race, RaceRenderer renderer, FPSReporter fpsReporter) {
         this.race = race;
         this.renderer = renderer;
+        this.fpsReporter = fpsReporter;
     }
 
     @Override
@@ -32,6 +36,15 @@ public class RaceLoop extends AnimationTimer {
         previousTime = currentTime;
         race.updateBoats(secondsElapsed);
         renderer.renderBoats();
+
+        secondsElapsedSinceLastFpsUpdate += secondsElapsed;
+        framesSinceLastFpsUpdate++;
+        if (secondsElapsedSinceLastFpsUpdate >= 0.5d) {
+            double fps = framesSinceLastFpsUpdate / secondsElapsedSinceLastFpsUpdate;
+            fpsReporter.report(fps);
+            secondsElapsedSinceLastFpsUpdate = 0;
+            framesSinceLastFpsUpdate = 0;
+        }
     }
 }
 
