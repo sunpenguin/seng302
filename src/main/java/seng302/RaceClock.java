@@ -6,8 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 
 public class RaceClock {
 

@@ -1,17 +1,14 @@
 package seng302;
 
 import javafx.scene.Group;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Random;
 
 /**
  * Class that takes a Race and a Group and draws the Race on the Group.
@@ -21,9 +18,10 @@ public class RaceRenderer {
     private Group group;
     private Race race;
     private HashMap<String, Circle> boats;
+    private HashMap<String, Label> boatLabels;
     final private Color MARK_COLOR = Color.BLACK;
     final private double MARK_SIZE = 10.0;
-    final double PADDING = 60.0;
+    final private double PADDING = 60.0;
 
     /**
      * Constructor for RaceRenderer, takes a Race and Group as parameters.
@@ -35,14 +33,25 @@ public class RaceRenderer {
         this.race = race;
         this.group = group;
         boats = new HashMap<>();
+        boatLabels = new HashMap<>();
         final double BOAT_RADIUS = 10.0;
         final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
                 Arrays.asList(Color.DODGERBLUE, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
 
         for (int i = 0; i < race.getStartingList().size(); i++) {
+            String boatName = race.getStartingList().get(i).getBoatName();
+            String teamName = race.getStartingList().get(i).getTeamName();
+
             Circle boat = new Circle(BOAT_RADIUS, BOAT_COLOURS.get(i));
-            boats.put(race.getStartingList().get(i).getBoatName(), boat);
+            boats.put(boatName, boat);
             this.group.getChildren().add(boat);
+
+            // Create the lablels to show the boat names next to the boats
+            Label boatNameLabel = new Label(teamName);
+            boatNameLabel.setTextFill(Color.BLACK);
+            boatNameLabel.setStyle("-fx-background-color: white");
+            boatLabels.put(teamName, boatNameLabel);
+            this.group.getChildren().add(boatNameLabel);
         }
     }
 
@@ -93,7 +102,7 @@ public class RaceRenderer {
 
 
     /**
-     * Draws boats in the Race on the Group.
+     * Draws boats in the Race on the Group as well as the boat name next to each boat.
      */
     public void renderBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
@@ -103,6 +112,13 @@ public class RaceRenderer {
             Circle boatImage = boats.get(boat.getBoatName());
             boatImage.setCenterX(pixels.getX());
             boatImage.setCenterY(pixels.getY());
+
+            // Render the label for the boatname as well.
+            String teamName = boat.getTeamName();
+            Label boatNameLabel = boatLabels.get(teamName);
+            boatNameLabel.setLayoutX(pixels.getX() + 7);
+            boatNameLabel.setLayoutY(pixels.getY() + 7);
+            boatNameLabel.setVisible(true);
         }
     }
 
