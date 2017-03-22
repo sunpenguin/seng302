@@ -73,7 +73,15 @@ public class RaceRendererTest {
     public void renderBoatsTest() {
         // Create expected
         ObservableList<Polyline> expected = FXCollections.observableArrayList();
-        Polyline c = new Polyline(); // TODO Fix this test to work with Polylines instead of Circles
+        Polyline c = new Polyline();
+        c.setLayoutX(60); // padding size
+        c.setLayoutY(-360); // - ( size of screen / 2)
+        c.getPoints().addAll(
+                5.0, 0.0,
+                10.0, 10.0,
+                0.0, 10.0,
+                5.0, 0.0,
+                5.0, 10.0);
         expected.add(c);
 
         // Create boat for race
