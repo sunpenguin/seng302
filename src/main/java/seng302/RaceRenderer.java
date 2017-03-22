@@ -48,6 +48,9 @@ public class RaceRenderer {
         annotations.add("Name");
         visibleAnnotations.put("Name", true);
 
+        annotations.add("Speed");
+        visibleAnnotations.put("Speed", true);
+
 
         for (int i = 0; i < race.getStartingList().size(); i++) {
             String boatName = race.getStartingList().get(i).getBoatName();
@@ -138,11 +141,11 @@ public class RaceRenderer {
         for (String annotation : annotations) {
             if (visibleAnnotations.get(annotation)) {
                 if (annotation.equals("Name")) {
-                    textToDisplay += boat.getTeamName() + " ";
+                    textToDisplay += boat.getTeamName() + "\n";
                 }
 
                 else if (annotation.equals("Speed")) {
-                    textToDisplay += boat.getSpeed() + " ";
+                    textToDisplay += boat.getSpeed() + " km/h\n";
                 }
             }
         }
