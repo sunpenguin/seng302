@@ -1,5 +1,8 @@
 package seng302;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 
 
@@ -8,10 +11,10 @@ import java.util.ArrayList;
  */
 public class Race {
 
-    private ArrayList<Boat> startingList = new ArrayList<>();
+    private ArrayList<Boat> startingList;
     private Course course;
-    private ArrayList<Boat> finishedList = new ArrayList<>();
-
+    private ObservableList<Boat> finishedList;
+    private int firstPlaceLeg;
 
     /**
      * Race class constructor.
@@ -22,6 +25,8 @@ public class Race {
     public Race(ArrayList<Boat> startingList, Course course) {
         this.startingList = startingList;
         this.course = course;
+        finishedList = FXCollections.observableArrayList();
+        firstPlaceLeg = course.getLegs().get(0).getLegNumber();
         setCourseForBoats();
     }
 
@@ -43,9 +48,9 @@ public class Race {
     private void setCourseForBoats() {
         for (Boat boat : startingList) {
             // Set Leg
-            boat.setCurrentLeg(course.getLegs().get(0));
+            boat.setLeg(course.getLegs().get(0));
             // Set Dest
-            boat.setDestination(boat.getCurrentLeg().getDestination().getMidCoordinate());
+            boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
             // Set Coordinate
             Coordinate midPoint = course.getCompoundMarks().get(0).getMidCoordinate();
             boat.setCoordinate(midPoint);
@@ -107,29 +112,39 @@ public class Race {
         // if boat gets within range of its next destination changes its destination and heading
         if ((Math.abs(boat.getDestination().getLongitude() - boat.getCoordinate().getLongitude()) < 0.0001)
                 && (Math.abs(boat.getDestination().getLatitude() - boat.getCoordinate().getLatitude()) < 0.0001)) {
-            Leg nextLeg = course.getNextLeg(boat.getCurrentLeg()); // find next leg
+            Leg nextLeg = course.getNextLeg(boat.getLeg()); // find next leg
             // if current leg is the last leg boat is now finished
-            if (nextLeg.equals(boat.getCurrentLeg())) {
+            if (nextLeg.equals(boat.getLeg())) {
                 finishedList.add(boat);
+                return;
             }
-            // if the destination is a gate check if the boat has gone around
-            if (boat.getCurrentLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE) {
-                // if the boats destination was not one of the gates marks move to the mark
-                if (!boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinates())) {
-                    boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinates());
-                } else { // if the destination was one of the marks move to the end of the leg
-                    boat.getCurrentLeg().getDestination().addPassed(boat);
-                    boat.setDestination(nextLeg.getDestination().getMidCoordinate());
-                    boat.setCurrentLeg(nextLeg);
-                }
-            } else { // the destination was a mark so move onto the next leg
-                boat.getCurrentLeg().getDestination().addPassed(boat);
-                boat.setDestination(nextLeg.getDestination().getMidCoordinate());
-                boat.setCurrentLeg(nextLeg);
+            if (boat.getLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
+                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinates())) { // and it hasn't gone around the gate
+                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinates()); // move around the gate
+            } else { // the destination was a mark or is already gone around gate so move onto the next leg
+                setNextLeg(boat, nextLeg);
             }
             // update the heading only if boat has reached its next destination
             boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
         }
+    }
+
+    private void setNextLeg(Boat boat, Leg nextLeg) {
+        if (firstPlaceLeg < nextLeg.getLegNumber()) {
+            firstPlaceLeg = nextLeg.getLegNumber();
+        }
+        boat.getLeg().getDestination().addPassed(boat);
+        boat.setDestination(nextLeg.getDestination().getMidCoordinate());
+        boat.setLeg(nextLeg);
+        boat.setPlace("" + (nextLeg.getDeparture().getPassed().indexOf(boat) + 1));
+
+        for (int i = 0; i < startingList.size(); i++) {
+            if (firstPlaceLeg > startingList.get(i).getLeg().getLegNumber()) {
+                startingList.get(i).setPlace("DNF");
+            }
+            System.out.println(startingList.get(i).getPlace());
+        }
+        System.out.println();
     }
 
     private void updatePosition(Boat boat, double time) {
@@ -140,7 +155,7 @@ public class Race {
                 GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
 
-    public ArrayList<Boat> getFinishedList() {
+    public ObservableList<Boat> getFinishedList() {
         return finishedList;
     }
 }

@@ -56,15 +56,15 @@ public class MainWindowController {
             e.printStackTrace();
         }
 
-        ObservableList<Boat> boats = FXCollections.observableArrayList();
-        boats.addAll(race.getStartingList());
-        tableView.setItems(boats);
-        TableColumn<Boat, String> boatPos = new TableColumn("Position");
-        boatPos.setCellValueFactory(new PropertyValueFactory<Boat, String>("boatName"));
-        TableColumn<Boat, String> boatName = new TableColumn("Name");
-        boatName.setCellValueFactory(new PropertyValueFactory<Boat, String>("boatName"));
-        tableView.getColumns().setAll(boatName);
-
+//        ObservableList<Boat> boats = FXCollections.observableArrayList();
+//        boats.addAll(race.getFinishedList());
+//        tableView.setItems(boats);
+        tableView.setItems(race.getFinishedList());
+        TableColumn<Boat, Integer> boatPositionColumn = new TableColumn("Position");
+        boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
+        TableColumn<Boat, String> boatNameColumn = new TableColumn("Name");
+        boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
+        tableView.getColumns().setAll(boatPositionColumn, boatNameColumn);
     }
 
     public void closeProgram() {
