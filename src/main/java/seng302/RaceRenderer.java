@@ -1,11 +1,11 @@
 package seng302;
 
 import javafx.scene.Group;
-import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,10 +18,15 @@ public class RaceRenderer {
     private Group group;
     private Race race;
     private HashMap<String, Circle> boats;
-    private HashMap<String, Label> boatLabels;
+
+    private HashMap<String, Text> annotationsMap = new HashMap<>();
+    private HashMap<String, Boolean> visibleAnnotations = new HashMap<>();
+    private ArrayList<String> annotations = new ArrayList<>();
+    final private int ANNOTATION_OFFSET_X = 10;
     final private Color MARK_COLOR = Color.BLACK;
     final private double MARK_SIZE = 10.0;
     final private double PADDING = 60.0;
+
 
     /**
      * Constructor for RaceRenderer, takes a Race and Group as parameters.
@@ -33,10 +38,16 @@ public class RaceRenderer {
         this.race = race;
         this.group = group;
         boats = new HashMap<>();
-        boatLabels = new HashMap<>();
+
         final double BOAT_RADIUS = 10.0;
         final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
                 Arrays.asList(Color.DODGERBLUE, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
+
+        // Add the name annotation, set it true for (visible). In future, set all false (invisible) and when
+        // rendering only render the ones that are true
+        annotations.add("Name");
+        visibleAnnotations.put("Name", true);
+
 
         for (int i = 0; i < race.getStartingList().size(); i++) {
             String boatName = race.getStartingList().get(i).getBoatName();
@@ -46,12 +57,10 @@ public class RaceRenderer {
             boats.put(boatName, boat);
             this.group.getChildren().add(boat);
 
-            // Create the lablels to show the boat names next to the boats
-            Label boatNameLabel = new Label(teamName);
-            boatNameLabel.setTextFill(Color.BLACK);
-            boatNameLabel.setStyle("-fx-background-color: white");
-            boatLabels.put(teamName, boatNameLabel);
-            this.group.getChildren().add(boatNameLabel);
+            // Create the Text objects for the boat annotations. Initially just an empty string
+            Text boatAnnotation = new Text("");
+            annotationsMap.put(teamName, boatAnnotation);
+            this.group.getChildren().add(boatAnnotation);
         }
     }
 
@@ -102,7 +111,7 @@ public class RaceRenderer {
 
 
     /**
-     * Draws boats in the Race on the Group as well as the boat name next to each boat.
+     * Draws boats in the Race on the Group as well as the visible annotations
      */
     public void renderBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
@@ -113,14 +122,36 @@ public class RaceRenderer {
             boatImage.setCenterX(pixels.getX());
             boatImage.setCenterY(pixels.getY());
 
-            // Render the label for the boatname as well.
-            String teamName = boat.getTeamName();
-            Label boatNameLabel = boatLabels.get(teamName);
-            boatNameLabel.setLayoutX(pixels.getX() + 7);
-            boatNameLabel.setLayoutY(pixels.getY() + 7);
-            boatNameLabel.setVisible(true);
+            // Render annotations
+            Text annotationToRender = setAnnotationText(boat);
+            annotationToRender.setLayoutX(pixels.getX() + ANNOTATION_OFFSET_X);
+            annotationToRender.setLayoutY(pixels.getY());
+            annotationToRender.setVisible(true);
+
         }
     }
+
+
+    private Text setAnnotationText(Boat boat) {
+
+        String textToDisplay = "";
+        for (String annotation : annotations) {
+            if (visibleAnnotations.get(annotation)) {
+                if (annotation.equals("Name")) {
+                    textToDisplay += boat.getTeamName() + " ";
+                }
+
+                else if (annotation.equals("Speed")) {
+                    textToDisplay += boat.getSpeed() + " ";
+                }
+            }
+        }
+        Text boatAnnotation = annotationsMap.get(boat.getTeamName());
+        boatAnnotation.setText(textToDisplay);
+
+        return boatAnnotation;
+    }
+
 
     /**
      * Converts the latitude / longitude coordinates to pixel coordinates.
