@@ -1,6 +1,9 @@
 package seng302;
 
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 /**
  * A class which represents a boat in the text based Application
  */
@@ -10,12 +13,12 @@ public class Boat {
     private String boatName;
     private String teamName;
     private double speed;
-    private Leg currentLeg;
-    private double position;
+    private Leg leg;
+//    private double position;
     private double heading;
     private Coordinate coordinate;
     private Coordinate destination;
-
+    private String place;
 
     /**
      * A constructor for the Boat class
@@ -95,30 +98,30 @@ public class Boat {
         this.speed = speed;
     }
 
-    /**
-     * A getter for the position of the boat
-     * @return the position the boat is from the start of the race
-     */
-    public double getPosition() {
-        return position;
+//    /**
+//     * A getter for the position of the boat
+//     * @return the position the boat is from the start of the race
+//     */
+//    public double getPosition() {
+//        return position;
+//    }
+//
+//    /**
+//     * Sets the position that the boat is at
+//     * @param position The value position will be set to
+//     */
+//    public void setPosition(double position) {
+//        this.position = position;
+//    }
+
+
+    public Leg getLeg() {
+        return leg;
     }
 
-    /**
-     * Sets the position that the boat is at
-     * @param position The value position will be set to
-     */
-    public void setPosition(double position) {
-        this.position = position;
-    }
 
-
-    public Leg getCurrentLeg() {
-        return currentLeg;
-    }
-
-
-    public void setCurrentLeg(Leg currentLeg) {
-        this.currentLeg = currentLeg;
+    public void setLeg(Leg leg) {
+        this.leg = leg;
     }
 
 
@@ -152,4 +155,23 @@ public class Boat {
                 ", teamName='" + teamName + '\'' +
                 '}';
     }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
+//    public String getPlace() {
+//        if (place == null) {
+//            place = new SimpleStringProperty();
+//        }
+//        return place.get();
+//    }
+//
+//    public void setPlace(String place) {
+//        this.place.setValue(place);
+//    }
 }
