@@ -25,7 +25,6 @@ import java.util.Random;
  * Created by dhl25 on 15/03/17.
  */
 public class MainWindowController {
-    private static DecimalFormat df2 = new DecimalFormat(".##");
     @FXML
     private Group group;
     @FXML
@@ -36,8 +35,6 @@ public class MainWindowController {
 
     @FXML
     private Polygon arrow;
-    @FXML
-    private TextField showWindDegree;
 
     @FXML
     @SuppressWarnings("unused")
@@ -56,7 +53,7 @@ public class MainWindowController {
             race.setStartingCoordintes(); // sets intial coordinates of boats
             RaceRenderer rr = new RaceRenderer(race, group);
             rr.renderCourse();
-            rr.renderArrow();
+//            rr.renderArrow();
 //          rr.renderBoats();
             RaceLoop rl = new RaceLoop(race, rr);
             rl.start();
@@ -82,15 +79,6 @@ public class MainWindowController {
         Random ran = new Random();
         double windDegree = ran.nextDouble() * 360;
         arrow.setRotate(windDegree);
-        showWindDegree.setText(df2.format(windDegree)+" degree");
-
-        System.out.println(arrow.getLayoutX());
-//        Polygon poly = new Polygon();
-//        poly.getPoints().addAll(new Double[]{
-//                0.0, 0.0,
-//                20.0, 10.0,
-//                10.0, 20.0 });
-//        group.getChildren().add(poly);
     }
 
     public void closeProgram() {
