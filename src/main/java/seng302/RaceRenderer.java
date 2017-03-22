@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -17,10 +18,10 @@ public class RaceRenderer {
 
     private Group group;
     private Race race;
-    private HashMap<String, Circle> boats;
+    private HashMap<String, Polyline> boats;
     final private Color MARK_COLOR = Color.BLACK;
     final private double MARK_SIZE = 10.0;
-    final double PADDING = 60.0;
+    final private double PADDING = 60.0;
 
     /**
      * Constructor for RaceRenderer, takes a Race and Group as parameters.
@@ -32,12 +33,18 @@ public class RaceRenderer {
         this.race = race;
         this.group = group;
         boats = new HashMap<>();
-        final double BOAT_RADIUS = 10.0;
         final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
                 Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
 
         for (int i = 0; i < race.getStartingList().size(); i++) {
-            Circle boat = new Circle(BOAT_RADIUS, BOAT_COLOURS.get(i));
+            Polyline boat = new Polyline();
+            boat.getPoints().addAll(
+                    5.0, 0.0,
+                    10.0, 10.0,
+                    0.0, 10.0,
+                    5.0, 0.0,
+                    5.0, 10.0);
+            boat.setStroke(BOAT_COLOURS.get(i));
             boats.put(race.getStartingList().get(i).getBoatName(), boat);
             this.group.getChildren().add(boat);
         }
@@ -95,9 +102,10 @@ public class RaceRenderer {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
             XYPair pixels = convertCoordPixel(boatCoordinates);
-            Circle boatImage = boats.get(boat.getBoatName());
-            boatImage.setCenterX(pixels.getX());
-            boatImage.setCenterY(pixels.getY());
+            Polyline boatImage = boats.get(boat.getBoatName());
+            boatImage.setLayoutX(pixels.getX());
+            boatImage.setLayoutY(pixels.getY());
+            boatImage.setRotate(boat.getHeading());
         }
     }
 
