@@ -44,5 +44,6 @@
           </Menu>
         </menus>
       </MenuBar>
+      <ToggleButton fx:id="fpsToggler" layoutX="131.0" layoutY="681.0" mnemonicParsing="false" onAction="#toggleFPS" text="Toggle FPS" />
    </children>
 </Pane>

@@ -11,10 +11,9 @@ import java.util.ArrayList;
  */
 public class Race {
 
-    private ArrayList<Boat> startingList;
+    private ObservableList<Boat> startingList;
     private Course course;
     private ObservableList<Boat> finishedList;
-    private int firstPlaceLeg;
 
     /**
      * Race class constructor.
@@ -23,10 +22,9 @@ public class Race {
      * @param course       Course object
      */
     public Race(ArrayList<Boat> startingList, Course course) {
-        this.startingList = startingList;
+        this.startingList = FXCollections.observableArrayList(startingList);
         this.course = course;
         finishedList = FXCollections.observableArrayList();
-        firstPlaceLeg = course.getLegs().get(0).getLegNumber();
         setCourseForBoats();
     }
 
@@ -62,9 +60,9 @@ public class Race {
     /**
      * Starting list getter.
      *
-     * @return Arraylist holding all entered boats
+     * @return ObservableList holding all entered boats
      */
-    public ArrayList<Boat> getStartingList() {
+    public ObservableList<Boat> getStartingList() {
         return startingList;
     }
 
@@ -73,7 +71,7 @@ public class Race {
      *
      * @param startingList Arraylist holding all entered boats
      */
-    public void setStartingList(ArrayList<Boat> startingList) {
+    public void setStartingList(ObservableList<Boat> startingList) {
         this.startingList = startingList;
     }
 
@@ -130,21 +128,12 @@ public class Race {
     }
 
     private void setNextLeg(Boat boat, Leg nextLeg) {
-        if (firstPlaceLeg < nextLeg.getLegNumber()) {
-            firstPlaceLeg = nextLeg.getLegNumber();
-        }
-        boat.getLeg().getDestination().addPassed(boat);
+        CompoundMark passedMark = boat.getLeg().getDestination();
+        passedMark.addPassed(boat);
+        boat.setPlace("" + (passedMark.getPassed().indexOf(boat) + 1));
         boat.setDestination(nextLeg.getDestination().getMidCoordinate());
         boat.setLeg(nextLeg);
-        boat.setPlace("" + (nextLeg.getDeparture().getPassed().indexOf(boat) + 1));
-
-        for (int i = 0; i < startingList.size(); i++) {
-            if (firstPlaceLeg > startingList.get(i).getLeg().getLegNumber()) {
-                startingList.get(i).setPlace("DNF");
-            }
-            System.out.println(startingList.get(i).getPlace());
-        }
-        System.out.println();
+        startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
     }
 
     private void updatePosition(Boat boat, double time) {

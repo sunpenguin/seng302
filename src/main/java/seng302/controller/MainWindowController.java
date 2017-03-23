@@ -3,16 +3,18 @@ package seng302.controller;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Polygon;
-import javafx.scene.transform.Rotate;
 import org.xml.sax.SAXException;
 import seng302.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -26,15 +28,14 @@ public class MainWindowController {
     private Group group;
     @FXML
     private Label timerLabel;
-
     @FXML
     private ToggleButton playPauseToggleButton;
-
+    @FXML
+    private ToggleButton fpsToggler;
     @FXML
     private Label fpsLabel;
     @FXML
     private TableView tableView;
-
     private Race race;
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
@@ -68,7 +69,7 @@ public class MainWindowController {
 //        ObservableList<Boat> boats = FXCollections.observableArrayList();
 //        boats.addAll(race.getFinishedList());
 //        tableView.setItems(boats);
-        tableView.setItems(race.getFinishedList());
+        tableView.setItems(race.getStartingList());
         TableColumn<Boat, Integer> boatPositionColumn = new TableColumn("Position");
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         TableColumn<Boat, String> boatNameColumn = new TableColumn("Name");
@@ -91,7 +92,10 @@ public class MainWindowController {
             raceClock.stop();
             raceLoop.stop();
         }
+    }
 
+    public void toggleFPS() {
+        fpsLabel.setVisible(fpsToggler.isSelected());
     }
 
 
