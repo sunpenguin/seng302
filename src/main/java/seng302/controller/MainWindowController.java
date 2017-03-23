@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.xml.sax.SAXException;
 import seng302.*;
@@ -42,14 +43,14 @@ public class MainWindowController {
         try {
             Course course = XMLParser.parseCourse(new File("src/main/resources/course.xml"));
             ArrayList<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml"));
+
             race = new Race(boats, course);
-            RaceRenderer rr = new RaceRenderer(race, group);
-            rr.renderCourse();
-
+            raceRenderer = new RaceRenderer(race, group);
+            raceRenderer.renderCourse();
+            raceRenderer.renderBoats();
             raceClock = new RaceClock(timerLabel);
+            raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel));
 
-            RaceLoop rl = new RaceLoop(race, rr, new FPSReporter(fpsLabel));
-            rl.start();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {

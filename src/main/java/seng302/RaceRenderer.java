@@ -65,7 +65,7 @@ public class RaceRenderer {
 
             // Create the Text objects for the boat annotations. Initially just an empty string
             Text boatAnnotation = new Text("");
-            annotationsMap.put(teamName, boatAnnotation);
+            annotationsMap.put(race.getStartingList().get(i).getTeamName(), boatAnnotation);
             this.group.getChildren().add(boatAnnotation);
         }
     }
