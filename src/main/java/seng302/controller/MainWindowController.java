@@ -73,7 +73,7 @@ public class MainWindowController {
             e.printStackTrace();
         }
 
-        tableView.setItems(race.getFinishedList());
+        tableView.setItems(race.getStartingList());
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));

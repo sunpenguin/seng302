@@ -123,8 +123,8 @@ public class Race {
                 setNextLeg(boat, nextLeg);
             }
             // update the heading only if boat has reached its next destination
-            boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
         }
+        boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
     }
 
     private void setNextLeg(Boat boat, Leg nextLeg) {
