@@ -10,8 +10,8 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="720.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.controller.MainWindowController">
    <children>
       <Group fx:id="group" layoutY="720.0" />
-      <TableView fx:id="tableView" layoutX="720.0" layoutY="0.0" prefHeight="720.0" prefWidth="560.0" />
-      <Label fx:id="timerLabel" layoutX="23.0" prefHeight="50.0" prefWidth="150.0" text="Clock goes here" />
+      <TableView fx:id="tableView" layoutX="720.0" layoutY="28.0" prefHeight="692.0" prefWidth="560.0" />
+      <Label fx:id="timerLabel" layoutX="13.0" layoutY="155.0" prefHeight="50.0" prefWidth="150.0" text="Clock goes here" />
       <ToggleButton fx:id="playPauseToggleButton" layoutX="14.0" layoutY="680.0" mnemonicParsing="false" onAction="#playPauseRace" onKeyPressed="#playPauseRace" text="Play / Pause" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="13.0" />
@@ -28,5 +28,20 @@
           <Double fx:value="-60.0" />
         </points>
       </Polygon>
+      <MenuBar prefHeight="29.0" prefWidth="1279.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Race">
+            <items>
+                  <Menu mnemonicParsing="false" text="Annotation level">
+                    <items>
+                      <MenuItem fx:id="fullAnnotationLevel" mnemonicParsing="false" onAction="#setFullAnnotationLevel" text="Full" />
+                        <MenuItem fx:id="noneAnnotationLevel" mnemonicParsing="false" onAction="#setNoneAnnotationLevel" text="None" />
+                    </items>
+                  </Menu>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
    </children>
 </Pane>

@@ -2,11 +2,7 @@ package seng302.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
@@ -18,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 
@@ -37,6 +34,7 @@ public class MainWindowController {
     private Label fpsLabel;
     @FXML
     private TableView tableView;
+
     private Race race;
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
@@ -56,7 +54,7 @@ public class MainWindowController {
             raceRenderer = new RaceRenderer(race, group);
             raceRenderer.renderCourse();
             raceRenderer.renderBoats();
-            raceClock = new RaceClock(timerLabel);
+            raceClock = new RaceClock(timerLabel, race);
             raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel));
 
         } catch (ParserConfigurationException e) {
@@ -95,6 +93,25 @@ public class MainWindowController {
         }
 
     }
+
+
+    public void setFullAnnotationLevel() {
+        HashMap<String, Boolean> visibleAnnotations = raceRenderer.getVisibleAnnotations();
+        visibleAnnotations.put("Speed", true);
+        visibleAnnotations.put("Name", true);
+
+        raceRenderer.setVisibleAnnotations(visibleAnnotations);
+    }
+
+
+    public void setNoneAnnotationLevel() {
+        HashMap<String, Boolean> visibleAnnotations = raceRenderer.getVisibleAnnotations();
+        visibleAnnotations.put("Speed", false);
+        visibleAnnotations.put("Name", false);
+
+        raceRenderer.setVisibleAnnotations(visibleAnnotations);
+    }
+
 
     public void closeProgram() {
         System.exit(0);
