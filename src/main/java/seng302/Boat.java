@@ -164,6 +164,7 @@ public class Boat {
         this.place = place;
     }
 
+
 //    public String getPlace() {
 //        if (place == null) {
 //            place = new SimpleStringProperty();

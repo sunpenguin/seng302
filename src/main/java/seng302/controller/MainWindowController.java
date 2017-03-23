@@ -67,7 +67,7 @@ public class MainWindowController {
 //        ObservableList<Boat> boats = FXCollections.observableArrayList();
 //        boats.addAll(race.getFinishedList());
 //        tableView.setItems(boats);
-        tableView.setItems(race.getFinishedList());
+        tableView.setItems(race.getStartingList());
         TableColumn<Boat, Integer> boatPositionColumn = new TableColumn("Position");
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         TableColumn<Boat, String> boatNameColumn = new TableColumn("Name");
