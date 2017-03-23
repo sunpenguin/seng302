@@ -63,5 +63,6 @@
             <Text layoutX="425.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
          </children>
       </Pane>
+      <ToggleButton fx:id="fpsToggler" layoutX="131.0" layoutY="681.0" mnemonicParsing="false" onAction="#toggleFPS" text="Toggle FPS" />
    </children>
 </Pane>
