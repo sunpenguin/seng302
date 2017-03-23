@@ -9,6 +9,9 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,6 +29,10 @@ public class RaceRenderer {
     private ArrayList<String> annotations = new ArrayList<>();
     final private int ANNOTATION_OFFSET_X = 10;
     private HashMap<String, Polyline> boats;
+    private HashMap<String, Polygon> wakes;
+    private HashMap<String, Double> boatHeadings;
+    private  HashMap<String, Double> boatSpeeds;
+    private double lowestSpeed;
     final private Color MARK_COLOR = Color.BLACK;
     final private double MARK_SIZE = 10.0;
     final private double PADDING = 60.0;
@@ -41,6 +48,11 @@ public class RaceRenderer {
         this.race = race;
         this.group = group;
         boats = new HashMap<>();
+        wakes = new HashMap<>();
+        boatHeadings = new HashMap<>();
+        boatSpeeds = new HashMap<>();
+        lowestSpeed = Double.MAX_VALUE;
+
 
         final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
                 Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
@@ -55,20 +67,41 @@ public class RaceRenderer {
 
 
         for (int i = 0; i < race.getStartingList().size(); i++) {
-            Polyline boat = new Polyline();
-            boat.getPoints().addAll(
+            Boat boat = race.getStartingList().get(i);
+            if (lowestSpeed > boat.getSpeed()) {
+                lowestSpeed = boat.getSpeed();
+            }
+
+            Polygon wake = new Polygon();
+            wake.getPoints().addAll(
+                    5.0, 0.0,
+                    0.0, 20.0,
+                    10.0, 20.0
+            );
+            wakes.put(boat.getBoatName(), wake);
+//            Scale scale = new Scale(2,2);
+//            wake.getTransforms().add(scale);
+            group.getChildren().add(wake);
+
+            boatHeadings.put(boat.getBoatName(), 0d);
+
+            boatSpeeds.put(boat.getBoatName(), 0d);
+
+
+            Polyline boatImage = new Polyline();
+            boatImage.getPoints().addAll(
                     5.0, 0.0,
                     10.0, 10.0,
                     0.0, 10.0,
                     5.0, 0.0,
                     5.0, 10.0);
-            boat.setStroke(BOAT_COLOURS.get(i));
-            boats.put(race.getStartingList().get(i).getBoatName(), boat);
-            this.group.getChildren().add(boat);
+            boatImage.setStroke(BOAT_COLOURS.get(i));
+            boats.put(boat.getBoatName(), boatImage);
+            this.group.getChildren().add(boatImage);
 
             // Create the Text objects for the boat annotations. Initially just an empty string
             Text boatAnnotation = new Text("");
-            annotationsMap.put(race.getStartingList().get(i).getTeamName(), boatAnnotation);
+            annotationsMap.put(boat.getTeamName(), boatAnnotation);
             this.group.getChildren().add(boatAnnotation);
         }
     }
@@ -129,18 +162,41 @@ public class RaceRenderer {
      */
     public void renderBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
+
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
             XYPair pixels = convertCoordPixel(boatCoordinates);
             Polyline boatImage = boats.get(boat.getBoatName());
             boatImage.setLayoutX(pixels.getX());
             boatImage.setLayoutY(pixels.getY());
-            boatImage.setRotate(boat.getHeading());
+//            boatImage.setRotate(boat.getHeading());
+
+            Polygon wake = wakes.get(boat.getBoatName());
+//            wake.setRotate(boat.getHeading());
+            wake.setLayoutX(pixels.getX());
+            wake.setLayoutY(pixels.getY());
+
+            if (boat.getSpeed() != boatSpeeds.get(boat.getBoatName())) {
+                double oldSpeed = boatSpeeds.get(boat.getBoatName()) == 0d ? 1d : boatSpeeds.get(boat.getBoatName());
+                double scale = boat.getSpeed() / oldSpeed / lowestSpeed;
+                Scale wakeSize = new Scale(scale, scale, 5, 0);
+                wake.getTransforms().add(wakeSize);
+                boatSpeeds.replace(boat.getBoatName(), boat.getSpeed());
+            }
+
+            if (boat.getHeading() != boatHeadings.get(boat.getBoatName())) {
+                Rotate rotation = new Rotate(boat.getHeading() - boatHeadings.get(boat.getBoatName()), 5, 0);
+                wake.getTransforms().add(rotation);
+                boatImage.getTransforms().add(rotation);
+                boatHeadings.replace(boat.getBoatName(), boat.getHeading());
+            }
 
             Text annotationToRender = setAnnotationText(boat);
             annotationToRender.setLayoutX(pixels.getX() + ANNOTATION_OFFSET_X);
             annotationToRender.setLayoutY(pixels.getY());
             annotationToRender.setVisible(true);
+
+
         }
     }
 
