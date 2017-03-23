@@ -1,19 +1,17 @@
 package seng302;
 
-import java.util.ArrayList;
-
 /**
  *  A class that represents a mark on the race course
  */
 public class Mark {
 
-    private String markName;
-    private Coordinate markCoordinates;
+    private String name;
+    private Coordinate coordinates;
 
 
-    public Mark(String markName, Coordinate coordinates) {
-        this.markName = markName;
-        this.markCoordinates = coordinates;
+    public Mark(String name, Coordinate coordinates) {
+        this.name = name;
+        this.coordinates = coordinates;
     }
 
 
@@ -21,8 +19,8 @@ public class Mark {
      * Getter for the mark's coordinates
      * @return the coordinates
      */
-    public Coordinate getMarkCoordinates() {
-        return this.markCoordinates;
+    public Coordinate getCoordinates() {
+        return this.coordinates;
     }
 
 
@@ -30,8 +28,8 @@ public class Mark {
      * Setter for mark's coordinates
      * @param coordinates the coordinates
      */
-    public void setMarkCoordinates(Coordinate coordinates) {
-        this.markCoordinates = coordinates;
+    public void setCoordinates(Coordinate coordinates) {
+        this.coordinates = coordinates;
     }
 
 
@@ -40,8 +38,8 @@ public class Mark {
      *
      * @return the name of the mark
      */
-    public String getMarkName() {
-        return markName;
+    public String getName() {
+        return name;
     }
 
 
@@ -50,8 +48,8 @@ public class Mark {
      *
      * @param markName The name that the mark will  be set to
      */
-    public void setMarkName(String markName) {
-        this.markName = markName;
+    public void setName(String markName) {
+        this.name = markName;
     }
 }
 

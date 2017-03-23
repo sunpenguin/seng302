@@ -1,10 +1,10 @@
 package seng302.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.xml.sax.SAXException;
 import seng302.*;
@@ -21,13 +21,14 @@ import java.util.ArrayList;
 public class MainWindowController {
     @FXML
     private Group group;
-
     @FXML
     private Label timerLabel;
 
     @FXML
     private ToggleButton playPauseToggleButton;
 
+    @FXML
+    private Label fpsLabel;
     @FXML
     private TableView tableView;
     private Race race;
@@ -44,11 +45,11 @@ public class MainWindowController {
             race = new Race(boats, course);
             RaceRenderer rr = new RaceRenderer(race, group);
             rr.renderCourse();
-            rr.renderBoats();
 
-            raceLoop = new RaceLoop(race, rr);
             raceClock = new RaceClock(timerLabel);
 
+            RaceLoop rl = new RaceLoop(race, rr, new FPSReporter(fpsLabel));
+            rl.start();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -57,15 +58,18 @@ public class MainWindowController {
             e.printStackTrace();
         }
 
-        ObservableList<Boat> boats = FXCollections.observableArrayList();
-        boats.addAll(race.getStartingList());
-        tableView.setItems(boats);
-        TableColumn<Boat, String> boatPos = new TableColumn("Position");
-        boatPos.setCellValueFactory(new PropertyValueFactory<Boat, String>("boatName"));
-        TableColumn<Boat, String> boatName = new TableColumn("Name");
-        boatName.setCellValueFactory(new PropertyValueFactory<Boat, String>("boatName"));
-        tableView.getColumns().setAll(boatName);
+//        ObservableList<Boat> boats = FXCollections.observableArrayList();
+//        boats.addAll(race.getFinishedList());
+//        tableView.setItems(boats);
+        tableView.setItems(race.getFinishedList());
+        TableColumn<Boat, Integer> boatPositionColumn = new TableColumn("Position");
+        boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
+        TableColumn<Boat, String> boatNameColumn = new TableColumn("Name");
+        boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
+        TableColumn<Boat, Integer> boatSpeedColumn = new TableColumn("Speed");
+        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
 
+        tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
     }
 
 

@@ -13,33 +13,38 @@ import java.util.ArrayList;
  */
 public class XMLReaderTest {
 
-    private File boatFile = new File("/home/cosc/student/jth102/302/project302/team-18/src/main/resources/boats.xml");
-    private File courseFile = new File("/home/cosc/student/jth102/302/project302/team-18/src/main/resources/course.xml");
+    private File boatFile = new File("src/main/resources/boats.xml");
+    private File courseFile = new File("src/main/resources/course.xml");
 
     @Test
     public void testParseBoats() throws IOException, SAXException, ParserConfigurationException {
 
         ArrayList<Boat> boats = XMLParser.parseBoats(boatFile);
-        Boat testBoat = boats.get(0);
-        assertEquals("Emirates", testBoat.getBoatName());
-        assertEquals("New Zealand", testBoat.getTeamName());
-        assertEquals(70.0, testBoat.getSpeed(), 0.1);
+        Boat testBoat = boats.get(4);
+        assertEquals("Land Rover", testBoat.getBoatName());
+        assertEquals("Britain", testBoat.getTeamName());
+        assertEquals(50.0, testBoat.getSpeed(), 0.1);
         assertEquals(6, boats.size());
+
     }
 
     @Test
     public void testParseCourse() throws IOException, SAXException, ParserConfigurationException {
 
         Course course = XMLParser.parseCourse(courseFile);
-        ArrayList<CompoundMark> compoundMarks = course.getCompoundMarks();
-        CompoundMark compoundMark = compoundMarks.get(0);
-        assertEquals(compoundMark.getName(), "Start");
-        assertEquals(compoundMark.getMarks().size(), 2);
-        assertEquals(compoundMarks.size(), 6);
+        ArrayList<CompoundMark> actualCourse = course.getCompoundMarks();
+        CompoundMark actualMark = actualCourse.get(0);
+        assertEquals("Start", actualMark.getName());
+        assertEquals(2, actualMark.getMarks().size());
+        assertEquals("Start1", actualMark.getMarks().get(0).getName());
+        assertEquals(new Coordinate(32.296577, -64.854304), actualMark.getMarks().get(0).getCoordinates());
+        assertEquals("Start2", actualMark.getMarks().get(1).getName());
+        assertEquals(new Coordinate(32.293771, -64.855242), actualMark.getMarks().get(1).getCoordinates());
+        assertEquals(6, actualCourse.size());
 
-        CompoundMark compoundMark1 = compoundMarks.get(3);
-        assertEquals(compoundMark1.getMarks().size(), 2);
-        assertEquals(compoundMark1.getMarks().get(1).getMarkName(), "Southern gate 2");
+        CompoundMark compoundMark1 = actualCourse.get(3);
+        assertEquals(2, compoundMark1.getMarks().size());
+        assertEquals("Southern gate 2", compoundMark1.getMarks().get(1).getName());
     }
 
 }

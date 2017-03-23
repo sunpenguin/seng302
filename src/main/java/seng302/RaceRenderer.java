@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import java.util.ArrayList;
@@ -17,11 +18,11 @@ public class RaceRenderer {
 
     private Group group;
     private Race race;
-    private HashMap<String, Circle> boats;
     private HashMap<String, Text> annotationsMap = new HashMap<>();
     private HashMap<String, Boolean> visibleAnnotations = new HashMap<>();
     private ArrayList<String> annotations = new ArrayList<>();
     final private int ANNOTATION_OFFSET_X = 10;
+    private HashMap<String, Polyline> boats;
     final private Color MARK_COLOR = Color.BLACK;
     final private double MARK_SIZE = 10.0;
     final private double PADDING = 60.0;
@@ -38,9 +39,8 @@ public class RaceRenderer {
         this.group = group;
         boats = new HashMap<>();
 
-        final double BOAT_RADIUS = 10.0;
         final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
-                Arrays.asList(Color.DODGERBLUE, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
+                Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
 
         // Add the name and speed annotations, set them true (visible). In future, set all false (invisible) and when
         // rendering only the ones that are true will be selected based on the chosen annotation level
@@ -52,11 +52,15 @@ public class RaceRenderer {
 
 
         for (int i = 0; i < race.getStartingList().size(); i++) {
-            String boatName = race.getStartingList().get(i).getBoatName();
-            String teamName = race.getStartingList().get(i).getTeamName();
-
-            Circle boat = new Circle(BOAT_RADIUS, BOAT_COLOURS.get(i));
-            boats.put(boatName, boat);
+            Polyline boat = new Polyline();
+            boat.getPoints().addAll(
+                    5.0, 0.0,
+                    10.0, 10.0,
+                    0.0, 10.0,
+                    5.0, 0.0,
+                    5.0, 10.0);
+            boat.setStroke(BOAT_COLOURS.get(i));
+            boats.put(race.getStartingList().get(i).getBoatName(), boat);
             this.group.getChildren().add(boat);
 
             // Create the Text objects for the boat annotations. Initially just an empty string
@@ -68,14 +72,12 @@ public class RaceRenderer {
 
 
     public void renderCourse() {
-        final int SINGLE_MARK_SIZE = 1;
-        final int GATE_SIZE = 2;
         ArrayList<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
         for (int i = 0 ; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
-            if (compoundMark.getMarks().size() == SINGLE_MARK_SIZE) {
+            if (compoundMark.getMarks().size() == CompoundMark.MARK_SIZE) {
                 renderMark(compoundMark.getMarks().get(0));
-            } else if (compoundMark.getMarks().size() == GATE_SIZE) {
+            } else if (compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) {
                 renderGate(compoundMark);
             }
         }
@@ -84,10 +86,10 @@ public class RaceRenderer {
 
     private void renderMark(Mark mark) {
         Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
-        Coordinate coordinate = mark.getMarkCoordinates();
+        Coordinate coordinate = mark.getCoordinates();
         XYPair pixelCoordinates = convertCoordPixel(coordinate);
-        rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
-        rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
+        rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
+        rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
         group.getChildren().add(rectangle);
     }
 
@@ -98,7 +100,7 @@ public class RaceRenderer {
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
             Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
-            Coordinate coordinate = mark.getMarkCoordinates();
+            Coordinate coordinate = mark.getCoordinates();
             XYPair pixelCoordinates = convertCoordPixel(coordinate);
             rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
             rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
@@ -127,9 +129,10 @@ public class RaceRenderer {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
             XYPair pixels = convertCoordPixel(boatCoordinates);
-            Circle boatImage = boats.get(boat.getBoatName());
-            boatImage.setCenterX(pixels.getX());
-            boatImage.setCenterY(pixels.getY());
+            Polyline boatImage = boats.get(boat.getBoatName());
+            boatImage.setLayoutX(pixels.getX());
+            boatImage.setLayoutY(pixels.getY());
+            boatImage.setRotate(boat.getHeading());
 
             Text annotationToRender = setAnnotationText(boat);
             annotationToRender.setLayoutX(pixels.getX() + ANNOTATION_OFFSET_X);
@@ -188,4 +191,7 @@ public class RaceRenderer {
         return new XYPair(pixelWidth * widthRatio + PADDING, (pixelHeight * heightRatio + PADDING) * -1);
     }
 
+    public Group getGroup() {
+        return group;
+    }
 }

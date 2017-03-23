@@ -1,6 +1,9 @@
 package seng302;
 
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 /**
  * A class which represents a boat in the text based Application
  */
@@ -10,24 +13,12 @@ public class Boat {
     private String boatName;
     private String teamName;
     private double speed;
-    private Leg currentLeg;
-    private double position;
-    private boolean finished = false;
+    private Leg leg;
+//    private double position;
     private double heading;
     private Coordinate coordinate;
-    private Coordinate nextDestination;
-
-
-
-    /**
-     * A constructor for the Boat class
-     * @param boatName The name of the boat
-     * @param teamName The name of the team the boat belongs to
-     */
-    public Boat(String boatName, String teamName) {
-        this.boatName = boatName;
-        this.teamName = teamName;
-    }
+    private Coordinate destination;
+    private String place;
 
     /**
      * A constructor for the Boat class
@@ -75,7 +66,6 @@ public class Boat {
         this.boatName = name;
     }
 
-
     /**
      * A getter for the team name that the boat belongs to
      * @return The teamName
@@ -83,25 +73,6 @@ public class Boat {
     public String getTeamName() {
         return teamName;
     }
-
-
-    /**
-     * Checks the value of the boolean finished
-     * @return The value of finished
-     */
-    public boolean isFinished() {
-        return finished;
-    }
-
-
-    /**
-     * A setter of the value of finished
-     * @param finished the value finished will be set to
-     */
-    public void setFinished(boolean finished) {
-        this.finished = finished;
-    }
-
 
     /**
      * A setter for the team name that the boat belongs to
@@ -111,7 +82,6 @@ public class Boat {
         this.teamName = name;
     }
 
-
     /**
      * A getter for the speed of the boat
      * @return The speed of the boat
@@ -119,7 +89,6 @@ public class Boat {
     public double getSpeed() {
         return speed;
     }
-
 
     /**
      * A setter for the speed of the boat
@@ -129,49 +98,51 @@ public class Boat {
         this.speed = speed;
     }
 
+//    /**
+//     * A getter for the position of the boat
+//     * @return the position the boat is from the start of the race
+//     */
+//    public double getPosition() {
+//        return position;
+//    }
+//
+//    /**
+//     * Sets the position that the boat is at
+//     * @param position The value position will be set to
+//     */
+//    public void setPosition(double position) {
+//        this.position = position;
+//    }
 
-    /**
-     * A getter for the position of the boat
-     * @return the position the boat is from the start of the race
-     */
-    public double getPosition() {
-        return position;
+
+    public Leg getLeg() {
+        return leg;
     }
 
 
-    /**
-     * Sets the position that the boat is at
-     * @param position The value position will be set to
-     */
-    public void setPosition(double position) {
-        this.position = position;
+    public void setLeg(Leg leg) {
+        this.leg = leg;
     }
 
-
-    public Leg getCurrentLeg() {
-        return currentLeg;
-    }
-
-    public void setCurrentLeg(Leg currentLeg) {
-        this.currentLeg = currentLeg;
-    }
 
     public Coordinate getCoordinate() {
         return coordinate;
     }
 
+
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
 
-    public Coordinate getNextDestination() {
-        return nextDestination;
+
+    public Coordinate getDestination() {
+        return destination;
     }
 
-    public void setNextDestination(Coordinate nextDestination) {
-        this.nextDestination = nextDestination;
-    }
 
+    public void setDestination(Coordinate destination) {
+        this.destination = destination;
+    }
 
     /**
      * An overidden toString for the boat objects which displays all of the boats variables
@@ -184,4 +155,23 @@ public class Boat {
                 ", teamName='" + teamName + '\'' +
                 '}';
     }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
+//    public String getPlace() {
+//        if (place == null) {
+//            place = new SimpleStringProperty();
+//        }
+//        return place.get();
+//    }
+//
+//    public void setPlace(String place) {
+//        this.place.setValue(place);
+//    }
 }
