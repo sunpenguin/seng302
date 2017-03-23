@@ -113,6 +113,15 @@ public class MainWindowController {
     }
 
 
+    public void setImportantAnnotationLevel() {
+        HashMap<String, Boolean> visibleAnnotations = raceRenderer.getVisibleAnnotations();
+        visibleAnnotations.put("Speed", false);
+        visibleAnnotations.put("Name", true);
+
+        raceRenderer.setVisibleAnnotations(visibleAnnotations);
+    }
+
+
     public void closeProgram() {
         System.exit(0);
     }

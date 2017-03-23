@@ -35,6 +35,7 @@
                   <Menu mnemonicParsing="false" text="Annotation level">
                     <items>
                       <MenuItem fx:id="fullAnnotationLevel" mnemonicParsing="false" onAction="#setFullAnnotationLevel" text="Full" />
+                        <MenuItem mnemonicParsing="false" onAction="#setImportantAnnotationLevel" text="Important Only" />
                         <MenuItem fx:id="noneAnnotationLevel" mnemonicParsing="false" onAction="#setNoneAnnotationLevel" text="None" />
                     </items>
                   </Menu>
