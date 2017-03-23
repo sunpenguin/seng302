@@ -97,7 +97,7 @@ public class MainWindowController {
 
 
     public void toggleFPS() {
-        fpsLabel.setVisible(fpsToggler.isSelected());
+        fpsLabel.setVisible(!fpsToggler.isSelected());
     }
 
 
