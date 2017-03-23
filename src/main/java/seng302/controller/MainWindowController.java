@@ -32,8 +32,18 @@ public class MainWindowController {
 
     @FXML
     private Label fpsLabel;
+
     @FXML
     private TableView tableView;
+
+    @FXML
+    private TableColumn<Boat, Integer> boatPositionColumn;
+
+    @FXML
+    private TableColumn<Boat, String> boatNameColumn;
+
+    @FXML
+    private TableColumn<Boat, Integer> boatSpeedColumn;
 
     private Race race;
     private RaceLoop raceLoop;
@@ -65,15 +75,9 @@ public class MainWindowController {
             e.printStackTrace();
         }
 
-//        ObservableList<Boat> boats = FXCollections.observableArrayList();
-//        boats.addAll(race.getFinishedList());
-//        tableView.setItems(boats);
         tableView.setItems(race.getFinishedList());
-        TableColumn<Boat, Integer> boatPositionColumn = new TableColumn("Position");
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
-        TableColumn<Boat, String> boatNameColumn = new TableColumn("Name");
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
-        TableColumn<Boat, Integer> boatSpeedColumn = new TableColumn("Speed");
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
 
         tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);

@@ -10,25 +10,19 @@
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="720.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.controller.MainWindowController">
    <children>
       <Group fx:id="group" layoutY="720.0" />
-      <TableView fx:id="tableView" layoutX="720.0" layoutY="28.0" prefHeight="692.0" prefWidth="560.0" />
-      <Label fx:id="timerLabel" layoutX="13.0" layoutY="155.0" prefHeight="50.0" prefWidth="150.0" text="Clock goes here" />
+      <TableView fx:id="tableView" layoutX="720.0" layoutY="459.0" prefHeight="260.0" prefWidth="560.0">
+         <columns>
+            <TableColumn fx:id="boatPositionColumn" text="Position" />
+            <TableColumn fx:id="boatNameColumn" prefWidth="240.0" text="Name" />
+            <TableColumn fx:id="boatSpeedColumn" prefWidth="240.0" text="Speed" />
+         </columns></TableView>
       <ToggleButton fx:id="playPauseToggleButton" layoutX="14.0" layoutY="680.0" mnemonicParsing="false" onAction="#playPauseRace" onKeyPressed="#playPauseRace" text="Play / Pause" textAlignment="CENTER">
          <font>
             <Font name="System Bold" size="13.0" />
          </font>
       </ToggleButton>
-      <Label fx:id="fpsLabel" layoutX="599.0" layoutY="681.0" prefHeight="38.0" prefWidth="121.0" text="Label" />
-      <Polygon fx:id="arrow" fill="DODGERBLUE" layoutX="68.0" layoutY="100.0" scaleX="0.4" scaleY="0.8" stroke="BLACK" strokeType="INSIDE">
-        <points>
-          <Double fx:value="-50.0" />
-          <Double fx:value="40.0" />
-          <Double fx:value="50.0" />
-          <Double fx:value="40.0" />
-          <Double fx:value="0.0" />
-          <Double fx:value="-60.0" />
-        </points>
-      </Polygon>
-      <MenuBar prefHeight="29.0" prefWidth="1279.0">
+      <Label fx:id="fpsLabel" layoutX="641.0" layoutY="29.0" prefHeight="38.0" prefWidth="79.0" text="fps:" />
+      <MenuBar prefHeight="30.0" prefWidth="1280.0">
         <menus>
           <Menu mnemonicParsing="false" text="Race">
             <items>
@@ -44,5 +38,30 @@
           </Menu>
         </menus>
       </MenuBar>
+      <Pane layoutX="720.0" layoutY="29.0" prefHeight="430.0" prefWidth="560.0" style="-fx-background-color: white;">
+         <children>
+            <Polygon fx:id="arrow" fill="#ff1f1f" layoutX="473.0" layoutY="98.0" scaleX="0.5" stroke="BLACK" strokeType="INSIDE">
+              <points>
+                <Double fx:value="-50.0" />
+                <Double fx:value="40.0" />
+                <Double fx:value="50.0" />
+                <Double fx:value="40.0" />
+                <Double fx:value="0.0" />
+                <Double fx:value="-60.0" />
+              </points>
+            </Polygon>
+            <Label fx:id="timerLabel" layoutX="205.0" layoutY="63.0" prefHeight="50.0" prefWidth="150.0" text="Clock goes here">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Text layoutX="466.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Text layoutX="425.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
+         </children>
+      </Pane>
    </children>
 </Pane>
