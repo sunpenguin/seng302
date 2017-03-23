@@ -6,14 +6,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.shape.Polygon;
+import javafx.scene.transform.Rotate;
 import org.xml.sax.SAXException;
 import seng302.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
@@ -36,6 +41,9 @@ public class MainWindowController {
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private RaceClock raceClock;
+
+    @FXML
+    private Polygon arrow;
 
     @FXML
     @SuppressWarnings("unused")
@@ -71,6 +79,9 @@ public class MainWindowController {
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
 
         tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
+        Random ran = new Random();
+        double windDegree = ran.nextDouble() * 360;
+        arrow.setRotate(windDegree);
     }
 
 
@@ -82,9 +93,16 @@ public class MainWindowController {
             raceClock.stop();
             raceLoop.stop();
         }
+
     }
 
     public void closeProgram() {
         System.exit(0);
     }
+
+//    public void start() {
+//        graphicsContext.setFill(Color.BEIGE);
+//        graphicsContext.fillOval(20, 50, 20,20);
+//    }
+
 }

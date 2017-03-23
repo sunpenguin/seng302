@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.*?>
@@ -16,5 +17,16 @@
          </font>
       </ToggleButton>
       <Label fx:id="fpsLabel" layoutX="599.0" layoutY="681.0" prefHeight="38.0" prefWidth="121.0" text="Label" />
+      <TableView fx:id="tableView" layoutX="335.0" layoutY="146.0" prefHeight="462.0" prefWidth="571.0" />
+      <Polygon fx:id="arrow" fill="DODGERBLUE" layoutX="40.0" layoutY="58.0" scaleX="0.4" scaleY="0.8" stroke="BLACK" strokeType="INSIDE" visible="true">
+        <points>
+          <Double fx:value="-50.0" />
+          <Double fx:value="40.0" />
+          <Double fx:value="50.0" />
+          <Double fx:value="40.0" />
+          <Double fx:value="0.0" />
+          <Double fx:value="-60.0" />
+        </points>
+      </Polygon>
    </children>
 </Pane>
