@@ -42,8 +42,8 @@ public class RaceRenderer {
         final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
                 Arrays.asList(Color.DODGERBLUE, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
 
-        // Add the name annotation, set it true for (visible). In future, set all false (invisible) and when
-        // rendering only render the ones that are true
+        // Add the name and speed annotations, set them true (visible). In future, set all false (invisible) and when
+        // rendering only the ones that are true will be selected based on the chosen annotation level
         annotations.add("Name");
         visibleAnnotations.put("Name", true);
 
@@ -106,6 +106,8 @@ public class RaceRenderer {
             group.getChildren().add(rectangle);
         }
 
+
+        // Only draw lines for the start and finish lines, gates do not have lines drawn
         if (compoundMark.getName().equals("Start") || compoundMark.getName().equals("Finish")) {
             Line line = new Line(
                     endPoints.get(0).getX(), endPoints.get(0).getY(),
@@ -129,16 +131,20 @@ public class RaceRenderer {
             boatImage.setCenterX(pixels.getX());
             boatImage.setCenterY(pixels.getY());
 
-            // Render annotations
             Text annotationToRender = setAnnotationText(boat);
             annotationToRender.setLayoutX(pixels.getX() + ANNOTATION_OFFSET_X);
             annotationToRender.setLayoutY(pixels.getY());
             annotationToRender.setVisible(true);
-
         }
     }
 
 
+    /**
+     * Set the annotation text to display next to the boat based on which annotations are true in the visibleAnnotations
+     * hashmap.
+     * @param boat The boat to set the annotation text for.
+     * @return the Text object with the correctly set text.
+     */
     private Text setAnnotationText(Boat boat) {
 
         String textToDisplay = "";
