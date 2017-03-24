@@ -116,6 +116,7 @@ public class Race {
             // if current leg is the last leg boat is now finished
             if (nextLeg.equals(boat.getLeg())) {
                 finishedList.add(boat);
+                boat.setSpeed(0d);
                 return;
             }
             if (boat.getLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
@@ -124,9 +125,8 @@ public class Race {
             } else { // the destination was a mark or is already gone around gate so move onto the next leg
                 setNextLeg(boat, nextLeg);
             }
-            // update the heading only if boat has reached its next destination
-            boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
         }
+        boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
     }
 
     private void setNextLeg(Boat boat, Leg nextLeg) {
