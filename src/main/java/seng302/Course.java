@@ -51,4 +51,17 @@ public class Course {
     public void setWindDirection(double windDirection) {
         this.windDirection = windDirection;
     }
+
+    public double getCourseDistance(){
+        double distance = 0;
+        Coordinate prev = getCompoundMarks().get(0).getMidCoordinate();
+        Coordinate cur = getCompoundMarks().get(1).getMidCoordinate();
+        for (int i = 2; i < getCompoundMarks().size(); i++){
+            distance += GPSCalculations.GPSDistance(prev, cur);
+            prev = cur;
+            cur = getCompoundMarks().get(i).getMidCoordinate();
+        }
+        return distance;
+    }
 }
+
