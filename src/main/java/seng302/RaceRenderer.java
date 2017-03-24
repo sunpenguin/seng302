@@ -102,6 +102,7 @@ public class RaceRenderer {
 
     public void renderCourse() {
         ArrayList<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
+        // Renders CompondMarks
         for (int i = 0 ; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
             if ((i == 0 || i == compoundMarks.size() - 1) && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) {
@@ -110,6 +111,18 @@ public class RaceRenderer {
                 renderCompoundMark(compoundMark);
             }
         }
+        // Renders Boundaries
+        Polyline border = new Polyline();
+        for (Coordinate boundary : race.getCourse().getBoundaries()) {
+            renderBoundary(border, boundary);
+        }
+        renderBoundary(border, race.getCourse().getBoundaries().get(0));
+        group.getChildren().addAll(border);
+    }
+
+    private void renderBoundary(Polyline border, Coordinate boundary) {
+        XYPair boundaryPixels = convertCoordPixel(boundary);
+        border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
     }
 
 

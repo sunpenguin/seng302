@@ -181,25 +181,21 @@ public class GPSCalculations {
     }
 
     public void findMinMaxPoints(Course course) {
-
-        for (CompoundMark compoundMark : course.getCompoundMarks()) {
-            for (Mark mark : compoundMark.getMarks()) {
-                Coordinate markCoordinates = mark.getCoordinates();
-                XYPair markXYValues = GPSxy(markCoordinates);
-                double xValue = markXYValues.getX();
-                double yValue = markXYValues.getY();
-                if (xValue < minX) {
-                    minX = xValue;
-                }
-                if (xValue > maxX) {
-                    maxX = xValue;
-                }
-                if (yValue < minY) {
-                    minY = yValue;
-                }
-                if (yValue > maxY) {
-                    maxY = yValue;
-                }
+        for (Coordinate boundary : course.getBoundaries()) {
+            XYPair boundaryXYValues = GPSxy(boundary);
+            double xValue = boundaryXYValues.getX();
+            double yValue = boundaryXYValues.getY();
+            if (xValue < minX) {
+                minX = xValue;
+            }
+            if (xValue > maxX) {
+                maxX = xValue;
+            }
+            if (yValue < minY) {
+                minY = yValue;
+            }
+            if (yValue > maxY) {
+                maxY = yValue;
             }
         }
     }
