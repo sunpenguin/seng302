@@ -186,10 +186,8 @@ public class GPSCalculations {
             for (Mark mark : compoundMark.getMarks()) {
                 Coordinate markCoordinates = mark.getCoordinates();
                 XYPair markXYValues = GPSxy(markCoordinates);
-
                 double xValue = markXYValues.getX();
                 double yValue = markXYValues.getY();
-
                 if (xValue < minX) {
                     minX = xValue;
                 }

@@ -35,7 +35,7 @@ public class RaceRendererTest {
         ArrayList<CompoundMark> compoundMarks = new ArrayList<>();
         compoundMarks.add(testCompoundMark0);
         compoundMarks.add(testCompoundMark1);
-        Course course = new Course(compoundMarks, 45);
+        Course course = new Course(compoundMarks, new ArrayList<>(), 45);
 
         // Setting up expected values
         Rectangle r1 = new Rectangle(10, 10, Color.BLACK);
@@ -102,7 +102,7 @@ public class RaceRendererTest {
 
         // Create everything needed for RaceRenderer + RaceRenderer
         Group group = new Group();
-        Course course = new Course(compoundMarks, 45);
+        Course course = new Course(compoundMarks, new ArrayList<>(), 45);
         Race race = new Race(boats, course);
         RaceRenderer raceRenderer = new RaceRenderer(race, group);
 

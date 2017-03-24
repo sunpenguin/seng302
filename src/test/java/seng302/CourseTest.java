@@ -13,7 +13,7 @@ public class CourseTest {
 
     @Test
     public void noLegsTest() {
-        Course actual = new Course(new ArrayList<>(), 45);
+        Course actual = new Course(new ArrayList<>(), new ArrayList<>(), 45);
         assertEquals(0, actual.getLegs().size());
     }
 
@@ -34,7 +34,7 @@ public class CourseTest {
         testCompoundMarks.add(testCompoundMark1);
         testCompoundMarks.add(testCompoundMark2);
 
-        Course actual = new Course(testCompoundMarks, 45);
+        Course actual = new Course(testCompoundMarks, new ArrayList<>(), 45);
         assertEquals(expected, actual.getNextLeg(firstLeg));
     }
 }

@@ -11,10 +11,12 @@ public class Course {
     private ArrayList<CompoundMark> compoundMarks;
     private ArrayList<Leg> legs;
     private double windDirection;
+    private ArrayList<Coordinate> boundaries;
 
-    public Course(ArrayList<CompoundMark> marks, double windDirection) {
+    public Course(ArrayList<CompoundMark> marks, ArrayList<Coordinate> boundaries, double windDirection) {
         this.compoundMarks = marks;
         this.windDirection = windDirection;
+        this.boundaries = boundaries;
         legs = new ArrayList<>();
         for (int i = 0; i < marks.size() - 1; i++) {
             legs.add(new Leg(marks.get(i), marks.get(i + 1), i));
@@ -50,5 +52,9 @@ public class Course {
 
     public void setWindDirection(double windDirection) {
         this.windDirection = windDirection;
+    }
+
+    public ArrayList<Coordinate> getBoundaries() {
+        return boundaries;
     }
 }
