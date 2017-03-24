@@ -54,12 +54,12 @@ public class Course {
 
     public double getCourseDistance(){
         double distance = 0;
-        Coordinate prev = getCompoundMarks().get(0).getMidCoordinate();
-        Coordinate cur = getCompoundMarks().get(1).getMidCoordinate();
-        for (int i = 2; i < getCompoundMarks().size(); i++){
-            distance += GPSCalculations.GPSDistance(prev, cur);
-            prev = cur;
-            cur = getCompoundMarks().get(i).getMidCoordinate();
+        Coordinate dep = getLegs().get(0).getDeparture().getMidCoordinate();
+        Coordinate dest = getLegs().get(0).getDestination().getMidCoordinate();
+        for (int i = 1; i < getCompoundMarks().size()-1; i++){
+            distance += GPSCalculations.GPSDistance(dep, dest);
+            dep = getLegs().get(i).getDeparture().getMidCoordinate();
+            dest = getLegs().get(i).getDestination().getMidCoordinate();
         }
         return distance;
     }

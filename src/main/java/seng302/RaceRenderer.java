@@ -184,7 +184,6 @@ public class RaceRenderer {
     }
 
 
-
     private void scaleWake(Boat boat, Polygon wake) {
         if (boat.getSpeed() != boatSpeeds.get(boat.getBoatName())) {
             double scale = boat.getSpeed() / boatSpeeds.get(boat.getBoatName()) / lowestSpeed;

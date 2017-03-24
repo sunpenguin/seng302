@@ -159,4 +159,14 @@ public class Race {
         }
         return slowest;
     }
+
+    public void scaleRace(double time){
+        time = time/60;
+        double distance = course.getCourseDistance()/1000;
+        double requiredSpeed = distance/time;
+        for(int i = 0; i < getStartingList().size(); i++){
+            getStartingList().get(i).setSpeed(requiredSpeed);
+            requiredSpeed = requiredSpeed * 1.1;
+        }
+    }
 }

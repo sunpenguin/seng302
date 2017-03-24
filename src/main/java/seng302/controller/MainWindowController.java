@@ -59,6 +59,7 @@ public class MainWindowController {
             ArrayList<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml"));
 
             race = new Race(boats, course);
+            race.scaleRace(1);
             raceRenderer = new RaceRenderer(race, group);
             raceRenderer.renderCourse();
             raceRenderer.renderBoats();
