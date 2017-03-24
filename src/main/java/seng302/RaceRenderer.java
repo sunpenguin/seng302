@@ -250,7 +250,7 @@ public class RaceRenderer {
      */
     private XYPair convertCoordPixel(Coordinate coord) {
         double pixelWidth = 720.0 - PADDING * 2; // TODO get size of screen
-        double pixelHeight = 720.0 - PADDING * 2;
+        double pixelHeight = 690.0 - PADDING * 2;
 //        double pixelHeight = group.getLayoutY() - PADDING * 2;
 //        double pixelWidth = group.getParent().getBoundsInLocal().getWidth() - PADDING * 2;
 //        double pixelHeight = group.getParent().getBoundsInLocal().getHeight() - PADDING * 2;
