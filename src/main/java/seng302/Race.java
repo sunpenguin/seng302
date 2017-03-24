@@ -147,4 +147,16 @@ public class Race {
     public ObservableList<Boat> getFinishedList() {
         return finishedList;
     }
+
+    public Boat selectSlowestBoat(){
+        Boat slowest = getStartingList().get(0);
+        double lowest = getStartingList().get(0).getSpeed();
+        for (Boat boat : startingList){
+            if (boat.getSpeed() < lowest){
+                lowest = boat.getSpeed();
+                slowest = boat;
+            }
+        }
+        return slowest;
+    }
 }
