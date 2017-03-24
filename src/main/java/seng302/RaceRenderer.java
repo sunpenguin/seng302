@@ -264,4 +264,14 @@ public class RaceRenderer {
     public Group getGroup() {
         return group;
     }
+
+
+    public HashMap<String, Boolean> getVisibleAnnotations() {
+        return visibleAnnotations;
+    }
+
+
+    public void setVisibleAnnotations(HashMap<String, Boolean> visibleAnnotations) {
+        this.visibleAnnotations = visibleAnnotations;
+    }
 }

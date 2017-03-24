@@ -13,11 +13,13 @@ public class RaceClock {
     private Label timerLabel;
     private double timeSeconds;
     private Duration time = Duration.ZERO;
+    private Race race;
 
     private String timeString;
 
-    public RaceClock(Label timerLabel) {
+    public RaceClock(Label timerLabel, Race race) {
         this.timerLabel = timerLabel;
+        this.race = race;
 
         timerLabel.setTextFill(Color.BLACK);
         timerLabel.setStyle("-fx-font-size: 2em;");
@@ -27,11 +29,15 @@ public class RaceClock {
     public void start() {
         timeline = new Timeline(
                 new KeyFrame(Duration.millis(100), t -> {
-                    Duration duration = ((KeyFrame)t.getSource()).getTime();
-                    time = time.add(duration);
-                    timeSeconds = time.toSeconds();
-                    secondsToString(timeSeconds);
-                    timerLabel.textProperty().set(timeString);
+                    if (race.getFinishedList().size() == race.getStartingList().size()) {
+                        timeline.stop();
+                    } else {
+                        Duration duration = ((KeyFrame) t.getSource()).getTime();
+                        time = time.add(duration);
+                        timeSeconds = time.toSeconds();
+                        secondsToString(timeSeconds);
+                        timerLabel.textProperty().set(timeString);
+                    }
                 }
                 ));
         timeline.setCycleCount(Timeline.INDEFINITE);

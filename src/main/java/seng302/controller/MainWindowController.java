@@ -2,22 +2,21 @@ package seng302.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Polygon;
-import javafx.scene.transform.Rotate;
 import org.xml.sax.SAXException;
 import seng302.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 
@@ -29,14 +28,21 @@ public class MainWindowController {
     private Group group;
     @FXML
     private Label timerLabel;
-
     @FXML
     private ToggleButton playPauseToggleButton;
-
+    @FXML
+    private ToggleButton fpsToggler;
     @FXML
     private Label fpsLabel;
     @FXML
     private TableView tableView;
+    @FXML
+    private TableColumn<Boat, Integer> boatPositionColumn;
+    @FXML
+    private TableColumn<Boat, String> boatNameColumn;
+    @FXML
+    private TableColumn<Boat, Integer> boatSpeedColumn;
+
     private Race race;
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
@@ -56,7 +62,7 @@ public class MainWindowController {
             raceRenderer = new RaceRenderer(race, group);
             raceRenderer.renderCourse();
             raceRenderer.renderBoats();
-            raceClock = new RaceClock(timerLabel);
+            raceClock = new RaceClock(timerLabel, race);
             raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel));
 
         } catch (ParserConfigurationException e) {
@@ -67,15 +73,9 @@ public class MainWindowController {
             e.printStackTrace();
         }
 
-//        ObservableList<Boat> boats = FXCollections.observableArrayList();
-//        boats.addAll(race.getFinishedList());
-//        tableView.setItems(boats);
-        tableView.setItems(race.getFinishedList());
-        TableColumn<Boat, Integer> boatPositionColumn = new TableColumn("Position");
+        tableView.setItems(race.getStartingList());
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
-        TableColumn<Boat, String> boatNameColumn = new TableColumn("Name");
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
-        TableColumn<Boat, Integer> boatSpeedColumn = new TableColumn("Speed");
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
 
         tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
@@ -93,8 +93,40 @@ public class MainWindowController {
             raceClock.stop();
             raceLoop.stop();
         }
-
     }
+
+
+    public void toggleFPS() {
+        fpsLabel.setVisible(!fpsToggler.isSelected());
+    }
+
+
+    public void setFullAnnotationLevel() {
+        HashMap<String, Boolean> visibleAnnotations = raceRenderer.getVisibleAnnotations();
+        visibleAnnotations.put("Speed", true);
+        visibleAnnotations.put("Name", true);
+
+        raceRenderer.setVisibleAnnotations(visibleAnnotations);
+    }
+
+
+    public void setNoneAnnotationLevel() {
+        HashMap<String, Boolean> visibleAnnotations = raceRenderer.getVisibleAnnotations();
+        visibleAnnotations.put("Speed", false);
+        visibleAnnotations.put("Name", false);
+
+        raceRenderer.setVisibleAnnotations(visibleAnnotations);
+    }
+
+
+    public void setImportantAnnotationLevel() {
+        HashMap<String, Boolean> visibleAnnotations = raceRenderer.getVisibleAnnotations();
+        visibleAnnotations.put("Speed", false);
+        visibleAnnotations.put("Name", true);
+
+        raceRenderer.setVisibleAnnotations(visibleAnnotations);
+    }
+
 
     public void closeProgram() {
         System.exit(0);
