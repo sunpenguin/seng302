@@ -1,5 +1,9 @@
 <course>
 
+  <windDirection>
+    45.0
+  </windDirection>
+
   <compoundMark>
     <name>Start</name>
     <mark>

@@ -31,6 +31,7 @@ public class XMLParser {
     public static Course parseCourse(File file) throws ParserConfigurationException, IOException, SAXException {
         final String COMPOUND_MARK_TAG = "compoundMark"; // declaring things as final is fun
         final String COURSE_TAG = "course";
+        final String WIND_TAG = "windDirection";
         // Gets file ready for parsing
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -47,7 +48,12 @@ public class XMLParser {
                 compoundMarks.add(parseCompoundMark(compoundMarkElement));
             }
         }
-        return new Course(compoundMarks);
+        NodeList windDirectionNodes = courseElement.getElementsByTagName(WIND_TAG);
+        double windDirection = -1.0;
+        if (windDirectionNodes.getLength() != 0) {
+            windDirection = Double.parseDouble(windDirectionNodes.item(0).getTextContent());
+        }
+        return new Course(compoundMarks, windDirection);
     }
 
     /**

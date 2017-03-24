@@ -109,15 +109,6 @@ public class RaceRenderer {
             } else {
                 renderCompoundMark(compoundMark);
             }
-//            if (compoundMark.getMarks().size() == CompoundMark.MARK_SIZE) {
-//                renderMark(compoundMark.getMarks().get(0));
-//            } else if (compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) {
-//                if (i == 0 || i == compoundMarks.size() - 1) {
-//                    render();
-//                } else {
-//                    renderGate(compoundMark);
-//                }
-//            }
         }
     }
 

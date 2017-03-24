@@ -64,7 +64,7 @@ public class MainWindowController {
             raceRenderer.renderBoats();
             raceClock = new RaceClock(timerLabel, race);
             raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel));
-
+            arrow.setRotate(course.getWindDirection());
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -79,9 +79,7 @@ public class MainWindowController {
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
 
         tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
-        Random ran = new Random();
-        double windDegree = ran.nextDouble() * 360;
-        arrow.setRotate(windDegree);
+
     }
 
 
