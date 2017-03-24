@@ -1,7 +1,10 @@
 package seng302;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -34,6 +37,7 @@ public class RaceRenderer {
     private HashMap<String, Double> boatHeadings;
     private  HashMap<String, Double> boatSpeeds;
     private double lowestSpeed;
+    private AnchorPane raceViewAnchorPane;
     private final Color MARK_COLOR = Color.BLACK;
     private final double MARK_SIZE = 10.0;
     private final double PADDING = 20.0;
@@ -48,9 +52,10 @@ public class RaceRenderer {
      * @param race the race containing the boats to be drawn
      * @param group the group to be drawn on
      */
-    public RaceRenderer(Race race, Group group) {
+    public RaceRenderer(Race race, Group group, AnchorPane raceViewAnchorPane) {
         this.race = race;
         this.group = group;
+        this.raceViewAnchorPane = raceViewAnchorPane;
         boats = new HashMap<>();
         wakes = new HashMap<>();
         boatHeadings = new HashMap<>();
@@ -249,11 +254,22 @@ public class RaceRenderer {
      * @return x and y pixel coordinates of the given coordinates
      */
     private XYPair convertCoordPixel(Coordinate coord) {
+
+        raceViewAnchorPane.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldWidth, Number newWidth) {
+                System.out.println("Width: " + newWidth);
+            }
+        });
+        raceViewAnchorPane.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldHeight, Number newHeight) {
+                System.out.println("Height: " + newHeight);
+            }
+        });
+
         double pixelWidth = 690.0 - PADDING * 2; // TODO get size of screen
         double pixelHeight = 690.0 - PADDING * 2;
-//        double pixelHeight = group.getLayoutY() - PADDING * 2;
-//        double pixelWidth = group.getParent().getBoundsInLocal().getWidth() - PADDING * 2;
-//        double pixelHeight = group.getParent().getBoundsInLocal().getHeight() - PADDING * 2;
+
+
         GPSCalculations gps = new GPSCalculations(race.getCourse());
         gps.findMinMaxPoints(race.getCourse());
         double courseWidth = gps.getMaxX() - gps.getMinX();

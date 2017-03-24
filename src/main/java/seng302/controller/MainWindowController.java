@@ -8,6 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Polygon;
 import org.xml.sax.SAXException;
 import seng302.*;
@@ -42,6 +43,8 @@ public class MainWindowController {
     private TableColumn<Boat, String> boatNameColumn;
     @FXML
     private TableColumn<Boat, Integer> boatSpeedColumn;
+    @FXML
+    private AnchorPane raceViewAnchorPane;
 
     private Race race;
     private RaceLoop raceLoop;
@@ -59,7 +62,7 @@ public class MainWindowController {
             ArrayList<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml"));
 
             race = new Race(boats, course);
-            raceRenderer = new RaceRenderer(race, group);
+            raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
             raceRenderer.renderCourse();
             raceRenderer.renderBoats();
             raceClock = new RaceClock(timerLabel, race);

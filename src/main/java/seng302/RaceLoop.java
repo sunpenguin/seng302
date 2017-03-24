@@ -2,6 +2,8 @@ package seng302;
 
 import javafx.animation.AnimationTimer;
 
+import static javafx.scene.input.KeyCode.L;
+
 
 /**
  * Created by dhl25 on 16/03/17.
@@ -32,6 +34,7 @@ public class RaceLoop extends AnimationTimer {
             previousTime = currentTime;
             return;
         }
+
         double secondsElapsed = (currentTime - previousTime) / 1e9f; // converting from nanoseconds to seconds
         previousTime = currentTime;
         race.updateBoats(secondsElapsed);
