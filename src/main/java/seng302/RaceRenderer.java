@@ -36,7 +36,7 @@ public class RaceRenderer {
     private double lowestSpeed;
     private final Color MARK_COLOR = Color.BLACK;
     private final double MARK_SIZE = 10.0;
-    private final double PADDING = 60.0;
+    private final double PADDING = 20.0;
     private final double BOAT_PIVOT_X = 5;
     private final double BOAT_PIVOT_Y = 0;
 
@@ -249,7 +249,7 @@ public class RaceRenderer {
      * @return x and y pixel coordinates of the given coordinates
      */
     private XYPair convertCoordPixel(Coordinate coord) {
-        double pixelWidth = 720.0 - PADDING * 2; // TODO get size of screen
+        double pixelWidth = 690.0 - PADDING * 2; // TODO get size of screen
         double pixelHeight = 690.0 - PADDING * 2;
 //        double pixelHeight = group.getLayoutY() - PADDING * 2;
 //        double pixelWidth = group.getParent().getBoundsInLocal().getWidth() - PADDING * 2;

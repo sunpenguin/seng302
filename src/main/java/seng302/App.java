@@ -36,13 +36,11 @@ public class App extends Application {
         scene.widthProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
                 System.out.println("Width: " + newSceneWidth);
-                System.out.println(root.getChildrenUnmodifiable().get(0).getLayoutY());
             }
         });
         scene.heightProperty().addListener(new ChangeListener<Number>() {
             @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
                 System.out.println("Height: " + newSceneHeight);
-                System.out.println(root.getChildrenUnmodifiable().get(0).getLayoutX());
             }
         });
 
