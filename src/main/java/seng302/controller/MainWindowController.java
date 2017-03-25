@@ -1,5 +1,9 @@
 package seng302.controller;
 
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
@@ -9,6 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Polygon;
+import javafx.util.Callback;
 import org.xml.sax.SAXException;
 import seng302.*;
 
@@ -72,14 +77,7 @@ public class MainWindowController {
         } catch (SAXException e) {
             e.printStackTrace();
         }
-
-        tableView.setItems(race.getStartingList());
-        boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
-        boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
-        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
-
-        tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
-
+        setUpTable();
     }
 
 
@@ -128,6 +126,30 @@ public class MainWindowController {
 
     public void closeProgram() {
         System.exit(0);
+    }
+
+    private void setUpTable() {
+        Callback<Boat, Observable[]> callback =(Boat boat) -> new Observable[]{
+                boat.placeProperty(),
+        };
+        ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
+        observableList.addAll(race.getStartingList());
+
+        SortedList<Boat> sortedList = new SortedList<>(observableList,
+                (Boat boat1, Boat boat2) -> {
+                    if( boat1.getPlace() < boat2.getPlace() ) {
+                        return -1;
+                    } else if( boat1.getPlace() > boat2.getPlace() ) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
+        tableView.setItems(sortedList);
+        boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
+        boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
+        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
+        tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
     }
 
 //    public void start() {

@@ -2,6 +2,7 @@ package seng302;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableView;
 
 import java.util.ArrayList;
 
@@ -11,9 +12,9 @@ import java.util.ArrayList;
  */
 public class Race {
 
-    private ObservableList<Boat> startingList;
+    private ArrayList<Boat> startingList;
     private Course course;
-    private ObservableList<Boat> finishedList;
+    private ArrayList<Boat> finishedList;
 
     /**
      * Race class constructor.
@@ -22,9 +23,9 @@ public class Race {
      * @param course       Course object
      */
     public Race(ArrayList<Boat> startingList, Course course) {
-        this.startingList = FXCollections.observableArrayList(startingList);
+        this.startingList = startingList;
         this.course = course;
-        finishedList = FXCollections.observableArrayList();
+        finishedList = new ArrayList<>();
         setCourseForBoats();
     }
 
@@ -62,7 +63,7 @@ public class Race {
      *
      * @return ObservableList holding all entered boats
      */
-    public ObservableList<Boat> getStartingList() {
+    public ArrayList<Boat> getStartingList() {
         return startingList;
     }
 
@@ -71,7 +72,7 @@ public class Race {
      *
      * @param startingList Arraylist holding all entered boats
      */
-    public void setStartingList(ObservableList<Boat> startingList) {
+    public void setStartingList(ArrayList<Boat> startingList) {
         this.startingList = startingList;
     }
 
@@ -130,10 +131,10 @@ public class Race {
     private void setNextLeg(Boat boat, Leg nextLeg) {
         CompoundMark passedMark = boat.getLeg().getDestination();
         passedMark.addPassed(boat);
-        boat.setPlace("" + (passedMark.getPassed().indexOf(boat) + 1));
+        boat.setPlace(passedMark.getPassed().indexOf(boat) + 1);
         boat.setDestination(nextLeg.getDestination().getMidCoordinate());
         boat.setLeg(nextLeg);
-        startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
+        //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
     }
 
     private void updatePosition(Boat boat, double time) {
@@ -144,7 +145,7 @@ public class Race {
                 GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
 
-    public ObservableList<Boat> getFinishedList() {
+    public ArrayList<Boat> getFinishedList() {
         return finishedList;
     }
 }

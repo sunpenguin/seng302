@@ -1,8 +1,7 @@
 package seng302;
 
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 /**
  * A class which represents a boat in the text based Application
@@ -10,15 +9,15 @@ import javafx.beans.property.StringProperty;
 
 public class Boat {
 
-    private String boatName;
+    private StringProperty boatName;
     private String teamName;
-    private double speed;
+    private DoubleProperty speed;
     private Leg leg;
 //    private double position;
     private double heading;
     private Coordinate coordinate;
     private Coordinate destination;
-    private String place;
+    private IntegerProperty place;
 
     /**
      * A constructor for the Boat class
@@ -27,9 +26,10 @@ public class Boat {
      * @param speed The speed of the boat
      */
     public Boat(String boatName, String teamName, double speed) {
-        this.boatName = boatName;
+        this.boatName = new SimpleStringProperty(boatName);
         this.teamName = teamName;
-        this.speed = speed;
+        this.speed = new SimpleDoubleProperty(speed);
+        place = new SimpleIntegerProperty(0);
     }
 
     /**
@@ -37,6 +37,19 @@ public class Boat {
      * @return The boatName
      */
     public String getBoatName() {
+        return boatName.get();
+    }
+
+    /**
+     * A setter for the name of the boat
+     * @param name The name the boatName will be set to
+     */
+    public void setBoatName(String name) {
+        this.boatName.set(name);
+    }
+
+
+    public StringProperty boatNameProperty() {
         return boatName;
     }
 
@@ -58,13 +71,6 @@ public class Boat {
         this.heading = heading;
     }
 
-    /**
-     * A setter for the name of the boat
-     * @param name The name the boatName will be set to
-     */
-    public void setBoatName(String name) {
-        this.boatName = name;
-    }
 
     /**
      * A getter for the team name that the boat belongs to
@@ -87,7 +93,7 @@ public class Boat {
      * @return The speed of the boat
      */
     public double getSpeed() {
-        return speed;
+        return speed.get();
     }
 
     /**
@@ -95,25 +101,12 @@ public class Boat {
      * @param speed the speed of the boat
      */
     public void setSpeed(double speed) {
-        this.speed = speed;
+        this.speed.set(speed);
     }
 
-//    /**
-//     * A getter for the position of the boat
-//     * @return the position the boat is from the start of the race
-//     */
-//    public double getPosition() {
-//        return position;
-//    }
-//
-//    /**
-//     * Sets the position that the boat is at
-//     * @param position The value position will be set to
-//     */
-//    public void setPosition(double position) {
-//        this.position = position;
-//    }
-
+    public DoubleProperty speedProperty() {
+        return speed;
+    }
 
     public Leg getLeg() {
         return leg;
@@ -156,14 +149,17 @@ public class Boat {
                 '}';
     }
 
-    public String getPlace() {
+    public int getPlace() {
+        return place.get();
+    }
+
+    public void setPlace(int place) {
+        this.place.set(place);
+    }
+
+    public IntegerProperty placeProperty() {
         return place;
     }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
 
 //    public String getPlace() {
 //        if (place == null) {
