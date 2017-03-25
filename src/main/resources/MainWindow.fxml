@@ -62,6 +62,8 @@
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </ToggleButton>
+                   <Button id="scaleButton" fx:id="scaleButton" layoutX="425.0" layoutY="344.0" mnemonicParsing="false" onAction="#scaleButtonHandle" text="Scale Race" />
+                   <TextField id="scaleTextField" fx:id="scaleTextField" layoutX="219.0" layoutY="347.0" promptText="Time scale in minutes" />
                </children>
             </AnchorPane>
             <TableView fx:id="tableView" layoutY="430.0" prefHeight="260.0" prefWidth="511.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

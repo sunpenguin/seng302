@@ -45,6 +45,10 @@ public class MainWindowController {
     private TableColumn<Boat, Integer> boatSpeedColumn;
     @FXML
     private AnchorPane raceViewAnchorPane;
+    @FXML
+    private TextField scaleTextField;
+    @FXML
+    private Button scaleButton;
 
     private Race race;
     private RaceLoop raceLoop;
@@ -82,8 +86,27 @@ public class MainWindowController {
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
 
         tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
+
     }
 
+    @FXML
+    public void scaleButtonHandle(){
+
+            scaleButton.setOnAction(e -> {
+                try {
+                Integer value1 = Integer.valueOf(scaleTextField.getText());
+                race.scaleRace(value1);
+
+                } catch (NumberFormatException e1){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Invalid Input");
+                    alert.setHeaderText("You have input a value which is not valid");
+                    alert.setContentText("Try an integer");
+                    alert.showAndWait();
+                }
+            });
+
+    }
 
     public void playPauseRace() {
         if (playPauseToggleButton.isSelected()) {

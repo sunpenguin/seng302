@@ -189,7 +189,9 @@ public class RaceRenderer {
             annotationToRender.setLayoutX(pixels.getX() + ANNOTATION_OFFSET_X);
             annotationToRender.setLayoutY(pixels.getY());
             annotationToRender.setVisible(true);
+
         }
+
     }
 
     private void moveBoat(Polyline boatImage, Polygon wake, XYPair pixels) {
@@ -198,7 +200,6 @@ public class RaceRenderer {
         wake.setLayoutX(pixels.getX());
         wake.setLayoutY(pixels.getY());
     }
-
 
 
     private void scaleWake(Boat boat, Polygon wake) {
