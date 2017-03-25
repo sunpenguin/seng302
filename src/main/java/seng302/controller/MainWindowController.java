@@ -42,6 +42,10 @@ public class MainWindowController {
     private TableColumn<Boat, String> boatNameColumn;
     @FXML
     private TableColumn<Boat, Integer> boatSpeedColumn;
+    @FXML
+    private TextField scaleTextField;
+    @FXML
+    private Button scaleButton;
 
     private Race race;
     private RaceLoop raceLoop;
@@ -59,7 +63,6 @@ public class MainWindowController {
             ArrayList<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml"));
 
             race = new Race(boats, course);
-            race.scaleRace(1);
             raceRenderer = new RaceRenderer(race, group);
             raceRenderer.renderCourse();
             raceRenderer.renderBoats();
@@ -83,6 +86,24 @@ public class MainWindowController {
 
     }
 
+    @FXML
+    public void scaleButtonHandle(){
+
+            scaleButton.setOnAction(e -> {
+                try {
+                Integer value1 = Integer.valueOf(scaleTextField.getText());
+                race.scaleRace(value1);
+                    
+                } catch (NumberFormatException e1){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Invalid Input");
+                    alert.setHeaderText("You have input a value which is not valid");
+                    alert.setContentText("Try an integer");
+                    alert.showAndWait();
+                }
+            });
+
+    }
 
     public void playPauseRace() {
         if (playPauseToggleButton.isSelected()) {

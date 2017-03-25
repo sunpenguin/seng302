@@ -2,6 +2,7 @@ package seng302;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
 
@@ -161,12 +162,20 @@ public class Race {
     }
 
     public void scaleRace(double time){
+        try {
         time = time/60;
         double distance = course.getCourseDistance()/1000;
         double requiredSpeed = distance/time;
         for(int i = 0; i < getStartingList().size(); i++){
             getStartingList().get(i).setSpeed(requiredSpeed);
             requiredSpeed = requiredSpeed * 1.1;
+        }
+        } catch (NumberFormatException e){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("You have input a value which is not valid");
+            alert.setContentText("Try an integer");
+            alert.showAndWait();
         }
     }
 }
