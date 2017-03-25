@@ -28,6 +28,11 @@
     <AnchorPane fx:id="raceViewAnchorPane" layoutY="30.0" minHeight="0.0" minWidth="0.0" prefHeight="690.0" prefWidth="690.0" style="-fx-background-color: lightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="590.0" AnchorPane.topAnchor="30.0">
          <children>
             <Group fx:id="group" layoutY="690.0" AnchorPane.leftAnchor="20.0" />
+            <Label fx:id="fpsLabel" layoutX="611.0" prefHeight="15.0" prefWidth="79.0" text="FPS:" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
     <AnchorPane layoutX="690.0" layoutY="30.0" minHeight="0.0" minWidth="0.0" prefHeight="690.0" prefWidth="590.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
@@ -44,9 +49,9 @@
                       <Double fx:value="-60.0" />
                     </points>
                   </Polygon>
-                  <Label fx:id="timerLabel" layoutX="220.0" layoutY="60.0" prefHeight="50.0" prefWidth="150.0" text="Clock goes here">
+                  <Label fx:id="timerLabel" layoutX="235.0" layoutY="51.0" prefHeight="50.0" prefWidth="108.0" text=" -00:00" textAlignment="CENTER">
                      <font>
-                        <Font size="18.0" />
+                        <Font size="24.0" />
                      </font>
                   </Label>
                   <Text layoutX="495.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N" wrappingWidth="16.46484375">
@@ -55,15 +60,14 @@
                      </font>
                   </Text>
                   <Text layoutX="455.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
-                  <ToggleButton fx:id="fpsToggler" layoutX="390.0" layoutY="392.0" mnemonicParsing="false" onAction="#toggleFPS" prefHeight="26.0" prefWidth="96.0" text="Toggle FPS" />
-                  <Label fx:id="fpsLabel" layoutX="497.0" layoutY="386.0" prefHeight="38.0" prefWidth="79.0" text="fps:" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="386.0" />
-                  <ToggleButton fx:id="playPauseToggleButton" layoutX="220.0" layoutY="155.0" mnemonicParsing="false" onAction="#playPauseRace" onKeyPressed="#playPauseRace" text="Play / Pause" textAlignment="CENTER">
+                  <ToggleButton fx:id="fpsToggler" layoutX="455.0" layoutY="393.0" mnemonicParsing="false" onAction="#toggleFPS" prefHeight="26.0" prefWidth="96.0" text="Toggle FPS" AnchorPane.rightAnchor="39.0" />
+                  <ToggleButton fx:id="playPauseToggleButton" layoutX="241.0" layoutY="121.0" mnemonicParsing="false" onAction="#playPauseRace" onKeyPressed="#playPauseRace" text="Play / Pause" textAlignment="CENTER">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </ToggleButton>
-                   <Button id="scaleButton" fx:id="scaleButton" layoutX="425.0" layoutY="344.0" mnemonicParsing="false" onAction="#scaleButtonHandle" text="Scale Race" />
-                   <TextField id="scaleTextField" fx:id="scaleTextField" layoutX="219.0" layoutY="347.0" promptText="Time scale in minutes" />
+                   <Button id="scaleButton" fx:id="scaleButton" layoutX="280.0" layoutY="394.0" mnemonicParsing="false" onAction="#scaleButtonHandle" text="Scale Race" AnchorPane.rightAnchor="220.0" />
+                   <TextField id="scaleTextField" fx:id="scaleTextField" layoutX="89.0" layoutY="394.0" promptText="Time scale in minutes" AnchorPane.rightAnchor="330.0" />
                </children>
             </AnchorPane>
             <TableView fx:id="tableView" layoutY="430.0" prefHeight="260.0" prefWidth="511.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
