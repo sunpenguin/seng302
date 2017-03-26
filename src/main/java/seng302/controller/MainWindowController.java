@@ -1,5 +1,7 @@
 package seng302.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
@@ -8,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Polygon;
 import org.xml.sax.SAXException;
 import seng302.*;
@@ -77,7 +80,8 @@ public class MainWindowController {
             e.printStackTrace();
         }
 
-        tableView.setItems(race.getStartingList());
+        ObservableList<Boat> tableItems = FXCollections.observableArrayList(race.getStartingList());
+        tableView.setItems(tableItems);
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
@@ -88,21 +92,16 @@ public class MainWindowController {
 
     @FXML
     public void scaleButtonHandle(){
-
-            scaleButton.setOnAction(e -> {
-                try {
-                Integer value1 = Integer.valueOf(scaleTextField.getText());
-                race.scaleRace(value1);
-                    
-                } catch (NumberFormatException e1){
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Invalid Input");
-                    alert.setHeaderText("You have input a value which is not valid");
-                    alert.setContentText("Try an integer");
-                    alert.showAndWait();
-                }
-            });
-
+        try {
+            Integer value1 = Integer.valueOf(scaleTextField.getText());
+            race.setDuration(value1);
+        } catch (NumberFormatException e1){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("You have input a value which is not valid");
+            alert.setContentText("Try an integer");
+            alert.showAndWait();
+        }
     }
 
     public void playPauseRace() {

@@ -5,6 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -12,9 +14,11 @@ import java.util.ArrayList;
  */
 public class Race {
 
-    private ObservableList<Boat> startingList;
+    private ArrayList<Boat> startingList;
     private Course course;
     private ObservableList<Boat> finishedList;
+    private double duration = 0.3;
+    private double slowest;
 
     /**
      * Race class constructor.
@@ -23,7 +27,11 @@ public class Race {
      * @param course       Course object
      */
     public Race(ArrayList<Boat> startingList, Course course) {
-        this.startingList = FXCollections.observableArrayList(startingList);
+        startingList.sort(Comparator.comparingDouble(Boat::getSpeed));
+//        startingList.sort((boat1, boat2) -> Double.compare(boat2.getSpeed(), boat1.getSpeed()));
+        slowest = startingList.get(0).getSpeed();
+        System.out.println(slowest);
+        this.startingList = startingList;
         this.course = course;
         finishedList = FXCollections.observableArrayList();
         setCourseForBoats();
@@ -63,7 +71,7 @@ public class Race {
      *
      * @return ObservableList holding all entered boats
      */
-    public ObservableList<Boat> getStartingList() {
+    public ArrayList<Boat> getStartingList() {
         return startingList;
     }
 
@@ -72,7 +80,7 @@ public class Race {
      *
      * @param startingList Arraylist holding all entered boats
      */
-    public void setStartingList(ObservableList<Boat> startingList) {
+    public void setStartingList(ArrayList<Boat> startingList) {
         this.startingList = startingList;
     }
 
@@ -140,7 +148,7 @@ public class Race {
     private void updatePosition(Boat boat, double time) {
         final double KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT = 1000.0 / 3600.0;
         double speed = boat.getSpeed() * KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT;
-        double distanceTravelled = speed * time; // meters
+        double distanceTravelled = speed * time / ((duration * 60) / (course.getCourseDistance() / (startingList.get(0).getSpeed() / 3.6))); // meters
         boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
                 GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
@@ -149,33 +157,18 @@ public class Race {
         return finishedList;
     }
 
-    public Boat selectSlowestBoat(){
-        Boat slowest = getStartingList().get(0);
-        double lowest = getStartingList().get(0).getSpeed();
-        for (Boat boat : startingList){
-            if (boat.getSpeed() < lowest){
-                lowest = boat.getSpeed();
-                slowest = boat;
-            }
-        }
-        return slowest;
-    }
-
     public void scaleRace(double time){
-        try {
-        time = time/60;
-        double distance = course.getCourseDistance()/1000;
-        double requiredSpeed = distance/time;
+        time = time / 60;
+        double distance = course.getCourseDistance() / 1000;
+        double requiredSpeed = distance / time;
         for(int i = 0; i < getStartingList().size(); i++){
             getStartingList().get(i).setSpeed(requiredSpeed);
             requiredSpeed = requiredSpeed * 1.1;
         }
-        } catch (NumberFormatException e){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Invalid Input");
-            alert.setHeaderText("You have input a value which is not valid");
-            alert.setContentText("Try an integer");
-            alert.showAndWait();
-        }
+
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
     }
 }
