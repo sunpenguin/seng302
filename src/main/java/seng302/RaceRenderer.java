@@ -32,10 +32,10 @@ public class RaceRenderer {
     private HashMap<String, Boolean> visibleAnnotations = new HashMap<>();
     private ArrayList<String> annotations = new ArrayList<>();
     private final int ANNOTATION_OFFSET_X = 10;
-    private HashMap<String, Polyline> boats;
-    private HashMap<String, Polygon> wakes;
-    private HashMap<String, Double> boatHeadings;
-    private  HashMap<String, Double> boatSpeeds;
+    private HashMap<String, Polyline> boats = new HashMap<>();
+    private HashMap<String, Polygon> wakes = new HashMap<>();
+    private HashMap<String, Double> boatHeadings = new HashMap<>();
+    private  HashMap<String, Double> boatSpeeds = new HashMap<>();
     private double lowestSpeed;
     private AnchorPane raceViewAnchorPane;
     private final Color MARK_COLOR = Color.BLACK;
@@ -56,52 +56,73 @@ public class RaceRenderer {
         this.race = race;
         this.group = group;
         this.raceViewAnchorPane = raceViewAnchorPane;
-        boats = new HashMap<>();
-        wakes = new HashMap<>();
-        boatHeadings = new HashMap<>();
-        boatSpeeds = new HashMap<>();
         lowestSpeed = Double.MAX_VALUE;
         final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
                 Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
+
+        // Add each annotation to the race
+        addAnnotations();
+
+        for (int i = 0; i < race.getStartingList().size(); i++) {
+            Boat boat = race.getStartingList().get(i);
+
+            if (lowestSpeed > boat.getSpeed()) {
+                lowestSpeed = boat.getSpeed();
+            }
+
+            boatHeadings.put(boat.getBoatName(), 0d);
+            boatSpeeds.put(boat.getBoatName(), 1d);
+
+            setUpWake(boat);
+            setUpBoat(boat, BOAT_COLOURS, i);
+            // Connect the annotations to each boat
+            setUpAnnotations(boat);
+
+        }
+    }
+
+
+    private void setUpAnnotations(Boat boat) {
+        Text boatAnnotation = new Text("");
+        annotationsMap.put(boat.getTeamName(), boatAnnotation);
+        this.group.getChildren().add(boatAnnotation);
+    }
+
+
+    private void setUpBoat(Boat boat, ArrayList<Color> BOAT_COLOURS, int i) {
+        Polyline boatImage = new Polyline();
+        boatImage.getPoints().addAll(
+                BOAT_PIVOT_X, BOAT_PIVOT_Y,
+                10.0, 10.0,
+                0.0, 10.0,
+                BOAT_PIVOT_X, BOAT_PIVOT_Y,
+                5.0, 10.0);
+        boatImage.setFill(BOAT_COLOURS.get(i));
+        boats.put(boat.getBoatName(), boatImage);
+        this.group.getChildren().add(boatImage);
+    }
+
+
+    private void setUpWake(Boat boat) {
+        Polygon wake = new Polygon();
+        wake.getPoints().addAll(
+                BOAT_PIVOT_X, BOAT_PIVOT_Y,
+                0.0, 20.0,
+                10.0, 20.0
+        );
+        wake.setFill(Color.ANTIQUEWHITE);
+        wakes.put(boat.getBoatName(), wake);
+        group.getChildren().add(wake);
+    }
+
+
+    private void addAnnotations() {
         // Add the name and speed annotations, set them true (visible). In future, set all false (invisible) and when
         // rendering only the ones that are true will be selected based on the chosen annotation level
         annotations.add("Name");
         visibleAnnotations.put("Name", true);
         annotations.add("Speed");
         visibleAnnotations.put("Speed", true);
-        for (int i = 0; i < race.getStartingList().size(); i++) {
-            Boat boat = race.getStartingList().get(i);
-            if (lowestSpeed > boat.getSpeed()) {
-                lowestSpeed = boat.getSpeed();
-            }
-            boatHeadings.put(boat.getBoatName(), 0d);
-            boatSpeeds.put(boat.getBoatName(), 1d);
-            // make wake
-            Polygon wake = new Polygon();
-            wake.getPoints().addAll(
-                    BOAT_PIVOT_X, BOAT_PIVOT_Y,
-                    0.0, 20.0,
-                    10.0, 20.0
-            );
-            wake.setFill(Color.ANTIQUEWHITE);
-            wakes.put(boat.getBoatName(), wake);
-            group.getChildren().add(wake);
-            // make boat
-            Polyline boatImage = new Polyline();
-            boatImage.getPoints().addAll(
-                    BOAT_PIVOT_X, BOAT_PIVOT_Y,
-                    10.0, 10.0,
-                    0.0, 10.0,
-                    BOAT_PIVOT_X, BOAT_PIVOT_Y,
-                    5.0, 10.0);
-            boatImage.setFill(BOAT_COLOURS.get(i));
-            boats.put(boat.getBoatName(), boatImage);
-            this.group.getChildren().add(boatImage);
-            // Create the Text objects for the boat annotations. Initially just an empty string
-            Text boatAnnotation = new Text("");
-            annotationsMap.put(boat.getTeamName(), boatAnnotation);
-            this.group.getChildren().add(boatAnnotation);
-        }
     }
 
 
