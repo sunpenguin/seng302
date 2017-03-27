@@ -57,4 +57,15 @@ public class Course {
     public ArrayList<Coordinate> getBoundaries() {
         return boundaries;
     }
+
+    public double getCourseDistance(){
+        double distance = 0;
+
+        for (int i = 0; i < getLegs().size(); i++){
+            Coordinate dep = getLegs().get(i).getDeparture().getMidCoordinate();
+            Coordinate dest = getLegs().get(i).getDestination().getMidCoordinate();
+            distance += GPSCalculations.GPSDistance(dep, dest);
+        }
+        return distance;
+    }
 }

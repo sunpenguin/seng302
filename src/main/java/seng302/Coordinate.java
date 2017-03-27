@@ -13,7 +13,7 @@ public class Coordinate {
      * @param longitude value representing longitude
      */
     public Coordinate(double latitude, double longitude) {
-        if (-90 <= latitude && latitude <= 90.0) {
+        if (-90.0 <= latitude && latitude <= 90.0) {
             if (-180.0 <= longitude && longitude <= 180.0) {
                 this.latitude = latitude;
                 this.longitude = longitude;

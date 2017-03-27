@@ -1,5 +1,7 @@
 package seng302.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
@@ -8,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Polygon;
 import org.xml.sax.SAXException;
 import seng302.*;
@@ -42,6 +45,10 @@ public class MainWindowController {
     private TableColumn<Boat, String> boatNameColumn;
     @FXML
     private TableColumn<Boat, Integer> boatSpeedColumn;
+    @FXML
+    private TextField scaleTextField;
+    @FXML
+    private Button scaleButton;
 
     private Race race;
     private RaceLoop raceLoop;
@@ -62,7 +69,7 @@ public class MainWindowController {
             raceRenderer = new RaceRenderer(race, group);
             raceRenderer.renderCourse();
             raceRenderer.renderBoats();
-            raceClock = new RaceClock(timerLabel, race);
+            raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
             raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel));
             arrow.setRotate(course.getWindDirection());
         } catch (ParserConfigurationException e) {
@@ -73,7 +80,8 @@ public class MainWindowController {
             e.printStackTrace();
         }
 
-        tableView.setItems(race.getStartingList());
+        ObservableList<Boat> tableItems = FXCollections.observableArrayList(race.getStartingList());
+        tableView.setItems(tableItems);
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
@@ -82,6 +90,21 @@ public class MainWindowController {
 
     }
 
+    @FXML
+    public void scaleButtonHandle(){
+        try {
+            final int MINUTES_TO_SECONDS = 60;
+            Integer timeInSeconds = Integer.valueOf(scaleTextField.getText()) * MINUTES_TO_SECONDS;
+            raceClock.setTimeScaleFactor(race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / (double) timeInSeconds);
+            race.setDuration(timeInSeconds);
+        } catch (NumberFormatException e1){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("You have input a value which is not valid");
+            alert.setContentText("Try an integer");
+            alert.showAndWait();
+        }
+    }
 
     public void playPauseRace() {
         if (playPauseToggleButton.isSelected()) {

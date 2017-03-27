@@ -2,8 +2,11 @@ package seng302;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 /**
@@ -11,9 +14,10 @@ import java.util.ArrayList;
  */
 public class Race {
 
-    private ObservableList<Boat> startingList;
+    private ArrayList<Boat> startingList;
     private Course course;
     private ObservableList<Boat> finishedList;
+    private double duration = 60;
 
     /**
      * Race class constructor.
@@ -22,7 +26,8 @@ public class Race {
      * @param course       Course object
      */
     public Race(ArrayList<Boat> startingList, Course course) {
-        this.startingList = FXCollections.observableArrayList(startingList);
+        startingList.sort(Comparator.comparingDouble(Boat::getSpeed));
+        this.startingList = startingList;
         this.course = course;
         finishedList = FXCollections.observableArrayList();
         setCourseForBoats();
@@ -62,7 +67,7 @@ public class Race {
      *
      * @return ObservableList holding all entered boats
      */
-    public ObservableList<Boat> getStartingList() {
+    public ArrayList<Boat> getStartingList() {
         return startingList;
     }
 
@@ -71,7 +76,7 @@ public class Race {
      *
      * @param startingList Arraylist holding all entered boats
      */
-    public void setStartingList(ObservableList<Boat> startingList) {
+    public void setStartingList(ArrayList<Boat> startingList) {
         this.startingList = startingList;
     }
 
@@ -139,7 +144,9 @@ public class Race {
     private void updatePosition(Boat boat, double time) {
         final double KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT = 1000.0 / 3600.0;
         double speed = boat.getSpeed() * KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT;
-        double distanceTravelled = speed * time; // meters
+        double distanceTravelled = speed * time
+                / (duration / (course.getCourseDistance()
+                / (startingList.get(0).getSpeed() * KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT))); // meters
         boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
                 GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
@@ -147,4 +154,24 @@ public class Race {
     public ObservableList<Boat> getFinishedList() {
         return finishedList;
     }
+
+    public void scaleRace(double time){
+        time = time / 60;
+        double distance = course.getCourseDistance() / 1000;
+        double requiredSpeed = distance / time;
+        for(int i = 0; i < getStartingList().size(); i++){
+            getStartingList().get(i).setSpeed(requiredSpeed);
+            requiredSpeed = requiredSpeed * 1.1;
+        }
+
+    }
+
+    public void setDuration(double duration) {
+        this.duration = duration;
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
 }

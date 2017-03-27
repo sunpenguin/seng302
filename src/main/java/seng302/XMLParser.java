@@ -154,6 +154,7 @@ public class XMLParser {
                 boats.add(parseBoat(boatElement));
             }
         }
+
         return boats;
     }
 
