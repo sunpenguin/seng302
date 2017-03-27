@@ -100,6 +100,7 @@ public class GPSCalculations {
         return new Coordinate(Math.toDegrees(lat2), Math.toDegrees(lon2));
     }
 
+
     public static double retrieveHeading(Coordinate c1, Coordinate c2) {
         double lon1 = Math.toRadians(c1.getLongitude());
         double lat1 = Math.toRadians(c1.getLatitude());

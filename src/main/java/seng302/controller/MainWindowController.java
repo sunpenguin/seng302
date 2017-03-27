@@ -187,10 +187,4 @@ public class MainWindowController {
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
         tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
     }
-
-//    public void start() {
-//        graphicsContext.setFill(Color.BEIGE);
-//        graphicsContext.fillOval(20, 50, 20,20);
-//    }
-
 }

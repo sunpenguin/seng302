@@ -136,7 +136,6 @@ public class RaceRenderer {
     private void setupBoundary() {
         // Renders Boundaries
         for (Coordinate boundary : race.getCourse().getBoundaries()) {
-            System.out.println(boundary.getLatitude() + " " + boundary.getLongitude());
             XYPair boundaryPixels = convertCoordPixel(boundary, true);
             border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
         }
@@ -198,7 +197,6 @@ public class RaceRenderer {
         for (int i = 0 ; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
             if (!compoundMarkMap.containsKey(compoundMark.getName())) {
-                System.out.println(compoundMark.getName());
                 if ((i == 0 || i == compoundMarks.size() - 1) && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) {
                     setupGate(compoundMark);
                 } else {
@@ -221,17 +219,13 @@ public class RaceRenderer {
                 renderCompoundMark(compoundMark);
             }
         }
-
         // Renders Boundaries
-
         group.getChildren().remove(border);
         border = new Polyline();
-
         for (Coordinate boundary : race.getCourse().getBoundaries()) {
             renderBoundary(border, boundary);
         }
         renderBoundary(border, race.getCourse().getBoundaries().get(0));
-
         group.getChildren().add(border);
     }
 
@@ -239,7 +233,6 @@ public class RaceRenderer {
     private void renderBoundary(Polyline border, Coordinate boundary) {
         XYPair boundaryPixels = convertCoordPixel(boundary, false);
         border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
-
     }
 
 

@@ -31,7 +31,7 @@ public class Race {
         this.course = course;
         finishedList = new ArrayList<>();
         setCourseForBoats();
-        duration = 60;
+        duration = 30;
     }
 
     /**
@@ -108,8 +108,8 @@ public class Race {
     }
 
     private void updateBoat(Boat boat, double time) {
-        updateHeading(boat);
         updatePosition(boat, time);
+        updateHeading(boat);
     }
 
     private void updateHeading(Boat boat) {
@@ -133,6 +133,7 @@ public class Race {
         boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
     }
 
+
     private void setNextLeg(Boat boat, Leg nextLeg) {
         CompoundMark passedMark = boat.getLeg().getDestination();
         passedMark.addPassed(boat);
@@ -141,6 +142,7 @@ public class Race {
         boat.setLeg(nextLeg);
         //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
     }
+
 
     private void updatePosition(Boat boat, double time) {
         final double KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT = 1000.0 / 3600.0;
@@ -151,6 +153,7 @@ public class Race {
         boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
                 GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
+
 
     public ArrayList<Boat> getFinishedList() {
         return finishedList;
