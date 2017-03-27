@@ -16,8 +16,7 @@ public class Race {
 
     private ArrayList<Boat> startingList;
     private Course course;
-    private ObservableList<Boat> finishedList;
-    private double duration = 60;
+    private ArrayList<Boat> finishedList;
 
     /**
      * Race class constructor.
@@ -29,7 +28,7 @@ public class Race {
         startingList.sort(Comparator.comparingDouble(Boat::getSpeed));
         this.startingList = startingList;
         this.course = course;
-        finishedList = FXCollections.observableArrayList();
+        finishedList = new ArrayList<>();
         setCourseForBoats();
     }
 
@@ -135,10 +134,10 @@ public class Race {
     private void setNextLeg(Boat boat, Leg nextLeg) {
         CompoundMark passedMark = boat.getLeg().getDestination();
         passedMark.addPassed(boat);
-        boat.setPlace("" + (passedMark.getPassed().indexOf(boat) + 1));
+        boat.setPlace(passedMark.getPassed().indexOf(boat) + 1);
         boat.setDestination(nextLeg.getDestination().getMidCoordinate());
         boat.setLeg(nextLeg);
-        startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
+        //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
     }
 
     private void updatePosition(Boat boat, double time) {
@@ -151,20 +150,10 @@ public class Race {
                 GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
 
-    public ObservableList<Boat> getFinishedList() {
+    public ArrayList<Boat> getFinishedList() {
         return finishedList;
     }
 
-    public void scaleRace(double time){
-        time = time / 60;
-        double distance = course.getCourseDistance() / 1000;
-        double requiredSpeed = distance / time;
-        for(int i = 0; i < getStartingList().size(); i++){
-            getStartingList().get(i).setSpeed(requiredSpeed);
-            requiredSpeed = requiredSpeed * 1.1;
-        }
-
-    }
 
     public void setDuration(double duration) {
         this.duration = duration;
