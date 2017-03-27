@@ -14,12 +14,14 @@ public class RaceClock {
     private double timeSeconds;
     private Duration time = Duration.ZERO;
     private Race race;
+    private double timeScaleFactor;
 
     private String timeString;
 
-    public RaceClock(Label timerLabel, Race race) {
+    public RaceClock(Label timerLabel, Race race, double timeScaleFactor) {
         this.timerLabel = timerLabel;
         this.race = race;
+        this.timeScaleFactor = timeScaleFactor;
 
         timerLabel.setTextFill(Color.BLACK);
         timerLabel.setStyle("-fx-font-size: 2em;");
@@ -33,7 +35,7 @@ public class RaceClock {
                         timeline.stop();
                     } else {
                         Duration duration = ((KeyFrame) t.getSource()).getTime();
-                        time = time.add(duration);
+                        time = time.add(duration.multiply(timeScaleFactor));
                         timeSeconds = time.toSeconds();
                         secondsToString(timeSeconds);
                         timerLabel.textProperty().set(timeString);
@@ -57,6 +59,11 @@ public class RaceClock {
 
     public Duration getTime() {
         return time;
+    }
+
+
+    public void setTimeScaleFactor(double timeScaleFactor) {
+        this.timeScaleFactor = timeScaleFactor;
     }
 }
 

@@ -17,8 +17,7 @@ public class Race {
     private ArrayList<Boat> startingList;
     private Course course;
     private ObservableList<Boat> finishedList;
-    private double duration = 0.3;
-    private double slowest;
+    private double duration = 60;
 
     /**
      * Race class constructor.
@@ -28,9 +27,6 @@ public class Race {
      */
     public Race(ArrayList<Boat> startingList, Course course) {
         startingList.sort(Comparator.comparingDouble(Boat::getSpeed));
-//        startingList.sort((boat1, boat2) -> Double.compare(boat2.getSpeed(), boat1.getSpeed()));
-        slowest = startingList.get(0).getSpeed();
-        System.out.println(slowest);
         this.startingList = startingList;
         this.course = course;
         finishedList = FXCollections.observableArrayList();
@@ -148,7 +144,9 @@ public class Race {
     private void updatePosition(Boat boat, double time) {
         final double KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT = 1000.0 / 3600.0;
         double speed = boat.getSpeed() * KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT;
-        double distanceTravelled = speed * time / ((duration * 60) / (course.getCourseDistance() / (startingList.get(0).getSpeed() / 3.6))); // meters
+        double distanceTravelled = speed * time
+                / (duration / (course.getCourseDistance()
+                / (startingList.get(0).getSpeed() * KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT))); // meters
         boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
                 GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
@@ -171,4 +169,9 @@ public class Race {
     public void setDuration(double duration) {
         this.duration = duration;
     }
+
+    public double getDuration() {
+        return duration;
+    }
+
 }

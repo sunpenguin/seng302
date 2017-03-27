@@ -69,7 +69,7 @@ public class MainWindowController {
             raceRenderer = new RaceRenderer(race, group);
             raceRenderer.renderCourse();
             raceRenderer.renderBoats();
-            raceClock = new RaceClock(timerLabel, race);
+            raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
             raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel));
             arrow.setRotate(course.getWindDirection());
         } catch (ParserConfigurationException e) {
@@ -93,8 +93,10 @@ public class MainWindowController {
     @FXML
     public void scaleButtonHandle(){
         try {
-            Integer value1 = Integer.valueOf(scaleTextField.getText());
-            race.setDuration(value1);
+            final int MINUTES_TO_SECONDS = 60;
+            Integer timeInSeconds = Integer.valueOf(scaleTextField.getText()) * MINUTES_TO_SECONDS;
+            raceClock.setTimeScaleFactor(race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / (double) timeInSeconds);
+            race.setDuration(timeInSeconds);
         } catch (NumberFormatException e1){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Invalid Input");

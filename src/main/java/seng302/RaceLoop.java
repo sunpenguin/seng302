@@ -36,7 +36,6 @@ public class RaceLoop extends AnimationTimer {
         previousTime = currentTime;
         race.updateBoats(secondsElapsed);
         renderer.renderBoats();
-
         secondsElapsedSinceLastFpsUpdate += secondsElapsed;
         framesSinceLastFpsUpdate++;
         if (secondsElapsedSinceLastFpsUpdate >= 0.5d) {
