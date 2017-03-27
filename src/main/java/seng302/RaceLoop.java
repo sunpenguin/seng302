@@ -1,6 +1,9 @@
 package seng302;
 
 import javafx.animation.AnimationTimer;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.layout.AnchorPane;
 
 import static javafx.scene.input.KeyCode.L;
 
@@ -15,6 +18,7 @@ public class RaceLoop extends AnimationTimer {
     private Race race;
     private RaceRenderer renderer;
     private FPSReporter fpsReporter;
+    private AnchorPane raceViewAnchorPane;
 
     /**
      * Constructor for the RaceLoop class.
@@ -22,10 +26,11 @@ public class RaceLoop extends AnimationTimer {
      * @param race the race to be updated
      * @param renderer the renderer that updates with the race
      */
-    public RaceLoop(Race race, RaceRenderer renderer, FPSReporter fpsReporter) {
+    public RaceLoop(Race race, RaceRenderer renderer, FPSReporter fpsReporter, AnchorPane raceViewAnchorPane) {
         this.race = race;
         this.renderer = renderer;
         this.fpsReporter = fpsReporter;
+        this.raceViewAnchorPane = raceViewAnchorPane;
     }
 
     @Override
@@ -38,7 +43,8 @@ public class RaceLoop extends AnimationTimer {
         double secondsElapsed = (currentTime - previousTime) / 1e9f; // converting from nanoseconds to seconds
         previousTime = currentTime;
         race.updateBoats(secondsElapsed);
-        renderer.renderBoats();
+        renderer.renderBoats(false);
+
 
         secondsElapsedSinceLastFpsUpdate += secondsElapsed;
         framesSinceLastFpsUpdate++;

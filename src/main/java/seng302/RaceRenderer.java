@@ -33,6 +33,11 @@ public class RaceRenderer {
     private ArrayList<String> annotations = new ArrayList<>();
     private final int ANNOTATION_OFFSET_X = 10;
     private HashMap<String, Polyline> boats = new HashMap<>();
+    private HashMap<String, Rectangle> marks = new HashMap();
+    private HashMap<String, Line> gates = new HashMap<>();
+    private HashMap<String, CompoundMark> compoundMarkMap = new HashMap<>();
+    private Polyline border = new Polyline();
+
     private HashMap<String, Polygon> wakes = new HashMap<>();
     private HashMap<String, Double> boatHeadings = new HashMap<>();
     private  HashMap<String, Double> boatSpeeds = new HashMap<>();
@@ -63,6 +68,8 @@ public class RaceRenderer {
         // Add each annotation to the race
         addAnnotations();
 
+        setupCourse();
+
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
 
@@ -79,6 +86,16 @@ public class RaceRenderer {
             setUpAnnotations(boat);
 
         }
+    }
+
+
+    private void addAnnotations() {
+        // Add the name and speed annotations, set them true (visible). In future, set all false (invisible) and when
+        // rendering only the ones that are true will be selected based on the chosen annotation level
+        annotations.add("Name");
+        visibleAnnotations.put("Name", true);
+        annotations.add("Speed");
+        visibleAnnotations.put("Speed", true);
     }
 
 
@@ -116,19 +133,86 @@ public class RaceRenderer {
     }
 
 
-    private void addAnnotations() {
-        // Add the name and speed annotations, set them true (visible). In future, set all false (invisible) and when
-        // rendering only the ones that are true will be selected based on the chosen annotation level
-        annotations.add("Name");
-        visibleAnnotations.put("Name", true);
-        annotations.add("Speed");
-        visibleAnnotations.put("Speed", true);
+    private void setupBoundary() {
+        // Renders Boundaries
+        for (Coordinate boundary : race.getCourse().getBoundaries()) {
+            System.out.println(boundary.getLatitude() + " " + boundary.getLongitude());
+            XYPair boundaryPixels = convertCoordPixel(boundary, true);
+            border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
+        }
+        Coordinate boundary = race.getCourse().getBoundaries().get(0);
+        XYPair boundaryPixels = convertCoordPixel(boundary, true);
+        border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
+
+        group.getChildren().addAll(border);
+    }
+
+
+    private void setupMark(CompoundMark compoundMark) {
+        compoundMarkMap.put(compoundMark.getName(), compoundMark);
+
+        for (Mark mark : compoundMark.getMarks()) {
+            Rectangle markImage = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
+
+            Coordinate coordinate = mark.getCoordinates();
+            XYPair pixelCoordinates = convertCoordPixel(coordinate, true);
+            markImage.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
+            markImage.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
+
+            marks.put(mark.getName(), markImage);
+            group.getChildren().add(markImage);
+
+        }
+    }
+
+
+    private void setupGate(CompoundMark compoundMark) {
+        ArrayList<XYPair> endPoints = new ArrayList<>();
+
+        for (int i = 0; i < compoundMark.getMarks().size(); i++) {
+            Mark mark = compoundMark.getMarks().get(i);
+            Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
+            Coordinate coordinate = mark.getCoordinates();
+            XYPair pixelCoordinates = convertCoordPixel(coordinate, true);
+            rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
+            rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
+            endPoints.add(pixelCoordinates);
+
+            marks.put(mark.getName(), rectangle);
+            group.getChildren().add(rectangle);
+        }
+        Line line = new Line(
+                endPoints.get(0).getX(), endPoints.get(0).getY(),
+                endPoints.get(1).getX(), endPoints.get(1).getY());
+        line.setFill(Color.WHITE);
+        line.setStyle("-fx-stroke: red");
+
+        gates.put(compoundMark.getName(), line);
+        group.getChildren().add(line);
+    }
+
+
+    private void setupCourse() {
+        ArrayList<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
+
+        for (int i = 0 ; i < compoundMarks.size(); i++) {
+            CompoundMark compoundMark = compoundMarks.get(i);
+            if (!compoundMarkMap.containsKey(compoundMark.getName())) {
+                System.out.println(compoundMark.getName());
+                if ((i == 0 || i == compoundMarks.size() - 1) && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) {
+                    setupGate(compoundMark);
+                } else {
+                    setupMark(compoundMark);
+                }
+            }
+        }
+        setupBoundary();
     }
 
 
     public void renderCourse() {
         ArrayList<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
-        // Renders CompondMarks
+        // Renders CompoundMarks
         for (int i = 0 ; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
             if ((i == 0 || i == compoundMarks.size() - 1) && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) {
@@ -137,18 +221,34 @@ public class RaceRenderer {
                 renderCompoundMark(compoundMark);
             }
         }
+
         // Renders Boundaries
-        Polyline border = new Polyline();
+
+        group.getChildren().remove(border);
+        border = new Polyline();
+
         for (Coordinate boundary : race.getCourse().getBoundaries()) {
             renderBoundary(border, boundary);
         }
         renderBoundary(border, race.getCourse().getBoundaries().get(0));
-        group.getChildren().addAll(border);
+
+        group.getChildren().add(border);
     }
 
+
     private void renderBoundary(Polyline border, Coordinate boundary) {
-        XYPair boundaryPixels = convertCoordPixel(boundary);
+        XYPair boundaryPixels = convertCoordPixel(boundary, false);
         border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
+
+    }
+
+
+    private void renderMark(Mark mark) {
+        Rectangle rectangle = marks.get(mark.getName());
+        Coordinate coordinate = mark.getCoordinates();
+        XYPair pixelCoordinates = convertCoordPixel(coordinate, false);
+        rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
+        rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
     }
 
 
@@ -159,46 +259,41 @@ public class RaceRenderer {
         }
     }
 
-    private void renderMark(Mark mark) {
-        Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
-        Coordinate coordinate = mark.getCoordinates();
-        XYPair pixelCoordinates = convertCoordPixel(coordinate);
-        rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
-        rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
-        group.getChildren().add(rectangle);
-    }
-
 
     private void renderGate(CompoundMark compoundMark) {
+
+
         ArrayList<XYPair> endPoints = new ArrayList<>();
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
-            Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
+
+            Rectangle rectangle = marks.get(mark.getName());
+
             Coordinate coordinate = mark.getCoordinates();
-            XYPair pixelCoordinates = convertCoordPixel(coordinate);
+            XYPair pixelCoordinates = convertCoordPixel(coordinate, false);
             rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
             rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
             endPoints.add(pixelCoordinates);
-            group.getChildren().add(rectangle);
         }
-        Line line = new Line(
-                endPoints.get(0).getX(), endPoints.get(0).getY(),
-                endPoints.get(1).getX(), endPoints.get(1).getY());
-        line.setFill(Color.WHITE);
-        line.setStyle("-fx-stroke: red");
-        group.getChildren().add(line);
+
+        Line line = gates.get(compoundMark.getName());
+
+        line.setStartX(endPoints.get(0).getX());
+        line.setStartY(endPoints.get(0).getY());
+        line.setEndX(endPoints.get(1).getX());
+        line.setEndY(endPoints.get(1).getY());
     }
 
 
     /**
      * Draws boats in the Race on the Group as well as the visible annotations
      */
-    public void renderBoats() {
+    public void renderBoats(boolean setup) {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             // move boat and wake
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
-            XYPair pixels = convertCoordPixel(boatCoordinates);
+            XYPair pixels = convertCoordPixel(boatCoordinates, setup);
             Polyline boatImage = boats.get(boat.getBoatName());
             Polygon wake = wakes.get(boat.getBoatName());
 
@@ -210,9 +305,7 @@ public class RaceRenderer {
             annotationToRender.setLayoutX(pixels.getX() + ANNOTATION_OFFSET_X);
             annotationToRender.setLayoutY(pixels.getY());
             annotationToRender.setVisible(true);
-
         }
-
     }
 
     private void moveBoat(Polyline boatImage, Polygon wake, XYPair pixels) {
@@ -275,22 +368,19 @@ public class RaceRenderer {
      * @param coord Coordinates to be converted
      * @return x and y pixel coordinates of the given coordinates
      */
-    private XYPair convertCoordPixel(Coordinate coord) {
+    private XYPair convertCoordPixel(Coordinate coord, boolean setup) {
 
-        raceViewAnchorPane.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldWidth, Number newWidth) {
-                System.out.println("Width: " + newWidth);
-            }
-        });
-        raceViewAnchorPane.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldHeight, Number newHeight) {
-                System.out.println("Height: " + newHeight);
-            }
-        });
 
-        double pixelWidth = 690.0 - PADDING * 2; // TODO get size of screen
-        double pixelHeight = 690.0 - PADDING * 2;
+        double pixelWidth;
+        double pixelHeight;
 
+        if (setup) {
+            pixelWidth = raceViewAnchorPane.getPrefWidth() - PADDING * 2; // TODO get size of screen
+            pixelHeight = raceViewAnchorPane.getPrefHeight() - PADDING * 2;
+        } else {
+            pixelWidth = raceViewAnchorPane.getWidth() - PADDING * 2; // TODO get size of screen
+            pixelHeight = raceViewAnchorPane.getHeight() - PADDING * 2;
+        }
 
         GPSCalculations gps = new GPSCalculations(race.getCourse());
         gps.findMinMaxPoints(race.getCourse());

@@ -54,7 +54,7 @@ public class RaceRendererTest {
         Group group = new Group();
         Race race = new Race(new ArrayList<>(), course);
         RaceRenderer raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
-        raceRenderer.renderCourse();
+//        raceRenderer.renderCourse();
         ObservableList<Node> actual = raceRenderer.getGroup().getChildren();
 
         // check for equality
@@ -109,7 +109,7 @@ public class RaceRendererTest {
         Race race = new Race(boats, course);
         RaceRenderer raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
 
-        raceRenderer.renderBoats();
+        raceRenderer.renderBoats(true);
         ObservableList<Node> actual = raceRenderer.getGroup().getChildren();
 
         // check equality

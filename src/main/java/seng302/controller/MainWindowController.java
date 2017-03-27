@@ -1,5 +1,7 @@
 package seng302.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
@@ -67,11 +69,21 @@ public class MainWindowController {
 
             race = new Race(boats, course);
             raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
-            raceRenderer.renderCourse();
-            raceRenderer.renderBoats();
+            raceRenderer.renderBoats(true);
             raceClock = new RaceClock(timerLabel, race);
-            raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel));
+            raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel), raceViewAnchorPane);
             arrow.setRotate(course.getWindDirection());
+
+
+            raceViewAnchorPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
+                raceRenderer.renderCourse();
+                raceRenderer.renderBoats(false);
+            });
+            raceViewAnchorPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
+                raceRenderer.renderCourse();
+                raceRenderer.renderBoats(false);
+            });
+
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {
