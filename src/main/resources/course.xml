@@ -19,6 +19,7 @@
   </compoundMark>
 
 
+
   <compoundMark>
     <name>Mark</name>
     <mark>
@@ -80,6 +81,7 @@
   </compoundMark>
 
 
+
   <compoundMark>
     <name>Finish</name>
     <mark>
@@ -97,20 +99,20 @@
 
   <boundaries>
     <boundary>
-      <longitude>-64.854304</longitude>
-      <latitude>32.280164</latitude>
+      <longitude>-64.8575</longitude>
+      <latitude>32.277</latitude>
     </boundary>
     <boundary>
-      <longitude>-64.835249</longitude>
-      <latitude>32.280164</latitude>
+      <longitude>-64.8295</longitude>
+      <latitude>32.277</latitude>
     </boundary>
     <boundary>
-      <longitude>-64.835249</longitude>
-      <latitude>32.317379</latitude>
+      <longitude>-64.8295</longitude>
+      <latitude>32.32</latitude>
     </boundary>
     <boundary>
-      <longitude>-64.854304</longitude>
-      <latitude>32.317379</latitude>
+      <longitude>-64.8575</longitude>
+      <latitude>32.32</latitude>
     </boundary>
   </boundaries>
 

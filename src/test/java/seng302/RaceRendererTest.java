@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
@@ -24,6 +25,7 @@ public class RaceRendererTest {
     @Test
     public void renderCourseTest() {
         // Setting up Course
+        AnchorPane raceViewAnchorPane = new AnchorPane();
         Mark testMark0 = new Mark("testMark0", new Coordinate(0, 0));
         Mark testMark1 = new Mark("testMark1", new Coordinate(90, 180));
         ArrayList<Mark> testMarks0 = new ArrayList<>();
@@ -51,8 +53,8 @@ public class RaceRendererTest {
         // making actual values
         Group group = new Group();
         Race race = new Race(new ArrayList<>(), course);
-        RaceRenderer raceRenderer = new RaceRenderer(race, group);
-        raceRenderer.renderCourse();
+        RaceRenderer raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
+//        raceRenderer.renderCourse();
         ObservableList<Node> actual = raceRenderer.getGroup().getChildren();
 
         // check for equality
@@ -71,6 +73,7 @@ public class RaceRendererTest {
 
     @Test
     public void renderBoatsTest() {
+        AnchorPane raceViewAnchorPane = new AnchorPane();
         // Create expected
         ObservableList<Polyline> expected = FXCollections.observableArrayList();
         Polyline c = new Polyline();
@@ -104,9 +107,9 @@ public class RaceRendererTest {
         Group group = new Group();
         Course course = new Course(compoundMarks, new ArrayList<>(), 45);
         Race race = new Race(boats, course);
-        RaceRenderer raceRenderer = new RaceRenderer(race, group);
+        RaceRenderer raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
 
-        raceRenderer.renderBoats();
+        raceRenderer.renderBoats(true);
         ObservableList<Node> actual = raceRenderer.getGroup().getChildren();
 
         // check equality

@@ -54,9 +54,6 @@ public class Course {
         this.windDirection = windDirection;
     }
 
-    public ArrayList<Coordinate> getBoundaries() {
-        return boundaries;
-    }
 
     public double getCourseDistance(){
         double distance = 0;
@@ -68,4 +65,9 @@ public class Course {
         }
         return distance;
     }
+
+    public ArrayList<Coordinate> getBoundaries() {
+        return boundaries;
+    }
 }
+

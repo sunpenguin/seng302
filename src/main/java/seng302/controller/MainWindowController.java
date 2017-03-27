@@ -1,10 +1,11 @@
 package seng302.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -15,6 +16,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Polygon;
 import javafx.util.Callback;
 import org.xml.sax.SAXException;
@@ -51,6 +53,8 @@ public class MainWindowController {
     @FXML
     private TableColumn<Boat, Integer> boatSpeedColumn;
     @FXML
+    private AnchorPane raceViewAnchorPane;
+    @FXML
     private TextField scaleTextField;
     @FXML
     private Button scaleButton;
@@ -71,12 +75,22 @@ public class MainWindowController {
             ArrayList<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml"));
 
             race = new Race(boats, course);
-            raceRenderer = new RaceRenderer(race, group);
-            raceRenderer.renderCourse();
-            raceRenderer.renderBoats();
+            raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
+            raceRenderer.renderBoats(true);
             raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
-            raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel));
+            raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel), raceViewAnchorPane);
             arrow.setRotate(course.getWindDirection());
+
+
+            raceViewAnchorPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
+                raceRenderer.renderCourse();
+                raceRenderer.renderBoats(false);
+            });
+            raceViewAnchorPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
+                raceRenderer.renderCourse();
+                raceRenderer.renderBoats(false);
+            });
+
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (IOException e) {
