@@ -8,7 +8,11 @@ import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -18,6 +22,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Polygon;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.xml.sax.SAXException;
 import seng302.*;
@@ -25,9 +30,11 @@ import seng302.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.ResourceBundle;
 
 
 /**
@@ -56,8 +63,6 @@ public class MainWindowController {
     private AnchorPane raceViewAnchorPane;
     @FXML
     private TextField scaleTextField;
-    @FXML
-    private Button scaleButton;
 
     private Race race;
     private RaceLoop raceLoop;
@@ -69,7 +74,7 @@ public class MainWindowController {
 
     @FXML
     @SuppressWarnings("unused")
-    private void initialize() {
+    public void initialize() {
         try {
             Course course = XMLParser.parseCourse(new File("src/main/resources/course.xml"));
             ArrayList<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml"));
@@ -102,11 +107,26 @@ public class MainWindowController {
     }
 
     @FXML
+    public void showLiveRaceView(MouseEvent mouseEvent) {
+        Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+//        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
+        try {
+            Parent root = loader.load(); // throws IOException
+            PreRaceController preRaceController = loader.getController();
+            preRaceController.setBoats(race.getStartingList());
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void scaleButtonHandle(){
         try {
-            final int MINUTES_TO_SECONDS = 60;
-            Integer timeInSeconds = Integer.valueOf(scaleTextField.getText()) * MINUTES_TO_SECONDS;
-            raceClock.setTimeScaleFactor(race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / (double) timeInSeconds);
+            final double MINUTES_TO_SECONDS = 60d;
+            double timeInSeconds = Integer.valueOf(scaleTextField.getText()) * MINUTES_TO_SECONDS;
+            raceClock.setTimeScaleFactor(race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / timeInSeconds);
             race.setDuration(timeInSeconds);
         } catch (NumberFormatException e1){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -117,6 +137,7 @@ public class MainWindowController {
         }
     }
 
+    @FXML
     public void playPauseRace() {
         if (playPauseToggleButton.isSelected()) {
             raceClock.start();
@@ -128,11 +149,13 @@ public class MainWindowController {
     }
 
 
+    @FXML
     public void toggleFPS() {
         fpsLabel.setVisible(!fpsToggler.isSelected());
     }
 
 
+    @FXML
     public void setFullAnnotationLevel() {
         HashMap<String, Boolean> visibleAnnotations = raceRenderer.getVisibleAnnotations();
         visibleAnnotations.put("Speed", true);
@@ -142,6 +165,7 @@ public class MainWindowController {
     }
 
 
+    @FXML
     public void setNoneAnnotationLevel() {
         HashMap<String, Boolean> visibleAnnotations = raceRenderer.getVisibleAnnotations();
         visibleAnnotations.put("Speed", false);
@@ -159,10 +183,6 @@ public class MainWindowController {
         raceRenderer.setVisibleAnnotations(visibleAnnotations);
     }
 
-
-    public void closeProgram() {
-        System.exit(0);
-    }
 
     private void setUpTable() {
         Callback<Boat, Observable[]> callback =(Boat boat) -> new Observable[]{
