@@ -17,6 +17,7 @@ public class Race {
     private ArrayList<Boat> startingList;
     private Course course;
     private ArrayList<Boat> finishedList;
+    private double duration;
 
     /**
      * Race class constructor.
@@ -30,6 +31,7 @@ public class Race {
         this.course = course;
         finishedList = new ArrayList<>();
         setCourseForBoats();
+        duration = 60;
     }
 
     /**
