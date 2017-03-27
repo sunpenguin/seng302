@@ -375,11 +375,27 @@ public class RaceRenderer {
             pixelHeight = raceViewAnchorPane.getHeight() - PADDING * 2;
         }
 
+
+        if (pixelHeight > pixelWidth) {
+            pixelHeight = pixelWidth;
+        } else if (pixelWidth > pixelHeight) {
+            pixelWidth = pixelHeight;
+        }
+
         GPSCalculations gps = new GPSCalculations(race.getCourse());
         gps.findMinMaxPoints(race.getCourse());
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
         XYPair planeCoordinates = GPSCalculations.GPSxy(coord);
+
+        double aspectRatio = courseWidth / courseHeight;
+
+        if (courseHeight > courseWidth) {
+            pixelWidth *= aspectRatio;
+        } else {
+            pixelHeight *= aspectRatio;
+        }
+
         double widthRatio = (courseWidth - (gps.getMaxX() - planeCoordinates.getX())) / courseWidth;
         double heightRatio = (courseHeight - (gps.getMaxY() - planeCoordinates.getY())) / courseHeight;
 
