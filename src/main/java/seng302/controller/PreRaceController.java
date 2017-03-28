@@ -94,4 +94,22 @@ public class PreRaceController {
         }
     }
 
+    private void startClock() {
+        final long UPDATE_PERIOD_NANO = 100000000L;
+        final double NANO_TO_SECONDS = 1e-9;
+        final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        ZoneId zoneId = ZoneId.of("Australia/Sydney");
+        zonedDateTime = ZonedDateTime.now(zoneId);
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.millis(TimeUnit.MILLISECONDS.convert(UPDATE_PERIOD_NANO, TimeUnit.NANOSECONDS)),
+                        actionEvent -> {
+                            zonedDateTime = zonedDateTime.plusNanos(UPDATE_PERIOD_NANO);
+                            timeLabel.setText(zonedDateTime.format(timeFormatter));
+                        }
+                ));
+        final int cycles = (int) (SECONDS_TIL_PREPARATORY_SIGNAL / (UPDATE_PERIOD_NANO * NANO_TO_SECONDS));
+        timeline.setCycleCount(cycles);
+        timeline.play();
+    }
+
 }
