@@ -5,9 +5,10 @@ import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
@@ -19,33 +20,44 @@ import seng302.XMLParser;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Created by dhl25 on 27/03/17.
  */
 public class PreRaceController {
-
+    @FXML
+    private Label timeLabel;
     @FXML
     private ListView<Boat> listView;
     private List<Boat> boats;
-    private final int MINUTES_UNTIL_PREPARATORY_SIGNAL = 1;
+    private final int SECONDS_TIL_PREPARATORY_SIGNAL = 10; // TODO change this to 60 later
+    private ZonedDateTime zonedDateTime;
+
 
     @FXML
-    public void initialize() throws IOException, SAXException, ParserConfigurationException {
-        new Timeline(new KeyFrame(Duration.seconds(5), event -> showLiveRaceView())).play();
-        // TODO comment the line above and uncomment the line below for actual thing
-//        new Timeline(new KeyFrame(
-//                Duration.minutes(MINUTES_UNTIL_PREPARATORY_SIGNAL),
-//                event -> showLiveRaceView()))
-//                .play();
-        boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
+    public void initialize() {
+        new Timeline(new KeyFrame(
+                Duration.seconds(SECONDS_TIL_PREPARATORY_SIGNAL),
+                event -> showLiveRaceView()))
+                .play();
+        try {
+            boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid Course / Boat XML file.");
+            alert.setHeaderText("Invalid Course / Boat XML file.");
+            alert.setContentText("Invalid Course / Boat XML file.");
+            alert.showAndWait();
+        }
+
+
         setUpList();
+        startClock();
     }
 
 
@@ -75,6 +87,26 @@ public class PreRaceController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private void startClock() {
+        final long UPDATE_PERIOD_NANO = 100000000L;
+        final double NANO_TO_SECONDS = 1e-9;
+        final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        ZoneId zoneId = ZoneId.of("Pacific/Auckland");
+        zonedDateTime = ZonedDateTime.now(zoneId);
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.millis(TimeUnit.MILLISECONDS.convert(UPDATE_PERIOD_NANO, TimeUnit.NANOSECONDS)),
+                        actionEvent -> {
+                            zonedDateTime = zonedDateTime.plusNanos(UPDATE_PERIOD_NANO);
+                            timeLabel.setText(zonedDateTime.format(timeFormatter));
+                            System.out.println(zonedDateTime.format(timeFormatter));
+                        }
+                ));
+        final int cycles = (int) (SECONDS_TIL_PREPARATORY_SIGNAL / (UPDATE_PERIOD_NANO * NANO_TO_SECONDS));
+        timeline.setCycleCount(cycles);
+        timeline.play();
     }
 
 }
