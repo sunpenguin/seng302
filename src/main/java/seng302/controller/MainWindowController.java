@@ -76,7 +76,7 @@ public class MainWindowController {
 
             race = new Race(boats, course);
             raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
-            raceRenderer.renderBoats(true);
+            raceRenderer.renderBoats(true, 0);
             raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
             raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel), raceViewAnchorPane);
             arrow.setRotate(course.getWindDirection());
@@ -84,11 +84,15 @@ public class MainWindowController {
 
             raceViewAnchorPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
                 raceRenderer.renderCourse();
-                raceRenderer.renderBoats(false);
+                raceRenderer.renderBoats(false, 0);
+                raceRenderer.reDrawTrail(race.getStartingList());
+
             });
             raceViewAnchorPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
                 raceRenderer.renderCourse();
-                raceRenderer.renderBoats(false);
+                raceRenderer.renderBoats(false, 0);
+                raceRenderer.reDrawTrail(race.getStartingList());
+
             });
 
         } catch (ParserConfigurationException e) {

@@ -19,6 +19,7 @@ public class RaceLoop extends AnimationTimer {
     private RaceRenderer renderer;
     private FPSReporter fpsReporter;
     private AnchorPane raceViewAnchorPane;
+    private int frameCount = 0;
 
     /**
      * Constructor for the RaceLoop class.
@@ -35,6 +36,8 @@ public class RaceLoop extends AnimationTimer {
 
     @Override
     public void handle(long currentTime) {
+        frameCount++;
+
         if (previousTime == 0) {
             previousTime = currentTime;
             return;
@@ -43,8 +46,7 @@ public class RaceLoop extends AnimationTimer {
         double secondsElapsed = (currentTime - previousTime) / 1e9f; // converting from nanoseconds to seconds
         previousTime = currentTime;
         race.updateBoats(secondsElapsed);
-        renderer.renderBoats(false);
-
+        renderer.renderBoats(false, frameCount);
 
         secondsElapsedSinceLastFpsUpdate += secondsElapsed;
         framesSinceLastFpsUpdate++;
@@ -53,6 +55,10 @@ public class RaceLoop extends AnimationTimer {
             fpsReporter.report(fps);
             secondsElapsedSinceLastFpsUpdate = 0;
             framesSinceLastFpsUpdate = 0;
+        }
+
+        if (frameCount >= 10) {
+            frameCount = 0;
         }
     }
 
