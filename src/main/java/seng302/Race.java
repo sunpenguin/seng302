@@ -146,11 +146,10 @@ public class Race {
 
 
     private void updatePosition(Boat boat, double time) {
-        final double KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT = 1000.0 / 3600.0;
-        double speed = boat.getSpeed() * KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT;
+        final double KMPH_TO_MPS = 1000.0 / 3600.0;
+        double speed = boat.getSpeed() * KMPH_TO_MPS;
         double distanceTravelled = speed * time
-                / (duration / (course.getCourseDistance()
-                / (startingList.get(0).getSpeed() * KILOMETERS_PER_HOUR_TO_METERS_PER_SECOND_CONVERSION_CONSTANT))); // meters
+                / (duration / (course.getCourseDistance() / (startingList.get(0).getSpeed() * KMPH_TO_MPS))); // meters
         boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
                 GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
@@ -167,6 +166,10 @@ public class Race {
 
     public double getDuration() {
         return duration;
+    }
+
+    public boolean isFinished() {
+        return startingList.size() == finishedList.size();
     }
 
 }

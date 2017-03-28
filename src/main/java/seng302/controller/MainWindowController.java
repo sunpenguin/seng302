@@ -30,6 +30,8 @@ import seng302.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.net.URL;
 import java.util.*;
 
@@ -78,26 +80,30 @@ public class MainWindowController {
 
             race = new Race(boats, course);
             raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
-            raceRenderer.renderBoats(true);
+            raceRenderer.renderBoats(true, 0);
             raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
             raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel), raceViewAnchorPane);
             arrow.setRotate(course.getWindDirection());
 
             raceViewAnchorPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
                 raceRenderer.renderCourse();
-                raceRenderer.renderBoats(false);
+                raceRenderer.renderBoats(false, 0);
+                raceRenderer.reDrawTrail(race.getStartingList());
+
             });
             raceViewAnchorPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
                 raceRenderer.renderCourse();
-                raceRenderer.renderBoats(false);
+                raceRenderer.renderBoats(false, 0);
+                raceRenderer.reDrawTrail(race.getStartingList());
+
             });
 
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid Course / Boat XML file.");
+            alert.setHeaderText("Invalid Course / Boat XML file.");
+            alert.setContentText("Invalid Course / Boat XML file.");
+            alert.showAndWait();
         }
         setUpTable();
     }
@@ -108,7 +114,7 @@ public class MainWindowController {
         try {
             final double MINUTES_TO_SECONDS = 60d;
             double timeInSeconds = Integer.valueOf(scaleTextField.getText()) * MINUTES_TO_SECONDS;
-            raceClock.setTimeScaleFactor(race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / timeInSeconds);
+            raceClock.setRaceDuration(timeInSeconds);
             race.setDuration(timeInSeconds);
         } catch (NumberFormatException e1){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

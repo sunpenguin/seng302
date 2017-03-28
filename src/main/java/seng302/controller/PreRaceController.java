@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -23,6 +24,9 @@ import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -88,25 +92,6 @@ public class PreRaceController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-
-    private void startClock() {
-        final long UPDATE_PERIOD_NANO = 100000000L;
-        final double NANO_TO_SECONDS = 1e-9;
-        final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        ZoneId zoneId = ZoneId.of("Australia/Sydney");
-        zonedDateTime = ZonedDateTime.now(zoneId);
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(TimeUnit.MILLISECONDS.convert(UPDATE_PERIOD_NANO, TimeUnit.NANOSECONDS)),
-                        actionEvent -> {
-                            zonedDateTime = zonedDateTime.plusNanos(UPDATE_PERIOD_NANO);
-                            timeLabel.setText(zonedDateTime.format(timeFormatter));
-                        }
-                ));
-        final int cycles = (int) (SECONDS_TIL_PREPARATORY_SIGNAL / (UPDATE_PERIOD_NANO * NANO_TO_SECONDS));
-        timeline.setCycleCount(cycles);
-        timeline.play();
     }
 
 }

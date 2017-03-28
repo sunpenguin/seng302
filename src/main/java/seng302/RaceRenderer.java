@@ -7,19 +7,12 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Class that takes a Race and a Group and draws the Race on the Group.
@@ -31,23 +24,28 @@ public class RaceRenderer {
     private HashMap<String, Text> annotationsMap = new HashMap<>();
     private HashMap<String, Boolean> visibleAnnotations = new HashMap<>();
     private ArrayList<String> annotations = new ArrayList<>();
-    private final int ANNOTATION_OFFSET_X = 10;
     private HashMap<String, Polyline> boats = new HashMap<>();
     private HashMap<String, Rectangle> marks = new HashMap();
     private HashMap<String, Line> gates = new HashMap<>();
-    private HashMap<String, CompoundMark> compoundMarkMap = new HashMap<>();
-    private Polyline border = new Polyline();
-
     private HashMap<String, Polygon> wakes = new HashMap<>();
     private HashMap<String, Double> boatHeadings = new HashMap<>();
-    private  HashMap<String, Double> boatSpeeds = new HashMap<>();
-    private double lowestSpeed;
+    private HashMap<String, Double> boatSpeeds = new HashMap<>();
+    private HashMap<String, CompoundMark> compoundMarkMap = new HashMap<>();
+
+    private Map<String, Collection<Circle>> trailMap = new HashMap<>();
+    private Map<Circle, Coordinate> circleCoordMap = new HashMap<>();
+
+    private Polyline border = new Polyline();
     private AnchorPane raceViewAnchorPane;
+    private double lowestSpeed;
     private final Color MARK_COLOR = Color.BLACK;
     private final double MARK_SIZE = 10.0;
     private final double PADDING = 20.0;
     private final double BOAT_PIVOT_X = 5;
     private final double BOAT_PIVOT_Y = 0;
+    private final int ANNOTATION_OFFSET_X = 10;
+    final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
+            Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
 
 
 
@@ -62,8 +60,6 @@ public class RaceRenderer {
         this.group = group;
         this.raceViewAnchorPane = raceViewAnchorPane;
         lowestSpeed = Double.MAX_VALUE;
-        final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
-                Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
 
         // Add each annotation to the race
         addAnnotations();
@@ -79,6 +75,10 @@ public class RaceRenderer {
 
             boatHeadings.put(boat.getBoatName(), 0d);
             boatSpeeds.put(boat.getBoatName(), 1d);
+
+            ArrayList<Circle> circleList = new ArrayList<>();
+
+            trailMap.put(boat.getBoatName(), circleList);
 
             setUpWake(boat);
             setUpBoat(boat, BOAT_COLOURS, i);
@@ -281,18 +281,25 @@ public class RaceRenderer {
     /**
      * Draws boats in the Race on the Group as well as the visible annotations
      */
-    public void renderBoats(boolean setup) {
+    public void renderBoats(boolean setup, int frameCount) {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             // move boat and wake
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
             XYPair pixels = convertCoordPixel(boatCoordinates, setup);
             Polyline boatImage = boats.get(boat.getBoatName());
+            boatImage.toFront();
             Polygon wake = wakes.get(boat.getBoatName());
 
             moveBoat(boatImage, wake, pixels);
             scaleWake(boat, wake);
             rotateBoat(boat, boatImage, wake);
+
+            if (frameCount == 10) {
+                drawTrail(boat, pixels);
+            }
+
+
             // annotations
             Text annotationToRender = setAnnotationText(boat);
             annotationToRender.setLayoutX(pixels.getX() + ANNOTATION_OFFSET_X);
@@ -301,10 +308,38 @@ public class RaceRenderer {
         }
     }
 
+
+    private void drawTrail(Boat boat, XYPair pixels) {
+        Circle circle = new Circle();
+        circleCoordMap.put(circle, boat.getCoordinate());
+
+        circle.setCenterX(pixels.getX());
+        circle.setCenterY(pixels.getY());
+        circle.setRadius(0.6);
+        circle.setFill(boats.get(boat.getBoatName()).getFill());
+
+        group.getChildren().add(circle);
+        Collection<Circle> circles = trailMap.get(boat.getBoatName());
+        circles.add(circle);
+    }
+
+
+    public void reDrawTrail(Collection<Boat> boats) {
+        for (Boat boat : boats) {
+            for (Circle circle : trailMap.get(boat.getBoatName())) {
+                XYPair newPosition = convertCoordPixel(circleCoordMap.get(circle), false);
+
+                circle.setCenterX(newPosition.getX());
+                circle.setCenterY(newPosition.getY());
+            }
+        }
+    }
+
+
     private void moveBoat(Polyline boatImage, Polygon wake, XYPair pixels) {
-        boatImage.setLayoutX(pixels.getX());
+        boatImage.setLayoutX(pixels.getX() - 5); // The boats are 5px from middle to outside so this will center the boat
         boatImage.setLayoutY(pixels.getY());
-        wake.setLayoutX(pixels.getX());
+        wake.setLayoutX(pixels.getX() - 5); // Also need to center the wake
         wake.setLayoutY(pixels.getY());
     }
 
@@ -375,11 +410,27 @@ public class RaceRenderer {
             pixelHeight = raceViewAnchorPane.getHeight() - PADDING * 2;
         }
 
+
+        if (pixelHeight > pixelWidth) {
+            pixelHeight = pixelWidth;
+        } else if (pixelWidth > pixelHeight) {
+            pixelWidth = pixelHeight;
+        }
+
         GPSCalculations gps = new GPSCalculations(race.getCourse());
         gps.findMinMaxPoints(race.getCourse());
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
         XYPair planeCoordinates = GPSCalculations.GPSxy(coord);
+
+        double aspectRatio = courseWidth / courseHeight;
+
+        if (courseHeight > courseWidth) {
+            pixelWidth *= aspectRatio;
+        } else {
+            pixelHeight *= aspectRatio;
+        }
+
         double widthRatio = (courseWidth - (gps.getMaxX() - planeCoordinates.getX())) / courseWidth;
         double heightRatio = (courseHeight - (gps.getMaxY() - planeCoordinates.getY())) / courseHeight;
 
