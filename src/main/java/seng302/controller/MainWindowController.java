@@ -30,11 +30,8 @@ import seng302.*;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
-import java.util.ResourceBundle;
 
 
 /**
@@ -99,12 +96,12 @@ public class MainWindowController {
 
             });
 
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid Course / Boat XML file.");
+            alert.setHeaderText("Invalid Course / Boat XML file.");
+            alert.setContentText("Invalid Course / Boat XML file.");
+            alert.showAndWait();
         }
         setUpTable();
     }
@@ -115,7 +112,7 @@ public class MainWindowController {
         try {
             final double MINUTES_TO_SECONDS = 60d;
             double timeInSeconds = Integer.valueOf(scaleTextField.getText()) * MINUTES_TO_SECONDS;
-            raceClock.setTimeScaleFactor(race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / timeInSeconds);
+            raceClock.setRaceDuration(timeInSeconds);
             race.setDuration(timeInSeconds);
         } catch (NumberFormatException e1){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

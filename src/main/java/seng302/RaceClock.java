@@ -15,13 +15,14 @@ public class RaceClock {
     private Duration time = Duration.ZERO;
     private Race race;
     private double timeScaleFactor;
-
+    private final double KMPH_TO_MPS = 1000.0 / 3600.0;
     private String timeString;
 
-    public RaceClock(Label timerLabel, Race race, double timeScaleFactor) {
+    public RaceClock(Label timerLabel, Race race, double raceDuration) {
         this.timerLabel = timerLabel;
         this.race = race;
-        this.timeScaleFactor = timeScaleFactor;
+        this.timeScaleFactor = race.getCourse().getCourseDistance()
+                        / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / raceDuration;
 
         timerLabel.setTextFill(Color.BLACK);
         timerLabel.setStyle("-fx-font-size: 2em;");
@@ -31,7 +32,7 @@ public class RaceClock {
     public void start() {
         timeline = new Timeline(
                 new KeyFrame(Duration.millis(100), t -> {
-                    if (race.getFinishedList().size() == race.getStartingList().size()) {
+                    if (race.isFinished()) {
                         timeline.stop();
                     } else {
                         Duration duration = ((KeyFrame) t.getSource()).getTime();
@@ -56,14 +57,9 @@ public class RaceClock {
         timeString = String.format(" %02.0f:%02.0f", (Math.floor(pTime / 60)), (pTime % 60));
     }
 
-
-    public Duration getTime() {
-        return time;
-    }
-
-
-    public void setTimeScaleFactor(double timeScaleFactor) {
-        this.timeScaleFactor = timeScaleFactor;
+    public void setRaceDuration(double raceDuration) {
+        this.timeScaleFactor = race.getCourse().getCourseDistance()
+                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / raceDuration;
     }
 }
 

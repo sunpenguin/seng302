@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
@@ -19,6 +20,8 @@ import seng302.XMLParser;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -36,16 +39,28 @@ public class PreRaceController {
     private List<Boat> boats;
     private final int MINUTES_UNTIL_PREPARATORY_SIGNAL = 1;
 
+//    ZoneId tID = ZoneId.of("Asia/Tokyo");
+//    ZonedDateTime zoneTime = ZonedDateTime.now(tID);
+
     @FXML
-    public void initialize() throws IOException, SAXException, ParserConfigurationException {
+    public void initialize() {
         new Timeline(new KeyFrame(Duration.seconds(5), event -> showLiveRaceView())).play();
         // TODO comment the line above and uncomment the line below for actual thing
 //        new Timeline(new KeyFrame(
 //                Duration.minutes(MINUTES_UNTIL_PREPARATORY_SIGNAL),
 //                event -> showLiveRaceView()))
 //                .play();
-        boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
+        try {
+            boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Invalid Course / Boat XML file.");
+            alert.setHeaderText("Invalid Course / Boat XML file.");
+            alert.setContentText("Invalid Course / Boat XML file.");
+            alert.showAndWait();
+        }
         setUpList();
+
     }
 
 
