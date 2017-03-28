@@ -41,10 +41,11 @@ public class PreRaceController {
 
     @FXML
     public void initialize() {
-        new Timeline(new KeyFrame(
+        Timeline showLive = new Timeline(new KeyFrame(
                 Duration.seconds(SECONDS_TIL_PREPARATORY_SIGNAL),
-                event -> showLiveRaceView()))
-                .play();
+                event -> showLiveRaceView()));
+        showLive.setCycleCount(1);
+        showLive.play();
         try {
             boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -94,14 +95,13 @@ public class PreRaceController {
         final long UPDATE_PERIOD_NANO = 100000000L;
         final double NANO_TO_SECONDS = 1e-9;
         final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        ZoneId zoneId = ZoneId.of("Pacific/Auckland");
+        ZoneId zoneId = ZoneId.of("Australia/Sydney");
         zonedDateTime = ZonedDateTime.now(zoneId);
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(TimeUnit.MILLISECONDS.convert(UPDATE_PERIOD_NANO, TimeUnit.NANOSECONDS)),
                         actionEvent -> {
                             zonedDateTime = zonedDateTime.plusNanos(UPDATE_PERIOD_NANO);
                             timeLabel.setText(zonedDateTime.format(timeFormatter));
-                            System.out.println(zonedDateTime.format(timeFormatter));
                         }
                 ));
         final int cycles = (int) (SECONDS_TIL_PREPARATORY_SIGNAL / (UPDATE_PERIOD_NANO * NANO_TO_SECONDS));

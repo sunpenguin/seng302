@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 
 /**
@@ -14,9 +15,9 @@ import java.util.Comparator;
  */
 public class Race {
 
-    private ArrayList<Boat> startingList;
+    private List<Boat> startingList;
     private Course course;
-    private ArrayList<Boat> finishedList;
+    private List<Boat> finishedList;
     private double duration;
 
     /**
@@ -25,7 +26,7 @@ public class Race {
      * @param startingList Arraylist holding all entered boats
      * @param course       Course object
      */
-    public Race(ArrayList<Boat> startingList, Course course) {
+    public Race(List<Boat> startingList, Course course) {
         startingList.sort(Comparator.comparingDouble(Boat::getSpeed));
         this.startingList = startingList;
         this.course = course;
@@ -68,7 +69,7 @@ public class Race {
      *
      * @return ObservableList holding all entered boats
      */
-    public ArrayList<Boat> getStartingList() {
+    public List<Boat> getStartingList() {
         return startingList;
     }
 
@@ -77,7 +78,7 @@ public class Race {
      *
      * @param startingList Arraylist holding all entered boats
      */
-    public void setStartingList(ArrayList<Boat> startingList) {
+    public void setStartingList(List<Boat> startingList) {
         this.startingList = startingList;
     }
 
@@ -155,7 +156,7 @@ public class Race {
     }
 
 
-    public ArrayList<Boat> getFinishedList() {
+    public List<Boat> getFinishedList() {
         return finishedList;
     }
 

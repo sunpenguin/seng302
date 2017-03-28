@@ -31,10 +31,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 /**
@@ -77,7 +74,7 @@ public class MainWindowController {
     public void initialize() {
         try {
             Course course = XMLParser.parseCourse(new File("src/main/resources/course.xml"));
-            ArrayList<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml"));
+            List<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml"));
 
             race = new Race(boats, course);
             raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
