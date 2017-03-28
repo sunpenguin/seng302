@@ -25,7 +25,6 @@ public class App extends Application {
         Parent root = loader.load(); // throws IOException
 //        MainWindowController mainWindowController = loader.getController();
         PreRaceController preRaceController = loader.getController();
-        preRaceController.setStage(primaryStage);
         primaryStage.setTitle("RaceVision");
         Scene scene = new Scene(root, 1280, 720);
         primaryStage.setScene(scene);

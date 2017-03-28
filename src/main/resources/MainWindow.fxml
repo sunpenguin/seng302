@@ -68,7 +68,6 @@
                   </ToggleButton>
                    <Button id="scaleButton" fx:id="scaleButton" layoutX="280.0" layoutY="394.0" mnemonicParsing="false" onAction="#scaleButtonHandle" text="Scale Race" AnchorPane.rightAnchor="220.0" />
                    <TextField id="scaleTextField" fx:id="scaleTextField" layoutX="89.0" layoutY="394.0" promptText="Time scale in minutes" AnchorPane.rightAnchor="330.0" />
-                  <Button layoutX="89.0" layoutY="255.0" mnemonicParsing="false" onMouseClicked="#showLiveRaceView" text="ChangeScene" />
                </children>
             </AnchorPane>
             <TableView fx:id="tableView" layoutY="430.0" prefHeight="260.0" prefWidth="511.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

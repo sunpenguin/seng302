@@ -63,14 +63,14 @@ public class MainWindowController {
     private AnchorPane raceViewAnchorPane;
     @FXML
     private TextField scaleTextField;
+    @FXML
+    private Polygon arrow;
 
     private Race race;
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private RaceClock raceClock;
 
-    @FXML
-    private Polygon arrow;
 
     @FXML
     @SuppressWarnings("unused")
@@ -85,7 +85,6 @@ public class MainWindowController {
             raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
             raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel), raceViewAnchorPane);
             arrow.setRotate(course.getWindDirection());
-
 
             raceViewAnchorPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
                 raceRenderer.renderCourse();
@@ -106,20 +105,6 @@ public class MainWindowController {
         setUpTable();
     }
 
-    @FXML
-    public void showLiveRaceView(MouseEvent mouseEvent) {
-        Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
-//        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
-        try {
-            Parent root = loader.load(); // throws IOException
-            PreRaceController preRaceController = loader.getController();
-            preRaceController.setBoats(race.getStartingList());
-            stage.setScene(new Scene(root));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     public void scaleButtonHandle(){
@@ -174,7 +159,7 @@ public class MainWindowController {
         raceRenderer.setVisibleAnnotations(visibleAnnotations);
     }
 
-
+    @FXML
     public void setImportantAnnotationLevel() {
         HashMap<String, Boolean> visibleAnnotations = raceRenderer.getVisibleAnnotations();
         visibleAnnotations.put("Speed", false);
