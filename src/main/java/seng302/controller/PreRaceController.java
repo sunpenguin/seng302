@@ -51,24 +51,25 @@ public class PreRaceController {
 
             race = new Race(boats, course);
 
-            int raceLength;
-            boolean success = false;
+            getDurationInput();
 
-            Scanner sc = new Scanner(System.in);
-            System.out.println("How many seconds would you like the race to last?");
-
-            while (!success) {
-                if (sc.hasNextInt()) {
-                    raceLength = sc.nextInt();
-                    race.setDuration(raceLength);
-                    success = true;
-                } else {
-                    System.out.println("Please enter a whole number");
-                    sc.next();
-                }
-            }
-
-            sc.close();
+//            int raceLength;
+//            boolean success = false;
+//
+//            Scanner sc = new Scanner(System.in);
+//            System.out.println("Would you like the race to last 1 or 5 minutes?");
+//
+//            while (!success) {
+//                System.out.println("Please enter either 1 or 5");
+//                sc.next();
+//                if (sc.hasNextInt()) {
+//                    raceLength = sc.nextInt();
+//                    if ((raceLength == 1) || (raceLength == 5)) {
+//                        race.setDuration(raceLength * 60); // convert minutes to seconds
+//                        success = true;
+//                    }
+//                }
+//            }
 
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -145,6 +146,22 @@ public class PreRaceController {
         String offset = String.format("%02d:%02d", Math.abs(offsetInMillis / MILLI_TO_HOUR), Math.abs((offsetInMillis / MILLI_TO_MINUTE) % SCALER_FOR_MINUTE));
         offset = (offsetInMillis >= 0 ? "+" : "-") + offset;
         timeZoneLabel.setText("UTC: " + offset);
+    }
+
+
+    private void getDurationInput() {
+
+        Scanner scanner = new Scanner(System.in);
+        int duration = 0;
+        while (duration != 1 && duration != 5) {
+            System.out.println("Choose how long the race lasts (1 minute or 5 minutes)");
+            if (scanner.hasNextInt()) {
+                duration = scanner.nextInt();
+                race.setDuration(duration * 60); // convert from minutes to seconds
+            } else {
+                scanner.next();
+            }
+        }
     }
 
 }
