@@ -18,8 +18,6 @@ import java.time.format.DateTimeFormatter;
 
 public class App extends Application {
 
-    private static int raceLength;
-
     @Override
     public void start(Stage primaryStage) throws IOException, InterruptedException {
 
