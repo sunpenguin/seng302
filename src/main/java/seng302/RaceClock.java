@@ -102,7 +102,7 @@ public class RaceClock extends AnimationTimer{
     private String timeString;
 
     private double previousTime;
-    private double totalTime = -10;
+    private double totalTime = -race.PREP_TIME_SECONDS;
 
     public RaceClock(Label timerLabel, Race race) {
         this.timerLabel = timerLabel;
@@ -112,7 +112,9 @@ public class RaceClock extends AnimationTimer{
         time = Duration.ZERO;
         timerLabel.setTextFill(Color.BLACK);
         timerLabel.setStyle("-fx-font-size: 2em;");
-        timerLabel.setText("-00:00");
+
+        secondsToString(totalTime);
+        timerLabel.setText(timeString);
     }
 
     @Override
@@ -130,10 +132,16 @@ public class RaceClock extends AnimationTimer{
         timerLabel.setText(timeString);
     }
 
+    @Override
+    public void stop() {
+        super.stop();
+        previousTime = 0;
+    }
+
 
     private void secondsToString(double pTime) {
         pTime = (int) pTime;
-        timeString = String.format(" %02.0f:%02.0f", (Math.floor(pTime / 60)), (pTime % 60));
+        timeString = String.format(" %02.0f:%02.0f", Math.floor(Math.abs(pTime / 60)), Math.abs(pTime) % 60);
     }
 
     public void setRaceDuration(double raceDuration) {
