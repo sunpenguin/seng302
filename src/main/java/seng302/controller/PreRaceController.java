@@ -53,25 +53,6 @@ public class PreRaceController {
 
             getDurationInput();
 
-//            int raceLength;
-//            boolean success = false;
-//
-//            Scanner sc = new Scanner(System.in);
-//            System.out.println("Would you like the race to last 1 or 5 minutes?");
-//
-//            while (!success) {
-//                System.out.println("Please enter either 1 or 5");
-//                sc.next();
-//                if (sc.hasNextInt()) {
-//                    raceLength = sc.nextInt();
-//                    if ((raceLength == 1) || (raceLength == 5)) {
-//                        race.setDuration(raceLength * 60); // convert minutes to seconds
-//                        success = true;
-//                    }
-//                }
-//            }
-
-
         } catch (ParserConfigurationException | SAXException | IOException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Invalid Course / Boat XML file.");
