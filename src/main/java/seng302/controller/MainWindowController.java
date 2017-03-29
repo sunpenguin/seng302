@@ -81,7 +81,8 @@ public class MainWindowController {
             race = new Race(boats, course);
             raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
             raceRenderer.renderBoats(true, 0);
-            raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
+//            raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
+            raceClock = new RaceClock(timerLabel, race);
             raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel), raceViewAnchorPane);
             arrow.setRotate(course.getWindDirection());
 
