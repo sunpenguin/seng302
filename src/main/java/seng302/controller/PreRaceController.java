@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.xml.sax.SAXException;
 import seng302.Boat;
+import seng302.Course;
+import seng302.Race;
 import seng302.XMLParser;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,8 +28,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,6 +42,9 @@ public class PreRaceController {
     private List<Boat> boats;
     private final int SECONDS_TIL_PREPARATORY_SIGNAL = 5; // TODO change this to 60 later
     private ZonedDateTime zonedDateTime;
+    @FXML
+    private Label timeZoneLabel;
+    private Course course;
 
 
     @FXML
@@ -52,6 +56,7 @@ public class PreRaceController {
         showLive.play();
         try {
             boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
+            course = XMLParser.parseCourse(new File("src/main/resources/course.xml"));
         } catch (ParserConfigurationException | SAXException | IOException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Invalid Course / Boat XML file.");
@@ -63,6 +68,7 @@ public class PreRaceController {
 
         setUpList();
         startClock();
+        displayTimeZone();
     }
 
 
@@ -111,6 +117,18 @@ public class PreRaceController {
         final int cycles = (int) (SECONDS_TIL_PREPARATORY_SIGNAL / (UPDATE_PERIOD_NANO * NANO_TO_SECONDS));
         timeline.setCycleCount(cycles);
         timeline.play();
+    }
+
+    private void displayTimeZone() {
+        final int MILLI_TO_HOUR = 3600000;
+        final int MILLI_TO_MINUTE = 60000;
+        final int SCALER_FOR_MINUTE = 60;
+        TimeZone timeZone = TimeZone.getTimeZone(course.getTimeZone());
+        Calendar cal = GregorianCalendar.getInstance(timeZone);
+        int offsetInMillis = timeZone.getOffset(cal.getTimeInMillis());
+        String offset = String.format("%02d:%02d", Math.abs(offsetInMillis / MILLI_TO_HOUR), Math.abs((offsetInMillis / MILLI_TO_MINUTE) % SCALER_FOR_MINUTE));
+        offset = (offsetInMillis >= 0 ? "+" : "-") + offset;
+        timeZoneLabel.setText("UTC: " + offset);
     }
 
 }
