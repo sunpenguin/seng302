@@ -204,6 +204,25 @@ public class GPSCalculations {
                 maxY = yValue;
             }
         }
+        for (CompoundMark compoundMark : course.getCompoundMarks()) {
+            for (Mark mark : compoundMark.getMarks()) {
+                XYPair markXYValues = GPSxy(mark.getCoordinates());
+                double xValue = markXYValues.getX();
+                double yValue = markXYValues.getY();
+                if (xValue < minX) {
+                    minX = xValue;
+                }
+                if (xValue > maxX) {
+                    maxX = xValue;
+                }
+                if (yValue < minY) {
+                    minY = yValue;
+                }
+                if (yValue > maxY) {
+                    maxY = yValue;
+                }
+            }
+        }
     }
 
     /**

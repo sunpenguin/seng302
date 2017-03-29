@@ -40,32 +40,14 @@ public class GPSCalculationsTest {
         double minY = g.getMinY();
         double maxY = g.getMaxY();
 
-        XYPair expectedMinXCoord = GPSCalculations.GPSxy(new Coordinate(32.293771, -64.855242));
-        XYPair expectedMaxXCoord = GPSCalculations.GPSxy(new Coordinate(32.308046, -64.831785));
-        XYPair expectedMinYCoord = GPSCalculations.GPSxy(new Coordinate(32.280164, -64.847591));
-        XYPair expectedMaxYCoord = GPSCalculations.GPSxy(new Coordinate(32.317379, -64.839291));
+        XYPair expectedMinXCoord = GPSCalculations.GPSxy(new Coordinate(51.0, -81.0));
+        XYPair expectedMaxXCoord = GPSCalculations.GPSxy(new Coordinate(30.0, -60.0));
+        XYPair expectedMinYCoord = GPSCalculations.GPSxy(new Coordinate(30.0, -60.0));
+        XYPair expectedMaxYCoord = GPSCalculations.GPSxy(new Coordinate(51.0, -81.0));
 
-        assertEquals(minX, expectedMinXCoord.getX(), 1);
-        assertEquals(maxX, expectedMaxXCoord.getX(), 1);
-        assertEquals(minY, expectedMinYCoord.getY(), 1);
-        assertEquals(maxY, expectedMaxYCoord.getY(), 1);
-    }
-
-    @Test
-    public void XYtoGPSConversionTest() {
-        // Get the coordinates of the first Mark in the second CompoundMark
-        Coordinate testCoordinate = testCourse.getCompoundMarks().get(1).getMarks().get(0).getCoordinates();
-
-        // Convert GPS coordinates to cartesian coordinates
-        XYPair testCoordinateXY = GPSCalculations.GPSxy(testCoordinate);
-
-        // Convert the cartesian coordinates back to GPS coordinates
-        Coordinate testCoordinate1 = GPSCalculations.XYToCoordinate(testCoordinateXY);
-
-        // Check that the 2 sets of GPS coordinates are the same within a delta of 1
-//        System.out.printf("Original lat: %.6f | New lat: %.6f\n", testCoordinate.getLatitude(), testCoordinate1.getLatitude());
-        assertEquals(testCoordinate.getLatitude(), testCoordinate1.getLatitude(), 0.000001);
-//        System.out.printf("Original long: %.6f | New long: %.6f\n", testCoordinate.getLongitude(), testCoordinate1.getLongitude());
-        assertEquals(testCoordinate.getLongitude(), testCoordinate1.getLongitude(), 0.000001);
+        assertEquals(expectedMinXCoord.getX(), minX, 1);
+        assertEquals(expectedMaxXCoord.getX(), maxX, 1);
+        assertEquals(expectedMinYCoord.getY(), minY, 1);
+        assertEquals(expectedMaxYCoord.getY(), maxY, 1);
     }
 }
