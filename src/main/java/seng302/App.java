@@ -18,6 +18,8 @@ import java.time.format.DateTimeFormatter;
 
 public class App extends Application {
 
+    private static int raceLength;
+
     @Override
     public void start(Stage primaryStage) throws IOException, InterruptedException {
 
@@ -34,6 +36,9 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+
+//        raceLength = Integer.parseInt(args[0]);
+
         launch(args);
     }
 }

@@ -61,13 +61,6 @@
                   </Text>
                   <Text layoutX="455.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
                   <ToggleButton fx:id="fpsToggler" layoutX="455.0" layoutY="393.0" mnemonicParsing="false" onAction="#toggleFPS" prefHeight="26.0" prefWidth="96.0" text="Toggle FPS" AnchorPane.rightAnchor="39.0" />
-                  <ToggleButton fx:id="playPauseToggleButton" layoutX="226.0" layoutY="121.0" mnemonicParsing="false" onAction="#playPauseRace" onKeyPressed="#playPauseRace" text="Play / Pause" textAlignment="CENTER">
-                     <font>
-                        <Font name="System Bold" size="13.0" />
-                     </font>
-                  </ToggleButton>
-                   <Button id="scaleButton" fx:id="scaleButton" layoutX="280.0" layoutY="394.0" mnemonicParsing="false" onAction="#scaleButtonHandle" text="Scale Race" AnchorPane.rightAnchor="220.0" />
-                   <TextField id="scaleTextField" fx:id="scaleTextField" layoutX="89.0" layoutY="394.0" promptText="Time scale in minutes" AnchorPane.rightAnchor="330.0" />
                </children>
             </AnchorPane>
             <TableView fx:id="tableView" layoutY="430.0" prefHeight="260.0" prefWidth="511.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
