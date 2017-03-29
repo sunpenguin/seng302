@@ -4,7 +4,7 @@ package seng302.model;
 import javafx.beans.property.*;
 
 /**
- * A class which represents a boat in the text based Application
+ * A class which represents a boat in the race. Boats are drawn on the group using information retrieved from this class
  */
 
 public class Boat {

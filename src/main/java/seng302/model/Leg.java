@@ -3,7 +3,8 @@ package seng302.model;
 import seng302.raceutil.GPSCalculations;
 
 /**
- * Created by dhl25 on 18/03/17.
+ * A class which denotes which two marks a boat is currently travelling between using a destination mark, a departure
+ * mark, a heading and the number of the leg in the race
  */
 public class Leg {
     private CompoundMark destination;

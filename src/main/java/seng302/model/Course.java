@@ -8,7 +8,8 @@ import java.util.List;
 
 
 /**
- * A class which represents a course that is used in a race event.
+ * A class which represents a course that is used in a race event. This is parsed from an XML file and a course is then
+ * drawn using information from this class
  */
 public class Course {
 
