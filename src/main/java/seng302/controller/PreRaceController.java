@@ -50,7 +50,28 @@ public class PreRaceController {
         try {
             List<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
             Course course = XMLParser.parseCourse(new File("src/main/resources/course.xml")); // throws exceptions
+
             race = new Race(boats, course);
+
+            int raceLength;
+            boolean success = false;
+
+            Scanner sc = new Scanner(System.in);
+            System.out.println("How many seconds would you like the race to last?");
+
+            while (!success) {
+                if (sc.hasNextInt()) {
+                    raceLength = sc.nextInt();
+                    race.setDuration(raceLength);
+                    success = true;
+                } else {
+                    System.out.println("Please enter a whole number");
+                    sc.next();
+                }
+            }
+
+            sc.close();
+
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

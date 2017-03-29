@@ -34,6 +34,9 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+
+//        raceLength = Integer.parseInt(args[0]);
+
         launch(args);
     }
 }

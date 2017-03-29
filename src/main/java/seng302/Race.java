@@ -1,11 +1,6 @@
 package seng302;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.control.Alert;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -34,7 +29,7 @@ public class Race {
         this.course = course;
         finishedList = new ArrayList<>();
         setCourseForBoats();
-        duration = 60;
+//        duration = 60;
     }
 
     /**
@@ -46,6 +41,7 @@ public class Race {
     public static double knotsToMetersPerSecond(double knots) {
         return ((knots * 1.852) / 3.6);
     }
+
 
     /**
      * Called in Race constructor.
@@ -102,6 +98,7 @@ public class Race {
         this.course = course;
     }
 
+
     public void updateBoats(double time) { // time in seconds
         for (Boat boat : startingList) {
             if (!finishedList.contains(boat)) {
@@ -110,10 +107,12 @@ public class Race {
         }
     }
 
+
     private void updateBoat(Boat boat, double time) {
         updatePosition(boat, time);
         updateHeading(boat);
     }
+
 
     private void updateHeading(Boat boat) {
         // if boat gets within range of its next destination changes its destination and heading

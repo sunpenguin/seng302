@@ -51,8 +51,6 @@ public class MainWindowController {
     @FXML
     private Label timerLabel;
     @FXML
-    private ToggleButton playPauseToggleButton;
-    @FXML
     private ToggleButton fpsToggler;
     @FXML
     private Label fpsLabel;
@@ -67,8 +65,6 @@ public class MainWindowController {
     @FXML
     private AnchorPane raceViewAnchorPane;
     @FXML
-    private TextField scaleTextField;
-    @FXML
     private Polygon arrow;
 
     private Race race;
@@ -81,34 +77,6 @@ public class MainWindowController {
     @SuppressWarnings("unused")
     public void initialize() {
 
-    }
-
-
-    @FXML
-    public void scaleButtonHandle(){
-        try {
-            final double MINUTES_TO_SECONDS = 60d;
-            double timeInSeconds = Integer.valueOf(scaleTextField.getText()) * MINUTES_TO_SECONDS;
-            raceClock.setRaceDuration(timeInSeconds);
-            race.setDuration(timeInSeconds);
-        } catch (NumberFormatException e1){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Invalid Input");
-            alert.setHeaderText("You have input a value which is not valid");
-            alert.setContentText("Try an integer");
-            alert.showAndWait();
-        }
-    }
-
-    @FXML
-    public void playPauseRace() {
-        if (playPauseToggleButton.isSelected()) {
-            raceClock.start();
-            raceLoop.start();
-        } else {
-            raceClock.stop();
-            raceLoop.stop();
-        }
     }
 
 

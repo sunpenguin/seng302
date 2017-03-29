@@ -4,7 +4,6 @@ package seng302;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
 
 
 
@@ -44,11 +43,15 @@ public class RaceClock extends AnimationTimer{
             return;
         }
 
-        double secondsElapsed = ((currentTime - previousTime) / 1e9f) * timeScaleFactor; // converting from nanoseconds to seconds
-        previousTime = currentTime;
-        totalTime += secondsElapsed;
-        secondsToString(totalTime);
-        timerLabel.setText(timeString);
+        if (race.isFinished()) {
+            stop();
+        } else {
+            double secondsElapsed = ((currentTime - previousTime) / 1e9f) * timeScaleFactor; // converting from nanoseconds to seconds
+            previousTime = currentTime;
+            totalTime += secondsElapsed;
+            secondsToString(totalTime);
+            timerLabel.setText(timeString);
+        }
     }
 
     @Override
