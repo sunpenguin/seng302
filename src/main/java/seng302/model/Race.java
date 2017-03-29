@@ -101,6 +101,10 @@ public class Race {
     }
 
 
+    /**
+     * Updates the position and heading of every boat in the race.
+     * @param time
+     */
     public void updateBoats(double time) { // time in seconds
         for (Boat boat : startingList) {
             if (!finishedList.contains(boat)) {
@@ -110,12 +114,23 @@ public class Race {
     }
 
 
+    /**
+     * Updates a boats position then heading.
+     * @param boat
+     * @param time
+     */
     private void updateBoat(Boat boat, double time) {
         updatePosition(boat, time);
         updateHeading(boat);
     }
 
 
+    /**
+     * Changes the boats heading so that if it has reached its destination
+     * it heads in the direction of its next destination. Otherwise set the heading
+     * to be in the direction of its current destination.
+     * @param boat to be updated
+     */
     private void updateHeading(Boat boat) {
         // if boat gets within range of its next destination changes its destination and heading
         if ((Math.abs(boat.getDestination().getLongitude() - boat.getCoordinate().getLongitude()) < 0.0001)
@@ -138,6 +153,12 @@ public class Race {
     }
 
 
+    /**
+     * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
+     * and sets the destination to the next marks coordinates.
+     * @param boat
+     * @param nextLeg
+     */
     private void setNextLeg(Boat boat, Leg nextLeg) {
         CompoundMark passedMark = boat.getLeg().getDestination();
         passedMark.addPassed(boat);
@@ -148,6 +169,12 @@ public class Race {
     }
 
 
+    /**
+     * Updates the boats coordinates to move closer to the boats destination.
+     * Amount moved is proportional to the time passed
+     * @param boat to be moved
+     * @param time that has passed
+     */
     private void updatePosition(Boat boat, double time) {
         final double KMPH_TO_MPS = 1000.0 / 3600.0;
         double speed = boat.getSpeed() * KMPH_TO_MPS;

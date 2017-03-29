@@ -69,16 +69,16 @@ public class CompoundMark {
 
         CompoundMark that = (CompoundMark) o;
 
-        if (!name.equals(that.name)) return false;
-        if (!marks.equals(that.marks)) return false;
-        return passed.equals(that.passed);
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (marks != null ? !marks.equals(that.marks) : that.marks != null) return false;
+        return passed != null ? passed.equals(that.passed) : that.passed == null;
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + marks.hashCode();
-        result = 31 * result + passed.hashCode();
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (marks != null ? marks.hashCode() : 0);
+        result = 31 * result + (passed != null ? passed.hashCode() : 0);
         return result;
     }
 }

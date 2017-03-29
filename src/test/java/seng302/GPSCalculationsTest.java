@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 import seng302.model.Coordinate;
 import seng302.model.Course;
-import seng302.parser.XMLParser;
+import seng302.parser.XMLCourseParser;
 import seng302.raceutil.GPSCalculations;
 import seng302.raceutil.XYPair;
 
@@ -25,7 +25,7 @@ public class GPSCalculationsTest {
 
     @Before
     public void setUp() throws IOException, SAXException, ParserConfigurationException {
-        testCourse = XMLParser.parseCourse(new File("src/main/resources/course.xml"));
+        testCourse = XMLCourseParser.parseCourse(new File("src/main/resources/test-course.xml"));
         g = new GPSCalculations(testCourse);
     }
 

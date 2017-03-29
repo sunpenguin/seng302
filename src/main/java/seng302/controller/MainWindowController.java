@@ -140,6 +140,7 @@ public class MainWindowController {
                 Duration.seconds(secondsDelay),
                 event -> {
                     raceClock = new RaceClock(timerLabel, race, 0d);
+                    raceClock.start();
                     raceLoop.start();
                 }));
         showLive.setCycleCount(1);

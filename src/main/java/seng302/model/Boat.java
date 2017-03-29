@@ -161,14 +161,5 @@ public class Boat {
         return place;
     }
 
-//    public String getPlace() {
-//        if (place == null) {
-//            place = new SimpleStringProperty();
-//        }
-//        return place.get();
-//    }
-//
-//    public void setPlace(String place) {
-//        this.place.setValue(place);
-//    }
+
 }

@@ -18,7 +18,8 @@ import seng302.display.ZoneTimeClock;
 import seng302.model.Boat;
 import seng302.model.Course;
 import seng302.model.Race;
-import seng302.parser.XMLParser;
+import seng302.parser.XMLBoatParser;
+import seng302.parser.XMLCourseParser;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
@@ -46,8 +47,8 @@ public class PreRaceController {
     @FXML
     public void initialize() {
         try {
-            List<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
-            Course course = XMLParser.parseCourse(new File("src/main/resources/course.xml")); // throws exceptions
+            List<Boat> boats = XMLBoatParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
+            Course course = XMLCourseParser.parseCourse(new File("src/main/resources/course.xml")); // throws exceptions
 
             race = new Race(boats, course);
 
