@@ -4,7 +4,7 @@ package seng302.display;
 import javafx.scene.control.Label;
 
 /**
- * Created by dhl25 on 22/03/17.
+ * Class to display FPS
  */
 public class FPSReporter {
 
@@ -17,6 +17,4 @@ public class FPSReporter {
     public void report(double fps) {
         label.setText("fps: " + Math.round(fps * 10) / 10.0);
     }
-
-
 }

@@ -77,6 +77,7 @@ public class PreRaceController {
     }
 
 
+
     public void setUpList() {
         listView.setItems(FXCollections.observableList(race.getStartingList()));
         listView.setCellFactory(param -> new ListCell<Boat>() {

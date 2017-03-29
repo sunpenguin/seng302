@@ -49,10 +49,11 @@ public class RaceRenderer {
 
 
     /**
-     * Constructor for RaceRenderer, takes a Race and Group as parameters.
+     * Constructor for RaceRenderer, takes a Race, Group  and AnchorPane as parameters.
      *
      * @param race the race containing the boats to be drawn
      * @param group the group to be drawn on
+     * @param raceViewAnchorPane The AnchorPane the group is on
      */
     public RaceRenderer(Race race, Group group, AnchorPane raceViewAnchorPane) {
         this.race = race;
@@ -89,8 +90,6 @@ public class RaceRenderer {
 
 
     private void addAnnotations() {
-        // Add the name and speed annotations, set them true (visible). In future, set all false (invisible) and when
-        // rendering only the ones that are true will be selected based on the chosen annotation level
         annotations.add("Name");
         visibleAnnotations.put("Name", true);
         annotations.add("Speed");
@@ -98,6 +97,11 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Set up an annotation for a boat by mapping the boat's team name to the annotation and
+     * adding the annotation to the group so it can be displayed.
+     * @param boat Boat to map annotation to.
+     */
     private void setUpAnnotations(Boat boat) {
         Text boatAnnotation = new Text("");
         annotationsMap.put(boat.getTeamName(), boatAnnotation);
@@ -105,6 +109,12 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Set up a boat by creating a triangle to represent the boat onscreen, mapping the boat name to the triangle
+     * and adding the triangle to the group.
+     * @param boat Boat to set up
+     * @param i The number of the boat to be set up.
+     */
     private void setUpBoat(Boat boat, int i) {
         Polyline boatImage = new Polyline();
         boatImage.getPoints().addAll(
@@ -119,6 +129,11 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Set up the wake for a boat by creating a triangle for it, mapping the boat name to the wake and adding
+     * the wake to the group.
+     * @param boat The boat to set up a wake for.
+     */
     private void setUpWake(Boat boat) {
         Polygon wake = new Polygon();
         wake.getPoints().addAll(
@@ -132,6 +147,10 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Set up the boundary around the course by getting the coordinates of the boundary points and drawing
+     * a PolyLine using each point.
+     */
     private void setupBoundary() {
         // Renders Boundaries
         for (Coordinate boundary : race.getCourse().getBoundaries()) {
@@ -147,6 +166,11 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Set up a CompoundMark by creating a rectangle for each mark within the CompoundMark,
+     * setting the necessary x, y coordinates and addinf them to the group.
+     * @param compoundMark CompoundMark to set up.
+     */
     private void setupMark(CompoundMark compoundMark) {
         compoundMarkMap.put(compoundMark.getName(), compoundMark);
 
@@ -165,6 +189,11 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Set up a gate (Start or Finish only) by creating a rectangle for the endpoints and drawing a line between them
+     * and adding the shapes to the group.
+     * @param compoundMark CompoundMark to set up.
+     */
     private void setupGate(CompoundMark compoundMark) {
         ArrayList<XYPair> endPoints = new ArrayList<>();
 
@@ -191,6 +220,10 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Set up each stage of the course.
+     * Only set up a CompoundMark if it has not already been added to avoid duplicates.
+     */
     private void setupCourse() {
         List<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
 
@@ -208,6 +241,9 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Called if the course needs to be re-rendered due to the window being resized.
+     */
     public void renderCourse() {
         List<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
         // Renders CompoundMarks
@@ -233,12 +269,21 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Reset a point on the border due to resizing
+     * @param border Polyline for the border
+     * @param boundary the point to reset
+     */
     private void renderBoundary(Polyline border, Coordinate boundary) {
         XYPair boundaryPixels = convertCoordPixel(boundary, false);
         border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
     }
 
 
+    /**
+     * Reset a point for a mark due to resizing
+     * @param mark Mark to reset
+     */
     private void renderMark(Mark mark) {
         Rectangle rectangle = marks.get(mark.getName());
         Coordinate coordinate = mark.getCoordinates();
@@ -248,6 +293,10 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Call each Mark in a CompoundMark to reset it's point due to resizing
+     * @param compoundMark CompoundMark to reset.
+     */
     private void renderCompoundMark(CompoundMark compoundMark) {
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
@@ -256,8 +305,11 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Reset the points for the endpoints of a gate as well as the line between them due to resizing
+     * @param compoundMark CompundMark to reset (Start/Finish only)
+     */
     private void renderGate(CompoundMark compoundMark) {
-
 
         ArrayList<XYPair> endPoints = new ArrayList<>();
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
@@ -312,6 +364,12 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Drop a circle on the raceView to visualise the boat's route through the race.
+     * Add the circle to the group and map the circle to it's coordinates.
+     * @param boat Boat to put circle behind.
+     * @param pixels point to place the circle at.
+     */
     private void drawTrail(Boat boat, XYPair pixels) {
         Circle circle = new Circle();
         circleCoordMap.put(circle, boat.getCoordinate());
@@ -327,6 +385,11 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Redraw the the trails behind each boat by looking into the Map of circles and coordinates and
+     * resetting the points.
+     * @param boats Collection of boats racing.
+     */
     public void reDrawTrail(Collection<Boat> boats) {
         for (Boat boat : boats) {
             for (Circle circle : trailMap.get(boat.getBoatName())) {
@@ -339,6 +402,12 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Update the position of a boat's image and it's wake.
+     * @param boatImage Boat PolyLine to update.
+     * @param wake Wake PolyLine to update.
+     * @param pixels New position to update to.
+     */
     private void moveBoat(Polyline boatImage, Polygon wake, XYPair pixels) {
         boatImage.setLayoutX(pixels.getX() - 5); // The boats are 5px from middle to outside so this will center the boat
         boatImage.setLayoutY(pixels.getY());
@@ -347,6 +416,11 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Scale the size of the wake according to the boat's speed.
+     * @param boat Boat to scale wake for.
+     * @param wake Wake to scale.
+     */
     private void scaleWake(Boat boat, Polygon wake) {
         if (boat.getSpeed() != boatSpeeds.get(boat.getBoatName())) {
             double scale = boat.getSpeed() / boatSpeeds.get(boat.getBoatName()) / lowestSpeed;
@@ -356,6 +430,13 @@ public class RaceRenderer {
         }
     }
 
+
+    /**
+     * Rotate the boat and it's wake according to it's heading.
+     * @param boat Boat to rotate.
+     * @param boatImage Image for the boat to rotate.
+     * @param wake Wake to rotate.
+     */
     private void rotateBoat(Boat boat, Polyline boatImage, Polygon wake) {
         // update heading if changed
         if (boat.getHeading() != boatHeadings.get(boat.getBoatName())) {
@@ -390,8 +471,6 @@ public class RaceRenderer {
 
         return boatAnnotation;
     }
-
-
 
 
     /**
@@ -439,6 +518,7 @@ public class RaceRenderer {
 
         return new XYPair(pixelWidth * widthRatio + PADDING, (pixelHeight * heightRatio + PADDING) * -1);
     }
+
 
     public Group getGroup() {
         return group;
