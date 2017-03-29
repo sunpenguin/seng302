@@ -13,7 +13,6 @@ public class Boat {
     private String teamName;
     private DoubleProperty speed;
     private Leg leg;
-//    private double position;
     private double heading;
     private Coordinate coordinate;
     private Coordinate destination;
@@ -157,18 +156,9 @@ public class Boat {
         this.place.set(place);
     }
 
+
     public IntegerProperty placeProperty() {
         return place;
     }
 
-//    public String getPlace() {
-//        if (place == null) {
-//            place = new SimpleStringProperty();
-//        }
-//        return place.get();
-//    }
-//
-//    public void setPlace(String place) {
-//        this.place.setValue(place);
-//    }
 }

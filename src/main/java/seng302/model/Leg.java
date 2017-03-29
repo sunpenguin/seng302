@@ -11,6 +11,12 @@ public class Leg {
     private double heading;
     private int legNumber;
 
+    /**
+     * A constructor for the Leg
+     * @param departure The CompoundMark at the beginning of the leg
+     * @param destination The CompoundMark at the end of the leg
+     * @param legNumber The number of the leg in the race
+     */
     public Leg(CompoundMark departure, CompoundMark destination, int legNumber) {
         this.destination = destination;
         this.departure = departure;
