@@ -39,7 +39,7 @@ public class PreRaceController {
     @FXML
     private ListView<Boat> listView;
     private List<Boat> boats;
-    private final int SECONDS_TIL_PREPARATORY_SIGNAL = 10; // TODO change this to 60 later
+    private final int SECONDS_TIL_PREPARATORY_SIGNAL = 5; // TODO change this to 60 later
     private ZonedDateTime zonedDateTime;
 
 
@@ -94,11 +94,12 @@ public class PreRaceController {
         }
     }
 
+
     private void startClock() {
         final long UPDATE_PERIOD_NANO = 100000000L;
         final double NANO_TO_SECONDS = 1e-9;
         final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-        ZoneId zoneId = ZoneId.of("Australia/Sydney");
+        ZoneId zoneId = ZoneId.of("Atlantic/Bermuda");
         zonedDateTime = ZonedDateTime.now(zoneId);
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(TimeUnit.MILLISECONDS.convert(UPDATE_PERIOD_NANO, TimeUnit.NANOSECONDS)),

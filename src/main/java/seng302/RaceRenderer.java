@@ -192,7 +192,7 @@ public class RaceRenderer {
 
 
     private void setupCourse() {
-        ArrayList<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
+        List<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
 
         for (int i = 0 ; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
@@ -209,7 +209,7 @@ public class RaceRenderer {
 
 
     public void renderCourse() {
-        ArrayList<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
+        List<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
         // Renders CompoundMarks
         for (int i = 0 ; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);

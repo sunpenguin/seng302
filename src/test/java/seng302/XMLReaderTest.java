@@ -7,6 +7,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by csl62 on 17/03/17.
@@ -32,7 +33,7 @@ public class XMLReaderTest {
     public void testParseCourse() throws IOException, SAXException, ParserConfigurationException {
 
         Course course = XMLParser.parseCourse(courseFile);
-        ArrayList<CompoundMark> actualCourse = course.getCompoundMarks();
+        List<CompoundMark> actualCourse = course.getCompoundMarks();
         CompoundMark actualMark = actualCourse.get(0);
         assertEquals("Start", actualMark.getName());
         assertEquals(2, actualMark.getMarks().size());

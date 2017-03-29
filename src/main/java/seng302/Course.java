@@ -1,6 +1,8 @@
 package seng302;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -8,15 +10,17 @@ import java.util.ArrayList;
  */
 public class Course {
 
-    private ArrayList<CompoundMark> compoundMarks;
-    private ArrayList<Leg> legs;
+    private List<CompoundMark> compoundMarks;
+    private List<Leg> legs;
     private double windDirection;
-    private ArrayList<Coordinate> boundaries;
+    private List<Coordinate> boundaries;
+    private ZoneId timeZone;
 
-    public Course(ArrayList<CompoundMark> marks, ArrayList<Coordinate> boundaries, double windDirection) {
+    public Course(List<CompoundMark> marks, List<Coordinate> boundaries, double windDirection, ZoneId timeZone) {
         this.compoundMarks = marks;
         this.windDirection = windDirection;
         this.boundaries = boundaries;
+        this.timeZone = timeZone;
         legs = new ArrayList<>();
         for (int i = 0; i < marks.size() - 1; i++) {
             legs.add(new Leg(marks.get(i), marks.get(i + 1), i));
@@ -29,12 +33,12 @@ public class Course {
      *
      * @return the Arraylist of CompoundMarks
      */
-    public ArrayList<CompoundMark> getCompoundMarks() {
+    public List<CompoundMark> getCompoundMarks() {
         return compoundMarks;
     }
 
 
-    public ArrayList<Leg> getLegs() {
+    public List<Leg> getLegs() {
         return legs;
     }
 
@@ -66,8 +70,12 @@ public class Course {
         return distance;
     }
 
-    public ArrayList<Coordinate> getBoundaries() {
+    public List<Coordinate> getBoundaries() {
         return boundaries;
+    }
+
+    public ZoneId getTimeZone() {
+        return timeZone;
     }
 }
 

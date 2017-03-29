@@ -1,6 +1,7 @@
 package seng302;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by csl62 on 15/03/17.
@@ -10,10 +11,10 @@ public class CompoundMark {
     public static int GATE_SIZE = 2;
     public static int MARK_SIZE = 1;
     private String name;
-    private ArrayList<Mark> marks;
-    private ArrayList<Boat> passed;
+    private List<Mark> marks;
+    private List<Boat> passed;
 
-    public CompoundMark(String name, ArrayList<Mark> marks) {
+    public CompoundMark(String name, List<Mark> marks) {
         if (0 < marks.size() && marks.size() <= 2) {
             this.name = name;
             this.marks = marks;
@@ -27,13 +28,16 @@ public class CompoundMark {
         return name;
     }
 
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public ArrayList<Mark> getMarks() {
+
+    public List<Mark> getMarks() {
         return marks;
     }
+
 
     public Coordinate getMidCoordinate() {
         if (marks.size() == GATE_SIZE) {
@@ -46,13 +50,16 @@ public class CompoundMark {
 
     }
 
-    public ArrayList<Boat> getPassed() {
+
+    public List<Boat> getPassed() {
         return passed;
     }
+
 
     public void addPassed(Boat passed) {
         this.passed.add(passed);
     }
+
 
     @Override
     public boolean equals(Object o) {
