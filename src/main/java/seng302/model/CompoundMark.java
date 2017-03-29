@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by csl62 on 15/03/17.
+ * A class to represent a Compound mark or gate comprising of one or two marks. Compound marks are drawn using
+ * information retrieved from instances of this class
  */
 public class CompoundMark {
 

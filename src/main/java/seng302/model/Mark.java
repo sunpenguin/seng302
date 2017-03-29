@@ -1,7 +1,7 @@
 package seng302.model;
 
 /**
- *  A class that represents a mark on the race course
+ *  A class that represents a mark on the race course, used to create compound marks to be drawn on the course
  */
 public class Mark {
 
