@@ -25,7 +25,7 @@ public class GPSCalculationsTest {
 
     @Before
     public void setUp() throws IOException, SAXException, ParserConfigurationException {
-        testCourse = XMLCourseParser.parseCourse(new File("src/main/resources/course.xml"));
+        testCourse = XMLCourseParser.parseCourse(new File("src/main/resources/test-course.xml"));
         g = new GPSCalculations(testCourse);
     }
 
