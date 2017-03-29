@@ -42,11 +42,7 @@ public class PreRaceController {
 
     @FXML
     public void initialize() {
-        Timeline showLive = new Timeline(new KeyFrame(
-                Duration.seconds(Race.WARNING_TIME_SECONDS),
-                event -> showLiveRaceView()));
-        showLive.setCycleCount(1);
-        showLive.play();
+
         try {
             List<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
             Course course = XMLParser.parseCourse(new File("src/main/resources/course.xml")); // throws exceptions
@@ -60,6 +56,15 @@ public class PreRaceController {
             alert.showAndWait();
         }
 
+        final double KMPH_TO_MPS = 1000.0 / 3600.0;
+        double timeScaleFactor = race.getCourse().getCourseDistance()
+                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
+
+        Timeline showLive = new Timeline(new KeyFrame(
+                Duration.seconds(Race.WARNING_TIME_SECONDS / timeScaleFactor),
+                event -> showLiveRaceView()));
+        showLive.setCycleCount(1);
+        showLive.play();
 
         setUpList();
         startClock();

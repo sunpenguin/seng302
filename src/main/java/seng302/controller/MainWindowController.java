@@ -37,6 +37,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -174,10 +177,17 @@ public class MainWindowController {
     }
 
     public void startRace(long secondsDelay) {
+        final double KMPH_TO_MPS = 1000.0 / 3600.0;
+        double timeScaleFactor = race.getCourse().getCourseDistance()
+                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
+        secondsDelay /= (double) timeScaleFactor;
         raceClock.start();
         Timeline showLive = new Timeline(new KeyFrame(
                 Duration.seconds(secondsDelay),
-                event -> raceLoop.start()));
+                event -> {
+                    raceClock = new RaceClock(timerLabel, race, 0d);
+                    raceLoop.start();
+                }));
         showLive.setCycleCount(1);
         showLive.play();
     }
@@ -188,7 +198,7 @@ public class MainWindowController {
         raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
         raceRenderer.renderBoats(true, 0);
 //            raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
-        raceClock = new RaceClock(timerLabel, race);
+        raceClock = new RaceClock(timerLabel, race, -Race.PREP_TIME_SECONDS);
         raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel), raceViewAnchorPane);
 
         raceViewAnchorPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {

@@ -31,7 +31,6 @@ public class ZoneTimeClock extends AnimationTimer {
         this.zoneId = zoneId;
         timerLabel.setTextFill(Color.BLACK);
         timerLabel.setStyle("-fx-font-size: 2em;");
-        timerLabel.setText("-00:00");
     }
 
     @Override
