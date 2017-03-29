@@ -5,17 +5,14 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import org.junit.Test;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 
@@ -41,7 +38,7 @@ public class RaceRendererTest {
         ArrayList<CompoundMark> compoundMarks = new ArrayList<>();
         compoundMarks.add(testCompoundMark0);
         compoundMarks.add(testCompoundMark1);
-        Course course = new Course(compoundMarks, new ArrayList<>(), 45);
+        Course course = new Course(compoundMarks, new ArrayList<>(), 45, ZoneId.of("Pacific/Auckland"));
 
         // Setting up expected values
         Rectangle r1 = new Rectangle(10, 10, Color.BLACK);
@@ -89,16 +86,18 @@ public class RaceRendererTest {
         AnchorPane raceViewAnchorPane = new AnchorPane();
         // Create expected
         ObservableList<Polyline> expected = FXCollections.observableArrayList();
-        Polyline c = new Polyline();
-        c.setLayoutX(60); // padding size
-        c.setLayoutY(-360); // - ( size of screen / 2)
-        c.getPoints().addAll(
+        Polyline boatImage = new Polyline();
+        boatImage.setLayoutX(60); // padding size
+        boatImage.setLayoutY(-360); // - ( size of screen / 2)
+        boatImage.getPoints().addAll(
                 5.0, 0.0,
                 10.0, 10.0,
                 0.0, 10.0,
                 5.0, 0.0,
                 5.0, 10.0);
-        expected.add(c);
+        boatImage.setFill(Color.VIOLET);
+        expected.addAll(new Polyline()); // the border
+        expected.add(boatImage);
 
         // Create boat for race
         ArrayList<Boat> boats = new ArrayList<>();
@@ -106,30 +105,38 @@ public class RaceRendererTest {
 
         // Create CompoundMark needed for Course
         Mark testMark0 = new Mark("testMark0", new Coordinate(0, 0));
-        ArrayList<Mark> testMarks = new ArrayList<>();
-        testMarks.add(testMark0);
-        CompoundMark testCompoundMark0 = new CompoundMark("test0", testMarks);
-        List<CompoundMark> compoundMarks = new ArrayList<>();
+        Mark testMark1 = new Mark("testMark1", new Coordinate(90, 180));
+        List<Mark> testMarks0 = new ArrayList<>();
+        List<Mark> testMarks1 = new ArrayList<>();
+        testMarks0.add(testMark0);
+        testMarks1.add(testMark1);
+        CompoundMark testCompoundMark0 = new CompoundMark("test0", testMarks0);
+        CompoundMark testCompoundMark1 = new CompoundMark("test1", testMarks1);
+        ArrayList<CompoundMark> compoundMarks = new ArrayList<>();
         compoundMarks.add(testCompoundMark0);
+        compoundMarks.add(testCompoundMark1);
+        Course course = new Course(compoundMarks, new ArrayList<>(), 45, ZoneId.of("Pacific/Auckland"));
 
         // Create everything needed for RaceRenderer + RaceRenderer
         Group group = new Group();
-        Course course = new Course(compoundMarks, new ArrayList<>(), 45);
         Race race = new Race(boats, course);
         RaceRenderer raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
 
         raceRenderer.renderBoats(true, 0);
         ObservableList<Node> actual = raceRenderer.getGroup().getChildren();
 
-        List<Polyline>
+        List<Polyline> actualPolylines = new ArrayList<>();
+        for (Node node: actual) {
+            if (node instanceof Polyline) {
+                actualPolylines.add((Polyline) node);
+            }
+        }
 
         // check equality
-        assertEquals(expected.size(), actual.size());
+        assertEquals(expected.size(), actualPolylines.size());
         for (int i = 0; i < expected.size(); i++) {
-            Polyline act = (Polyline) actual.get(i);
+            Polyline act = actualPolylines.get(i);
             Polyline exp = expected.get(i);
-            assertEquals(exp.getLayoutX(), act.getLayoutX(), 0.001);
-            assertEquals(exp.getLayoutY(), act.getLayoutY(), 0.001);
             assertEquals(exp.getFill(), act.getFill());
             assertEquals(exp.getPoints().size(), act.getPoints().size());
             for (int j = 0; j < exp.getPoints().size(); j++) {

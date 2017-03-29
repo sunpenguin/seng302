@@ -47,11 +47,6 @@ public class PreRaceController {
 
     @FXML
     public void initialize() {
-        Timeline showLive = new Timeline(new KeyFrame(
-                Duration.seconds(SECONDS_TIL_PREPARATORY_SIGNAL),
-                event -> showLiveRaceView()));
-        showLive.setCycleCount(1);
-        showLive.play();
         try {
             List<Boat> boats = XMLParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
             Course course = XMLParser.parseCourse(new File("src/main/resources/course.xml")); // throws exceptions
@@ -125,7 +120,7 @@ public class PreRaceController {
         final int MILLI_TO_HOUR = 3600000;
         final int MILLI_TO_MINUTE = 60000;
         final int SCALER_FOR_MINUTE = 60;
-        TimeZone timeZone = TimeZone.getTimeZone(course.getTimeZone());
+        TimeZone timeZone = TimeZone.getTimeZone(race.getCourse().getTimeZone());
         Calendar cal = GregorianCalendar.getInstance(timeZone);
         int offsetInMillis = timeZone.getOffset(cal.getTimeInMillis());
         String offset = String.format("%02d:%02d", Math.abs(offsetInMillis / MILLI_TO_HOUR), Math.abs((offsetInMillis / MILLI_TO_MINUTE) % SCALER_FOR_MINUTE));

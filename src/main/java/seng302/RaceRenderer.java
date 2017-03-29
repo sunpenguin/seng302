@@ -81,7 +81,7 @@ public class RaceRenderer {
             trailMap.put(boat.getBoatName(), circleList);
 
             setUpWake(boat);
-            setUpBoat(boat, BOAT_COLOURS, i);
+            setUpBoat(boat, i);
             // Connect the annotations to each boat
             setUpAnnotations(boat);
 
@@ -106,7 +106,7 @@ public class RaceRenderer {
     }
 
 
-    private void setUpBoat(Boat boat, ArrayList<Color> BOAT_COLOURS, int i) {
+    private void setUpBoat(Boat boat, int i) {
         Polyline boatImage = new Polyline();
         boatImage.getPoints().addAll(
                 BOAT_PIVOT_X, BOAT_PIVOT_Y,
