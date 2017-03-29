@@ -1,6 +1,6 @@
 package seng302.model;
 
-import seng302.raceutil.GPSCalculations;
+import seng302.util.GPSCalculations;
 
 /**
  * Created by dhl25 on 18/03/17.

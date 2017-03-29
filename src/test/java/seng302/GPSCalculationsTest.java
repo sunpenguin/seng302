@@ -6,8 +6,8 @@ import org.xml.sax.SAXException;
 import seng302.model.Coordinate;
 import seng302.model.Course;
 import seng302.parser.XMLCourseParser;
-import seng302.raceutil.GPSCalculations;
-import seng302.raceutil.XYPair;
+import seng302.util.GPSCalculations;
+import seng302.util.XYPair;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;

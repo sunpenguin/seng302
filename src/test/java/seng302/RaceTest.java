@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 import seng302.model.*;
 import seng302.parser.XMLCourseParser;
-import seng302.raceutil.GPSCalculations;
+import seng302.util.GPSCalculations;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;

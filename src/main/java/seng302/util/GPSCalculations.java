@@ -1,4 +1,4 @@
-package seng302.raceutil;
+package seng302.util;
 
 import seng302.model.CompoundMark;
 import seng302.model.Coordinate;
