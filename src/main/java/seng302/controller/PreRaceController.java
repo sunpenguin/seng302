@@ -37,16 +37,13 @@ public class PreRaceController {
     private Label timeLabel;
     @FXML
     private ListView<Boat> listView;
-//    private List<Boat> boats;
-    private final int SECONDS_TIL_PREPARATORY_SIGNAL = 5; // TODO change this to 60 later
-    private ZonedDateTime zonedDateTime;
     private Race race;
-
+    private ZoneTimeClock preRaceClock;
 
     @FXML
     public void initialize() {
         Timeline showLive = new Timeline(new KeyFrame(
-                Duration.seconds(SECONDS_TIL_PREPARATORY_SIGNAL),
+                Duration.seconds(Race.WARNING_TIME_SECONDS),
                 event -> showLiveRaceView()));
         showLive.setCycleCount(1);
         showLive.play();
@@ -86,10 +83,13 @@ public class PreRaceController {
 
     public void showLiveRaceView() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
+        preRaceClock.stop();
         try {
             Parent root = loader.load(); // throws IOException
             Stage stage = (Stage) listView.getScene().getWindow();
-//            MainWindowController mainWindowController = loader.getController();
+            MainWindowController mainWindowController = loader.getController();
+            mainWindowController.setRace(race);
+            mainWindowController.startRace((long) Race.PREP_TIME_SECONDS);
             Scene scene = new Scene(root);
             stage.setScene(scene);
         } catch (IOException e) {
@@ -99,25 +99,10 @@ public class PreRaceController {
 
 
     private void startClock() {
-//        final long UPDATE_PERIOD_NANO = 100000000L;
-//        final double NANO_TO_SECONDS = 1e-9;
-//        final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-//        ZoneId zoneId = ZoneId.of("Atlantic/Bermuda");
-//        zonedDateTime = ZonedDateTime.now(zoneId);
-//        Timeline timeline = new Timeline(
-//                new KeyFrame(Duration.millis(TimeUnit.MILLISECONDS.convert(UPDATE_PERIOD_NANO, TimeUnit.NANOSECONDS)),
-//                        actionEvent -> {
-//                            zonedDateTime = zonedDateTime.plusNanos(UPDATE_PERIOD_NANO);
-//                            timeLabel.setText(zonedDateTime.format(timeFormatter));
-//                        }
-//                ));
-//        final int cycles = (int) (SECONDS_TIL_PREPARATORY_SIGNAL / (UPDATE_PERIOD_NANO * NANO_TO_SECONDS));
-//        timeline.setCycleCount(cycles);
-//        timeline.play();
         final double KMPH_TO_MPS = 1000.0 / 3600.0;
         double timeScaleFactor = race.getCourse().getCourseDistance()
                 / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
-        ZoneTimeClock preRaceClock = new ZoneTimeClock(timeLabel, timeScaleFactor, race.getCourse().getTimeZone());
+        preRaceClock = new ZoneTimeClock(timeLabel, timeScaleFactor, race.getCourse().getTimeZone());
         preRaceClock.start();
     }
 
