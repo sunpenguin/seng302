@@ -38,6 +38,8 @@ public class RaceRenderer {
     private AnchorPane raceViewAnchorPane;
     private double lowestSpeed;
     private final Color MARK_COLOR = Color.BLACK;
+    private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
+    private final double BOUNDARY_OPACITY = 0.3;
     private final double MARK_SIZE = 10.0;
     private final double PADDING = 20.0;
     private final double BOAT_PIVOT_X = 5;
@@ -229,7 +231,9 @@ public class RaceRenderer {
             renderBoundary(border, race.getCourse().getBoundaries().get(0));
             group.getChildren().add(border);
         }
-
+        border.setFill(BOUNDARY_FILL_COLOR);
+        border.setOpacity(BOUNDARY_OPACITY);
+        border.toBack();
     }
 
 
