@@ -23,10 +23,6 @@ public class RaceClock extends AnimationTimer{
         this.race = race;
         this.timeScaleFactor = race.getCourse().getCourseDistance()
                 / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
-
-        System.out.println(timeScaleFactor);
-        System.out.println(totalTime);
-
         totalTime = startTime;
 
         timerLabel.setTextFill(Color.BLACK);
