@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Class for parsing XML files which represent Courses into a Course class.
  */
-public class XMLParser {
+public class XMLCourseParser {
 
     /**
      * Creates a new Course by parsing a XML file.
@@ -127,53 +127,6 @@ public class XMLParser {
         String latString = boundaryElement.getElementsByTagName(LATITUDE_TAG).item(0).getTextContent();
         String longString = boundaryElement.getElementsByTagName(LONGITUDE_TAG).item(0).getTextContent();
         return new Coordinate(Double.parseDouble(latString), Double.parseDouble(longString));
-    }
-
-
-    /**
-     * Creates a new ArrayList of Boat by parsing a XML file.
-     *
-     * @param file
-     * @return The boats from the XML file
-     * @throws ParserConfigurationException
-     * @throws IOException
-     * @throws SAXException
-     */
-    public static ArrayList<Boat> parseBoats(File file) throws ParserConfigurationException, IOException, SAXException {
-        final String BOATS_TAG = "boats";
-        final String BOAT_TAG = "boat";
-
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(file);
-        doc.getDocumentElement().normalize();
-        Element boatsElement = (Element) doc.getElementsByTagName(BOATS_TAG).item(0);
-        NodeList boatNodes = boatsElement.getElementsByTagName(BOAT_TAG);
-        ArrayList<Boat> boats = new ArrayList<>();
-        for (int i = 0; i < boatNodes.getLength(); i++) {
-            Node boatNode = boatNodes.item(i);
-            if (boatNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element boatElement = (Element) boatNode;
-                boats.add(parseBoat(boatElement));
-            }
-        }
-
-        return boats;
-    }
-
-    /**
-     * Returns a boat given an Element containing a boat
-     * @param boatElement
-     * @return Boat contained within the Element
-     */
-    private static Boat parseBoat(Element boatElement) {
-        final String SPEED_TAG = "speed";
-        final String BOAT_NAME_TAG = "boatname";
-        final String TEAM_NAME_TAG = "teamname";
-        double speed = Double.parseDouble(boatElement.getElementsByTagName(SPEED_TAG).item(0).getTextContent());
-        String boatName = boatElement.getElementsByTagName(BOAT_NAME_TAG).item(0).getTextContent();
-        String teamName = boatElement.getElementsByTagName(TEAM_NAME_TAG).item(0).getTextContent();
-        return new Boat(boatName, teamName, speed);
     }
 
 
