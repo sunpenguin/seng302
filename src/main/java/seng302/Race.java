@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 
 /**
@@ -14,10 +15,12 @@ import java.util.Comparator;
  */
 public class Race {
 
-    private ArrayList<Boat> startingList;
+    private List<Boat> startingList;
     private Course course;
-    private ArrayList<Boat> finishedList;
+    private List<Boat> finishedList;
     private double duration;
+    public static final double WARNING_TIME_SECONDS = 60;
+    public static final double PREP_TIME_SECONDS = 120;
 
     /**
      * Race class constructor.
@@ -25,13 +28,13 @@ public class Race {
      * @param startingList Arraylist holding all entered boats
      * @param course       Course object
      */
-    public Race(ArrayList<Boat> startingList, Course course) {
+    public Race(List<Boat> startingList, Course course) {
         startingList.sort(Comparator.comparingDouble(Boat::getSpeed));
         this.startingList = startingList;
         this.course = course;
         finishedList = new ArrayList<>();
         setCourseForBoats();
-        duration = 30;
+        duration = 60;
     }
 
     /**
@@ -68,7 +71,7 @@ public class Race {
      *
      * @return ObservableList holding all entered boats
      */
-    public ArrayList<Boat> getStartingList() {
+    public List<Boat> getStartingList() {
         return startingList;
     }
 
@@ -77,7 +80,7 @@ public class Race {
      *
      * @param startingList Arraylist holding all entered boats
      */
-    public void setStartingList(ArrayList<Boat> startingList) {
+    public void setStartingList(List<Boat> startingList) {
         this.startingList = startingList;
     }
 
@@ -151,6 +154,11 @@ public class Race {
                 / (duration / (course.getCourseDistance() / (startingList.get(0).getSpeed() * KMPH_TO_MPS))); // meters
         boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
                 GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+    }
+
+
+    public List<Boat> getFinishedList() {
+        return finishedList;
     }
 
 

@@ -4,6 +4,10 @@
     45.0
   </windDirection>
 
+  <timeZone>
+    Atlantic/Bermuda
+  </timeZone>
+
   <compoundMark>
     <name>Start</name>
     <mark>

@@ -11,8 +11,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Class for parsing XML files which represent Courses into a Course class.
@@ -22,13 +25,13 @@ public class XMLParser {
     /**
      * Creates a new Course by parsing a XML file.
      *
-     * @param file the XML file to be read from
+     * @param courseFile the XML file to be read from
      * @return the course that is represented by the file
      * @throws ParserConfigurationException
      * @throws IOException
      * @throws SAXException
      */
-    public static Course parseCourse(File file) throws ParserConfigurationException, IOException, SAXException {
+    public static Course parseCourse(File courseFile) throws ParserConfigurationException, IOException, SAXException {
         final String COMPOUND_MARK_TAG = "compoundMark"; // declaring things as final is fun
         final String COURSE_TAG = "course";
         final String WIND_TAG = "windDirection";
@@ -36,7 +39,7 @@ public class XMLParser {
         // Gets file ready for parsing
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        Document doc = builder.parse(file);
+        Document doc = builder.parse(courseFile);
         doc.getDocumentElement().normalize();
         // creates all Compound Marks
         Element courseElement = (Element) doc.getElementsByTagName(COURSE_TAG).item(0);
@@ -57,8 +60,9 @@ public class XMLParser {
         }
         // boundaries
         Element boundariesElement = (Element) courseElement.getElementsByTagName(BOUNDARIES_TAG).item(0);
-        ArrayList<Coordinate> boundaries = parseBoundaries(boundariesElement); // parses boundaries
-        return new Course(compoundMarks, boundaries, windDirection);
+        List<Coordinate> boundaries = parseBoundaries(boundariesElement); // parses boundaries
+        ZoneId courseTimeZone = ZoneId.of(parseTimeZone(courseElement).trim());
+        return new Course(compoundMarks, boundaries, windDirection, courseTimeZone);
     }
 
 
@@ -79,7 +83,7 @@ public class XMLParser {
 
         String name = compoundMarkElement.getElementsByTagName(COMPOUND_MARK_NAME_TAG).item(0).getTextContent();
         NodeList markList = compoundMarkElement.getElementsByTagName(MARK_TAG);
-        ArrayList<Mark> marks = new ArrayList<>();
+        List<Mark> marks = new ArrayList<>();
         for (int i = 0; i < markList.getLength(); i++) {
             Node markNode = markList.item(i);
             Element markElement = (Element) markNode;
@@ -173,5 +177,13 @@ public class XMLParser {
         return new Boat(boatName, teamName, speed);
     }
 
+
+
+    private static String parseTimeZone(Element courseElement) throws ParserConfigurationException, IOException, SAXException {
+        final String COURSE_TAG = "course";
+        final String TIME_ZONE_TAG = "timeZone";
+        NodeList timeZoneNodes = courseElement.getElementsByTagName(TIME_ZONE_TAG);
+        return timeZoneNodes.item(0).getTextContent();
+    }
 
 }

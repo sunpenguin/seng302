@@ -28,13 +28,16 @@ public class CompoundMark {
         return name;
     }
 
+
     public void setName(String name) {
         this.name = name;
     }
 
+
     public List<Mark> getMarks() {
         return marks;
     }
+
 
     public Coordinate getMidCoordinate() {
         if (marks.size() == GATE_SIZE) {
@@ -46,13 +49,16 @@ public class CompoundMark {
         }
     }
 
+
     public List<Boat> getPassed() {
         return passed;
     }
 
+
     public void addPassed(Boat passed) {
         this.passed.add(passed);
     }
+
 
     @Override
     public boolean equals(Object o) {
