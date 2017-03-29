@@ -81,6 +81,7 @@ public class Coordinate {
         return Double.compare(that.longitude, longitude) == 0;
     }
 
+
     @Override
     public int hashCode() {
         int result;

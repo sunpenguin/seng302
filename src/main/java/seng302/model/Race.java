@@ -198,6 +198,10 @@ public class Race {
         return duration;
     }
 
+    /**
+     * Checks if all boats in the race have finished
+     * @return a boolean value of true if all the boats have finished, false otherwise
+     */
     public boolean isFinished() {
         return startingList.size() == finishedList.size();
     }

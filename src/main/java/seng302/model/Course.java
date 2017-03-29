@@ -18,6 +18,13 @@ public class Course {
     private List<Coordinate> boundaries;
     private ZoneId timeZone;
 
+    /**
+     * A constructor for the Course class
+     * @param marks The list of marks that the course consists of
+     * @param boundaries The boundries of the course
+     * @param windDirection The direction of the wind in the course
+     * @param timeZone The timezone of the course
+     */
     public Course(List<CompoundMark> marks, List<Coordinate> boundaries, double windDirection, ZoneId timeZone) {
         this.compoundMarks = marks;
         this.windDirection = windDirection;
@@ -45,6 +52,11 @@ public class Course {
     }
 
 
+    /**
+     * Returns the next leg of the race for a boats
+     * @param leg The current leg
+     * @return The next leg of the race
+     */
     public Leg getNextLeg(Leg leg) {
         if (leg.getLegNumber() + 1 >= legs.size()) {
             return leg;
@@ -52,15 +64,21 @@ public class Course {
         return legs.get(leg.getLegNumber() + 1);
     }
 
+
     public double getWindDirection() {
         return windDirection;
     }
+
 
     public void setWindDirection(double windDirection) {
         this.windDirection = windDirection;
     }
 
 
+    /**
+     * Returns the total distance of the course
+     * @return The distance of the entire course
+     */
     public double getCourseDistance(){
         double distance = 0;
 

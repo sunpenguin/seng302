@@ -8,7 +8,11 @@ public class Mark {
     private String name;
     private Coordinate coordinates;
 
-
+    /**
+     * A constructor for the Mark class
+     * @param name The name of the mark
+     * @param coordinates The coordinate the Mark is located at
+     */
     public Mark(String name, Coordinate coordinates) {
         this.name = name;
         this.coordinates = coordinates;

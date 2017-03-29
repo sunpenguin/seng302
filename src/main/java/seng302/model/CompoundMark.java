@@ -16,6 +16,11 @@ public class CompoundMark {
     private List<Mark> marks;
     private List<Boat> passed;
 
+    /**
+     * A constructor for the CompoundMark class
+     * @param name The name of the CompoundMark
+     * @param marks The arraylist of Marks for the Compound Mark
+     */
     public CompoundMark(String name, List<Mark> marks) {
         if (0 < marks.size() && marks.size() <= 2) {
             this.name = name;
@@ -41,6 +46,10 @@ public class CompoundMark {
     }
 
 
+    /**
+     * Returns the coordniate located at the midpoint of the two Marks of the CompoundMark
+     * @return coordinate
+     */
     public Coordinate getMidCoordinate() {
         if (marks.size() == GATE_SIZE) {
             return GPSCalculations.GPSMidpoint(marks.get(0).getCoordinates(), marks.get(1).getCoordinates());
@@ -61,7 +70,11 @@ public class CompoundMark {
         this.passed.add(passed);
     }
 
-
+    /**
+     * An override of the equals method for use in testing
+     * @param o The object to be checked against
+     * @return The boolean value of the test
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,6 +87,10 @@ public class CompoundMark {
         return passed.equals(that.passed);
     }
 
+    /**
+     * An override of the hashCode method to map the Marks
+     * @return an integer that is used for the key
+     */
     @Override
     public int hashCode() {
         int result = name.hashCode();
