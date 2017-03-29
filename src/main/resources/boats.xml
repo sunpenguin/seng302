@@ -2,31 +2,31 @@
   <boat>
     <boatname>Emirates Team New Zealand</boatname>
     <teamname>NZL</teamname>
-    <speed>1500.0</speed>
+    <speed>45.0</speed>
   </boat>
   <boat>
     <boatname>Oracle Team USA</boatname>
     <teamname>USA</teamname>
-    <speed>2000.0</speed>
+    <speed>50.0</speed>
   </boat>
   <boat>
     <boatname>Artemis Racing</boatname>
     <teamname>SWE</teamname>
-    <speed>2500.0</speed>
+    <speed>55.0</speed>
   </boat>
   <boat>
     <boatname>Groupama Team France</boatname>
     <teamname>FRA</teamname>
-    <speed>3000.0</speed>
+    <speed>60.0</speed>
   </boat>
   <boat>
     <boatname>Land Rover BAR</boatname>
     <teamname>GBR</teamname>
-    <speed>3500.0</speed>
+    <speed>65.0</speed>
   </boat>
   <boat>
     <boatname>Softbank Team Japan</boatname>
     <teamname>JPN</teamname>
-    <speed>4000.0</speed>
+    <speed>70.0</speed>
   </boat>
 </boats>

@@ -19,6 +19,8 @@ public class Race {
     private Course course;
     private List<Boat> finishedList;
     private double duration;
+    public static final double WARNING_TIME_SECONDS = 60;
+    public static final double PREP_TIME_SECONDS = 120;
 
     /**
      * Race class constructor.
@@ -32,7 +34,7 @@ public class Race {
         this.course = course;
         finishedList = new ArrayList<>();
         setCourseForBoats();
-        duration = 30;
+        duration = 60;
     }
 
     /**
