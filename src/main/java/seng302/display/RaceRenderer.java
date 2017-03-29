@@ -7,8 +7,8 @@ import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
-import seng302.raceutil.GPSCalculations;
-import seng302.raceutil.XYPair;
+import seng302.util.PixelMapper;
+import seng302.util.XYPair;
 import seng302.model.*;
 
 import java.util.*;
@@ -24,23 +24,23 @@ public class RaceRenderer {
     private HashMap<String, Boolean> visibleAnnotations = new HashMap<>();
     private ArrayList<String> annotations = new ArrayList<>();
     private HashMap<String, Polyline> boats = new HashMap<>();
-    private HashMap<String, Rectangle> marks = new HashMap();
-    private HashMap<String, Line> gates = new HashMap<>();
+//    private HashMap<String, Rectangle> marks = new HashMap();
+//    private HashMap<String, Line> gates = new HashMap<>();
     private HashMap<String, Polygon> wakes = new HashMap<>();
     private HashMap<String, Double> boatHeadings = new HashMap<>();
     private HashMap<String, Double> boatSpeeds = new HashMap<>();
-    private HashMap<String, CompoundMark> compoundMarkMap = new HashMap<>();
+//    private HashMap<String, CompoundMark> compoundMarkMap = new HashMap<>();
 
     private Map<String, Collection<Circle>> trailMap = new HashMap<>();
     private Map<Circle, Coordinate> circleCoordMap = new HashMap<>();
 
-    private Polyline border = new Polyline();
+//    private Polyline border = new Polyline();
     private AnchorPane raceViewAnchorPane;
     private double lowestSpeed;
-    private final Color MARK_COLOR = Color.BLACK;
-    private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
-    private final double BOUNDARY_OPACITY = 0.3;
-    private final double MARK_SIZE = 10.0;
+//    private final Color MARK_COLOR = Color.BLACK;
+//    private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
+//    private final double BOUNDARY_OPACITY = 0.3;
+//    private final double MARK_SIZE = 10.0;
     private final double PADDING = 20.0;
     private final double BOAT_PIVOT_X = 5;
     private final double BOAT_PIVOT_Y = 0;
@@ -66,7 +66,7 @@ public class RaceRenderer {
         // Add each annotation to the race
         addAnnotations();
 
-        setupCourse();
+//        setupCourse();
 
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
@@ -149,192 +149,7 @@ public class RaceRenderer {
     }
 
 
-    /**
-     * Set up the boundary around the course by getting the coordinates of the boundary points and drawing
-     * a PolyLine using each point.
-     */
-    private void setupBoundary() {
-        // Renders Boundaries
-        for (Coordinate boundary : race.getCourse().getBoundaries()) {
-            XYPair boundaryPixels = convertCoordPixel(boundary, true);
-            border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
-        }
-        if (race.getCourse().getBoundaries().size() != 0) {
-            Coordinate boundary = race.getCourse().getBoundaries().get(0);
-            XYPair boundaryPixels = convertCoordPixel(boundary, true);
-            border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
-        }
-        group.getChildren().addAll(border);
-    }
 
-
-    /**
-     * Set up a CompoundMark by creating a rectangle for each mark within the CompoundMark,
-     * setting the necessary x, y coordinates and addinf them to the group.
-     * @param compoundMark CompoundMark to set up.
-     */
-    private void setupMark(CompoundMark compoundMark) {
-        compoundMarkMap.put(compoundMark.getName(), compoundMark);
-
-        for (Mark mark : compoundMark.getMarks()) {
-            Rectangle markImage = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
-
-            Coordinate coordinate = mark.getCoordinates();
-            XYPair pixelCoordinates = convertCoordPixel(coordinate, true);
-            markImage.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
-            markImage.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
-
-            marks.put(mark.getName(), markImage);
-            group.getChildren().add(markImage);
-
-        }
-    }
-
-
-    /**
-     * Set up a gate (Start or Finish only) by creating a rectangle for the endpoints and drawing a line between them
-     * and adding the shapes to the group.
-     * @param compoundMark CompoundMark to set up.
-     */
-    private void setupGate(CompoundMark compoundMark) {
-        ArrayList<XYPair> endPoints = new ArrayList<>();
-
-        for (int i = 0; i < compoundMark.getMarks().size(); i++) {
-            Mark mark = compoundMark.getMarks().get(i);
-            Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
-            Coordinate coordinate = mark.getCoordinates();
-            XYPair pixelCoordinates = convertCoordPixel(coordinate, true);
-            rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
-            rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
-            endPoints.add(pixelCoordinates);
-
-            marks.put(mark.getName(), rectangle);
-            group.getChildren().add(rectangle);
-        }
-        Line line = new Line(
-                endPoints.get(0).getX(), endPoints.get(0).getY(),
-                endPoints.get(1).getX(), endPoints.get(1).getY());
-        line.setFill(Color.WHITE);
-        line.setStyle("-fx-stroke: red");
-
-        gates.put(compoundMark.getName(), line);
-        group.getChildren().add(line);
-    }
-
-
-    /**
-     * Set up each stage of the course.
-     * Only set up a CompoundMark if it has not already been added to avoid duplicates.
-     */
-    private void setupCourse() {
-        List<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
-
-        for (int i = 0 ; i < compoundMarks.size(); i++) {
-            CompoundMark compoundMark = compoundMarks.get(i);
-            if (!compoundMarkMap.containsKey(compoundMark.getName())) {
-                if ((i == 0 || i == compoundMarks.size() - 1) && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) {
-                    setupGate(compoundMark);
-                } else {
-                    setupMark(compoundMark);
-                }
-            }
-        }
-        setupBoundary();
-    }
-
-
-    /**
-     * Called if the course needs to be re-rendered due to the window being resized.
-     */
-    public void renderCourse() {
-        List<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
-        // Renders CompoundMarks
-        for (int i = 0 ; i < compoundMarks.size(); i++) {
-            CompoundMark compoundMark = compoundMarks.get(i);
-            if ((i == 0 || i == compoundMarks.size() - 1) && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) {
-                renderGate(compoundMark);
-            } else {
-                renderCompoundMark(compoundMark);
-            }
-        }
-        // Renders Boundaries
-        group.getChildren().remove(border);
-        border = new Polyline();
-        for (Coordinate boundary : race.getCourse().getBoundaries()) {
-            renderBoundary(border, boundary);
-        }
-        if (race.getCourse().getBoundaries().size() != 0) {
-            renderBoundary(border, race.getCourse().getBoundaries().get(0));
-            group.getChildren().add(border);
-        }
-        border.setFill(BOUNDARY_FILL_COLOR);
-        border.setOpacity(BOUNDARY_OPACITY);
-        border.toBack();
-    }
-
-
-    /**
-     * Reset a point on the border due to resizing
-     * @param border Polyline for the border
-     * @param boundary the point to reset
-     */
-    private void renderBoundary(Polyline border, Coordinate boundary) {
-        XYPair boundaryPixels = convertCoordPixel(boundary, false);
-        border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
-    }
-
-
-    /**
-     * Reset a point for a mark due to resizing
-     * @param mark Mark to reset
-     */
-    private void renderMark(Mark mark) {
-        Rectangle rectangle = marks.get(mark.getName());
-        Coordinate coordinate = mark.getCoordinates();
-        XYPair pixelCoordinates = convertCoordPixel(coordinate, false);
-        rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
-        rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
-    }
-
-
-    /**
-     * Call each Mark in a CompoundMark to reset it's point due to resizing
-     * @param compoundMark CompoundMark to reset.
-     */
-    private void renderCompoundMark(CompoundMark compoundMark) {
-        for (int i = 0; i < compoundMark.getMarks().size(); i++) {
-            Mark mark = compoundMark.getMarks().get(i);
-            renderMark(mark);
-        }
-    }
-
-
-    /**
-     * Reset the points for the endpoints of a gate as well as the line between them due to resizing
-     * @param compoundMark CompundMark to reset (Start/Finish only)
-     */
-    private void renderGate(CompoundMark compoundMark) {
-
-        ArrayList<XYPair> endPoints = new ArrayList<>();
-        for (int i = 0; i < compoundMark.getMarks().size(); i++) {
-            Mark mark = compoundMark.getMarks().get(i);
-
-            Rectangle rectangle = marks.get(mark.getName());
-
-            Coordinate coordinate = mark.getCoordinates();
-            XYPair pixelCoordinates = convertCoordPixel(coordinate, false);
-            rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
-            rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
-            endPoints.add(pixelCoordinates);
-        }
-
-        Line line = gates.get(compoundMark.getName());
-
-        line.setStartX(endPoints.get(0).getX());
-        line.setStartY(endPoints.get(0).getY());
-        line.setEndX(endPoints.get(1).getX());
-        line.setEndY(endPoints.get(1).getY());
-    }
 
 
     /**
@@ -345,7 +160,7 @@ public class RaceRenderer {
             // move boat and wake
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
-            XYPair pixels = convertCoordPixel(boatCoordinates, setup);
+            XYPair pixels = PixelMapper.convertCoordPixel(boatCoordinates, PADDING, setup, raceViewAnchorPane, race.getCourse());
             Polyline boatImage = boats.get(boat.getBoatName());
             boatImage.toFront();
             Polygon wake = wakes.get(boat.getBoatName());
@@ -397,7 +212,7 @@ public class RaceRenderer {
     public void reDrawTrail(Collection<Boat> boats) {
         for (Boat boat : boats) {
             for (Circle circle : trailMap.get(boat.getBoatName())) {
-                XYPair newPosition = convertCoordPixel(circleCoordMap.get(circle), false);
+                XYPair newPosition = PixelMapper.convertCoordPixel(circleCoordMap.get(circle), PADDING, false, raceViewAnchorPane, race.getCourse());
 
                 circle.setCenterX(newPosition.getX());
                 circle.setCenterY(newPosition.getY());
@@ -477,51 +292,7 @@ public class RaceRenderer {
     }
 
 
-    /**
-     * Converts the latitude / longitude coordinates to pixel coordinates.
-     * @param coord Coordinates to be converted
-     * @return x and y pixel coordinates of the given coordinates
-     */
-    private XYPair convertCoordPixel(Coordinate coord, boolean setup) {
 
-
-        double pixelWidth;
-        double pixelHeight;
-
-        if (setup) {
-            pixelWidth = raceViewAnchorPane.getPrefWidth() - PADDING * 2;
-            pixelHeight = raceViewAnchorPane.getPrefHeight() - PADDING * 2;
-        } else {
-            pixelWidth = raceViewAnchorPane.getWidth() - PADDING * 2;
-            pixelHeight = raceViewAnchorPane.getHeight() - PADDING * 2;
-        }
-
-
-        if (pixelHeight > pixelWidth) {
-            pixelHeight = pixelWidth;
-        } else if (pixelWidth > pixelHeight) {
-            pixelWidth = pixelHeight;
-        }
-
-        GPSCalculations gps = new GPSCalculations(race.getCourse());
-        gps.findMinMaxPoints(race.getCourse());
-        double courseWidth = gps.getMaxX() - gps.getMinX();
-        double courseHeight = gps.getMaxY() - gps.getMinY();
-        XYPair planeCoordinates = GPSCalculations.GPSxy(coord);
-
-        double aspectRatio = courseWidth / courseHeight;
-
-        if (courseHeight > courseWidth) {
-            pixelWidth *= aspectRatio;
-        } else {
-            pixelHeight *= aspectRatio;
-        }
-
-        double widthRatio = (courseWidth - (gps.getMaxX() - planeCoordinates.getX())) / courseWidth;
-        double heightRatio = (courseHeight - (gps.getMaxY() - planeCoordinates.getY())) / courseHeight;
-
-        return new XYPair(pixelWidth * widthRatio + PADDING, (pixelHeight * heightRatio + PADDING) * -1);
-    }
 
 
     public Group getGroup() {

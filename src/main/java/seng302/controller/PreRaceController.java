@@ -96,7 +96,6 @@ public class PreRaceController {
 
     public void showLiveRaceView() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
-        preRaceClock.stop();
         try {
             Parent root = loader.load(); // throws IOException
             Stage stage = (Stage) listView.getScene().getWindow();
@@ -105,6 +104,7 @@ public class PreRaceController {
             mainWindowController.startRace((long) Race.PREP_TIME_SECONDS);
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            preRaceClock.stop();
         } catch (IOException e) {
             e.printStackTrace();
         }

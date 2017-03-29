@@ -19,6 +19,7 @@ import javafx.scene.shape.Polygon;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import seng302.*;
+import seng302.display.CourseRenderer;
 import seng302.display.FPSReporter;
 import seng302.display.RaceClock;
 import seng302.display.RaceRenderer;
@@ -56,6 +57,7 @@ public class MainWindowController {
     private Race race;
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
+    private CourseRenderer courseRenderer;
     private RaceClock raceClock;
 
 
@@ -125,10 +127,6 @@ public class MainWindowController {
         tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
     }
 
-    public void startRace() {
-        raceLoop.start();
-        raceClock.start();
-    }
 
     public void startRace(long secondsDelay) {
         final double KMPH_TO_MPS = 1000.0 / 3600.0;
@@ -152,17 +150,18 @@ public class MainWindowController {
         arrow.setRotate(race.getCourse().getWindDirection());
         raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
         raceRenderer.renderBoats(true, 0);
+        courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewAnchorPane);
 //            raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
         raceClock = new RaceClock(timerLabel, race, -Race.PREP_TIME_SECONDS);
         raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel), raceViewAnchorPane);
 
         raceViewAnchorPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
-            raceRenderer.renderCourse();
+            courseRenderer.renderCourse();
             raceRenderer.renderBoats(false, 0);
             raceRenderer.reDrawTrail(race.getStartingList());
         });
         raceViewAnchorPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
-            raceRenderer.renderCourse();
+            courseRenderer.renderCourse();
             raceRenderer.renderBoats(false, 0);
             raceRenderer.reDrawTrail(race.getStartingList());
         });
