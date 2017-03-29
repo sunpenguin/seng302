@@ -3,6 +3,12 @@ package seng302;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.xml.sax.SAXException;
+import seng302.model.Boat;
+import seng302.model.CompoundMark;
+import seng302.model.Coordinate;
+import seng302.model.Course;
+import seng302.parser.XMLParser;
+
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;

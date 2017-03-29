@@ -3,6 +3,11 @@ package seng302;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
+import seng302.model.Coordinate;
+import seng302.model.Course;
+import seng302.parser.XMLParser;
+import seng302.raceutil.GPSCalculations;
+import seng302.raceutil.XYPair;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;

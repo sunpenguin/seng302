@@ -1,10 +1,11 @@
-package seng302;
+package seng302.parser;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import seng302.model.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,9 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Class for parsing XML files which represent Courses into a Course class.

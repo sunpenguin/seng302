@@ -1,4 +1,4 @@
-package seng302;
+package seng302.model;
 
 /**
  *  A class that represents a mark on the race course

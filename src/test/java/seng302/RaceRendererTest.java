@@ -8,6 +8,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import org.junit.Test;
+import seng302.display.RaceRenderer;
+import seng302.model.*;
 
 import java.time.ZoneId;
 import java.util.ArrayList;

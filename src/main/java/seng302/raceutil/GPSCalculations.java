@@ -1,4 +1,9 @@
-package seng302;
+package seng302.raceutil;
+
+import seng302.model.CompoundMark;
+import seng302.model.Coordinate;
+import seng302.model.Course;
+import seng302.model.Mark;
 
 import java.util.ArrayList;
 

@@ -8,25 +8,23 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.xml.sax.SAXException;
-import seng302.*;
+import seng302.display.ZoneTimeClock;
+import seng302.model.Boat;
+import seng302.model.Course;
+import seng302.model.Race;
+import seng302.parser.XMLParser;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by dhl25 on 27/03/17.

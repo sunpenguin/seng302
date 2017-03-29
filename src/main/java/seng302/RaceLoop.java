@@ -1,11 +1,10 @@
 package seng302;
 
 import javafx.animation.AnimationTimer;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.AnchorPane;
-
-import static javafx.scene.input.KeyCode.L;
+import seng302.display.FPSReporter;
+import seng302.display.RaceRenderer;
+import seng302.model.Race;
 
 
 /**

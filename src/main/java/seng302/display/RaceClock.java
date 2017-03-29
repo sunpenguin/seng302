@@ -1,10 +1,10 @@
-package seng302;
+package seng302.display;
 
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
-
+import seng302.model.Race;
 
 
 public class RaceClock extends AnimationTimer{

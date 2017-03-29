@@ -3,6 +3,7 @@ package seng302;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import seng302.model.Coordinate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

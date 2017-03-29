@@ -1,4 +1,6 @@
-package seng302;
+package seng302.model;
+
+import seng302.raceutil.GPSCalculations;
 
 import java.util.ArrayList;
 import java.util.List;

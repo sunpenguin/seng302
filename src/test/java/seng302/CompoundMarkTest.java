@@ -3,6 +3,9 @@ package seng302;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import seng302.model.CompoundMark;
+import seng302.model.Coordinate;
+import seng302.model.Mark;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

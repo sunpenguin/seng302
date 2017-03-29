@@ -1,4 +1,4 @@
-package seng302;
+package seng302.display;
 
 
 import javafx.scene.control.Label;

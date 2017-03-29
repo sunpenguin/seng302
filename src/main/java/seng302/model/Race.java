@@ -1,4 +1,6 @@
-package seng302;
+package seng302.model;
+
+import seng302.raceutil.GPSCalculations;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,7 +31,7 @@ public class Race {
         this.course = course;
         finishedList = new ArrayList<>();
         setCourseForBoats();
-//        duration = 60;
+        duration = 60;
     }
 
     /**

@@ -1,6 +1,8 @@
 package seng302;
 
 import org.junit.Test;
+import seng302.model.Boat;
+
 import static org.junit.Assert.*;
 
 /**

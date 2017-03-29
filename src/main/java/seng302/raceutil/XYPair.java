@@ -1,4 +1,4 @@
-package seng302;
+package seng302.raceutil;
 
 /**
  * Class to hold x, y cartesian coordinates

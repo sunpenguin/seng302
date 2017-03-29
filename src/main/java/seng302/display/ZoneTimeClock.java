@@ -1,4 +1,4 @@
-package seng302;
+package seng302.display;
 
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;

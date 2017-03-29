@@ -1,16 +1,15 @@
-package seng302;
+package seng302.display;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
+import seng302.raceutil.GPSCalculations;
+import seng302.raceutil.XYPair;
+import seng302.model.*;
 
 import java.util.*;
 

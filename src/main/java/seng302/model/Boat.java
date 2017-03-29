@@ -1,4 +1,4 @@
-package seng302;
+package seng302.model;
 
 
 import javafx.beans.property.*;

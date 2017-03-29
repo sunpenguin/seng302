@@ -1,6 +1,9 @@
 package seng302;
 
 import org.junit.Test;
+import seng302.model.Coordinate;
+import seng302.model.Mark;
+
 import static org.junit.Assert.*;
 
 /**
