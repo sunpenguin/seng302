@@ -139,10 +139,11 @@ public class RaceRenderer {
             XYPair boundaryPixels = convertCoordPixel(boundary, true);
             border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
         }
-        Coordinate boundary = race.getCourse().getBoundaries().get(0);
-        XYPair boundaryPixels = convertCoordPixel(boundary, true);
-        border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
-
+        if (race.getCourse().getBoundaries().size() != 0) {
+            Coordinate boundary = race.getCourse().getBoundaries().get(0);
+            XYPair boundaryPixels = convertCoordPixel(boundary, true);
+            border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
+        }
         group.getChildren().addAll(border);
     }
 
@@ -225,8 +226,11 @@ public class RaceRenderer {
         for (Coordinate boundary : race.getCourse().getBoundaries()) {
             renderBoundary(border, boundary);
         }
-        renderBoundary(border, race.getCourse().getBoundaries().get(0));
-        group.getChildren().add(border);
+        if (race.getCourse().getBoundaries().size() != 0) {
+            renderBoundary(border, race.getCourse().getBoundaries().get(0));
+            group.getChildren().add(border);
+        }
+
     }
 
 
@@ -403,10 +407,10 @@ public class RaceRenderer {
         double pixelHeight;
 
         if (setup) {
-            pixelWidth = raceViewAnchorPane.getPrefWidth() - PADDING * 2; // TODO get size of screen
+            pixelWidth = raceViewAnchorPane.getPrefWidth() - PADDING * 2;
             pixelHeight = raceViewAnchorPane.getPrefHeight() - PADDING * 2;
         } else {
-            pixelWidth = raceViewAnchorPane.getWidth() - PADDING * 2; // TODO get size of screen
+            pixelWidth = raceViewAnchorPane.getWidth() - PADDING * 2;
             pixelHeight = raceViewAnchorPane.getHeight() - PADDING * 2;
         }
 
