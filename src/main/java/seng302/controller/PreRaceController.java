@@ -49,7 +49,6 @@ public class PreRaceController {
     @FXML
     public void initialize() {
         try {
-            System.out.println(getClass().getResourceAsStream("/boats.xml"));
             List<Boat> boats = XMLBoatParser.parseBoats(getClass().getResourceAsStream("/boats.xml")); // throws exceptions
             Course course = XMLCourseParser.parseCourse(getClass().getResourceAsStream("/course.xml")); // throws exceptions
 
