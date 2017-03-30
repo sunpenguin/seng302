@@ -47,8 +47,8 @@ public class PreRaceController {
     @FXML
     public void initialize() {
         try {
-            List<Boat> boats = XMLBoatParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
-            Course course = XMLCourseParser.parseCourse(new File("src/main/resources/course.xml")); // throws exceptions
+            List<Boat> boats = XMLBoatParser.parseBoats(new File("../src/main/resources/boats.xml")); // throws exceptions
+            Course course = XMLCourseParser.parseCourse(new File("../src/main/resources/course.xml")); // throws exceptions
 
             race = new Race(boats, course);
 
