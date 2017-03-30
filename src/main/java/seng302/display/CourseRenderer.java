@@ -229,4 +229,8 @@ public class CourseRenderer {
         line.setEndX(endPoints.get(1).getX());
         line.setEndY(endPoints.get(1).getY());
     }
+
+    public Group getGroup() {
+        return group;
+    }
 }
