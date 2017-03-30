@@ -24,23 +24,15 @@ public class RaceRenderer {
     private HashMap<String, Boolean> visibleAnnotations = new HashMap<>();
     private ArrayList<String> annotations = new ArrayList<>();
     private HashMap<String, Polyline> boats = new HashMap<>();
-//    private HashMap<String, Rectangle> marks = new HashMap();
-//    private HashMap<String, Line> gates = new HashMap<>();
     private HashMap<String, Polygon> wakes = new HashMap<>();
     private HashMap<String, Double> boatHeadings = new HashMap<>();
     private HashMap<String, Double> boatSpeeds = new HashMap<>();
-//    private HashMap<String, CompoundMark> compoundMarkMap = new HashMap<>();
 
     private Map<String, Collection<Circle>> trailMap = new HashMap<>();
     private Map<Circle, Coordinate> circleCoordMap = new HashMap<>();
 
-//    private Polyline border = new Polyline();
     private AnchorPane raceViewAnchorPane;
     private double lowestSpeed;
-//    private final Color MARK_COLOR = Color.BLACK;
-//    private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
-//    private final double BOUNDARY_OPACITY = 0.3;
-//    private final double MARK_SIZE = 10.0;
     private final double PADDING = 20.0;
     private final double BOAT_PIVOT_X = 5;
     private final double BOAT_PIVOT_Y = 0;
@@ -77,11 +69,8 @@ public class RaceRenderer {
 
             boatHeadings.put(boat.getBoatName(), 0d);
             boatSpeeds.put(boat.getBoatName(), 1d);
-
             ArrayList<Circle> circleList = new ArrayList<>();
-
             trailMap.put(boat.getBoatName(), circleList);
-
             setUpWake(boat);
             setUpBoat(boat, i);
             // Connect the annotations to each boat
@@ -172,7 +161,6 @@ public class RaceRenderer {
             if (frameCount == 10) {
                 drawTrail(boat, pixels);
             }
-
 
             // annotations
             Text annotationToRender = setAnnotationText(boat);
