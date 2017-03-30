@@ -24,6 +24,8 @@ import seng302.parser.XMLCourseParser;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -47,8 +49,10 @@ public class PreRaceController {
     @FXML
     public void initialize() {
         try {
-            List<Boat> boats = XMLBoatParser.parseBoats(new File("../src/main/resources/boats.xml")); // throws exceptions
-            Course course = XMLCourseParser.parseCourse(new File("../src/main/resources/course.xml")); // throws exceptions
+            System.out.println(getClass().getResourceAsStream("/boats.xml"));
+            List<Boat> boats = XMLBoatParser.parseBoats(getClass().getResourceAsStream("/boats.xml")); // throws exceptions
+            Course course = XMLCourseParser.parseCourse(getClass().getResourceAsStream("/course.xml")); // throws exceptions
+
 
             race = new Race(boats, course);
 

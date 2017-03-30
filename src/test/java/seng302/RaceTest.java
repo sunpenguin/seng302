@@ -7,8 +7,10 @@ import seng302.parser.XMLCourseParser;
 import seng302.util.GPSCalculations;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -29,7 +31,7 @@ public class RaceTest {
     @Test
     public void updateBoatsTest() throws IOException, SAXException, ParserConfigurationException {
         int time = 5;
-        File file = new File("src/main/resources/course.xml");
+        InputStream file = new BufferedInputStream(new BufferedInputStream(getClass().getResourceAsStream("/course.xml")));
         Course course = XMLCourseParser.parseCourse(file);
         CompoundMark start = course.getCompoundMarks().get(0);
         Boat boat1 = new Boat("Emirates", "NZL", 45);
@@ -53,7 +55,7 @@ public class RaceTest {
      */
     @Test
     public void setCourseForBoatsTest() throws IOException, SAXException, ParserConfigurationException {
-        File file = new File("src/main/resources/course.xml");
+        InputStream file = new BufferedInputStream(new BufferedInputStream(getClass().getResourceAsStream("/course.xml")));
         Course course = XMLCourseParser.parseCourse(file);
         Boat boat1 = new Boat("Emirates", "NZL", 45);
         ArrayList<Boat> boats = new ArrayList<>();

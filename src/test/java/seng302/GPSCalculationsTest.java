@@ -10,6 +10,7 @@ import seng302.util.GPSCalculations;
 import seng302.util.XYPair;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -25,7 +26,7 @@ public class GPSCalculationsTest {
 
     @Before
     public void setUp() throws IOException, SAXException, ParserConfigurationException {
-        testCourse = XMLCourseParser.parseCourse(new File("src/main/resources/test-course.xml"));
+        testCourse = XMLCourseParser.parseCourse(new BufferedInputStream(getClass().getResourceAsStream("/test-course.xml")));
         g = new GPSCalculations(testCourse);
     }
 

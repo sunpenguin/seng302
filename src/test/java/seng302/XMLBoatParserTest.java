@@ -6,8 +6,10 @@ import seng302.model.Boat;
 import seng302.parser.XMLBoatParser;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class XMLBoatParserTest {
 
-    private File boatFile = new File("src/main/resources/test-boats.xml");
+    private InputStream boatFile = new BufferedInputStream(getClass().getResourceAsStream("/test-boats.xml"));
 
     @Test
     public void testParseBoats() throws IOException, SAXException, ParserConfigurationException {

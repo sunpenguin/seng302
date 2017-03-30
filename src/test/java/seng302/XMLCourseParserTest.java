@@ -10,8 +10,10 @@ import seng302.model.Mark;
 import seng302.parser.XMLCourseParser;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.List;
 public class XMLCourseParserTest {
 
 
-    private File courseFile = new File("src/main/resources/test-course.xml");
+    private InputStream courseFile = new BufferedInputStream(getClass().getResourceAsStream("/test-course.xml"));
 
 
 

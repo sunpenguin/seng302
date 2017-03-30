@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class XMLBoatParser {
      * @throws IOException
      * @throws SAXException
      */
-    public static List<Boat> parseBoats(File file) throws ParserConfigurationException, IOException, SAXException {
+    public static List<Boat> parseBoats(InputStream file) throws ParserConfigurationException, IOException, SAXException {
         final String BOATS_TAG = "boats";
         final String BOAT_TAG = "boat";
 
