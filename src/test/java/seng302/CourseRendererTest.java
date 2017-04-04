@@ -4,15 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import org.junit.Test;
 import seng302.display.CourseRenderer;
-import seng302.display.RaceRenderer;
-import seng302.model.*;
+import seng302.model.CompoundMark;
+import seng302.model.Coordinate;
+import seng302.model.Course;
+import seng302.model.Mark;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class CourseRendererTest {
         // Setting up expected values
         Rectangle r1 = new Rectangle(10, 10, Color.BLACK);
         r1.setX(20 - 10 / 2d); // size of padding - size of rectangle / 2
-        r1.setY( -1 * (20 + 10 / 2d)); // -(size of padding + size of rectangle / 2)
+        r1.setY(-1 * (20 + 10 / 2d)); // -(size of padding + size of rectangle / 2)
         Rectangle r2 = new Rectangle(10, 10, Color.BLACK);
         r2.setX(695.0); // size of screen - size of padding - size of rectangle / 2 OLD
         r2.setY(-1385.0); // -(size of screen - size of padding + size of rectangle / 2) OLD

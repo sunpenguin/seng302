@@ -3,7 +3,7 @@ package seng302;
 import org.junit.Test;
 import seng302.model.Boat;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * A test class for the boat class
