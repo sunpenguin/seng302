@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class CourseRendererTest {
 
-//    @Test
+    //    @Test
     public void renderCourseTest() {
         // Setting up Course
         Pane pane = new Pane();
