@@ -1,12 +1,9 @@
 package seng302.display;
 
 import javafx.scene.Group;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
-import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
 import seng302.util.PixelMapper;
 import seng302.util.XYPair;
 import seng302.model.*;
@@ -20,153 +17,57 @@ public class RaceRenderer {
 
     private Group group;
     private Race race;
-    private HashMap<String, Text> annotationsMap = new HashMap<>();
-    private HashMap<String, Boolean> visibleAnnotations = new HashMap<>();
-    private ArrayList<String> annotations = new ArrayList<>();
-    private HashMap<String, Polyline> boats = new HashMap<>();
-    private HashMap<String, Polygon> wakes = new HashMap<>();
-    private HashMap<String, Double> boatHeadings = new HashMap<>();
-    private HashMap<String, Double> boatSpeeds = new HashMap<>();
-
-    private Map<String, Collection<Circle>> trailMap = new HashMap<>();
+    private Map<String, DisplayBoat> displayBoats = new HashMap<>();
+    private Map<String, List<Circle>> trailMap = new HashMap<>();
     private Map<Circle, Coordinate> circleCoordMap = new HashMap<>();
-
-    private AnchorPane raceViewAnchorPane;
-    private double lowestSpeed;
+    private Pane raceViewPane;
     private final double PADDING = 20.0;
-    private final double BOAT_PIVOT_X = 5;
-    private final double BOAT_PIVOT_Y = 0;
-    private final int ANNOTATION_OFFSET_X = 10;
-    final ArrayList<Color> BOAT_COLOURS = new ArrayList<>(
+    final List<Color> BOAT_COLOURS = new ArrayList<>(
             Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
-
 
 
     /**
      * Constructor for RaceRenderer, takes a Race, Group  and AnchorPane as parameters.
      *
-     * @param race the race containing the boats to be drawn
+     * @param race the race containing the displayBoats to be drawn
      * @param group the group to be drawn on
-     * @param raceViewAnchorPane The AnchorPane the group is on
+     * @param raceViewPane The AnchorPane the group is on
      */
-    public RaceRenderer(Race race, Group group, AnchorPane raceViewAnchorPane) {
+    public RaceRenderer(Race race, Group group, Pane raceViewPane) {
         this.race = race;
         this.group = group;
-        this.raceViewAnchorPane = raceViewAnchorPane;
-        lowestSpeed = Double.MAX_VALUE;
-
-        // Add each annotation to the race
-        addAnnotations();
-
-//        setupCourse();
+        this.raceViewPane = raceViewPane;
 
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
-
-            if (lowestSpeed > boat.getSpeed()) {
-                lowestSpeed = boat.getSpeed();
-            }
-
-            boatHeadings.put(boat.getBoatName(), 0d);
-            boatSpeeds.put(boat.getBoatName(), 1d);
-            ArrayList<Circle> circleList = new ArrayList<>();
-            trailMap.put(boat.getBoatName(), circleList);
-            setUpWake(boat);
-            setUpBoat(boat, i);
-            // Connect the annotations to each boat
-            setUpAnnotations(boat);
-
+            DisplayBoat displayBoat =
+                    new DisplayBoat(boat.getTeamName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(i));
+            displayBoat.addToGroup(group);
+            displayBoats.put(boat.getTeamName(), displayBoat);
+            trailMap.put(boat.getTeamName(), new ArrayList<>());
         }
     }
 
 
-    private void addAnnotations() {
-        annotations.add("Name");
-        visibleAnnotations.put("Name", true);
-        annotations.add("Speed");
-        visibleAnnotations.put("Speed", true);
-    }
-
-
     /**
-     * Set up an annotation for a boat by mapping the boat's team name to the annotation and
-     * adding the annotation to the group so it can be displayed.
-     * @param boat Boat to map annotation to.
-     */
-    private void setUpAnnotations(Boat boat) {
-        Text boatAnnotation = new Text("");
-        annotationsMap.put(boat.getTeamName(), boatAnnotation);
-        this.group.getChildren().add(boatAnnotation);
-    }
-
-
-    /**
-     * Set up a boat by creating a triangle to represent the boat onscreen, mapping the boat name to the triangle
-     * and adding the triangle to the group.
-     * @param boat Boat to set up
-     * @param i The number of the boat to be set up.
-     */
-    private void setUpBoat(Boat boat, int i) {
-        Polyline boatImage = new Polyline();
-        boatImage.getPoints().addAll(
-                BOAT_PIVOT_X, BOAT_PIVOT_Y,
-                10.0, 10.0,
-                0.0, 10.0,
-                BOAT_PIVOT_X, BOAT_PIVOT_Y,
-                5.0, 10.0);
-        boatImage.setFill(BOAT_COLOURS.get(i));
-        boats.put(boat.getBoatName(), boatImage);
-        this.group.getChildren().add(boatImage);
-    }
-
-
-    /**
-     * Set up the wake for a boat by creating a triangle for it, mapping the boat name to the wake and adding
-     * the wake to the group.
-     * @param boat The boat to set up a wake for.
-     */
-    private void setUpWake(Boat boat) {
-        Polygon wake = new Polygon();
-        wake.getPoints().addAll(
-                BOAT_PIVOT_X, BOAT_PIVOT_Y,
-                0.0, 20.0,
-                10.0, 20.0
-        );
-        wake.setFill(Color.ANTIQUEWHITE);
-        wakes.put(boat.getBoatName(), wake);
-        group.getChildren().add(wake);
-    }
-
-
-
-
-
-    /**
-     * Draws boats in the Race on the Group as well as the visible annotations
+     * Draws displayBoats in the Race on the Group as well as the visible annotations
      */
     public void renderBoats(boolean setup, int frameCount) {
         for (int i = 0; i < race.getStartingList().size(); i++) {
-            // move boat and wake
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
-            XYPair pixels = PixelMapper.convertCoordPixel(boatCoordinates, PADDING, setup, raceViewAnchorPane, race.getCourse());
-            Polyline boatImage = boats.get(boat.getBoatName());
-            boatImage.toFront();
-            Polygon wake = wakes.get(boat.getBoatName());
+            XYPair pixels =
+                    PixelMapper.convertCoordPixel(boatCoordinates, PADDING, setup, raceViewPane, race.getCourse());
 
-            moveBoat(boatImage, wake, pixels);
-            scaleWake(boat, wake);
-            rotateBoat(boat, boatImage, wake);
+            DisplayBoat displayBoat = displayBoats.get(boat.getTeamName());
+            displayBoat.toFront();
+            displayBoat.moveBoat(pixels);
+            displayBoat.setSpeed(boat.getSpeed());
+            displayBoat.setHeading(boat.getHeading());
 
             if (frameCount == 10) {
                 drawTrail(boat, pixels);
             }
-
-            // annotations
-            Text annotationToRender = setAnnotationText(boat);
-            annotationToRender.setLayoutX(pixels.getX() + ANNOTATION_OFFSET_X);
-            annotationToRender.setLayoutY(pixels.getY());
-            annotationToRender.setVisible(true);
         }
     }
 
@@ -184,10 +85,10 @@ public class RaceRenderer {
         circle.setCenterX(pixels.getX());
         circle.setCenterY(pixels.getY());
         circle.setRadius(0.6);
-        circle.setFill(boats.get(boat.getBoatName()).getFill());
+        circle.setFill(displayBoats.get(boat.getTeamName()).getBoatColor());
 
         group.getChildren().add(circle);
-        Collection<Circle> circles = trailMap.get(boat.getBoatName());
+        List<Circle> circles = trailMap.get(boat.getTeamName());
         circles.add(circle);
     }
 
@@ -195,105 +96,35 @@ public class RaceRenderer {
     /**
      * Redraw the the trails behind each boat by looking into the Map of circles and coordinates and
      * resetting the points.
-     * @param boats Collection of boats racing.
+     * @param boats Collection of displayBoats racing.
      */
     public void reDrawTrail(Collection<Boat> boats) {
         for (Boat boat : boats) {
-            for (Circle circle : trailMap.get(boat.getBoatName())) {
-                XYPair newPosition = PixelMapper.convertCoordPixel(circleCoordMap.get(circle), PADDING, false, raceViewAnchorPane, race.getCourse());
-
+            for (Circle circle : trailMap.get(boat.getTeamName())) {
+                XYPair newPosition = PixelMapper.convertCoordPixel
+                        (circleCoordMap.get(circle), PADDING, false, raceViewPane, race.getCourse());
                 circle.setCenterX(newPosition.getX());
                 circle.setCenterY(newPosition.getY());
             }
         }
     }
 
-
-    /**
-     * Update the position of a boat's image and it's wake.
-     * @param boatImage Boat PolyLine to update.
-     * @param wake Wake PolyLine to update.
-     * @param pixels New position to update to.
-     */
-    private void moveBoat(Polyline boatImage, Polygon wake, XYPair pixels) {
-        boatImage.setLayoutX(pixels.getX() - 5); // The boats are 5px from middle to outside so this will center the boat
-        boatImage.setLayoutY(pixels.getY());
-        wake.setLayoutX(pixels.getX() - 5); // Also need to center the wake
-        wake.setLayoutY(pixels.getY());
-    }
-
-
-    /**
-     * Scale the size of the wake according to the boat's speed.
-     * @param boat Boat to scale wake for.
-     * @param wake Wake to scale.
-     */
-    private void scaleWake(Boat boat, Polygon wake) {
-        if (boat.getSpeed() != boatSpeeds.get(boat.getBoatName())) {
-            double scale = boat.getSpeed() / boatSpeeds.get(boat.getBoatName()) / lowestSpeed;
-            Scale wakeSize = new Scale(scale, scale, BOAT_PIVOT_X, BOAT_PIVOT_Y);
-            wake.getTransforms().add(wakeSize);
-            boatSpeeds.replace(boat.getBoatName(), boat.getSpeed());
-        }
-    }
-
-
-    /**
-     * Rotate the boat and it's wake according to it's heading.
-     * @param boat Boat to rotate.
-     * @param boatImage Image for the boat to rotate.
-     * @param wake Wake to rotate.
-     */
-    private void rotateBoat(Boat boat, Polyline boatImage, Polygon wake) {
-        // update heading if changed
-        if (boat.getHeading() != boatHeadings.get(boat.getBoatName())) {
-            Rotate rotation = new Rotate(boat.getHeading() - boatHeadings.get(boat.getBoatName()), BOAT_PIVOT_X, BOAT_PIVOT_Y);
-            wake.getTransforms().add(rotation);
-            boatImage.getTransforms().add(rotation);
-            boatHeadings.replace(boat.getBoatName(), boat.getHeading());
-        }
-    }
-
-
-
-    /**
-     * Set the annotation text to display next to the boat based on which annotations are true in the visibleAnnotations
-     * hashmap.
-     * @param boat The boat to set the annotation text for.
-     * @return the Text object with the correctly set text.
-     */
-    private Text setAnnotationText(Boat boat) {
-        String textToDisplay = "";
-        for (String annotation : annotations) {
-            if (visibleAnnotations.get(annotation)) {
-                if (annotation.equals("Name")) {
-                    textToDisplay += boat.getTeamName() + "\n";
-                } else if (annotation.equals("Speed")) {
-                    textToDisplay += boat.getSpeed() + " km/h\n";
-                }
-            }
-        }
-        Text boatAnnotation = annotationsMap.get(boat.getTeamName());
-        boatAnnotation.setText(textToDisplay);
-
-        return boatAnnotation;
-    }
-
-
-
-
-
     public Group getGroup() {
         return group;
     }
 
+//    public Map<String, Boolean> getVisibleAnnotations() {
+//        Map visibleAnnotations = new HashMap();
+//        DisplayBoat boat = displayBoats.values().iterator().next(); // get a boat from the map LOL
+//        for (AnnotationType type : AnnotationType.values()) {
+//            visibleAnnotations.put(type, boat.getAnnotationVisible(type));
+//        }
+//        return visibleAnnotations;
+//    }
 
-    public HashMap<String, Boolean> getVisibleAnnotations() {
-        return visibleAnnotations;
-    }
-
-
-    public void setVisibleAnnotations(HashMap<String, Boolean> visibleAnnotations) {
-        this.visibleAnnotations = visibleAnnotations;
+    public void setVisibleAnnotations(AnnotationType type, Boolean isVisible) {
+        for (DisplayBoat boat : displayBoats.values()) {
+            boat.setAnnotationVisibile(type, isVisible);
+        }
     }
 }

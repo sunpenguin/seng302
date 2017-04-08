@@ -16,6 +16,7 @@ import seng302.util.XYPair;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dhl25 on 30/03/17.
@@ -28,9 +29,9 @@ public class CourseRenderer {
     private final double MARK_SIZE = 10.0;
     private final double PADDING = 20.0;
     private Polyline border = new Polyline();
-    private HashMap<String, Rectangle> marks = new HashMap();
-    private HashMap<String, Line> gates = new HashMap<>();
-    private HashMap<String, CompoundMark> compoundMarkMap = new HashMap<>();
+    private Map<String, Rectangle> marks = new HashMap();
+    private Map<String, Line> gates = new HashMap<>();
+    private Map<String, CompoundMark> compoundMarkMap = new HashMap<>();
     private Course course;
     private Group group;
     private Pane pane;

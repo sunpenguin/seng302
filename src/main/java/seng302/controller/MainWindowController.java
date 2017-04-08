@@ -8,25 +8,21 @@ import javafx.beans.Observable;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import seng302.*;
-import seng302.display.CourseRenderer;
-import seng302.display.FPSReporter;
-import seng302.display.RaceClock;
-import seng302.display.RaceRenderer;
+import seng302.display.*;
 import seng302.model.Boat;
 import seng302.model.Race;
 
-import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -50,7 +46,7 @@ public class MainWindowController {
     @FXML
     private TableColumn<Boat, Integer> boatSpeedColumn;
     @FXML
-    private AnchorPane raceViewAnchorPane;
+    private Pane raceViewPane;
     @FXML
     private Polygon arrow;
 
@@ -76,30 +72,24 @@ public class MainWindowController {
 
     @FXML
     public void setFullAnnotationLevel() {
-        HashMap<String, Boolean> visibleAnnotations = raceRenderer.getVisibleAnnotations();
-        visibleAnnotations.put("Speed", true);
-        visibleAnnotations.put("Name", true);
-
-        raceRenderer.setVisibleAnnotations(visibleAnnotations);
+        for (AnnotationType type : AnnotationType.values()) {
+            raceRenderer.setVisibleAnnotations(type, true);
+        }
     }
 
 
     @FXML
     public void setNoneAnnotationLevel() {
-        HashMap<String, Boolean> visibleAnnotations = raceRenderer.getVisibleAnnotations();
-        visibleAnnotations.put("Speed", false);
-        visibleAnnotations.put("Name", false);
-
-        raceRenderer.setVisibleAnnotations(visibleAnnotations);
+        for (AnnotationType type : AnnotationType.values()) {
+            raceRenderer.setVisibleAnnotations(type, false);
+        }
     }
+
 
     @FXML
     public void setImportantAnnotationLevel() {
-        HashMap<String, Boolean> visibleAnnotations = raceRenderer.getVisibleAnnotations();
-        visibleAnnotations.put("Speed", false);
-        visibleAnnotations.put("Name", true);
-
-        raceRenderer.setVisibleAnnotations(visibleAnnotations);
+        raceRenderer.setVisibleAnnotations(AnnotationType.NAME, true);
+        raceRenderer.setVisibleAnnotations(AnnotationType.SPEED, false);
     }
 
 
@@ -148,19 +138,19 @@ public class MainWindowController {
     public void setRace(Race race) {
         this.race = race;
         arrow.setRotate(race.getCourse().getWindDirection());
-        raceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
+        raceRenderer = new RaceRenderer(race, group, raceViewPane);
         raceRenderer.renderBoats(true, 0);
-        courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewAnchorPane);
+        courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
 //            raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
         raceClock = new RaceClock(timerLabel, race, -Race.PREP_TIME_SECONDS);
-        raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel), raceViewAnchorPane);
+        raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel));
 
-        raceViewAnchorPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
+        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
             courseRenderer.renderCourse();
             raceRenderer.renderBoats(false, 0);
             raceRenderer.reDrawTrail(race.getStartingList());
         });
-        raceViewAnchorPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
+        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
             courseRenderer.renderCourse();
             raceRenderer.renderBoats(false, 0);
             raceRenderer.reDrawTrail(race.getStartingList());

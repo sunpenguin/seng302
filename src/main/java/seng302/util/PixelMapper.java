@@ -13,18 +13,18 @@ public class PixelMapper {
      * @param coord Coordinates to be converted
      * @return x and y pixel coordinates of the given coordinates
      */
-    public static XYPair convertCoordPixel(Coordinate coord, double padding, boolean setup, Pane pane, Course course) {
+    public static XYPair convertCoordPixel
+            (Coordinate coord, double padding, boolean usePrefSize, Pane pane, Course course) {
+
         double pixelWidth;
         double pixelHeight;
-
-        if (setup) {
+        if (usePrefSize) {
             pixelWidth = pane.getPrefWidth() - padding * 2;
             pixelHeight = pane.getPrefHeight() - padding * 2;
         } else {
             pixelWidth = pane.getWidth() - padding * 2;
             pixelHeight = pane.getHeight() - padding * 2;
         }
-
 
         if (pixelHeight > pixelWidth) {
             pixelHeight = pixelWidth;
@@ -37,7 +37,6 @@ public class PixelMapper {
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
         XYPair planeCoordinates = GPSCalculations.GPSxy(coord);
-
         double aspectRatio = courseWidth / courseHeight;
 
         if (courseHeight > courseWidth) {
