@@ -14,18 +14,16 @@ import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.xml.sax.SAXException;
+import seng302.data.LiveDataListener;
 import seng302.display.ZoneTimeClock;
 import seng302.model.Boat;
 import seng302.model.Course;
 import seng302.model.Race;
-import seng302.parser.XMLBoatParser;
-import seng302.parser.XMLCourseParser;
+import seng302.data.XMLBoatParser;
+import seng302.data.XMLCourseParser;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -159,6 +157,12 @@ public class PreRaceController {
             }
         }
         System.out.println(decision);
+
+        // TODO move to a better place.
+
+        if (decision.equals("Y")){
+            LiveDataListener l = new LiveDataListener(4941);
+        }
     }
 
 }

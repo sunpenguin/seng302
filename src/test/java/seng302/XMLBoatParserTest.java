@@ -3,11 +3,10 @@ package seng302;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 import seng302.model.Boat;
-import seng302.parser.XMLBoatParser;
+import seng302.data.XMLBoatParser;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;

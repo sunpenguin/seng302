@@ -7,11 +7,10 @@ import seng302.model.CompoundMark;
 import seng302.model.Coordinate;
 import seng302.model.Course;
 import seng302.model.Mark;
-import seng302.parser.XMLCourseParser;
+import seng302.data.XMLCourseParser;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.ZoneId;
