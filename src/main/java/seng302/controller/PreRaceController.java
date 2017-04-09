@@ -148,6 +148,17 @@ public class PreRaceController {
                 scanner.next();
             }
         }
+
+        String decision = "";
+        while (!decision.toUpperCase().equals("Y") && !decision.toUpperCase().equals("N")) {
+            System.out.println("Would you like a live race? (Y/N)");
+            if (scanner.hasNext()) {
+                decision = scanner.next().toUpperCase();
+            } else {
+                scanner.next();
+            }
+        }
+        System.out.println(decision);
     }
 
 }
