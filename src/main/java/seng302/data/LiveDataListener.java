@@ -37,7 +37,7 @@ public class LiveDataListener {
             inStream.reset();
             return null;
         }
-        MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.getType().getValue());
+        MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.getType());
         byte[] bodyBytes = new byte[head.bodySize()];
         byte[] checkBytes = new byte[detector.errorCheckSize()];
         inStream.read(bodyBytes);

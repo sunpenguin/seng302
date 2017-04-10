@@ -19,7 +19,7 @@ public class AC35MessageParserFactory implements MessageParserFactory {
             case BOAT_LOCATION:
                 return new AC35BoatLocationParser();
             case XML_MESSAGE:
-                return new AC35XMLMessageParser();
+                return new AC35XMLMessageParser(new AC35XMLParserFactory());
             default:
                 return null;
         }

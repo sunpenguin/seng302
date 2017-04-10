@@ -5,7 +5,7 @@ package seng302.data;
  */
 public interface MessageHead {
 
-    public AC35MessageType getType();
+    public int getType();
 
     public int bodySize();
 
