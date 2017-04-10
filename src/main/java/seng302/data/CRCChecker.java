@@ -7,6 +7,11 @@ public class CRCChecker implements MessageErrorDetector {
 
 
     @Override
+    public int errorCheckSize() {
+        return 0;
+    }
+
+    @Override
     public Boolean isValid(byte[] bytes) {
         return null;
     }

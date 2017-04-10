@@ -5,5 +5,7 @@ package seng302.data;
  */
 public interface MessageErrorDetector {
 
+    public int errorCheckSize();
+
     public Boolean isValid(byte[] bytes);
 }

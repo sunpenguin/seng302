@@ -7,4 +7,6 @@ public interface MessageHead {
 
     public MessageType getType();
 
+    public int bodySize();
+
 }

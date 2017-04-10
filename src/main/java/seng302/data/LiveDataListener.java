@@ -13,9 +13,9 @@ public class LiveDataListener {
     private Socket socket;
     private InputStream inStream;
     private String currentLine;
-    private AbstractMessageParserFactory parserFactory;
+    private MessageParserFactory parserFactory;
 
-    public LiveDataListener(int portNumber, AbstractMessageParserFactory parserFactory) throws IOException {
+    public LiveDataListener(int portNumber, MessageParserFactory parserFactory) throws IOException {
         this.parserFactory = parserFactory;
         // Create input and output streams for reading in data
         socket = new Socket("livedata.americascup.com", portNumber);
@@ -25,11 +25,6 @@ public class LiveDataListener {
 
 
     public MessageBody nextMessage() throws IOException {
-        MessageHead head = nextHead();
-        MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.type());
-    }
-
-    private MessageHead nextHead() throws IOException {
         MessageHeadParser headParser = parserFactory.makeHeadParser();
         if (inStream.available() <= headParser.headerSize()) {
             return null;
@@ -38,7 +33,21 @@ public class LiveDataListener {
         byte[] headerBytes = new byte[headParser.headerSize()];
         inStream.read(headerBytes);
         MessageHead head = headParser.parse(headerBytes);
-        return head;
+        MessageErrorDetector detector = parserFactory.makeDetector();
+        if (inStream.available() <= head.bodySize() + detector.errorCheckSize()) {
+            inStream.reset();
+            return null;
+        }
+        MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.getType());
+        byte[] bodyBytes = new byte[head.bodySize()];
+        byte[] checkBytes = new byte[detector.errorCheckSize()];
+        inStream.read(bodyBytes);
+        inStream.read(checkBytes);
+        if (detector.isValid(checkBytes)) {
+            return bodyParser.parse(bodyBytes);
+        }
+        return null;
     }
+
 
 }
