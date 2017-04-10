@@ -21,6 +21,6 @@ public class AC35MessageHead implements MessageHead {
 
     @Override
     public int bodySize() {
-        return 0;
+        return bodySize;
     }
 }

@@ -12,7 +12,6 @@ import java.net.Socket;
 public class LiveDataListener {
     private Socket socket;
     private InputStream inStream;
-    private String currentLine;
     private MessageParserFactory parserFactory;
 
     public LiveDataListener(int portNumber, MessageParserFactory parserFactory) throws IOException {
