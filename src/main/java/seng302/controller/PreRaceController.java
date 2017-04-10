@@ -160,9 +160,9 @@ public class PreRaceController {
 
         // TODO move to a better place.
 
-        if (decision.equals("Y")){
-            LiveDataListener l = new LiveDataListener(4941);
-        }
+//        if (decision.equals("Y")){
+//            LiveDataListener l = new LiveDataListener(4941);
+//        }
     }
 
 }

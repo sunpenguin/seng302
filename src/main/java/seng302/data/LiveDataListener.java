@@ -40,9 +40,13 @@ public class LiveDataListener {
         MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.getType());
         byte[] bodyBytes = new byte[head.bodySize()];
         byte[] checkBytes = new byte[detector.errorCheckSize()];
+        byte[] headAndBody = new byte[headerBytes.length + bodyBytes.length];
+        System.arraycopy(headerBytes, 0, headAndBody, 0, headerBytes.length);
+        System.arraycopy(bodyBytes, 0, headAndBody, headerBytes.length, bodyBytes.length);
+
         inStream.read(bodyBytes);
         inStream.read(checkBytes);
-        if (detector.isValid(checkBytes)) {
+        if (detector.isValid(checkBytes, headAndBody)) {
             return bodyParser.parse(bodyBytes);
         }
         return null;
