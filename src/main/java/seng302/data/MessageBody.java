@@ -5,4 +5,5 @@ package seng302.data;
  */
 public interface MessageBody {
 
+    public MessageType getType();
 }
