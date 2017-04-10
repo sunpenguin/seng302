@@ -5,17 +5,17 @@ package seng302.data;
  */
 public class AC35MessageHead implements MessageHead {
 
-    private MessageType type;
+    private AC35MessageType type;
     private int bodySize;
 
-    public AC35MessageHead(MessageType type, int bodySize) {
+    public AC35MessageHead(AC35MessageType type, int bodySize) {
         this.type = type;
         this.bodySize = bodySize;
     }
 
 
     @Override
-    public MessageType getType() {
+    public AC35MessageType getType() {
         return null;
     }
 

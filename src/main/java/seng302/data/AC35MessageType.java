@@ -3,14 +3,16 @@ package seng302.data;
 /**
  * Created by dhl25 on 10/04/17.
  */
-public enum MessageType {
+public enum AC35MessageType {
     XML_MESSAGE (26), YACHT_EVENT (29), BOAT_LOCATION (37);
 
-    MessageType(int code) {
+    private int code;
 
+    private AC35MessageType(int code) {
+        this.code = code;
     }
 
-    public static MessageType from(int code) {
+    public static AC35MessageType from(int code) {
         switch (code) {
             case 26:
                 return XML_MESSAGE;
@@ -21,6 +23,10 @@ public enum MessageType {
             default:
                 return null;
         }
+    }
+
+    public int getValue() {
+        return code;
     }
 
 }

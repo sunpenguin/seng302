@@ -7,7 +7,7 @@ public interface MessageParserFactory {
 
     public MessageHeadParser makeHeadParser();
 
-    public MessageBodyParser makeBodyParser(MessageType type);
+    public MessageBodyParser makeBodyParser(int type);
 
     public MessageErrorDetector makeDetector();
 }

@@ -13,7 +13,7 @@ public class AC35MessageHeadParser implements MessageHeadParser {
     @Override
     public MessageHead parse(byte[] header) {
         int type = header[2];
-        MessageType messageType = MessageType.from(type);
+        AC35MessageType messageType = AC35MessageType.from(type);
         int len = ((header[13] & 0xff) << 8) | (header[14] & 0xff);
         return new AC35MessageHead(messageType, len);
     }
