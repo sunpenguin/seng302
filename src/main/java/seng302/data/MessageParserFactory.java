@@ -5,9 +5,13 @@ package seng302.data;
  */
 public interface MessageParserFactory {
 
+//    public MessageHeadParser makeDefaultHeadParser();
+//
+//    public MessageHeadParser makeHeadParser(int type);
+
     public MessageHeadParser makeHeadParser();
 
-    public MessageBodyParser makeBodyParser(MessageType type);
+    public MessageBodyParser makeBodyParser(int type);
 
     public MessageErrorDetector makeDetector();
 }

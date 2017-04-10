@@ -1,14 +1,14 @@
 package seng302.data;
 
 /**
- * Created by dhl25 on 10/04/17.
+ * Created by david on 4/10/17.
  */
-public class AC35MessageHead implements MessageHead {
+public class AC35XMLHead  implements MessageHead {
 
-    private AC35MessageType type;
+    private AC35XMLMessageType type;
     private int bodySize;
 
-    public AC35MessageHead(AC35MessageType type, int bodySize) {
+    public AC35XMLHead(AC35XMLMessageType type, int bodySize) {
         this.type = type;
         this.bodySize = bodySize;
     }

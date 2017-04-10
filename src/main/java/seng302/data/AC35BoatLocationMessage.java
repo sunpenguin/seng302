@@ -19,8 +19,8 @@ public class AC35BoatLocationMessage implements MessageBody {
     }
 
     @Override
-    public MessageType getType() {
-        return MessageType.BOAT_LOCATION;
+    public AC35MessageType getType() {
+        return AC35MessageType.BOAT_LOCATION;
     }
 
     public Integer getSourceID() {
