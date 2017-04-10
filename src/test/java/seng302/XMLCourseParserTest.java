@@ -6,11 +6,16 @@ import org.xml.sax.SAXException;
 import seng302.model.CompoundMark;
 import seng302.model.Coordinate;
 import seng302.model.Course;
+import seng302.model.Mark;
 import seng302.parser.XMLCourseParser;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,27 +24,50 @@ import java.util.List;
 public class XMLCourseParserTest {
 
 
-    private File courseFile = new File("src/main/resources/course.xml");
+    private InputStream courseFile = new BufferedInputStream(getClass().getResourceAsStream("/test-course.xml"));
 
 
 
     @Test
     public void testParseCourse() throws IOException, SAXException, ParserConfigurationException {
 
-        Course course = XMLCourseParser.parseCourse(courseFile);
-        List<CompoundMark> actualCourse = course.getCompoundMarks();
-        CompoundMark actualMark = actualCourse.get(0);
-        assertEquals("Start", actualMark.getName());
-        assertEquals(2, actualMark.getMarks().size());
-        assertEquals("Start1", actualMark.getMarks().get(0).getName());
-        assertEquals(new Coordinate(32.296577, -64.854304), actualMark.getMarks().get(0).getCoordinates());
-        assertEquals("Start2", actualMark.getMarks().get(1).getName());
-        assertEquals(new Coordinate(32.293771, -64.855242), actualMark.getMarks().get(1).getCoordinates());
-        assertEquals(6, actualCourse.size());
+        Course actual = XMLCourseParser.parseCourse(courseFile);
+        List<CompoundMark> expectedCompoundMarks = new ArrayList<>();
+        List<Mark> expectedMarks = new ArrayList<>();
+        expectedMarks.add(new Mark("Start1", new Coordinate(30, -60.0)));
+        expectedCompoundMarks.add(new CompoundMark("Start", new ArrayList<>(expectedMarks)));
+        expectedMarks.clear();
+        expectedMarks.add(new Mark("Mark1", new Coordinate(40.0, -70.0)));
+        expectedCompoundMarks.add(new CompoundMark("Mark", new ArrayList<>(expectedMarks)));
+        expectedMarks.clear();
+        expectedMarks.add(new Mark("Finish1", new Coordinate(50.0, -80.0)));
+        expectedMarks.add(new Mark("Finish2", new Coordinate(51.0, -81.0)));
+        expectedCompoundMarks.add(new CompoundMark("Finish", expectedMarks));
 
-        CompoundMark compoundMark1 = actualCourse.get(3);
-        assertEquals(2, compoundMark1.getMarks().size());
-        assertEquals("Southern gate 2", compoundMark1.getMarks().get(1).getName());
+        Course expected = new Course(expectedCompoundMarks, new ArrayList<>(), 45.0, ZoneId.of("Atlantic/Bermuda"));
+
+        assertEquals(expected.getTimeZone(), actual.getTimeZone());
+        assertEquals(expected.getWindDirection(), actual.getWindDirection(), 0.1);
+        assertEquals(expected.getBoundaries().size(), actual.getBoundaries().size());
+        for (int i = 0; i < expected.getBoundaries().size(); i++) {
+            assertEquals(expected.getBoundaries().get(i), actual.getBoundaries().get(i));
+        }
+        assertEquals(expected.getCompoundMarks().size(), actual.getCompoundMarks().size());
+        for (int i = 0; i < expected.getCompoundMarks().size(); i++) {
+            CompoundMark expectedMark = expected.getCompoundMarks().get(i);
+            CompoundMark actualMark = actual.getCompoundMarks().get(i);
+            assertEquals(expectedMark.getName(), actualMark.getName());
+            assertEquals(expectedMark.getPassed().size(), actualMark.getPassed().size());
+            for (int j = 0; j < expectedMark.getPassed().size(); j++) {
+                assertEquals(expectedMark.getPassed().get(j), actualMark.getPassed().get(j));
+            }
+            assertEquals(expectedMark.getMarks().size(), actualMark.getMarks().size());
+            for (int j = 0; j < expectedMark.getMarks().size(); j++) {
+                assertEquals(expectedMark.getMarks().get(j).getName(), actualMark.getMarks().get(j).getName());
+                assertEquals(expectedMark.getMarks().get(j).getCoordinates(), actualMark.getMarks().get(j).getCoordinates());
+            }
+        }
+
     }
 
 }

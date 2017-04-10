@@ -1,0 +1,51 @@
+<course>
+
+    <windDirection>
+        45.0
+    </windDirection>
+
+    <timeZone>
+        Atlantic/Bermuda
+    </timeZone>
+
+    <compoundMark>
+        <name>Start</name>
+        <mark>
+            <markName>Start1</markName>
+            <longitude>-60.0</longitude>
+            <latitude>30.0</latitude>
+        </mark>
+    </compoundMark>
+
+
+
+    <compoundMark>
+        <name>Mark</name>
+        <mark>
+            <markName>Mark1</markName>
+            <longitude>-70.0</longitude>
+            <latitude>40.0</latitude>
+        </mark>
+    </compoundMark>
+
+
+    <compoundMark>
+        <name>Finish</name>
+        <mark>
+            <markName>Finish1</markName>
+            <longitude>-80.0</longitude>
+            <latitude>50.0</latitude>
+        </mark>
+        <mark>
+            <markName>Finish2</markName>
+            <longitude>-81.0</longitude>
+            <latitude>51.0</latitude>
+        </mark>
+    </compoundMark>
+
+
+    <boundaries>
+    </boundaries>
+
+
+</course>

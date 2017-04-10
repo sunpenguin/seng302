@@ -12,7 +12,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dhl25 on 30/03/17.
@@ -28,7 +30,7 @@ public class XMLBoatParser {
      * @throws IOException
      * @throws SAXException
      */
-    public static ArrayList<Boat> parseBoats(File file) throws ParserConfigurationException, IOException, SAXException {
+    public static List<Boat> parseBoats(InputStream file) throws ParserConfigurationException, IOException, SAXException {
         final String BOATS_TAG = "boats";
         final String BOAT_TAG = "boat";
 
@@ -38,7 +40,7 @@ public class XMLBoatParser {
         doc.getDocumentElement().normalize();
         Element boatsElement = (Element) doc.getElementsByTagName(BOATS_TAG).item(0);
         NodeList boatNodes = boatsElement.getElementsByTagName(BOAT_TAG);
-        ArrayList<Boat> boats = new ArrayList<>();
+        List<Boat> boats = new ArrayList<>();
         for (int i = 0; i < boatNodes.getLength(); i++) {
             Node boatNode = boatNodes.item(i);
             if (boatNode.getNodeType() == Node.ELEMENT_NODE) {

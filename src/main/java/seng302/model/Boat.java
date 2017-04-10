@@ -4,7 +4,7 @@ package seng302.model;
 import javafx.beans.property.*;
 
 /**
- * A class which represents a boat in the race. Boats are drawn on the group using information retrieved from this class
+ * A class which represents a boat in the text based Application
  */
 
 public class Boat {
@@ -13,6 +13,7 @@ public class Boat {
     private String teamName;
     private DoubleProperty speed;
     private Leg leg;
+//    private double position;
     private double heading;
     private Coordinate coordinate;
     private Coordinate destination;
@@ -156,9 +157,9 @@ public class Boat {
         this.place.set(place);
     }
 
-
     public IntegerProperty placeProperty() {
         return place;
     }
+
 
 }

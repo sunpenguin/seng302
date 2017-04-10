@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class XMLCourseParser {
      * @throws IOException
      * @throws SAXException
      */
-    public static Course parseCourse(File courseFile) throws ParserConfigurationException, IOException, SAXException {
+    public static Course parseCourse(InputStream courseFile) throws ParserConfigurationException, IOException, SAXException {
         final String COMPOUND_MARK_TAG = "compoundMark"; // declaring things as final is fun
         final String COURSE_TAG = "course";
         final String WIND_TAG = "windDirection";

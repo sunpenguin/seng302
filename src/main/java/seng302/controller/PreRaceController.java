@@ -24,6 +24,8 @@ import seng302.parser.XMLCourseParser;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -47,8 +49,9 @@ public class PreRaceController {
     @FXML
     public void initialize() {
         try {
-            List<Boat> boats = XMLBoatParser.parseBoats(new File("src/main/resources/boats.xml")); // throws exceptions
-            Course course = XMLCourseParser.parseCourse(new File("src/main/resources/course.xml")); // throws exceptions
+            List<Boat> boats = XMLBoatParser.parseBoats(getClass().getResourceAsStream("/boats.xml")); // throws exceptions
+            Course course = XMLCourseParser.parseCourse(getClass().getResourceAsStream("/course.xml")); // throws exceptions
+
 
             race = new Race(boats, course);
 
@@ -78,6 +81,7 @@ public class PreRaceController {
     }
 
 
+
     public void setUpList() {
         listView.setItems(FXCollections.observableList(race.getStartingList()));
         listView.setCellFactory(param -> new ListCell<Boat>() {
@@ -95,7 +99,6 @@ public class PreRaceController {
 
     public void showLiveRaceView() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
-        preRaceClock.stop();
         try {
             Parent root = loader.load(); // throws IOException
             Stage stage = (Stage) listView.getScene().getWindow();
@@ -104,6 +107,7 @@ public class PreRaceController {
             mainWindowController.startRace((long) Race.PREP_TIME_SECONDS);
             Scene scene = new Scene(root);
             stage.setScene(scene);
+            preRaceClock.stop();
         } catch (IOException e) {
             e.printStackTrace();
         }

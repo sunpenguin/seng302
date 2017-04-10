@@ -1,6 +1,6 @@
 package seng302.model;
 
-import seng302.raceutil.GPSCalculations;
+import seng302.util.GPSCalculations;
 
 /**
  * A class which denotes which two marks a boat is currently travelling between using a destination mark, a departure

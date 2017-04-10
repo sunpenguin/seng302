@@ -25,7 +25,7 @@
           </Menu>
         </menus>
       </MenuBar>
-    <AnchorPane fx:id="raceViewAnchorPane" layoutY="30.0" minHeight="0.0" minWidth="0.0" prefHeight="690.0" prefWidth="690.0" style="-fx-background-color: lightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="590.0" AnchorPane.topAnchor="30.0">
+    <AnchorPane fx:id="raceViewPane" layoutY="30.0" minHeight="0.0" minWidth="0.0" prefHeight="690.0" prefWidth="690.0" style="-fx-background-color: lightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="590.0" AnchorPane.topAnchor="30.0">
          <children>
             <Group fx:id="group" layoutY="690.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
             <Label fx:id="fpsLabel" layoutX="611.0" prefHeight="15.0" prefWidth="79.0" text="FPS:" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

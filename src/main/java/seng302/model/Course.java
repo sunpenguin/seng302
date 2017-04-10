@@ -1,6 +1,6 @@
 package seng302.model;
 
-import seng302.raceutil.GPSCalculations;
+import seng302.util.GPSCalculations;
 
 import java.time.ZoneId;
 import java.util.ArrayList;

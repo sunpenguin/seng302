@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by jth102 on 29/03/17.
+ * Class to display time from a specific time-zone on a JavaFX Label.
  */
 public class ZoneTimeClock extends AnimationTimer {
 

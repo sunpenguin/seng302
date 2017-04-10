@@ -5,15 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import seng302.controller.MainWindowController;
 import seng302.controller.PreRaceController;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 
 public class App extends Application {
@@ -34,9 +28,6 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-
-//        raceLength = Integer.parseInt(args[0]);
-
         launch(args);
     }
 }

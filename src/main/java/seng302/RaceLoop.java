@@ -2,6 +2,7 @@ package seng302;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import seng302.display.FPSReporter;
 import seng302.display.RaceRenderer;
 import seng302.model.Race;
@@ -17,7 +18,6 @@ public class RaceLoop extends AnimationTimer {
     private Race race;
     private RaceRenderer renderer;
     private FPSReporter fpsReporter;
-    private AnchorPane raceViewAnchorPane;
     private int frameCount = 0;
 
     /**
@@ -26,11 +26,10 @@ public class RaceLoop extends AnimationTimer {
      * @param race the race to be updated
      * @param renderer the renderer that updates with the race
      */
-    public RaceLoop(Race race, RaceRenderer renderer, FPSReporter fpsReporter, AnchorPane raceViewAnchorPane) {
+    public RaceLoop(Race race, RaceRenderer renderer, FPSReporter fpsReporter) {
         this.race = race;
         this.renderer = renderer;
         this.fpsReporter = fpsReporter;
-        this.raceViewAnchorPane = raceViewAnchorPane;
     }
 
     @Override
