@@ -1,7 +1,7 @@
-package seng302.Mock;
+package seng302.team18.test_mock;
 
-import seng302.model.Coordinate;
-import seng302.util.GPSCalculations;
+import seng302.team18.model.Coordinate;
+import seng302.team18.util.GPSCalculations;
 
 import java.util.ArrayList;
 import java.util.HashMap;

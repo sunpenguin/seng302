@@ -1,6 +1,6 @@
-package seng302.Mock;
+package seng302.team18.test_mock;
 
-import seng302.model.Coordinate;
+import seng302.team18.model.Coordinate;
 
 /**
  * Created by jth102 on 11/04/17.
