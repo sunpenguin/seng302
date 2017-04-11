@@ -17,13 +17,15 @@ public class CRCChecker implements MessageErrorDetector {
     public Boolean isValid(byte[] checkSum, byte[] messageBytes) {
         //Convert byte array to decimal number
         ByteBuffer wrapped = ByteBuffer.wrap(checkSum);
-        long givenCheckSum = wrapped.getLong();
+        int givenCheckSum = wrapped.getInt();
 
         //Calculate the checksum for the given message with crc polynomial
         CRC32 crc = new CRC32();
         crc.update(messageBytes);
-        long calculatedCheckSum = crc.getValue();
+        int calculatedCheckSum = (int) crc.getValue();
 
+        System.out.println(givenCheckSum);
+        System.out.println(calculatedCheckSum);
         //Valid if the two checksums are the same.
         return calculatedCheckSum == givenCheckSum;
     }
