@@ -46,7 +46,7 @@ public class XMLCourseParser {
         // creates all Compound Marks
         Element courseElement = (Element) doc.getElementsByTagName(COURSE_TAG).item(0);
         NodeList compoundNodes = courseElement.getElementsByTagName(COMPOUND_MARK_TAG);
-        ArrayList<CompoundMark> compoundMarks = new ArrayList<>();
+        List<CompoundMark> compoundMarks = new ArrayList<>();
         for(int i = 0; i < compoundNodes.getLength(); i++) {
             Node compoundMarkNode = compoundNodes.item(i);
             if (compoundMarkNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -64,7 +64,7 @@ public class XMLCourseParser {
         Element boundariesElement = (Element) courseElement.getElementsByTagName(BOUNDARIES_TAG).item(0);
         List<Coordinate> boundaries = parseBoundaries(boundariesElement); // parses boundaries
         ZoneId courseTimeZone = ZoneId.of(parseTimeZone(courseElement).trim());
-        return new Course(compoundMarks, boundaries, windDirection, courseTimeZone);
+        return null; // new Course(compoundMarks, boundaries, windDirection, courseTimeZone);
     }
 
 

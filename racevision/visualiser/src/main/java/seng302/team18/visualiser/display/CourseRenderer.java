@@ -6,10 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
-import seng302.team18.model.CompoundMark;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
-import seng302.team18.model.Mark;
+import seng302.team18.model.*;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -50,12 +47,12 @@ public class CourseRenderer {
      */
     private void setupBoundary() {
         // Renders Boundaries
-        for (Coordinate boundary : course.getBoundaries()) {
-            XYPair boundaryPixels = PixelMapper.convertCoordPixel(boundary, PADDING, true, pane, course);
+        for (BoundaryMark boundary : course.getBoundaries()) {
+            XYPair boundaryPixels = PixelMapper.convertCoordPixel(boundary.getCoordinate(), PADDING, true, pane, course);
             border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
         }
         if (course.getBoundaries().size() != 0) {
-            Coordinate boundary = course.getBoundaries().get(0);
+            Coordinate boundary = course.getBoundaries().get(0).getCoordinate();
             XYPair boundaryPixels = PixelMapper.convertCoordPixel(boundary, PADDING, true, pane, course);
             border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
         }
@@ -155,11 +152,11 @@ public class CourseRenderer {
         // Renders Boundaries
         group.getChildren().remove(border);
         border = new Polyline();
-        for (Coordinate boundary : course.getBoundaries()) {
-            renderBoundary(border, boundary);
+        for (BoundaryMark boundary : course.getBoundaries()) {
+            renderBoundary(border, boundary.getCoordinate());
         }
         if (course.getBoundaries().size() != 0) {
-            renderBoundary(border, course.getBoundaries().get(0));
+            renderBoundary(border, course.getBoundaries().get(0).getCoordinate());
             group.getChildren().add(border);
         }
         border.setFill(BOUNDARY_FILL_COLOR);

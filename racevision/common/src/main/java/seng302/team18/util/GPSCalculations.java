@@ -1,9 +1,6 @@
 package seng302.team18.util;
 
-import seng302.team18.model.CompoundMark;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
-import seng302.team18.model.Mark;
+import seng302.team18.model.*;
 
 import java.util.ArrayList;
 
@@ -187,8 +184,8 @@ public class GPSCalculations {
     }
 
     public void findMinMaxPoints(Course course) {
-        for (Coordinate boundary : course.getBoundaries()) {
-            XYPair boundaryXYValues = GPSxy(boundary);
+        for (BoundaryMark boundary : course.getBoundaries()) {
+            XYPair boundaryXYValues = GPSxy(boundary.getCoordinate());
             double xValue = boundaryXYValues.getX();
             double yValue = boundaryXYValues.getY();
             if (xValue < minX) {
