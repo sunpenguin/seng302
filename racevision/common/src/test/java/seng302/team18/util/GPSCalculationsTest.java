@@ -23,7 +23,7 @@ public class GPSCalculationsTest {
 
     @Before
     public void setUp() throws IOException, SAXException, ParserConfigurationException {
-        testCourse = XMLCourseParser.parseCourse(new BufferedInputStream(getClass().getResourceAsStream("/misc/test-course.xml")));
+        testCourse = XMLCourseParser.parseCourse(new BufferedInputStream(getClass().getResourceAsStream("/test-course.xml")));
         g = new GPSCalculations(testCourse);
     }
 

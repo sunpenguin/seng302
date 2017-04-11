@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class XMLBoatParserTest {
 
-    private InputStream boatFile = new BufferedInputStream(getClass().getResourceAsStream("/misc/test-boats.xml"));
+    private InputStream boatFile = new BufferedInputStream(getClass().getResourceAsStream("/test-boats.xml"));
 
     @Test
     public void testParseBoats() throws IOException, SAXException, ParserConfigurationException {

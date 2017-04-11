@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 public class XMLCourseParserTest {
 
 
-    private InputStream courseFile = new BufferedInputStream(getClass().getResourceAsStream("/misc/test-course.xml"));
+    private InputStream courseFile = new BufferedInputStream(getClass().getResourceAsStream("/test-course.xml"));
 
 
     @Test
