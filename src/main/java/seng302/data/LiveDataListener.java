@@ -29,7 +29,8 @@ public class LiveDataListener {
             return null;
         }
         inStream.mark(headParser.headerSize() + 1);
-        byte[] headerBytes = new byte[headParser.headerSize()];
+        byte[] headerBytes = new byte[headParser.
+                headerSize()];
         inStream.read(headerBytes);
         MessageHead head = headParser.parse(headerBytes);
         MessageErrorDetector detector = parserFactory.makeDetector();
