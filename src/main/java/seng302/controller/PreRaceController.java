@@ -14,6 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.xml.sax.SAXException;
+import seng302.data.AC35MessageParserFactory;
 import seng302.data.LiveDataListener;
 import seng302.display.ZoneTimeClock;
 import seng302.model.Boat;
@@ -161,7 +162,12 @@ public class PreRaceController {
         // TODO move to a better place.
 
         if (decision.equals("Y")){
-            LiveDataListener l = new LiveDataListener(4941);
+            try {
+                LiveDataListener l = new LiveDataListener(4941, new AC35MessageParserFactory());
+            } catch (IOException e) {
+                System.out.println("try again noob");
+                getDurationInput();
+            }
         }
     }
 
