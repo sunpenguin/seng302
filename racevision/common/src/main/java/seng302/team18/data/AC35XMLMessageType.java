@@ -8,7 +8,7 @@ import java.util.Map;
  * Created by david on 4/10/17.
  */
 public enum AC35XMLMessageType {
-    DEFAULT (0), XML_REGATTA (5), XML_RACE (6), XML_BOATS (7);
+    XML_REGATTA (5), XML_RACE (6), XML_BOATS (7);
 
     private int code;
     private static final Map<Integer, AC35XMLMessageType> CODE_MAP = Collections.unmodifiableMap(initializeMapping());

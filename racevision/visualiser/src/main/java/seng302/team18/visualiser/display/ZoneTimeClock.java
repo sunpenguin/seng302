@@ -14,15 +14,16 @@ import java.time.format.DateTimeFormatter;
 public class ZoneTimeClock extends AnimationTimer {
 
     private Label timerLabel;
-    private double timeScaleFactor;
+//    private double timeScaleFactor;
     private ZonedDateTime zonedDateTime;
     private ZoneId zoneId;
     private long previousTime = 0;
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-    public ZoneTimeClock(Label timerLabel, double timeScale, ZoneId zoneId) {
-        this.timerLabel = timerLabel;
-        this.timeScaleFactor = timeScale;
+//    public ZoneTimeClock(Label timerLabel, double timeScale, ZoneId zoneId) {
+    public ZoneTimeClock(Label timerLabel, ZoneId zoneId) {
+            this.timerLabel = timerLabel;
+//        this.timeScaleFactor = timeScale;
 
         this.zoneId = zoneId;
         timerLabel.setTextFill(Color.BLACK);
@@ -37,7 +38,7 @@ public class ZoneTimeClock extends AnimationTimer {
             return;
         }
 
-        double nanoSecondsElapsed = (currentTime - previousTime) * timeScaleFactor;
+        double nanoSecondsElapsed = (currentTime - previousTime);// * timeScaleFactor;
         previousTime = currentTime;
 
         zonedDateTime = zonedDateTime.plusNanos((long) nanoSecondsElapsed);

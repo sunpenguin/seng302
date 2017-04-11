@@ -15,9 +15,9 @@ public class Race {
     private List<Boat> startingList;
     private Course course;
     private List<Boat> finishedList;
-    private double duration;
-    public static final double WARNING_TIME_SECONDS = 30; // TODO change this to 60
-    public static final double PREP_TIME_SECONDS = 60; // TODO change this to 120
+//    private double duration;
+    public static final double WARNING_TIME_SECONDS = 4; // TODO change this to 60
+    public static final double PREP_TIME_SECONDS = 8; // TODO change this to 120
 
     /**
      * Race class constructor.
@@ -31,7 +31,7 @@ public class Race {
         this.course = course;
         finishedList = new ArrayList<>();
         setCourseForBoats();
-        duration = 60;
+//        duration = 60;
     }
 
     /**
@@ -178,8 +178,9 @@ public class Race {
     private void updatePosition(Boat boat, double time) {
         final double KMPH_TO_MPS = 1000.0 / 3600.0;
         double speed = boat.getSpeed() * KMPH_TO_MPS;
-        double distanceTravelled = speed * time
-                / (duration / (course.getCourseDistance() / (startingList.get(0).getSpeed() * KMPH_TO_MPS))); // meters
+        double distanceTravelled = speed * time;
+//        double distanceTravelled = speed * time
+//                / (duration / (course.getCourseDistance() / (startingList.get(0).getSpeed() * KMPH_TO_MPS))); // meters
         boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
                 GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
@@ -190,13 +191,13 @@ public class Race {
     }
 
 
-    public void setDuration(double duration) {
-        this.duration = duration;
-    }
-
-    public double getDuration() {
-        return duration;
-    }
+//    public void setDuration(double duration) {
+//        this.duration = duration;
+//    }
+//
+//    public double getDuration() {
+//        return duration;
+//    }
 
     public boolean isFinished() {
         return startingList.size() == finishedList.size();

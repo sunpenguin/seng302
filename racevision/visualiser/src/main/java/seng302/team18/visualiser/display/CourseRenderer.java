@@ -29,7 +29,7 @@ public class CourseRenderer {
     private final double MARK_SIZE = 10.0;
     private final double PADDING = 20.0;
     private Polyline border = new Polyline();
-    private Map<String, Rectangle> marks = new HashMap();
+    private Map<String, Rectangle> marks = new HashMap<>();
     private Map<String, Line> gates = new HashMap<>();
     private Map<String, CompoundMark> compoundMarkMap = new HashMap<>();
     private Course course;

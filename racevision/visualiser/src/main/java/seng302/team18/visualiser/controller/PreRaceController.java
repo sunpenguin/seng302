@@ -14,6 +14,8 @@ import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.xml.sax.SAXException;
+import seng302.team18.data.AC35MessageParserFactory;
+import seng302.team18.data.LiveDataListener;
 import seng302.team18.data.XMLBoatParser;
 import seng302.team18.data.XMLCourseParser;
 import seng302.team18.model.Boat;
@@ -34,11 +36,8 @@ public class PreRaceController {
     private Label timeLabel;
     @FXML
     private ListView<Boat> listView;
-    private List<Boat> boats;
-    private ZonedDateTime zonedDateTime;
     @FXML
     private Label timeZoneLabel;
-    private Course course;
 
     private Race race;
     private ZoneTimeClock preRaceClock;
@@ -63,11 +62,12 @@ public class PreRaceController {
         }
 
         final double KMPH_TO_MPS = 1000.0 / 3600.0;
-        double timeScaleFactor = race.getCourse().getCourseDistance()
-                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
+//        double timeScaleFactor = race.getCourse().getCourseDistance()
+//                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
 
         Timeline showLive = new Timeline(new KeyFrame(
-                Duration.seconds(Race.WARNING_TIME_SECONDS / timeScaleFactor),
+//                Duration.seconds(Race.WARNING_TIME_SECONDS / timeScaleFactor),
+                Duration.seconds(Race.WARNING_TIME_SECONDS),
                 event -> showLiveRaceView()));
         showLive.setCycleCount(1);
         showLive.play();
@@ -113,9 +113,10 @@ public class PreRaceController {
 
     private void startClock() {
         final double KMPH_TO_MPS = 1000.0 / 3600.0;
-        double timeScaleFactor = race.getCourse().getCourseDistance()
-                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
-        preRaceClock = new ZoneTimeClock(timeLabel, timeScaleFactor, race.getCourse().getTimeZone());
+//        double timeScaleFactor = race.getCourse().getCourseDistance()
+//                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
+//        preRaceClock = new ZoneTimeClock(timeLabel, timeScaleFactor, race.getCourse().getTimeZone());
+        preRaceClock = new ZoneTimeClock(timeLabel, race.getCourse().getTimeZone());
         preRaceClock.start();
     }
 
@@ -135,16 +136,16 @@ public class PreRaceController {
     private void getDurationInput() {
 
         Scanner scanner = new Scanner(System.in);
-        int duration = 0;
-        while (duration != 1 && duration != 5) {
-            System.out.println("Choose how long the race lasts (1 minute or 5 minutes)");
-            if (scanner.hasNextInt()) {
-                duration = scanner.nextInt();
-                race.setDuration(duration * 60); // convert from minutes to seconds
-            } else {
-                scanner.next();
-            }
-        }
+//        int duration = 0;
+//        while (duration != 1 && duration != 5) {
+//            System.out.println("Choose how long the race lasts (1 minute or 5 minutes)");
+//            if (scanner.hasNextInt()) {
+//                duration = scanner.nextInt();
+//                race.setDuration(duration * 60); // convert from minutes to seconds
+//            } else {
+//                scanner.next();
+//            }
+//        }
 
         String decision = "";
         while (!decision.toUpperCase().equals("Y") && !decision.toUpperCase().equals("N")) {
@@ -161,7 +162,7 @@ public class PreRaceController {
 
         if (decision.equals("Y")){
             try {
-                LiveDataListener l = new LiveDataListener(4941, new AC35MessageParserFactory());
+                LiveDataListener liveDataListener = new LiveDataListener(4941, new AC35MessageParserFactory());
             } catch (IOException e) {
                 System.out.println("try again noob");
                 getDurationInput();

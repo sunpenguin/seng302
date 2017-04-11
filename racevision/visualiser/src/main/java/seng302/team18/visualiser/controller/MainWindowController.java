@@ -118,9 +118,9 @@ public class MainWindowController {
 
     public void startRace(long secondsDelay) {
         final double KMPH_TO_MPS = 1000.0 / 3600.0;
-        double timeScaleFactor = race.getCourse().getCourseDistance()
-                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
-        secondsDelay /= (double) timeScaleFactor;
+//        double timeScaleFactor = race.getCourse().getCourseDistance()
+//                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
+//        secondsDelay /= (double) timeScaleFactor;
         raceClock.start();
         Timeline showLive = new Timeline(new KeyFrame(
                 Duration.seconds(secondsDelay),
