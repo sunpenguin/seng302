@@ -3,6 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/racevision/common/common.iml" filepath="$PROJECT_DIR$/racevision/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/racevision/racevision.iml" filepath="$PROJECT_DIR$/racevision/racevision.iml" />
+      <module fileurl="file://$PROJECT_DIR$/racevision/test_mock/test_mock.iml" filepath="$PROJECT_DIR$/racevision/test_mock/test_mock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/racevision/visualiser/visualiser.iml" filepath="$PROJECT_DIR$/racevision/visualiser/visualiser.iml" />
     </modules>
   </component>
 </project>
