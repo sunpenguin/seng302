@@ -2,8 +2,6 @@ package seng302.team18.data;
 
 import seng302.team18.util.ByteCheck;
 
-import seng302.util.ByteCheck;
-
 /**
  * Created by dhl25 on 10/04/17.
  */

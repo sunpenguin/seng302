@@ -1,5 +1,6 @@
 package seng302.team18.data;
 
+import seng302.team18.util.ByteCheck;
 import seng302.team18.model.Coordinate;
 
 import java.nio.ByteBuffer;
