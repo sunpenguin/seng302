@@ -1,8 +1,7 @@
 package seng302.data;
 
 import seng302.model.Coordinate;
-
-import java.nio.ByteBuffer;
+import seng302.util.ByteCheck;
 
 /**
  * Created by dhl25 on 10/04/17.
@@ -24,12 +23,11 @@ public class AC35BoatLocationParser implements MessageBodyParser {
 
     @Override
     public MessageBody parse(byte[] bytes) { // more final declarations than actual code LOL
-        // TODO Change these to use ByteCheck method
-        int sourceID = ByteBuffer.wrap(bytes, SOURCE_ID_INDEX, SOURCE_ID_LENGTH).getInt();
-        double lat = ByteBuffer.wrap(bytes, LAT_INDEX, LAT_LENGTH).getInt() * BYTE_COORDINATE_TO_DOUBLE;
-        double longitude = ByteBuffer.wrap(bytes, LONG_INDEX, LONG_LENGTH).getInt() * BYTE_COORDINATE_TO_DOUBLE;
-        double heading = ByteBuffer.wrap(bytes, HEADING_INDEX, HEADING_LENGTH).getInt() * BYTE_HEADING_TO_DOUBLE;
-        double speed = ByteBuffer.wrap(bytes, SPEED_INDEX, SPEED_LENGTH).getInt() * MMPS_TO_KMPH; // mm/s -> km/h
+        int sourceID = ByteCheck.ByteToIntConverter(bytes, SOURCE_ID_INDEX, SOURCE_ID_LENGTH);
+        double lat = ByteCheck.ByteToIntConverter(bytes, LAT_INDEX, LAT_LENGTH) * BYTE_COORDINATE_TO_DOUBLE;
+        double longitude = ByteCheck.ByteToIntConverter(bytes, LONG_INDEX, LONG_LENGTH) * BYTE_COORDINATE_TO_DOUBLE;
+        double heading = ByteCheck.ByteToIntConverter(bytes, HEADING_INDEX, HEADING_LENGTH) * BYTE_HEADING_TO_DOUBLE;
+        double speed = ByteCheck.ByteToIntConverter(bytes, SPEED_INDEX, SPEED_LENGTH) * MMPS_TO_KMPH; // mm/s -> km/h
         return new AC35BoatLocationMessage(sourceID, new Coordinate(lat, longitude), heading, speed);
     }
 
