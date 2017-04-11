@@ -7,17 +7,8 @@ generate_artifacts:
   stage: deploy
   script:
     - mvn -B clean site package
-  except:
-    - modularisation
-
-generate_artifacts_test:
-  stage: deploy
-  script:
-    - mvn -B clean site package
     - tar -czf target/site.tar.gz target/site
   artifacts:
     paths:
       - racevision/*/target/*.jar
       - target/site.tar.gz
-  only:
-    - modularisation
