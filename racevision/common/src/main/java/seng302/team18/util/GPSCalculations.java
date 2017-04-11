@@ -6,6 +6,7 @@ import seng302.team18.model.Course;
 import seng302.team18.model.Mark;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for making GPS calculations
@@ -223,6 +224,48 @@ public class GPSCalculations {
                 }
             }
         }
+    }
+
+
+    public static Coordinate getCentralCoordinate(List<Coordinate> geoCoordinates) {
+        double x = 0;
+        double y = 0;
+        double z = 0;
+
+        for (Coordinate geoCoordinate : geoCoordinates)
+        {
+            double latitude = geoCoordinate.getLatitude() * Math.PI / 180;
+            double longitude = geoCoordinate.getLongitude() * Math.PI / 180;
+
+            x += Math.cos(latitude) * Math.cos(longitude);
+            y += Math.cos(latitude) * Math.sin(longitude);
+            z += Math.sin(latitude);
+        }
+
+        double total = geoCoordinates.size();
+
+        x = x / total;
+        y = y / total;
+        z = z / total;
+
+        double centralLongitude = Math.atan2(y, x);
+        double centralSquareRoot = Math.sqrt(x * x + y * y);
+        double centralLatitude = Math.atan2(z, centralSquareRoot);
+
+        return new Coordinate(centralLatitude * 180 / Math.PI, centralLongitude * 180 / Math.PI);
+
+//        double totalLatitude = 0;
+//        double totalLongitude = 0;
+//
+//        for (Coordinate coordinate : geoCoordinates) {
+//            totalLatitude += coordinate.getLatitude();
+//            totalLongitude += coordinate.getLongitude();
+//        }
+//
+//        double latitude = totalLatitude / 4;
+//        double longitude = totalLongitude / 4;
+//
+//        return new Coordinate(latitude, longitude);
     }
 
     /**
