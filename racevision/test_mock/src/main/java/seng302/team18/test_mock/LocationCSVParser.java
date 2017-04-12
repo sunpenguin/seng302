@@ -21,14 +21,22 @@ public class LocationCSVParser {
     public static void ParserCSV(File file) {
         int numRaces = 0;
         try {
-            numRaces = getNumRaces(file);
+            numRaces = getNumRaces(file);           //get number of lines
+            System.out.println();
         }catch (Exception e){
         }
         Random rand = new Random();
-        int  n = rand.nextInt(numRaces) + 1;
-        System.out.println(n + "  " + numRaces);
+        int  lineNum = rand.nextInt(numRaces);      //chose a random line
+        String location = "oh no";
+        try {
+            location = getLine(lineNum, file);      //get chosen line
+        }catch (Exception e){
+        }
+        System.out.println(lineNum + "  " +location);
+        //makeRegatta(location);                      //create Regatta.xml
     }
 
+    //gets the number of lines in a file
     private static int getNumRaces(File file) throws IOException{
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
         String input;
@@ -39,5 +47,22 @@ public class LocationCSVParser {
         }
         return count;
     }
+
+    //gets a specific line from a file
+    private static String getLine(int lineNum, File file)throws IOException{
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+        String line = bufferedReader.readLine();
+        int count = 0;
+        while(count < lineNum)
+        {
+            line = bufferedReader.readLine();
+            count++;
+        }
+        return line;
+    }
+
+//    private static File makeRegatta(String location){
+//
+//    }
 
 }
