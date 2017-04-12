@@ -7,10 +7,15 @@ public class Mark {
 
     private String name;
     private Coordinate coordinates;
-
+    private Integer id;
 
     public Mark(String name, Coordinate coordinates) {
         this.name = name;
+        this.coordinates = coordinates;
+    }
+
+    public Mark(int id, Coordinate coordinates) {
+        this.id = id;
         this.coordinates = coordinates;
     }
 

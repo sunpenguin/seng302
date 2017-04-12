@@ -13,17 +13,21 @@ public class CompoundMark {
     public static int GATE_SIZE = 2;
     public static int MARK_SIZE = 1;
     private String name;
+    private Integer id;
     private List<Mark> marks;
     private List<Boat> passed;
 
     public CompoundMark(String name, List<Mark> marks) {
-        if (0 < marks.size() && marks.size() <= 2) {
-            this.name = name;
-            this.marks = marks;
-            passed = new ArrayList<>();
-        } else {
-            System.err.println("A compound mark cannot have more than 2 marks");
-        }
+        this.name = name;
+        this.marks = marks;
+        passed = new ArrayList<>();
+    }
+
+    public CompoundMark(String name, List<Mark> marks, int id) {
+        this.name = name;
+        this.marks = marks;
+        this.id = id;
+        passed = new ArrayList<>();
     }
 
     public String getName() {
