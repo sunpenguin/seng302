@@ -2,10 +2,13 @@ package seng302.team18.data;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -23,29 +26,23 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
 
         InputStream stream = new ByteArrayInputStream(bytes);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder(); // parser configuration exception
-        Document doc = builder.parse(stream); // io exception
+        DocumentBuilder builder;
+        Document doc;
+        try {
+            builder = factory.newDocumentBuilder(); // parser configuration exception
+            doc = builder.parse(stream); // io exception, SAXException
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            return null;
+        }
         doc.getDocumentElement().normalize();
-        Element regattaElement = (Element) doc.getElementsByTagName(REGATTA_TAG).item(0);
-        int regattaID =
-                Integer.parseInt(regattaElement.getElementsByTagName(REGATTA_ID).item(0).getTextContent());
-        double centralLat =
-                Double.parseDouble(regattaElement.getElementsByTagName(CENTER_LAT).item(0).getTextContent());
-        double centralLong =
-                Double.parseDouble(regattaElement.getElementsByTagName(CENTER_LONG).item(0).getTextContent());
-        String utcOffset = regattaElement.getElementsByTagName(CENTER_LONG).item(0).getTextContent();
-        return null;
+        Element regattaElement = doc.getElementById(REGATTA_TAG);
+//        int regattaID = Integer.parseInt(regattaElement.getAttribute(REGATTA_ID));
+        double centralLat = Double.parseDouble(regattaElement.getAttribute(CENTER_LAT));
+        double centralLong = Double.parseDouble(regattaElement.getAttribute(CENTER_LONG));
+        String utcOffset = regattaElement.getAttribute(CENTER_LONG);
+
+        return new AC35XMLRegattaMessage(centralLat, centralLong, utcOffset);
     }
 
-//<RegattaConfig>
-//<RegattaID>3</RegattaID>
-//    <RegattaName>New Zealand Test</RegattaName>
-//    <CourseName>North Head</CourseName>
-//<CentralLatitude>-36.82791529</CentralLatitude>
-//<CentralLongitude>174.81218919</CentralLongitude>
-//<CentralAltitude>0.00</CentralAltitude>
-//<UtcOffset>12</UtcOffset>
-//<MagneticVariation>14.1</MagneticVariation>
-//</RegattaConfig>
 
 }

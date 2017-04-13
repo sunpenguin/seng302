@@ -4,11 +4,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import seng302.team18.model.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +22,6 @@ import java.util.Map;
  * Created by dhl25 on 11/04/17.
  */
 public class AC35XMLRaceParser implements MessageBodyParser {
-
 
 
     @Override
@@ -51,12 +53,18 @@ public class AC35XMLRaceParser implements MessageBodyParser {
 
         InputStream stream = new ByteArrayInputStream(bytes);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder(); // parser configuration exception
-        Document doc = builder.parse(stream); // io exception
+        DocumentBuilder builder;
+        Document doc;
+        try {
+            builder = factory.newDocumentBuilder(); // parser configuration exception
+            doc = builder.parse(stream); // io exception
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            return null;
+        }
         doc.getDocumentElement().normalize();
-        Element raceElement = (Element) doc.getElementsByTagName(RACE_ELEMENT).item(0);
+        Element raceElement = doc.getElementById(RACE_ELEMENT);
         Node startTimeNode = raceElement.getAttributeNode(START_DATE_TIME_ELEMENT);
-        String startTimeString;
+        String startTimeString = null;
         if (startTimeNode.getNodeType() == Node.ELEMENT_NODE) {
             startTimeString = ((Element) startTimeNode).getAttribute(TIME);
         }
@@ -136,7 +144,13 @@ public class AC35XMLRaceParser implements MessageBodyParser {
             }
         }
 
-        return null;
+        AC35XMLRaceMessage message = new AC35XMLRaceMessage();
+        message.setRaceStartTime(startTimeString);
+        message.setBoundaryMarks(boundaries);
+        message.setCompoundMarks(new ArrayList<>(compoundMarks.values()));
+        message.setParticipantIDs(participantIDs);
+        message.setMarkRoundings(markRoundings);
+        return message;
     }
 
 
