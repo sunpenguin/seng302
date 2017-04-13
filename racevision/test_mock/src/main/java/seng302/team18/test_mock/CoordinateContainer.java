@@ -52,6 +52,7 @@ public class CoordinateContainer {
     }
 
     private void setUpCourseMap() {
+        StreamResult result = new StreamResult(new File("racevision/test_mock/src/main/resources/race.xml"));
         List<Coordinate> referenceBoundary = ACLocationsMap.get(1);
 
         Random ran = new Random();
@@ -233,13 +234,13 @@ public class CoordinateContainer {
             compoundMarkSeq5.setAttribute("ZoneSize","3");
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
             try {
                 Transformer transformer = transformerFactory.newTransformer();
                 transformer.setOutputProperty(OutputKeys.INDENT, "yes");
                 transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
                 DOMSource source = new DOMSource(doc);
 //                StreamResult result =  new StreamResult(System.out);
-                StreamResult result = new StreamResult(new File("C:\\Users\\Public\\team-18\\racevision\\common\\src\\main\\resources\\file.xml"));
                 try {
                     transformer.transform(source, result);
                 } catch (TransformerException e) {
