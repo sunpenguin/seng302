@@ -16,7 +16,7 @@ public class AC35XMLParserFactory implements MessageParserFactory {
 
     @Override
     public MessageBodyParser makeBodyParser(int type) {
-        AC35XMLMessageType xmlType = AC35XMLMessageType.from(type);
+        AC35MessageType xmlType = AC35MessageType.from(type);
         switch (xmlType) {
             case XML_REGATTA:
                 return null;

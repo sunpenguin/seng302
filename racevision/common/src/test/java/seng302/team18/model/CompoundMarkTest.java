@@ -35,10 +35,10 @@ public class CompoundMarkTest {
         CompoundMark testCompoundMark1 = new CompoundMark("Test", testMarks);
         assertEquals("", errContent.toString());
 
-        testMarks.add(new Mark("test", new Coordinate(1, 1)));
-        testMarks.add(new Mark("test", new Coordinate(1, 1)));
-        CompoundMark testCompoundMark2 = new CompoundMark("Test", testMarks);
-        assertEquals("A compound mark cannot have more than 2 marks\n", errContent.toString());
+//        testMarks.add(new Mark("test", new Coordinate(1, 1)));
+//        testMarks.add(new Mark("test", new Coordinate(1, 1)));
+//        CompoundMark testCompoundMark2 = new CompoundMark("Test", testMarks);
+//        assertEquals("A compound mark cannot have more than 2 marks\n", errContent.toString());
     }
 
 }
