@@ -18,6 +18,11 @@
             <artifactId>common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>seng302</groupId>
+            <artifactId>common</artifactId>
+            <version>0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
