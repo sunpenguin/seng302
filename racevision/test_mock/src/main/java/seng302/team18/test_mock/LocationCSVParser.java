@@ -9,8 +9,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.GPSCalculations;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  * Class to parse race data from a CSV.
@@ -44,6 +56,7 @@ public class LocationCSVParser {
         }catch (Exception e){
         }
 
+        System.out.println(lineNum);
         //create Regatta.xml
         makeRegatta(location);
     }
@@ -108,11 +121,77 @@ public class LocationCSVParser {
         locationsCoordinates.add(bottomLeft);
 
         //get centre co-ordinate for XML
-        Coordinate center = GPSCalculations.getCentralCoordinate(locationsCoordinates);
+        Coordinate centre = GPSCalculations.getCentralCoordinate(locationsCoordinates);
+        String centralLatitude = String.valueOf(centre.getLatitude());
+        String centralLongitude = String.valueOf(centre.getLongitude());
 
-//        System.out.println(locationsCoordinates);
-//        System.out.println(center.getLatitude() + "  " + center.getLongitude());
+        //make XML
 
+        try {
+
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+            // root element, RegattaConfig
+            Document doc = docBuilder.newDocument();
+            Element rootElement = doc.createElement("RegattaConfig");
+            doc.appendChild(rootElement);
+
+            //RegattaID element
+            Element regattaIDElement = doc.createElement("RegattaID");
+            regattaIDElement.appendChild(doc.createTextNode(regattaID));
+            rootElement.appendChild(regattaIDElement);
+
+            //RegattaName element
+            Element regattaNameElement= doc.createElement("RegattaName");
+            regattaNameElement.appendChild(doc.createTextNode(regattaName));
+            rootElement.appendChild(regattaNameElement);
+
+            //CourseName element
+            Element courseNameElement = doc.createElement("CourseName");
+            courseNameElement.appendChild(doc.createTextNode(courseName));
+            rootElement.appendChild(courseNameElement);
+
+            //CentralLatitude element
+            Element centralLatitudeElement= doc.createElement("CentralLatitude");
+            centralLatitudeElement.appendChild(doc.createTextNode(centralLatitude));
+            rootElement.appendChild(centralLatitudeElement);
+
+            //CentralLongitude element
+            Element centralLongitudeElement= doc.createElement("CentralLongitude");
+            centralLongitudeElement.appendChild(doc.createTextNode(centralLongitude));
+            rootElement.appendChild(centralLongitudeElement);
+
+            //CentralAltitude element
+            Element centralAltitudeElement= doc.createElement("CentralAltitude");
+            centralAltitudeElement.appendChild(doc.createTextNode("0.00"));
+            rootElement.appendChild(centralAltitudeElement);
+
+            //UtcOffset element
+            Element utcOffsetElement= doc.createElement("UtcOffset");
+            utcOffsetElement.appendChild(doc.createTextNode(UTC));
+            rootElement.appendChild(utcOffsetElement);
+
+            //MagneticVariation element
+            Element magneticVariationElement= doc.createElement("MagneticVariation");
+            magneticVariationElement.appendChild(doc.createTextNode(magneticVariation));
+            rootElement.appendChild(magneticVariationElement);
+
+            // write the content into xml file
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File("racevision/test_mock/src/main/resources/Regatta.xml"));
+
+            transformer.transform(source, result);
+
+            System.out.println("File saved!");
+
+        } catch (ParserConfigurationException pce) {
+            pce.printStackTrace();
+        } catch (TransformerException tfe) {
+            tfe.printStackTrace();
+        }
     }
 
 }

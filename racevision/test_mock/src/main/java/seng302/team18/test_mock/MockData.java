@@ -12,7 +12,6 @@ public class MockData {
     public static void main (String[] args){
         CoordinateContainer coordinates = new CoordinateContainer();
         File LocationsCSV = new File(System.getProperty("user.dir")+"/racevision/test_mock/src/main/resources/Locations.csv");
-        System.out.println(LocationsCSV);
         LocationCSVParser.ParserCSV(LocationsCSV);
     }
 }
