@@ -12,7 +12,7 @@ public class AC35XMLHeadParser implements MessageHeadParser {
         final int TYPE_INDEX = 9;
         final int LEN_INDEX = 12;
         final int LEN_LENGTH = 2;
-        AC35XMLMessageType type = AC35XMLMessageType.from((int) header[TYPE_INDEX]);
+        AC35MessageType type = AC35MessageType.from((int) header[TYPE_INDEX]);
         int len = ByteBuffer.wrap(header, LEN_INDEX, LEN_LENGTH).getInt();
         return new AC35XMLHead(type, len);
     }

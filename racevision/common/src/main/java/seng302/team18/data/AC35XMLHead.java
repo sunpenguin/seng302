@@ -5,10 +5,10 @@ package seng302.team18.data;
  */
 public class AC35XMLHead  implements MessageHead {
 
-    private AC35XMLMessageType type;
+    private AC35MessageType type;
     private int bodySize;
 
-    public AC35XMLHead(AC35XMLMessageType type, int bodySize) {
+    public AC35XMLHead(AC35MessageType type, int bodySize) {
         this.type = type;
         this.bodySize = bodySize;
     }

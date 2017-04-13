@@ -176,8 +176,8 @@ public class AC35XMLRaceParser implements MessageBodyParser {
                     boundaries.add(new BoundaryMark(seqId, new Coordinate(lat, lon)));
                 }
             }
-            return boundaries;
         }
+        return boundaries;
     }
 
 
