@@ -33,16 +33,21 @@ import javax.xml.transform.stream.StreamResult;
  */
 public class LocationCSVParser {
 
+    MockData mockData;
+
+    public LocationCSVParser(MockData mockData){
+        this.mockData = mockData;
+    }
+
     /**
      * Reads CSV file and uses information to create Reggata.xml
      * @param file CSV file
      */
-    public static void ParserCSV(File file) {
+    public void ParserCSV(File file) {
         //get number of lines
         int numRaces = 0;
         try {
             numRaces = getNumRaces(file);
-            System.out.println();
         }catch (Exception e){
         }
 
@@ -54,16 +59,14 @@ public class LocationCSVParser {
         String location = "oh no";
         try {
             location = getLine(lineNum, file);
+            makeRegatta(location);
         }catch (Exception e){
+            System.out.println(location);
         }
-
-        System.out.println(lineNum);
-        //create Regatta.xml
-        makeRegatta(location);
     }
 
     //gets the number of lines in a file
-    private static int getNumRaces(File file) throws IOException{
+    private int getNumRaces(File file) throws IOException{
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
         String input;
         int count = 0;
@@ -75,7 +78,7 @@ public class LocationCSVParser {
     }
 
     //gets a specific line from a file
-    private static String getLine(int lineNum, File file)throws IOException{
+    private String getLine(int lineNum, File file)throws IOException{
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
         String line = bufferedReader.readLine();
         int count = 0;
@@ -88,7 +91,7 @@ public class LocationCSVParser {
     }
 
     //creates the regatta.xml file
-    private static void makeRegatta(String location){
+    private void makeRegatta(String location){
         //split the line into its items
         List<String> locationsInfoList = Arrays.asList(location.split(", "));
         String regattaID = locationsInfoList.get(0);
@@ -96,7 +99,7 @@ public class LocationCSVParser {
         String courseName = locationsInfoList.get(2);
         String UTC = locationsInfoList.get(3);
         String magneticVariation = locationsInfoList.get(4);
-        String raceID = locationsInfoList.get(5);
+        double raceID = new Double(locationsInfoList.get(5));
         String raceType = locationsInfoList.get(6);
         String raceStartTime = locationsInfoList.get(7);
         double latTL = new Double(locationsInfoList.get(8));
@@ -126,8 +129,15 @@ public class LocationCSVParser {
         String centralLatitude = String.valueOf(centre.getLatitude());
         String centralLongitude = String.valueOf(centre.getLongitude());
 
-        //make XML
+        //set variables for Mock Data
+        mockData.centreCoordinate = centre;
+        mockData.boundaries = locationsCoordinates;
+        mockData.raceID = raceID;
+        mockData.raceStartTime = raceStartTime;
+        mockData.raceType = raceType;
 
+        System.out.println(mockData);
+        //make XML
         try {
 
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -187,8 +197,6 @@ public class LocationCSVParser {
             StreamResult result = new StreamResult(new File("racevision/test_mock/src/main/resources/Regatta.xml"));
 
             transformer.transform(source, result);
-
-            System.out.println("File saved!");
 
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
