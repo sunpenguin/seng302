@@ -27,5 +27,8 @@ public class MockData {
                 "\nRaceType: " + raceType +
                 "\nRace Start Time: " +raceStartTime);
         return info;
+    public static void main (String[] args) {
+        CoordinateContainer coordinates = new CoordinateContainer();
+        GenerateCourse courseCoordinates = new GenerateCourse();
     }
 }

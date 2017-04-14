@@ -3,10 +3,7 @@ package seng302.team18.test_mock;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.GPSCalculations;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by jth102 on 11/04/17.
@@ -36,8 +33,11 @@ public class CoordinateContainer {
 
         Coordinate center = GPSCalculations.getCentralCoordinate(isleOfWhiteLocations);
 
+//        System.out.println("center"+center);
         isleOfWhiteLocations.add(center);
 
         ACLocationsMap.put(1, isleOfWhiteLocations);
     }
+
+    public Map<Integer, List> getLocationMap() {return ACLocationsMap;}
 }
