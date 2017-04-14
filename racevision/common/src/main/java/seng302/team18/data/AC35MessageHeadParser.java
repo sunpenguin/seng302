@@ -23,7 +23,6 @@ public class AC35MessageHeadParser implements MessageHeadParser {
         return new AC35MessageHead(messageType, len);
     }
 
-
     @Override
     public int headerSize() {
         return HEADER_BYTE_SIZE;
