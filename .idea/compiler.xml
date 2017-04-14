@@ -6,11 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="app" />
+        <module name="common" />
+        <module name="test_mock" />
+        <module name="visualiser" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="app" target="1.8" />
+      <module name="common" target="1.8" />
+      <module name="racevision" target="1.8" />
+      <module name="test_mock" target="1.8" />
+      <module name="visualiser" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
