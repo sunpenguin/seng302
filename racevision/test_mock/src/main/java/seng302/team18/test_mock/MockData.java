@@ -9,5 +9,6 @@ public class MockData {
 
     public static void main (String[] args) {
         CoordinateContainer coordinates = new CoordinateContainer();
+        GenerateCourse courseCoordinates = new GenerateCourse();
     }
 }
