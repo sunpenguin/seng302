@@ -13,10 +13,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 
 /**
  * Created by dhl25 on 11/04/17.
@@ -44,21 +42,21 @@ public class AC35XMLRaceParser implements MessageBodyParser {
             return null;
         }
         doc.getDocumentElement().normalize();
-        Element raceElement = doc.getElementById(RACE_ELEMENT);
+        Element raceElement = (Element) doc.getElementsByTagName(RACE_ELEMENT).item(0);
 
-        Node startTimeNode = raceElement.getAttributeNode(START_DATE_TIME_ELEMENT); // start time
+        Node startTimeNode = raceElement.getElementsByTagName(START_DATE_TIME_ELEMENT).item(0); // start time
         String startTimeString = parseRaceTime(startTimeNode);
 
-        Node participantsNode = raceElement.getAttributeNode(PARTICIPANTS_ELEMENT); // participants
+        Node participantsNode = raceElement.getElementsByTagName(PARTICIPANTS_ELEMENT).item(0); // participants
         List<Integer> participantIDs = parseParticipantIDs(participantsNode);
 
-        Node courseNode = raceElement.getAttributeNode(COURSE_ELEMENT); // compound marks
+        Node courseNode = raceElement.getElementsByTagName(COURSE_ELEMENT).item(0); // compound marks
         Map<Integer, CompoundMark> compoundMarks = parseCompoundMarks(courseNode);
 
-        Node markSequenceNode = raceElement.getAttributeNode(COMPOUND_MARK_SEQUENCE); // mark roundings
+        Node markSequenceNode = raceElement.getElementsByTagName(COMPOUND_MARK_SEQUENCE).item(0); // mark roundings
         List<MarkRounding> markRoundings = parseMarkRoundings(markSequenceNode, compoundMarks);
 
-        Node boundariesNode = raceElement.getAttributeNode(COURSE_BOUNDARIES_ELEMENT); // boundaries
+        Node boundariesNode = raceElement.getElementsByTagName(COURSE_BOUNDARIES_ELEMENT).item(0); // boundaries
         List<BoundaryMark> boundaries = parseBoundaries(boundariesNode);
 
         AC35XMLRaceMessage message = new AC35XMLRaceMessage();
@@ -163,16 +161,17 @@ public class AC35XMLRaceParser implements MessageBodyParser {
             final String BOUNDARY_LAT = "Lat";
             final String BOUNDARY_LONG = "Lon";
         List<BoundaryMark> boundaries = new ArrayList<>();
+
         if (boundariesNode.getNodeType() == Node.ELEMENT_NODE) {
             Element boundariesElement = (Element) boundariesNode;
             NodeList boundaryList = boundariesElement.getElementsByTagName(COURSE_BOUNDARY_ELEMENT);
             for (int i = 0; i < boundaryList.getLength(); i++) {
                 Node boundaryNode = boundaryList.item(i);
                 if (boundariesNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element boundaryElement = (Element) boundariesNode;
-                    int seqId = Integer.parseInt(boundariesElement.getAttribute(BOUNDARY_SEQUENCE_ID));
-                    double lat = Double.parseDouble(boundariesElement.getAttribute(BOUNDARY_LAT));
-                    double lon = Double.parseDouble(boundariesElement.getAttribute(BOUNDARY_LONG));
+                    Element boundaryElement = (Element) boundaryNode;
+                    int seqId = Integer.parseInt(boundaryElement.getAttribute(BOUNDARY_SEQUENCE_ID));
+                    double lat = Double.parseDouble(boundaryElement.getAttribute(BOUNDARY_LAT));
+                    double lon = Double.parseDouble(boundaryElement.getAttribute(BOUNDARY_LONG));
                     boundaries.add(new BoundaryMark(seqId, new Coordinate(lat, lon)));
                 }
             }

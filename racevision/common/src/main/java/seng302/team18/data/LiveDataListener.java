@@ -29,8 +29,11 @@ public class LiveDataListener {
 
 
     public MessageBody nextMessage() throws IOException {
+//        System.out.println("nextMessage called");
         MessageHeadParser headParser = parserFactory.makeHeadParser();
         if (bis.available() <= headParser.headerSize()) {
+//            System.out.println(inStream.available());
+//            System.out.println("not enough for head\n");
             return null;
         }
         bis.mark(headParser.headerSize() + 1);
@@ -39,14 +42,18 @@ public class LiveDataListener {
         MessageHead head = headParser.parse(headerBytes);
         MessageErrorDetector detector = parserFactory.makeDetector();
         if (bis.available() < head.bodySize() + detector.errorCheckSize()) {
-            System.out.println("bis.available: " + bis.available() + "/inStream.available: " + inStream.available());
-            int total = head.bodySize() + detector.errorCheckSize();
-            System.out.println("head.bodySize + detector.errorCheckSize: " + total);
-            System.out.println(" ");
+//            System.out.println("not enough");
+//            System.out.println("bis.available: " + bis.available() + "/inStream.available: " + inStream.available());
+//            int total = head.bodySize() + detector.errorCheckSize();
+//            System.out.println("head.bodySize + detector.errorCheckSize: " + total);
+//            System.out.println(" ");
             bis.reset();
             return null;
         }
-        System.out.println("We get a message now.");
+//        System.out.println("We get a message now.");
+//        System.out.println(head == null);
+//        System.out.println(AC35MessageType.from(head.getType()));
+//        System.out.println();
         MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.getType());
         byte[] bodyBytes = new byte[head.bodySize()];
         byte[] checkBytes = new byte[detector.errorCheckSize()];
@@ -56,13 +63,15 @@ public class LiveDataListener {
 
         bis.read(bodyBytes);
         bis.read(checkBytes);
+//        System.out.println(AC35MessageType.from(head.getType()));
+//        System.out.println();
         if (detector.isValid(checkBytes, headAndBody) && bodyParser != null) {
-            System.out.println("Pass");
-            System.out.println(AC35MessageType.from(head.getType()));
+//            System.out.println("Pass");
+//            System.out.println(AC35MessageType.from(head.getType()));
             return bodyParser.parse(bodyBytes);
         }
-        System.out.println("Fail");
-        System.out.println(AC35MessageType.from(head.getType()));
+//        System.out.println("Fail");
+//        System.out.println(AC35MessageType.from(head.getType()));
         return null;
 //        return bodyParser.parse(bodyBytes);
     }

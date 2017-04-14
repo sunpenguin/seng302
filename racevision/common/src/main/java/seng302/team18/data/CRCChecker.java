@@ -26,7 +26,7 @@ public class CRCChecker implements MessageErrorDetector {
 
 //        System.out.println(givenCheckSum);
 //        System.out.println(calculatedCheckSum);
-        System.out.println("GIVEN: " + givenCheckSum + "/CALCULATED: " + calculatedCheckSum);
+//        System.out.println("GIVEN: " + givenCheckSum + "/CALCULATED: " + calculatedCheckSum);
         //Valid if the two checksums are the same.
 //        return calculatedCheckSum == givenCheckSum;
         return true;

@@ -19,9 +19,9 @@ public class AC35XMLParserFactory implements MessageParserFactory {
         AC35MessageType xmlType = AC35MessageType.from(type);
         switch (xmlType) {
             case XML_REGATTA:
-                return null;
+                return new AC35XMLRegattaParser();
             case XML_RACE:
-                return null;
+                return new AC35XMLRaceParser();
             case XML_BOATS:
                 return null;
             default:

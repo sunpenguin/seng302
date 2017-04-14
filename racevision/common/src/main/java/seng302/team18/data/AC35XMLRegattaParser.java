@@ -10,6 +10,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 
 /**
  * Created by david on 4/12/17.
@@ -23,8 +25,17 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
         final String CENTER_LAT = "CentralLatitude";
         final String CENTER_LONG = "CentralLongitude";
         final String UTC_OFFSET = "UtcOffset";
-
         InputStream stream = new ByteArrayInputStream(bytes);
+//        System.out.println("AC35XMLRegattaParser::parse called");
+//        try {
+//            System.out.println(new String(Arrays.copyOfRange(bytes, 14, bytes.length), "UTF-8"));
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//        for (byte b : bytes) {
+//            System.out.println(b);
+//        }
+
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         Document doc;
@@ -32,14 +43,20 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
             builder = factory.newDocumentBuilder(); // parser configuration exception
             doc = builder.parse(stream); // io exception, SAXException
         } catch (ParserConfigurationException | SAXException | IOException e) {
+//            System.out.println("cant build document");
+//            e.printStackTrace();
+//            System.out.println();
             return null;
         }
         doc.getDocumentElement().normalize();
-        Element regattaElement = doc.getElementById(REGATTA_TAG);
+        Element regattaElement = (Element) doc.getElementsByTagName(REGATTA_TAG).item(0);
 //        int regattaID = Integer.parseInt(regattaElement.getAttribute(REGATTA_ID));
-        double centralLat = Double.parseDouble(regattaElement.getAttribute(CENTER_LAT));
-        double centralLong = Double.parseDouble(regattaElement.getAttribute(CENTER_LONG));
-        String utcOffset = regattaElement.getAttribute(CENTER_LONG);
+//        System.out.println(regattaElement.getElementsByTagName(CENTER_LAT).item(0).getTextContent());
+        double centralLat =
+                Double.parseDouble(regattaElement.getElementsByTagName(CENTER_LAT).item(0).getTextContent());
+        double centralLong =
+                Double.parseDouble(regattaElement.getElementsByTagName(CENTER_LONG).item(0).getTextContent());
+        String utcOffset = regattaElement.getElementsByTagName(UTC_OFFSET).item(0).getTextContent();
 
         return new AC35XMLRegattaMessage(centralLat, centralLong, utcOffset);
     }

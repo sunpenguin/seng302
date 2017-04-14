@@ -29,11 +29,12 @@ public class LiveDataListenerTest {
         int x = 0;
         boolean X = true;
         while(X) {
-            liveDataListener.nextMessage();
+            MessageBody message = liveDataListener.nextMessage();
             x ++;
-            if (x == 100000000 - 1) {
+            if (x == 100 - 1) {
                 X = false;
             }
+            Thread.sleep(100);
         }
     }
 
