@@ -43,12 +43,13 @@ public class LocationCSVParser {
      * Reads CSV file and uses information to create Reggata.xml
      * @param file CSV file
      */
-    public void ParserCSV(File file) {
+    public void parseCSV(File file) {
         //get number of lines
         int numRaces = 0;
         try {
             numRaces = getNumRaces(file);
         }catch (Exception e){
+            System.out.println("asdf");
         }
 
         //chose a random line
@@ -136,7 +137,6 @@ public class LocationCSVParser {
         mockData.raceStartTime = raceStartTime;
         mockData.raceType = raceType;
 
-        System.out.println(mockData);
         //make XML
         try {
 
@@ -194,7 +194,7 @@ public class LocationCSVParser {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("racevision/test_mock/src/main/resources/Regatta.xml"));
+            StreamResult result = new StreamResult(new File(System.getProperty("user.dir"),"/racevision/test_mock/src/main/resources/Regatta.xml"));
 
             transformer.transform(source, result);
 
