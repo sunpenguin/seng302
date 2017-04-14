@@ -10,18 +10,18 @@
   </Participants>
   <Course>
     <CompoundMark CompoundMarkID="1" Name="StartLine">
-      <Mark Name="PRO" SeqID="1" SourceID="101" TargetLat="50.736827746089105" TargetLng="-1.4629305241815185"/>
-      <Mark Name="PIN" SeqID="2" SourceID="102" TargetLat="50.73640603803624" TargetLng="-1.4591521699319745"/>
+      <Mark Name="PRO" SeqID="1" SourceID="101" TargetLat="50.730784421998045" TargetLng="-1.4375877935254773"/>
+      <Mark Name="PIN" SeqID="2" SourceID="102" TargetLat="50.7303627139583" TargetLng="-1.433809926726528"/>
     </CompoundMark>
     <CompoundMark CompoundMarkID="2" Name="M1">
-      <Mark Name="M1" SourceID="103" TargetLat="50.738313748398014" TargetLng="-1.4561376969345943"/>
+      <Mark Name="M1" SourceID="103" TargetLat="50.73227042432844" TargetLng="-1.4307958426568124"/>
     </CompoundMark>
     <CompoundMark CompoundMarkID="3" Name="M2">
       <Mark Name="M2" SourceID="104" TargetLat="50.74468223455609" TargetLng="-1.4267322393051936"/>
     </CompoundMark>
     <CompoundMark CompoundMarkID="4" Name="Gate">
-      <Mark Name="G1" SeqID="1" SourceID="104" TargetLat="50.757689215877846" TargetLng="-1.417893421171373"/>
-      <Mark Name="G2" SeqID="2" SourceID="105" TargetLat="50.75722064378215" TargetLng="-1.413693382918459"/>
+      <Mark Name="G1" SeqID="1" SourceID="104" TargetLat="50.7701385967481" TargetLng="-1.4176125658305014"/>
+      <Mark Name="G2" SeqID="2" SourceID="105" TargetLat="50.76967002461894" TargetLng="-1.4134114099325643"/>
     </CompoundMark>
   </Course>
   <CompoundMarkSequence>

@@ -1,17 +1,8 @@
 package seng302.team18.test_mock;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.GPSCalculations;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.File;
 import java.util.*;
 
 /**
