@@ -20,7 +20,7 @@ public class Main {
         CoordinateContainer coordinates = new CoordinateContainer();
         LocationCSVParser MyParser = new LocationCSVParser(mockData);
         File LocationsCSV = new File("racevision/test_mock/src/main/resources/Locations.csv");
-        MyParser.ParserCSV(LocationsCSV);
+        MyParser.parseCSV(LocationsCSV);
 
         GenerateCourse courseCoordinates = new GenerateCourse(mockData);
     }
