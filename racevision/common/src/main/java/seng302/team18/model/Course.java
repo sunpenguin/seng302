@@ -17,6 +17,8 @@ public class Course {
     private List<Leg> legs;
     private double windDirection;
     private List<BoundaryMark> boundaries;
+    private List<MarkRounding> markRoundings;
+    private Coordinate centralCoordinate;
     private ZoneId timeZone;
 
     public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, ZoneId timeZone) {
@@ -28,11 +30,13 @@ public class Course {
         for (int i = 0; i < marks.size() - 1; i++) {
             legs.add(new Leg(compoundMarks.get(i), compoundMarks.get(i + 1), i));
         }
+        markRoundings = new ArrayList<>();
     }
 
     public Course() {
         compoundMarks = new ArrayList<>();
         boundaries = new ArrayList<>();
+        markRoundings = new ArrayList<>();
     }
 
 
@@ -100,6 +104,14 @@ public class Course {
 
     public ZoneId getTimeZone() {
         return timeZone;
+    }
+
+    public void setMarkRoundings(List<MarkRounding> markRoundings) {
+        this.markRoundings = markRoundings;
+    }
+
+    public void setCentralCoordinate(Coordinate centralCoordinate) {
+        this.centralCoordinate = centralCoordinate;
     }
 }
 

@@ -2,9 +2,12 @@ package seng302.team18.model;
 
 import seng302.team18.util.GPSCalculations;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -15,14 +18,15 @@ public class Race {
     private List<Boat> startingList;
     private Course course;
     private List<Boat> finishedList;
-//    private double duration;
+    private LocalDateTime startTime;
+    private List<Integer> participantIds;
     public static final double WARNING_TIME_SECONDS = 4; // TODO change this to 60
     public static final double PREP_TIME_SECONDS = 8; // TODO change this to 120
 
     /**
      * Race class constructor.
      *
-     * @param startingList Arraylist holding all entered boats
+     * @param startingList ArrayList holding all entered boats
      * @param course       Course object
      */
     public Race(List<Boat> startingList, Course course) {
@@ -203,4 +207,15 @@ public class Race {
         return startingList.size() == finishedList.size();
     }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setParticipantIds(List<Integer> participantIds) {
+        this.participantIds = participantIds;
+    }
 }

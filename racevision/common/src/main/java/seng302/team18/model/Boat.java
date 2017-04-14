@@ -13,7 +13,7 @@ public class Boat {
     private String teamName;
     private DoubleProperty speed;
     private Leg leg;
-//    private double position;
+    private Integer id;
     private double heading;
     private Coordinate coordinate;
     private Coordinate destination;
@@ -162,4 +162,11 @@ public class Boat {
     }
 
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import seng302.team18.visualiser.controller.PreRaceController;
 
 import java.io.IOException;
+import java.time.ZoneId;
 
 /**
  * Created by afj19 on 11/04/17.
@@ -30,6 +31,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        launch(args);
+        System.out.println(ZoneId.of("UTC3"));
+//        launch(args);
     }
 }
