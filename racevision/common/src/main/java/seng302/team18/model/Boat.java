@@ -8,9 +8,8 @@ import javafx.beans.property.*;
  */
 
 public class Boat {
-
     private StringProperty boatName;
-    private String teamName;
+    private String shortName;
     private DoubleProperty speed;
     private Leg leg;
     private Integer id;
@@ -22,14 +21,13 @@ public class Boat {
     /**
      * A constructor for the Boat class
      * @param boatName The name of the boat
-     * @param teamName The name of the team the boat belongs to
-     * @param speed The speed of the boat
+     * @param shortName The name of the team the boat belongs to
+     * @param id The id of the boat
      */
-    public Boat(String boatName, String teamName, double speed) {
+    public Boat(String boatName, String shortName, int id) {
         this.boatName = new SimpleStringProperty(boatName);
-        this.teamName = teamName;
-        this.speed = new SimpleDoubleProperty(speed);
-        place = new SimpleIntegerProperty(0);
+        this.shortName = shortName;
+        this.id = id;
     }
 
     /**
@@ -77,7 +75,7 @@ public class Boat {
      * @return The teamName
      */
     public String getTeamName() {
-        return teamName;
+        return shortName;
     }
 
     /**
@@ -85,7 +83,7 @@ public class Boat {
      * @param name The name that the teamName variable will be set to
      */
     public void setTeamName(String name) {
-        this.teamName = name;
+        this.shortName = name;
     }
 
     /**
@@ -145,7 +143,7 @@ public class Boat {
     public String toString() {
         return "Boat{" +
                 "boatName='" + boatName + '\'' +
-                ", teamName='" + teamName + '\'' +
+                ", teamName='" + shortName + '\'' +
                 '}';
     }
 
