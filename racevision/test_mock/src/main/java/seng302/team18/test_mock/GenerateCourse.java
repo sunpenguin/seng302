@@ -44,7 +44,12 @@ public class GenerateCourse {
         for (int i = 0; i < referenceBoundary.size(); i ++) {
             XYPair xy = GPSCalculations.GPSxy(referenceBoundary.get(i));
             polygon.addPoint((int)xy.getX(), (int)xy.getY());
+
+            System.out.println(referenceBoundary.get(i).getLatitude() + ", " + referenceBoundary.get(i).getLongitude());
         }
+
+        XYPair xy = GPSCalculations.GPSxy(referenceBoundary.get(0));
+        polygon.addPoint((int) xy.getX(), (int) xy.getY());
 
         Random ran = new Random();
         //  startline
@@ -81,10 +86,10 @@ public class GenerateCourse {
 
         // gate
         double rangeGateLat = referenceBoundary.get(1).getLatitude() - center.getLatitude();
-        double gateLat = ran.nextDouble() * rangeStartLat + center.getLatitude();
+        double gateLat = ran.nextDouble() * rangeGateLat + center.getLatitude();
 
         double rangeGateLon = referenceBoundary.get(1).getLongitude() - center.getLongitude();
-        double gateLon = ran.nextDouble() * rangeStartLon + center.getLongitude();
+        double gateLon = ran.nextDouble() * rangeGateLon + center.getLongitude();
         Coordinate gate1 = new Coordinate(gateLat, gateLon);
 
         XYPair xyGate1 = GPSCalculations.GPSxy(gate1);
