@@ -94,9 +94,7 @@ public class Coordinate {
 
     @Override
     public String toString() {
-        return "Coordinate{" +
-                "latitude=" + latitude +
-                ", longitude=" + longitude +
-                '}';
+        return String.format("%.6f, %.6f", latitude, longitude);
+
     }
 }

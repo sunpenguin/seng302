@@ -1,9 +1,11 @@
 package seng302.team18.test_mock;
 
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.XYPair;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -11,11 +13,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import java.awt.*;
 import java.io.File;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * Created by hqi19 on 14/04/17.
@@ -23,57 +24,83 @@ import java.util.Random;
 public class GenerateCourse {
 
     private Map<String, Coordinate> CourseMap;
-    private Map<Integer, List> ACLocationsMap;
+    private MockData data;
+    private Coordinate center;
+    private Polygon polygon;
 
-    public GenerateCourse () {
+    public GenerateCourse (MockData mockData) {
+        data = mockData;
+        center = data.centreCoordinate;
+        polygon = new Polygon();
         CoordinateContainer coordinates = new CoordinateContainer();
-        ACLocationsMap = coordinates.getLocationMap();
         CourseMap = new HashMap<>();
         setUpCourseMap();
     }
 
     private void setUpCourseMap() {
         StreamResult result = new StreamResult(new File("racevision/test_mock/src/main/resources/race.xml"));
-        List<Coordinate> referenceBoundary = ACLocationsMap.get(1);
+        List<Coordinate> referenceBoundary = data.boundaries;
+
+        for (int i = 0; i < referenceBoundary.size(); i ++) {
+            XYPair xy = GPSCalculations.GPSxy(referenceBoundary.get(i));
+            polygon.addPoint((int)xy.getX(), (int)xy.getY());
+        }
 
         Random ran = new Random();
         //  startline
-        double rangeStartLat = referenceBoundary.get(4).getLatitude() - referenceBoundary.get(2).getLatitude();
-        double startLine1Lat = ran.nextDouble() * rangeStartLat + referenceBoundary.get(2).getLatitude();
+        double rangeStartLat = center.getLatitude() - referenceBoundary.get(3).getLatitude();
+        double startLine1Lat = ran.nextDouble() * rangeStartLat + referenceBoundary.get(3).getLatitude();
 
-        double rangeStartLon = referenceBoundary.get(4).getLongitude() - referenceBoundary.get(2).getLongitude();
-        double startLine1Lon = ran.nextDouble() * rangeStartLon + referenceBoundary.get(2).getLongitude();
+        double rangeStartLon = center.getLongitude() - referenceBoundary.get(3).getLongitude();
+        double startLine1Lon = ran.nextDouble() * rangeStartLon + referenceBoundary.get(3).getLongitude();
         Coordinate startLine1 = new Coordinate(startLine1Lat, startLine1Lon);
-        System.out.println("s1" + startLine1);
+
+        XYPair xyStart1 = GPSCalculations.GPSxy(startLine1);
+        System.out.println(polygon.contains(xyStart1.getX(), xyStart1.getY()));
+
+        System.out.println(startLine1);
         CourseMap.put("StartLine1", startLine1);
         Coordinate startLine2 = GPSCalculations.coordinateToCoordinate(startLine1,100,270);
+
+        XYPair xyStart2 = GPSCalculations.GPSxy(startLine2);
+        System.out.println(polygon.contains(xyStart2.getX(), xyStart2.getY()));
+
         CourseMap.put("StartLine2", startLine2);
-        System.out.println("s2"+startLine2);
+        System.out.println(startLine2);
 
         // marks
         Coordinate mark1 = GPSCalculations.coordinateToCoordinate(startLine2,45,300);
         CourseMap.put("Mark1", mark1);
-        System.out.println("m1"+mark1);
+        System.out.println(mark1);
 
-        double mark2Lat = referenceBoundary.get(4).getLatitude();
-        double mark2Lon = referenceBoundary.get(4).getLongitude();
+        double mark2Lat = center.getLatitude();
+        double mark2Lon = center.getLongitude();
         Coordinate mark2 = GPSCalculations.coordinateToCoordinate(new Coordinate(mark2Lat, mark2Lon), 200,400);
         CourseMap.put("Mark2", mark2);
-        System.out.println("m2"+mark2);
+        System.out.println(mark2);
 
         // gate
-        double rangeGateLat = referenceBoundary.get(1).getLatitude() - referenceBoundary.get(4).getLatitude();
-        double gateLat = ran.nextDouble() * rangeStartLat + referenceBoundary.get(4).getLatitude();
+        double rangeGateLat = referenceBoundary.get(1).getLatitude() - center.getLatitude();
+        double gateLat = ran.nextDouble() * rangeStartLat + center.getLatitude();
 
-        double rangeGateLon = referenceBoundary.get(1).getLongitude() - referenceBoundary.get(4).getLongitude();
-        double gateLon = ran.nextDouble() * rangeStartLon + referenceBoundary.get(4).getLongitude();
+        double rangeGateLon = referenceBoundary.get(1).getLongitude() - center.getLongitude();
+        double gateLon = ran.nextDouble() * rangeStartLon + center.getLongitude();
         Coordinate gate1 = new Coordinate(gateLat, gateLon);
+
+        XYPair xyGate1 = GPSCalculations.GPSxy(gate1);
+        System.out.println(polygon.contains(xyGate1.getX(), xyGate1.getY()));
+
         CourseMap.put("Gate1", gate1);
-        System.out.println("g1"+gate1);
+        System.out.println(gate1);
 
         Coordinate gate2 = GPSCalculations.coordinateToCoordinate(gate1,100,300);
+
+        System.out.println("GATE2:");
+        XYPair xyGate2 = GPSCalculations.GPSxy(gate2);
+        System.out.println(polygon.contains(xyGate2.getX(), xyGate2.getY()));
+
         CourseMap.put("Gate2", gate2);
-        System.out.println("g2"+gate2);
+        System.out.println(gate2);
 
         //now we generate the race.xml
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -232,14 +259,14 @@ public class GenerateCourse {
             Element limit3 = doc.createElement("Limit");
             courselimit.appendChild(limit3);
             limit3.setAttribute("SeqID","3");
-            limit3.setAttribute("Lat", String.valueOf(referenceBoundary.get(2).getLatitude()));
-            limit3.setAttribute("Lon",String.valueOf(referenceBoundary.get(2).getLongitude()));
+            limit3.setAttribute("Lat", String.valueOf(referenceBoundary.get(3).getLatitude()));
+            limit3.setAttribute("Lon",String.valueOf(referenceBoundary.get(3).getLongitude()));
 
             Element limit4 = doc.createElement("Limit");
             courselimit.appendChild(limit4);
             limit4.setAttribute("SeqID","4");
-            limit4.setAttribute("Lat", String.valueOf(referenceBoundary.get(3).getLatitude()));
-            limit4.setAttribute("Lon",String.valueOf(referenceBoundary.get(3).getLongitude()));
+            limit4.setAttribute("Lat", String.valueOf(referenceBoundary.get(2).getLatitude()));
+            limit4.setAttribute("Lon",String.valueOf(referenceBoundary.get(2).getLongitude()));
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
 

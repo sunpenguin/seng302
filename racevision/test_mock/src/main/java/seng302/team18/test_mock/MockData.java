@@ -16,19 +16,16 @@ public class MockData {
     protected String raceType;
     protected String raceStartTime;
 
-    MockData(){
+    MockData() {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         String info = new String("Centre: " + centreCoordinate.toString() +
                 "\nBoundaries: " + boundaries.toString() +
                 "\nraceID: " + raceID +
                 "\nRaceType: " + raceType +
-                "\nRace Start Time: " +raceStartTime);
+                "\nRace Start Time: " + raceStartTime);
         return info;
-    public static void main (String[] args) {
-        CoordinateContainer coordinates = new CoordinateContainer();
-        GenerateCourse courseCoordinates = new GenerateCourse();
     }
 }

@@ -38,6 +38,4 @@ public class CoordinateContainer {
 
         ACLocationsMap.put(1, isleOfWhiteLocations);
     }
-
-    public Map<Integer, List> getLocationMap() {return ACLocationsMap;}
 }

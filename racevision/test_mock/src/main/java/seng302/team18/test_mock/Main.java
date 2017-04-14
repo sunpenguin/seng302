@@ -21,6 +21,8 @@ public class Main {
         LocationCSVParser MyParser = new LocationCSVParser(mockData);
         File LocationsCSV = new File("racevision/test_mock/src/main/resources/Locations.csv");
         MyParser.ParserCSV(LocationsCSV);
+
+        GenerateCourse courseCoordinates = new GenerateCourse(mockData);
     }
 
     public MockData getMockData() {
