@@ -20,7 +20,7 @@ public class AC35XMLMessageParser implements MessageBodyParser {
         System.arraycopy(bytes, headerBytes.length, bodyBytes, 0, bodyBytes.length);
         MessageHead head = headParser.parse(headerBytes);
         MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.getType());
-        return bodyParser.parse(bytes);
+        return bodyParser == null ? null : bodyParser.parse(bytes);
     }
 
 }
