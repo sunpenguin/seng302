@@ -43,10 +43,10 @@ public class RaceRenderer {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             DisplayBoat displayBoat =
-                    new DisplayBoat(boat.getTeamName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(i));
+                    new DisplayBoat(boat.getShortName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(i));
             displayBoat.addToGroup(group);
-            displayBoats.put(boat.getTeamName(), displayBoat);
-            trailMap.put(boat.getTeamName(), new ArrayList<>());
+            displayBoats.put(boat.getShortName(), displayBoat);
+            trailMap.put(boat.getShortName(), new ArrayList<>());
         }
     }
 
@@ -61,7 +61,7 @@ public class RaceRenderer {
             XYPair pixels =
                     PixelMapper.convertCoordPixel(boatCoordinates, PADDING, setup, raceViewPane, race.getCourse());
 
-            DisplayBoat displayBoat = displayBoats.get(boat.getTeamName());
+            DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             displayBoat.toFront();
             displayBoat.moveBoat(pixels);
             displayBoat.setSpeed(boat.getSpeed());
@@ -87,10 +87,10 @@ public class RaceRenderer {
         circle.setCenterX(pixels.getX());
         circle.setCenterY(pixels.getY());
         circle.setRadius(0.6);
-        circle.setFill(displayBoats.get(boat.getTeamName()).getBoatColor());
+        circle.setFill(displayBoats.get(boat.getShortName()).getBoatColor());
 
         group.getChildren().add(circle);
-        List<Circle> circles = trailMap.get(boat.getTeamName());
+        List<Circle> circles = trailMap.get(boat.getShortName());
         circles.add(circle);
     }
 
@@ -102,7 +102,7 @@ public class RaceRenderer {
      */
     public void reDrawTrail(Collection<Boat> boats) {
         for (Boat boat : boats) {
-            for (Circle circle : trailMap.get(boat.getTeamName())) {
+            for (Circle circle : trailMap.get(boat.getShortName())) {
                 XYPair newPosition = PixelMapper.convertCoordPixel
                         (circleCoordMap.get(circle), PADDING, false, raceViewPane, race.getCourse());
                 circle.setCenterX(newPosition.getX());

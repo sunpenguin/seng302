@@ -33,7 +33,7 @@ public class XMLBoatParserTest {
 //            Boat exp = expected.get(i);
 //            Boat act = actual.get(i);
 //            assertEquals(exp.getBoatName(), act.getBoatName());
-//            assertEquals(exp.getTeamName(), act.getTeamName());
+//            assertEquals(exp.getShortName(), act.getShortName());
 //            assertEquals(exp.getCoordinate(), act.getCoordinate());
 //            assertEquals(exp.getDestination(), act.getDestination());
 //            assertEquals(exp.getHeading(), act.getHeading(), 0.1);

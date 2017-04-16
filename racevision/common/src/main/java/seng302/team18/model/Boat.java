@@ -72,9 +72,9 @@ public class Boat {
 
     /**
      * A getter for the team name that the boat belongs to
-     * @return The teamName
+     * @return The shortName
      */
-    public String getTeamName() {
+    public String getShortName() {
         return shortName;
     }
 
@@ -82,7 +82,7 @@ public class Boat {
      * A setter for the team name that the boat belongs to
      * @param name The name that the teamName variable will be set to
      */
-    public void setTeamName(String name) {
+    public void setShortName(String name) {
         this.shortName = name;
     }
 

@@ -5,10 +5,8 @@ import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -29,6 +27,7 @@ public class RaceMessageInterpreter {
                 xmlRace((AC35XMLRaceMessage) message, race);
                 break;
             case XML_BOATS:
+                xmlBoats((AC35XMLBoatMessage) message, race);
                 break;
             case XML_REGATTA:
                 xmlRegatta((AC35XMLRegattaMessage) message, race.getCourse());
@@ -39,6 +38,18 @@ public class RaceMessageInterpreter {
             case YACHT_EVENT:
                 break;
         }
+    }
+
+    private void xmlBoats(AC35XMLBoatMessage message, Race race) {
+        // What do I do here? Boats contain marks etc.
+        System.out.println("Boat XML");
+        for (Boat boat: message.getBoats()) {
+            System.out.println("BoatName: " + boat.getBoatName());
+            System.out.println("Boat Short Name: " + boat.getShortName());
+            System.out.println("Boat ID: " + boat.getId());
+            System.out.println();
+        }
+
     }
 
     private void boatLocation(AC35BoatLocationMessage message, List<Boat> boats) {
