@@ -27,6 +27,8 @@ public class GenerateCourse {
     private MockData data;
     private Coordinate center;
     private Polygon polygon;
+    private double max;
+    private double min;
 
     public GenerateCourse (MockData mockData) {
         data = mockData;
@@ -56,7 +58,14 @@ public class GenerateCourse {
         double rangeStartLat = center.getLatitude() - referenceBoundary.get(3).getLatitude();
         double startLine1Lat = ran.nextDouble() * rangeStartLat + referenceBoundary.get(3).getLatitude();
 
-        double rangeStartLon = center.getLongitude() - referenceBoundary.get(3).getLongitude();
+        if (center.getLongitude() >= referenceBoundary.get(3).getLongitude()) {
+            max = center.getLongitude();
+            min = referenceBoundary.get(3).getLongitude();
+        } else {
+            max = referenceBoundary.get(3).getLongitude();
+            min = center.getLongitude();
+        }
+        double rangeStartLon = max - min;
         double startLine1Lon = ran.nextDouble() * rangeStartLon + referenceBoundary.get(3).getLongitude();
         Coordinate startLine1 = new Coordinate(startLine1Lat, startLine1Lon);
 
@@ -88,7 +97,14 @@ public class GenerateCourse {
         double rangeGateLat = referenceBoundary.get(1).getLatitude() - center.getLatitude();
         double gateLat = ran.nextDouble() * rangeGateLat + center.getLatitude();
 
-        double rangeGateLon = referenceBoundary.get(1).getLongitude() - center.getLongitude();
+        if (center.getLongitude() >= referenceBoundary.get(1).getLongitude()) {
+            max = center.getLongitude();
+            min = referenceBoundary.get(1).getLongitude();
+        } else {
+            max = referenceBoundary.get(1).getLongitude();
+            min = center.getLongitude();
+        }
+        double rangeGateLon = max - min;
         double gateLon = ran.nextDouble() * rangeGateLon + center.getLongitude();
         Coordinate gate1 = new Coordinate(gateLat, gateLon);
 
