@@ -8,9 +8,8 @@ import javafx.beans.property.*;
  */
 
 public class Boat {
-
     private StringProperty boatName;
-    private String teamName;
+    private String shortName;
     private DoubleProperty speed;
     private Leg leg;
     private Integer id;
@@ -22,14 +21,13 @@ public class Boat {
     /**
      * A constructor for the Boat class
      * @param boatName The name of the boat
-     * @param teamName The name of the team the boat belongs to
-     * @param speed The speed of the boat
+     * @param shortName The name of the team the boat belongs to
+     * @param id The id of the boat
      */
-    public Boat(String boatName, String teamName, double speed) {
+    public Boat(String boatName, String shortName, int id) {
         this.boatName = new SimpleStringProperty(boatName);
-        this.teamName = teamName;
-        this.speed = new SimpleDoubleProperty(speed);
-        place = new SimpleIntegerProperty(0);
+        this.shortName = shortName;
+        this.id = id;
     }
 
     /**
@@ -74,18 +72,18 @@ public class Boat {
 
     /**
      * A getter for the team name that the boat belongs to
-     * @return The teamName
+     * @return The shortName
      */
-    public String getTeamName() {
-        return teamName;
+    public String getShortName() {
+        return shortName;
     }
 
     /**
      * A setter for the team name that the boat belongs to
      * @param name The name that the teamName variable will be set to
      */
-    public void setTeamName(String name) {
-        this.teamName = name;
+    public void setShortName(String name) {
+        this.shortName = name;
     }
 
     /**
@@ -145,7 +143,7 @@ public class Boat {
     public String toString() {
         return "Boat{" +
                 "boatName='" + boatName + '\'' +
-                ", teamName='" + teamName + '\'' +
+                ", teamName='" + shortName + '\'' +
                 '}';
     }
 

@@ -23,7 +23,7 @@ public class AC35XMLParserFactory implements MessageParserFactory {
             case XML_RACE:
                 return new AC35XMLRaceParser();
             case XML_BOATS:
-                return null;
+                return new AC35XMLBoatParser();
             default:
                 return null;
         }

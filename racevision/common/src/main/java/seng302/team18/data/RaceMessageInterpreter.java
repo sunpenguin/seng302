@@ -5,7 +5,6 @@ import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +29,7 @@ public class RaceMessageInterpreter implements MessageInterpreter {
                 xmlRace((AC35XMLRaceMessage) message, race);
                 break;
             case XML_BOATS:
+                xmlBoats((AC35XMLBoatMessage) message, race);
                 break;
             case XML_REGATTA:
                 xmlRegatta((AC35XMLRegattaMessage) message, race.getCourse());
@@ -40,6 +40,18 @@ public class RaceMessageInterpreter implements MessageInterpreter {
             case YACHT_EVENT:
                 break;
         }
+    }
+
+    private void xmlBoats(AC35XMLBoatMessage message, Race race) {
+        // What do I do here? Boats contain marks etc.
+        System.out.println("Boat XML");
+        for (Boat boat: message.getBoats()) {
+            System.out.println("BoatName: " + boat.getBoatName());
+            System.out.println("Boat Short Name: " + boat.getShortName());
+            System.out.println("Boat ID: " + boat.getId());
+            System.out.println();
+        }
+
     }
 
     private void boatLocation(AC35BoatLocationMessage message, List<Boat> boats) {
@@ -72,7 +84,6 @@ public class RaceMessageInterpreter implements MessageInterpreter {
 //        System.out.println("marks = " + message.getCompoundMarks());
 //        System.out.println("roundings = " + message.getMarkRoundings());
 //        System.out.println();
-        System.out.println(message.getRaceStartTime());
         LocalDateTime startTime = LocalDateTime.parse(message.getRaceStartTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         race.setStartTime(startTime);
         race.setParticipantIds(message.getParticipantIDs());
