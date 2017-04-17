@@ -23,6 +23,7 @@ public class Main {
         MyParser.parseCSV(LocationsCSV);
 
         GenerateCourse courseCoordinates = new GenerateCourse(mockData);
+        GenerateBoats boats = new GenerateBoats();
     }
 
     public MockData getMockData() {
