@@ -17,36 +17,31 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import seng302.team18.data.AC35MessageParserFactory;
+import seng302.team18.data.RaceMessageInterpreter;
+import seng302.team18.data.SocketMessageReceiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.RaceLoop;
 import seng302.team18.visualiser.display.*;
+
+import java.io.IOException;
 
 
 /**
  * Created by dhl25 on 15/03/17.
  */
 public class MainWindowController {
-    @FXML
-    private Group group;
-    @FXML
-    private Label timerLabel;
-    @FXML
-    private ToggleButton fpsToggler;
-    @FXML
-    private Label fpsLabel;
-    @FXML
-    private TableView tableView;
-    @FXML
-    private TableColumn<Boat, Integer> boatPositionColumn;
-    @FXML
-    private TableColumn<Boat, String> boatNameColumn;
-    @FXML
-    private TableColumn<Boat, Integer> boatSpeedColumn;
-    @FXML
-    private Pane raceViewPane;
-    @FXML
-    private Polygon arrow;
+    @FXML private Group group;
+    @FXML private Label timerLabel;
+    @FXML private ToggleButton fpsToggler;
+    @FXML private Label fpsLabel;
+    @FXML private TableView tableView;
+    @FXML private TableColumn<Boat, Integer> boatPositionColumn;
+    @FXML private TableColumn<Boat, String> boatNameColumn;
+    @FXML private TableColumn<Boat, Integer> boatSpeedColumn;
+    @FXML private Pane raceViewPane;
+    @FXML private Polygon arrow;
 
     private Race race;
     private RaceLoop raceLoop;
@@ -58,7 +53,31 @@ public class MainWindowController {
     @FXML
     @SuppressWarnings("unused")
     public void initialize() {
+        this.race = new Race();
+        arrow.setRotate(race.getCourse().getWindDirection());
+        raceRenderer = new RaceRenderer(race, group, raceViewPane);
+        raceRenderer.renderBoats(true, 0);
+        courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
+//        raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
+        raceClock = new RaceClock(timerLabel, race, -Race.PREP_TIME_SECONDS);
+        try {
+            raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel), new RaceMessageInterpreter(race), new SocketMessageReceiver(4941, new AC35MessageParserFactory()));
+            raceLoop.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
+            courseRenderer.renderCourse();
+            raceRenderer.renderBoats(false, 0);
+            raceRenderer.reDrawTrail(race.getStartingList());
+        });
+        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
+            courseRenderer.renderCourse();
+            raceRenderer.renderBoats(false, 0);
+            raceRenderer.reDrawTrail(race.getStartingList());
+        });
+        setUpTable();
     }
 
 
@@ -133,26 +152,26 @@ public class MainWindowController {
         showLive.play();
     }
 
-    public void setRace(Race race) {
-        this.race = race;
-        arrow.setRotate(race.getCourse().getWindDirection());
-        raceRenderer = new RaceRenderer(race, group, raceViewPane);
-        raceRenderer.renderBoats(true, 0);
-        courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
-//            raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
-        raceClock = new RaceClock(timerLabel, race, -Race.PREP_TIME_SECONDS);
-        raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel));
-
-        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
-            courseRenderer.renderCourse();
-            raceRenderer.renderBoats(false, 0);
-            raceRenderer.reDrawTrail(race.getStartingList());
-        });
-        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
-            courseRenderer.renderCourse();
-            raceRenderer.renderBoats(false, 0);
-            raceRenderer.reDrawTrail(race.getStartingList());
-        });
-        setUpTable();
-    }
+//    public void setRace(Race race) {
+//        this.race = race;
+//        arrow.setRotate(race.getCourse().getWindDirection());
+//        raceRenderer = new RaceRenderer(race, group, raceViewPane);
+//        raceRenderer.renderBoats(true, 0);
+//        courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
+////            raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
+//        raceClock = new RaceClock(timerLabel, race, -Race.PREP_TIME_SECONDS);
+//        raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel));
+//
+//        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
+//            courseRenderer.renderCourse();
+//            raceRenderer.renderBoats(false, 0);
+//            raceRenderer.reDrawTrail(race.getStartingList());
+//        });
+//        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
+//            courseRenderer.renderCourse();
+//            raceRenderer.renderBoats(false, 0);
+//            raceRenderer.reDrawTrail(race.getStartingList());
+//        });
+//        setUpTable();
+//    }
 }

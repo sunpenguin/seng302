@@ -37,6 +37,8 @@ public class Course {
         compoundMarks = new ArrayList<>();
         boundaries = new ArrayList<>();
         markRoundings = new ArrayList<>();
+        timeZone = ZoneId.systemDefault();
+        windDirection = 0d;
     }
 
 

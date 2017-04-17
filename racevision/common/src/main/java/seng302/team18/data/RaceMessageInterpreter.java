@@ -8,6 +8,7 @@ import seng302.team18.model.Race;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * Created by david on 4/13/17.
  */
-public class RaceMessageInterpreter {
+public class RaceMessageInterpreter implements MessageInterpreter {
     
     private Race race;
 
@@ -48,15 +49,17 @@ public class RaceMessageInterpreter {
 //        System.out.println("coordinate = " + message.getCoordinate().toString());
 //        System.out.println();
 
-        Iterator<Boat> boatIterator = boats.iterator();
-        Boat boat = boatIterator.next();
-        while (!boat.getId().equals(message.getSourceId()) && boatIterator.hasNext()) {
-            boat = boatIterator.next();
-        }
-        if (boat.getId().equals(message.getSourceId())) {
-            boat.setSpeed(message.getSpeed());
-            boat.setHeading(message.getHeading());
-            boat.setCoordinate(message.getCoordinate());
+        if (boats.size() > 0) {
+            Iterator<Boat> boatIterator = boats.iterator();
+            Boat boat = boatIterator.next();
+            while (!boat.getId().equals(message.getSourceId()) && boatIterator.hasNext()) {
+                boat = boatIterator.next();
+            }
+            if (boat.getId().equals(message.getSourceId())) {
+                boat.setSpeed(message.getSpeed());
+                boat.setHeading(message.getHeading());
+                boat.setCoordinate(message.getCoordinate());
+            }
         }
     }
 
@@ -69,7 +72,8 @@ public class RaceMessageInterpreter {
 //        System.out.println("marks = " + message.getCompoundMarks());
 //        System.out.println("roundings = " + message.getMarkRoundings());
 //        System.out.println();
-        LocalDateTime startTime = LocalDateTime.parse(message.getRaceStartTime());
+        System.out.println(message.getRaceStartTime());
+        LocalDateTime startTime = LocalDateTime.parse(message.getRaceStartTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         race.setStartTime(startTime);
         race.setParticipantIds(message.getParticipantIDs());
 

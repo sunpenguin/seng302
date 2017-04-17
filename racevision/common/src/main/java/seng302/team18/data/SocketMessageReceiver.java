@@ -11,19 +11,20 @@ import java.net.Socket;
  *
  */
 
-public class LiveDataListener {
+public class SocketMessageReceiver {
     private Socket socket;
     private InputStream inStream;
     private MessageParserFactory parserFactory;
 
-    InputStream bis;
 
-    public LiveDataListener(int portNumber, MessageParserFactory parserFactory) throws IOException {
+    public SocketMessageReceiver(int portNumber, MessageParserFactory parserFactory) throws IOException {
         this.parserFactory = parserFactory;
         // Create input and output streams for reading in data
         socket = new Socket("livedata.americascup.com", portNumber);
         inStream = socket.getInputStream();
-        bis = new BufferedInputStream(inStream);
+        if (!inStream.markSupported()) {
+            inStream = new BufferedInputStream(inStream);
+        }
     }
 
 
@@ -31,23 +32,23 @@ public class LiveDataListener {
     public MessageBody nextMessage() throws IOException {
 //        System.out.println("nextMessage called");
         MessageHeadParser headParser = parserFactory.makeHeadParser();
-        if (bis.available() <= headParser.headerSize()) {
+        if (inStream.available() <= headParser.headerSize()) {
 //            System.out.println(inStream.available());
 //            System.out.println("not enough for head\n");
             return null;
         }
-        bis.mark(headParser.headerSize() + 1);
+        inStream.mark(headParser.headerSize() + 1);
         byte[] headerBytes = new byte[headParser.headerSize()];
-        bis.read(headerBytes);
+        inStream.read(headerBytes);
         MessageHead head = headParser.parse(headerBytes);
         MessageErrorDetector detector = parserFactory.makeDetector();
-        if (bis.available() < head.bodySize() + detector.errorCheckSize()) {
+        if (inStream.available() < head.bodySize() + detector.errorCheckSize()) {
 //            System.out.println("not enough");
 //            System.out.println("bis.available: " + bis.available() + "/inStream.available: " + inStream.available());
 //            int total = head.bodySize() + detector.errorCheckSize();
 //            System.out.println("head.bodySize + detector.errorCheckSize: " + total);
 //            System.out.println(" ");
-            bis.reset();
+            inStream.reset();
             return null;
         }
 //        System.out.println("We get a message now.");
@@ -61,8 +62,8 @@ public class LiveDataListener {
         System.arraycopy(headerBytes, 0, headAndBody, 0, headerBytes.length);
         System.arraycopy(bodyBytes, 0, headAndBody, headerBytes.length, bodyBytes.length);
 
-        bis.read(bodyBytes);
-        bis.read(checkBytes);
+        inStream.read(bodyBytes);
+        inStream.read(checkBytes);
 //        System.out.println(AC35MessageType.from(head.getType()));
 //        System.out.println();
         if (detector.isValid(checkBytes, headAndBody) && bodyParser != null) {

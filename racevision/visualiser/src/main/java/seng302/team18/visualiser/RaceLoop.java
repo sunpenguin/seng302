@@ -1,6 +1,7 @@
 package seng302.team18.visualiser;
 
 import javafx.animation.AnimationTimer;
+import seng302.team18.data.*;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.FPSReporter;
 import seng302.team18.visualiser.display.RaceRenderer;
@@ -16,7 +17,9 @@ public class RaceLoop extends AnimationTimer {
     private Race race;
     private RaceRenderer renderer;
     private FPSReporter fpsReporter;
-    private int frameCount = 0;
+    private int messageCount = 0;
+    private MessageInterpreter interpreter;
+    private SocketMessageReceiver reader;
 
     /**
      * Constructor for the RaceLoop class.
@@ -24,26 +27,47 @@ public class RaceLoop extends AnimationTimer {
      * @param race the race to be updated
      * @param renderer the renderer that updates with the race
      */
-    public RaceLoop(Race race, RaceRenderer renderer, FPSReporter fpsReporter) {
+    public RaceLoop(Race race, RaceRenderer renderer, FPSReporter fpsReporter, MessageInterpreter interpreter, SocketMessageReceiver reader) {
         this.race = race;
         this.renderer = renderer;
         this.fpsReporter = fpsReporter;
+        this.interpreter = interpreter;
+        this.reader = reader;
     }
 
     @Override
     public void handle(long currentTime) {
-        frameCount++;
-
         if (previousTime == 0) {
             previousTime = currentTime;
             return;
         }
-
         double secondsElapsed = (currentTime - previousTime) / 1e9f; // converting from nanoseconds to seconds
         previousTime = currentTime;
-        race.updateBoats(secondsElapsed);
-        renderer.renderBoats(false, frameCount);
+        updateFps(secondsElapsed);
+        updateRace();
+    }
 
+
+    private void updateRace() {
+        MessageBody message = null;
+        try {
+            message = reader.nextMessage();
+        } catch (Exception e) {
+            return; // ignore if anything goes wrong
+        }
+        if (message != null) {
+            interpreter.interpretMessage(message);
+            renderer.renderBoats(false, messageCount);
+
+            messageCount++;
+            if (messageCount >= 10) {
+                messageCount = 0;
+            }
+        }
+    }
+
+
+    private void updateFps(double secondsElapsed) {
         secondsElapsedSinceLastFpsUpdate += secondsElapsed;
         framesSinceLastFpsUpdate++;
         if (secondsElapsedSinceLastFpsUpdate >= 0.5d) {
@@ -51,10 +75,6 @@ public class RaceLoop extends AnimationTimer {
             fpsReporter.report(fps);
             secondsElapsedSinceLastFpsUpdate = 0;
             framesSinceLastFpsUpdate = 0;
-        }
-
-        if (frameCount >= 10) {
-            frameCount = 0;
         }
     }
 

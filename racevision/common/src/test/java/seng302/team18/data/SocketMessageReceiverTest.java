@@ -1,23 +1,20 @@
 package seng302.team18.data;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by jds112 on 9/04/17.
  */
-public class LiveDataListenerTest {
-    private LiveDataListener liveDataListener;
+public class SocketMessageReceiverTest {
+    private SocketMessageReceiver socketMessageReceiver;
 
     @Before
     public void setUp() {
         try {
-            liveDataListener = new LiveDataListener(4941, new AC35MessageParserFactory());
+            socketMessageReceiver = new SocketMessageReceiver(4941, new AC35MessageParserFactory());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -29,7 +26,7 @@ public class LiveDataListenerTest {
         int x = 0;
         boolean X = true;
         while(X) {
-            MessageBody message = liveDataListener.nextMessage();
+            MessageBody message = socketMessageReceiver.nextMessage();
             x ++;
             if (x == 100 - 1) {
                 X = false;
@@ -41,6 +38,6 @@ public class LiveDataListenerTest {
 
 //    @After
 //    public void tearDown() throws Exception {
-//        liveDataListener.getSocket().close();
+//        socketMessageReceiver.getSocket().close();
 //    }
 }

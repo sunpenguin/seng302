@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import seng302.team18.visualiser.controller.ControllerManager;
+import seng302.team18.visualiser.controller.MainWindowController;
 import seng302.team18.visualiser.controller.PreRaceController;
 
 import java.io.IOException;
@@ -19,11 +21,11 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException, InterruptedException {
 
 
-//        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
+//        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
         Parent root = loader.load(); // throws IOException
-//        MainWindowController mainWindowController = loader.getController();
-        PreRaceController preRaceController = loader.getController();
+        MainWindowController mainWindowController = loader.getController();
+//        PreRaceController preRaceController = loader.getController();
         primaryStage.setTitle("RaceVision");
         Scene scene = new Scene(root, 1280, 720);
         primaryStage.setScene(scene);
@@ -31,7 +33,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        System.out.println(ZoneId.of("UTC3"));
-//        launch(args);
+//        ControllerManager manager = new ControllerManager("MainWindow.fxml");
+        launch(args);
     }
 }

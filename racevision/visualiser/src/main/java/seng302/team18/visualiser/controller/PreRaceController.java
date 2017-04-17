@@ -14,8 +14,6 @@ import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.xml.sax.SAXException;
-import seng302.team18.data.AC35MessageParserFactory;
-import seng302.team18.data.LiveDataListener;
 import seng302.team18.data.XMLBoatParser;
 import seng302.team18.data.XMLCourseParser;
 import seng302.team18.model.Boat;
@@ -25,7 +23,6 @@ import seng302.team18.visualiser.display.ZoneTimeClock;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.*;
 
 /**
@@ -48,10 +45,9 @@ public class PreRaceController {
             List<Boat> boats = XMLBoatParser.parseBoats(getClass().getResourceAsStream("/boats.xml")); // throws exceptions
             Course course = XMLCourseParser.parseCourse(getClass().getResourceAsStream("/course.xml")); // throws exceptions
 
-
             race = new Race(boats, course);
 
-            getDurationInput();
+//            getDurationInput();
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -100,7 +96,7 @@ public class PreRaceController {
             Parent root = loader.load(); // throws IOException
             Stage stage = (Stage) listView.getScene().getWindow();
             MainWindowController mainWindowController = loader.getController();
-            mainWindowController.setRace(race);
+//            mainWindowController.setRace(race);
             mainWindowController.startRace((long) Race.PREP_TIME_SECONDS);
             Scene scene = new Scene(root);
             stage.setScene(scene);
@@ -133,9 +129,9 @@ public class PreRaceController {
     }
 
 
-    private void getDurationInput() {
+//    private void getDurationInput() {
 
-        Scanner scanner = new Scanner(System.in);
+//        Scanner scanner = new Scanner(System.in);
 //        int duration = 0;
 //        while (duration != 1 && duration != 5) {
 //            System.out.println("Choose how long the race lasts (1 minute or 5 minutes)");
@@ -147,27 +143,27 @@ public class PreRaceController {
 //            }
 //        }
 
-        String decision = "";
-        while (!decision.toUpperCase().equals("Y") && !decision.toUpperCase().equals("N")) {
-            System.out.println("Would you like a live race? (Y/N)");
-            if (scanner.hasNext()) {
-                decision = scanner.next().toUpperCase();
-            } else {
-                scanner.next();
-            }
-        }
-        System.out.println(decision);
-
-        // TODO move to a better place.
-
-        if (decision.equals("Y")){
-            try {
-                LiveDataListener liveDataListener = new LiveDataListener(4941, new AC35MessageParserFactory());
-            } catch (IOException e) {
-                System.out.println("try again noob");
-                getDurationInput();
-            }
-        }
-    }
+//        String decision = "";
+//        while (!decision.toUpperCase().equals("Y") && !decision.toUpperCase().equals("N")) {
+//            System.out.println("Would you like a live race? (Y/N)");
+//            if (scanner.hasNext()) {
+//                decision = scanner.next().toUpperCase();
+//            } else {
+//                scanner.next();
+//            }
+//        }
+//        System.out.println(decision);
+//
+//        // TODO move to a better place.
+//
+//        if (decision.equals("Y")){
+//            try {
+//                SocketMessageReceiver socketMessageReader = new SocketMessageReceiver(4941, new AC35MessageParserFactory());
+//            } catch (IOException e) {
+//                System.out.println("try again noob");
+//                getDurationInput();
+//            }
+//        }
+//    }
 
 }

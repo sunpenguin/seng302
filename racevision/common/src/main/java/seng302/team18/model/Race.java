@@ -23,6 +23,14 @@ public class Race {
     public static final double WARNING_TIME_SECONDS = 4; // TODO change this to 60
     public static final double PREP_TIME_SECONDS = 8; // TODO change this to 120
 
+
+    public Race() {
+        startingList = new ArrayList<>();
+        course = new Course();
+        finishedList = new ArrayList<>();
+    }
+
+
     /**
      * Race class constructor.
      *
@@ -55,16 +63,18 @@ public class Race {
      * current(starting CompoundMark) and next CompoundMark.
      */
     private void setCourseForBoats() {
-        for (Boat boat : startingList) {
-            // Set Leg
-            boat.setLeg(course.getLegs().get(0));
-            // Set Dest
-            boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
-            // Set Coordinate
-            Coordinate midPoint = course.getCompoundMarks().get(0).getMidCoordinate();
-            boat.setCoordinate(midPoint);
-            // Set Heading
-            boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+        if (course.getLegs().size() > 0) {
+            for (Boat boat : startingList) {
+                // Set Leg
+                boat.setLeg(course.getLegs().get(0));
+                // Set Dest
+                boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
+                // Set Coordinate
+                Coordinate midPoint = course.getCompoundMarks().get(0).getMidCoordinate();
+                boat.setCoordinate(midPoint);
+                // Set Heading
+                boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+            }
         }
     }
 
