@@ -92,10 +92,10 @@ public class Race {
         if (participantIds.size() == 0) {
             this.startingList = startingList;
         } else {
-            startingList.clear();
+            this.startingList.clear();
             for (Boat boat : startingList) {
                 if (participantIds.contains(boat.getId())) {
-                    startingList.add(boat);
+                    this.startingList.add(boat);
                 }
             }
         }

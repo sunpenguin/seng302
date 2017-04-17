@@ -74,9 +74,9 @@ public class RaceRenderer {
                 displayBoat.moveBoat(pixels);
                 displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());
-                if (frameCount == 10) {
-                    drawTrail(boat, pixels);
-                }
+//                if (frameCount == 10) {
+//                    drawTrail(boat, pixels);
+//                }
             }
 
 

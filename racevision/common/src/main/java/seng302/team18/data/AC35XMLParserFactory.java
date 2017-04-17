@@ -8,6 +8,7 @@ import java.util.Map;
  */
 public class AC35XMLParserFactory implements MessageParserFactory {
 
+    private final Map<AC35MessageType, MessageBodyParser> parserMap = initialiseMap();
 
     @Override
     public MessageHeadParser makeHeadParser() {
@@ -17,17 +18,23 @@ public class AC35XMLParserFactory implements MessageParserFactory {
     @Override
     public MessageBodyParser makeBodyParser(int type) {
         AC35MessageType xmlType = AC35MessageType.from(type);
-        switch (xmlType) {
-            case XML_REGATTA:
-                return new AC35XMLRegattaParser();
-            case XML_RACE:
-                return new AC35XMLRaceParser();
-            case XML_BOATS:
-                return new AC35XMLBoatParser();
-            default:
-                return null;
-        }
+        return parserMap.get(xmlType);
     }
+
+//    @Override
+//    public MessageBodyParser makeBodyParser(int type) {
+//        AC35MessageType xmlType = AC35MessageType.from(type);
+//        switch (xmlType) {
+//            case XML_REGATTA:
+//                return new AC35XMLRegattaParser();
+//            case XML_RACE:
+//                return new AC35XMLRaceParser();
+//            case XML_BOATS:
+//                return new AC35XMLBoatParser();
+//            default:
+//                return null;
+//        }
+//    }
 
 
     @Override
@@ -44,6 +51,15 @@ public class AC35XMLParserFactory implements MessageParserFactory {
             }
         };
     }
+
+    private Map<AC35MessageType, MessageBodyParser> initialiseMap() {
+        Map<AC35MessageType, MessageBodyParser> parserMap = new HashMap<>();
+        parserMap.put(AC35MessageType.XML_REGATTA, new AC35XMLRegattaParser());
+        parserMap.put(AC35MessageType.XML_RACE, new AC35XMLRaceParser());
+        parserMap.put(AC35MessageType.XML_BOATS, new AC35XMLBoatParser());
+        return parserMap;
+    }
+
 
 
 }
