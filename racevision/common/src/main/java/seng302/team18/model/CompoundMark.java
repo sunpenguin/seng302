@@ -47,7 +47,8 @@ public class CompoundMark {
 
     public Coordinate getMidCoordinate() {
         if (marks.size() == GATE_SIZE) {
-            return GPSCalculations.GPSMidpoint(marks.get(0).getCoordinates(), marks.get(1).getCoordinates());
+//            return marks.get(0).getCoordinates().distance(marks.get(1).getCoordinates());
+            return null;
         } else if (marks.size() == MARK_SIZE) {
             return marks.get(0).getCoordinates();
         } else {

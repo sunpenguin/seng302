@@ -24,6 +24,7 @@ public class RaceRenderer {
     private Map<Circle, Coordinate> circleCoordMap = new HashMap<>();
     private Pane raceViewPane;
     private final double PADDING = 20.0;
+    private int numBoats;
     final List<Color> BOAT_COLOURS = new ArrayList<>(
             Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
 
@@ -40,10 +41,10 @@ public class RaceRenderer {
         this.group = group;
         this.raceViewPane = raceViewPane;
 
-        for (int i = 0; i < race.getStartingList().size(); i++) {
-            Boat boat = race.getStartingList().get(i);
+        for (numBoats = 0; numBoats < race.getStartingList().size(); numBoats++) {
+            Boat boat = race.getStartingList().get(numBoats);
             DisplayBoat displayBoat =
-                    new DisplayBoat(boat.getShortName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(i));
+                    new DisplayBoat(boat.getShortName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(numBoats));
             displayBoat.addToGroup(group);
             displayBoats.put(boat.getShortName(), displayBoat);
             trailMap.put(boat.getShortName(), new ArrayList<>());
@@ -57,19 +58,28 @@ public class RaceRenderer {
     public void renderBoats(boolean setup, int frameCount) {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
-            Coordinate boatCoordinates = boat.getCoordinate();
-            XYPair pixels =
-                    PixelMapper.convertCoordPixel(boatCoordinates, PADDING, setup, raceViewPane, race.getCourse());
 
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
-            displayBoat.toFront();
-            displayBoat.moveBoat(pixels);
-            displayBoat.setSpeed(boat.getSpeed());
-            displayBoat.setHeading(boat.getHeading());
-
-            if (frameCount == 10) {
-                drawTrail(boat, pixels);
+            if (displayBoat == null) {
+                displayBoat = new DisplayBoat(boat.getShortName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(numBoats++));
+                displayBoat.addToGroup(group);
+                displayBoats.put(boat.getShortName(), displayBoat);
             }
+
+            Coordinate boatCoordinates = boat.getCoordinate();
+//            XYPair pixels;
+            if (boatCoordinates != null) {
+                XYPair pixels = PixelMapper.convertCoordPixel(boatCoordinates, PADDING, setup, raceViewPane, race.getCourse());
+                displayBoat.toFront();
+                displayBoat.moveBoat(pixels);
+                displayBoat.setSpeed(boat.getSpeed());
+                displayBoat.setHeading(boat.getHeading());
+                if (frameCount == 10) {
+                    drawTrail(boat, pixels);
+                }
+            }
+
+
         }
     }
 

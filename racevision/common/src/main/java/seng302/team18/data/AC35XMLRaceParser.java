@@ -58,8 +58,6 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         Node boundariesNode = raceElement.getElementsByTagName(COURSE_BOUNDARIES_ELEMENT).item(0); // boundaries
         List<BoundaryMark> boundaries = parseBoundaries(boundariesNode);
 
-
-        System.out.println("start time = " + startTimeString);
         AC35XMLRaceMessage message = new AC35XMLRaceMessage();
         message.setRaceStartTime(startTimeString);
         message.setBoundaryMarks(boundaries);

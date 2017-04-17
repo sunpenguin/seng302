@@ -44,13 +44,14 @@ public class RaceMessageInterpreter implements MessageInterpreter {
 
     private void xmlBoats(AC35XMLBoatMessage message, Race race) {
         // What do I do here? Boats contain marks etc.
-        System.out.println("Boat XML");
-        for (Boat boat: message.getBoats()) {
-            System.out.println("BoatName: " + boat.getBoatName());
-            System.out.println("Boat Short Name: " + boat.getShortName());
-            System.out.println("Boat ID: " + boat.getId());
-            System.out.println();
-        }
+        race.setStartingList(message.getBoats());
+//        System.out.println("Boat XML");
+//        for (Boat boat: message.getBoats()) {
+//            System.out.println("BoatName: " + boat.getBoatName());
+//            System.out.println("Boat Short Name: " + boat.getShortName());
+//            System.out.println("Boat ID: " + boat.getId());
+//            System.out.println();
+//        }
 
     }
 
@@ -60,14 +61,13 @@ public class RaceMessageInterpreter implements MessageInterpreter {
 //        System.out.println("heading = " + message.getHeading());
 //        System.out.println("coordinate = " + message.getCoordinate().toString());
 //        System.out.println();
-
         if (boats.size() > 0) {
             Iterator<Boat> boatIterator = boats.iterator();
             Boat boat = boatIterator.next();
             while (!boat.getId().equals(message.getSourceId()) && boatIterator.hasNext()) {
                 boat = boatIterator.next();
             }
-            if (boat.getId().equals(message.getSourceId())) {
+            if (boat.getId().intValue() == message.getSourceId().intValue()) {
                 boat.setSpeed(message.getSpeed());
                 boat.setHeading(message.getHeading());
                 boat.setCoordinate(message.getCoordinate());

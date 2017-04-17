@@ -12,7 +12,7 @@ import java.util.List;
 
 public class GPSCalculations {
 
-    private static double aveLat;
+    private double aveLat;
     private double minX = Double.MAX_VALUE;
     private double maxX = -(Double.MAX_VALUE);
     private double minY = Double.MAX_VALUE;
@@ -32,7 +32,7 @@ public class GPSCalculations {
             for (Mark m : cM.getMarks()) {
                 double lat = m.getCoordinates().getLatitude();
                 double lon = m.getCoordinates().getLongitude();
-                XYPair xy = GPSxy(new Coordinate(lat, lon));
+                XYPair xy = coordinateToPixel(new Coordinate(lat, lon));
                 XY.add(totalMarks, xy);
                 totalMarks += 1;
             }
@@ -56,40 +56,40 @@ public class GPSCalculations {
         aveLat = Math.atan2(z, hyp);
     }
 
-    /**
-     * Given 2 sets of GPS coordinates in signed decimal degrees, return the distance
-     * in metres between them.
-     *
-     * @param point1 Coordinates for point1
-     * @param point2 Coordinates for point2
-     * @return The distance in metres
-     */
-    public static double GPSDistance(Coordinate point1, Coordinate point2) {
+//    /**
+//     * Given 2 sets of GPS coordinates in signed decimal degrees, return the distance
+//     * in metres between them.
+//     *
+//     * @param point1 Coordinates for point1
+//     * @param point2 Coordinates for point2
+//     * @return The distance in metres
+//     */
+//    public double gpsDistance(Coordinate point1, Coordinate point2) {
+//
+//        double lat1 = point1.getLatitude();
+//        double long1 = point1.getLongitude();
+//
+//        double lat2 = point2.getLatitude();
+//        double long2 = point2.getLongitude();
+//
+//        double earthRadius = 6371e3; // meters
+//
+//        double lat1Rad = Math.toRadians(lat1);
+//        double lat2Rad = Math.toRadians(lat2);
+//
+//        double difLatitudeRad = Math.toRadians(lat2 - lat1);
+//        double difLongitudeRad = Math.toRadians(long2 - long1);
+//
+//        double a = Math.sin(difLatitudeRad / 2) * Math.sin(difLatitudeRad / 2) +
+//                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+//                        Math.sin(difLongitudeRad / 2) * Math.sin(difLongitudeRad / 2);
+//
+//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//
+//        return earthRadius * c;
+//    }
 
-        double lat1 = point1.getLatitude();
-        double long1 = point1.getLongitude();
-
-        double lat2 = point2.getLatitude();
-        double long2 = point2.getLongitude();
-
-        double earthRadius = 6371e3; // meters
-
-        double lat1Rad = Math.toRadians(lat1);
-        double lat2Rad = Math.toRadians(lat2);
-
-        double difLatitudeRad = Math.toRadians(lat2 - lat1);
-        double difLongitudeRad = Math.toRadians(long2 - long1);
-
-        double a = Math.sin(difLatitudeRad / 2) * Math.sin(difLatitudeRad / 2) +
-                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-                        Math.sin(difLongitudeRad / 2) * Math.sin(difLongitudeRad / 2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return earthRadius * c;
-    }
-
-    public static Coordinate coordinateToCoordinate(Coordinate initialCoord, double bearing, double distance) {
+    public Coordinate coordinateToCoordinate(Coordinate initialCoord, double bearing, double distance) {
 
         double bR = Math.toRadians(bearing);
         double lat1R = Math.toRadians(initialCoord.getLatitude());
@@ -104,16 +104,16 @@ public class GPSCalculations {
     }
 
 
-    public static double retrieveHeading(Coordinate c1, Coordinate c2) {
-        double lon1 = Math.toRadians(c1.getLongitude());
-        double lat1 = Math.toRadians(c1.getLatitude());
-        double lon2 = Math.toRadians(c2.getLongitude());
-        double lat2 = Math.toRadians(c2.getLatitude());
-
-        double x = Math.cos(lat2) * Math.sin(lon2 - lon1);
-        double y = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
-        return Math.toDegrees(Math.atan2(x, y));
-    }
+//    public double retrieveHeading(Coordinate c1, Coordinate c2) {
+//        double lon1 = Math.toRadians(c1.getLongitude());
+//        double lat1 = Math.toRadians(c1.getLatitude());
+//        double lon2 = Math.toRadians(c2.getLongitude());
+//        double lat2 = Math.toRadians(c2.getLatitude());
+//
+//        double x = Math.cos(lat2) * Math.sin(lon2 - lon1);
+//        double y = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+//        return Math.toDegrees(Math.atan2(x, y));
+//    }
 
     /**
      * Given 2 sets GPS coordinates in signed decimal degrees, return the coordinates
@@ -123,7 +123,7 @@ public class GPSCalculations {
      * @param point2 Coordinates for point2
      * @return The coordinates of the midpoint
      */
-    public static Coordinate GPSMidpoint(Coordinate point1, Coordinate point2) {
+    public Coordinate gpsMidpoint(Coordinate point1, Coordinate point2) {
 
         double lat1 = point1.getLatitude();
         double long1 = point1.getLongitude();
@@ -156,7 +156,7 @@ public class GPSCalculations {
      *
      * @param point The coordinates to convert
      */
-    public static XYPair GPSxy(Coordinate point) {
+    public XYPair coordinateToPixel(Coordinate point) {
         double earthRadius = 6371e3; // meters
         double aspectLat = Math.cos(aveLat);
         double x = earthRadius * Math.toRadians(point.getLongitude()) * aspectLat;
@@ -164,7 +164,7 @@ public class GPSCalculations {
         return new XYPair(x, y);
     }
 
-    public static Coordinate XYToCoordinate(XYPair point) {
+    public Coordinate pixelToCoordinate(XYPair point) {
         double earthRadius = 6371e3; // meters
         double aspectLat = Math.cos(aveLat);
         double latitude = Math.toDegrees(point.getY() / earthRadius);
@@ -172,9 +172,9 @@ public class GPSCalculations {
         return new Coordinate(latitude, longitude);
     }
 
-    public static double findAngle(Coordinate departure, Coordinate destination) {
-        XYPair origin = GPSCalculations.GPSxy(departure);
-        XYPair target = GPSCalculations.GPSxy(destination);
+    public double findAngle(Coordinate departure, Coordinate destination) {
+        XYPair origin = coordinateToPixel(departure);
+        XYPair target = coordinateToPixel(destination);
         double angle = Math.toDegrees(Math.atan2(target.getY() - origin.getY(), target.getX() - origin.getX())) - 90;
         if (angle < 0) {
             angle += 360;
@@ -186,7 +186,7 @@ public class GPSCalculations {
 
     public void findMinMaxPoints(Course course) {
         for (BoundaryMark boundary : course.getBoundaries()) {
-            XYPair boundaryXYValues = GPSxy(boundary.getCoordinate());
+            XYPair boundaryXYValues = coordinateToPixel(boundary.getCoordinate());
             double xValue = boundaryXYValues.getX();
             double yValue = boundaryXYValues.getY();
             if (xValue < minX) {
@@ -204,7 +204,7 @@ public class GPSCalculations {
         }
         for (CompoundMark compoundMark : course.getCompoundMarks()) {
             for (Mark mark : compoundMark.getMarks()) {
-                XYPair markXYValues = GPSxy(mark.getCoordinates());
+                XYPair markXYValues = coordinateToPixel(mark.getCoordinates());
                 double xValue = markXYValues.getX();
                 double yValue = markXYValues.getY();
                 if (xValue < minX) {
@@ -224,7 +224,7 @@ public class GPSCalculations {
     }
 
 
-    public static Coordinate getCentralCoordinate(List<Coordinate> geoCoordinates) {
+    public Coordinate getCentralCoordinate(List<Coordinate> geoCoordinates) {
         double x = 0;
         double y = 0;
         double z = 0;

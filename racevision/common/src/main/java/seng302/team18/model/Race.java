@@ -73,7 +73,7 @@ public class Race {
                 Coordinate midPoint = course.getCompoundMarks().get(0).getMidCoordinate();
                 boat.setCoordinate(midPoint);
                 // Set Heading
-                boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+//                boat.setHeading(boat.getCoordinate().retrieveHeading(boat.getDestination()));
             }
         }
     }
@@ -163,7 +163,7 @@ public class Race {
                 setNextLeg(boat, nextLeg);
             }
         }
-        boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+//        boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
     }
 
 
@@ -195,8 +195,8 @@ public class Race {
         double distanceTravelled = speed * time;
 //        double distanceTravelled = speed * time
 //                / (duration / (course.getCourseDistance() / (startingList.get(0).getSpeed() * KMPH_TO_MPS))); // meters
-        boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
-                GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+//        boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
+//                GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
 
 

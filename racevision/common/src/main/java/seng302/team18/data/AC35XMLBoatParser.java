@@ -6,6 +6,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import seng302.team18.model.Boat;
+import seng302.team18.model.BoundaryMark;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -36,26 +37,24 @@ public class AC35XMLBoatParser implements MessageBodyParser {
         try {
             builder = factory.newDocumentBuilder();
             doc = builder.parse(stream);
-            System.out.println("Parsed the stream.");
         } catch (ParserConfigurationException | SAXException | IOException e) {
             return null;
         }
         doc.getDocumentElement().normalize();
-        Element boatElement = (Element) doc.getElementsByTagName(BOATS_ELEMENT).item(0);
+        Element boatsElement = (Element) doc.getElementsByTagName(BOATS_ELEMENT).item(0);
         // Settings contains RaceBoatType, BoatDimension, ZoneSize, ZoneLimits
-        Node settingsNode = boatElement.getElementsByTagName(BOAT_SETTINGS).item(0);
+        Node settingsNode = boatsElement.getElementsByTagName(BOAT_SETTINGS).item(0);
         // Currently not getting any information from it.
 
         // Do we need boats shapes right now?
         // Has BoatShape (ShapeID), which has Vertices (with Vtx) and can have Catamaran, Bowsprit, Trampoline
-        Node shapeNode = boatElement.getElementsByTagName(BOAT_SHAPES).item(0);
+        Node shapeNode = boatsElement.getElementsByTagName(BOAT_SHAPES).item(0);
 
-        Node boatsNode = boatElement.getElementsByTagName(BOATS).item(0);
-        List<Boat> boatList = parseBoats(boatsNode);
+        Node boatsNode = boatsElement.getElementsByTagName(BOATS).item(0);
+        List<Boat> boats = parseBoats(boatsNode);
 
         AC35XMLBoatMessage message = new AC35XMLBoatMessage();
-        message.setBoats(boatList);
-        System.out.println("I have been called.");
+        message.setBoats(boats);
         return message;
     }
 
@@ -65,6 +64,8 @@ public class AC35XMLBoatParser implements MessageBodyParser {
         final String BOAT_NAME = "BoatName";
         final String BOAT_SHORT_NAME = "ShortName";
         final String BOAT_ID = "SourceID";
+        final String BOAT_TYPE = "Type";
+        final String YACHT = "Yacht";
 
         List<Boat> boats = new ArrayList<>();
         if (boatsNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -74,10 +75,12 @@ public class AC35XMLBoatParser implements MessageBodyParser {
                 Node boatNode = boatSequenceNodeList.item(i);
                 if (boatNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element boatElement = (Element) boatNode;
-                    String boatName = boatElement.getAttribute(BOAT_NAME);
-                    String boatShortName = boatElement.getAttribute(BOAT_SHORT_NAME);
-                    int boatID = Integer.parseInt(boatElement.getAttribute(BOAT_ID));
-                    boats.add(new Boat(boatName, boatShortName, boatID));
+                    if (boatElement.getAttribute(BOAT_TYPE).equals(YACHT)) {
+                        String boatName = boatElement.getAttribute(BOAT_NAME);
+                        String boatShortName = boatElement.getAttribute(BOAT_SHORT_NAME);
+                        int boatID = Integer.parseInt(boatElement.getAttribute(BOAT_ID));
+                        boats.add(new Boat(boatName, boatShortName, boatID));
+                    }
                 }
             }
         }

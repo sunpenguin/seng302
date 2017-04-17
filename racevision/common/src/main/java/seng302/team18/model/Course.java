@@ -86,7 +86,7 @@ public class Course {
 //        for (int i = 0; i < getLegs().size(); i++){
 //            Coordinate dep = getLegs().get(i).getDeparture().getMidCoordinate();
 //            Coordinate dest = getLegs().get(i).getDestination().getMidCoordinate();
-//            distance += GPSCalculations.GPSDistance(dep, dest);
+//            distance += GPSCalculations.gpsDistance(dep, dest);
 //        }
 //        return distance;
 //    }

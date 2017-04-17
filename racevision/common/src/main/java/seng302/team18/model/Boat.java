@@ -28,6 +28,9 @@ public class Boat {
         this.boatName = new SimpleStringProperty(boatName);
         this.shortName = shortName;
         this.id = id;
+        speed = new SimpleDoubleProperty();
+        place = new SimpleIntegerProperty();
+
     }
 
     /**
@@ -99,7 +102,7 @@ public class Boat {
      * @param speed the speed of the boat
      */
     public void setSpeed(double speed) {
-        this.speed.set(speed);
+        this.speed.setValue(speed);
     }
 
     public DoubleProperty speedProperty() {

@@ -33,6 +33,11 @@ public class AC35XMLMessageParser implements MessageBodyParser {
 //        System.out.println();
 
         MessageHead head = headParser.parse(headerBytes);
+        if (AC35MessageType.from(head.getType()) == AC35MessageType.XML_BOATS) {
+            bodyBytes = new byte[bytes.length - headParser.headerSize() - 2];
+            System.arraycopy(bytes, headerBytes.length, bodyBytes, 0, bodyBytes.length);
+        }
+
         MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.getType());
         return bodyParser == null ? null : bodyParser.parse(bodyBytes);
     }

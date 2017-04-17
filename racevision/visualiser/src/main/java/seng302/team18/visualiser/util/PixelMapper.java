@@ -18,6 +18,7 @@ public class PixelMapper {
     public static XYPair convertCoordPixel
             (Coordinate coord, double padding, boolean usePrefSize, Pane pane, Course course) {
 
+        GPSCalculations calculator = new GPSCalculations(course);
         double pixelWidth;
         double pixelHeight;
         if (usePrefSize) {
@@ -38,7 +39,7 @@ public class PixelMapper {
         gps.findMinMaxPoints(course);
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
-        XYPair planeCoordinates = GPSCalculations.GPSxy(coord);
+        XYPair planeCoordinates = calculator.coordinateToPixel(coord);
         double aspectRatio = courseWidth / courseHeight;
 
         if (courseHeight > courseWidth) {
