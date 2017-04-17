@@ -3,6 +3,7 @@ package seng302.team18.visualiser;
 import javafx.animation.AnimationTimer;
 import seng302.team18.data.*;
 import seng302.team18.model.Race;
+import seng302.team18.visualiser.display.CourseRenderer;
 import seng302.team18.visualiser.display.FPSReporter;
 import seng302.team18.visualiser.display.RaceRenderer;
 
@@ -16,6 +17,7 @@ public class RaceLoop extends AnimationTimer {
     private int framesSinceLastFpsUpdate = 0;
     private Race race;
     private RaceRenderer renderer;
+    private CourseRenderer courseRenderer;
     private FPSReporter fpsReporter;
     private int messageCount = 0;
     private MessageInterpreter interpreter;
@@ -27,12 +29,13 @@ public class RaceLoop extends AnimationTimer {
      * @param race the race to be updated
      * @param renderer the renderer that updates with the race
      */
-    public RaceLoop(Race race, RaceRenderer renderer, FPSReporter fpsReporter, MessageInterpreter interpreter, SocketMessageReceiver reader) {
+    public RaceLoop(Race race, RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter, MessageInterpreter interpreter, SocketMessageReceiver reader) {
         this.race = race;
         this.renderer = renderer;
         this.fpsReporter = fpsReporter;
         this.interpreter = interpreter;
         this.reader = reader;
+        this.courseRenderer = courseRenderer;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class RaceLoop extends AnimationTimer {
         if (message != null) {
             interpreter.interpretMessage(message);
             renderer.renderBoats(false, messageCount);
-
+            courseRenderer.renderCourse();
             messageCount++;
             if (messageCount >= 10) {
                 messageCount = 0;

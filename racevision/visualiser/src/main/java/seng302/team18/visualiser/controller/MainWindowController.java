@@ -61,7 +61,7 @@ public class MainWindowController {
 //        raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
         raceClock = new RaceClock(timerLabel, race, -Race.PREP_TIME_SECONDS);
         try {
-            raceLoop = new RaceLoop(race, raceRenderer, new FPSReporter(fpsLabel), new RaceMessageInterpreter(race), new SocketMessageReceiver(4941, new AC35MessageParserFactory()));
+            raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), new RaceMessageInterpreter(race), new SocketMessageReceiver(4941, new AC35MessageParserFactory()));
             raceLoop.start();
         } catch (IOException e) {
             e.printStackTrace();

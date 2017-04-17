@@ -1,7 +1,5 @@
 package seng302.team18.model;
 
-import seng302.team18.util.GPSCalculations;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +15,11 @@ public class CompoundMark {
     private List<Mark> marks;
     private List<Boat> passed;
 
-    public CompoundMark(String name, List<Mark> marks) {
-        this.name = name;
-        this.marks = marks;
-        passed = new ArrayList<>();
-    }
+//    public CompoundMark(String name, List<Mark> marks) {
+//        this.name = name;
+//        this.marks = marks;
+//        passed = new ArrayList<>();
+//    }
 
     public CompoundMark(String name, List<Mark> marks, int id) {
         this.name = name;
@@ -47,10 +45,10 @@ public class CompoundMark {
 
     public Coordinate getMidCoordinate() {
         if (marks.size() == GATE_SIZE) {
-//            return marks.get(0).getCoordinates().distance(marks.get(1).getCoordinates());
+//            return marks.get(0).getCoordinate().distance(marks.get(1).getCoordinate());
             return null;
         } else if (marks.size() == MARK_SIZE) {
-            return marks.get(0).getCoordinates();
+            return marks.get(0).getCoordinate();
         } else {
             return null;
         }

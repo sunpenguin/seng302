@@ -1,14 +1,10 @@
 package seng302.team18.data;
 
-import seng302.team18.model.Boat;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
-import seng302.team18.model.Race;
+import seng302.team18.model.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,23 +22,24 @@ public class RaceMessageInterpreter implements MessageInterpreter {
     public void interpretMessage(MessageBody message) {
         switch (message.getType()) {
             case XML_RACE:
-                xmlRace((AC35XMLRaceMessage) message, race);
+                updateXMLRace((AC35XMLRaceMessage) message, race);
                 break;
             case XML_BOATS:
-                xmlBoats((AC35XMLBoatMessage) message, race);
+                updateXMLBoats((AC35XMLBoatMessage) message, race);
                 break;
             case XML_REGATTA:
-                xmlRegatta((AC35XMLRegattaMessage) message, race.getCourse());
+                updateXMLRegatta((AC35XMLRegattaMessage) message, race.getCourse());
                 break;
             case BOAT_LOCATION:
-                boatLocation((AC35BoatLocationMessage) message, race.getStartingList());
+                updateBoatLocation((AC35BoatLocationMessage) message, race.getStartingList());
+                updateMarkLocation((AC35BoatLocationMessage) message, race.getCourse().getMarks());
                 break;
             case YACHT_EVENT:
                 break;
         }
     }
 
-    private void xmlBoats(AC35XMLBoatMessage message, Race race) {
+    private void updateXMLBoats(AC35XMLBoatMessage message, Race race) {
         // What do I do here? Boats contain marks etc.
         race.setStartingList(message.getBoats());
 //        System.out.println("Boat XML");
@@ -55,7 +52,7 @@ public class RaceMessageInterpreter implements MessageInterpreter {
 
     }
 
-    private void boatLocation(AC35BoatLocationMessage message, List<Boat> boats) {
+    private void updateBoatLocation(AC35BoatLocationMessage message, List<Boat> boats) {
 //        System.out.println("boat location");
 //        System.out.println("speed = " + message.getSpeed());
 //        System.out.println("heading = " + message.getHeading());
@@ -67,7 +64,7 @@ public class RaceMessageInterpreter implements MessageInterpreter {
             while (!boat.getId().equals(message.getSourceId()) && boatIterator.hasNext()) {
                 boat = boatIterator.next();
             }
-            if (boat.getId().intValue() == message.getSourceId().intValue()) {
+            if (boat.getId().equals(message.getSourceId())) {
                 boat.setSpeed(message.getSpeed());
                 boat.setHeading(message.getHeading());
                 boat.setCoordinate(message.getCoordinate());
@@ -76,7 +73,21 @@ public class RaceMessageInterpreter implements MessageInterpreter {
     }
 
 
-    private void xmlRace(AC35XMLRaceMessage message, Race race) {
+    private void updateMarkLocation(AC35BoatLocationMessage message, List<Mark> marks) {
+        if (marks.size() > 0) {
+            Iterator<Mark> marksIterator = marks.iterator();
+            Mark mark = marksIterator.next();
+            while (!mark.getId().equals(message.getSourceId()) && marksIterator.hasNext()) {
+                mark = marksIterator.next();
+            }
+            if (mark.getId().equals(message.getSourceId())) {
+                mark.setCoordinate(message.getCoordinate());
+            }
+        }
+    }
+
+
+    private void updateXMLRace(AC35XMLRaceMessage message, Race race) {
 //        System.out.println("race xml");
 //        System.out.println("time = " + message.getRaceStartTime());
 //        System.out.println("participant ids = " + message.getParticipantIDs());
@@ -96,7 +107,7 @@ public class RaceMessageInterpreter implements MessageInterpreter {
     }
 
 
-    private void xmlRegatta(AC35XMLRegattaMessage message, Course course) {
+    private void updateXMLRegatta(AC35XMLRegattaMessage message, Course course) {
 //        System.out.println("regatta xml");
 //        System.out.println("UTC offset = " + message.getUtcOffset());
 //        System.out.println("cent Lat = " + message.getCentralLat());

@@ -62,7 +62,7 @@ public class XMLCourseParserTest {
 //            assertEquals(expectedMark.getMarks().size(), actualMark.getMarks().size());
 //            for (int j = 0; j < expectedMark.getMarks().size(); j++) {
 //                assertEquals(expectedMark.getMarks().get(j).getName(), actualMark.getMarks().get(j).getName());
-//                assertEquals(expectedMark.getMarks().get(j).getCoordinates(), actualMark.getMarks().get(j).getCoordinates());
+//                assertEquals(expectedMark.getMarks().get(j).getCoordinate(), actualMark.getMarks().get(j).getCoordinate());
 //            }
 //        }
 //

@@ -43,8 +43,8 @@ public class PreRaceController {
     public void initialize() {
         try {
             List<Boat> boats = XMLBoatParser.parseBoats(getClass().getResourceAsStream("/boats.xml")); // throws exceptions
-            Course course = XMLCourseParser.parseCourse(getClass().getResourceAsStream("/course.xml")); // throws exceptions
-
+//            Course course = XMLCourseParser.parseCourse(getClass().getResourceAsStream("/course.xml")); // throws exceptions
+            Course course = null;
             race = new Race(boats, course);
 
 //            getDurationInput();

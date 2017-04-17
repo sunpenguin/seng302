@@ -17,6 +17,7 @@ public class GPSCalculations {
     private double maxX = -(Double.MAX_VALUE);
     private double minY = Double.MAX_VALUE;
     private double maxY = -(Double.MAX_VALUE);
+    private Course course;
 
 
     /**
@@ -25,13 +26,14 @@ public class GPSCalculations {
      * @param course a given course
      */
     public GPSCalculations(Course course) {
+        this.course = course;
         ArrayList<XYPair> XY = new ArrayList<>();
         int totalMarks = 0;
 
         for (CompoundMark cM : course.getCompoundMarks()) {
             for (Mark m : cM.getMarks()) {
-                double lat = m.getCoordinates().getLatitude();
-                double lon = m.getCoordinates().getLongitude();
+                double lat = m.getCoordinate().getLatitude();
+                double lon = m.getCoordinate().getLongitude();
                 XYPair xy = coordinateToPixel(new Coordinate(lat, lon));
                 XY.add(totalMarks, xy);
                 totalMarks += 1;
@@ -158,7 +160,7 @@ public class GPSCalculations {
      */
     public XYPair coordinateToPixel(Coordinate point) {
         double earthRadius = 6371e3; // meters
-        double aspectLat = Math.cos(aveLat);
+        double aspectLat = Math.cos(course.getCentralCoordinate().getLatitude());
         double x = earthRadius * Math.toRadians(point.getLongitude()) * aspectLat;
         double y = earthRadius * Math.toRadians(point.getLatitude());
         return new XYPair(x, y);
@@ -166,7 +168,7 @@ public class GPSCalculations {
 
     public Coordinate pixelToCoordinate(XYPair point) {
         double earthRadius = 6371e3; // meters
-        double aspectLat = Math.cos(aveLat);
+        double aspectLat = Math.cos(course.getCentralCoordinate().getLatitude());
         double latitude = Math.toDegrees(point.getY() / earthRadius);
         double longitude = Math.toDegrees((point.getX() / earthRadius) / aspectLat);
         return new Coordinate(latitude, longitude);
@@ -204,7 +206,7 @@ public class GPSCalculations {
         }
         for (CompoundMark compoundMark : course.getCompoundMarks()) {
             for (Mark mark : compoundMark.getMarks()) {
-                XYPair markXYValues = coordinateToPixel(mark.getCoordinates());
+                XYPair markXYValues = coordinateToPixel(mark.getCoordinate());
                 double xValue = markXYValues.getX();
                 double yValue = markXYValues.getY();
                 if (xValue < minX) {

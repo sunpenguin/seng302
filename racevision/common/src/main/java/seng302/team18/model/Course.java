@@ -80,19 +80,16 @@ public class Course {
     }
 
 
-//    public double getCourseDistance(){
-//        double distance = 0;
-//
-//        for (int i = 0; i < getLegs().size(); i++){
-//            Coordinate dep = getLegs().get(i).getDeparture().getMidCoordinate();
-//            Coordinate dest = getLegs().get(i).getDestination().getMidCoordinate();
-//            distance += GPSCalculations.gpsDistance(dep, dest);
-//        }
-//        return distance;
-//    }
+    public List<Mark> getMarks(){
+        List<Mark> marks = new ArrayList<>();
+        for (CompoundMark cMark : compoundMarks) {
+            marks.addAll(cMark.getMarks());
+        }
+        return marks;
+    }
 
     public List<BoundaryMark> getBoundaries() {
-        return boundaries;
+        return new ArrayList<>(boundaries);
     }
 
     public void setBoundaries(Collection<BoundaryMark> boundaries) {
@@ -114,6 +111,10 @@ public class Course {
 
     public void setCentralCoordinate(Coordinate centralCoordinate) {
         this.centralCoordinate = centralCoordinate;
+    }
+
+    public Coordinate getCentralCoordinate() {
+        return centralCoordinate;
     }
 }
 

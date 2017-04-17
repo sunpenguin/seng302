@@ -10,10 +10,7 @@ import seng302.team18.model.*;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by dhl25 on 30/03/17.
@@ -26,7 +23,7 @@ public class CourseRenderer {
     private final double MARK_SIZE = 10.0;
     private final double PADDING = 20.0;
     private Polyline border = new Polyline();
-    private Map<String, Rectangle> marks = new HashMap<>();
+    private Map<Integer, Rectangle> marks = new HashMap<>();
     private Map<String, Line> gates = new HashMap<>();
     private Map<String, CompoundMark> compoundMarkMap = new HashMap<>();
     private Course course;
@@ -38,14 +35,35 @@ public class CourseRenderer {
         this.course = course;
         this.group = group;
         this.pane = pane;
-        setupCourse();
+        setUpCourse();
     }
+
+    /**
+     * Set up each stage of the course.
+     * Only set up a CompoundMark if it has not already been added to avoid duplicates.
+     */
+    private void setUpCourse() {
+        List<CompoundMark> compoundMarks = course.getCompoundMarks();
+
+        for (int i = 0 ; i < compoundMarks.size(); i++) {
+            CompoundMark compoundMark = compoundMarks.get(i);
+            if (!compoundMarkMap.containsKey(compoundMark.getName())) {
+                if ((i == 0 || i == compoundMarks.size() - 1) && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) {
+                    setUpGate(compoundMark);
+                } else {
+                    setUpMark(compoundMark);
+                }
+            }
+        }
+        setUpBoundary();
+    }
+
 
     /**
      * Set up the boundary around the course by getting the coordinates of the boundary points and drawing
      * a PolyLine using each point.
      */
-    private void setupBoundary() {
+    private void setUpBoundary() {
         // Renders Boundaries
         for (BoundaryMark boundary : course.getBoundaries()) {
             XYPair boundaryPixels = PixelMapper.convertCoordPixel(boundary.getCoordinate(), PADDING, true, pane, course);
@@ -65,18 +83,18 @@ public class CourseRenderer {
      * setting the necessary x, y coordinates and addinf them to the group.
      * @param compoundMark CompoundMark to set up.
      */
-    private void setupMark(CompoundMark compoundMark) {
+    private void setUpMark(CompoundMark compoundMark) {
         compoundMarkMap.put(compoundMark.getName(), compoundMark);
 
         for (Mark mark : compoundMark.getMarks()) {
             Rectangle markImage = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
 
-            Coordinate coordinate = mark.getCoordinates();
+            Coordinate coordinate = mark.getCoordinate();
             XYPair pixelCoordinates = PixelMapper.convertCoordPixel(coordinate, PADDING, true, pane, course);
             markImage.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
             markImage.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
 
-            marks.put(mark.getName(), markImage);
+            marks.put(mark.getId(), markImage);
             group.getChildren().add(markImage);
 
         }
@@ -88,19 +106,19 @@ public class CourseRenderer {
      * and adding the shapes to the group.
      * @param compoundMark CompoundMark to set up.
      */
-    private void setupGate(CompoundMark compoundMark) {
-        ArrayList<XYPair> endPoints = new ArrayList<>();
+    private void setUpGate(CompoundMark compoundMark) {
+        List<XYPair> endPoints = new ArrayList<>();
 
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
             Rectangle rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
-            Coordinate coordinate = mark.getCoordinates();
+            Coordinate coordinate = mark.getCoordinate();
             XYPair pixelCoordinates = PixelMapper.convertCoordPixel(coordinate, PADDING, true, pane, course);
             rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
             rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
             endPoints.add(pixelCoordinates);
 
-            marks.put(mark.getName(), rectangle);
+            marks.put(mark.getId(), rectangle);
             group.getChildren().add(rectangle);
         }
         Line line = new Line(
@@ -114,45 +132,35 @@ public class CourseRenderer {
     }
 
 
-    /**
-     * Set up each stage of the course.
-     * Only set up a CompoundMark if it has not already been added to avoid duplicates.
-     */
-    private void setupCourse() {
-        List<CompoundMark> compoundMarks = course.getCompoundMarks();
-
-        for (int i = 0 ; i < compoundMarks.size(); i++) {
-            CompoundMark compoundMark = compoundMarks.get(i);
-            if (!compoundMarkMap.containsKey(compoundMark.getName())) {
-                if ((i == 0 || i == compoundMarks.size() - 1) && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) {
-                    setupGate(compoundMark);
-                } else {
-                    setupMark(compoundMark);
-                }
-            }
-        }
-        setupBoundary();
-    }
-
 
     /**
      * Called if the course needs to be re-rendered due to the window being resized.
      */
     public void renderCourse() {
+//        System.out.println(group.getChildren());
+//        System.out.println(course.getCompoundMarks());
         List<CompoundMark> compoundMarks = course.getCompoundMarks();
         // Renders CompoundMarks
         for (int i = 0 ; i < compoundMarks.size(); i++) {
+            System.out.println(i);
             CompoundMark compoundMark = compoundMarks.get(i);
-            if ((i == 0 || i == compoundMarks.size() - 1) && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) {
+            if ((i == 0 || i == compoundMarks.size() - 1) && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) { // draw a line between the gate if its a start or finish
                 renderGate(compoundMark);
             } else {
                 renderCompoundMark(compoundMark);
             }
         }
+        System.out.println();
+        renderBoundaries();
+    }
+
+    private void renderBoundaries() {
         // Renders Boundaries
         group.getChildren().remove(border);
         border = new Polyline();
-        for (BoundaryMark boundary : course.getBoundaries()) {
+        List<BoundaryMark> boundaryMarks = course.getBoundaries();
+        boundaryMarks.sort(Comparator.comparing(BoundaryMark::getSequenceID));
+        for (BoundaryMark boundary : boundaryMarks) {
             renderBoundary(border, boundary.getCoordinate());
         }
         if (course.getBoundaries().size() != 0) {
@@ -182,7 +190,12 @@ public class CourseRenderer {
      */
     private void renderMark(Mark mark) {
         Rectangle rectangle = marks.get(mark.getName());
-        Coordinate coordinate = mark.getCoordinates();
+        if (rectangle == null) {
+            rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
+            marks.put(mark.getId(), rectangle);
+            group.getChildren().addAll(rectangle);
+        }
+        Coordinate coordinate = mark.getCoordinate();
         XYPair pixelCoordinates = PixelMapper.convertCoordPixel(coordinate, PADDING, false, pane, course);
         rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
         rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
@@ -207,13 +220,18 @@ public class CourseRenderer {
      */
     private void renderGate(CompoundMark compoundMark) {
 
-        ArrayList<XYPair> endPoints = new ArrayList<>();
+        List<XYPair> endPoints = new ArrayList<>();
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
 
             Rectangle rectangle = marks.get(mark.getName());
+            if (rectangle == null) {
+                rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
+                marks.put(mark.getId(), rectangle);
+                group.getChildren().addAll(rectangle);
+            }
 
-            Coordinate coordinate = mark.getCoordinates();
+            Coordinate coordinate = mark.getCoordinate();
             XYPair pixelCoordinates = PixelMapper.convertCoordPixel(coordinate, PADDING, false, pane, course);
             rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
             rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
@@ -221,6 +239,15 @@ public class CourseRenderer {
         }
 
         Line line = gates.get(compoundMark.getName());
+        if (line == null) {
+            line = new Line(
+                    endPoints.get(0).getX(), endPoints.get(0).getY(),
+                    endPoints.get(1).getX(), endPoints.get(1).getY());
+            line.setFill(Color.WHITE);
+            line.setStyle("-fx-stroke: red");
+            gates.put(compoundMark.getName(), line);
+            group.getChildren().addAll(line);
+        }
 
         line.setStartX(endPoints.get(0).getX());
         line.setStartY(endPoints.get(0).getY());

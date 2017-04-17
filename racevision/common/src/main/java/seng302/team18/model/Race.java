@@ -1,13 +1,9 @@
 package seng302.team18.model;
 
-import seng302.team18.util.GPSCalculations;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -93,7 +89,16 @@ public class Race {
      * @param startingList Arraylist holding all entered boats
      */
     public void setStartingList(List<Boat> startingList) {
-        this.startingList = startingList;
+        if (participantIds.size() == 0) {
+            this.startingList = startingList;
+        } else {
+            startingList.clear();
+            for (Boat boat : startingList) {
+                if (participantIds.contains(boat.getId())) {
+                    startingList.add(boat);
+                }
+            }
+        }
     }
 
     /**
@@ -157,8 +162,8 @@ public class Race {
                 return;
             }
             if (boat.getLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
-                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinates())) { // and it hasn't gone around the gate
-                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinates()); // move around the gate
+                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinate())) { // and it hasn't gone around the gate
+                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinate()); // move around the gate
             } else { // the destination was a mark or is already gone around gate so move onto the next leg
                 setNextLeg(boat, nextLeg);
             }

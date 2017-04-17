@@ -24,7 +24,7 @@ public class Mark {
      * Getter for the mark's coordinates
      * @return the coordinates
      */
-    public Coordinate getCoordinates() {
+    public Coordinate getCoordinate() {
         return this.coordinates;
     }
 
@@ -33,7 +33,7 @@ public class Mark {
      * Setter for mark's coordinates
      * @param coordinates the coordinates
      */
-    public void setCoordinates(Coordinate coordinates) {
+    public void setCoordinate(Coordinate coordinates) {
         this.coordinates = coordinates;
     }
 
@@ -55,6 +55,10 @@ public class Mark {
      */
     public void setName(String markName) {
         this.name = markName;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }
 
