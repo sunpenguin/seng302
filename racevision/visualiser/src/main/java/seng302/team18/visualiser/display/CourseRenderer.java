@@ -142,7 +142,6 @@ public class CourseRenderer {
         List<CompoundMark> compoundMarks = course.getCompoundMarks();
         // Renders CompoundMarks
         for (int i = 0 ; i < compoundMarks.size(); i++) {
-            System.out.println(i);
             CompoundMark compoundMark = compoundMarks.get(i);
             if ((i == 0 || i == compoundMarks.size() - 1) && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) { // draw a line between the gate if its a start or finish
                 renderGate(compoundMark);
@@ -150,7 +149,6 @@ public class CourseRenderer {
                 renderCompoundMark(compoundMark);
             }
         }
-        System.out.println();
         renderBoundaries();
     }
 
