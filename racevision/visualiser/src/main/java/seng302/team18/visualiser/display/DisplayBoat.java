@@ -51,7 +51,7 @@ public class DisplayBoat {
         this.speed = speed;
         this.boatColor = boatColor;
         // default values
-        wakeColor = Color.BLACK;
+        wakeColor = Color.CADETBLUE;
         wakeScaleFactor = 1.0d / 32.0d; // the wake is at normal size when the boat is moving 40 speed
         boat = new Polyline();
         boat.getPoints().addAll(BOAT_SHAPE);

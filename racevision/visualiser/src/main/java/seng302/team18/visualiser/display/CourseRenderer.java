@@ -137,7 +137,7 @@ public class CourseRenderer {
      * Called if the course needs to be re-rendered due to the window being resized.
      */
     public void renderCourse() {
-//        System.out.println(group.getChildren());
+//        System.out.println(group.getChildren().size());
 //        System.out.println(course.getCompoundMarks());
         List<CompoundMark> compoundMarks = course.getCompoundMarks();
         // Renders CompoundMarks
@@ -187,7 +187,7 @@ public class CourseRenderer {
      * @param mark Mark to reset
      */
     private void renderMark(Mark mark) {
-        Rectangle rectangle = marks.get(mark.getName());
+        Rectangle rectangle = marks.get(mark.getId());
         if (rectangle == null) {
             rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
             marks.put(mark.getId(), rectangle);
@@ -222,7 +222,7 @@ public class CourseRenderer {
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
 
-            Rectangle rectangle = marks.get(mark.getName());
+            Rectangle rectangle = marks.get(mark.getId());
             if (rectangle == null) {
                 rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
                 marks.put(mark.getId(), rectangle);
