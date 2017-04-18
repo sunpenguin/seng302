@@ -10,18 +10,18 @@
   </Participants>
   <Course>
     <CompoundMark CompoundMarkID="1" Name="StartLine">
-      <Mark Name="PRO" SeqID="1" SourceID="101" TargetLat="-36.729228761907876" TargetLng="174.8193100374345"/>
-      <Mark Name="PIN" SeqID="2" SourceID="102" TargetLat="-36.72965037167962" TargetLng="174.82229366768695"/>
+      <Mark Name="PRO" SeqID="1" SourceID="101" TargetLat="-31.965476323597233" TargetLng="115.65169089405342"/>
+      <Mark Name="PIN" SeqID="2" SourceID="102" TargetLat="-31.96589793946387" TargetLng="115.65450959078555"/>
     </CompoundMark>
     <CompoundMark CompoundMarkID="2" Name="M1">
-      <Mark Name="M1" SourceID="103" TargetLat="-36.72774259876324" TargetLng="174.8246739323311"/>
+      <Mark Name="M1" SourceID="103" TargetLat="-31.963990170426587" TargetLng="115.65675828478984"/>
     </CompoundMark>
     <CompoundMark CompoundMarkID="3" Name="M2">
-      <Mark Name="M2" SourceID="104" TargetLat="-36.6986169980514" TargetLng="174.825700289054"/>
+      <Mark Name="M2" SourceID="104" TargetLat="-31.953406625823117" TargetLng="115.63552983007145"/>
     </CompoundMark>
     <CompoundMark CompoundMarkID="4" Name="Gate">
-      <Mark Name="G1" SeqID="1" SourceID="104" TargetLat="-36.66622824577404" TargetLng="174.8275490398269"/>
-      <Mark Name="G2" SeqID="2" SourceID="105" TargetLat="-36.66669669658439" TargetLng="174.83086147079896"/>
+      <Mark Name="G1" SeqID="1" SourceID="104" TargetLat="-31.90602211466254" TargetLng="115.6795286584245"/>
+      <Mark Name="G2" SeqID="2" SourceID="105" TargetLat="-31.906490572980857" TargetLng="115.68265852021763"/>
     </CompoundMark>
   </Course>
   <CompoundMarkSequence>
@@ -32,9 +32,9 @@
     <Corner CompoundMarkID="1" Rounding="SP" SeqID="5" ZoneSize="3"/>
   </CompoundMarkSequence>
   <CourseLimit>
-    <Limit Lat="-36.6597" Lon="174.7566" SeqID="1"/>
-    <Limit Lat="-36.6299" Lon="174.8293" SeqID="2"/>
-    <Limit Lat="-36.7589" Lon="174.8179" SeqID="3"/>
-    <Limit Lat="-36.7324" Lon="174.9052" SeqID="4"/>
+    <Limit Lat="-31.9" Lon="115.5" SeqID="1"/>
+    <Limit Lat="-31.9" Lon="115.7" SeqID="2"/>
+    <Limit Lat="-32.0" Lon="115.648" SeqID="3"/>
+    <Limit Lat="-32.0" Lon="115.7" SeqID="4"/>
   </CourseLimit>
 </Race>

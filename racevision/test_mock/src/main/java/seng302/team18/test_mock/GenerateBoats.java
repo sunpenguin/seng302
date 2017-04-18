@@ -73,7 +73,26 @@ public class GenerateBoats {
         boatShapes.appendChild(shape0);
         Element vertice1 = doc.createElement("Vertices");
         shape0.appendChild(vertice1);
-
+        Element vtx1 = doc.createElement("Vtx");
+        vtx1.setAttribute("Seq", "1");
+        vtx1.setAttribute("Y", "0");
+        vtx1.setAttribute("X", "-2.569");
+        vertice1.appendChild(vtx1);
+        Element vtx2 = doc.createElement("Vtx");
+        vtx2.setAttribute("Seq", "2");
+        vtx2.setAttribute("Y", "18.359");
+        vtx2.setAttribute("X", "-2.569");
+        vertice1.appendChild(vtx2);
+        Element vtx3 = doc.createElement("Vtx");
+        vtx3.setAttribute("Seq", "3");
+        vtx3.setAttribute("Y", "18.359");
+        vtx3.setAttribute("X", "-2.569");
+        vertice1.appendChild(vtx3);
+        Element vtx4 = doc.createElement("Vtx");
+        vtx4.setAttribute("Seq", "4");
+        vtx4.setAttribute("Y", "0");
+        vtx4.setAttribute("X", "2.569");
+        vertice1.appendChild(vtx4);
 
 
         // output result
