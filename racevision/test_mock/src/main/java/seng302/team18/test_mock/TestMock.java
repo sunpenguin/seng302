@@ -4,6 +4,7 @@ import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 import seng302.team18.model.Regatta;
 
+
 /**
  * Created by Justin on 18/04/2017.
  */
@@ -17,7 +18,15 @@ public class TestMock {
         RegattaGenerator regattaGenerator = new RegattaGenerator();
         regattaGenerator.generate();
         regatta = regattaGenerator.getRegatta();
+    }
 
+    public void constructFiles() {
+        FileConstructor fileConstructor = new FileConstructor(regatta, course, race);
+        fileConstructor.constructFiles();
+    }
 
+    public void run() {
+        generateClasses();
+        constructFiles();
     }
 }

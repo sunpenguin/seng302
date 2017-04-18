@@ -9,6 +9,6 @@ public class Main {
 
     public static void main (String[] args) {
         TestMock testMock = new TestMock();
-        testMock.generateClasses(); // Generate the Regatta, Course and Race classes for our TestMock
+        testMock.run();
     }
 }
