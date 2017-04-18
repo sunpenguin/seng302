@@ -7,6 +7,9 @@ import seng302.team18.test_mock.XMLConstructor;
  */
 public class AC35RegattaXMLConstructor implements XMLConstructor {
 
+    /**
+     * Construct regatta.XML to conform to the AC35 protocol.
+     */
     public void construct() {
 
     }

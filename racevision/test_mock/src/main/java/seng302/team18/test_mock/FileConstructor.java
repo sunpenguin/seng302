@@ -19,6 +19,10 @@ public class FileConstructor {
         this.race = race;
     }
 
+    /**
+     * Construct the files needed by instantiating the appropriate constructor classes.
+     * For AC35, this would involve creating each AC35XMLConstructor and then calling construct()
+     */
     public void constructFiles() {
 
     }
