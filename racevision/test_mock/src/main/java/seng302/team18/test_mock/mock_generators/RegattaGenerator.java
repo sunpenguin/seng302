@@ -28,6 +28,8 @@ public class RegattaGenerator implements Generator {
         regatta.setUTcOffset(utcOffset);
     }
 
+
+
     public Regatta getRegatta(){
         return regatta;
     }

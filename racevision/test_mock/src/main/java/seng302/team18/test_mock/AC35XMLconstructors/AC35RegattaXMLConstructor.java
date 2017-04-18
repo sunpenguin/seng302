@@ -13,6 +13,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.StringWriter;
 
 /**
  * Created by Justin on 18/04/2017.
@@ -48,9 +49,12 @@ public class AC35RegattaXMLConstructor {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("regatta.XML"));
 
+            StreamResult result = new StreamResult(new StringWriter());
             transformer.transform(source, result);
+
+            String r = result.getWriter().toString();
+            System.out.println(r);
 
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
