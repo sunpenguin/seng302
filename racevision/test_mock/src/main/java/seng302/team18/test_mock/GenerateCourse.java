@@ -66,7 +66,7 @@ public class GenerateCourse {
             min = center.getLongitude();
         }
         double rangeStartLon = max - min;
-        double startLine1Lon = ran.nextDouble() * rangeStartLon + referenceBoundary.get(3).getLongitude();
+        double startLine1Lon = ran.nextDouble() * rangeStartLon + min;
         Coordinate startLine1 = new Coordinate(startLine1Lat, startLine1Lon);
 
         XYPair xyStart1 = GPSCalculations.GPSxy(startLine1);
@@ -105,7 +105,7 @@ public class GenerateCourse {
             min = center.getLongitude();
         }
         double rangeGateLon = max - min;
-        double gateLon = ran.nextDouble() * rangeGateLon + center.getLongitude();
+        double gateLon = ran.nextDouble() * rangeGateLon + min;
         Coordinate gate1 = new Coordinate(gateLat, gateLon);
 
         XYPair xyGate1 = GPSCalculations.GPSxy(gate1);
