@@ -3,6 +3,7 @@ package seng302.team18.test_mock;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 import seng302.team18.model.Regatta;
+import seng302.team18.test_mock.AC35XMLconstructors.AC35RegattaXMLConstructor;
 
 /**
  * Created by Justin on 18/04/2017.
@@ -24,7 +25,8 @@ public class FileConstructor {
      * For AC35, this would involve creating each AC35XMLConstructor and then calling construct()
      */
     public void constructFiles() {
-
+        AC35RegattaXMLConstructor regattaXMLConstructor = new AC35RegattaXMLConstructor();
+        regattaXMLConstructor.construct(regatta);
     }
 
 }
