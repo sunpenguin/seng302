@@ -7,7 +7,7 @@ import seng302.team18.model.Coordinate;
  * Created by dhl25 on 10/04/17.
  */
 public class AC35BoatLocationParser implements MessageBodyParser {
-    final double MMPS_TO_KMPH = 277.778;
+    final double MMPS_TO_KMPH = 36d / 10000d;
     final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
     final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
     final int SOURCE_ID_INDEX = 7;
@@ -18,7 +18,7 @@ public class AC35BoatLocationParser implements MessageBodyParser {
     final int LONG_LENGTH = 4;
     final int HEADING_INDEX = 28;
     final int HEADING_LENGTH = 2;
-    final int SPEED_INDEX = 34;
+    final int SPEED_INDEX = 38;
     final int SPEED_LENGTH = 2;
 
     @Override

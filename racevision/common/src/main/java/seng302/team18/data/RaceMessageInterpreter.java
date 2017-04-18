@@ -103,7 +103,6 @@ public class RaceMessageInterpreter implements MessageInterpreter {
         course.setMarkRoundings(message.getMarkRoundings());
         course.setCompoundMarks(message.getCompoundMarks());
         course.setBoundaries(message.getBoundaryMarks());
-//        if (course == null) {}
     }
 
 

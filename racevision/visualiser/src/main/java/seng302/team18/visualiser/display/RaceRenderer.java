@@ -136,7 +136,7 @@ public class RaceRenderer {
 
     public void setVisibleAnnotations(AnnotationType type, Boolean isVisible) {
         for (DisplayBoat boat : displayBoats.values()) {
-            boat.setAnnotationVisibile(type, isVisible);
+            boat.setAnnotationVisible(type, isVisible);
         }
     }
 }
