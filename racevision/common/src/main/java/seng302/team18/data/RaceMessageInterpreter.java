@@ -4,6 +4,7 @@ import seng302.team18.model.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
@@ -95,9 +96,12 @@ public class RaceMessageInterpreter implements MessageInterpreter {
 //        System.out.println("marks = " + message.getCompoundMarks());
 //        System.out.println("roundings = " + message.getMarkRoundings());
 //        System.out.println();
-        LocalDateTime startTime = LocalDateTime.parse(message.getRaceStartTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        ZonedDateTime startTime = ZonedDateTime.parse(message.getRaceStartTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         race.setStartTime(startTime);
         race.setParticipantIds(message.getParticipantIDs());
+
+//        System.out.println("race start = " + startTime);
+//        System.out.println("current time = " + ZonedDateTime.now(startTime.getZone()));
 
         Course course = race.getCourse();
         course.setMarkRoundings(message.getMarkRoundings());

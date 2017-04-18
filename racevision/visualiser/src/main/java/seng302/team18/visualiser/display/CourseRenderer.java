@@ -65,7 +65,8 @@ public class CourseRenderer {
      */
     private void setUpBoundary() {
         // Renders Boundaries
-        for (BoundaryMark boundary : course.getBoundaries()) {
+        List<BoundaryMark> boundaryMarks = course.getBoundaries();
+        for (BoundaryMark boundary : boundaryMarks) {
             XYPair boundaryPixels = PixelMapper.convertCoordPixel(boundary.getCoordinate(), PADDING, true, pane, course);
             border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
         }

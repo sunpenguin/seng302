@@ -60,10 +60,11 @@ public class RaceLoop extends AnimationTimer {
         }
         if (message != null) {
             interpreter.interpretMessage(message);
-            renderer.renderBoats(false, messageCount);
+            renderer.renderBoats(false);
             courseRenderer.renderCourse();
             messageCount++;
             if (messageCount >= 10) {
+                renderer.drawTrails();
                 messageCount = 0;
             }
         }

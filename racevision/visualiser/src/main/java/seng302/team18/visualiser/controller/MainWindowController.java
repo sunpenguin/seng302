@@ -56,7 +56,7 @@ public class MainWindowController {
         this.race = new Race();
         arrow.setRotate(race.getCourse().getWindDirection());
         raceRenderer = new RaceRenderer(race, group, raceViewPane);
-        raceRenderer.renderBoats(true, 0);
+        raceRenderer.renderBoats(true);
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
 //        raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
         raceClock = new RaceClock(timerLabel, race, -Race.PREP_TIME_SECONDS);
@@ -69,12 +69,12 @@ public class MainWindowController {
 
         raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
             courseRenderer.renderCourse();
-            raceRenderer.renderBoats(false, 0);
+            raceRenderer.renderBoats(false);
             raceRenderer.reDrawTrail(race.getStartingList());
         });
         raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
             courseRenderer.renderCourse();
-            raceRenderer.renderBoats(false, 0);
+            raceRenderer.renderBoats(false);
             raceRenderer.reDrawTrail(race.getStartingList());
         });
         setUpTable();

@@ -1,6 +1,7 @@
 package seng302.team18.model;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -14,7 +15,7 @@ public class Race {
     private List<Boat> startingList;
     private Course course;
     private List<Boat> finishedList;
-    private LocalDateTime startTime;
+    private ZonedDateTime startTime;
     private List<Integer> participantIds;
     public static final double WARNING_TIME_SECONDS = 4; // TODO change this to 60
     public static final double PREP_TIME_SECONDS = 8; // TODO change this to 120
@@ -222,11 +223,11 @@ public class Race {
         return startingList.size() == finishedList.size();
     }
 
-    public LocalDateTime getStartTime() {
+    public ZonedDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
     }
 
