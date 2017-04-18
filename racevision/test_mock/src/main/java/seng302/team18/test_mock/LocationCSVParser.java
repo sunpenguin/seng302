@@ -194,7 +194,8 @@ public class LocationCSVParser {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(System.getProperty("user.dir"),"/racevision/test_mock/src/main/resources/Regatta.xml"));
+            //Needs to be changed but needed for tests right now
+            StreamResult result = new StreamResult(new File("/home/cosc/student/sbe67/Documents/nrac/302/Team18/team-18/racevision/test_mock/src/main/resources/Regatta.xml"));
 
             transformer.transform(source, result);
 

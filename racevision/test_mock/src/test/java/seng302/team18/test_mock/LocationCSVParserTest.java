@@ -6,11 +6,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.Coordinate;
+import seng302.team18.util.GPSCalculations;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -58,8 +61,29 @@ public class LocationCSVParserTest {
     public void parseCSVRegattaXMLtest(){
         testParser.parseCSV(newYorkCSV);
         try {
-            //BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("src/main/resources/Regatta.xml")));
-            //String line = bufferedReader.readLine();
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File("src/main/resources/Regatta.xml")));
+            String line1 = bufferedReader.readLine();
+            String line2 = bufferedReader.readLine();
+            String line3 = bufferedReader.readLine();
+            String line4 = bufferedReader.readLine();
+            String line5 = bufferedReader.readLine();
+            String line6 = bufferedReader.readLine();
+            String line7 = bufferedReader.readLine();
+            String line8 = bufferedReader.readLine();
+            String line9 = bufferedReader.readLine();
+            String line10 = bufferedReader.readLine();
+            String line11 = bufferedReader.readLine();
+            assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>",line1);
+            assertEquals("<RegattaConfig>",line2);
+            assertEquals("  <RegattaID>121</RegattaID>",line3);
+            assertEquals("  <RegattaName>New York City Mock</RegattaName>",line4);
+            assertEquals("  <CourseName>AC13</CourseName>",line5);
+            assertEquals("  <CentralLatitude>40.398482131821964</CentralLatitude>",line6);
+            assertEquals("  <CentralLongitude>-73.92494706003819</CentralLongitude>",line7);
+            assertEquals("  <CentralAltitude>0.00</CentralAltitude>",line8);
+            assertEquals("  <UtcOffset>-4</UtcOffset>",line9);
+            assertEquals("  <MagneticVariation>-12</MagneticVariation>",line10);
+            assertEquals("</RegattaConfig>",line11);
         }catch (Exception e){
             System.out.println("oh no");
         }
