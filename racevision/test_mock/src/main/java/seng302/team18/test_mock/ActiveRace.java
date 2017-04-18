@@ -1,23 +1,14 @@
-package seng302.team18.model;
+package seng302.team18.test_mock;
 
+import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-
 /**
- * A class to represent an individual race.
+ * Subclass of race that can simulate a race.
  */
-public class Race {
-
-    protected List<Boat> startingList;
-    protected Course course;
-    protected List<Boat> finishedList;
-    protected double duration;
-    protected static final double WARNING_TIME_SECONDS = 30; // TODO change this to 60
-    protected static final double PREP_TIME_SECONDS = 60; // TODO change this to 120
+public class ActiveRace extends Race {
 
     /**
      * Race class constructor.
@@ -25,84 +16,14 @@ public class Race {
      * @param startingList Arraylist holding all entered boats
      * @param course       Course object
      */
-    public Race(List<Boat> startingList, Course course) {
-        startingList.sort(Comparator.comparingDouble(Boat::getSpeed));
-        this.startingList = startingList;
-        this.course = course;
-        finishedList = new ArrayList<>();
-        setCourseForBoats();
-        duration = 60;
-    }
-
-    /**
-     * Convert a value given in knots to meters per second.
-     *
-     * @param knots speed in knots.
-     * @return speed in meters per second.
-     */ // TODO: This is not the appropriate location for this. Move somewhere more suitable
-    public static double knotsToMetersPerSecond(double knots) {
-        return ((knots * 1.852) / 3.6);
-    }
-
-
-    /**
-     * Called in Race constructor.
-     * Set up the course CompoundMarks for each boat in the race as well as set the
-     * current(starting CompoundMark) and next CompoundMark.
-     */
-    private void setCourseForBoats() {
-        for (Boat boat : startingList) {
-            // Set Leg
-            boat.setLeg(course.getLegs().get(0));
-            // Set Dest
-            boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
-            // Set Coordinate
-            Coordinate midPoint = course.getCompoundMarks().get(0).getMidCoordinate();
-            boat.setCoordinate(midPoint);
-            // Set Heading
-            boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
-        }
-    }
-
-    /**
-     * Starting list getter.
-     *
-     * @return ObservableList holding all entered boats
-     */
-    public List<Boat> getStartingList() {
-        return startingList;
-    }
-
-    /**
-     * Starting list setter.
-     *
-     * @param startingList Arraylist holding all entered boats
-     */
-    public void setStartingList(List<Boat> startingList) {
-        this.startingList = startingList;
-    }
-
-    /**
-     * Course getter.
-     *
-     * @return Course object
-     */
-    public Course getCourse() {
-        return course;
-    }
-
-    /**
-     * Course setter.
-     *
-     * @param course Course object
-     */
-    public void setCourse(Course course) {
-        this.course = course;
+    public ActiveRace(List<Boat> startingList, Course course) {
+        super(startingList, course);
     }
 
 
     /**
      * Updates the position and heading of every boat in the race.
+     *
      * @param time
      */
     public void updateBoats(double time) { // time in seconds
@@ -116,6 +37,7 @@ public class Race {
 
     /**
      * Updates a boats position then heading.
+     *
      * @param boat
      * @param time
      */
@@ -129,6 +51,7 @@ public class Race {
      * Changes the boats heading so that if it has reached its destination
      * it heads in the direction of its next destination. Otherwise set the heading
      * to be in the direction of its current destination.
+     *
      * @param boat to be updated
      */
     private void updateHeading(Boat boat) {
@@ -156,6 +79,7 @@ public class Race {
     /**
      * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
      * and sets the destination to the next marks coordinates.
+     *
      * @param boat
      * @param nextLeg
      */
@@ -172,6 +96,7 @@ public class Race {
     /**
      * Updates the boats coordinates to move closer to the boats destination.
      * Amount moved is proportional to the time passed
+     *
      * @param boat to be moved
      * @param time that has passed
      */
@@ -185,21 +110,7 @@ public class Race {
     }
 
 
-    public List<Boat> getFinishedList() {
-        return finishedList;
-    }
-
-
-    public void setDuration(double duration) {
-        this.duration = duration;
-    }
-
-    public double getDuration() {
-        return duration;
-    }
-
     public boolean isFinished() {
         return startingList.size() == finishedList.size();
     }
-
 }
