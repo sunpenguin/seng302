@@ -7,7 +7,7 @@ public class Regatta {
 
     private int RegattaID;
     private String RegattaName;
-    private double UTcOffset;
+    private String UTcOffset;
 
     public int getRegattaID() {
         return RegattaID;
@@ -25,11 +25,11 @@ public class Regatta {
         RegattaName = regattaName;
     }
 
-    public double getUTcOffset() {
+    public String getUTcOffset() {
         return UTcOffset;
     }
 
-    public void setUTcOffset(double UTcOffset) {
+    public void setUTcOffset(String UTcOffset) {
         this.UTcOffset = UTcOffset;
     }
 }

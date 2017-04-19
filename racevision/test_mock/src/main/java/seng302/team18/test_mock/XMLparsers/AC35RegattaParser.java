@@ -1,8 +1,15 @@
 package seng302.team18.test_mock.XMLparsers;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+import seng302.team18.model.Regatta;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -10,17 +17,40 @@ import java.io.InputStream;
  */
 public class AC35RegattaParser {
 
-    public void parse(InputStream regattaFile) {
+    public void parse(InputStream stream, Regatta regatta) {
+
+        final String REGATTA_TAG = "RegattaConfig";
+        final String REGATTA_ID = "RegattaID";
+        final String CENTER_LAT = "CentralLatitude";
+        final String CENTER_LONG = "CentralLongitude";
+        final String UTC_OFFSET = "UtcOffset";
+
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        Document doc;
 
         try {
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dbuilder = dbFactory.newDocumentBuilder();
+            builder = factory.newDocumentBuilder(); // parser configuration exception
+            doc = builder.parse(stream); // io exception, SAXException
 
+            doc.getDocumentElement().normalize();
+            Element regattaElement = (Element) doc.getElementsByTagName(REGATTA_TAG).item(0);
 
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
+            int regattaID = Integer.parseInt(regattaElement.getElementsByTagName(REGATTA_ID).item(0).getTextContent());
+
+            double centralLat =
+                    Double.parseDouble(regattaElement.getElementsByTagName(CENTER_LAT).item(0).getTextContent());
+            double centralLong =
+                    Double.parseDouble(regattaElement.getElementsByTagName(CENTER_LONG).item(0).getTextContent());
+
+            String utcOffset = regattaElement.getElementsByTagName(UTC_OFFSET).item(0).getTextContent();
+
+            regatta.setRegattaID(regattaID);
+            regatta.setUTcOffset(utcOffset);
+
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
         }
-
-
     }
 }
