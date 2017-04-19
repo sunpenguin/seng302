@@ -16,8 +16,8 @@ public class Race {
     protected Course course;
     protected List<Boat> finishedList;
     protected double duration;
-    protected static final double WARNING_TIME_SECONDS = 30; // TODO change this to 60
-    protected static final double PREP_TIME_SECONDS = 60; // TODO change this to 120
+    public static final double WARNING_TIME_SECONDS = 30; // TODO change this to 60
+    public static final double PREP_TIME_SECONDS = 60; // TODO change this to 120
 
     /**
      * Race class constructor.
