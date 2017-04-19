@@ -4,6 +4,6 @@
     <RegattaName>Atlantic/Bermuda Test</RegattaName>
     <CourseName>North Head</CourseName>
     <CentralAltitude>0.00</CentralAltitude>
-    <UtcOffset>-3:00</UtcOffset>
+    <UtcOffset>-3</UtcOffset>
     <MagneticVariation>14.1</MagneticVariation>
 </RegattaConfig>

@@ -18,7 +18,9 @@ import java.io.InputStream;
  */
 public class AC35RegattaParser {
 
-    public void parse(InputStream stream, Regatta regatta) {
+    private AC35RegattaContainer container = new AC35RegattaContainer();
+
+    public AC35RegattaContainer parse(InputStream stream) {
 
         final String REGATTA_TAG = "RegattaConfig";
         final String REGATTA_ID = "RegattaID";
@@ -47,11 +49,15 @@ public class AC35RegattaParser {
 
             String utcOffset = regattaElement.getElementsByTagName(UTC_OFFSET).item(0).getTextContent();
 
-            regatta.setRegattaID(regattaID);
-            regatta.setUTcOffset(utcOffset);
+            container.setRegattaID(regattaID);
+            container.setCentralLatitude(centralLat);
+            container.setGetCentralLongtitude(centralLong);
+            container.setuTcOffset(utcOffset);
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
+
+        return container;
     }
 }
