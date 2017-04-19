@@ -39,7 +39,7 @@ public class Course {
         markRoundings = new ArrayList<>();
         timeZone = ZoneId.systemDefault();
         windDirection = 0d;
-//        centralCoordinate = new Coordinate(0d, 0d);
+        centralCoordinate = new Coordinate(0d, 0d);
     }
 
 

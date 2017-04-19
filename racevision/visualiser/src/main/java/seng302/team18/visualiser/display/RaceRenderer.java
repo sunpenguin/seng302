@@ -99,7 +99,8 @@ public class RaceRenderer {
         group.getChildren().add(circle);
         List<Circle> circles = trailMap.get(boat.getShortName());
         if (circles == null) {
-            trailMap.put(boat.getShortName(), new ArrayList<>());
+            circles = new ArrayList<>();
+            trailMap.put(boat.getShortName(), circles);
         }
         circles.add(circle);
     }
