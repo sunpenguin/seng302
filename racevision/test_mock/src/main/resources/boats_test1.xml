@@ -89,13 +89,13 @@
             <FlagPosition Z="0.000" Y="3.426" X="0.000" />
         </Boat>
 
-        <Boat Type="Mark" SourceID="108" HullNum="LC18" StoweName="G1" ShortName="G1"
+        <Boat Type="Mark" SourceID="108" HullNum="LC18" StoweName="F1" ShortName="F1"
               BoatName="FinishLine1">
             <GPSposition Z="5.334" Y="3.804" X="0.000" />
             <FlagPosition Z="0.000" Y="3.426" X="0.000" />
         </Boat>
 
-        <Boat Type="Mark" SourceID="109" HullNum="LC19" StoweName="G2" ShortName="G2"
+        <Boat Type="Mark" SourceID="109" HullNum="LC19" StoweName="F2" ShortName="F2"
               BoatName="FinishLine2">
             <GPSposition Z="5.334" Y="3.804" X="0.000" />
             <FlagPosition Z="0.000" Y="3.426" X="0.000" />

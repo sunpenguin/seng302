@@ -47,12 +47,6 @@
             <MastTop Z="21.496" Y="4.233" X="0.000" />
         </Boat>
 
-        <Boat Type="Mark" SourceID="133" HullNum="LC14" StoweName="M1" ShortName="Mark"
-              BoatName="Mark">
-            <GPSposition Z="5.334" Y="3.804" X="0.000" />
-            <FlagPosition Z="0.000" Y="3.426" X="0.000" />
-        </Boat>
-
         <Boat Type="Mark" SourceID="131" HullNum="LC21" StoweName="PRO" ShortName="S1"
               BoatName="StartLine1">
             <GPSposition Z="5.334" Y="3.804" X="0.000" />
@@ -95,13 +89,13 @@
             <FlagPosition Z="0.000" Y="3.426" X="0.000" />
         </Boat>
 
-        <Boat Type="Mark" SourceID="138" HullNum="LC28" StoweName="G1" ShortName="G1"
+        <Boat Type="Mark" SourceID="138" HullNum="LC28" StoweName="F1" ShortName="F1"
               BoatName="FinishLine1">
             <GPSposition Z="5.334" Y="3.804" X="0.000" />
             <FlagPosition Z="0.000" Y="3.426" X="0.000" />
         </Boat>
 
-        <Boat Type="Mark" SourceID="139" HullNum="LC29" StoweName="G2" ShortName="G2"
+        <Boat Type="Mark" SourceID="139" HullNum="LC29" StoweName="F2" ShortName="F2"
               BoatName="FinishLine2">
             <GPSposition Z="5.334" Y="3.804" X="0.000" />
             <FlagPosition Z="0.000" Y="3.426" X="0.000" />
