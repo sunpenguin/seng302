@@ -16,17 +16,14 @@ public class PixelMapper {
      * @return x and y pixel coordinates of the given coordinates
      */
     public static XYPair convertCoordPixel
-            (Coordinate coord, double padding, boolean usePrefSize, Pane pane, Course course) {
+            (Coordinate coord, double padding, Pane pane, Course course) {
 
         GPSCalculations calculator = new GPSCalculations(course);
-        double pixelWidth;
-        double pixelHeight;
-        if (usePrefSize) {
+        double pixelWidth = pane.getWidth() - padding * 2;
+        double pixelHeight = pane.getHeight() - padding * 2;
+        if (pixelHeight <= 0 || pixelWidth <= 0) {
             pixelWidth = pane.getPrefWidth() - padding * 2;
             pixelHeight = pane.getPrefHeight() - padding * 2;
-        } else {
-            pixelWidth = pane.getWidth() - padding * 2;
-            pixelHeight = pane.getHeight() - padding * 2;
         }
 
         if (pixelHeight > pixelWidth) {

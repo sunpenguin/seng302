@@ -40,22 +40,13 @@ public class RaceRenderer {
         this.race = race;
         this.group = group;
         this.raceViewPane = raceViewPane;
-
-        for (numBoats = 0; numBoats < race.getStartingList().size(); numBoats++) {
-            Boat boat = race.getStartingList().get(numBoats);
-            DisplayBoat displayBoat =
-                    new DisplayBoat(boat.getShortName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(numBoats));
-            displayBoat.addToGroup(group);
-            displayBoats.put(boat.getShortName(), displayBoat);
-            trailMap.put(boat.getShortName(), new ArrayList<>());
-        }
     }
 
 
     /**
      * Draws displayBoats in the Race on the Group as well as the visible annotations
      */
-    public void renderBoats(boolean setup) {
+    public void renderBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
 
@@ -68,17 +59,12 @@ public class RaceRenderer {
 
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
-                XYPair pixels = PixelMapper.convertCoordPixel(boatCoordinates, PADDING, setup, raceViewPane, race.getCourse());
+                XYPair pixels = PixelMapper.convertCoordPixel(boatCoordinates, PADDING, raceViewPane, race.getCourse());
                 displayBoat.toFront();
                 displayBoat.moveBoat(pixels);
                 displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());
-//                if (frameCount == 10) {
-//                    drawTrail(boat, pixels);
-//                }
             }
-
-
         }
     }
 
@@ -88,7 +74,7 @@ public class RaceRenderer {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
-                XYPair pixels = PixelMapper.convertCoordPixel(boatCoordinates, PADDING, false, raceViewPane, race.getCourse());
+                XYPair pixels = PixelMapper.convertCoordPixel(boatCoordinates, PADDING, raceViewPane, race.getCourse());
                 drawTrail(boat, pixels);
             }
         }
@@ -128,7 +114,7 @@ public class RaceRenderer {
         for (Boat boat : boats) {
             for (Circle circle : trailMap.get(boat.getShortName())) {
                 XYPair newPosition = PixelMapper.convertCoordPixel
-                        (circleCoordMap.get(circle), PADDING, false, raceViewPane, race.getCourse());
+                        (circleCoordMap.get(circle), PADDING, raceViewPane, race.getCourse());
                 circle.setCenterX(newPosition.getX());
                 circle.setCenterY(newPosition.getY());
             }
