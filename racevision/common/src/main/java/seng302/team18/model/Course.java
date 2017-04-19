@@ -29,7 +29,6 @@ public class Course {
         }
     }
 
-
     /**
      * A getter for the CompoundMarks in the course
      *
