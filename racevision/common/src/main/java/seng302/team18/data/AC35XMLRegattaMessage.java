@@ -16,8 +16,8 @@ public class AC35XMLRegattaMessage implements MessageBody {
 
 
     @Override
-    public AC35MessageType getType() {
-        return AC35MessageType.XML_REGATTA;
+    public int getType() {
+        return AC35MessageType.XML_REGATTA.getCode();
     }
 
 

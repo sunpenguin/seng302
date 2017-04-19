@@ -18,8 +18,8 @@ public class AC35XMLRaceMessage implements MessageBody {
     private List<BoundaryMark> boundaryMarks;
 
     @Override
-    public AC35MessageType getType() {
-        return AC35MessageType.XML_RACE;
+    public int getType() {
+        return AC35MessageType.XML_RACE.getCode();
     }
 
     public String getRaceStartTime() {

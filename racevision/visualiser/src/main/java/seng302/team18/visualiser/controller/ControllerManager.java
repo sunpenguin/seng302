@@ -39,6 +39,7 @@ public class ControllerManager {
 
 
     public void start() throws Exception {
+
         receiver = getPort();
         race = new Race();
         interpreter = new RaceMessageInterpreter(race);
@@ -69,7 +70,9 @@ public class ControllerManager {
 
         if (decision.equals("Y")){
             try {
-                return new SocketMessageReceiver(4941, new AC35MessageParserFactory());
+                SocketMessageReceiver s = new SocketMessageReceiver(4941, new AC35MessageParserFactory());
+                return s;
+
             } catch (IOException e) {
                 System.out.println("try again");
             }

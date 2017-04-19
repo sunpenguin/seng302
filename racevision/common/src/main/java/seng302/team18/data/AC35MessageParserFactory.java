@@ -46,6 +46,7 @@ public class AC35MessageParserFactory implements MessageParserFactory {
         parserMap.put(AC35MessageType.YACHT_EVENT, new AC35YachtEventParser());
         parserMap.put(AC35MessageType.BOAT_LOCATION, new AC35BoatLocationParser());
         parserMap.put(AC35MessageType.XML_MESSAGE, new AC35XMLMessageParser(new AC35XMLParserFactory()));
+        parserMap.put(AC35MessageType.RACE_STATUS, new AC35RaceStatusParser());
         return parserMap;
     }
 }

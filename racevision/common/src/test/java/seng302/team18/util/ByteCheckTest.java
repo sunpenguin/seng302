@@ -41,13 +41,13 @@ public class ByteCheckTest {
 
     @Test
     public void ByteToIntConverterTest() {
-        int actual1 = ByteCheck.ByteToIntConverter(b1, 0, 3);
+        int actual1 = ByteCheck.byteToIntConverter(b1, 0, 3);
         int expected1 = 65793; // 2^16 + 2^8 + 1
-        int actual2 = ByteCheck.ByteToIntConverter(b2, 0, 1);
+        int actual2 = ByteCheck.byteToIntConverter(b2, 0, 1);
         int expected2 = 9; // 9 * 1
-        int actual3 = ByteCheck.ByteToIntConverter(b3, 5, 3);
+        int actual3 = ByteCheck.byteToIntConverter(b3, 5, 3);
         int expected3 = 460035; // 2^16 * 7 + 2^8 * 5 + 1 * 3
-        int actual4 = ByteCheck.ByteToIntConverter(b1, 0, 0);
+        int actual4 = ByteCheck.byteToIntConverter(b1, 0, 0);
         int expected4 = 0; // Length 0
 
         Assert.assertEquals(expected1, actual1);

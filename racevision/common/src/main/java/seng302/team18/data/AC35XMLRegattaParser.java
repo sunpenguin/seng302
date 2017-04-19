@@ -50,7 +50,7 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
         }
         doc.getDocumentElement().normalize();
         Element regattaElement = (Element) doc.getElementsByTagName(REGATTA_TAG).item(0);
-//        int regattaID = Integer.parseInt(regattaElement.getAttribute(REGATTA_ID));
+//        int regattaID = Integer.parseInt(regattaElement.getElementsByTagName(REGATTA_ID).item(0).getTextContent());
 //        System.out.println(regattaElement.getElementsByTagName(CENTER_LAT).item(0).getTextContent());
         double centralLat =
                 Double.parseDouble(regattaElement.getElementsByTagName(CENTER_LAT).item(0).getTextContent());

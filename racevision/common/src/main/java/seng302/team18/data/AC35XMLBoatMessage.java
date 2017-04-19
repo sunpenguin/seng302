@@ -12,8 +12,8 @@ public class AC35XMLBoatMessage implements MessageBody {
     private List<Boat> boats;
 
     @Override
-    public AC35MessageType getType() {
-        return AC35MessageType.XML_BOATS;
+    public int getType() {
+        return AC35MessageType.XML_BOATS.getCode();
     }
 
     public List<Boat> getBoats() {

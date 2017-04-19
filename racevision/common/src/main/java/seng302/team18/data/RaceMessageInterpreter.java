@@ -2,12 +2,15 @@ package seng302.team18.data;
 
 import seng302.team18.model.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
+
+import static seng302.team18.data.AC35MessageType.*;
 
 /**
  * Created by david on 4/13/17.
@@ -21,7 +24,8 @@ public class RaceMessageInterpreter implements MessageInterpreter {
     }
 
     public void interpretMessage(MessageBody message) {
-        switch (message.getType()) {
+        AC35MessageType messageType = AC35MessageType.from(message.getType());
+        switch (messageType) {
             case XML_RACE:
                 updateXMLRace((AC35XMLRaceMessage) message, race);
                 break;
@@ -30,6 +34,9 @@ public class RaceMessageInterpreter implements MessageInterpreter {
                 break;
             case XML_REGATTA:
                 updateXMLRegatta((AC35XMLRegattaMessage) message, race.getCourse());
+                break;
+            case RACE_STATUS:
+                updateRaceTime((AC35RaceStatusMessage) message, race);
                 break;
             case BOAT_LOCATION:
                 updateBoatLocation((AC35BoatLocationMessage) message, race.getStartingList());
@@ -85,6 +92,18 @@ public class RaceMessageInterpreter implements MessageInterpreter {
                 mark.setCoordinate(message.getCoordinate());
             }
         }
+    }
+
+    private void updateRaceTime(AC35RaceStatusMessage message, Race race) {
+        Instant startIn = Instant.ofEpochMilli(message.getStartTime());
+        Instant currentIn = Instant.ofEpochMilli(message.getCurrentTime());
+        ZonedDateTime startTime = ZonedDateTime.ofInstant(startIn, race.getCourse().getTimeZone());
+        ZonedDateTime currentTime = ZonedDateTime.ofInstant(currentIn, race.getCourse().getTimeZone());
+
+        race.setStartTime(startTime);
+        race.setCurrentTime(currentTime);
+        System.out.println(startTime);
+        System.out.println(currentTime);
     }
 
 

@@ -16,6 +16,7 @@ public class Race {
     private Course course;
     private List<Boat> finishedList;
     private ZonedDateTime startTime;
+    private ZonedDateTime currentTime;
     private List<Integer> participantIds;
     public static final double WARNING_TIME_SECONDS = 4; // TODO change this to 60
     public static final double PREP_TIME_SECONDS = 8; // TODO change this to 120
@@ -233,5 +234,9 @@ public class Race {
 
     public void setParticipantIds(List<Integer> participantIds) {
         this.participantIds = participantIds;
+    }
+
+    public void setCurrentTime(ZonedDateTime currentTime) {
+        this.currentTime = currentTime;
     }
 }
