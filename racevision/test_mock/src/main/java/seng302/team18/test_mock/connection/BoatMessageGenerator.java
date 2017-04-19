@@ -1,4 +1,4 @@
-package seng302.team18.test_mock;
+package seng302.team18.test_mock.connection;
 
 import seng302.team18.model.Boat;
 
@@ -16,7 +16,8 @@ public class BoatMessageGenerator extends ScheduledMessage {
     }
 
     @Override
-    protected void generateMessage() {
+    public String getMessage() {
         // TODO encode the message. Remember to check each boat to see that sending a message is appropriate for its situation
+        return "";
     }
 }

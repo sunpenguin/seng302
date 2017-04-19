@@ -1,4 +1,4 @@
-package seng302.team18.test_mock;
+package seng302.team18.test_mock.connection;
 
 /**
  * Abstract base class for messages to be sent on a regular schedule.
@@ -16,16 +16,17 @@ public abstract class ScheduledMessage {
      *
      * @param currTime the current time
      */
-    public void send(long currTime) {
+    public boolean isTimeToSend(long currTime) {
         if ((currTime - lastSent) > (1000 / frequency)) {
-            generateMessage();
             lastSent = currTime;
+            return true;
         }
+        return false;
     }
 
     /**
      * Overridden by base classes to define behaviour when it is time to send a message/s
      */
-    protected abstract void generateMessage();
+    public abstract String getMessage();
 
 }

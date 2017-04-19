@@ -3,17 +3,21 @@ package seng302.team18.test_mock;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 import seng302.team18.model.Regatta;
+import seng302.team18.test_mock.connection.BoatMessageGenerator;
+import seng302.team18.test_mock.connection.ScheduledMessage;
+import seng302.team18.test_mock.connection.Server;
 import seng302.team18.test_mock.mock_generators.CourseGenerator;
 import seng302.team18.test_mock.mock_generators.RaceGenerator;
 import seng302.team18.test_mock.mock_generators.RegattaGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Thread.sleep;
 
 
 /**
- * Created by Justin on 18/04/2017.
+ * A mock AC35 created from supplied XML files.
  */
 public class TestMock {
 
@@ -24,7 +28,11 @@ public class TestMock {
     /**
      * The messages to be sent on a schedule during race simulation
      */
-    private List<ScheduledMessage> messages;
+    private List<ScheduledMessage> messages = new ArrayList<>();
+
+    //TODO give real port
+    private Server server = new Server(1478);
+
 
     /**
      * Generate the classes necessary to visualise a mock race.
@@ -44,6 +52,7 @@ public class TestMock {
         race = raceGenerator.getRace();
     }
 
+
     /**
      * Create a FileConstructor with the necessary objects as arguments (regatta, course, race)
      * so that the appropriate files can be constructed.
@@ -53,22 +62,24 @@ public class TestMock {
         fileConstructor.constructFiles();
     }
 
+
     public void run() {
         generateClasses();
         constructFiles();
 
-        // wait for connection
-        // TODO add list of connections
+        server.openServer();
 
-        initMessageSenders();
+        initMessageGenerators();
         runSimulation();
+
+        server.closeServer();
     }
 
 
     /**
      * Initialise the generators for scheduled messages
      */
-    private void initMessageSenders() {
+    private void initMessageGenerators() {
         messages.add(new BoatMessageGenerator(race.getStartingList()));
     }
 
@@ -78,7 +89,6 @@ public class TestMock {
      */
     private void runSimulation() {
         final int LOOP_FREQUENCY = 10;
-        boolean simulate = true;
 
         long timeCurr = System.currentTimeMillis();
         long timeLast;
@@ -87,21 +97,25 @@ public class TestMock {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
+            // Update simulation
             race.updateBoats((timeCurr - timeLast) * 1e3);
 
+            // Send messages if needed
             for (ScheduledMessage sendable : messages) {
-                sendable.send(timeCurr);
+                if (sendable.isTimeToSend(timeCurr)) {
+                    server.broadcast(sendable.getMessage());
+                }
             }
 
+            server.pruneConnections();
+
+            // Sleep
             try {
                 sleep(1000 / LOOP_FREQUENCY);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-            if (race.isFinished()) {
-                simulate = false;
-            }
-        } while (simulate);
+        } while (!race.isFinished());
     }
 }
