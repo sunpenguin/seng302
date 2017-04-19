@@ -1,10 +1,20 @@
 package seng302.team18.test_mock.XMLparsers;
 
+import seng302.team18.model.Boat;
+
+import java.util.List;
+
 /**
- * Created by hqi19 on 20/04/17.
+ * A class contains list of boats.
  */
 public class AC35BoatsContainer {
-    // A boat has Type, SourceID, ShapeID, HullNum, StoweName with elements GPSposition and FlagPosition
-    private String type;
-    private String sourceID;
+    private List<Boat> boats;
+
+    public List<Boat> getBoats() {
+        return boats;
+    }
+
+    public void setBoats(List<Boat> boats) {
+        this.boats = boats;
+    }
 }

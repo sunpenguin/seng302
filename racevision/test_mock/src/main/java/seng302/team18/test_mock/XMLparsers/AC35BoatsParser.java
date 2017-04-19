@@ -22,6 +22,8 @@ import java.util.List;
  */
 public class AC35BoatsParser {
 
+    private AC35BoatsContainer boatsContainer = new AC35BoatsContainer();
+
     public AC35BoatsContainer parse(InputStream stream) {
         final String BOATS_ELEMENT = "BoatConfig";
         final String BOAT_SETTINGS = "Settings";
@@ -46,13 +48,13 @@ public class AC35BoatsParser {
 
             Node boatsNode = boatsElement.getElementsByTagName(BOATS).item(0);
             List<Boat> boats = parseBoats(boatsNode);
-
-
+            boatsContainer.setBoats(boats);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
             return null;
         }
-//        return message;
+
+        return boatsContainer;
     }
 
     private List<Boat> parseBoats(Node boatsNode) {
@@ -83,5 +85,4 @@ public class AC35BoatsParser {
         }
         return boats;
     }
-
 }
