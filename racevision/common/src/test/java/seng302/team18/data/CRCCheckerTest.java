@@ -4,10 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
-import java.util.zip.CRC32;
 
-import static com.sun.xml.internal.ws.dump.LoggingDumpTube.Position.Before;
 import static org.junit.Assert.assertEquals;
 
 /**
