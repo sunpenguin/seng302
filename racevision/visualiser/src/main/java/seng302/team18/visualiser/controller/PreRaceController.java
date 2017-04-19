@@ -111,7 +111,7 @@ public class PreRaceController {
 //        int offsetInMillis = timeZone.getOffset(cal.getTimeInMillis());
 //        String offset = String.format("%02d:%02d", Math.abs(offsetInMillis / MILLI_TO_HOUR), Math.abs((offsetInMillis / MILLI_TO_MINUTE) % SCALER_FOR_MINUTE));
 //        offset = (offsetInMillis >= 0 ? "+" : "-") + offset;
-        timeZoneLabel.setText(zoneTime.getOffset().toString());
+        timeZoneLabel.setText("UTC " + zoneTime.getOffset().toString());
     }
 
     private void setUpLists(List<Boat> boats) {

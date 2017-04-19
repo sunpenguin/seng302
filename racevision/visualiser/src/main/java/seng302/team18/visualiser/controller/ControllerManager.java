@@ -13,6 +13,7 @@ import seng302.team18.visualiser.display.RaceRenderer;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
@@ -59,9 +60,6 @@ public class ControllerManager {
         } else {
             showMainView();
         }
-
-
-
     }
 
 
