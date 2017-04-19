@@ -54,6 +54,7 @@ public class AC35RegattaParser {
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
+            return null;
         }
 
         return container;
