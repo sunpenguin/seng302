@@ -5,5 +5,5 @@ package seng302.team18.data;
  */
 public interface MessageBody {
 
-    public AC35MessageType getType();
+    public int getType();
 }

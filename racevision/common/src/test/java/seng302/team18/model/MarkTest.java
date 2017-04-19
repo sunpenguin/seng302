@@ -24,11 +24,11 @@ public class MarkTest {
     public void coordinateTest() {
         Coordinate expected = new Coordinate(1, 1);
         Mark actual = new Mark("HAHAhOHo", new Coordinate(1, 1));
-        assertEquals(expected, actual.getCoordinates());
+        assertEquals(expected, actual.getCoordinate());
 
         expected = new Coordinate(2.5, 4);
-        actual.setCoordinates(new Coordinate(2.5, 4));
-        assertEquals(expected, actual.getCoordinates());
+        actual.setCoordinate(new Coordinate(2.5, 4));
+        assertEquals(expected, actual.getCoordinate());
     }
 
 

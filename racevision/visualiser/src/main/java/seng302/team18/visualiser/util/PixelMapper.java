@@ -16,16 +16,14 @@ public class PixelMapper {
      * @return x and y pixel coordinates of the given coordinates
      */
     public static XYPair convertCoordPixel
-            (Coordinate coord, double padding, boolean usePrefSize, Pane pane, Course course) {
+            (Coordinate coord, double padding, Pane pane, Course course) {
 
-        double pixelWidth;
-        double pixelHeight;
-        if (usePrefSize) {
+        GPSCalculations calculator = new GPSCalculations(course);
+        double pixelWidth = pane.getWidth() - padding * 2;
+        double pixelHeight = pane.getHeight() - padding * 2;
+        if (pixelHeight <= 0 || pixelWidth <= 0) {
             pixelWidth = pane.getPrefWidth() - padding * 2;
             pixelHeight = pane.getPrefHeight() - padding * 2;
-        } else {
-            pixelWidth = pane.getWidth() - padding * 2;
-            pixelHeight = pane.getHeight() - padding * 2;
         }
 
         if (pixelHeight > pixelWidth) {
@@ -38,7 +36,7 @@ public class PixelMapper {
         gps.findMinMaxPoints(course);
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
-        XYPair planeCoordinates = GPSCalculations.GPSxy(coord);
+        XYPair planeCoordinates = calculator.coordinateToPixel(coord);
         double aspectRatio = courseWidth / courseHeight;
 
         if (courseHeight > courseWidth) {

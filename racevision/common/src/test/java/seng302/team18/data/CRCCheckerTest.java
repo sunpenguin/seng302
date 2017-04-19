@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.zip.CRC32;
 
 import static com.sun.xml.internal.ws.dump.LoggingDumpTube.Position.Before;
@@ -24,9 +25,24 @@ public class CRCCheckerTest {
     public void setUp() throws Exception {
         checker = new CRCChecker();
         message = "Hello from Jess";
-        checkSum = BigInteger.valueOf(0x514DAC35).toByteArray(); // calculated checksum which is known to be correct
-        wrongCheckSum = BigInteger.valueOf(0x800EF01).toByteArray(); // random checksum which is known to be incorrect
+        int checkInt = 0x800EFB03;
+//        checkSum = Integer.valueOf(0x800EFB03).toByteArray(); // calculated checksum which is known to be correct
+        ByteBuffer b = ByteBuffer.allocate(4);
+        b.putInt(checkInt);
+        //b.order(ByteOrder.LITTLE_ENDIAN);
+        checkSum = b.array();
+//        System.out.println(checkInt);
+//        b.clear();
+//        b.allocate(8);
+//        b.put(checkSum);
+//        System.out.println(b.getInt());
+
         messageBytes = message.getBytes();
+        wrongCheckSum = BigInteger.valueOf(0x800EF01).toByteArray(); // random checksum which is known to be incorrect
+        ByteBuffer bb = ByteBuffer.allocate(messageBytes.length);
+        bb.put(messageBytes);
+        bb.order(ByteOrder.LITTLE_ENDIAN);
+
     }
 
     @Test

@@ -1,5 +1,7 @@
 package seng302.team18.data;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -9,16 +11,20 @@ import java.net.Socket;
  *
  */
 
-public class LiveDataListener {
+public class SocketMessageReceiver {
     private Socket socket;
     private InputStream inStream;
     private MessageParserFactory parserFactory;
 
-    public LiveDataListener(int portNumber, MessageParserFactory parserFactory) throws IOException {
+
+    public SocketMessageReceiver(int portNumber, MessageParserFactory parserFactory) throws IOException {
         this.parserFactory = parserFactory;
         // Create input and output streams for reading in data
         socket = new Socket("livedata.americascup.com", portNumber);
         inStream = socket.getInputStream();
+        if (!inStream.markSupported()) {
+            inStream = new BufferedInputStream(inStream);
+        }
     }
 
 
@@ -33,7 +39,7 @@ public class LiveDataListener {
         inStream.read(headerBytes);
         MessageHead head = headParser.parse(headerBytes);
         MessageErrorDetector detector = parserFactory.makeDetector();
-        if (inStream.available() <= head.bodySize() + detector.errorCheckSize()) {
+        if (inStream.available() < head.bodySize() + detector.errorCheckSize()) {
             inStream.reset();
             return null;
         }
@@ -46,7 +52,7 @@ public class LiveDataListener {
 
         inStream.read(bodyBytes);
         inStream.read(checkBytes);
-        if (detector.isValid(checkBytes, headAndBody)) {
+        if (detector.isValid(checkBytes, headAndBody) && bodyParser != null) {
             return bodyParser.parse(bodyBytes);
         }
         return null;

@@ -1,5 +1,7 @@
 package seng302.team18.data;
 
+import seng302.team18.util.ByteCheck;
+
 import java.nio.ByteBuffer;
 
 /**
@@ -12,8 +14,8 @@ public class AC35XMLHeadParser implements MessageHeadParser {
         final int TYPE_INDEX = 9;
         final int LEN_INDEX = 12;
         final int LEN_LENGTH = 2;
-        AC35XMLMessageType type = AC35XMLMessageType.from((int) header[TYPE_INDEX]);
-        int len = ByteBuffer.wrap(header, LEN_INDEX, LEN_LENGTH).getInt();
+        AC35MessageType type = AC35MessageType.from((int) header[TYPE_INDEX]);
+        int len = ByteCheck.byteToIntConverter(header, LEN_INDEX, LEN_LENGTH);
         return new AC35XMLHead(type, len);
     }
 

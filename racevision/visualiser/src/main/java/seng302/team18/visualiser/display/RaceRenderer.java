@@ -24,6 +24,7 @@ public class RaceRenderer {
     private Map<Circle, Coordinate> circleCoordMap = new HashMap<>();
     private Pane raceViewPane;
     private final double PADDING = 20.0;
+    private int numBoats;
     final List<Color> BOAT_COLOURS = new ArrayList<>(
             Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
 
@@ -39,35 +40,41 @@ public class RaceRenderer {
         this.race = race;
         this.group = group;
         this.raceViewPane = raceViewPane;
-
-        for (int i = 0; i < race.getStartingList().size(); i++) {
-            Boat boat = race.getStartingList().get(i);
-            DisplayBoat displayBoat =
-                    new DisplayBoat(boat.getTeamName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(i));
-            displayBoat.addToGroup(group);
-            displayBoats.put(boat.getTeamName(), displayBoat);
-            trailMap.put(boat.getTeamName(), new ArrayList<>());
-        }
     }
 
 
     /**
      * Draws displayBoats in the Race on the Group as well as the visible annotations
      */
-    public void renderBoats(boolean setup, int frameCount) {
+    public void renderBoats() {
+        for (int i = 0; i < race.getStartingList().size(); i++) {
+            Boat boat = race.getStartingList().get(i);
+
+            DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
+            if (displayBoat == null) {
+                displayBoat = new DisplayBoat(boat.getShortName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(numBoats++));
+                displayBoat.addToGroup(group);
+                displayBoats.put(boat.getShortName(), displayBoat);
+            }
+
+            Coordinate boatCoordinates = boat.getCoordinate();
+            if (boatCoordinates != null) {
+                XYPair pixels = PixelMapper.convertCoordPixel(boatCoordinates, PADDING, raceViewPane, race.getCourse());
+                displayBoat.toFront();
+                displayBoat.moveBoat(pixels);
+                displayBoat.setSpeed(boat.getSpeed());
+                displayBoat.setHeading(boat.getHeading());
+            }
+        }
+    }
+
+
+    public void drawTrails() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
-            XYPair pixels =
-                    PixelMapper.convertCoordPixel(boatCoordinates, PADDING, setup, raceViewPane, race.getCourse());
-
-            DisplayBoat displayBoat = displayBoats.get(boat.getTeamName());
-            displayBoat.toFront();
-            displayBoat.moveBoat(pixels);
-            displayBoat.setSpeed(boat.getSpeed());
-            displayBoat.setHeading(boat.getHeading());
-
-            if (frameCount == 10) {
+            if (boatCoordinates != null) {
+                XYPair pixels = PixelMapper.convertCoordPixel(boatCoordinates, PADDING, raceViewPane, race.getCourse());
                 drawTrail(boat, pixels);
             }
         }
@@ -87,10 +94,14 @@ public class RaceRenderer {
         circle.setCenterX(pixels.getX());
         circle.setCenterY(pixels.getY());
         circle.setRadius(0.6);
-        circle.setFill(displayBoats.get(boat.getTeamName()).getBoatColor());
+        circle.setFill(displayBoats.get(boat.getShortName()).getBoatColor());
 
         group.getChildren().add(circle);
-        List<Circle> circles = trailMap.get(boat.getTeamName());
+        List<Circle> circles = trailMap.get(boat.getShortName());
+        if (circles == null) {
+            circles = new ArrayList<>();
+            trailMap.put(boat.getShortName(), circles);
+        }
         circles.add(circle);
     }
 
@@ -102,9 +113,9 @@ public class RaceRenderer {
      */
     public void reDrawTrail(Collection<Boat> boats) {
         for (Boat boat : boats) {
-            for (Circle circle : trailMap.get(boat.getTeamName())) {
+            for (Circle circle : trailMap.get(boat.getShortName())) {
                 XYPair newPosition = PixelMapper.convertCoordPixel
-                        (circleCoordMap.get(circle), PADDING, false, raceViewPane, race.getCourse());
+                        (circleCoordMap.get(circle), PADDING, raceViewPane, race.getCourse());
                 circle.setCenterX(newPosition.getX());
                 circle.setCenterY(newPosition.getY());
             }
@@ -126,7 +137,7 @@ public class RaceRenderer {
 
     public void setVisibleAnnotations(AnnotationType type, Boolean isVisible) {
         for (DisplayBoat boat : displayBoats.values()) {
-            boat.setAnnotationVisibile(type, isVisible);
+            boat.setAnnotationVisible(type, isVisible);
         }
     }
 }

@@ -1,7 +1,7 @@
 package seng302.team18.model;
 
-import seng302.team18.util.GPSCalculations;
-
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -15,14 +15,24 @@ public class Race {
     private List<Boat> startingList;
     private Course course;
     private List<Boat> finishedList;
-    private double duration;
-    public static final double WARNING_TIME_SECONDS = 30; // TODO change this to 60
-    public static final double PREP_TIME_SECONDS = 60; // TODO change this to 120
+    private ZonedDateTime startTime;
+    private ZonedDateTime currentTime;
+    private List<Integer> participantIds;
+    public static final double WARNING_TIME_SECONDS = 4; // TODO change this to 60
+    public static final double PREP_TIME_SECONDS = 8; // TODO change this to 120
+
+
+    public Race() {
+        startingList = new ArrayList<>();
+        course = new Course();
+        finishedList = new ArrayList<>();
+    }
+
 
     /**
      * Race class constructor.
      *
-     * @param startingList Arraylist holding all entered boats
+     * @param startingList ArrayList holding all entered boats
      * @param course       Course object
      */
     public Race(List<Boat> startingList, Course course) {
@@ -31,7 +41,7 @@ public class Race {
         this.course = course;
         finishedList = new ArrayList<>();
         setCourseForBoats();
-        duration = 60;
+//        duration = 60;
     }
 
     /**
@@ -51,16 +61,18 @@ public class Race {
      * current(starting CompoundMark) and next CompoundMark.
      */
     private void setCourseForBoats() {
-        for (Boat boat : startingList) {
-            // Set Leg
-            boat.setLeg(course.getLegs().get(0));
-            // Set Dest
-            boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
-            // Set Coordinate
-            Coordinate midPoint = course.getCompoundMarks().get(0).getMidCoordinate();
-            boat.setCoordinate(midPoint);
-            // Set Heading
-            boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+        if (course.getLegs().size() > 0) {
+            for (Boat boat : startingList) {
+                // Set Leg
+                boat.setLeg(course.getLegs().get(0));
+                // Set Dest
+                boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
+                // Set Coordinate
+                Coordinate midPoint = course.getCompoundMarks().get(0).getMidCoordinate();
+                boat.setCoordinate(midPoint);
+                // Set Heading
+//                boat.setHeading(boat.getCoordinate().retrieveHeading(boat.getDestination()));
+            }
         }
     }
 
@@ -79,7 +91,16 @@ public class Race {
      * @param startingList Arraylist holding all entered boats
      */
     public void setStartingList(List<Boat> startingList) {
-        this.startingList = startingList;
+        if (participantIds.size() == 0) {
+            this.startingList = startingList;
+        } else {
+            this.startingList.clear();
+            for (Boat boat : startingList) {
+                if (participantIds.contains(boat.getId())) {
+                    this.startingList.add(boat);
+                }
+            }
+        }
     }
 
     /**
@@ -143,13 +164,13 @@ public class Race {
                 return;
             }
             if (boat.getLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
-                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinates())) { // and it hasn't gone around the gate
-                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinates()); // move around the gate
+                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinate())) { // and it hasn't gone around the gate
+                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinate()); // move around the gate
             } else { // the destination was a mark or is already gone around gate so move onto the next leg
                 setNextLeg(boat, nextLeg);
             }
         }
-        boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+//        boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
     }
 
 
@@ -178,10 +199,11 @@ public class Race {
     private void updatePosition(Boat boat, double time) {
         final double KMPH_TO_MPS = 1000.0 / 3600.0;
         double speed = boat.getSpeed() * KMPH_TO_MPS;
-        double distanceTravelled = speed * time
-                / (duration / (course.getCourseDistance() / (startingList.get(0).getSpeed() * KMPH_TO_MPS))); // meters
-        boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
-                GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+        double distanceTravelled = speed * time;
+//        double distanceTravelled = speed * time
+//                / (duration / (course.getCourseDistance() / (startingList.get(0).getSpeed() * KMPH_TO_MPS))); // meters
+//        boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
+//                GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
 
 
@@ -190,16 +212,31 @@ public class Race {
     }
 
 
-    public void setDuration(double duration) {
-        this.duration = duration;
-    }
-
-    public double getDuration() {
-        return duration;
-    }
+//    public void setDuration(double duration) {
+//        this.duration = duration;
+//    }
+//
+//    public double getDuration() {
+//        return duration;
+//    }
 
     public boolean isFinished() {
         return startingList.size() == finishedList.size();
     }
 
+    public ZonedDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(ZonedDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setParticipantIds(List<Integer> participantIds) {
+        this.participantIds = participantIds;
+    }
+
+    public void setCurrentTime(ZonedDateTime currentTime) {
+        this.currentTime = currentTime;
+    }
 }
