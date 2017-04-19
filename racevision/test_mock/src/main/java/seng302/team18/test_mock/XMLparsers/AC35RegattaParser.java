@@ -3,6 +3,7 @@ package seng302.team18.test_mock.XMLparsers;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+import seng302.team18.model.Course;
 import seng302.team18.model.Regatta;
 
 import javax.xml.parsers.DocumentBuilder;
