@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class AC35BoatsParser {
 
-    public void parse(InputStream stream) {
+    public AC35BoatsContainer parse(InputStream stream) {
         final String BOATS_ELEMENT = "BoatConfig";
         final String BOAT_SETTINGS = "Settings";
         final String BOAT_SHAPES = "BoatShapes";
@@ -50,7 +50,7 @@ public class AC35BoatsParser {
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
-//            return null;
+            return null;
         }
 //        return message;
     }
