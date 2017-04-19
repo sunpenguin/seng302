@@ -18,8 +18,6 @@ public class TestMock {
         AC35RegattaParser ac35RegattaParser = new AC35RegattaParser();
         ac35RegattaContainer = ac35RegattaParser.parse(this.getClass().getResourceAsStream("/AC35regatta.xml"));
 
-        AC35RaceParser ac35RaceParser = new AC35RaceParser();
-
 
     }
 
