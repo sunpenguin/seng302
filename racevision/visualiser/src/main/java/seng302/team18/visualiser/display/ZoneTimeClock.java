@@ -21,11 +21,12 @@ public class ZoneTimeClock extends AnimationTimer {
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
 //    public ZoneTimeClock(Label timerLabel, double timeScale, ZoneId zoneId) {
-    public ZoneTimeClock(Label timerLabel, ZoneId zoneId) {
+    public ZoneTimeClock(Label timerLabel, ZoneId zoneId, ZonedDateTime currentTime) {
             this.timerLabel = timerLabel;
 //        this.timeScaleFactor = timeScale;
 
         this.zoneId = zoneId;
+        zonedDateTime = currentTime;
         timerLabel.setTextFill(Color.BLACK);
         timerLabel.setStyle("-fx-font-size: 2em;");
     }
@@ -34,7 +35,6 @@ public class ZoneTimeClock extends AnimationTimer {
     public void handle(long currentTime) {
         if (previousTime == 0) {
             previousTime = currentTime;
-            zonedDateTime = ZonedDateTime.now(zoneId);
             return;
         }
 

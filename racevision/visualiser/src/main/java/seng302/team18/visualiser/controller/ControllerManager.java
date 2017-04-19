@@ -5,14 +5,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import seng302.team18.data.AC35MessageParserFactory;
-import seng302.team18.data.RaceMessageInterpreter;
-import seng302.team18.data.SocketMessageReceiver;
+import seng302.team18.data.*;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.RaceLoop;
 import seng302.team18.visualiser.display.RaceRenderer;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 /**
@@ -43,16 +44,51 @@ public class ControllerManager {
         receiver = getPort();
         race = new Race();
         interpreter = new RaceMessageInterpreter(race);
+        MessageBody message = receiver.nextMessage();
+        while(message == null || AC35MessageType.from(message.getType()) != AC35MessageType.RACE_STATUS) {
+            interpreter.interpretMessage(message);
+            message = receiver.nextMessage();
+        }
+        AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
+        Instant startIn = Instant.ofEpochMilli(statusMessage.getStartTime());
+        Instant currentIn = Instant.ofEpochMilli(statusMessage.getCurrentTime());
+        ZonedDateTime startTime = ZonedDateTime.ofInstant(startIn, race.getCourse().getTimeZone());
+        ZonedDateTime currentTime = ZonedDateTime.ofInstant(currentIn, race.getCourse().getTimeZone());
+        if (currentTime.isBefore(startTime.plusSeconds((long) Race.PREP_TIME_SECONDS))) {
+            showPreRace(currentTime, ChronoUnit.SECONDS.between(currentTime, startTime) - (long) Race.PREP_TIME_SECONDS);
+        } else {
+            showMainView();
+        }
 
+
+
+    }
+
+
+
+    public void showMainView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(mainControllerPath));
         Parent root = loader.load(); // throws IOException
-        MainWindowController mainWindowController = loader.getController();
+        mainController = loader.getController();
         primaryStage.setTitle("RaceVision");
         Scene scene = new Scene(root, 1280, 720);
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        mainWindowController.setUp(race, interpreter, receiver);
+        mainController.setUp(race, interpreter, receiver);
+    }
+
+
+    private void showPreRace(ZonedDateTime currentTime, long duration) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(preRacePath));
+        Parent root = loader.load(); // throws IOException
+        preRaceController = loader.getController();
+        primaryStage.setTitle("RaceVision");
+        Scene scene = new Scene(root, 1280, 720);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        preRaceController.setUp(this, currentTime, duration, race.getStartingList());
     }
 
 

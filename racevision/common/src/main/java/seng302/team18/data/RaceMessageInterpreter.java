@@ -24,6 +24,9 @@ public class RaceMessageInterpreter implements MessageInterpreter {
     }
 
     public void interpretMessage(MessageBody message) {
+        if (message == null) {
+            return;
+        }
         AC35MessageType messageType = AC35MessageType.from(message.getType());
         switch (messageType) {
             case XML_RACE:
@@ -102,8 +105,6 @@ public class RaceMessageInterpreter implements MessageInterpreter {
 
         race.setStartTime(startTime);
         race.setCurrentTime(currentTime);
-        System.out.println(startTime);
-        System.out.println(currentTime);
     }
 
 
