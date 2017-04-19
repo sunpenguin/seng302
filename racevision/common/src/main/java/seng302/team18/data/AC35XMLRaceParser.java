@@ -69,7 +69,7 @@ public class AC35XMLRaceParser implements MessageBodyParser {
 
 
     private String parseRaceTime(Node startTimeNode) {
-        final String TIME = "Start";
+        final String TIME = "Time";
         if (startTimeNode.getNodeType() == Node.ELEMENT_NODE) {
             return ((Element) startTimeNode).getAttribute(TIME);
         }
