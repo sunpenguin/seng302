@@ -30,7 +30,7 @@ public class AC35RaceStatusMessage implements MessageBody {
         return startTime;
     }
 
-    public Map<Integer, Long> getBoatStatus() {
+    public Map<Integer, Long> getEstimatedMarkTimes() {
         return boatStatus;
     }
 }

@@ -17,7 +17,7 @@ public class Boat {
     private Coordinate coordinate;
     private Coordinate destination;
     private IntegerProperty place;
-    private SimpleLongProperty estimatedTimeNextMark;
+    private SimpleLongProperty timeTilNextMark;
 
     /**
      * A constructor for the Boat class
@@ -31,7 +31,7 @@ public class Boat {
         this.id = id;
         speed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty();
-        estimatedTimeNextMark = new SimpleLongProperty();
+        timeTilNextMark = new SimpleLongProperty();
     }
 
     /**
@@ -172,15 +172,15 @@ public class Boat {
         this.id = id;
     }
 
-    public long getEstimatedTimeNextMark() {
-        return estimatedTimeNextMark.get();
+    public long getTimeTilNextMark() {
+        return timeTilNextMark.get();
     }
 
-    public SimpleLongProperty estimatedTimeNextMarkProperty() {
-        return estimatedTimeNextMark;
+    public SimpleLongProperty timeTilNextMarkProperty() {
+        return timeTilNextMark;
     }
 
-    public void setEstimatedTimeNextMark(long estimatedTimeNextMark) {
-        this.estimatedTimeNextMark.set(estimatedTimeNextMark);
+    public void setTimeTilNextMark(long timeTilNextMark) {
+        this.timeTilNextMark.set(timeTilNextMark);
     }
 }

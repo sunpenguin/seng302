@@ -3,15 +3,13 @@ package seng302.team18.data;
 import seng302.team18.model.*;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static seng302.team18.data.AC35MessageType.*;
 
 /**
  * Created by david on 4/13/17.
@@ -42,7 +40,7 @@ public class RaceMessageInterpreter implements MessageInterpreter {
                 break;
             case RACE_STATUS:
                 updateRaceTime((AC35RaceStatusMessage) message, race);
-                updateEstimatedTime((AC35RaceStatusMessage) message, race.getStartingList());
+                updateEstimatedTime((AC35RaceStatusMessage) message, race);
                 break;
             case BOAT_LOCATION:
                 updateBoatLocation((AC35BoatLocationMessage) message, race.getStartingList());
@@ -58,29 +56,19 @@ public class RaceMessageInterpreter implements MessageInterpreter {
         race.setStartingList(message.getBoats());
     }
 
-    private void updateEstimatedTime(AC35RaceStatusMessage message, List<Boat> boats) {
+    private void updateEstimatedTime(AC35RaceStatusMessage message, Race race) {
 //        System.out.println(message.getBoatID());
 //        System.out.println(message.getEstimatedTime());
-        Map<Integer, Long> boatStatus = message.getBoatStatus();
-        for (Boat boat : boats) {
+        Map<Integer, Long> boatStatus = message.getEstimatedMarkTimes();
+        for (Boat boat : race.getStartingList()) {
             if (boatStatus.containsKey(boat.getId())) {
-                boat.setEstimatedTimeNextMark(boatStatus.get(boat.getId()));
+//                Instant nextMarkInstant = Instant.ofEpochMilli(boatStatus.get(boat.getId()));
+//                ZonedDateTime nextMarkTime = ZonedDateTime.ofInstant(nextMarkInstant, race.getCourse().getTimeZone());
+                double timeTilNextMark = (boatStatus.get(boat.getId()) - message.getCurrentTime()) / 1000d;
+                boat.setTimeTilNextMark((long) timeTilNextMark);
+//                ChronoUnit.SECONDS.between(currentTime, startTime);
             }
         }
-//        if (boats.size() > 0) {
-//            Iterator<Boat> boatIterator = boats.iterator();
-//            Boat boat = boatIterator.next();
-//            while (!boatStatus.containsKey(boat.getId()) && boatIterator.hasNext()) {
-//                boat = boatIterator.next();
-//            }
-//
-////            if (boat.getId().equals(message.getBoatID())) {
-////                boat.setEstimatedTimeNextMark(message.getEstimatedTime());
-////            }
-//            if (boat.getId() == 102) {
-//                System.out.println("Boat ID 102: " + boat.getEstimatedTimeNextMark());
-//            }
-//        }
     }
 
     private void updateBoatLocation(AC35BoatLocationMessage message, List<Boat> boats) {
@@ -95,9 +83,9 @@ public class RaceMessageInterpreter implements MessageInterpreter {
                 boat.setHeading(message.getHeading());
                 boat.setCoordinate(message.getCoordinate());
             }
-            if (boat.getId() == 102) {
+//            if (boat.getId() == 102) {
 //                System.out.println("Boat ID 102: " + boat.getHeading());
-            }
+//            }
         }
     }
 
