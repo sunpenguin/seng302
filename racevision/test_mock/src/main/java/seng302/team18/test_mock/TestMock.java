@@ -15,6 +15,7 @@ public class TestMock {
 
     AC35RegattaContainer ac35RegattaContainer;
     AC35BoatsContainer ac35BoatsContainer;
+    AC35RaceContainer ac35RaceContainer;
 
     private void readFiles() {
         AC35RegattaParser ac35RegattaParser = new AC35RegattaParser();
@@ -23,7 +24,8 @@ public class TestMock {
         AC35BoatsParser ac35BoatsParser = new AC35BoatsParser();
         ac35BoatsContainer = ac35BoatsParser.parse(this.getClass().getResourceAsStream("/AC35boats.xml"));
 
-
+        AC35RaceParser ac35RaceParser = new AC35RaceParser();
+        ac35RaceContainer = ac35RaceParser.parse(this.getClass().getResourceAsStream("/AC35race.xml"));
 
     }
 

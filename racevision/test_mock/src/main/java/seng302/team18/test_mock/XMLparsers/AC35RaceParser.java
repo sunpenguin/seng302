@@ -22,8 +22,9 @@ import java.util.Map;
  * Created by jth102 on 19/04/17.
  */
 public class AC35RaceParser {
+    private AC35RaceContainer raceContainer = new AC35RaceContainer();
 
-    public void parse(InputStream stream) {
+    public AC35RaceContainer parse(InputStream stream) {
         final String RACE_ELEMENT = "Race";
         final String START_DATE_TIME_ELEMENT = "RaceStartTime";
         final String PARTICIPANTS_ELEMENT = "Participants";
@@ -56,23 +57,22 @@ public class AC35RaceParser {
             Node boundariesNode = raceElement.getElementsByTagName(COURSE_BOUNDARIES_ELEMENT).item(0); // boundaries
             List<BoundaryMark> boundaries = parseBoundaries(boundariesNode);
 
-            AC35XMLRaceMessage message = new AC35XMLRaceMessage();
-            message.setRaceStartTime(startTimeString);
-            message.setBoundaryMarks(boundaries);
-            message.setCompoundMarks(new ArrayList<>(compoundMarks.values()));
-            message.setParticipantIDs(participantIDs);
-            message.setMarkRoundings(markRoundings);
+            raceContainer.setBoundaryMark(boundaries);
+            raceContainer.setCompoundMarks(compoundMarks);
+            raceContainer.setMarkRoundings(markRoundings);
+            raceContainer.setParticipantIDs(participantIDs);
+            raceContainer.setStartTime(startTimeString);
 
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
-//            return null;
+            return null;
         }
-//        return message;
+        return raceContainer;
     }
 
 
     private String parseRaceTime(Node startTimeNode) {
-        final String TIME = "Start";
+        final String TIME = "Time";
         if (startTimeNode.getNodeType() == Node.ELEMENT_NODE) {
             return ((Element) startTimeNode).getAttribute(TIME);
         }
