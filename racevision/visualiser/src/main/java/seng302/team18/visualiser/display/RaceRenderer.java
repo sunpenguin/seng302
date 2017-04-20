@@ -25,7 +25,7 @@ public class RaceRenderer {
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
 //    private Map<String, List<Circle>> trailMap = new HashMap<>();
     private Map<String, Polyline> trailMap = new HashMap<>();
-    private Map<Integer, Coordinate> trailCoordinateMap;
+    private Map<Integer, List<Coordinate>> trailCoordinateMap;
 //    private Map<Circle, Coordinate> circleCoordMap = new HashMap<>();
     private Map<String, Double> headingMap;
     private Pane raceViewPane;
@@ -98,48 +98,54 @@ public class RaceRenderer {
 //     * @param pixels point to place the circle at.
 //     */
     private void drawTrail(Boat boat, XYPair pixels) {
-        final double MAX_DIFFERENCE = 1d; // smaller => smoother trail
+        final double MAX_DIFFERENCE = 0.5d; // smaller => smoother trail
         Polyline trail = trailMap.get(boat.getShortName());
+        List<Coordinate> trailPoints = trailCoordinateMap.get(boat.getId());
         if (trail == null) {
             trail = new Polyline();
             trail.setStroke(displayBoats.get(boat.getShortName()).getBoatColor());
             trailMap.put(boat.getShortName(), trail);
             group.getChildren().add(trail);
+            trailPoints = new ArrayList<>();
+            trailCoordinateMap.put(boat.getId(), trailPoints);
         }
         Double oldHeading = headingMap.getOrDefault(boat.getShortName(), 5000d);
         int trailSize = trail.getPoints().size();
         if (Math.abs(oldHeading - boat.getHeading()) < MAX_DIFFERENCE && trailSize >= 4) {
-//            System.out.println("inif");
             trail.getPoints().remove(trailSize - 1);
             trail.getPoints().remove(trailSize - 2);
+            trailPoints.remove(trailPoints.size() - 1);
         }
         headingMap.put(boat.getShortName(), boat.getHeading());
 //        count++;
 //        System.out.println(count / 6 * 2);
 //        System.out.println(trail.getPoints().size());
 //        System.out.println();
-//        trailCoordinateMap.put(trailSize - 1, boat.getCoordinate());
         trail.getPoints().addAll(pixels.getX(), pixels.getY());
-//        Circle circle = new Circle();
-//        circleCoordMap.put(circle, boat.getCoordinate());
-//
-//        circle.setCenterX(pixels.getX());
-//        circle.setCenterY(pixels.getY());
-//        circle.setRadius(0.6);
-//        circle.setFill(displayBoats.get(boat.getShortName()).getBoatColor());
-//
-//        group.getChildren().add(circle);
-//        List<Circle> circles = trailMap.getOrDefault(boat.getShortName(), new ArrayList<>());
-//        circles.add(circle);
+        trailPoints.add(boat.getCoordinate());
     }
 
 
-    /**
-     * Redraw the the trails behind each boat by looking into the Map of circles and coordinates and
-     * resetting the points.
-     * @param boats Collection of displayBoats racing.
-     */
+//    /**
+//     * Redraw the the trails behind each boat by looking into the Map of circles and coordinates and
+//     * resetting the points.
+//     * @param boats Collection of displayBoats racing.
+//     */
     public void reDrawTrail(Collection<Boat> boats) {
+        for (Boat boat : boats) {
+            Polyline trail = trailMap.get(boat.getShortName());
+            if (null != trail) {
+                List<Coordinate> trailCoordinates = trailCoordinateMap.get(boat.getId());
+                List<Double> updatedTrailPoints = new ArrayList<>();
+                for (Coordinate c : trailCoordinates) {
+                    XYPair newPixels = PixelMapper.convertCoordPixel(c, PADDING, raceViewPane, race.getCourse());
+                    updatedTrailPoints.add(newPixels.getX());
+                    updatedTrailPoints.add(newPixels.getY());
+                }
+                trail.getPoints().clear();
+                trail.getPoints().addAll(updatedTrailPoints);
+            }
+        }
 //        for (Boat boat : boats) {
 //            if (null != trailMap.get(boat.getShortName())) {
 //                for (Circle circle : trailMap.get(boat.getShortName())) {
