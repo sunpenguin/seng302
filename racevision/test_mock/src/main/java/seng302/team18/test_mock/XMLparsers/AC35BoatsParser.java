@@ -59,33 +59,4 @@ public class AC35BoatsParser {
 
         return boatsContainer;
     }
-
-//    private List<Boat> parseBoats(Node boatsNode) {
-//        // A boat has Type, SourceID, ShapeID, HullNum, StoweName with elements GPSposition and FlagPosition
-//        final String BOAT_ELEMENT = "Boat";
-//        final String BOAT_NAME = "BoatName";
-//        final String BOAT_SHORT_NAME = "ShortName";
-//        final String BOAT_ID = "SourceID";
-//        final String BOAT_TYPE = "Type";
-//        final String YACHT = "Yacht";
-//
-//        List<Boat> boats = new ArrayList<>();
-//        if (boatsNode.getNodeType() == Node.ELEMENT_NODE) {
-//            Element boatSequenceElement = (Element) boatsNode;
-//            NodeList boatSequenceNodeList = boatSequenceElement.getElementsByTagName(BOAT_ELEMENT);
-//            for (int i = 0; i < boatSequenceNodeList.getLength(); i++) {
-//                Node boatNode = boatSequenceNodeList.item(i);
-//                if (boatNode.getNodeType() == Node.ELEMENT_NODE) {
-//                    Element boatElement = (Element) boatNode;
-//                    if (boatElement.getAttribute(BOAT_TYPE).equals(YACHT)) {
-//                        String boatName = boatElement.getAttribute(BOAT_NAME);
-//                        String boatShortName = boatElement.getAttribute(BOAT_SHORT_NAME);
-//                        int boatID = Integer.parseInt(boatElement.getAttribute(BOAT_ID));
-//                        boats.add(new Boat(boatName, boatShortName, boatID));
-//                    }
-//                }
-//            }
-//        }
-//        return boats;
-//    }
 }

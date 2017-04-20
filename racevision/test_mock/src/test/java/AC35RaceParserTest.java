@@ -29,7 +29,7 @@ public class AC35RaceParserTest {
         // Retrieve everything from the container
         String startTime = ac35RaceContainer.getStartTime();
         List<BoundaryMark> boundaryMarks = ac35RaceContainer.getBoundaryMark();
-        Map<Integer, CompoundMark> compoundMarkMap = ac35RaceContainer.getCompoundMarks();
+        Map<Integer, CompoundMark> actualCompoundMarkMap = ac35RaceContainer.getCompoundMarks();
         List<Integer> participantIDs = ac35RaceContainer.getParticipantIDs();
         List<MarkRounding> markRoundings = ac35RaceContainer.getMarkRoundings();
 
@@ -54,7 +54,7 @@ public class AC35RaceParserTest {
         // =============================================================================================================
 
         // Assert the compoundMarks are correct
-        Map<Integer, CompoundMark> actualCMM = new HashMap<>();
+        Map<Integer, CompoundMark> expectedCMM = new HashMap<>();
         // Set up compoundMark 1 ---------------------------------------------------------------------------------------
         List<Mark> startMarks = new ArrayList<>();
 
@@ -66,58 +66,72 @@ public class AC35RaceParserTest {
 
         startMarks.add(mark1);
         startMarks.add(mark2);
-        actualCMM.put(1, new CompoundMark("Startline", startMarks, 1));
+        expectedCMM.put(1, new CompoundMark("StartLine", startMarks, 1));
 
         // set up compoundMark2 ----------------------------------------------------------------------------------------
         List<Mark> m1Mark = new ArrayList<>();
 
         Mark mark3 = new Mark(103, new Coordinate(-36.63566590, 174.88543944));
-        mark1.setName("M1");
+        mark3.setName("M1");
 
-        startMarks.add(mark1);
+        m1Mark.add(mark3);
 
-        actualCMM.put(3, new CompoundMark("M1", startMarks, 3));
+        expectedCMM.put(2, new CompoundMark("M1", m1Mark, 2));
 
         // set up compoundMark3 ----------------------------------------------------------------------------------------
         List<Mark> m2Mark = new ArrayList<>();
 
-        Mark mark4 = new Mark(104, new Coordinate(-36.63566590, 174.88543944));
-        mark1.setName("M2");
+        Mark mark4 = new Mark(102, new Coordinate(-36.83, 174.80));
+        mark4.setName("M2");
 
-        startMarks.add(mark1);
+        m2Mark.add(mark4);
 
-        actualCMM.put(3, new CompoundMark("M2", startMarks, 3));
+        expectedCMM.put(3, new CompoundMark("M2", m2Mark, 3));
 
         // set up compoundMark 4 ---------------------------------------------------------------------------------------
         List<Mark> gateMarks = new ArrayList<>();
 
         Mark mark5 = new Mark(104, new Coordinate(-36.63566590, 174.97205159));
-        mark1.setName("G1");
+        mark5.setName("G1");
 
         Mark mark6 = new Mark(105, new Coordinate(-36.64566590, 174.98205159));
-        mark2.setName("G2");
+        mark6.setName("G2");
 
         gateMarks.add(mark5);
         gateMarks.add(mark6);
-        actualCMM.put(4, new CompoundMark("Gate", startMarks, 4));
+        expectedCMM.put(4, new CompoundMark("Gate", gateMarks, 4));
 
 
         for (int i = 1; i < 5; i++) {
-            CompoundMark actual = compoundMarkMap.get(i);
-            CompoundMark expected = actualCMM.get(i);
+            CompoundMark actualCM = actualCompoundMarkMap.get(i);
+            CompoundMark expectedCM = expectedCMM.get(i);
+            List<Mark> actual = actualCompoundMarkMap.get(i).getMarks();
+            List<Mark> expected = expectedCMM.get(i).getMarks();
 
-            for (Mark mark : actual.getMarks()) {
-                System.out.println(mark.getName());
+            assertEquals(expected.size(), actual.size());
+            assertEquals(expectedCM.getName(), actualCM.getName());
+
+            for (int j = 0; j < actual.size(); j++) {
+                assertEquals(expected.get(j).getId(), actual.get(j).getId());
+//                assertEquals(expected.get(j).getName(), actual.get(j).getName()); TODO: if mark names are used we need to test them here
+                assertEquals(expected.get(j).getCoordinate().getLatitude(), actual.get(j).getCoordinate().getLatitude(), 0.000001);
+                assertEquals(expected.get(j).getCoordinate().getLongitude(), actual.get(j).getCoordinate().getLongitude(), 0.000001);
             }
 
-            assertEquals(expected.getMarks().size(), actual.getMarks().size());
-
-//            for (Mark mark : ) {
-//
-//            }
         }
         // =============================================================================================================
 
+        // Assert the MarkRoundings are correct TODO: if these get used in future, we will need to test them here
 
+        // Assert participantIDs are correct
+        List<Integer> expectedIDs = new ArrayList<>();
+        expectedIDs.add(107);
+        expectedIDs.add(108);
+
+        assertEquals(expectedIDs.size(), participantIDs.size());
+
+        for (int i = 0; i < participantIDs.size(); i++) {
+            assertEquals(expectedIDs.get(i), participantIDs.get(i));
+        }
     }
 }
