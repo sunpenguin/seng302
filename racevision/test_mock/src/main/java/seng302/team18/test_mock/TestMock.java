@@ -26,8 +26,6 @@ public class TestMock {
 
         AC35RaceParser ac35RaceParser = new AC35RaceParser();
         ac35RaceContainer = ac35RaceParser.parse(this.getClass().getResourceAsStream("/AC35race.xml"));
-
-        System.out.println(ac35RaceContainer.getBoundaryMark().get(2).getCoordinate().getLatitude());
     }
 
     public void run() {
