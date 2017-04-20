@@ -7,7 +7,7 @@ public class AC35RegattaContainer {
 
     private int regattaID;
     private double centralLatitude;
-    private double getCentralLongtitude;
+    private double centralLongtitude;
     private String uTcOffset;
 
     public int getRegattaID() {
@@ -26,12 +26,12 @@ public class AC35RegattaContainer {
         this.centralLatitude = centralLatitude;
     }
 
-    public double getGetCentralLongtitude() {
-        return getCentralLongtitude;
+    public double getCentralLongtitude() {
+        return centralLongtitude;
     }
 
     public void setGetCentralLongtitude(double getCentralLongtitude) {
-        this.getCentralLongtitude = getCentralLongtitude;
+        this.centralLongtitude = getCentralLongtitude;
     }
 
     public String getuTcOffset() {
