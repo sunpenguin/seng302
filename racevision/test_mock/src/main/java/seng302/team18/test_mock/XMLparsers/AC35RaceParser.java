@@ -6,6 +6,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import seng302.team18.data.AC35XMLRaceMessage;
+import seng302.team18.data.AC35XMLRaceParser;
 import seng302.team18.model.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -36,6 +37,8 @@ public class AC35RaceParser {
         DocumentBuilder builder;
         Document doc;
         try {
+            AC35XMLRaceParser parser = new AC35XMLRaceParser();
+
             builder = factory.newDocumentBuilder(); // parser configuration exception
             doc = builder.parse(stream); // io exception
 
@@ -43,19 +46,19 @@ public class AC35RaceParser {
             Element raceElement = (Element) doc.getElementsByTagName(RACE_ELEMENT).item(0);
 
             Node startTimeNode = raceElement.getElementsByTagName(START_DATE_TIME_ELEMENT).item(0); // start time
-            String startTimeString = parseRaceTime(startTimeNode);
+            String startTimeString = parser.parseRaceTime(startTimeNode);
 
             Node participantsNode = raceElement.getElementsByTagName(PARTICIPANTS_ELEMENT).item(0); // participants
-            List<Integer> participantIDs = parseParticipantIDs(participantsNode);
+            List<Integer> participantIDs = parser.parseParticipantIDs(participantsNode);
 
             Node courseNode = raceElement.getElementsByTagName(COURSE_ELEMENT).item(0); // compound marks
-            Map<Integer, CompoundMark> compoundMarks = parseCompoundMarks(courseNode);
+            Map<Integer, CompoundMark> compoundMarks = parser.parseCompoundMarks(courseNode);
 
             Node markSequenceNode = raceElement.getElementsByTagName(COMPOUND_MARK_SEQUENCE).item(0); // mark roundings
-            List<MarkRounding> markRoundings = parseMarkRoundings(markSequenceNode, compoundMarks);
+            List<MarkRounding> markRoundings = parser.parseMarkRoundings(markSequenceNode, compoundMarks);
 
             Node boundariesNode = raceElement.getElementsByTagName(COURSE_BOUNDARIES_ELEMENT).item(0); // boundaries
-            List<BoundaryMark> boundaries = parseBoundaries(boundariesNode);
+            List<BoundaryMark> boundaries = parser.parseBoundaries(boundariesNode);
 
             raceContainer.setBoundaryMark(boundaries);
             raceContainer.setCompoundMarks(compoundMarks);
@@ -71,114 +74,114 @@ public class AC35RaceParser {
     }
 
 
-    private String parseRaceTime(Node startTimeNode) {
-        final String TIME = "Time";
-        if (startTimeNode.getNodeType() == Node.ELEMENT_NODE) {
-            return ((Element) startTimeNode).getAttribute(TIME);
-        }
-        return "";
-    }
+//    private String parseRaceTime(Node startTimeNode) {
+//        final String TIME = "Time";
+//        if (startTimeNode.getNodeType() == Node.ELEMENT_NODE) {
+//            return ((Element) startTimeNode).getAttribute(TIME);
+//        }
+//        return "";
+//    }
 
-    private List<Integer> parseParticipantIDs(Node participantsNode) {
-        final String PARTICIPANT_ELEMENT = "Yacht";
-        final String PARTICIPANT_ID = "SourceID";
-        List<Integer> participantIDs = new ArrayList<>();
-        if (participantsNode.getNodeType() == Node.ELEMENT_NODE) {
-            Element participantsElement = (Element) participantsNode;
-            NodeList participantNodeList = participantsElement.getElementsByTagName(PARTICIPANT_ELEMENT);
-            for (int i = 0; i < participantNodeList.getLength(); i++) {
-                Node participantNode = participantNodeList.item(i);
-                if (participantNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element participantElement = (Element) participantNode;
-                    participantIDs.add(Integer.parseInt(participantElement.getAttribute(PARTICIPANT_ID)));
-                }
-            }
-        }
-        return participantIDs;
-    }
+//    private List<Integer> parseParticipantIDs(Node participantsNode) {
+//        final String PARTICIPANT_ELEMENT = "Yacht";
+//        final String PARTICIPANT_ID = "SourceID";
+//        List<Integer> participantIDs = new ArrayList<>();
+//        if (participantsNode.getNodeType() == Node.ELEMENT_NODE) {
+//            Element participantsElement = (Element) participantsNode;
+//            NodeList participantNodeList = participantsElement.getElementsByTagName(PARTICIPANT_ELEMENT);
+//            for (int i = 0; i < participantNodeList.getLength(); i++) {
+//                Node participantNode = participantNodeList.item(i);
+//                if (participantNode.getNodeType() == Node.ELEMENT_NODE) {
+//                    Element participantElement = (Element) participantNode;
+//                    participantIDs.add(Integer.parseInt(participantElement.getAttribute(PARTICIPANT_ID)));
+//                }
+//            }
+//        }
+//        return participantIDs;
+//    }
 
 
-    private Map<Integer, CompoundMark> parseCompoundMarks(Node courseNode) {
-        final String COMPOUND_MARK_ELEMENT = "CompoundMark";
-        final String COMPOUND_MARK_ID = "CompoundMarkID";
-        final String COMPOUND_MARK_NAME = "Name";
-        final String MARK_ELEMENT = "Mark";
-        final String MARK_ID = "SourceID";
-        final String MARK_LAT = "TargetLat";
-        final String MARK_LONG = "TargetLng";
-        Map<Integer, CompoundMark> compoundMarks = new HashMap<>();
-        if (courseNode.getNodeType() == Node.ELEMENT_NODE) {
-            Element courseElement = (Element) courseNode;
-            NodeList compoundMarkNodeList = courseElement.getElementsByTagName(COMPOUND_MARK_ELEMENT);
-            for (int i = 0; i < compoundMarkNodeList.getLength(); i++) {
-                Node compoundMarkNode = compoundMarkNodeList.item(i);
-                if (compoundMarkNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element compoundMarkElement = (Element) compoundMarkNode;
-                    List<Mark> marks = new ArrayList<>();
-                    NodeList markNodeList = compoundMarkElement.getElementsByTagName(MARK_ELEMENT);
-                    for (int j = 0; j < markNodeList.getLength(); j++) {
-                        Node markNode = markNodeList.item(j);
-                        if (markNode.getNodeType() == Node.ELEMENT_NODE) {
-                            Element markElement = (Element) markNode;
-                            int id = Integer.parseInt(markElement.getAttribute(MARK_ID));
-                            double lat = Double.parseDouble(markElement.getAttribute(MARK_LAT));
-                            double lng = Double.parseDouble(markElement.getAttribute(MARK_LONG));
-                            marks.add(new Mark(id, new Coordinate(lat, lng)));
-                        }
-                    }
-                    String compoundMarkName = compoundMarkElement.getAttribute(COMPOUND_MARK_NAME);
-                    int compoundMarkID = Integer.parseInt(compoundMarkElement.getAttribute(COMPOUND_MARK_ID));
-                    compoundMarks.put(compoundMarkID, new CompoundMark(compoundMarkName, marks, compoundMarkID));
-                }
-            }
-        }
-        return compoundMarks;
-    }
+//    private Map<Integer, CompoundMark> parseCompoundMarks(Node courseNode) {
+//        final String COMPOUND_MARK_ELEMENT = "CompoundMark";
+//        final String COMPOUND_MARK_ID = "CompoundMarkID";
+//        final String COMPOUND_MARK_NAME = "Name";
+//        final String MARK_ELEMENT = "Mark";
+//        final String MARK_ID = "SourceID";
+//        final String MARK_LAT = "TargetLat";
+//        final String MARK_LONG = "TargetLng";
+//        Map<Integer, CompoundMark> compoundMarks = new HashMap<>();
+//        if (courseNode.getNodeType() == Node.ELEMENT_NODE) {
+//            Element courseElement = (Element) courseNode;
+//            NodeList compoundMarkNodeList = courseElement.getElementsByTagName(COMPOUND_MARK_ELEMENT);
+//            for (int i = 0; i < compoundMarkNodeList.getLength(); i++) {
+//                Node compoundMarkNode = compoundMarkNodeList.item(i);
+//                if (compoundMarkNode.getNodeType() == Node.ELEMENT_NODE) {
+//                    Element compoundMarkElement = (Element) compoundMarkNode;
+//                    List<Mark> marks = new ArrayList<>();
+//                    NodeList markNodeList = compoundMarkElement.getElementsByTagName(MARK_ELEMENT);
+//                    for (int j = 0; j < markNodeList.getLength(); j++) {
+//                        Node markNode = markNodeList.item(j);
+//                        if (markNode.getNodeType() == Node.ELEMENT_NODE) {
+//                            Element markElement = (Element) markNode;
+//                            int id = Integer.parseInt(markElement.getAttribute(MARK_ID));
+//                            double lat = Double.parseDouble(markElement.getAttribute(MARK_LAT));
+//                            double lng = Double.parseDouble(markElement.getAttribute(MARK_LONG));
+//                            marks.add(new Mark(id, new Coordinate(lat, lng)));
+//                        }
+//                    }
+//                    String compoundMarkName = compoundMarkElement.getAttribute(COMPOUND_MARK_NAME);
+//                    int compoundMarkID = Integer.parseInt(compoundMarkElement.getAttribute(COMPOUND_MARK_ID));
+//                    compoundMarks.put(compoundMarkID, new CompoundMark(compoundMarkName, marks, compoundMarkID));
+//                }
+//            }
+//        }
+//        return compoundMarks;
+//    }
 
-    private List<MarkRounding> parseMarkRoundings(Node markSequenceNode, Map<Integer, CompoundMark> compoundMarks) {
-        final String CORNER = "Corner";
-        final String MARK_SEQUENCE_ID = "SeqID";
-        //final String COMPOUND_MARK_ID = "CompoundMarkID";
-        final String ROUNDING = "Rounding";
-        List<MarkRounding> markRoundings = new ArrayList<>();
-        if (markSequenceNode.getNodeType() == Node.ELEMENT_NODE) {
-            Element markSequenceElement = (Element) markSequenceNode;
-            NodeList markSequenceNodeList = markSequenceElement.getElementsByTagName(CORNER);
-            for (int i = 0; i < markSequenceNodeList.getLength(); i++) {
-                Node markNode = markSequenceNodeList.item(i);
-                if (markNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element markElement = (Element) markNode;
-                    int seqNum = Integer.parseInt(markElement.getAttribute(MARK_SEQUENCE_ID));
-                    String rounding = markElement.getAttribute(ROUNDING);
-                    markRoundings.add(new MarkRounding(seqNum, compoundMarks.get(seqNum)));
-                }
-            }
-        }
-        return markRoundings;
-    }
+//    private List<MarkRounding> parseMarkRoundings(Node markSequenceNode, Map<Integer, CompoundMark> compoundMarks) {
+//        final String CORNER = "Corner";
+//        final String MARK_SEQUENCE_ID = "SeqID";
+//        //final String COMPOUND_MARK_ID = "CompoundMarkID";
+//        final String ROUNDING = "Rounding";
+//        List<MarkRounding> markRoundings = new ArrayList<>();
+//        if (markSequenceNode.getNodeType() == Node.ELEMENT_NODE) {
+//            Element markSequenceElement = (Element) markSequenceNode;
+//            NodeList markSequenceNodeList = markSequenceElement.getElementsByTagName(CORNER);
+//            for (int i = 0; i < markSequenceNodeList.getLength(); i++) {
+//                Node markNode = markSequenceNodeList.item(i);
+//                if (markNode.getNodeType() == Node.ELEMENT_NODE) {
+//                    Element markElement = (Element) markNode;
+//                    int seqNum = Integer.parseInt(markElement.getAttribute(MARK_SEQUENCE_ID));
+//                    String rounding = markElement.getAttribute(ROUNDING);
+//                    markRoundings.add(new MarkRounding(seqNum, compoundMarks.get(seqNum)));
+//                }
+//            }
+//        }
+//        return markRoundings;
+//    }
 
-    private List<BoundaryMark> parseBoundaries(Node boundariesNode) {
-        final String COURSE_BOUNDARY_ELEMENT = "Limit";
-        final String BOUNDARY_SEQUENCE_ID = "SeqID";
-        final String BOUNDARY_LAT = "Lat";
-        final String BOUNDARY_LONG = "Lon";
-        List<BoundaryMark> boundaries = new ArrayList<>();
-
-        if (boundariesNode.getNodeType() == Node.ELEMENT_NODE) {
-            Element boundariesElement = (Element) boundariesNode;
-            NodeList boundaryList = boundariesElement.getElementsByTagName(COURSE_BOUNDARY_ELEMENT);
-            for (int i = 0; i < boundaryList.getLength(); i++) {
-                Node boundaryNode = boundaryList.item(i);
-                if (boundariesNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element boundaryElement = (Element) boundaryNode;
-                    int seqId = Integer.parseInt(boundaryElement.getAttribute(BOUNDARY_SEQUENCE_ID));
-                    double lat = Double.parseDouble(boundaryElement.getAttribute(BOUNDARY_LAT));
-                    double lon = Double.parseDouble(boundaryElement.getAttribute(BOUNDARY_LONG));
-                    boundaries.add(new BoundaryMark(seqId, new Coordinate(lat, lon)));
-                }
-            }
-        }
-        return boundaries;
-    }
+//    private List<BoundaryMark> parseBoundaries(Node boundariesNode) {
+//        final String COURSE_BOUNDARY_ELEMENT = "Limit";
+//        final String BOUNDARY_SEQUENCE_ID = "SeqID";
+//        final String BOUNDARY_LAT = "Lat";
+//        final String BOUNDARY_LONG = "Lon";
+//        List<BoundaryMark> boundaries = new ArrayList<>();
+//
+//        if (boundariesNode.getNodeType() == Node.ELEMENT_NODE) {
+//            Element boundariesElement = (Element) boundariesNode;
+//            NodeList boundaryList = boundariesElement.getElementsByTagName(COURSE_BOUNDARY_ELEMENT);
+//            for (int i = 0; i < boundaryList.getLength(); i++) {
+//                Node boundaryNode = boundaryList.item(i);
+//                if (boundariesNode.getNodeType() == Node.ELEMENT_NODE) {
+//                    Element boundaryElement = (Element) boundaryNode;
+//                    int seqId = Integer.parseInt(boundaryElement.getAttribute(BOUNDARY_SEQUENCE_ID));
+//                    double lat = Double.parseDouble(boundaryElement.getAttribute(BOUNDARY_LAT));
+//                    double lon = Double.parseDouble(boundaryElement.getAttribute(BOUNDARY_LONG));
+//                    boundaries.add(new BoundaryMark(seqId, new Coordinate(lat, lon)));
+//                }
+//            }
+//        }
+//        return boundaries;
+//    }
 
 }

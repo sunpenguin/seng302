@@ -13,9 +13,9 @@ import java.util.List;
  */
 public class TestMock {
 
-    AC35RegattaContainer ac35RegattaContainer;
-    AC35BoatsContainer ac35BoatsContainer;
-    AC35RaceContainer ac35RaceContainer;
+    private AC35RegattaContainer ac35RegattaContainer;
+    private AC35BoatsContainer ac35BoatsContainer;
+    private AC35RaceContainer ac35RaceContainer;
 
     private void readFiles() {
         AC35RegattaParser ac35RegattaParser = new AC35RegattaParser();
@@ -27,6 +27,7 @@ public class TestMock {
         AC35RaceParser ac35RaceParser = new AC35RaceParser();
         ac35RaceContainer = ac35RaceParser.parse(this.getClass().getResourceAsStream("/AC35race.xml"));
 
+        System.out.println(ac35RaceContainer.getBoundaryMark().get(2).getCoordinate().getLatitude());
     }
 
     public void run() {

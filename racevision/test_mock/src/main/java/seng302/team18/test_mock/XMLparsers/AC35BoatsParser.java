@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import seng302.team18.data.AC35XMLBoatParser;
 import seng302.team18.data.MessageBody;
 import seng302.team18.model.Boat;
 
@@ -34,6 +35,8 @@ public class AC35BoatsParser {
         DocumentBuilder builder;
         Document doc;
         try {
+            AC35XMLBoatParser parser = new AC35XMLBoatParser();
+
             builder = factory.newDocumentBuilder();
             doc = builder.parse(stream);
 
@@ -47,7 +50,7 @@ public class AC35BoatsParser {
             Node shapeNode = boatsElement.getElementsByTagName(BOAT_SHAPES).item(0); // currently don't use any of this
 
             Node boatsNode = boatsElement.getElementsByTagName(BOATS).item(0);
-            List<Boat> boats = parseBoats(boatsNode);
+            List<Boat> boats = parser.parseBoats(boatsNode);
             boatsContainer.setBoats(boats);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
@@ -57,32 +60,32 @@ public class AC35BoatsParser {
         return boatsContainer;
     }
 
-    private List<Boat> parseBoats(Node boatsNode) {
-        // A boat has Type, SourceID, ShapeID, HullNum, StoweName with elements GPSposition and FlagPosition
-        final String BOAT_ELEMENT = "Boat";
-        final String BOAT_NAME = "BoatName";
-        final String BOAT_SHORT_NAME = "ShortName";
-        final String BOAT_ID = "SourceID";
-        final String BOAT_TYPE = "Type";
-        final String YACHT = "Yacht";
-
-        List<Boat> boats = new ArrayList<>();
-        if (boatsNode.getNodeType() == Node.ELEMENT_NODE) {
-            Element boatSequenceElement = (Element) boatsNode;
-            NodeList boatSequenceNodeList = boatSequenceElement.getElementsByTagName(BOAT_ELEMENT);
-            for (int i = 0; i < boatSequenceNodeList.getLength(); i++) {
-                Node boatNode = boatSequenceNodeList.item(i);
-                if (boatNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element boatElement = (Element) boatNode;
-                    if (boatElement.getAttribute(BOAT_TYPE).equals(YACHT)) {
-                        String boatName = boatElement.getAttribute(BOAT_NAME);
-                        String boatShortName = boatElement.getAttribute(BOAT_SHORT_NAME);
-                        int boatID = Integer.parseInt(boatElement.getAttribute(BOAT_ID));
-                        boats.add(new Boat(boatName, boatShortName, boatID));
-                    }
-                }
-            }
-        }
-        return boats;
-    }
+//    private List<Boat> parseBoats(Node boatsNode) {
+//        // A boat has Type, SourceID, ShapeID, HullNum, StoweName with elements GPSposition and FlagPosition
+//        final String BOAT_ELEMENT = "Boat";
+//        final String BOAT_NAME = "BoatName";
+//        final String BOAT_SHORT_NAME = "ShortName";
+//        final String BOAT_ID = "SourceID";
+//        final String BOAT_TYPE = "Type";
+//        final String YACHT = "Yacht";
+//
+//        List<Boat> boats = new ArrayList<>();
+//        if (boatsNode.getNodeType() == Node.ELEMENT_NODE) {
+//            Element boatSequenceElement = (Element) boatsNode;
+//            NodeList boatSequenceNodeList = boatSequenceElement.getElementsByTagName(BOAT_ELEMENT);
+//            for (int i = 0; i < boatSequenceNodeList.getLength(); i++) {
+//                Node boatNode = boatSequenceNodeList.item(i);
+//                if (boatNode.getNodeType() == Node.ELEMENT_NODE) {
+//                    Element boatElement = (Element) boatNode;
+//                    if (boatElement.getAttribute(BOAT_TYPE).equals(YACHT)) {
+//                        String boatName = boatElement.getAttribute(BOAT_NAME);
+//                        String boatShortName = boatElement.getAttribute(BOAT_SHORT_NAME);
+//                        int boatID = Integer.parseInt(boatElement.getAttribute(BOAT_ID));
+//                        boats.add(new Boat(boatName, boatShortName, boatID));
+//                    }
+//                }
+//            }
+//        }
+//        return boats;
+//    }
 }
