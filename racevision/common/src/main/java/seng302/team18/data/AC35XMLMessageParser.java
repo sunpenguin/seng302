@@ -8,6 +8,7 @@ import java.util.Arrays;
 public class AC35XMLMessageParser implements MessageBodyParser {
 
     private MessageParserFactory parserFactory;
+    private Boolean firstBoat = true;
 
     public AC35XMLMessageParser(MessageParserFactory parserFactory) {
         this.parserFactory = parserFactory;
@@ -33,9 +34,10 @@ public class AC35XMLMessageParser implements MessageBodyParser {
 //        System.out.println();
 
         MessageHead head = headParser.parse(headerBytes);
-        if (AC35MessageType.from(head.getType()) == AC35MessageType.XML_BOATS) {
+        if (AC35MessageType.from(head.getType()).equals(AC35MessageType.XML_BOATS) && firstBoat.equals(true)) {
             bodyBytes = new byte[bytes.length - headParser.headerSize() - 2];
             System.arraycopy(bytes, headerBytes.length, bodyBytes, 0, bodyBytes.length);
+            firstBoat = false;
         }
 
         MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.getType());

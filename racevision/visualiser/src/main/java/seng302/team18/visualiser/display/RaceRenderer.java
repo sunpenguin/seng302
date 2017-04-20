@@ -53,7 +53,7 @@ public class RaceRenderer {
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             if (displayBoat == null) {
                 displayBoat = new DisplayBoat
-                        (boat.getShortName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(numBoats++));
+                        (boat.getShortName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(numBoats++), boat.getEstimatedTimeNextMark());
                 displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
@@ -65,6 +65,7 @@ public class RaceRenderer {
                 displayBoat.moveBoat(pixels);
                 displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());
+                displayBoat.setEstimatedTime(boat.getEstimatedTimeNextMark());
             }
         }
     }

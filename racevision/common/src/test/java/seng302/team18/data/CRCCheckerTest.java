@@ -52,7 +52,7 @@ public class CRCCheckerTest {
         assertEquals("The calculated checksum from the isValid method was not correct.", expected, result);
         expected = false;
         result = checker.isValid(wrongCheckSum, messageBytes);
-        assertEquals("The calculated checksum from the isValid method was not correct.", expected, result);
+        assertEquals("The calculated checksum from the isValid method was not correct.", expected, !result);
     }
 
 }

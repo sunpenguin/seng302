@@ -9,6 +9,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import static seng302.team18.data.AC35MessageType.*;
 
@@ -41,6 +42,7 @@ public class RaceMessageInterpreter implements MessageInterpreter {
                 break;
             case RACE_STATUS:
                 updateRaceTime((AC35RaceStatusMessage) message, race);
+                updateEstimatedTime((AC35RaceStatusMessage) message, race.getStartingList());
                 break;
             case BOAT_LOCATION:
                 updateBoatLocation((AC35BoatLocationMessage) message, race.getStartingList());
@@ -56,6 +58,30 @@ public class RaceMessageInterpreter implements MessageInterpreter {
         race.setStartingList(message.getBoats());
     }
 
+    private void updateEstimatedTime(AC35RaceStatusMessage message, List<Boat> boats) {
+//        System.out.println(message.getBoatID());
+//        System.out.println(message.getEstimatedTime());
+        Map<Integer, Long> boatStatus = message.getBoatStatus();
+        for (Boat boat : boats) {
+            if (boatStatus.containsKey(boat.getId())) {
+                boat.setEstimatedTimeNextMark(boatStatus.get(boat.getId()));
+            }
+        }
+//        if (boats.size() > 0) {
+//            Iterator<Boat> boatIterator = boats.iterator();
+//            Boat boat = boatIterator.next();
+//            while (!boatStatus.containsKey(boat.getId()) && boatIterator.hasNext()) {
+//                boat = boatIterator.next();
+//            }
+//
+////            if (boat.getId().equals(message.getBoatID())) {
+////                boat.setEstimatedTimeNextMark(message.getEstimatedTime());
+////            }
+//            if (boat.getId() == 102) {
+//                System.out.println("Boat ID 102: " + boat.getEstimatedTimeNextMark());
+//            }
+//        }
+    }
 
     private void updateBoatLocation(AC35BoatLocationMessage message, List<Boat> boats) {
         if (boats.size() > 0) {
@@ -69,8 +95,8 @@ public class RaceMessageInterpreter implements MessageInterpreter {
                 boat.setHeading(message.getHeading());
                 boat.setCoordinate(message.getCoordinate());
             }
-            if (boat.getId() == 101) {
-                System.out.println(boat.getHeading());
+            if (boat.getId() == 102) {
+//                System.out.println("Boat ID 102: " + boat.getHeading());
             }
         }
     }
