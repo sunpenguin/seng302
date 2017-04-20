@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polyline;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
@@ -17,11 +18,16 @@ import java.util.*;
  */
 public class RaceRenderer {
 
+    private int count = 0;
+
     private Group group;
     private Race race;
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
-    private Map<String, List<Circle>> trailMap = new HashMap<>();
-    private Map<Circle, Coordinate> circleCoordMap = new HashMap<>();
+//    private Map<String, List<Circle>> trailMap = new HashMap<>();
+    private Map<String, Polyline> trailMap = new HashMap<>();
+    private Map<Integer, Coordinate> trailCoordinateMap;
+//    private Map<Circle, Coordinate> circleCoordMap = new HashMap<>();
+    private Map<String, Double> headingMap;
     private Pane raceViewPane;
     private final double PADDING = 20.0;
     private int numBoats;
@@ -40,6 +46,8 @@ public class RaceRenderer {
         this.race = race;
         this.group = group;
         this.raceViewPane = raceViewPane;
+        headingMap = new HashMap<>();
+        trailCoordinateMap =  new HashMap<>();
     }
 
 
@@ -83,28 +91,46 @@ public class RaceRenderer {
     }
 
 
-    /**
-     * Drop a circle on the raceView to visualise the boat's route through the race.
-     * Add the circle to the group and map the circle to it's coordinates.
-     * @param boat Boat to put circle behind.
-     * @param pixels point to place the circle at.
-     */
+//    /**
+//     * Drop a circle on the raceView to visualise the boat's route through the race.
+//     * Add the circle to the group and map the circle to it's coordinates.
+//     * @param boat Boat to put circle behind.
+//     * @param pixels point to place the circle at.
+//     */
     private void drawTrail(Boat boat, XYPair pixels) {
-        Circle circle = new Circle();
-        circleCoordMap.put(circle, boat.getCoordinate());
-
-        circle.setCenterX(pixels.getX());
-        circle.setCenterY(pixels.getY());
-        circle.setRadius(0.6);
-        circle.setFill(displayBoats.get(boat.getShortName()).getBoatColor());
-
-        group.getChildren().add(circle);
-        List<Circle> circles = trailMap.get(boat.getShortName());
-        if (circles == null) {
-            circles = new ArrayList<>();
-            trailMap.put(boat.getShortName(), circles);
+        final double MAX_DIFFERENCE = 1d; // smaller => smoother trail
+        Polyline trail = trailMap.get(boat.getShortName());
+        if (trail == null) {
+            trail = new Polyline();
+            trail.setStroke(displayBoats.get(boat.getShortName()).getBoatColor());
+            trailMap.put(boat.getShortName(), trail);
+            group.getChildren().add(trail);
         }
-        circles.add(circle);
+        Double oldHeading = headingMap.getOrDefault(boat.getShortName(), 5000d);
+        int trailSize = trail.getPoints().size();
+        if (Math.abs(oldHeading - boat.getHeading()) < MAX_DIFFERENCE && trailSize >= 4) {
+//            System.out.println("inif");
+            trail.getPoints().remove(trailSize - 1);
+            trail.getPoints().remove(trailSize - 2);
+        }
+        headingMap.put(boat.getShortName(), boat.getHeading());
+//        count++;
+//        System.out.println(count / 6 * 2);
+//        System.out.println(trail.getPoints().size());
+//        System.out.println();
+//        trailCoordinateMap.put(trailSize - 1, boat.getCoordinate());
+        trail.getPoints().addAll(pixels.getX(), pixels.getY());
+//        Circle circle = new Circle();
+//        circleCoordMap.put(circle, boat.getCoordinate());
+//
+//        circle.setCenterX(pixels.getX());
+//        circle.setCenterY(pixels.getY());
+//        circle.setRadius(0.6);
+//        circle.setFill(displayBoats.get(boat.getShortName()).getBoatColor());
+//
+//        group.getChildren().add(circle);
+//        List<Circle> circles = trailMap.getOrDefault(boat.getShortName(), new ArrayList<>());
+//        circles.add(circle);
     }
 
 
@@ -114,14 +140,16 @@ public class RaceRenderer {
      * @param boats Collection of displayBoats racing.
      */
     public void reDrawTrail(Collection<Boat> boats) {
-        for (Boat boat : boats) {
-            for (Circle circle : trailMap.get(boat.getShortName())) {
-                XYPair newPosition = PixelMapper.convertCoordPixel
-                        (circleCoordMap.get(circle), PADDING, raceViewPane, race.getCourse());
-                circle.setCenterX(newPosition.getX());
-                circle.setCenterY(newPosition.getY());
-            }
-        }
+//        for (Boat boat : boats) {
+//            if (null != trailMap.get(boat.getShortName())) {
+//                for (Circle circle : trailMap.get(boat.getShortName())) {
+//                    XYPair newPosition = PixelMapper.convertCoordPixel
+//                            (circleCoordMap.get(circle), PADDING, raceViewPane, race.getCourse());
+//                    circle.setCenterX(newPosition.getX());
+//                    circle.setCenterY(newPosition.getY());
+//                }
+//            }
+//        }
     }
 
     public Group getGroup() {
