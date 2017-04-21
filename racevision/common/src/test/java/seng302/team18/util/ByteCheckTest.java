@@ -55,4 +55,21 @@ public class ByteCheckTest {
         Assert.assertEquals(expected3, actual3);
         Assert.assertEquals(expected4, actual4);
     }
+
+    @Test
+    public void ByteToLongConverterTest() {
+        long actual1 = ByteCheck.byteToLongConverter(b1, 0, 4);
+        long expected1 = 16843009; // 2^24 + 2^16 + 2^8 + 1
+        long actual2 = ByteCheck.byteToLongConverter(b2, 0, 1);
+        long expected2 = 9; // 9 * 1
+        long actual3 = ByteCheck.byteToLongConverter(b3, 1, 6);
+        long expected3 = 5510460343812L; // (2^40 * 5) + (2^32 * 3) + 2^24 * 1 + (2^16 * 8) + (2^8 * 6) + 1 * 4
+        long actual4 = ByteCheck.byteToLongConverter(b1, 0, 0);
+        long expected4 = 0; // Length 0
+
+        Assert.assertEquals(expected1, actual1);
+        Assert.assertEquals(expected2, actual2);
+        Assert.assertEquals(expected3, actual3);
+        Assert.assertEquals(expected4, actual4);
+    }
 }

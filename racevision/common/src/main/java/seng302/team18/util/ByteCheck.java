@@ -38,8 +38,8 @@ public class ByteCheck {
     }
 
     /**
-     * The method which converts the byte array (little endian) to integer.
-     * Corrects if there are less than 4 bytes.
+     * The method which converts the byte array (little endian) to long.
+     * Corrects if there are less than 8 bytes.
      * @param bytes The whole byte array in little endian
      * @param index The index where the split begins
      * @param length How long the split will be
