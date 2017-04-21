@@ -9,6 +9,26 @@ import java.nio.ByteOrder;
  */
 public class ByteCheck {
 
+
+    public static byte[] intToByteArray(int a) {
+        byte[] bytes = new byte[4];
+        ByteBuffer.wrap(bytes).putInt(a);
+        return bytes;
+    }
+
+    public static byte[] doubleToByteArray(double a) {
+        byte[] bytes = new byte[8];
+        ByteBuffer.wrap(bytes).putDouble(a);
+        return bytes;
+    }
+
+    public static byte[] shortToByteArray(int a) {
+        byte[] bytes = new byte[4];
+        ByteBuffer.wrap(bytes).putInt(a);
+        return bytes;
+
+    }
+
     /**
      * The method which converts the byte array (little endian) to integer.
      * Corrects if there are less than 4 bytes.
