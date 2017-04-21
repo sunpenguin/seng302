@@ -108,6 +108,7 @@ public class MainWindowController {
     public void setImportantAnnotationLevel() {
         raceRenderer.setVisibleAnnotations(AnnotationType.NAME, true);
         raceRenderer.setVisibleAnnotations(AnnotationType.SPEED, false);
+        raceRenderer.setVisibleAnnotations(AnnotationType.ESTIMATED_TIME_NEXT_MARK, false);
     }
 
 

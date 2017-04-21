@@ -30,6 +30,12 @@ public class AC35XMLBoatParser implements MessageBodyParser {
         final String BOAT_SHAPES = "BoatShapes";
         final String BOATS = "Boats";
 
+//        if (bytes[bytes.length - 1] == 0x00) {
+//            System.out.println("a");
+//        } else {
+//            System.out.println("b");
+//        }
+
         InputStream stream = new ByteArrayInputStream(bytes);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
@@ -38,6 +44,7 @@ public class AC35XMLBoatParser implements MessageBodyParser {
             builder = factory.newDocumentBuilder();
             doc = builder.parse(stream);
         } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
             return null;
         }
         doc.getDocumentElement().normalize();

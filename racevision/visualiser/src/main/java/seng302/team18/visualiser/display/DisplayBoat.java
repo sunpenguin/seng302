@@ -26,6 +26,7 @@ public class DisplayBoat {
     private double minWakeSize;
     private Double heading;
     private Double speed;
+    private Long estimatedTime;
     private Text annotation;
     private int decimalPlaces;
     private Map<AnnotationType, Boolean> visibleAnnotations;
@@ -45,11 +46,12 @@ public class DisplayBoat {
             10.0, 20.0 };
 
 
-    public DisplayBoat(String name, Double heading, Double speed, Color boatColor) {
+    public DisplayBoat(String name, Double heading, Double speed, Color boatColor, Long estimatedTime) {
         this.name = name;
         this.heading = heading;
         this.speed = speed;
         this.boatColor = boatColor;
+        this.estimatedTime = estimatedTime;
         // default values
         wakeColor = Color.CADETBLUE;
         wakeScaleFactor = 1.0d / 32.0d; // the wake is at normal size when the boat is moving 40 speed
@@ -96,6 +98,8 @@ public class DisplayBoat {
                     textToDisplay += name + "\n";
                 } else if (entry.getKey().equals(AnnotationType.SPEED)) {
                     textToDisplay += String.format("%." + decimalPlaces + "f", speed) + " km/h\n";
+                } else if (entry.getKey().equals(AnnotationType.ESTIMATED_TIME_NEXT_MARK)) {
+                    textToDisplay += estimatedTime +"\n";
                 }
             }
         }
@@ -149,6 +153,9 @@ public class DisplayBoat {
         this.heading = heading;
     }
 
+    public void setEstimatedTime(Long estimatedTime) {
+        this.estimatedTime = estimatedTime;
+    }
 
     public void addToGroup(Group group) {
         group.getChildren().add(boat);

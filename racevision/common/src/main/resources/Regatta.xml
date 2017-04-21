@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<RegattaConfig>
+  <RegattaID>1234321</RegattaID>
+  <RegattaName>Newport Mock</RegattaName>
+  <CourseName>AC14</CourseName>
+  <CentralLatitude>41.48815029598392</CentralLatitude>
+  <CentralLongitude>-71.34977476608917</CentralLongitude>
+  <CentralAltitude>0.00</CentralAltitude>
+  <UtcOffset>-5</UtcOffset>
+  <MagneticVariation>-12</MagneticVariation>
+</RegattaConfig>
