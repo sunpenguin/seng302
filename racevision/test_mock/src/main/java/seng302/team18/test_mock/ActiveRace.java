@@ -9,6 +9,7 @@ import java.util.List;
  * Subclass of race that can simulate a race.
  */
 public class ActiveRace extends Race {
+    GPSCalculations gpsCalculations;
 
     /**
      * Race class constructor.
@@ -18,6 +19,7 @@ public class ActiveRace extends Race {
      */
     public ActiveRace(List<Boat> startingList, Course course) {
         super(startingList, course);
+        gpsCalculations = new GPSCalculations(course);
     }
 
 
@@ -66,13 +68,13 @@ public class ActiveRace extends Race {
                 return;
             }
             if (boat.getLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
-                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinates())) { // and it hasn't gone around the gate
-                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinates()); // move around the gate
+                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinate())) { // and it hasn't gone around the gate
+                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinate()); // move around the gate
             } else { // the destination was a mark or is already gone around gate so move onto the next leg
                 setNextLeg(boat, nextLeg);
             }
         }
-        boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+        boat.setHeading(gpsCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
     }
 
 
@@ -101,12 +103,12 @@ public class ActiveRace extends Race {
      * @param time that has passed
      */
     private void updatePosition(Boat boat, double time) {
-        final double KMPH_TO_MPS = 1000.0 / 3600.0;
-        double speed = boat.getSpeed() * KMPH_TO_MPS;
-        double distanceTravelled = speed * time
-                / (duration / (course.getCourseDistance() / (startingList.get(0).getSpeed() * KMPH_TO_MPS))); // meters
-        boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
-                GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+//        final double KMPH_TO_MPS = 1000.0 / 3600.0;
+//        double speed = boat.getSpeed() * KMPH_TO_MPS;
+//        double distanceTravelled = speed * time
+//                / (duration / (course.getCourseDistance() / (startingList.get(0).getSpeed() * KMPH_TO_MPS))); // meters
+//        boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
+//                gpsCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
 
 

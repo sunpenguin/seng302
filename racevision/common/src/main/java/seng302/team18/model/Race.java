@@ -12,12 +12,12 @@ import java.util.List;
  */
 public class Race {
 
-    private List<Boat> startingList;
-    private Course course;
-    private List<Boat> finishedList;
-    private ZonedDateTime startTime;
-    private ZonedDateTime currentTime;
-    private List<Integer> participantIds;
+    protected List<Boat> startingList;
+    protected Course course;
+    protected List<Boat> finishedList;
+    protected ZonedDateTime startTime;
+    protected ZonedDateTime currentTime;
+    protected List<Integer> participantIds;
     public static final double WARNING_TIME_SECONDS = 4; // TODO change this to 60
     public static final double PREP_TIME_SECONDS = 8; // TODO change this to 120
 
@@ -49,6 +49,7 @@ public class Race {
      *
      * @param knots speed in knots.
      * @return speed in meters per second.
+     * TODO: Put this somewhere more reasonable
      */
     public static double knotsToMetersPerSecond(double knots) {
         return ((knots * 1.852) / 3.6);

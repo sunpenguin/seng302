@@ -57,15 +57,6 @@ public class TestMock {
         ac35RaceContainer = ac35RaceParser.parse(this.getClass().getResourceAsStream("/AC35race.xml"));
     }
 
-    /**
-     * Create a FileConstructor with the necessary objects as arguments (regatta, course, race)
-     * so that the appropriate files can be constructed.
-     */
-    private void constructFiles() {
-        FileConstructor fileConstructor = new FileConstructor(regatta, course, race);
-        fileConstructor.constructFiles();
-    }
-
     public void run() {
         readFiles();
 
