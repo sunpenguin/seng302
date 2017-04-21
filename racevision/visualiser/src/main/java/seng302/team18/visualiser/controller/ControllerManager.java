@@ -55,8 +55,9 @@ public class ControllerManager {
         Instant currentIn = Instant.ofEpochMilli(statusMessage.getCurrentTime());
         ZonedDateTime startTime = ZonedDateTime.ofInstant(startIn, race.getCourse().getTimeZone());
         ZonedDateTime currentTime = ZonedDateTime.ofInstant(currentIn, race.getCourse().getTimeZone());
+
         if (currentTime.isBefore(startTime.plusSeconds((long) Race.PREP_TIME_SECONDS))) {
-            showPreRace(currentTime, ChronoUnit.SECONDS.between(currentTime, startTime) - (long) Race.PREP_TIME_SECONDS);
+            showPreRace(currentTime, startTime, ChronoUnit.SECONDS.between(currentTime, startTime) - (long) Race.PREP_TIME_SECONDS);
         } else {
             showMainView();
         }
@@ -77,7 +78,7 @@ public class ControllerManager {
     }
 
 
-    private void showPreRace(ZonedDateTime currentTime, long duration) throws IOException {
+    private void showPreRace(ZonedDateTime currentTime, ZonedDateTime startTime, long duration) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(preRacePath));
         Parent root = loader.load(); // throws IOException
         preRaceController = loader.getController();
@@ -86,7 +87,7 @@ public class ControllerManager {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        preRaceController.setUp(this, currentTime, duration, race.getStartingList());
+        preRaceController.setUp(this, currentTime, startTime, duration, race.getStartingList());
     }
 
 

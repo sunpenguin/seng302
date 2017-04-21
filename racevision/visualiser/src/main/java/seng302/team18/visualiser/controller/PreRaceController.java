@@ -25,6 +25,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -33,6 +34,8 @@ import java.util.*;
 public class PreRaceController {
     @FXML
     private Label timeLabel;
+    @FXML
+    private Label startTimeLabel;
     @FXML
     private ListView<Boat> listView;
     @FXML
@@ -58,38 +61,47 @@ public class PreRaceController {
 
 
 
-    public void setUp(ControllerManager manager, ZonedDateTime currentTime, long duration, List<Boat> boats) {
+    public void setUp(ControllerManager manager, ZonedDateTime currentTime, ZonedDateTime startTime, long duration, List<Boat> boats) {
         this.manager = manager;
         startClock(currentTime, currentTime.getZone());
         displayTimeZone(currentTime);
-        Timeline showLive = new Timeline(new KeyFrame(
-                Duration.seconds(duration),
-                event -> {
-                    try {
-                        manager.showMainView();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }));
-        showLive.setCycleCount(1);
-        showLive.play();
-        setUpLists(boats);
+        startTimeLabel.setText(startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+
+        if (duration > 0) {
+            Timeline showLive = new Timeline(new KeyFrame(
+                    Duration.seconds(duration),
+                    event -> {
+                        showLiveRaceView(boats);
+                    }));
+
+            showLive.setCycleCount(1);
+            showLive.play();
+        }else{
+            showLiveRaceView(boats);
+        }
     }
 
-    public void showLiveRaceView() {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
+
+    public void showLiveRaceView(List<Boat> boats) {
+//        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
+//        try {
+//            Parent root = loader.load(); // throws IOException
+//            Stage stage = (Stage) listView.getScene().getWindow();
+//            MainWindowController mainWindowController = loader.getController();
+////            mainWindowController.setRace(race);
+//            mainWindowController.startRace((long) Race.PREP_TIME_SECONDS);
+//            Scene scene = new Scene(root);
+//            stage.setScene(scene);
+//            preRaceClock.stop();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         try {
-            Parent root = loader.load(); // throws IOException
-            Stage stage = (Stage) listView.getScene().getWindow();
-            MainWindowController mainWindowController = loader.getController();
-//            mainWindowController.setRace(race);
-            mainWindowController.startRace((long) Race.PREP_TIME_SECONDS);
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            preRaceClock.stop();
+            manager.showMainView();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        setUpLists(boats);
     }
 
 
