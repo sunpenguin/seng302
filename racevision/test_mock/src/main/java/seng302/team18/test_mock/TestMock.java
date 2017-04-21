@@ -34,7 +34,7 @@ public class TestMock {
     private List<ScheduledMessage> messages = new ArrayList<>();
 
     //TODO give real port
-    private Server server = new Server(1604);
+    private Server server = new Server(5005);
 
     /**
      * Generate the classes necessary to visualise a mock race.
