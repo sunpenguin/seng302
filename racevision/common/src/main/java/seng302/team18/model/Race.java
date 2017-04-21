@@ -240,4 +240,6 @@ public class Race {
     public void setCurrentTime(ZonedDateTime currentTime) {
         this.currentTime = currentTime;
     }
+
+    public ZonedDateTime getCurrentTime() {return currentTime; }
 }
