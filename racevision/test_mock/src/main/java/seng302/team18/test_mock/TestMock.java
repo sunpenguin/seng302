@@ -21,7 +21,7 @@ public class TestMock {
 
     private Regatta regatta;
     private Course course;
-    private Race race;
+    private ActiveRace race;
 
     private AC35RegattaContainer ac35RegattaContainer;
     private AC35BoatsContainer ac35BoatsContainer;
@@ -33,7 +33,7 @@ public class TestMock {
     private List<ScheduledMessage> messages = new ArrayList<>();
 
     //TODO give real port
-    private Server server = new Server(1478);
+    private Server server = new Server(1604);
 
     /**
      * Generate the classes necessary to visualise a mock race.
@@ -41,6 +41,7 @@ public class TestMock {
      */
     private void generateClasses() {
         generateCourse();
+        generateRace();
     }
 
     /**
@@ -59,6 +60,7 @@ public class TestMock {
 
     public void run() {
         readFiles();
+        generateClasses();
 
         server.openServer();
 
@@ -134,6 +136,10 @@ public class TestMock {
 
         course = new Course(compoundMarks, boundaryMarks, windDirection, zoneId);
         course.setCentralCoordinate(central);
+    }
 
+    private void generateRace() {
+        List<Boat> startingList = ac35BoatsContainer.getBoats();
+        race = new ActiveRace(startingList, course);
     }
 }

@@ -18,6 +18,6 @@ public class BoatMessageGenerator extends ScheduledMessage {
     @Override
     public String getMessage() {
         // TODO encode the message. Remember to check each boat to see that sending a message is appropriate for its situation
-        return "";
+        return "65";
     }
 }
