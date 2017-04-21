@@ -1,16 +1,15 @@
 package seng302.team18.test_mock;
 
-import seng302.team18.model.Boat;
-import seng302.team18.model.Course;
-import seng302.team18.model.Race;
-import seng302.team18.model.Regatta;
+import seng302.team18.model.*;
 import seng302.team18.test_mock.XMLparsers.*;
 import seng302.team18.test_mock.connection.BoatMessageGenerator;
 import seng302.team18.test_mock.connection.ScheduledMessage;
 import seng302.team18.test_mock.connection.Server;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
@@ -41,6 +40,7 @@ public class TestMock {
      * These are: Regatta, Race, Course
      */
     private void generateClasses() {
+        generateCourse();
     }
 
     /**
@@ -109,5 +109,31 @@ public class TestMock {
             }
 
         } while (!race.isFinished());
+    }
+
+    private void generateCourse() {
+        Map<Integer, CompoundMark> compoundMarkMap = ac35RaceContainer.getCompoundMarks();
+        List<CompoundMark> compoundMarks = new ArrayList<>();
+
+        for (CompoundMark compoundMark : compoundMarkMap.values()) {
+            compoundMarks.add(compoundMark);
+        }
+
+        List<BoundaryMark> boundaryMarks = ac35RaceContainer.getBoundaryMark();
+        double windDirection = 0;
+
+        ZoneId zoneId;
+        String utcOffset = ac35RegattaContainer.getuTcOffset();
+        if (utcOffset.startsWith("+") || utcOffset.startsWith("-")) {
+            zoneId = ZoneId.of("UTC" + utcOffset);
+        } else {
+            zoneId = ZoneId.of("UTC+" + utcOffset);
+        }
+
+        Coordinate central = new Coordinate(ac35RegattaContainer.getCentralLatitude(), ac35RegattaContainer.getCentralLongtitude());
+
+        course = new Course(compoundMarks, boundaryMarks, windDirection, zoneId);
+        course.setCentralCoordinate(central);
+
     }
 }
