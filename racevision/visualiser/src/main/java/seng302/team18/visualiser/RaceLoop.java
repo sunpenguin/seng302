@@ -19,7 +19,6 @@ public class RaceLoop extends AnimationTimer {
     private RaceRenderer renderer;
     private CourseRenderer courseRenderer;
     private FPSReporter fpsReporter;
-    private int messageCount = 0;
     private MessageInterpreter interpreter;
     private SocketMessageReceiver reader;
 
@@ -47,27 +46,14 @@ public class RaceLoop extends AnimationTimer {
         double secondsElapsed = (currentTime - previousTime) / 1e9f; // converting from nanoseconds to seconds
         previousTime = currentTime;
         updateFps(secondsElapsed);
-        updateRace();
+        updateView();
     }
 
 
-    private void updateRace() {
-        MessageBody message = null;
-        try {
-            message = reader.nextMessage();
-        } catch (Exception e) {
-            return; // ignore if anything goes wrong
-        }
-        if (message != null) {
-            interpreter.interpretMessage(message);
-            renderer.renderBoats();
-            courseRenderer.renderCourse();
-            messageCount++;
-            if (messageCount >= 10) {
-                renderer.drawTrails();
-                messageCount = 0;
-            }
-        }
+    private void updateView() {
+        renderer.renderBoats();
+        courseRenderer.renderCourse();
+        renderer.drawTrails();
     }
 
 
