@@ -16,6 +16,8 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by dhl25 on 17/04/17.
@@ -50,6 +52,7 @@ public class ControllerManager {
             interpreter.interpretMessage(message);
             message = receiver.nextMessage();
         }
+
         AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
         Instant startIn = Instant.ofEpochMilli(statusMessage.getStartTime());
         Instant currentIn = Instant.ofEpochMilli(statusMessage.getCurrentTime());
@@ -60,6 +63,20 @@ public class ControllerManager {
         } else {
             showMainView();
         }
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(() -> {
+            while(true) {
+                MessageBody messageBody = null;
+                try {
+                    messageBody = receiver.nextMessage();
+                } catch (Exception e) {
+                    return; // ignore if anything goes wrong
+                }
+                interpreter.interpretMessage(messageBody);
+            }
+        });
+
     }
 
 
@@ -104,9 +121,8 @@ public class ControllerManager {
 
         if (decision.equals("Y")){
             try {
-                SocketMessageReceiver s = new SocketMessageReceiver(4941, new AC35MessageParserFactory());
-                return s;
-
+                SocketMessageReceiver receiver = new SocketMessageReceiver(4941, new AC35MessageParserFactory());
+                return receiver;
             } catch (IOException e) {
                 System.out.println("try again");
             }
