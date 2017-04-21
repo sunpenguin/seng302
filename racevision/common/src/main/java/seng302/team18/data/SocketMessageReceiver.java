@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 
 /**
@@ -21,6 +22,7 @@ public class SocketMessageReceiver {
         this.parserFactory = parserFactory;
         // Create input and output streams for reading in data
         socket = new Socket("livedata.americascup.com", portNumber);
+
         inStream = socket.getInputStream();
         if (!inStream.markSupported()) {
             inStream = new BufferedInputStream(inStream);

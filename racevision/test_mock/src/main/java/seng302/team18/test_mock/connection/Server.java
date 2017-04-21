@@ -25,6 +25,7 @@ public class Server {
     private void acceptClientConnection() {
         try {
             ClientConnection client = new ClientConnection(serverSocket.accept());
+            System.out.println("Connection Established");
             sendXmls(client);
             clientList.getClients().add(client);
         } catch (IOException e) {
