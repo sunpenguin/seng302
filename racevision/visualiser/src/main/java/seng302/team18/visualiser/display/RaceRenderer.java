@@ -98,7 +98,7 @@ public class RaceRenderer {
 //     * @param pixels point to place the circle at.
 //     */
     private void drawTrail(Boat boat, XYPair pixels) {
-        final double MAX_DIFFERENCE = 0.5d; // smaller => smoother trail
+        final double MAX_DIFFERENCE = 0.75d; // smaller => smoother trail, higher => more fps
         Polyline trail = trailMap.get(boat.getShortName());
         List<Coordinate> trailPoints = trailCoordinateMap.get(boat.getId());
         if (trail == null) {
