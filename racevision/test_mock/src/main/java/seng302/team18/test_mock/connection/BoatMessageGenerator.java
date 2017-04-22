@@ -29,6 +29,7 @@ public class BoatMessageGenerator extends ScheduledMessage {
             double heading = b.getHeading();
             double speed = b.getSpeed();
             message = String.valueOf(sourceID) + String.valueOf(lat) + String.valueOf(lon) + String.valueOf(heading) + String.valueOf(speed);
+            //System.out.println(coordinate.getLatitude() + ",  " + coordinate.getLongitude());
         }
         return message;
     }
