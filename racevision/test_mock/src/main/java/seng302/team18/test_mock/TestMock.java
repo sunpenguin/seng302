@@ -24,6 +24,10 @@ public class TestMock {
     private Course course;
     private ActiveRace race;
 
+    private String regattaXML = "/AC35regatta.xml";
+    private String boatsXML = "/AC35boats.xml";
+    private String raceXML = "/AC35race.xml";
+
     private AC35RegattaContainer ac35RegattaContainer;
     private AC35BoatsContainer ac35BoatsContainer;
     private AC35RaceContainer ac35RaceContainer;
@@ -34,7 +38,7 @@ public class TestMock {
     private List<ScheduledMessage> messages = new ArrayList<>();
 
     //TODO give real port
-    private Server server = new Server(5005);
+    private Server server = new Server(5005, regattaXML, boatsXML, raceXML);
 
     /**
      * Generate the classes necessary to visualise a mock race.
@@ -50,13 +54,13 @@ public class TestMock {
      */
     private void readFiles() {
         AC35RegattaParser ac35RegattaParser = new AC35RegattaParser();
-        ac35RegattaContainer = ac35RegattaParser.parse(this.getClass().getResourceAsStream("/AC35regatta.xml"));
+        ac35RegattaContainer = ac35RegattaParser.parse(this.getClass().getResourceAsStream(regattaXML));
 
         AC35BoatsParser ac35BoatsParser = new AC35BoatsParser();
-        ac35BoatsContainer = ac35BoatsParser.parse(this.getClass().getResourceAsStream("/AC35boats.xml"));
+        ac35BoatsContainer = ac35BoatsParser.parse(this.getClass().getResourceAsStream(boatsXML));
 
         AC35RaceParser ac35RaceParser = new AC35RaceParser();
-        ac35RaceContainer = ac35RaceParser.parse(this.getClass().getResourceAsStream("/AC35race.xml"));
+        ac35RaceContainer = ac35RaceParser.parse(this.getClass().getResourceAsStream(raceXML));
     }
 
     public void run() {
@@ -142,5 +146,17 @@ public class TestMock {
     private void generateRace() {
         List<Boat> startingList = ac35BoatsContainer.getBoats();
         race = new ActiveRace(startingList, course);
+    }
+
+    public String getRegattaXML() {
+        return regattaXML;
+    }
+
+    public String getBoatsXML() {
+        return boatsXML;
+    }
+
+    public String getRaceXML() {
+        return raceXML;
     }
 }
