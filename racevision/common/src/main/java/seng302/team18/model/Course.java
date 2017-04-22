@@ -1,7 +1,5 @@
 package seng302.team18.model;
 
-import seng302.team18.util.GPSCalculations;
-
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -108,6 +106,8 @@ public class Course {
     public void setMarkRoundings(List<MarkRounding> markRoundings) {
         this.markRoundings = markRoundings;
     }
+
+    public List<MarkRounding> getMarkRoundings() {return markRoundings;}
 
     public void setCentralCoordinate(Coordinate centralCoordinate) {
         this.centralCoordinate = centralCoordinate;
