@@ -44,7 +44,7 @@ public class ActiveRace extends Race {
      */
     private void setInitialSpeed(){
         for(Boat b: startingList){
-            b.setSpeed(0.05);
+            b.setSpeed(0.005);
         }
     }
 
@@ -71,7 +71,7 @@ public class ActiveRace extends Race {
             // Set Dest
             boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
             // Set Coordinate
-            Coordinate midPoint = course.getCompoundMarks().get(1).getMidCoordinate();
+            Coordinate midPoint = course.getCompoundMarks().get(0).getMidCoordinate();
             boat.setCoordinate(midPoint);
             // Set Heading
             boat.setHeading(gpsCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
@@ -147,8 +147,8 @@ public class ActiveRace extends Race {
      */
     private void updateHeading(Boat boat) {
         // if boat gets within range of its next destination changes its destination and heading
-        if ((Math.abs(boat.getDestination().getLongitude() - boat.getCoordinate().getLongitude()) < 0.0001)
-                && (Math.abs(boat.getDestination().getLatitude() - boat.getCoordinate().getLatitude()) < 0.0001)) {
+        if ((Math.abs(boat.getDestination().getLongitude() - boat.getCoordinate().getLongitude()) < 0.001)
+                && (Math.abs(boat.getDestination().getLatitude() - boat.getCoordinate().getLatitude()) < 0.001)) {
             Leg nextLeg = course.getNextLeg(boat.getLeg()); // find next leg
             // if current leg is the last leg boat is now finished
             if (nextLeg.equals(boat.getLeg())) {

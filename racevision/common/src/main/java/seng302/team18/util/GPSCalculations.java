@@ -125,7 +125,7 @@ public class GPSCalculations {
      * @param point2 Coordinates for point2
      * @return The coordinates of the midpoint
      */
-    public Coordinate gpsMidpoint(Coordinate point1, Coordinate point2) {
+    public static Coordinate gpsMidpoint(Coordinate point1, Coordinate point2) {
 
         double lat1 = point1.getLatitude();
         double long1 = point1.getLongitude();
