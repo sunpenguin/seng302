@@ -146,6 +146,8 @@ public class TestMock {
     private void generateRace() {
         List<Boat> startingList = ac35BoatsContainer.getBoats();
         race = new ActiveRace(startingList, course);
+        RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
+        raceMessageGenerator.getMessage();
     }
 
     public String getRegattaXML() {
