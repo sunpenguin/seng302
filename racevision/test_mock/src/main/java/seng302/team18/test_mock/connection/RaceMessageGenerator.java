@@ -1,15 +1,10 @@
 package seng302.team18.test_mock.connection;
 
-import com.sun.org.apache.xerces.internal.impl.dv.xs.DateTimeDV;
 import seng302.team18.model.*;
-import seng302.team18.test_mock.XMLparsers.AC35RaceContainer;
-import seng302.team18.test_mock.XMLparsers.AC35RaceParser;
-
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,49 +34,55 @@ public class RaceMessageGenerator extends ScheduledMessage {
         ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
         utc.format(DateTimeFormatter.ofPattern("hh:mm"));
         String currentTime = fixLength(String.valueOf(utc), 6);
-        System.out.println(currentTime);
+//        System.out.println(currentTime);
         String raceID = fixLength("11080703", 4);
-        System.out.println(raceID);
+//        System.out.println(raceID);
         String raceStatus = "0"; //it may switch to other value in the future.
-        System.out.println(raceStatus);
+//        System.out.println(raceStatus);
         String startTime = fixLength(String.valueOf(Instant.now().toEpochMilli()), 6); //it is milllisecs from 1.1.1997 until now
-        System.out.println(startTime);
+//        System.out.println(startTime);
         String windDirection = fixLength(String.valueOf(race.getCourse().getWindDirection()), 2);
-        System.out.println(windDirection);
+//        System.out.println(windDirection);
         String windSpeed = fixLength("3100", 2); //it may change in the future
-        System.out.println(windSpeed);
+//        System.out.println(windSpeed);
         String numOfBoats = String.valueOf(boats.size());
-        System.out.println(numOfBoats);
+//        System.out.println(numOfBoats);
         String raceType = "1";
 
         message = " " + currentTime + raceID + raceStatus + startTime + windDirection + windSpeed + numOfBoats + raceType;
 
         for (Boat b: boats) {
             String sourceID = fixLength(String.valueOf(b.getId()), 4);
-            System.out.println(sourceID);
+//            System.out.println(sourceID);
             message += sourceID;
             String boatStatus = "0"; // it may change later
-            System.out.println(boatStatus);
+//            System.out.println(boatStatus);
             message += boatStatus;
             String legNo = "0"; // it may change later to 1 or 2
-            System.out.println(legNo);
+//            System.out.println(legNo);
             message += legNo;
             String numOfPenaltiesAwarded = " ";
-            System.out.println(numOfPenaltiesAwarded);
+//            System.out.println(numOfPenaltiesAwarded);
             message += numOfPenaltiesAwarded;
             String numOfPenaltiesServed = " ";
-            System.out.println(numOfPenaltiesServed);
+//            System.out.println(numOfPenaltiesServed);
             message += numOfPenaltiesServed;
-            String timeToNextMark = fixLength(" ", 6);
+
+            Coordinate boatCurrentPosition = b.getCoordinate();
+            Coordinate boatNextMark = b.getDestination();
+            double distance = boatCurrentPosition.distance(boatNextMark) / 1000; // km
+            double time = distance / b.getSpeed() * 3.6e+6; // millisecond
+            String timeToNextMark = fixLength(String.valueOf(time), 6);
             System.out.println(timeToNextMark);
             message += timeToNextMark;
-            String timeToFinish = fixLength("60000", 6); // assume the race will
-            System.out.println(timeToFinish);
+
+            String timeToFinish = fixLength("60000", 6); // assume the race will end in 1 minute
+//            System.out.println(timeToFinish);
             message += timeToFinish;
 //            boatsSourceIDs.add(b.getId());
         }
-        System.out.println(message);
-        System.out.println(message.length());
+//        System.out.println(message);
+//        System.out.println(message.length());
         return message;
     }
 
