@@ -98,7 +98,7 @@ public class DisplayBoat {
                     textToDisplay += name + "\n";
                 } else if (entry.getKey().equals(AnnotationType.SPEED)) {
                     textToDisplay += String.format("%." + decimalPlaces + "f", speed) + " km/h\n";
-                } else if (entry.getKey().equals(AnnotationType.ESTIMATED_TIME_NEXT_MARK)) {
+                } else if (entry.getKey().equals(AnnotationType.ESTIMATED_TIME_NEXT_MARK) && estimatedTime > 0) {
                     textToDisplay += estimatedTime +"\n";
                 }
             }
