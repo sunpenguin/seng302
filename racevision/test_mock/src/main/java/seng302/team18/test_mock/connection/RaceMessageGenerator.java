@@ -86,7 +86,7 @@ public class RaceMessageGenerator extends ScheduledMessage {
         return message;
     }
 
-    private String fixLength(String s, int len) {
+    private String fixLength(String s, int len) { //TODO move to super class so all subclasses can use this
         StringBuilder str = new StringBuilder(s);
         str.setLength(len);
         return String.valueOf(str);
