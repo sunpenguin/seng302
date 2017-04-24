@@ -73,7 +73,6 @@ public class RaceMessageGenerator extends ScheduledMessage {
             double distance = boatCurrentPosition.distance(boatNextMark) / 1000; // km
             double time = distance / b.getSpeed() * 3.6e+6; // millisecond
             String timeToNextMark = fixLength(String.valueOf(time), 6);
-            System.out.println(timeToNextMark);
             message += timeToNextMark;
 
             String timeToFinish = fixLength("60000", 6); // assume the race will end in 1 minute

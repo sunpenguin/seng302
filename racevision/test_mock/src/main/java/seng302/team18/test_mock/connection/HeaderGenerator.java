@@ -45,6 +45,8 @@ public class HeaderGenerator {
         outputSteam.write(messageLen);
 
         byte header[] = outputSteam.toByteArray();
+        //String s = new String(header);
+        //System.out.println(s);
 
 
     }
