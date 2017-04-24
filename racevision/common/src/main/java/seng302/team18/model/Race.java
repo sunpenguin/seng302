@@ -19,7 +19,7 @@ public class Race {
     protected ZonedDateTime currentTime;
     protected List<Integer> participantIds;
     public static final double WARNING_TIME_SECONDS = 4; // TODO change this to 60
-    public static final double PREP_TIME_SECONDS = 8; // TODO change this to 120
+    public static final double PREP_TIME_SECONDS = 120; // TODO change this to 120
 
 
     public Race() {
