@@ -10,6 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by david on 4/13/17.
@@ -45,6 +46,13 @@ public class RaceMessageInterpreter implements MessageInterpreter {
             case BOAT_LOCATION:
                 updateBoatLocation((AC35BoatLocationMessage) message, race.getStartingList());
                 updateMarkLocation((AC35BoatLocationMessage) message, race.getCourse().getMarks());
+//                List<Mark> marks = race.getCourse().getMarks().stream().filter(mark -> mark.getId().equals(((AC35BoatLocationMessage) message).getSourceId())).collect(Collectors.toList());
+//                System.out.println("course size = " + race.getCourse().getMarks().size());
+//                System.out.println("size = " + marks.size());
+//                if (marks.size() > 0) {
+//                    System.out.println("coord = " + marks.get(0).getCoordinate());
+//                }
+//                System.out.println();
                 break;
             case YACHT_EVENT:
                 break;
@@ -57,16 +65,11 @@ public class RaceMessageInterpreter implements MessageInterpreter {
     }
 
     private void updateEstimatedTime(AC35RaceStatusMessage message, Race race) {
-//        System.out.println(message.getBoatID());
-//        System.out.println(message.getEstimatedTime());
         Map<Integer, Long> boatStatus = message.getEstimatedMarkTimes();
         for (Boat boat : race.getStartingList()) {
             if (boatStatus.containsKey(boat.getId())) {
-//                Instant nextMarkInstant = Instant.ofEpochMilli(boatStatus.get(boat.getId()));
-//                ZonedDateTime nextMarkTime = ZonedDateTime.ofInstant(nextMarkInstant, race.getCourse().getTimeZone());
                 double timeTilNextMark = (boatStatus.get(boat.getId()) - message.getCurrentTime()) / 1000d;
                 boat.setTimeTilNextMark((long) timeTilNextMark);
-//                ChronoUnit.SECONDS.between(currentTime, startTime);
             }
         }
     }
@@ -83,23 +86,16 @@ public class RaceMessageInterpreter implements MessageInterpreter {
                 boat.setHeading(message.getHeading());
                 boat.setCoordinate(message.getCoordinate());
             }
-//            if (boat.getId() == 102) {
-//                System.out.println("Boat ID 102: " + boat.getHeading());
-//            }
         }
     }
 
 
     private void updateMarkLocation(AC35BoatLocationMessage message, List<Mark> marks) {
-        if (marks.size() > 0) {
-            Iterator<Mark> marksIterator = marks.iterator();
-            Mark mark = marksIterator.next();
-            while (!mark.getId().equals(message.getSourceId()) && marksIterator.hasNext()) {
-                mark = marksIterator.next();
-            }
-            if (mark.getId().equals(message.getSourceId())) {
-                mark.setCoordinate(message.getCoordinate());
-            }
+        List<Mark> filteredMarks = race.getCourse().getMarks().stream()
+                .filter(mark -> mark.getId().equals(message.getSourceId()))
+                .collect(Collectors.toList());
+        for (Mark mark : filteredMarks) {
+            mark.setCoordinate(message.getCoordinate());
         }
     }
 

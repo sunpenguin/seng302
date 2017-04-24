@@ -12,7 +12,7 @@ import java.util.List;
 
 public class GPSCalculations {
 
-    private double aveLat;
+//    private double aveLat;
     private double minX = Double.MAX_VALUE;
     private double maxX = -(Double.MAX_VALUE);
     private double minY = Double.MAX_VALUE;
@@ -27,35 +27,6 @@ public class GPSCalculations {
      */
     public GPSCalculations(Course course) {
         this.course = course;
-        ArrayList<XYPair> XY = new ArrayList<>();
-        int totalMarks = 0;
-
-        for (CompoundMark cM : course.getCompoundMarks()) {
-            for (Mark m : cM.getMarks()) {
-                double lat = m.getCoordinate().getLatitude();
-                double lon = m.getCoordinate().getLongitude();
-                XYPair xy = coordinateToPixel(new Coordinate(lat, lon));
-                XY.add(totalMarks, xy);
-                totalMarks += 1;
-            }
-        }
-
-        int i;
-        double latTotal = 0;
-        double lonTotal = 0;
-        double Z = 0;
-
-        for (i = 0; i < XY.size(); i++) {
-            latTotal += XY.get(i).getX();
-            lonTotal += XY.get(i).getY();
-            Z += Math.sin(XY.get(i).getX());
-        }
-
-        double x = latTotal / totalMarks;
-        double y = lonTotal / totalMarks;
-        double z = Z / totalMarks;
-        double hyp = Math.sqrt(x * x + y * y);
-        aveLat = Math.atan2(z, hyp);
     }
 
 //    /**
