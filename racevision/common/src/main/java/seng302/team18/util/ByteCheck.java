@@ -22,7 +22,13 @@ public class ByteCheck {
         return bytes;
     }
 
-    public static byte[] shortToByteArray(int a) {
+    public static byte[] longToByteArray(long a) {
+        byte[] bytes = new byte[8];
+        ByteBuffer.wrap(bytes).putLong(a);
+        return bytes;
+    }
+
+    public static byte[] shortToByteArray(short a) {
         byte[] bytes = new byte[4];
         ByteBuffer.wrap(bytes).putInt(a);
         return bytes;
