@@ -90,7 +90,9 @@ public class Server {
     public void openServer() {
         try {
             serverSocket = new ServerSocket(PORT);
-            HeaderGenerator.generateHeader((byte)2, 6); //TODO remove this line if you see it, sam forgot to delete it
+
+            HeaderGenerator.generateHeader(2, (short) 6); //TODO remove this line if you see it, sam forgot to delete it
+
         } catch (IOException e) {
             System.err.println("Could not listen on port " + PORT);
             System.err.println("Exiting program");

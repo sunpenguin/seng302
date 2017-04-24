@@ -21,41 +21,27 @@ public class HeaderGenerator {
      * A method used to generate the header for a message of a certain type.
      * @param type The type of the message the header is generated for.
      */
-    public static void generateHeader(byte type, int lengthOfMessage) throws IOException {
+    public static byte[] generateHeader(int type, short lengthOfMessage) throws IOException {
 
         byte syncByte1 = 0x47;
 
         byte syncByte2 = (byte) 0x83;//TODO make sure -125 is okay, might need to be 131
 
-        byte messageType = type;
+        byte messageType = (byte) type;
 
         Timestamp time = new Timestamp(System.currentTimeMillis());
         long timestamp =  time.getTime(); //number of milliseconds since January 1, 1970, 00:00:00 GMT
         byte[] timestampBytes =  ByteCheck.longToByteArray(timestamp);
         timestampBytes = Arrays.copyOfRange(timestampBytes, 2, 8); //Shave the first 2 bytes off
 
-
+        // TODO: How to make reasonable sourceID?
         byte[] sourceID = new byte[4];
         sourceID[0] = 58;
         sourceID[1] = 94;
         sourceID[2] = 123;
         sourceID[3] = 93;
 
-        byte[] messageLen = ByteCheck.intToByteArray(1505131556);
-        String s = new String(messageLen);
-
-        int i = ByteCheck.byteToIntConverter(messageLen, 0, 4);
-
-        messageLen =  Arrays.copyOfRange(messageLen, 2, 4);
-        i = ByteCheck.byteToIntConverter(messageLen, 0, 2);
-
-
-        int originalInt = 10;
-        byte[] convertedToBytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(originalInt).array();
-        int convertedBackToInt = ByteCheck.byteToIntConverter(convertedToBytes, 0, 4);
-
-        System.out.printf("Original number: %d | Converted number: %d\n", originalInt, convertedBackToInt);
-
+        byte[] messageLen = ByteCheck.shortToByteArray(lengthOfMessage);
 
         ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
         outputSteam.write(syncByte1);
@@ -67,12 +53,7 @@ public class HeaderGenerator {
 
         byte header[] = outputSteam.toByteArray();
 
-        header = ByteCheck.convertToLittleEndian(header,15);
-
-        AC35MessageHeadParser p = new AC35MessageHeadParser();
-        p.parse(header);
-
-
+        return ByteCheck.convertToLittleEndian(header,15);
     }
 
 }

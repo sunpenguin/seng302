@@ -10,20 +10,40 @@ import java.nio.ByteOrder;
 public class ByteCheck {
 
 
-    public static byte[] intToByteArray(int encoded) {
-        return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(encoded).array();
+    /**
+     * Convert an int to a byte array of length 4. Endianness is big endian
+     * @param value value to convert
+     * @return converted byte array
+     */
+    public static byte[] intToByteArray(int value) {
+        return ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(value).array();
     }
 
-    public static byte[] doubleToByteArray(double encoded) {
-        return ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putDouble(encoded).array();
+    /**
+     * Convert an double to a byte array of length 8. Endianness is big endian
+     * @param value value to convert
+     * @return converted byte array
+     */
+    public static byte[] doubleToByteArray(double value) {
+        return ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN).putDouble(value).array();
     }
 
-    public static byte[] longToByteArray(long encoded) {
-        return ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putLong(encoded).array();
+    /**
+     * Convert an long to a byte array of length 8. Endianness is big endian
+     * @param value value to convert
+     * @return converted byte array
+     */
+    public static byte[] longToByteArray(long value) {
+        return ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN).putLong(value).array();
     }
 
-    public static byte[] shortToByteArray(short encoded) {
-        return ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort(encoded).array();
+    /**
+     * Convert a short to a byte array of length 2. Endianness is big endian
+     * @param value value to convert
+     * @return converted byte array
+     */
+    public static byte[] shortToByteArray(short value) {
+        return ByteBuffer.allocate(2).order(ByteOrder.BIG_ENDIAN).putShort(value).array();
     }
 
     /**
