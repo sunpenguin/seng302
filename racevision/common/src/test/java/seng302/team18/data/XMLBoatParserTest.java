@@ -1,24 +1,24 @@
-//package seng302.team18.data;
-//
-//import org.junit.Before;
-//import org.junit.Test;
-//import org.xml.sax.SAXException;
-//import seng302.team18.model.Boat;
-//
-//import javax.xml.parsers.ParserConfigurationException;
-//import java.io.BufferedInputStream;
-//import java.io.IOException;
-//import java.io.InputStream;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import static org.junit.Assert.assertEquals;
-//
-///**
-// * Created by dhl25 on 30/03/17.
-// */
-//public class XMLBoatParserTest {
-//
+package seng302.team18.data;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.xml.sax.SAXException;
+import seng302.team18.model.Boat;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
+/**
+ * Created by dhl25 on 30/03/17.
+ */
+public class XMLBoatParserTest {
+
 //    private InputStream boatFile;
 //    private List<Boat> actual;
 //
@@ -52,7 +52,7 @@
 //            assertEquals(exp.getSpeed(), act.getSpeed(), 0.1);
 //        }
 //    }
-//
-//}
-//
-//
+
+}
+
+

@@ -44,9 +44,13 @@ public class XMLBoatParser {
             Node boatNode = boatNodes.item(i);
             System.out.println(boatNode.getTextContent());
             if (boatNode.getNodeType() == Node.ELEMENT_NODE) {
+                System.out.println("here");
                 Element boatElement = (Element) boatNode;
                 parseBoat(boatElement);
             }
+        }
+        for (Boat boat: boats){
+            System.out.println(boat.getBoatName());
         }
         return boats;
     }
@@ -61,7 +65,6 @@ public class XMLBoatParser {
         final String SOURCE_ID = "SourceID";
         final String SHORT_NAME = "ShortName";
         final String BOAT_NAME = "BoatName";
-
         int sourceId = Integer.parseInt(boatElement.getAttributes().getNamedItem(SOURCE_ID).getTextContent());
         String shortName = boatElement.getAttributes().getNamedItem(SHORT_NAME).getTextContent();
         String boatName = boatElement.getAttributes().getNamedItem(BOAT_NAME).getTextContent();
