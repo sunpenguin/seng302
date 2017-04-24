@@ -35,7 +35,7 @@ public class RaceMessageGenerator extends ScheduledMessage {
         utc.format(DateTimeFormatter.ofPattern("hh:mm"));
         String currentTime = fixLength(String.valueOf(utc), 6);
 //        System.out.println(currentTime);
-        String raceID = fixLength("11080703", 4);
+        String raceID = fixLength("11080703", 4); //TODO store raceId as variable and use it here
 //        System.out.println(raceID);
         String raceStatus = "0"; //it may switch to other value in the future.
 //        System.out.println(raceStatus);
