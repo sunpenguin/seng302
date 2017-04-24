@@ -90,4 +90,17 @@ public class ByteCheck {
         }
         return finalValue;
     }
+
+    /**
+     * Method to conver a byte array to little edian format.
+     * @param bytes a byte array to be converted
+     * @param length length of the byte array
+     * @return the byte array in little edian format
+     */
+    public static byte[] convertToLittleEndian(byte[] bytes, int length) {
+        ByteBuffer buffer = ByteBuffer.allocate(length);
+        buffer.put(bytes);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        return buffer.array();
+    }
 }

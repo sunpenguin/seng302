@@ -1,5 +1,6 @@
 package seng302.team18.test_mock.connection;
 
+import seng302.team18.data.AC35MessageHeadParser;
 import seng302.team18.util.ByteCheck;
 
 import java.io.ByteArrayOutputStream;
@@ -33,27 +34,43 @@ public class HeaderGenerator {
         timestampBytes = Arrays.copyOfRange(timestampBytes, 2, 8); //Shave the first 2 bytes off
 
 
+        byte[] sourceID = new byte[4];
+        sourceID[0] = 58;
+        sourceID[1] = 94;
+        sourceID[2] = 123;
+        sourceID[3] = 93;
 
-        byte[] messageLen = ByteCheck.intToByteArray(lengthOfMessage);
+        byte[] messageLen = ByteCheck.intToByteArray(1505131556);
+        String s = new String(messageLen);
+
+        int i = ByteCheck.byteToIntConverter(messageLen, 0, 4);
+
         messageLen =  Arrays.copyOfRange(messageLen, 2, 4);
+        i = ByteCheck.byteToIntConverter(messageLen, 0, 2);
+
+
+        int j = 10;
+        byte[] byteArray = ByteCheck.intToByteArray(j);
+        int k = ByteCheck.byteToIntConverter(byteArray, 0, 4);
+        System.out.println(k);
+
 
         ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
         outputSteam.write(syncByte1);
         outputSteam.write(syncByte2);
         outputSteam.write(messageType);
         outputSteam.write(timestampBytes);
+        outputSteam.write(sourceID);
         outputSteam.write(messageLen);
 
         byte header[] = outputSteam.toByteArray();
-        //String s = new String(header);
-        //System.out.println(s);
+
+        header = ByteCheck.convertToLittleEndian(header,15);
+
+        AC35MessageHeadParser p = new AC35MessageHeadParser();
+        p.parse(header);
 
 
     }
-
-    public static int unsignedToBytes(int b) {
-        return b & 0xFF;
-    }
-
 
 }
