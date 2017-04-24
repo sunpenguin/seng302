@@ -10,29 +10,20 @@ import java.nio.ByteOrder;
 public class ByteCheck {
 
 
-    public static byte[] intToByteArray(int a) {
-        byte[] bytes = new byte[4];
-        ByteBuffer.wrap(bytes).putInt(a);
-        return bytes;
+    public static byte[] intToByteArray(int encoded) {
+        return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(encoded).array();
     }
 
-    public static byte[] doubleToByteArray(double a) {
-        byte[] bytes = new byte[8];
-        ByteBuffer.wrap(bytes).putDouble(a);
-        return bytes;
+    public static byte[] doubleToByteArray(double encoded) {
+        return ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putDouble(encoded).array();
     }
 
-    public static byte[] longToByteArray(long a) {
-        byte[] bytes = new byte[8];
-        ByteBuffer.wrap(bytes).putLong(a);
-        return bytes;
+    public static byte[] longToByteArray(long encoded) {
+        return ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putLong(encoded).array();
     }
 
-    public static byte[] shortToByteArray(short a) {
-        byte[] bytes = new byte[4];
-        ByteBuffer.wrap(bytes).putInt(a);
-        return bytes;
-
+    public static byte[] shortToByteArray(short encoded) {
+        return ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN).putShort(encoded).array();
     }
 
     /**

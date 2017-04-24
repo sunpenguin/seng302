@@ -7,6 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Objects;
@@ -24,7 +25,7 @@ public class HeaderGenerator {
 
         byte syncByte1 = 0x47;
 
-        byte syncByte2 = (byte)0x83;//TODO make sure -125 is okay, might need to be 131
+        byte syncByte2 = (byte) 0x83;//TODO make sure -125 is okay, might need to be 131
 
         byte messageType = type;
 
@@ -49,10 +50,11 @@ public class HeaderGenerator {
         i = ByteCheck.byteToIntConverter(messageLen, 0, 2);
 
 
-        int j = 10;
-        byte[] byteArray = ByteCheck.intToByteArray(j);
-        int k = ByteCheck.byteToIntConverter(byteArray, 0, 4);
-        System.out.println(k);
+        int originalInt = 10;
+        byte[] convertedToBytes = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(originalInt).array();
+        int convertedBackToInt = ByteCheck.byteToIntConverter(convertedToBytes, 0, 4);
+
+        System.out.printf("Original number: %d | Converted number: %d\n", originalInt, convertedBackToInt);
 
 
         ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
