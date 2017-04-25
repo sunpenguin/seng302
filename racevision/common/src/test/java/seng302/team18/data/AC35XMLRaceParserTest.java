@@ -6,6 +6,7 @@ import org.junit.Test;
 import seng302.team18.model.*;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -13,37 +14,47 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by spe76 on 21/04/17.
+ * The tests for AC35 XML Race parser.
  */
 public class AC35XMLRaceParserTest {
     private AC35XMLRaceParser raceParser;
     private InputStream fileToStream;
-    private double delta = 0.001;
+    private AC35XMLRaceMessage raceMessageToTest;
+
+    private List<CompoundMark> expectedCompoundMarks;
+    private List<MarkRounding> expectedMarkRounding;
+    private List<BoundaryMark> expectedBoundaries;
+
+    private Integer byteArrayLength = 99999;
+    private Double delta = 0.001;
 
     @Before
-    public void setUp() {
-        raceParser = new AC35XMLRaceParser();
-        fileToStream = new BufferedInputStream(getClass().getClassLoader().getResourceAsStream("race1.xml"));
+    public void setUp() throws IOException {
+        if (fileToStream == null) {
+            raceParser = new AC35XMLRaceParser();
+            fileToStream = new BufferedInputStream(getClass().getClassLoader().getResourceAsStream("race1.xml"));
+
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+            int nRead;
+            byte[] data = new byte[byteArrayLength];
+
+            while ((nRead = fileToStream.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+
+            buffer.flush();
+            byte[] bytes = buffer.toByteArray();
+            MessageBody message = raceParser.parse(bytes);
+            raceMessageToTest = (AC35XMLRaceMessage) message;
+
+            setUpExpectedValues();
+        }
     }
 
-    @Test
-    public void parseAC35XMLRaceTest1() throws IOException {
-        // This length is not very dynamic, it's a set value.
-        byte[] bytes = new byte[3433];
-        fileToStream.read(bytes, 0, 3433); // length of the XML file
-        MessageBody message = raceParser.parse(bytes);
-        AC35XMLRaceMessage raceMessage = (AC35XMLRaceMessage) message;
-
-        String expectedTime = "2015-08-29T13:10:00+02:00";
-        String actualTime = raceMessage.getRaceStartTime();
-        Assert.assertEquals(expectedTime, actualTime);
-
-        List<Integer> expectedIDs = new ArrayList<>(Arrays.asList(101, 102, 103, 104, 105, 106));
-        List<Integer> actualIDs = raceMessage.getParticipantIDs();
-        Assert.assertEquals(expectedIDs, actualIDs);
-
-        // List of Compound <arks
-        List<CompoundMark> expectedCompoundMarks = new ArrayList<>();
+    private void setUpExpectedValues() {
+        // List of expected marks
+        expectedCompoundMarks = new ArrayList<>();
         List<Mark> marks1 = new ArrayList<>(Arrays.asList(
                 new Mark(122, new Coordinate(57.6703330, 11.8278330)),
                 new Mark(123, new Coordinate(57.6703330, 11.8278330))));
@@ -68,31 +79,17 @@ public class AC35XMLRaceParserTest {
                 new Mark(129, new Coordinate(57.6715240, 11.8444950))));
         expectedCompoundMarks.add(new CompoundMark("Mark4", marks6, 6));
 
-        List<CompoundMark> actualCompoundMarks = raceMessage.getCompoundMarks();
-        // Checks for multiple things
-        Assert.assertEquals(expectedCompoundMarks.size(), actualCompoundMarks.size());
-        Assert.assertEquals(expectedCompoundMarks.get(0).getMidCoordinate(), actualCompoundMarks.get(0).getMidCoordinate());
-        Assert.assertEquals(expectedCompoundMarks.get(3).getName(), actualCompoundMarks.get(3).getName());
-        Assert.assertEquals(
-                expectedCompoundMarks.get(5).getMarks().get(0).getCoordinate().getLatitude(),
-                actualCompoundMarks.get(5).getMarks().get(0).getCoordinate().getLatitude(),
-                delta);
-
-        // List of Mark Roundings
-        List<MarkRounding> expectedMarkRoundings = new ArrayList<>();
-        expectedMarkRoundings.add(new MarkRounding(1, expectedCompoundMarks.get(0)));
-        expectedMarkRoundings.add(new MarkRounding(2, expectedCompoundMarks.get(1)));
-        expectedMarkRoundings.add(new MarkRounding(3, expectedCompoundMarks.get(2)));
-        expectedMarkRoundings.add(new MarkRounding(4, expectedCompoundMarks.get(3)));
-        expectedMarkRoundings.add(new MarkRounding(5, expectedCompoundMarks.get(4)));
-        expectedMarkRoundings.add(new MarkRounding(6, expectedCompoundMarks.get(5)));
-
-        List<MarkRounding> actualMarkRoundings = raceMessage.getMarkRoundings();
-        // Mark rounding have no getter and setters yet
-        Assert.assertEquals(expectedMarkRoundings.size(), actualMarkRoundings.size());
+        // List of expected mark roundings
+        expectedMarkRounding = new ArrayList<>();
+        expectedMarkRounding.add(new MarkRounding(1, expectedCompoundMarks.get(0)));
+        expectedMarkRounding.add(new MarkRounding(2, expectedCompoundMarks.get(1)));
+        expectedMarkRounding.add(new MarkRounding(3, expectedCompoundMarks.get(2)));
+        expectedMarkRounding.add(new MarkRounding(4, expectedCompoundMarks.get(3)));
+        expectedMarkRounding.add(new MarkRounding(5, expectedCompoundMarks.get(4)));
+        expectedMarkRounding.add(new MarkRounding(6, expectedCompoundMarks.get(5)));
 
         // List of Boundary Marks
-        List<BoundaryMark> expectedBoundaries = new ArrayList<>();
+        expectedBoundaries = new ArrayList<>();
         expectedBoundaries.add(new BoundaryMark(1, new Coordinate(57.6739450, 11.8417100)));
         expectedBoundaries.add(new BoundaryMark(2, new Coordinate(57.6709520, 11.8485010)));
         expectedBoundaries.add(new BoundaryMark(3, new Coordinate(57.6690260, 11.8472790)));
@@ -103,8 +100,44 @@ public class AC35XMLRaceParserTest {
         expectedBoundaries.add(new BoundaryMark(8, new Coordinate(57.6629480, 11.8249660)));
         expectedBoundaries.add(new BoundaryMark(9, new Coordinate(57.6686890, 11.8250920)));
         expectedBoundaries.add(new BoundaryMark(10, new Coordinate(57.6708220, 11.8321340)));
+    }
 
-        List<BoundaryMark> actualBoundaries = raceMessage.getBoundaryMarks();
+    @Test
+    public void parseAC35XMLRaceStartTimeTest() {
+        String expectedTime = "2015-08-29T13:10:00+02:00";
+        String actualTime = raceMessageToTest.getRaceStartTime();
+        Assert.assertEquals(expectedTime, actualTime);
+    }
+
+    @Test
+    public void parseAC35XMLRaceParticipantIDsTest() {
+        List<Integer> expectedIDs = new ArrayList<>(Arrays.asList(101, 102, 103, 104, 105, 106));
+        List<Integer> actualIDs = raceMessageToTest.getParticipantIDs();
+        Assert.assertEquals(expectedIDs, actualIDs);
+    }
+
+    @Test
+    public void parseAC35XMLCompoundMarksTest() {
+        List<CompoundMark> actualCompoundMarks = raceMessageToTest.getCompoundMarks();
+        // Checks for multiple things
+        Assert.assertEquals(expectedCompoundMarks.size(), actualCompoundMarks.size());
+        Assert.assertEquals(expectedCompoundMarks.get(0).getMidCoordinate(), actualCompoundMarks.get(0).getMidCoordinate());
+        Assert.assertEquals(expectedCompoundMarks.get(3).getName(), actualCompoundMarks.get(3).getName());
+        Assert.assertEquals(
+                expectedCompoundMarks.get(5).getMarks().get(0).getCoordinate().getLatitude(),
+                actualCompoundMarks.get(5).getMarks().get(0).getCoordinate().getLatitude(),
+                delta);
+    }
+
+    @Test
+    public void parseAC35XMLRaceMarkRoundingTest() {
+        List<MarkRounding> actualMarkRoundings = raceMessageToTest.getMarkRoundings();
+        Assert.assertEquals(expectedMarkRounding.size(), actualMarkRoundings.size());
+    }
+
+    @Test
+    public void parseAC35XMLRaceBoundariesTest() {
+        List<BoundaryMark> actualBoundaries = raceMessageToTest.getBoundaryMarks();
 
         Assert.assertEquals(expectedBoundaries.size(), actualBoundaries.size());
         Assert.assertEquals(expectedBoundaries.get(4).getSequenceID(), actualBoundaries.get(4).getSequenceID());
