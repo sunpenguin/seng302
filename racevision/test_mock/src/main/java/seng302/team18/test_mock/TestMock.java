@@ -79,7 +79,8 @@ public class TestMock {
      * Initialise the generators for scheduled messages
      */
     private void initMessageGenerators() {
-        //messages.add(new BoatMessageGenerator(race.getStartingList()));
+        messages.add(new BoatMessageGenerator(race.getStartingList()));
+        messages.add(new RaceMessageGenerator(race));
     }
 
 
@@ -145,7 +146,9 @@ public class TestMock {
 
     private void generateRace() {
         List<Boat> startingList = ac35BoatsContainer.getBoats();
-        race = new ActiveRace(startingList, course);
+        int raceID = ac35RaceContainer.getRaceID();
+
+        race = new ActiveRace(startingList, course, raceID);
         RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
         raceMessageGenerator.getMessage();
     }

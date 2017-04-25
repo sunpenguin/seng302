@@ -67,6 +67,9 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         return message;
     }
 
+    public int parseRaceID(Node raceIDNode) {
+        return Integer.parseInt(raceIDNode.getTextContent());
+    }
 
     public String parseRaceTime(Node startTimeNode) {
         final String TIME = "Time";

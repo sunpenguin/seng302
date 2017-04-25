@@ -26,9 +26,9 @@ public class ClientConnection {
      *
      * @param message the message to send
      */
-    public void sendMessage(String message) {
+    public void sendMessage(byte[] message) {
         try {
-            out.writeBytes(message);
+            out.write(message);
             out.flush(); // TODO is this helpful?
             nFailures = 0;
         } catch (IOException e) {

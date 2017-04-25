@@ -1,10 +1,14 @@
 package seng302.team18.test_mock.connection;
 
 import seng302.team18.model.*;
+import seng302.team18.util.ByteCheck;
+
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,7 +25,22 @@ public class RaceMessageGenerator extends ScheduledMessage {
     }
 
     @Override
-    public String getMessage() {
+    public byte[] getMessage() {
+
+        byte messageVersionNumber = 0x2;
+
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        long expectedTime = currentTime.getTime();
+        byte[] currentTimeBytes = ByteCheck.longToByteArray(expectedTime);
+        currentTimeBytes = Arrays.copyOfRange(currentTimeBytes, 2, 8);
+
+        //int raceID =
+        byte[] sam  = new byte[4];
+        return sam;
+    }
+
+
+    public String getMessage2() {
 
         List<Boat> boats = race.getStartingList();
 
@@ -82,6 +101,7 @@ public class RaceMessageGenerator extends ScheduledMessage {
         }
 //        System.out.println(message);
 //        System.out.println(message.length());
+        System.out.println(message);
         return message;
     }
 

@@ -83,5 +83,4 @@ public class BoatMessageGenerator {
         // TODO encode the message. Remember to check each boat to see that sending a message is appropriate for its situation
 
     }
-
-
+}
