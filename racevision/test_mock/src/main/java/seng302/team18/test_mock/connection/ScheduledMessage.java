@@ -1,5 +1,7 @@
 package seng302.team18.test_mock.connection;
 
+import java.io.IOException;
+
 /**
  * Abstract base class for messages to be sent on a regular schedule.
  */
@@ -27,6 +29,6 @@ public abstract class ScheduledMessage {
     /**
      * Overridden by base classes to define behaviour when it is time to send a message/s
      */
-    public abstract byte[] getMessage();
+    public abstract byte[] getMessage() throws IOException;
 
 }

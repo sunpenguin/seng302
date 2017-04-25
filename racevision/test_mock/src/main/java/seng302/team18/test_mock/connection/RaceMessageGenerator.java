@@ -1,8 +1,12 @@
 package seng302.team18.test_mock.connection;
 
 import seng302.team18.model.*;
+import seng302.team18.test_mock.ActiveRace;
 import seng302.team18.util.ByteCheck;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -16,27 +20,73 @@ import java.util.List;
  */
 public class RaceMessageGenerator extends ScheduledMessage {
 
-    private Race race;
+    private ActiveRace race;
     private String message;
 
-    public RaceMessageGenerator(Race race) {
+    public RaceMessageGenerator(ActiveRace race) {
         super(2);
         this.race = race;
     }
 
     @Override
-    public byte[] getMessage() {
+    public byte[] getMessage() throws IOException {
 
-        byte messageVersionNumber = 0x2;
+        ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
 
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        long expectedTime = currentTime.getTime();
-        byte[] currentTimeBytes = ByteCheck.longToByteArray(expectedTime);
-        currentTimeBytes = Arrays.copyOfRange(currentTimeBytes, 2, 8);
+        int messageLength = 0;
 
-        //int raceID =
-        byte[] sam  = new byte[4];
-        return sam;
+        byte messageVersionNumberBytes = 0x2;
+
+        byte[] currentTimeBytes = ByteCheck.getCurrentTime6Bytes();
+
+        byte[] raceIDBytes = ByteCheck.intToByteArray(race.getRaceID());
+
+        byte raceStatusByte = race.getRaceStatusNumber();
+
+        byte[] expectedStartTimeBytes = ByteCheck.getCurrentTime6Bytes(); // TODO: Use a reasonable starting time
+
+        byte[] raceWindDirectionBytes = ByteCheck.shortToByteArray((short) 0x4000); // Currently set to east
+
+        byte[] raceWindSpeedBytes = ByteCheck.shortToByteArray((short) 5000); // Currently 18 km/h
+
+        byte numBoatsByte = (byte) race.getStartingList().size();
+
+        byte raceTypeByte = 0x2; // Currently set to fleet race TODO: add this to race xml parser + race class
+
+        outputSteam.write(messageVersionNumberBytes);
+        outputSteam.write(currentTimeBytes);
+        outputSteam.write(raceIDBytes);
+        outputSteam.write(raceStatusByte);
+        outputSteam.write(expectedStartTimeBytes);
+        outputSteam.write(raceWindDirectionBytes);
+        outputSteam.write(raceWindSpeedBytes);
+        outputSteam.write(numBoatsByte);
+        outputSteam.write(raceTypeByte);
+        messageLength += 24;
+
+        for (Boat boat : race.getStartingList()) {
+            byte[] sourceIDBytes = ByteCheck.intToByteArray(boat.getId());
+            byte statusByte = 0x2; // TODO: Currently always "racing" need to add this to boat class, update as race goes on
+            byte legNumberByte = (byte) boat.getLeg().getLegNumber(); // TODO: Update leg numbers so that 0 is prestart, 1 is first leg and so on
+            byte numPenaltiesAwardedByte = 0;
+            byte numPenaltiesServedByte = 0;
+            byte[] estTimeAtNextMark = ByteCheck.convertLongTo6ByteArray(0); // TODO: calculate this value
+            byte[] estTimeAtFinish = ByteCheck.convertLongTo6ByteArray(0); // TODO: calculate this value
+
+            outputSteam.write(sourceIDBytes);
+            outputSteam.write(statusByte);
+            outputSteam.write(legNumberByte);
+            outputSteam.write(numPenaltiesAwardedByte);
+            outputSteam.write(numPenaltiesServedByte);
+            outputSteam.write(estTimeAtNextMark);
+            outputSteam.write(estTimeAtFinish);
+            messageLength += 20;
+        }
+
+
+        byte header[] = outputSteam.toByteArray();
+
+        return ByteCheck.convertToLittleEndian(header,0);
     }
 
 

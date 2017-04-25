@@ -118,7 +118,6 @@ public class ByteCheck {
         return buffer.array();
     }
 
-
     public static byte[] getCurrentTime6Bytes() {
         long timestamp = System.currentTimeMillis();
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
@@ -134,5 +133,21 @@ public class ByteCheck {
         }
 
         return timestampBytes;
+    }
+
+    public static byte[] convertLongTo6ByteArray(long value) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(value);
+        byte[] valueBytes = new byte[6];
+        System.arraycopy(buffer.array(), 2, valueBytes, 0, 6);
+
+        for(int i = 0; i < valueBytes.length / 2; i++)
+        {
+            byte temp = valueBytes[i];
+            valueBytes[i] = valueBytes[valueBytes.length - i - 1];
+            valueBytes[valueBytes.length - i - 1] = temp;
+        }
+
+        return valueBytes;
     }
 }

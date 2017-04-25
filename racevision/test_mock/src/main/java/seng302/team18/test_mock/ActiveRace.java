@@ -19,6 +19,7 @@ public class ActiveRace extends Race {
     public static final double WARNING_TIME_SECONDS = 60;
     public static final double PREP_TIME_SECONDS = 120;
     private int raceID;
+    private byte raceStatusNumber;
 
     /**
      * Race class constructor.
@@ -215,10 +216,23 @@ public class ActiveRace extends Race {
     }
 
     public boolean isFinished() {
-        return startingList.size() == finishedList.size();
+        if (startingList.size() == finishedList.size()) {
+            raceStatusNumber = 4;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public int getRaceID() {
         return raceID;
+    }
+
+    public byte getRaceStatusNumber() {
+        return raceStatusNumber;
+    }
+
+    public void setRaceStatusNumber(byte raceStatusNumber) {
+        this.raceStatusNumber = raceStatusNumber;
     }
 }

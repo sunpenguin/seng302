@@ -7,6 +7,7 @@ import seng302.team18.test_mock.connection.RaceMessageGenerator;
 import seng302.team18.test_mock.connection.ScheduledMessage;
 import seng302.team18.test_mock.connection.Server;
 
+import java.io.IOException;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -98,12 +99,18 @@ public class TestMock {
             timeCurr = System.currentTimeMillis();
 
             // Update simulation
+            race.setRaceStatusNumber((byte) 3);
             race.updateBoats((timeCurr - timeLast) * 1e3);
 
             // Send messages if needed
             for (ScheduledMessage sendable : messages) {
                 if (sendable.isTimeToSend(timeCurr)) {
-                    server.broadcast(sendable.getMessage());
+                    try {
+                        server.broadcast(sendable.getMessage());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.out.println("Failed to create a message");
+                    }
                 }
             }
 
@@ -149,8 +156,9 @@ public class TestMock {
         int raceID = ac35RaceContainer.getRaceID();
 
         race = new ActiveRace(startingList, course, raceID);
-        RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
-        raceMessageGenerator.getMessage();
+
+//        RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
+//        raceMessageGenerator.getMessage();
     }
 
     public String getRegattaXML() {
