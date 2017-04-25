@@ -18,6 +18,7 @@ public class ActiveRace extends Race {
     private double duration;
     public static final double WARNING_TIME_SECONDS = 60;
     public static final double PREP_TIME_SECONDS = 120;
+    private int raceID;
 
     /**
      * Race class constructor.
@@ -25,11 +26,12 @@ public class ActiveRace extends Race {
      * @param startingList Arraylist holding all entered boats
      * @param course       Course object
      */
-    public ActiveRace(List<Boat> startingList, Course course) {
+    public ActiveRace(List<Boat> startingList, Course course, int raceID) {
         gpsCalculations = new GPSCalculations(course);
         startingList.sort(Comparator.comparingDouble(Boat::getSpeed));
         this.startingList = startingList;
         this.course = course;
+        this.raceID = raceID;
         finishedList = new ArrayList<>();
         setCourseForBoats();
         duration = 60;
@@ -214,4 +216,9 @@ public class ActiveRace extends Race {
 
     public boolean isFinished() {
         return startingList.size() == finishedList.size();
-    }}
+    }
+
+    public int getRaceID() {
+        return raceID;
+    }
+}

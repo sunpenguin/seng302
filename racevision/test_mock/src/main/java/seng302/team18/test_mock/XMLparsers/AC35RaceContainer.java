@@ -18,6 +18,7 @@ public class AC35RaceContainer {
     private Map<Integer, CompoundMark> compoundMarks;
     private List<Integer> participantIDs;
     private List<MarkRounding> markRoundings;
+    private int raceID;
 
     /*
     Get start time for a race.
@@ -87,5 +88,13 @@ public class AC35RaceContainer {
      */
     public void setMarkRoundings(List<MarkRounding> markRoundings) {
         this.markRoundings = markRoundings;
+    }
+
+    public int getRaceID() {
+        return raceID;
+    }
+
+    public void setRaceID(int raceID) {
+        this.raceID = raceID;
     }
 }

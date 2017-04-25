@@ -32,6 +32,7 @@ public class AC35RaceParser {
         final String COURSE_ELEMENT = "Course";
         final String COMPOUND_MARK_SEQUENCE = "CompoundMarkSequence";
         final String COURSE_BOUNDARIES_ELEMENT = "CourseLimit";
+        final String RACE_ID_ELEMENT = "RaceID";
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
@@ -44,6 +45,11 @@ public class AC35RaceParser {
 
             doc.getDocumentElement().normalize();
             Element raceElement = (Element) doc.getElementsByTagName(RACE_ELEMENT).item(0);
+
+
+            Node raceIDNode = raceElement.getElementsByTagName(RACE_ID_ELEMENT).item(0); // start time
+            int raceID = parser.parseRaceID(raceIDNode);
+
 
             Node startTimeNode = raceElement.getElementsByTagName(START_DATE_TIME_ELEMENT).item(0); // start time
             String startTimeString = parser.parseRaceTime(startTimeNode);
@@ -65,7 +71,8 @@ public class AC35RaceParser {
             raceContainer.setMarkRoundings(markRoundings);
             raceContainer.setParticipantIDs(participantIDs);
             raceContainer.setStartTime(startTimeString);
-
+            raceContainer.setRaceID(raceID);
+            System.out.println(raceID);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
             return null;

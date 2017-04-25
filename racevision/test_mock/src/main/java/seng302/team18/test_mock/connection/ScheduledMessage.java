@@ -27,6 +27,6 @@ public abstract class ScheduledMessage {
     /**
      * Overridden by base classes to define behaviour when it is time to send a message/s
      */
-    public abstract String getMessage();
+    public abstract byte[] getMessage();
 
 }

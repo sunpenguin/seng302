@@ -18,7 +18,7 @@ public class BoatMessageGenerator extends ScheduledMessage {
     }
 
     @Override
-    public String getMessage() {
+    public byte[] getMessage() {
         // TODO encode the message. Remember to check each boat to see that sending a message is appropriate for its situation
         for(Boat b: boats){
             //make message
@@ -31,6 +31,7 @@ public class BoatMessageGenerator extends ScheduledMessage {
             message = String.valueOf(sourceID) + String.valueOf(lat) + String.valueOf(lon) + String.valueOf(heading) + String.valueOf(speed);
             //System.out.println(coordinate.getLatitude() + ",  " + coordinate.getLongitude());
         }
-        return message;
+        byte[] sam  = new byte[4];
+        return sam;
     }
 }

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 /**
@@ -51,15 +52,15 @@ public class Server {
         //send regatta file
         File regattaXML = new File(this.getClass().getResource(regattaXMLPath).getFile());
         String content = new Scanner(regattaXML).useDelimiter("\\Z").next();
-        client.sendMessage(content);
+        client.sendMessage(content.getBytes(StandardCharsets.UTF_8));
         //send race file
         File raceXML = new File(this.getClass().getResource(raceXMLPath).getFile());
         content = new Scanner(raceXML).useDelimiter("\\Z").next();
-        client.sendMessage(content);
+        client.sendMessage(content.getBytes(StandardCharsets.UTF_8));
         //send boats file
         File boatsXML = new File(this.getClass().getResource(boatsXMLPath).getFile());
         content = new Scanner(boatsXML).useDelimiter("\\Z").next();
-        client.sendMessage(content);
+        client.sendMessage(content.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -91,8 +92,6 @@ public class Server {
         try {
             serverSocket = new ServerSocket(PORT);
 
-            HeaderGenerator.generateHeader(2, (short) 6); //TODO remove this line if you see it, sam forgot to delete it
-
         } catch (IOException e) {
             System.err.println("Could not listen on port " + PORT);
             System.err.println("Exiting program");
@@ -107,9 +106,9 @@ public class Server {
      * Broadcasts a message to all connected clients
      *
      * @param message the message to broadcast
-     * @see ClientConnection#sendMessage(String)
+     * @see ClientConnection#sendMessage(byte[])
      */
-    public void broadcast(String message) {
+    public void broadcast(byte[] message) {
         for (ClientConnection client : clientList.getClients()) {
             client.sendMessage(message);
         }
