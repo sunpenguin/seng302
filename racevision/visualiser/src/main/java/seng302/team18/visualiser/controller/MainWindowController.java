@@ -46,6 +46,7 @@ public class MainWindowController {
     private Boolean boatNameImportant;
     private Boolean boatSpeedImportant;
     private Boolean estimatedTimeImportant;
+    private Boolean timeSinceLastMarkImportant;
 
     private Race race;
     private RaceLoop raceLoop;
@@ -61,6 +62,7 @@ public class MainWindowController {
         boatNameImportant = true;
         boatSpeedImportant = false;
         estimatedTimeImportant = false;
+        timeSinceLastMarkImportant = false;
     }
 
 
@@ -94,6 +96,7 @@ public class MainWindowController {
         raceRenderer.setVisibleAnnotations(AnnotationType.NAME, boatNameImportant);
         raceRenderer.setVisibleAnnotations(AnnotationType.SPEED, boatSpeedImportant);
         raceRenderer.setVisibleAnnotations(AnnotationType.ESTIMATED_TIME_NEXT_MARK, estimatedTimeImportant);
+        raceRenderer.setVisibleAnnotations(AnnotationType.TIME_SINCE_LAST_MARK, timeSinceLastMarkImportant);
     }
 
 
@@ -115,6 +118,13 @@ public class MainWindowController {
 
     public void toggleEstimatedTime() {
         estimatedTimeImportant = !estimatedTimeImportant;
+        if (onImportant) {
+            setImportantAnnotationLevel();
+        }
+    }
+
+    public void toggleTimeSinceLastMark() {
+        timeSinceLastMarkImportant = !timeSinceLastMarkImportant;
         if (onImportant) {
             setImportantAnnotationLevel();
         }
