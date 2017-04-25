@@ -8,10 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
@@ -40,7 +37,7 @@ public class MainWindowController {
     @FXML private TableView tableView;
     @FXML private TableColumn<Boat, Integer> boatPositionColumn;
     @FXML private TableColumn<Boat, String> boatNameColumn;
-    @FXML private TableColumn<Boat, Integer> boatSpeedColumn;
+    @FXML private TableColumn<Boat, Double> boatSpeedColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
 
@@ -133,6 +130,17 @@ public class MainWindowController {
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
+        boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
+            @Override
+            public void updateItem(Double speed, boolean empty) {
+                super.updateItem(speed, empty) ;
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(String.format("%.3f", speed));
+                }
+            }
+        });
         tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
     }
 
