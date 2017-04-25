@@ -29,6 +29,7 @@ public class RaceMessageInterpreter implements MessageInterpreter {
             return;
         }
         AC35MessageType messageType = AC35MessageType.from(message.getType());
+//        System.out.println(messageType);
         switch (messageType) {
             case XML_RACE:
                 updateXMLRace((AC35XMLRaceMessage) message, race);
@@ -46,15 +47,11 @@ public class RaceMessageInterpreter implements MessageInterpreter {
             case BOAT_LOCATION:
                 updateBoatLocation((AC35BoatLocationMessage) message, race.getStartingList());
                 updateMarkLocation((AC35BoatLocationMessage) message, race.getCourse().getMarks());
-//                List<Mark> marks = race.getCourse().getMarks().stream().filter(mark -> mark.getId().equals(((AC35BoatLocationMessage) message).getSourceId())).collect(Collectors.toList());
-//                System.out.println("course size = " + race.getCourse().getMarks().size());
-//                System.out.println("size = " + marks.size());
-//                if (marks.size() > 0) {
-//                    System.out.println("coord = " + marks.get(0).getCoordinate());
-//                }
-//                System.out.println();
                 break;
             case YACHT_EVENT:
+                break;
+            case MARK_ROUNDING:
+                updateMarkRounding((AC35MarkRoundingMessage) message, race.getStartingList());
                 break;
         }
     }
@@ -108,6 +105,16 @@ public class RaceMessageInterpreter implements MessageInterpreter {
 
         race.setStartTime(startTime);
         race.setCurrentTime(currentTime);
+
+        updateBoatMarkTimes(race.getStartingList(), message.getCurrentTime());
+    }
+
+    private void updateBoatMarkTimes(Iterable<Boat> boats, long time) {
+        for (Boat boat : boats) {
+            if (!boat.getTimeAtLastMark().equals(0L)) {
+                boat.setTimeSinceLastMark((time - boat.getTimeAtLastMark()) / 1000);
+            }
+        }
     }
 
 
@@ -122,6 +129,8 @@ public class RaceMessageInterpreter implements MessageInterpreter {
         course.setBoundaries(message.getBoundaryMarks());
     }
 
+    
+
 
     private void updateXMLRegatta(AC35XMLRegattaMessage message, Course course) {
         String utcOffset = message.getUtcOffset();
@@ -131,6 +140,14 @@ public class RaceMessageInterpreter implements MessageInterpreter {
             course.setTimeZone(ZoneId.of("UTC+" + utcOffset));
         }
         course.setCentralCoordinate(new Coordinate(message.getCentralLat(), message.getCentralLong()));
+    }
+
+    private void updateMarkRounding(AC35MarkRoundingMessage message, Iterable<Boat> boats) {
+        for (Boat boat : boats) {
+            if (boat.getId().equals(message.getBoatId())) {
+                boat.setTimeAtLastMark(message.getTime());
+            }
+        }
     }
 
 

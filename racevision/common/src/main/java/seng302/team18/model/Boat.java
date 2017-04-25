@@ -192,6 +192,10 @@ public class Boat {
         return timeSinceLastMark;
     }
 
+    public void setTimeSinceLastMark(long timeSinceLastMark) {
+        this.timeSinceLastMark = timeSinceLastMark;
+    }
+
     public Long getTimeAtLastMark() {
         return timeAtLastMark;
     }

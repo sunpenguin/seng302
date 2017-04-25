@@ -14,8 +14,8 @@ public class AC35MarkRoundingParser implements MessageBodyParser {
         final int ID_INDEX = 13;
         final int ID_LENGTH = 4;
 
-        int boatId = ByteCheck.byteToIntConverter(bytes, TIME_INDEX, TIME_LENGTH);
-        long time = ByteCheck.byteToLongConverter(bytes, ID_INDEX, ID_LENGTH);
+        int boatId = ByteCheck.byteToIntConverter(bytes, ID_INDEX, ID_LENGTH);
+        long time = ByteCheck.byteToLongConverter(bytes, TIME_INDEX, TIME_LENGTH);
         return new AC35MarkRoundingMessage(boatId, time);
     }
 
