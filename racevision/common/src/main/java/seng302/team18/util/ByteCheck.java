@@ -2,6 +2,7 @@ package seng302.team18.util;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 
 /**
  * This class stores the methods that are used for dealing with byte errors.
@@ -34,7 +35,10 @@ public class ByteCheck {
      * @return converted byte array
      */
     public static byte[] longToByteArray(long value) {
-        return ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN).putLong(value).array();
+//        return ByteBuffer.allocate(Long.BYTES).order(ByteOrder.BIG_ENDIAN).putLong(value).array();
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(value);
+        return buffer.array();
     }
 
     /**
@@ -96,17 +100,24 @@ public class ByteCheck {
             }
             // May run into trouble with unsigned things and need to work with them
             finalValue = ByteBuffer.wrap(b, 0, 8).order(ByteOrder.LITTLE_ENDIAN).getLong();
+            System.out.println("upper" + finalValue);
         } else {
             finalValue = ByteBuffer.wrap(bytes, index, length).order(ByteOrder.LITTLE_ENDIAN).getLong();
+            System.out.println("lower" + finalValue);
         }
         return finalValue;
+//        byte[] myb = Arrays.copyOfRange(bytes, index, (index + length));
+//        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+//        buffer.put((byte)0 + (byte) 0 + myb);
+//        buffer.flip();//need flip
+//        return buffer.getLong();
     }
 
     /**
-     * Method to conver a byte array to little edian format.
+     * Method to conver a byte array to little endian format.
      * @param bytes a byte array to be converted
      * @param length length of the byte array
-     * @return the byte array in little edian format
+     * @return the byte array in little endian format
      */
     public static byte[] convertToLittleEndian(byte[] bytes, int length) {
         ByteBuffer buffer = ByteBuffer.allocate(length);

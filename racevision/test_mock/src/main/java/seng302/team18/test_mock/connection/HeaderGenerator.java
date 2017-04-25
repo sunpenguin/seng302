@@ -29,6 +29,8 @@ public class HeaderGenerator {
 
         byte messageType = (byte) type;
 
+        //WARNING: this is wrong
+        //TODO: make it not wrong
         Timestamp time = new Timestamp(System.currentTimeMillis());
         long timestamp =  time.getTime(); //number of milliseconds since January 1, 1970, 00:00:00 GMT
         byte[] timestampBytes =  ByteCheck.longToByteArray(timestamp);
