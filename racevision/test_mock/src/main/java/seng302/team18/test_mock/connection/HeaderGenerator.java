@@ -31,10 +31,26 @@ public class HeaderGenerator {
 
         //WARNING: this is wrong
         //TODO: make it not wrong
-        Timestamp time = new Timestamp(System.currentTimeMillis());
-        long timestamp =  time.getTime(); //number of milliseconds since January 1, 1970, 00:00:00 GMT
-        byte[] timestampBytes =  ByteCheck.longToByteArray(timestamp);
-        timestampBytes = Arrays.copyOfRange(timestampBytes, 2, 8); //Shave the first 2 bytes off
+//        Timestamp time = new Timestamp(System.currentTimeMillis());
+//        long timestamp =  time.getTime(); //number of milliseconds since January 1, 1970, 00:00:00 GMT
+
+
+        long timestamp = System.currentTimeMillis();
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(timestamp);
+        byte[] timestampBytes = new byte[6];
+        System.arraycopy(buffer.array(), 2, timestampBytes, 0, 6);
+
+        for(int i = 0; i < timestampBytes.length / 2; i++)
+        {
+            byte temp = timestampBytes[i];
+            timestampBytes[i] = timestampBytes[timestampBytes.length - i - 1];
+            timestampBytes[timestampBytes.length - i - 1] = temp;
+        }
+
+
+//        byte[] timestampBytes =  ByteCheck.longToByteArray(timestamp);
+//        timestampBytes = Arrays.copyOfRange(timestampBytes, 2, 8); //Shave the first 2 bytes off
 
         // TODO: How to make reasonable sourceID?
         byte[] sourceID = new byte[4];
