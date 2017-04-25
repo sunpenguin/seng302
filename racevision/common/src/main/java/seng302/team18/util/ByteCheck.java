@@ -100,17 +100,10 @@ public class ByteCheck {
             }
             // May run into trouble with unsigned things and need to work with them
             finalValue = ByteBuffer.wrap(b, 0, 8).order(ByteOrder.LITTLE_ENDIAN).getLong();
-            System.out.println("upper" + finalValue);
         } else {
             finalValue = ByteBuffer.wrap(bytes, index, length).order(ByteOrder.LITTLE_ENDIAN).getLong();
-            System.out.println("lower" + finalValue);
         }
         return finalValue;
-//        byte[] myb = Arrays.copyOfRange(bytes, index, (index + length));
-//        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-//        buffer.put((byte)0 + (byte) 0 + myb);
-//        buffer.flip();//need flip
-//        return buffer.getLong();
     }
 
     /**
