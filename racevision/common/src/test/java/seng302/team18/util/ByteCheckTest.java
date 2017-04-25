@@ -1,6 +1,6 @@
 package seng302.team18.util;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -50,10 +50,10 @@ public class ByteCheckTest {
         int actual4 = ByteCheck.byteToIntConverter(b1, 0, 0);
         int expected4 = 0; // Length 0
 
-        Assert.assertEquals(expected1, actual1);
-        Assert.assertEquals(expected2, actual2);
-        Assert.assertEquals(expected3, actual3);
-        Assert.assertEquals(expected4, actual4);
+        assertEquals(expected1, actual1);
+        assertEquals(expected2, actual2);
+        assertEquals(expected3, actual3);
+        assertEquals(expected4, actual4);
     }
 
     @Test
@@ -67,9 +67,47 @@ public class ByteCheckTest {
         long actual4 = ByteCheck.byteToLongConverter(b1, 0, 0);
         long expected4 = 0; // Length 0
 
-        Assert.assertEquals(expected1, actual1);
-        Assert.assertEquals(expected2, actual2);
-        Assert.assertEquals(expected3, actual3);
-        Assert.assertEquals(expected4, actual4);
+        assertEquals(expected1, actual1);
+        assertEquals(expected2, actual2);
+        assertEquals(expected3, actual3);
+        assertEquals(expected4, actual4);
+    }
+
+    @Test
+    public void intToByteTest() {
+        int expectedInt1 = 46576;
+        byte[] bytes1 = ByteCheck.intToByteArray(expectedInt1);
+        int actualInt1 = ByteCheck.byteToIntConverter(bytes1, 0, 4);
+
+        int expectedInt2 = 6;
+        byte[] bytes2 = ByteCheck.intToByteArray(expectedInt2);
+        int actualInt2 = ByteCheck.byteToIntConverter(bytes2, 0, 4);
+
+        int expectedInt3 = 1265541335;
+        byte[] bytes3 = ByteCheck.intToByteArray(expectedInt3);
+        int actualInt3 = ByteCheck.byteToIntConverter(bytes3, 0, 4);
+
+        assertEquals(expectedInt1, actualInt1);
+        assertEquals(expectedInt2, actualInt2);
+        assertEquals(expectedInt3, actualInt3);
+    }
+
+    @Test
+    public void shortToByteTest() {
+        short expectedShort1 = 4;
+        byte[] bytes1 = ByteCheck.shortToByteArray(expectedShort1);
+        int acutualShort1 = ByteCheck.byteToIntConverter(bytes1, 0, 2);
+
+        short expectedShort2 = 16000;
+        byte[] bytes2 = ByteCheck.shortToByteArray(expectedShort2);
+        int acutualShort2 = ByteCheck.byteToIntConverter(bytes2, 0, 2);
+
+        short expectedShort3 = 6587;
+        byte[] bytes3 = ByteCheck.shortToByteArray(expectedShort3);
+        int acutualShort3 = ByteCheck.byteToIntConverter(bytes3, 0, 2);
+
+        assertEquals(expectedShort1, acutualShort1);
+        assertEquals(expectedShort2, acutualShort2);
+        assertEquals(expectedShort3, acutualShort3);
     }
 }

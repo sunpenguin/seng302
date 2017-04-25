@@ -36,7 +36,7 @@ public class HeaderGeneratorTest {
 
     @Test
     public void headerTest() throws IOException {
-        short msgLen = 0;
+        short msgLen = 10;
         int type = 26;
         byte[] headerBytes = HeaderGenerator.generateHeader(type, msgLen);
 
@@ -46,7 +46,7 @@ public class HeaderGeneratorTest {
 
         long expectedTime = System.currentTimeMillis();
         int expectedSourceID = 1568366138; // Get real value
-        int expectedMsgLen = 0;
+        int expectedMsgLen = 10;
 
         int actualSync1 = ByteCheck.byteToIntConverter(headerBytes, SYNC_1_POS, SYNC_1_LEN);
         int actualSync2 = ByteCheck.byteToIntConverter(headerBytes, SYNC_2_POS, SYNC_2_LEN);

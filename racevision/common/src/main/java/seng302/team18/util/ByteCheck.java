@@ -9,36 +9,74 @@ import java.nio.ByteOrder;
  */
 public class ByteCheck {
 
-
     /**
      * Convert an int to a byte array of length 4. Endianness is big endian
      * @param value value to convert
      * @return converted byte array
      */
     public static byte[] intToByteArray(int value) {
-        return ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(value).array();
+//        return ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(value).array();
+        ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
+        buffer.putInt(value);
+
+        byte[] result = new byte[4];
+        System.arraycopy(buffer.array(), 0, result, 0, 4);
+
+        for(int i = 0; i < result.length / 2; i++)
+        {
+            byte temp = result[i];
+            result[i] = result[result.length - i - 1];
+            result[result.length - i - 1] = temp;
+        }
+
+        return result;
     }
 
-    /**
-     * Convert an double to a byte array of length 8. Endianness is big endian
-     * @param value value to convert
-     * @return converted byte array
-     */
-    public static byte[] doubleToByteArray(double value) {
-        return ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN).putDouble(value).array();
-    }
+//    /**
+//     * Convert an double to a byte array of length 8. Endianness is big endian
+//     * @param value value to convert
+//     * @return converted byte array
+//     */
+//    public static byte[] doubleToByteArray(double value) {
+////        return ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN).putDouble(value).array();
+//        ByteBuffer buffer = ByteBuffer.allocate(Double.BYTES);
+//        buffer.putDouble(value);
+//
+//        byte[] result = new byte[8];
+//        System.arraycopy(buffer.array(), 0, result, 0, 8);
+//
+//        for(int i = 0; i < result.length / 2; i++)
+//        {
+//            byte temp = result[i];
+//            result[i] = result[result.length - i - 1];
+//            result[result.length - i - 1] = temp;
+//        }
+//
+//        return result;
+//    }
 
-    /**
-     * Convert an long to a byte array of length 8. Endianness is big endian
-     * @param value value to convert
-     * @return converted byte array
-     */
-    public static byte[] longToByteArray(long value) {
-//        return ByteBuffer.allocate(Long.BYTES).order(ByteOrder.BIG_ENDIAN).putLong(value).array();
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.putLong(value);
-        return buffer.array();
-    }
+//    /**
+//     * Convert an long to a byte array of length 8. Endianness is big endian
+//     * @param value value to convert
+//     * @return converted byte array
+//     */
+//    public static byte[] longToByteArray(long value) {
+////        return ByteBuffer.allocate(Long.BYTES).order(ByteOrder.BIG_ENDIAN).putLong(value).array();
+//        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+//        buffer.putLong(value);
+//
+//        byte[] result = new byte[8];
+//        System.arraycopy(buffer.array(), 0, result, 0, 8);
+//
+//        for(int i = 0; i < result.length / 2; i++)
+//        {
+//            byte temp = result[i];
+//            result[i] = result[result.length - i - 1];
+//            result[result.length - i - 1] = temp;
+//        }
+//
+//        return result;
+//    }
 
     /**
      * Convert a short to a byte array of length 2. Endianness is big endian
@@ -46,7 +84,21 @@ public class ByteCheck {
      * @return converted byte array
      */
     public static byte[] shortToByteArray(short value) {
-        return ByteBuffer.allocate(2).order(ByteOrder.BIG_ENDIAN).putShort(value).array();
+//        return ByteBuffer.allocate(2).order(ByteOrder.BIG_ENDIAN).putShort(value).array();
+        ByteBuffer buffer = ByteBuffer.allocate(Short.BYTES);
+        buffer.putShort(value);
+
+        byte[] result = new byte[2];
+        System.arraycopy(buffer.array(), 0, result, 0, 2);
+
+        for(int i = 0; i < result.length / 2; i++)
+        {
+            byte temp = result[i];
+            result[i] = result[result.length - i - 1];
+            result[result.length - i - 1] = temp;
+        }
+
+        return result;
     }
 
     /**

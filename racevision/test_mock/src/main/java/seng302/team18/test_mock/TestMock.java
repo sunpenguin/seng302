@@ -76,6 +76,12 @@ public class TestMock {
         server.closeServer();
     }
 
+    public ActiveRace testRun() {
+        readFiles();
+        generateClasses();
+        return race;
+    }
+
     /**
      * Initialise the generators for scheduled messages
      */

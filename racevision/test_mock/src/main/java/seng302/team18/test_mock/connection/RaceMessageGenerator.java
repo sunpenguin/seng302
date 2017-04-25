@@ -7,6 +7,7 @@ import seng302.team18.util.ByteCheck;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -40,6 +41,12 @@ public class RaceMessageGenerator extends ScheduledMessage {
         byte[] currentTimeBytes = ByteCheck.getCurrentTime6Bytes();
 
         byte[] raceIDBytes = ByteCheck.intToByteArray(race.getRaceID());
+
+//        short num = (short) 8000;
+//        byte[] numBytes = ByteCheck.shortToByteArray(num);
+//        byte[] little = ByteCheck.convertToLittleEndian(numBytes, 2);
+//        int result = ByteCheck.byteToIntConverter(little, 0, 2);
+//        System.out.println(result);
 
         byte raceStatusByte = race.getRaceStatusNumber();
 
@@ -83,10 +90,9 @@ public class RaceMessageGenerator extends ScheduledMessage {
             messageLength += 20;
         }
 
-
         byte header[] = outputSteam.toByteArray();
 
-        return ByteCheck.convertToLittleEndian(header,0);
+        return ByteCheck.convertToLittleEndian(header, messageLength);
     }
 
 
@@ -151,7 +157,6 @@ public class RaceMessageGenerator extends ScheduledMessage {
         }
 //        System.out.println(message);
 //        System.out.println(message.length());
-        System.out.println(message);
         return message;
     }
 
