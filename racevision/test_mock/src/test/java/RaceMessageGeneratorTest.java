@@ -58,16 +58,16 @@ public class RaceMessageGeneratorTest {
             generatedBytes = generator.getMessage();
 
             int expectedMsgVersion = 2;
-//            long expectedCurrentTime = System.currentTimeMillis();
+            long expectedCurrentTime = System.currentTimeMillis();
             int expectedRaceID = testRace.getRaceID();
 
 
             int actualMsgVersion = ByteCheck.byteToIntConverter(generatedBytes, VERSION_P, VERSION_L);
-//            long actualCurrentTime = ByteCheck.byteToLongConverter(generatedBytes, CURRENT_TIME_P, CURRENT_TIME_L);
+            long actualCurrentTime = ByteCheck.byteToLongConverter(generatedBytes, CURRENT_TIME_P, CURRENT_TIME_L);
             int actualRaceID = ByteCheck.byteToIntConverter(generatedBytes, RACE_ID_P, RACE_ID_L);
 
             assertEquals(expectedMsgVersion, actualMsgVersion);
-//            assertEquals(expectedCurrentTime, actualCurrentTime, 10);
+            assertEquals(expectedCurrentTime, actualCurrentTime, 10);
             assertEquals(expectedRaceID, actualRaceID);
         } catch (IOException e) {
             e.printStackTrace();
