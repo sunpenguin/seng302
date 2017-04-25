@@ -79,7 +79,7 @@ public class TestMock {
      * Initialise the generators for scheduled messages
      */
     private void initMessageGenerators() {
-        messages.add(new BoatMessageGenerator(race.getStartingList()));
+        //messages.add(new BoatMessageGenerator(race.getStartingList()));
     }
 
 

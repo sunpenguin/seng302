@@ -50,6 +50,9 @@ public class ByteCheck {
         return ByteBuffer.allocate(2).order(ByteOrder.BIG_ENDIAN).putShort(value).array();
     }
 
+
+
+
     /**
      * The method which converts the byte array (little endian) to integer.
      * Corrects if there are less than 4 bytes.
