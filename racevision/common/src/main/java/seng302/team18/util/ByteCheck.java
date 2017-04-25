@@ -2,7 +2,6 @@ package seng302.team18.util;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Arrays;
 
 /**
  * This class stores the methods that are used for dealing with byte errors.
@@ -117,5 +116,23 @@ public class ByteCheck {
         buffer.put(bytes);
         buffer.order(ByteOrder.LITTLE_ENDIAN);
         return buffer.array();
+    }
+
+
+    public static byte[] getCurrentTime6Bytes() {
+        long timestamp = System.currentTimeMillis();
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(timestamp);
+        byte[] timestampBytes = new byte[6];
+        System.arraycopy(buffer.array(), 2, timestampBytes, 0, 6);
+
+        for(int i = 0; i < timestampBytes.length / 2; i++)
+        {
+            byte temp = timestampBytes[i];
+            timestampBytes[i] = timestampBytes[timestampBytes.length - i - 1];
+            timestampBytes[timestampBytes.length - i - 1] = temp;
+        }
+
+        return timestampBytes;
     }
 }

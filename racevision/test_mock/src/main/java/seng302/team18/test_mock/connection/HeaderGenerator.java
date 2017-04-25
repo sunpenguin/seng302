@@ -1,16 +1,8 @@
 package seng302.team18.test_mock.connection;
 
-import seng302.team18.data.AC35MessageHeadParser;
 import seng302.team18.util.ByteCheck;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * Class to generate headers for messages to be sent via the server.
@@ -29,28 +21,7 @@ public class HeaderGenerator {
 
         byte messageType = (byte) type;
 
-        //WARNING: this is wrong
-        //TODO: make it not wrong
-//        Timestamp time = new Timestamp(System.currentTimeMillis());
-//        long timestamp =  time.getTime(); //number of milliseconds since January 1, 1970, 00:00:00 GMT
-
-
-        long timestamp = System.currentTimeMillis();
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.putLong(timestamp);
-        byte[] timestampBytes = new byte[6];
-        System.arraycopy(buffer.array(), 2, timestampBytes, 0, 6);
-
-        for(int i = 0; i < timestampBytes.length / 2; i++)
-        {
-            byte temp = timestampBytes[i];
-            timestampBytes[i] = timestampBytes[timestampBytes.length - i - 1];
-            timestampBytes[timestampBytes.length - i - 1] = temp;
-        }
-
-
-//        byte[] timestampBytes =  ByteCheck.longToByteArray(timestamp);
-//        timestampBytes = Arrays.copyOfRange(timestampBytes, 2, 8); //Shave the first 2 bytes off
+        byte[] timestampBytes = ByteCheck.getCurrentTime6Bytes();
 
         // TODO: How to make reasonable sourceID?
         byte[] sourceID = new byte[4];
