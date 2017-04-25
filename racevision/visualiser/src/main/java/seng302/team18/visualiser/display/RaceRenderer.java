@@ -74,6 +74,7 @@ public class RaceRenderer {
                 displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
+                displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
             }
         }
     }

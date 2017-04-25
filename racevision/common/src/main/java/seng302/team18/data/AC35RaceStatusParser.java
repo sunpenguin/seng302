@@ -13,19 +13,21 @@ import java.util.Map;
  */
 public class AC35RaceStatusParser implements MessageBodyParser {
 
-    final int CURRENT_TIME_INDEX = 1;
-    final int CURRENT_TIME_LENGTH = 6;
-    final int START_TIME_INDEX = 12;
-    final int START_TIME_LENGTH = 6;
-    final int BOAT_SOURCEID_INDEX =  24;
-    final int BOAT_SOURCEID_LENGTH = 4;
-    final int ESTIMATED_TIME_AT_NEXT_MARK_INDEX = 32;
-    final int ESTIMATED_TIME_AT_NEXT_MARK_LENGTH = 6;
 
-    final int BOAT_STATUS_LENGTH = 20;
 
     @Override
     public MessageBody parse(byte[] bytes) { // more final declarations than actual code LOL
+        final int CURRENT_TIME_INDEX = 1;
+        final int CURRENT_TIME_LENGTH = 6;
+        final int START_TIME_INDEX = 12;
+        final int START_TIME_LENGTH = 6;
+        final int BOAT_SOURCEID_INDEX =  24;
+        final int BOAT_SOURCEID_LENGTH = 4;
+        final int ESTIMATED_TIME_AT_NEXT_MARK_INDEX = 32;
+        final int ESTIMATED_TIME_AT_NEXT_MARK_LENGTH = 6;
+
+        final int BOAT_STATUS_LENGTH = 20;
+
         Map<Integer, Long> boatStatus = new HashMap<>();
         long currentTime = ByteCheck.byteToLongConverter(bytes, CURRENT_TIME_INDEX, CURRENT_TIME_LENGTH);
         long startTime = ByteCheck.byteToLongConverter(bytes, START_TIME_INDEX, START_TIME_LENGTH);
