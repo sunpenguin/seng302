@@ -9,31 +9,31 @@ import java.io.IOException;
  * Created by jds112 on 9/04/17.
  */
 public class SocketMessageReceiverTest {
-    private SocketMessageReceiver socketMessageReceiver;
-
-    @Before
-    public void setUp() {
-        try {
-            socketMessageReceiver = new SocketMessageReceiver(4941, new AC35MessageParserFactory());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Test
-    public void runTest() throws Exception {
-        int x = 0;
-        boolean X = true;
-        while(X) {
-            MessageBody message = socketMessageReceiver.nextMessage();
-            x ++;
-            if (x == 100 - 1) {
-                X = false;
-            }
-            Thread.sleep(100);
-        }
-    }
+//    private SocketMessageReceiver socketMessageReceiver;
+//
+//    @Before
+//    public void setUp() {
+//        try {
+//            socketMessageReceiver = new SocketMessageReceiver(4941, new AC35MessageParserFactory());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+//
+//    @Test
+//    public void runTest() throws Exception {
+//        int x = 0;
+//        boolean X = true;
+//        while(X) {
+//            MessageBody message = socketMessageReceiver.nextMessage();
+//            x ++;
+//            if (x == 100 - 1) {
+//                X = false;
+//            }
+//            Thread.sleep(100);
+//        }
+//    }
 
 
 //    @After
