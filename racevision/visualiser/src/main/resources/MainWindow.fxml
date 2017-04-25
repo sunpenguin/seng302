@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0"
-            prefWidth="1280.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="seng302.team18.visualiser.controller.MainWindowController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.MainWindowController">
    <children>
       <MenuBar prefHeight="30.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
@@ -62,12 +62,17 @@
                      </font>
                   </Text>
                   <Text layoutX="455.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
-                  <ToggleButton fx:id="fpsToggler" layoutX="455.0" layoutY="393.0" mnemonicParsing="false" onAction="#toggleFPS" prefHeight="26.0" prefWidth="96.0" text="Toggle FPS" AnchorPane.rightAnchor="39.0" />
+                  <ToggleButton fx:id="fpsToggler" layoutX="463.0" layoutY="393.0" mnemonicParsing="false" onAction="#toggleFPS" prefHeight="26.0" prefWidth="96.0" text="Toggle FPS" AnchorPane.rightAnchor="31.0" />
                   <Text layoutX="161.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Official Race Clock">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Text>
+                  <CheckBox layoutX="14.0" layoutY="397.0" mnemonicParsing="false" onAction="#toggleBoatName" selected="true" text="Boat Name" />
+                  <CheckBox layoutX="124.0" layoutY="397.0" mnemonicParsing="false" onAction="#toggleBoatSpeed" text="Boat Speed" />
+                  <CheckBox layoutX="231.0" layoutY="397.0" mnemonicParsing="false" onAction="#toggleEstimatedTime" text="Estimated Time to Next Mark" />
+                  <Label layoutX="196.0" layoutY="371.0" text="Important Annotation Settings" />
+                  <Separator layoutY="361.0" prefWidth="590.0" />
                </children>
             </AnchorPane>
             <TableView fx:id="tableView" layoutY="430.0" prefHeight="260.0" prefWidth="511.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

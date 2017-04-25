@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import seng302.team18.data.AC35MessageParserFactory;
@@ -41,6 +42,11 @@ public class MainWindowController {
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
 
+    private Boolean onImportant;
+    private Boolean boatNameImportant;
+    private Boolean boatSpeedImportant;
+    private Boolean estimatedTimeImportant;
+
     private Race race;
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
@@ -51,31 +57,10 @@ public class MainWindowController {
     @FXML
     @SuppressWarnings("unused")
     public void initialize() {
-//        this.race = new Race();
-//        arrow.setRotate(race.getCourse().getWindDirection());
-//        raceRenderer = new RaceRenderer(race, group, raceViewPane);
-//        raceRenderer.renderBoats();
-//        courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
-//        raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
-//        raceClock = new RaceClock(timerLabel, race, -Race.PREP_TIME_SECONDS);
-//        try {
-//            raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), new RaceMessageInterpreter(race), new SocketMessageReceiver(4941, new AC35MessageParserFactory()));
-//            raceLoop.start();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-//        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
-//            courseRenderer.renderCourse();
-//            raceRenderer.renderBoats();
-//            raceRenderer.reDrawTrail(race.getStartingList());
-//        });
-//        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
-//            courseRenderer.renderCourse();
-//            raceRenderer.renderBoats();
-//            raceRenderer.reDrawTrail(race.getStartingList());
-//        });
-//        setUpTable();
+        onImportant = false;
+        boatNameImportant = true;
+        boatSpeedImportant = false;
+        estimatedTimeImportant = false;
     }
 
 
@@ -87,6 +72,7 @@ public class MainWindowController {
 
     @FXML
     public void setFullAnnotationLevel() {
+        onImportant = false;
         for (AnnotationType type : AnnotationType.values()) {
             raceRenderer.setVisibleAnnotations(type, true);
         }
@@ -95,6 +81,7 @@ public class MainWindowController {
 
     @FXML
     public void setNoneAnnotationLevel() {
+        onImportant = false;
         for (AnnotationType type : AnnotationType.values()) {
             raceRenderer.setVisibleAnnotations(type, false);
         }
@@ -103,9 +90,34 @@ public class MainWindowController {
 
     @FXML
     public void setImportantAnnotationLevel() {
-        raceRenderer.setVisibleAnnotations(AnnotationType.NAME, true);
-        raceRenderer.setVisibleAnnotations(AnnotationType.SPEED, false);
-        raceRenderer.setVisibleAnnotations(AnnotationType.ESTIMATED_TIME_NEXT_MARK, false);
+        onImportant = true;
+        raceRenderer.setVisibleAnnotations(AnnotationType.NAME, boatNameImportant);
+        raceRenderer.setVisibleAnnotations(AnnotationType.SPEED, boatSpeedImportant);
+        raceRenderer.setVisibleAnnotations(AnnotationType.ESTIMATED_TIME_NEXT_MARK, estimatedTimeImportant);
+    }
+
+
+    public void toggleBoatName() {
+        boatNameImportant = !boatNameImportant;
+        if (onImportant) {
+            setImportantAnnotationLevel();
+        }
+    }
+
+
+    public void toggleBoatSpeed() {
+        boatSpeedImportant = !boatSpeedImportant;
+        if (onImportant) {
+            setImportantAnnotationLevel();
+        }
+    }
+
+
+    public void toggleEstimatedTime() {
+        estimatedTimeImportant = !estimatedTimeImportant;
+        if (onImportant) {
+            setImportantAnnotationLevel();
+        }
     }
 
 
