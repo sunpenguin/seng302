@@ -2,11 +2,9 @@ package seng302.team18.test_mock;
 
 import seng302.team18.model.*;
 import seng302.team18.test_mock.XMLparsers.*;
-import seng302.team18.test_mock.connection.BoatMessageGenerator;
-import seng302.team18.test_mock.connection.RaceMessageGenerator;
-import seng302.team18.test_mock.connection.ScheduledMessage;
-import seng302.team18.test_mock.connection.Server;
+import seng302.team18.test_mock.connection.*;
 
+import java.io.IOException;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,7 @@ public class TestMock {
     private ActiveRace race;
 
     private String regattaXML = "/AC35regatta.xml";
-    private String boatsXML = "/AC35boats.xml";
+    private String boatsXML = "/boats_test1.xml";
     private String raceXML = "/AC35race.xml";
 
     private AC35RegattaContainer ac35RegattaContainer;
@@ -75,12 +73,19 @@ public class TestMock {
         server.closeServer();
     }
 
+    public ActiveRace testRun() {
+        readFiles();
+        generateClasses();
+        return race;
+    }
+
     /**
      * Initialise the generators for scheduled messages
      */
     private void initMessageGenerators() {
         messages.add(new BoatMessageGenerator(race.getStartingList()));
         messages.add(new RaceMessageGenerator(race));
+        messages.add(new HeartBeatMessageGenerator());
     }
 
 
@@ -98,6 +103,7 @@ public class TestMock {
             timeCurr = System.currentTimeMillis();
 
             // Update simulation
+            race.setRaceStatusNumber((byte) 3);
             race.updateBoats((timeCurr - timeLast) * 1e3);
 
             // Send messages if needed
@@ -149,8 +155,9 @@ public class TestMock {
         int raceID = ac35RaceContainer.getRaceID();
 
         race = new ActiveRace(startingList, course, raceID);
-        RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
-        raceMessageGenerator.getMessage();
+
+//        RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
+//        raceMessageGenerator.getMessage();
     }
 
     public String getRegattaXML() {

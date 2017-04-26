@@ -18,6 +18,7 @@ public class BoatMessageGenerator {
     final int MMPS_TO_KMPH = 36 / 10000;
 
     public BoatMessageGenerator(List<Boat> boats) {
+        super(5, 37); //TODO magic number: fix this
         this.boats = boats;
     }
 

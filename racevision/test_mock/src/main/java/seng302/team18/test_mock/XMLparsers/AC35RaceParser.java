@@ -72,7 +72,6 @@ public class AC35RaceParser {
             raceContainer.setParticipantIDs(participantIDs);
             raceContainer.setStartTime(startTimeString);
             raceContainer.setRaceID(raceID);
-            System.out.println(raceID);
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
             return null;

@@ -1,8 +1,13 @@
 package seng302.team18.test_mock.connection;
 
 import seng302.team18.model.*;
+import seng302.team18.test_mock.ActiveRace;
 import seng302.team18.util.ByteCheck;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -16,93 +21,71 @@ import java.util.List;
  */
 public class RaceMessageGenerator extends ScheduledMessage {
 
-    private Race race;
+    private ActiveRace race;
     private String message;
 
-    public RaceMessageGenerator(Race race) {
-        super(2);
+    public RaceMessageGenerator(ActiveRace race) {
+        super(2, 12);
+
         this.race = race;
     }
 
     @Override
-    public byte[] getMessage() {
+    public byte[] getPayload() throws IOException {
 
-        byte messageVersionNumber = 0x2;
+        ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
 
-        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        long expectedTime = currentTime.getTime();
-        byte[] currentTimeBytes = ByteCheck.longToByteArray(expectedTime);
-        currentTimeBytes = Arrays.copyOfRange(currentTimeBytes, 2, 8);
+        byte messageVersionNumberBytes = 0x2;
 
-        //int raceID =
-        byte[] sam  = new byte[4];
-        return sam;
-    }
+        byte[] currentTimeBytes = ByteCheck.getCurrentTime6Bytes();
 
+        byte[] raceIDBytes = ByteCheck.intToByteArray(race.getRaceID());
 
-    public String getMessage2() {
+        byte raceStatusByte = race.getRaceStatusNumber();
 
-        List<Boat> boats = race.getStartingList();
+        byte[] expectedStartTimeBytes = ByteCheck.getCurrentTime6Bytes(); // TODO: Use a reasonable starting time
 
-//        List<BoundaryMark> boundaries = race.getCourse().getBoundaries();
-//        List<CompoundMark> compoundMarks = race.getCourse().getCompoundMarks();
-//        List<MarkRounding> markRoundings = race.getCourse().getMarkRoundings();
-//        List<Integer> boatsSourceIDs = new ArrayList<>();
+        byte[] raceWindDirectionBytes = ByteCheck.shortToByteArray((short) 0x4000);
+                // Currently set to east TODO: make this a field of race or boat?
 
-//        DateTime dateTime = new DateTime(DateTime.UTC);
-        ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
-        utc.format(DateTimeFormatter.ofPattern("hh:mm"));
-        String currentTime = fixLength(String.valueOf(utc), 6);
-//        System.out.println(currentTime);
-        String raceID = fixLength("11080703", 4); //TODO store raceId as variable and use it here
-//        System.out.println(raceID);
-        String raceStatus = "0"; //it may switch to other value in the future.
-//        System.out.println(raceStatus);
-        String startTime = fixLength(String.valueOf(Instant.now().toEpochMilli()), 6); //it is milllisecs from 1.1.1997 until now
-//        System.out.println(startTime);
-        String windDirection = fixLength(String.valueOf(race.getCourse().getWindDirection()), 2);
-//        System.out.println(windDirection);
-        String windSpeed = fixLength("3100", 2); //it may change in the future
-//        System.out.println(windSpeed);
-        String numOfBoats = String.valueOf(boats.size());
-//        System.out.println(numOfBoats);
-        String raceType = "1";
+        byte[] raceWindSpeedBytes = ByteCheck.shortToByteArray((short) 5000);
+                // Currently 18 km/h TODO: make this a field of race or boat?
 
-        message = " " + currentTime + raceID + raceStatus + startTime + windDirection + windSpeed + numOfBoats + raceType;
+        byte numBoatsByte = (byte) race.getStartingList().size();
 
-        for (Boat b: boats) {
-            String sourceID = fixLength(String.valueOf(b.getId()), 4);
-//            System.out.println(sourceID);
-            message += sourceID;
-            String boatStatus = "0"; // it may change later
-//            System.out.println(boatStatus);
-            message += boatStatus;
-            String legNo = "0"; // it may change later to 1 or 2
-//            System.out.println(legNo);
-            message += legNo;
-            String numOfPenaltiesAwarded = " ";
-//            System.out.println(numOfPenaltiesAwarded);
-            message += numOfPenaltiesAwarded;
-            String numOfPenaltiesServed = " ";
-//            System.out.println(numOfPenaltiesServed);
-            message += numOfPenaltiesServed;
+        byte raceTypeByte = 0x2; // Currently set to fleet race TODO: add this to race xml parser + race class
 
-            Coordinate boatCurrentPosition = b.getCoordinate();
-            Coordinate boatNextMark = b.getDestination();
-            double distance = boatCurrentPosition.distance(boatNextMark) / 1000; // km
-            double time = distance / b.getSpeed() * 3.6e+6; // millisecond
-            String timeToNextMark = fixLength(String.valueOf(time), 6);
-            message += timeToNextMark;
+        outputSteam.write(messageVersionNumberBytes);
+        outputSteam.write(currentTimeBytes);
+        outputSteam.write(raceIDBytes);
+        outputSteam.write(raceStatusByte);
+        outputSteam.write(expectedStartTimeBytes);
+        outputSteam.write(raceWindDirectionBytes);
+        outputSteam.write(raceWindSpeedBytes);
+        outputSteam.write(numBoatsByte);
+        outputSteam.write(raceTypeByte);
 
-            String timeToFinish = fixLength("60000", 6); // assume the race will end in 1 minute
-//            System.out.println(timeToFinish);
-            message += timeToFinish;
-//            boatsSourceIDs.add(b.getId());
+        for (Boat boat : race.getStartingList()) {
+            byte[] sourceIDBytes = ByteCheck.intToByteArray(boat.getId());
+            byte statusByte = 0x2; // TODO: Currently always "racing" need to add this to boat class, update as race goes on
+            byte legNumberByte = (byte) boat.getLeg().getLegNumber(); // TODO: Update leg numbers so that 0 is prestart, 1 is first leg and so on
+            byte numPenaltiesAwardedByte = 7; // TODO: Add this field to boat
+            byte numPenaltiesServedByte = 4; // TODO: Add this field to boat
+            byte[] estTimeAtNextMark = ByteCheck.convertLongTo6ByteArray(11111111111L); // TODO: calculate this value
+            byte[] estTimeAtFinish = ByteCheck.convertLongTo6ByteArray(6666666666L); // TODO: calculate this value
+
+            outputSteam.write(sourceIDBytes);
+            outputSteam.write(statusByte);
+            outputSteam.write(legNumberByte);
+            outputSteam.write(numPenaltiesAwardedByte);
+            outputSteam.write(numPenaltiesServedByte);
+            outputSteam.write(estTimeAtNextMark);
+            outputSteam.write(estTimeAtFinish);
         }
-//        System.out.println(message);
-//        System.out.println(message.length());
-        System.out.println(message);
-        return message;
+
+        byte payLoad[] = outputSteam.toByteArray();
+
+        return ByteCheck.convertToLittleEndian(payLoad, payLoad.length);
     }
 
     private String fixLength(String s, int len) { //TODO move to super class so all subclasses can use this
