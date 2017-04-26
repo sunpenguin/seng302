@@ -2,10 +2,7 @@ package seng302.team18.test_mock;
 
 import seng302.team18.model.*;
 import seng302.team18.test_mock.XMLparsers.*;
-import seng302.team18.test_mock.connection.BoatMessageGenerator;
-import seng302.team18.test_mock.connection.RaceMessageGenerator;
-import seng302.team18.test_mock.connection.ScheduledMessage;
-import seng302.team18.test_mock.connection.Server;
+import seng302.team18.test_mock.connection.*;
 
 import java.io.IOException;
 import java.time.ZoneId;
@@ -88,6 +85,7 @@ public class TestMock {
     private void initMessageGenerators() {
         messages.add(new BoatMessageGenerator(race.getStartingList()));
         messages.add(new RaceMessageGenerator(race));
+        messages.add(new HeartBeatMessageGenerator());
     }
 
 
