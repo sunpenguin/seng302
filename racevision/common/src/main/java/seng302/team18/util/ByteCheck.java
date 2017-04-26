@@ -10,7 +10,7 @@ import java.nio.ByteOrder;
 public class ByteCheck {
 
     /**
-     * Convert an int to a byte array of length 4. Endianness is big endian
+     * Convert an int to a byte array of length 4. Endianness is little endian
      * @param value value to convert
      * @return converted byte array
      */
@@ -79,7 +79,7 @@ public class ByteCheck {
 //    }
 
     /**
-     * Convert a short to a byte array of length 2. Endianness is big endian
+     * Convert a short to a byte array of length 2. Endianness is little endian
      * @param value value to convert
      * @return converted byte array
      */
@@ -158,7 +158,7 @@ public class ByteCheck {
     }
 
     /**
-     * Method to conver a byte array to little endian format.
+     * Method to convert a byte array to little endian format.
      * @param bytes a byte array to be converted
      * @param length length of the byte array
      * @return the byte array in little endian format

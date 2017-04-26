@@ -42,19 +42,15 @@ public class RaceMessageGenerator extends ScheduledMessage {
 
         byte[] raceIDBytes = ByteCheck.intToByteArray(race.getRaceID());
 
-//        short num = (short) 8000;
-//        byte[] numBytes = ByteCheck.shortToByteArray(num);
-//        byte[] little = ByteCheck.convertToLittleEndian(numBytes, 2);
-//        int result = ByteCheck.byteToIntConverter(little, 0, 2);
-//        System.out.println(result);
-
         byte raceStatusByte = race.getRaceStatusNumber();
 
         byte[] expectedStartTimeBytes = ByteCheck.getCurrentTime6Bytes(); // TODO: Use a reasonable starting time
 
-        byte[] raceWindDirectionBytes = ByteCheck.shortToByteArray((short) 0x4000); // Currently set to east
+        byte[] raceWindDirectionBytes = ByteCheck.shortToByteArray((short) 0x4000);
+                // Currently set to east TODO: make this a field of race or boat?
 
-        byte[] raceWindSpeedBytes = ByteCheck.shortToByteArray((short) 5000); // Currently 18 km/h
+        byte[] raceWindSpeedBytes = ByteCheck.shortToByteArray((short) 5000);
+                // Currently 18 km/h TODO: make this a field of race or boat?
 
         byte numBoatsByte = (byte) race.getStartingList().size();
 
@@ -75,10 +71,10 @@ public class RaceMessageGenerator extends ScheduledMessage {
             byte[] sourceIDBytes = ByteCheck.intToByteArray(boat.getId());
             byte statusByte = 0x2; // TODO: Currently always "racing" need to add this to boat class, update as race goes on
             byte legNumberByte = (byte) boat.getLeg().getLegNumber(); // TODO: Update leg numbers so that 0 is prestart, 1 is first leg and so on
-            byte numPenaltiesAwardedByte = 0;
-            byte numPenaltiesServedByte = 0;
-            byte[] estTimeAtNextMark = ByteCheck.convertLongTo6ByteArray(0); // TODO: calculate this value
-            byte[] estTimeAtFinish = ByteCheck.convertLongTo6ByteArray(0); // TODO: calculate this value
+            byte numPenaltiesAwardedByte = 7; // TODO: Add this field to boat
+            byte numPenaltiesServedByte = 4; // TODO: Add this field to boat
+            byte[] estTimeAtNextMark = ByteCheck.convertLongTo6ByteArray(11111111111L); // TODO: calculate this value
+            byte[] estTimeAtFinish = ByteCheck.convertLongTo6ByteArray(6666666666L); // TODO: calculate this value
 
             outputSteam.write(sourceIDBytes);
             outputSteam.write(statusByte);
