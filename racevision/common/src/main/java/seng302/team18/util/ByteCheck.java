@@ -32,6 +32,7 @@ public class ByteCheck {
         return result;
     }
 
+    //Currently not in use
 //    /**
 //     * Convert an double to a byte array of length 8. Endianness is big endian
 //     * @param value value to convert
@@ -55,6 +56,7 @@ public class ByteCheck {
 //        return result;
 //    }
 
+    //Currently not in use
 //    /**
 //     * Convert an long to a byte array of length 8. Endianness is big endian
 //     * @param value value to convert

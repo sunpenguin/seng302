@@ -7,15 +7,20 @@ import java.io.IOException;
 /**
  * A class that generates the heartbeat for messages.
  */
-public class HeartBeatMessageGenerator{
+public class HeartBeatMessageGenerator extends ScheduledMessage{
 
     private static int seqNo = 0;
+
+    public HeartBeatMessageGenerator() {
+        super(2);
+    }
 
     /*
     Generate a heartbeat message which will contain a sequence number.
     The sequence number will increment by one every time it is called.
      */
-    public static byte[] generateHeartBeat() throws IOException {
+    @Override
+    public byte[] getMessage() throws IOException {
 
         byte[] seqNum = ByteCheck.intToByteArray(seqNo);
 
