@@ -44,6 +44,7 @@ public class RaceMessageInterpreter implements MessageInterpreter {
                 updateRaceTime((AC35RaceStatusMessage) message, race);
                 updateWindDirection((AC35RaceStatusMessage) message, race);
                 updateEstimatedTime((AC35RaceStatusMessage) message, race);
+                updateFinisherList((AC35RaceStatusMessage) message, race);
                 break;
             case BOAT_LOCATION:
                 updateBoatLocation((AC35BoatLocationMessage) message, race.getStartingList());
@@ -57,6 +58,18 @@ public class RaceMessageInterpreter implements MessageInterpreter {
         }
     }
 
+    private void updateFinisherList(AC35RaceStatusMessage message, Race race) {
+        List<Boat> finishedList = race.getFinishedList();
+        Map<Integer, List> boatStatus = message.getBoatStatus();
+        for (Boat boat : race.getStartingList()) {
+            if (!finishedList.contains(boat) &&
+                    (int) boatStatus.get(boat.getId()).get(message.getBoatStatusPosition()) == 3) {
+                finishedList.add(boat);
+            }
+        }
+//        System.out.println(race.getFinishedList().size());
+    }
+
     private void updateWindDirection(AC35RaceStatusMessage message, Race race) {
         double newDirection = message.getWindDirection();
         race.getCourse().setWindDirection(newDirection);
@@ -67,10 +80,10 @@ public class RaceMessageInterpreter implements MessageInterpreter {
     }
 
     private void updateEstimatedTime(AC35RaceStatusMessage message, Race race) {
-        Map<Integer, Long> boatStatus = message.getEstimatedMarkTimes();
+        Map<Integer, List> boatStatus = message.getBoatStatus();
         for (Boat boat : race.getStartingList()) {
             if (boatStatus.containsKey(boat.getId())) {
-                double timeTilNextMark = (boatStatus.get(boat.getId()) - message.getCurrentTime()) / 1000d;
+                double timeTilNextMark = ((long) boatStatus.get(boat.getId()).get(message.getEstimatedTimePosition()) - message.getCurrentTime()) / 1000d;
                 boat.setTimeTilNextMark((long) timeTilNextMark);
             }
         }
@@ -155,6 +168,4 @@ public class RaceMessageInterpreter implements MessageInterpreter {
             }
         }
     }
-
-
 }
