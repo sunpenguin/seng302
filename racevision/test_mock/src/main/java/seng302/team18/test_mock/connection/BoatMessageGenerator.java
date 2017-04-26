@@ -11,8 +11,9 @@ import java.util.List;
 /**
  * Generator for boat messages (see #4.9 in the AC35 Streaming protocol spec.)
  */
-public class BoatMessageGenerator {
+public class BoatMessageGenerator extends ScheduledMessage {
     private List<Boat> boats;
+    private Boat b;
     final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
     final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
     final int MMPS_TO_KMPH = 36 / 10000;
@@ -22,16 +23,14 @@ public class BoatMessageGenerator {
         this.boats = boats;
     }
 
-
-    public byte[] generateMessage(Boat b) throws IOException{
+    @Override
+    public byte[] getPayload() throws IOException{
 
         final int LENGTH = 56;
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
         byte versionNum = 0x1;
-        Timestamp time = new Timestamp(System.currentTimeMillis());
-        long timestamp =  time.getTime(); //number of milliseconds since January 1, 1970, 00:00:00 GMT
-        byte[] timestampBytes =  ByteCheck.longToByteArray(timestamp);
+        byte[] timestampBytes =  ByteCheck.getCurrentTime6Bytes();
         byte[] sourceID = ByteCheck.intToByteArray(b.getId());
         byte[] sequenceNum = ByteBuffer.allocate(4).array();
         byte[] deviceType = ByteBuffer.allocate(1).array();
@@ -84,4 +83,4 @@ public class BoatMessageGenerator {
         // TODO encode the message. Remember to check each boat to see that sending a message is appropriate for its situation
 
     }
-}
+
