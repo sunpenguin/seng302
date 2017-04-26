@@ -12,38 +12,15 @@ public class HeartBeatMessageGenerator extends ScheduledMessage{
     private static int seqNo = 0;
 
     public HeartBeatMessageGenerator() {
-        super(2);
-    }
-
-    /**
-     * Returns the heartbeat message with the header, payload and CRC.
-     * @return byte[] of heartbeat message
-     */
-    @Override
-    public byte[] getMessage(){
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        byte[] payload;
-        try {
-            payload = getPayload();
-            byte[] header = HeaderGenerator.generateHeader(1, (short)payload.length);
-            //TODO get CRC
-            outputStream.write(header);
-            outputStream.write(payload);
-            //outputStream.write(CRC)
-            byte[] message = outputStream.toByteArray();
-            return message;
-        } catch (IOException e) {
-            e.printStackTrace();
-            byte[] error = {0};
-            return error;
-        }
+        super(2, 1);
     }
 
     /*
     Generate a heartbeat message which will contain a sequence number.
     The sequence number will increment by one every time it is called.
      */
-    private byte[] getPayload()  throws IOException {
+    @Override
+    public byte[] getPayload()  throws IOException {
         byte[] seqNum = ByteCheck.intToByteArray(seqNo);
 
         ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();

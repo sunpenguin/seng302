@@ -13,12 +13,12 @@ public class BoatMessageGenerator extends ScheduledMessage {
     private String message;
 
     public BoatMessageGenerator(List<Boat> boats) {
-        super(5); //TODO magic number: fix this
+        super(5, 37); //TODO magic number: fix this
         this.boats = boats;
     }
 
     @Override
-    public byte[] getMessage() {
+    public byte[] getPayload() {
         // TODO encode the message. Remember to check each boat to see that sending a message is appropriate for its situation
         for(Boat b: boats){
             //make message

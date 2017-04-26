@@ -25,12 +25,13 @@ public class RaceMessageGenerator extends ScheduledMessage {
     private String message;
 
     public RaceMessageGenerator(ActiveRace race) {
-        super(2);
+        super(2, 12);
+
         this.race = race;
     }
 
     @Override
-    public byte[] getMessage() throws IOException {
+    public byte[] getPayload() throws IOException {
 
         ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
 

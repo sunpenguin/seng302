@@ -56,7 +56,7 @@ public class RaceMessageGeneratorTest {
 
         RaceMessageGenerator generator = new RaceMessageGenerator(testRace);
         try {
-            generatedBytes = generator.getMessage();
+            generatedBytes = generator.getPayload();
 
             // NOTE: If tests are failing here, it may be because things that are hard coded and not received from testRace
             // may be able to be received from testRace now. Eg windDirection will be a part of the race in the future.

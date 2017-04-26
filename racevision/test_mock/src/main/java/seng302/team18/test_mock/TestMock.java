@@ -109,12 +109,7 @@ public class TestMock {
             // Send messages if needed
             for (ScheduledMessage sendable : messages) {
                 if (sendable.isTimeToSend(timeCurr)) {
-                    try {
-                        server.broadcast(sendable.getMessage());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        System.out.println("Failed to create a message");
-                    }
+                    server.broadcast(sendable.getMessage());
                 }
             }
 
