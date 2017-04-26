@@ -33,10 +33,10 @@ public class CoordinateContainer {
         isleOfWhiteLocations.add(topRight);
         isleOfWhiteLocations.add(bottomLeft);
         isleOfWhiteLocations.add(bottomRight);
-
-        Coordinate center = GPSCalculations.getCentralCoordinate(isleOfWhiteLocations);
-
-        isleOfWhiteLocations.add(center);
+        // Commented out due to error
+//        Coordinate center = GPSCalculations.getCentralCoordinate(isleOfWhiteLocations);
+//
+//        isleOfWhiteLocations.add(center);
 
         ACLocationsMap.put(1, isleOfWhiteLocations);
     }
