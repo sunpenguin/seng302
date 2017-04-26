@@ -24,15 +24,6 @@ public class AC35XMLMessageParser implements MessageBodyParser {
         byte[] bodyBytes = new byte[bytes.length - headParser.headerSize()];
         System.arraycopy(bytes, headerBytes.length, bodyBytes, 0, bodyBytes.length);
 
-//        bytes[] bod
-//        System.out.println(new String(Arrays.copyOfRange(bytes, 14, bytes.length), "UTF-8"));
-
-//        System.out.println("AC35XMLMessageParser");
-//        System.out.println("Total size = " + bytes.length);
-//        System.out.println("head size = " + headerBytes.length);
-//        System.out.println("body size = " + bodyBytes.length);
-//        System.out.println();
-
         MessageHead head = headParser.parse(headerBytes);
         if (AC35MessageType.from(head.getType()).equals(AC35MessageType.XML_BOATS) && firstBoat.equals(true)) {
             bodyBytes = new byte[bytes.length - headParser.headerSize() - 2];
