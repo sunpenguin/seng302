@@ -66,23 +66,23 @@ public class PreRaceController {
         startClock(currentTime, currentTime.getZone());
         displayTimeZone(currentTime);
         startTimeLabel.setText(startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-
+        setUpLists(boats);
         if (duration > 0) {
             Timeline showLive = new Timeline(new KeyFrame(
                     Duration.seconds(duration),
                     event -> {
-                        showLiveRaceView(boats);
+                        showLiveRaceView();
                     }));
 
             showLive.setCycleCount(1);
             showLive.play();
         }else{
-            showLiveRaceView(boats);
+            showLiveRaceView();
         }
     }
 
 
-    public void showLiveRaceView(List<Boat> boats) {
+    public void showLiveRaceView() {
 //        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
 //        try {
 //            Parent root = loader.load(); // throws IOException
@@ -101,7 +101,6 @@ public class PreRaceController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setUpLists(boats);
     }
 
 
