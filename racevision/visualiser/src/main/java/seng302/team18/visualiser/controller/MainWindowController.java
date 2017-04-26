@@ -53,6 +53,7 @@ public class MainWindowController {
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
     private RaceClock raceClock;
+    private WindDirection windDirection;
 
 
     @FXML
@@ -166,6 +167,11 @@ public class MainWindowController {
         tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
     }
 
+    private void startWindDirection() {
+        windDirection = new WindDirection(race, arrow, race.getCourse().getWindDirection());
+        windDirection.start();
+    }
+
 
     public void startRace(long secondsDelay) {
         final double KMPH_TO_MPS = 1000.0 / 3600.0;
@@ -184,18 +190,15 @@ public class MainWindowController {
         showLive.play();
     }
 
-//    public RaceLoop(Race race, RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter, MessageInterpreter interpreter, SocketMessageReceiver reader) {
-
 
     public void setUp(Race race, MessageInterpreter interpreter, SocketMessageReceiver receiver) {
         this.race = race;
-        arrow.setRotate(race.getCourse().getWindDirection());
         raceRenderer = new RaceRenderer(race, group, raceViewPane);
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
-//            raceClock = new RaceClock(timerLabel, race, race.getCourse().getCourseDistance() / (race.getStartingList().get(0).getSpeed() / 3.6) / race.getDuration());
         raceClock = new RaceClock(timerLabel, race, -Race.PREP_TIME_SECONDS);
         raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), interpreter, receiver);
+        startWindDirection();
         raceLoop.start();
 
         raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {

@@ -17,10 +17,13 @@ public class AC35RaceStatusParser implements MessageBodyParser {
 
     @Override
     public MessageBody parse(byte[] bytes) { // more final declarations than actual code LOL
+        final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
         final int CURRENT_TIME_INDEX = 1;
         final int CURRENT_TIME_LENGTH = 6;
         final int START_TIME_INDEX = 12;
         final int START_TIME_LENGTH = 6;
+        final int WIND_DIRECTION_INDEX = 18;
+        final int WIND_DIRECTION_LENGTH = 2;
         final int BOAT_SOURCEID_INDEX =  24;
         final int BOAT_SOURCEID_LENGTH = 4;
         final int ESTIMATED_TIME_AT_NEXT_MARK_INDEX = 32;
@@ -31,6 +34,7 @@ public class AC35RaceStatusParser implements MessageBodyParser {
         Map<Integer, Long> boatStatus = new HashMap<>();
         long currentTime = ByteCheck.byteToLongConverter(bytes, CURRENT_TIME_INDEX, CURRENT_TIME_LENGTH);
         long startTime = ByteCheck.byteToLongConverter(bytes, START_TIME_INDEX, START_TIME_LENGTH);
+        double windDirection = ByteCheck.byteToIntConverter(bytes, WIND_DIRECTION_INDEX, WIND_DIRECTION_LENGTH) * BYTE_HEADING_TO_DOUBLE;
         int i = 0;
         while (BOAT_SOURCEID_INDEX + (BOAT_STATUS_LENGTH * i) < bytes.length) {
             int boatID = ByteCheck.byteToIntConverter(bytes, BOAT_SOURCEID_INDEX + (BOAT_STATUS_LENGTH * i), BOAT_SOURCEID_LENGTH);
@@ -38,6 +42,6 @@ public class AC35RaceStatusParser implements MessageBodyParser {
             boatStatus.put(boatID, estimatedTime);
             i += 1;
         }
-        return new AC35RaceStatusMessage(currentTime, startTime, boatStatus);
+        return new AC35RaceStatusMessage(currentTime, startTime, windDirection, boatStatus);
     }
 }

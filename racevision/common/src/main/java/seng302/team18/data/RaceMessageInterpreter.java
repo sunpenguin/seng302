@@ -42,6 +42,7 @@ public class RaceMessageInterpreter implements MessageInterpreter {
                 break;
             case RACE_STATUS:
                 updateRaceTime((AC35RaceStatusMessage) message, race);
+                updateWindDirection((AC35RaceStatusMessage) message, race);
                 updateEstimatedTime((AC35RaceStatusMessage) message, race);
                 break;
             case BOAT_LOCATION:
@@ -56,6 +57,10 @@ public class RaceMessageInterpreter implements MessageInterpreter {
         }
     }
 
+    private void updateWindDirection(AC35RaceStatusMessage message, Race race) {
+        double newDirection = message.getWindDirection();
+        race.getCourse().setWindDirection(newDirection);
+    }
 
     private void updateXMLBoats(AC35XMLBoatMessage message, Race race) {
         race.setStartingList(message.getBoats());
@@ -80,6 +85,7 @@ public class RaceMessageInterpreter implements MessageInterpreter {
             }
             if (boat.getId().equals(message.getSourceId())) {
                 boat.setSpeed(message.getSpeed());
+//                System.out.println("Boat Heading: " + message.getHeading());
                 boat.setHeading(message.getHeading());
                 boat.setCoordinate(message.getCoordinate());
             }

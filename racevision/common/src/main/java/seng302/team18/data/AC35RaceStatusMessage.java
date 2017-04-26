@@ -9,11 +9,13 @@ public class AC35RaceStatusMessage implements MessageBody {
 
     private long currentTime;
     private long startTime;
+    private double windDirection;
     private Map <Integer, Long> boatStatus;
 
-    public AC35RaceStatusMessage(long currentTime, long startTime, Map <Integer, Long> boatStatus) {
+    public AC35RaceStatusMessage(long currentTime, long startTime, double windDirection, Map <Integer, Long> boatStatus) {
         this.currentTime = currentTime;
         this.startTime = startTime;
+        this.windDirection = windDirection;
         this.boatStatus = boatStatus;
     }
 
@@ -28,6 +30,10 @@ public class AC35RaceStatusMessage implements MessageBody {
 
     public long getStartTime() {
         return startTime;
+    }
+
+    public double getWindDirection() {
+        return windDirection;
     }
 
     public Map<Integer, Long> getEstimatedMarkTimes() {
