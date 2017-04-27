@@ -12,19 +12,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
-import seng302.team18.data.AC35MessageParserFactory;
-import seng302.team18.data.MessageInterpreter;
-import seng302.team18.data.RaceMessageInterpreter;
+import seng302.team18.messageinterpreting.MessageInterpreter;
 import seng302.team18.data.SocketMessageReceiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.RaceLoop;
 import seng302.team18.visualiser.display.*;
-
-import java.io.IOException;
 
 
 /**
