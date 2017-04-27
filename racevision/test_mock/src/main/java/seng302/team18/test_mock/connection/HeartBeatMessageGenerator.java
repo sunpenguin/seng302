@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public class HeartBeatMessageGenerator extends ScheduledMessage{
 
-    private static int seqNo = 0;
+    private int seqNo = 0;
 
     public HeartBeatMessageGenerator() {
         super(2, 1);
