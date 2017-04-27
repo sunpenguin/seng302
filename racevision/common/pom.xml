@@ -14,6 +14,16 @@
             <artifactId>junit</artifactId>
             <version>RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>seng302</groupId>
+            <artifactId>visualiser</artifactId>
+            <version>0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>seng302</groupId>
+            <artifactId>visualiser</artifactId>
+            <version>0.0</version>
+        </dependency>
     </dependencies>
     <modelVersion>4.0.0</modelVersion>
 

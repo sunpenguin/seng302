@@ -9,6 +9,7 @@ import java.util.Map;
 public class AC35RaceStatusMessage implements MessageBody {
 
     private long currentTime;
+    private int raceStatus;
     private long startTime;
     private double windDirection;
     private Map <Integer, List> boatStatus;
@@ -18,8 +19,9 @@ public class AC35RaceStatusMessage implements MessageBody {
     private int ESTIMATED_TIME_POSITION = 2;
 
 
-    public AC35RaceStatusMessage(long currentTime, long startTime, double windDirection, Map <Integer, List> boatStatus) {
+    public AC35RaceStatusMessage(long currentTime, int raceStatus, long startTime, double windDirection, Map <Integer, List> boatStatus) {
         this.currentTime = currentTime;
+        this.raceStatus = raceStatus;
         this.startTime = startTime;
         this.windDirection = windDirection;
         this.boatStatus = boatStatus;
@@ -56,5 +58,9 @@ public class AC35RaceStatusMessage implements MessageBody {
 
     public int getEstimatedTimePosition() {
         return ESTIMATED_TIME_POSITION;
+    }
+
+    public int getRaceStatus() {
+        return raceStatus;
     }
 }

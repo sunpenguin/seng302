@@ -45,9 +45,12 @@ public class DisplayTrail {
         XYPair pixel = pixelMapper.convertCoordPixel(coordinate);
         polyline.getPoints().addAll(pixel.getX(), pixel.getY());
         coordinates.add(coordinate);
-//        if (coordinates.size() > length) {
-//
-//        }
+        if (coordinates.size() > length) {
+            coordinates.remove(0);
+//            polyline.getPoints().remove(0, 1);
+            polyline.getPoints().remove(0);
+            polyline.getPoints().remove(0);
+        }
     }
 
     public void reDraw(PixelMapper pixelMapper) {

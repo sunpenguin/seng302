@@ -101,7 +101,7 @@ public class RaceRenderer {
         final double MAX_HEADING_DIFFERENCE = 0.75d; // smaller => smoother trail, higher => more fps
         DisplayTrail trail = trailMap.get(boat.getShortName());
         if (trail == null) {
-            final int MAX_TRAIL_LENGTH = 1000;
+            final int MAX_TRAIL_LENGTH = 500;
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             trail = new DisplayTrail(boat.getShortName(), displayBoat.getBoatColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
             trailMap.put(boat.getShortName(), trail);
