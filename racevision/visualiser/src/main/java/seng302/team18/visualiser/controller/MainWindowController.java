@@ -14,7 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.util.Callback;
 import javafx.util.Duration;
-import seng302.team18.data.MessageInterpreter;
+import seng302.team18.messageinterpreting.MessageInterpreter;
 import seng302.team18.data.SocketMessageReceiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
