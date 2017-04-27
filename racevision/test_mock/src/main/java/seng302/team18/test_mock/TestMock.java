@@ -4,6 +4,7 @@ import seng302.team18.model.*;
 import seng302.team18.test_mock.XMLparsers.*;
 import seng302.team18.test_mock.connection.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -62,6 +63,27 @@ public class TestMock {
     }
 
     public void run() {
+
+        // comment out to see checksum result.
+//        byte[] message = new byte[4];
+//        message[0] = 0;
+//        message[1] = 1;
+//        message[2] = 2;
+//        message[3] = 3;
+//
+//        ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
+//
+//        try {
+//            outputSteam.write(message);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        byte[] check = outputSteam.toByteArray();
+//
+//        CRCGenerator crcGenerator = new CRCGenerator();
+//        crcGenerator.generateCRC(check);
+
         readFiles();
         generateClasses();
 
