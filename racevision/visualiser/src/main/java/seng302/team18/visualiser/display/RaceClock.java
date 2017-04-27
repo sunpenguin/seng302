@@ -24,9 +24,9 @@ public class RaceClock extends AnimationTimer {
      * @param timeLabel JavaFX Label to display the time on.
      */
     public RaceClock(Label timeLabel, DateTimeFormatter formatter) {
-
         this.timeLabel = timeLabel;
         this.formatter = formatter;
+        time = 0L;
         timeLabel.setTextFill(Color.BLACK);
         timeLabel.setStyle("-fx-font-size: 2em;");
 //        timeLabel.setText("");
