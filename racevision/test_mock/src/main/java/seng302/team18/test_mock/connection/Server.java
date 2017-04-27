@@ -16,15 +16,15 @@ public class Server {
     private final ConnectionListener connectionListener = new ConnectionListener();
     private final int PORT;
     private ServerSocket serverSocket;
-    private String regattaXMLPath;
-    private String boatsXMLPath;
-    private String raceXMLPath;
+    private XMLMessageGenerator regattaXMLMessageGenerator;
+    private XMLMessageGenerator boatsXMLMessageGenerator;
+    private XMLMessageGenerator raceXMLMessageGenerator;
 
     public Server(int port, String regattaXML, String boatsXML, String raceXML) {
         this.PORT = port;
-        this.regattaXMLPath = regattaXML;
-        this.boatsXMLPath = boatsXML;
-        this.raceXMLPath = raceXML;
+        regattaXMLMessageGenerator = new XMLMessageGenerator((byte)5, regattaXML);
+        boatsXMLMessageGenerator = new XMLMessageGenerator((byte)7, boatsXML);
+        raceXMLMessageGenerator = new XMLMessageGenerator((byte)6, raceXML);
     }
 
     /**
@@ -49,18 +49,9 @@ public class Server {
      * @throws IOException if an I/O exception occurs
      */
     private void sendXmls(ClientConnection client) throws IOException {
-        //send regatta file
-        File regattaXML = new File(this.getClass().getResource(regattaXMLPath).getFile());
-        String content = new Scanner(regattaXML).useDelimiter("\\Z").next();
-        client.sendMessage(content.getBytes(StandardCharsets.UTF_8));
-        //send race file
-        File raceXML = new File(this.getClass().getResource(raceXMLPath).getFile());
-        content = new Scanner(raceXML).useDelimiter("\\Z").next();
-        client.sendMessage(content.getBytes(StandardCharsets.UTF_8));
-        //send boats file
-        File boatsXML = new File(this.getClass().getResource(boatsXMLPath).getFile());
-        content = new Scanner(boatsXML).useDelimiter("\\Z").next();
-        client.sendMessage(content.getBytes(StandardCharsets.UTF_8));
+        client.sendMessage(regattaXMLMessageGenerator.getMessage());
+        client.sendMessage(raceXMLMessageGenerator.getMessage());
+        client.sendMessage(boatsXMLMessageGenerator.getMessage());
     }
 
     /**

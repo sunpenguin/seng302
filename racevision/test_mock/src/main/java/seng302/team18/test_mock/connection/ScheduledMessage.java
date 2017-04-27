@@ -48,7 +48,7 @@ public abstract class ScheduledMessage {
         } catch (IOException e) {
             e.printStackTrace();
             byte[] error = {0};
-            return error;
+            return error; //return failed message
         }
     }
 
