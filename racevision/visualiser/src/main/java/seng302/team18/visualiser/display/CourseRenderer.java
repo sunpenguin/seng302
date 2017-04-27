@@ -82,7 +82,8 @@ public class CourseRenderer {
      * @param boundary the point to reset
      */
     private void renderBoundary(Polyline border, Coordinate boundary) {
-        XYPair boundaryPixels = PixelMapper.convertCoordPixel(boundary, PADDING, pane, course);
+        PixelMapper pixelMapper = new PixelMapper(course, pane, PADDING);
+        XYPair boundaryPixels = pixelMapper.convertCoordPixel(boundary);
         border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
     }
 
@@ -92,6 +93,7 @@ public class CourseRenderer {
      * @param mark Mark to reset
      */
     private void renderMark(Mark mark) {
+        PixelMapper pixelMapper = new PixelMapper(course, pane, PADDING);
         Rectangle rectangle = marks.get(mark.getId());
         if (rectangle == null) {
             rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
@@ -99,7 +101,7 @@ public class CourseRenderer {
             group.getChildren().addAll(rectangle);
         }
         Coordinate coordinate = mark.getCoordinate();
-        XYPair pixelCoordinates = PixelMapper.convertCoordPixel(coordinate, PADDING, pane, course);
+        XYPair pixelCoordinates = pixelMapper.convertCoordPixel(coordinate);
         rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
         rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
 //        System.out.println(mark.getId());
@@ -143,6 +145,7 @@ public class CourseRenderer {
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */
     private void renderGate(CompoundMark compoundMark) {
+        PixelMapper pixelMapper = new PixelMapper(course, pane, PADDING);
         List<XYPair> endPoints = new ArrayList<>();
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
@@ -154,7 +157,7 @@ public class CourseRenderer {
             }
 
             Coordinate coordinate = mark.getCoordinate();
-            XYPair pixelCoordinates = PixelMapper.convertCoordPixel(coordinate, PADDING, pane, course);
+            XYPair pixelCoordinates = pixelMapper.convertCoordPixel(coordinate);
             rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
             rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
             endPoints.add(pixelCoordinates);
