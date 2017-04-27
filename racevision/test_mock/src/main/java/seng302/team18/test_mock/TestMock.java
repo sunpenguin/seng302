@@ -105,7 +105,7 @@ public class TestMock {
      * Initialise the generators for scheduled messages
      */
     private void initMessageGenerators() {
-        messages.add(new BoatMessageGenerator(race.getStartingList()));
+        messages.add(new BoatMessageGenerator());
         messages.add(new RaceMessageGenerator(race));
         messages.add(new HeartBeatMessageGenerator());
     }
@@ -119,8 +119,9 @@ public class TestMock {
 
         long timeCurr = System.currentTimeMillis();
         long timeLast;
-
+        List<Boat> boats = race.getStartingList();
         do {
+
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 

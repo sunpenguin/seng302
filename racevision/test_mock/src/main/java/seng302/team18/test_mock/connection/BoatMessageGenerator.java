@@ -17,10 +17,11 @@ public class BoatMessageGenerator extends ScheduledMessage {
     final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
     final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
     final int MMPS_TO_KMPH = 36 / 10000;
+    final double KMPH_TO_MMPS = 277.778;
 
-    public BoatMessageGenerator(List<Boat> boats) {
+    public BoatMessageGenerator() {
         super(5, 37); //TODO magic number: fix this
-        this.boats = boats;
+
     }
 
     @Override
@@ -30,7 +31,7 @@ public class BoatMessageGenerator extends ScheduledMessage {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
         byte versionNum = 0x1;
-        byte[] timestampBytes =  ByteCheck.getCurrentTime6Bytes();
+        byte[] timeBytes =  ByteCheck.getCurrentTime6Bytes();
         byte[] sourceID = ByteCheck.intToByteArray(b.getId());
         byte[] sequenceNum = ByteBuffer.allocate(4).array();
         byte[] deviceType = ByteBuffer.allocate(1).array();
@@ -46,7 +47,7 @@ public class BoatMessageGenerator extends ScheduledMessage {
         byte[] headingBytes = ByteCheck.shortToByteArray(headingShort);
         byte[] pitch = ByteBuffer.allocate(2).array();
         byte[] roll = ByteBuffer.allocate(2).array();
-        Double speed = b.getSpeed() / MMPS_TO_KMPH;
+        Double speed = b.getSpeed() * KMPH_TO_MMPS;
         short speedShort = speed.shortValue();
         byte[] speedBytes = ByteCheck.shortToByteArray(speedShort);
         byte[] cog = ByteBuffer.allocate(2).array();
@@ -57,7 +58,7 @@ public class BoatMessageGenerator extends ScheduledMessage {
         byte[] rudderAng = ByteBuffer.allocate(2).array();
 
         outStream.write(versionNum);
-        outStream.write(timestampBytes);
+        outStream.write(timeBytes);
         outStream.write(sourceID);
         outStream.write(sequenceNum);
         outStream.write(deviceType);
@@ -80,7 +81,15 @@ public class BoatMessageGenerator extends ScheduledMessage {
         return boatMessage;
     }
 
-        // TODO encode the message. Remember to check each boat to see that sending a message is appropriate for its situation
+    public Boat getB() {
+        return b;
+    }
+
+    public void setB(Boat b) {
+        this.b = b;
+    }
+
+    // TODO encode the message. Remember to check each boat to see that sending a message is appropriate for its situation
 
     }
 

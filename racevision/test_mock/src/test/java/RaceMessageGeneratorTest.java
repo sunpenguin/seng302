@@ -31,7 +31,6 @@ public class RaceMessageGeneratorTest {
     private final int NUM_BOATS_P = 22;
     private final int RACE_TYPE_L = 1;
     private final int RACE_TYPE_P = 23;
-
     private final int SOURCE_ID_L = 4;
     private final int SOURCE_ID_P = 24;
     private final int BOAT_STATUS_L = 1;
