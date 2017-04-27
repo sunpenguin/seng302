@@ -1,7 +1,7 @@
 package seng302.team18.messageinterpreting;
 
-import seng302.team18.data.AC35XMLRegattaMessage;
-import seng302.team18.data.MessageBody;
+import seng302.team18.messageparsing.AC35XMLRegattaMessage;
+import seng302.team18.messageparsing.MessageBody;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;

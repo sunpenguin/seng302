@@ -4,9 +4,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import seng302.team18.data.*;
+import seng302.team18.messageparsing.*;
+//import seng302.team18.visualiser.display.RaceClockInterpreter;
 import seng302.team18.messageinterpreting.*;
 import seng302.team18.model.Race;
+import seng302.team18.visualiser.display.RaceClockInterpreter;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -87,7 +89,7 @@ public class ControllerManager {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new EstimatedTimeInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishersListInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLocationInterpreter(race));
-        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLocationInterpreter(race));
+        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
     }
 
@@ -102,6 +104,8 @@ public class ControllerManager {
         primaryStage.show();
 
         mainController.setUp(race, interpreter, receiver);
+
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(mainController.getRaceClock(), race.getCourse().getTimeZone()));
     }
 
 

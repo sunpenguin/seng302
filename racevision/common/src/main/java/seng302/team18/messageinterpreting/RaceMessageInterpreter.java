@@ -1,9 +1,6 @@
 package seng302.team18.messageinterpreting;
 
-import seng302.team18.data.AC35MarkRoundingMessage;
-import seng302.team18.data.AC35MessageType;
-import seng302.team18.data.MessageBody;
-import seng302.team18.model.Race;
+import seng302.team18.messageparsing.MessageBody;
 
 import java.util.ArrayList;
 import java.util.HashMap;

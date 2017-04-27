@@ -1,6 +1,6 @@
 package seng302.team18.messageinterpreting;
 
-import seng302.team18.data.MessageBody;
+import seng302.team18.messageparsing.MessageBody;
 
 /**
  * Created by dhl25 on 17/04/17.

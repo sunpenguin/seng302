@@ -1,7 +1,5 @@
 package seng302.team18.visualiser.controller;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,13 +11,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.util.Callback;
-import javafx.util.Duration;
 import seng302.team18.messageinterpreting.MessageInterpreter;
-import seng302.team18.data.SocketMessageReceiver;
+import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.RaceLoop;
 import seng302.team18.visualiser.display.*;
+
+import java.time.format.DateTimeFormatter;
 
 
 /**
@@ -168,22 +167,22 @@ public class MainWindowController {
     }
 
 
-    public void startRace(long secondsDelay) {
-        final double KMPH_TO_MPS = 1000.0 / 3600.0;
-//        double timeScaleFactor = race.getCourse().getCourseDistance()
-//                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
-//        secondsDelay /= (double) timeScaleFactor;
-        raceClock.start();
-        Timeline showLive = new Timeline(new KeyFrame(
-                Duration.seconds(secondsDelay),
-                event -> {
-                    raceClock = new RaceClock(timerLabel, race, 0d);
-                    raceClock.start();
-                    raceLoop.start();
-                }));
-        showLive.setCycleCount(1);
-        showLive.play();
-    }
+//    public void startRace(long secondsDelay) {
+//        final double KMPH_TO_MPS = 1000.0 / 3600.0;
+////        double timeScaleFactor = race.getCourse().getCourseDistance()
+////                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
+////        secondsDelay /= (double) timeScaleFactor;
+//        raceClock.start();
+//        Timeline showLive = new Timeline(new KeyFrame(
+//                Duration.seconds(secondsDelay),
+//                event -> {
+//                    raceClock = new RaceClock(timerLabel, race, 0d);
+//                    raceClock.start();
+//                    raceLoop.start();
+//                }));
+//        showLive.setCycleCount(1);
+//        showLive.play();
+//    }
 
 
     public void setUp(Race race, MessageInterpreter interpreter, SocketMessageReceiver receiver) {
@@ -191,7 +190,8 @@ public class MainWindowController {
         raceRenderer = new RaceRenderer(race, group, raceViewPane);
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
-        raceClock = new RaceClock(timerLabel, race, -Race.PREP_TIME_SECONDS);
+        raceClock = new RaceClock(timerLabel, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        raceClock.start();
         raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), interpreter, receiver);
         startWindDirection();
         raceLoop.start();
@@ -207,5 +207,9 @@ public class MainWindowController {
             raceRenderer.reDrawTrails(race.getStartingList());
         });
         setUpTable();
+    }
+
+    public RaceClock getRaceClock() {
+        return raceClock;
     }
 }
