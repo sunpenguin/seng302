@@ -47,7 +47,7 @@ public class ActiveRace extends Race {
      */
     private void setInitialSpeed(){
         for(Boat b: startingList){
-            b.setSpeed(70);
+            b.setSpeed(0.005); // TODO find out what is going on with speed needing to be so low
         }
     }
 
@@ -193,7 +193,6 @@ public class ActiveRace extends Race {
      * @param time that has passed
      */
     private void updatePosition(Boat boat, double time) {
-        //System.out.println(boat.getCoordinate());
         final double KMPH_TO_MPS = 1000.0 / 3600.0;
         double speed = boat.getSpeed() * KMPH_TO_MPS;
         double distanceTravelled = speed * time;

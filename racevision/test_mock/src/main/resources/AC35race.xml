@@ -12,9 +12,7 @@
 
     <Participants>
 
-        <Yacht SourceID="107" Entry="Port" />
-
-        <Yacht SourceID="108" Entry="Stbd" />
+        <Yacht SourceID="200" Entry="Port" />
 
     </Participants>
 
@@ -36,15 +34,15 @@
 
         <CompoundMark CompoundMarkID="3" Name="M2">
 
-            <Mark Name="M2" TargetLat="-36.83" TargetLng="174.80" SourceID="102" />
+            <Mark Name="M2" TargetLat="-36.83" TargetLng="174.80" SourceID="104" />
 
         </CompoundMark>
 
         <CompoundMark CompoundMarkID="4" Name="Gate">
 
-            <Mark SeqID="1" Name="G1" TargetLat="-36.63566590" TargetLng="174.97205159" SourceID="104" />
+            <Mark SeqID="1" Name="G1" TargetLat="-36.63566590" TargetLng="174.97205159" SourceID="105" />
 
-            <Mark SeqID="2" Name="G2" TargetLat="-36.64566590" TargetLng="174.98205159" SourceID="105" />
+            <Mark SeqID="2" Name="G2" TargetLat="-36.64566590" TargetLng="174.98205159" SourceID="106" />
 
         </CompoundMark>
 

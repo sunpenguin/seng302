@@ -24,7 +24,7 @@ public class TestMock {
     private ActiveRace race;
 
     private String regattaXML = "/AC35regatta.xml";
-    private String boatsXML = "/boats_test1.xml";
+    private String boatsXML = "/AC35boats.xml";
     private String raceXML = "/AC35race.xml";
 
     private AC35RegattaContainer ac35RegattaContainer;
@@ -120,7 +120,7 @@ public class TestMock {
      */
     private void initMessageGenerators() {
         for(Boat b : race.getStartingList()){
-            messages.add(new BoatMessageGenerator(b));
+           messages.add(new BoatMessageGenerator(b));
         }
         messages.add(new RaceMessageGenerator(race));
         messages.add(new HeartBeatMessageGenerator());
