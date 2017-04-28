@@ -33,11 +33,7 @@ public class CompositeMessageInterpreter extends MessageInterpreter {
 
     @Override
     public void add(int type, MessageInterpreter interpreter) {
-        List<MessageInterpreter> interpreters = interpreterMap.get(type);
-        if (interpreters == null) {
-            interpreters =  new ArrayList<>();
-            interpreterMap.put(type, interpreters);
-        }
+        List<MessageInterpreter> interpreters = interpreterMap.computeIfAbsent(type, k -> new ArrayList<>());
         interpreters.add(interpreter);
     }
 

@@ -25,16 +25,6 @@ public class RaceClockInterpreter extends MessageInterpreter {
             AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
             Instant startIn = Instant.ofEpochMilli(statusMessage.getStartTime());
             Instant currentIn = Instant.ofEpochMilli(statusMessage.getCurrentTime());
-//            ZonedDateTime startTime = ZonedDateTime.ofInstant(startIn, timeZone);
-//            ZonedDateTime currentTime = ZonedDateTime.ofInstant(currentIn, timeZone);
-
-//            System.out.println("minused");
-//            System.out.println((currentIn.minusSeconds(statusMessage.getStartTime() / 1000)).format(DateTimeFormatter.ISO_DATE_TIME));
-//            System.out.println("original");
-//            System.out.println(currentIn.format(DateTimeFormatter.ISO_DATE_TIME));
-//            System.out.println("chrono");
-//            System.out.println(ChronoUnit.SECONDS.between(startIn, currentIn));
-//            System.out.println();
             raceClock.setTime(ChronoUnit.SECONDS.between(startIn, currentIn));
         }
     }

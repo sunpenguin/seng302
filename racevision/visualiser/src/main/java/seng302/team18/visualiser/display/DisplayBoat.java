@@ -9,8 +9,11 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import seng302.team18.util.XYPair;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -95,7 +98,12 @@ public class DisplayBoat {
 
     private void updateAnnotationText() {
         String textToDisplay = "";
-        for (Map.Entry<AnnotationType, Boolean> entry : visibleAnnotations.entrySet()) {
+        List<Map.Entry<AnnotationType, Boolean>> sortedEntries = visibleAnnotations
+                .entrySet()
+                .stream()
+                .sorted(Comparator.comparingInt(entry -> entry.getKey().getCode()))
+                .collect(Collectors.toList());
+        for (Map.Entry<AnnotationType, Boolean> entry : sortedEntries) {
             if (entry.getValue()) {
                 if (entry.getKey().equals(AnnotationType.NAME)) {
                     textToDisplay += name + "\n";
