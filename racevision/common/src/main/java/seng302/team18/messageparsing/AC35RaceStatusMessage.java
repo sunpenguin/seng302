@@ -21,8 +21,8 @@ public class AC35RaceStatusMessage implements MessageBody {
 
     /**
      * Constructor for AC35RaceStatusMessage.
-     * @param currentTime of the race.
-     * @param raceStatus of the race.
+     * @param currentTime of the race in Epoch milliseconds.
+     * @param raceStatus of the race in Epoch milliseconds.
      * @param startTime of the race.
      * @param windDirection of the race.
      * @param boatStatus a map of the boats id to the status, leg, and estimated time to next mark.
@@ -42,7 +42,7 @@ public class AC35RaceStatusMessage implements MessageBody {
 
     /**
      * Getter for the current time of the race.
-     * @return the current time of the race.
+     * @return the current time of the race in Epoch milliseconds.
      */
     public long getCurrentTime() {
         return currentTime;
@@ -50,7 +50,7 @@ public class AC35RaceStatusMessage implements MessageBody {
 
     /**
      * Getter for the start time of the race.
-     * @return the start time of the race.
+     * @return the start time of the race in Epoch milliseconds.
      */
     public long getStartTime() {
         return startTime;

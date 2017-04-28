@@ -190,7 +190,7 @@ public class MainWindowController {
         raceRenderer = new RaceRenderer(race, group, raceViewPane);
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
-        raceClock = new RaceClock(timerLabel, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        raceClock = new RaceClock(timerLabel);
         raceClock.start();
         raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), interpreter, receiver);
         startWindDirection();
