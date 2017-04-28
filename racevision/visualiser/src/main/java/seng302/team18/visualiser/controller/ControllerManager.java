@@ -135,8 +135,26 @@ public class ControllerManager {
         }
 
         if (decision.equals("Y")){
+            // Ask the user for a port number
+
+//            Scanner portScanner = new Scanner(System.in);
+//            String portNumber = "";
+//            int portNum = 0;
+//            while (portNumber.isEmpty()) {
+//                System.out.println("Please enter a port number (4941): ");
+//                if (scanner.hasNext()) {
+//                    portNumber = scanner.next().toUpperCase();
+//                    try {
+//                        portNum = Integer.parseInt(portNumber);
+//                    } catch (Exception e){
+//                        portNumber = "";
+//                    }
+//                } else {
+//                    scanner.next();
+//                }
+//            }
             try {
-                SocketMessageReceiver receiver = new SocketMessageReceiver(4941, new AC35MessageParserFactory());
+                SocketMessageReceiver receiver = new SocketMessageReceiver(4941, new AC35MessageParserFactory()); //TODO change hard coded port number to variable portNum
                 return receiver;
             } catch (IOException e) {
                 System.out.println("try again");

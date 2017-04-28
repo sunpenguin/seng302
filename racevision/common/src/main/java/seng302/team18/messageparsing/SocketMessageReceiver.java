@@ -45,15 +45,29 @@ public class SocketMessageReceiver {
         MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.getType());
         byte[] bodyBytes = new byte[head.bodySize()];
         byte[] checkBytes = new byte[detector.errorCheckSize()];
-        byte[] headAndBody = new byte[headerBytes.length + bodyBytes.length];
-        System.arraycopy(headerBytes, 0, headAndBody, 0, headerBytes.length);
-        System.arraycopy(bodyBytes, 0, headAndBody, headerBytes.length, bodyBytes.length);
 
         inStream.read(bodyBytes);
         inStream.read(checkBytes);
-        if (detector.isValid(checkBytes, headAndBody) && bodyParser != null) {
+        if (detector.isValid(checkBytes, bodyBytes, headerBytes) && bodyParser != null) {
             return bodyParser.parse(bodyBytes);
         }
+        for (byte b: bodyBytes) {
+            System.out.print(b + ", ");
+        }
+        System.out.println();
+        for (byte b: headerBytes) {
+            System.out.print(b + ", ");
+        }
+        System.out.println();
+        for (byte b: checkBytes) {
+            System.out.print(b + ", ");
+        }
+        System.out.println();
+        System.out.println("========================================================================================");
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
         return null;
     }
 
