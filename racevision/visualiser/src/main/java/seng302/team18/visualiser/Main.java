@@ -1,16 +1,9 @@
 package seng302.team18.visualiser;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import seng302.team18.visualiser.controller.ControllerManager;
-import seng302.team18.visualiser.controller.MainWindowController;
-import seng302.team18.visualiser.controller.PreRaceController;
 
-import java.io.IOException;
-import java.time.ZoneId;
 
 /**
  * Created by afj19 on 11/04/17.

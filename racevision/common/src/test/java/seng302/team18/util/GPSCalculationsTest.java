@@ -3,12 +3,9 @@ package seng302.team18.util;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
-import seng302.team18.data.XMLCourseParser;
-import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.BufferedInputStream;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;

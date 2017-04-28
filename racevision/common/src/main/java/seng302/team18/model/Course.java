@@ -110,7 +110,9 @@ public class Course {
     public List<MarkRounding> getMarkRoundings() {return markRoundings;}
 
     public void setCentralCoordinate(Coordinate centralCoordinate) {
-        this.centralCoordinate = centralCoordinate;
+        if (this.centralCoordinate.getLatitude() == 0d && this.centralCoordinate.getLongitude() == 0d) {
+            this.centralCoordinate = centralCoordinate;
+        }
     }
 
     public Coordinate getCentralCoordinate() {

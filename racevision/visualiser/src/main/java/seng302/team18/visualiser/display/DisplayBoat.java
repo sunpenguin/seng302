@@ -9,26 +9,31 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import seng302.team18.util.XYPair;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
  * Created by david on 4/8/17.
  */
 public class DisplayBoat {
-    private String name;
     private Polyline boat;
     private Color boatColor;
     private Polygon wake;
     private Color wakeColor;
     private double wakeScaleFactor;
     private double minWakeSize;
+
+    private Text annotation;
+    private String name;
+    private Long estimatedTime;
+    private Long timeSinceLastMark;
     private Double heading;
     private Double speed;
-    private Long estimatedTime;
-    private Text annotation;
-    private int decimalPlaces;
+    private int decimalPlaces; // for speed annotation
     private Map<AnnotationType, Boolean> visibleAnnotations;
 
     private final int ANNOTATION_OFFSET_X = 10;
@@ -63,6 +68,7 @@ public class DisplayBoat {
         wake.setFill(wakeColor);
         decimalPlaces = 1;
         minWakeSize = 0.1;
+
         // initial rotation + wake size
         Rotate rotation = new Rotate(this.heading, BOAT_PIVOT_X, BOAT_PIVOT_Y);
         wake.getTransforms().add(rotation);
@@ -92,15 +98,21 @@ public class DisplayBoat {
 
     private void updateAnnotationText() {
         String textToDisplay = "";
-        for (Map.Entry<AnnotationType, Boolean> entry : visibleAnnotations.entrySet()) {
+        List<Map.Entry<AnnotationType, Boolean>> sortedEntries = visibleAnnotations
+                .entrySet()
+                .stream()
+                .sorted(Comparator.comparingInt(entry -> entry.getKey().getCode()))
+                .collect(Collectors.toList());
+        for (Map.Entry<AnnotationType, Boolean> entry : sortedEntries) {
             if (entry.getValue()) {
                 if (entry.getKey().equals(AnnotationType.NAME)) {
                     textToDisplay += name + "\n";
                 } else if (entry.getKey().equals(AnnotationType.SPEED)) {
                     textToDisplay += String.format("%." + decimalPlaces + "f", speed) + " km/h\n";
                 } else if (entry.getKey().equals(AnnotationType.ESTIMATED_TIME_NEXT_MARK) && estimatedTime > 0) {
-                    textToDisplay += estimatedTime +"\n";
-                }
+                    textToDisplay += estimatedTime + "\n";
+                } else if (entry.getKey().equals(AnnotationType.TIME_SINCE_LAST_MARK))
+                    textToDisplay += timeSinceLastMark + "\n";
             }
         }
         annotation.setText(textToDisplay);
@@ -125,7 +137,6 @@ public class DisplayBoat {
      * @param speed the new speed of the boat.
      */
     public void setSpeed(double speed) {
-//        double scale = speed / (this.speed * wakeScaleFactor) * wakeScaleFactor;
         double scale;
         if (this.speed != 0 && speed != 0) {
             scale = speed / this.speed;
@@ -134,7 +145,6 @@ public class DisplayBoat {
         } else {
             scale = minWakeSize;
         }
-//        System.out.println(scale);
         Scale wakeSize = new Scale(scale, scale, BOAT_PIVOT_X, BOAT_PIVOT_Y);
         wake.getTransforms().add(wakeSize);
         this.speed = speed;
@@ -180,5 +190,9 @@ public class DisplayBoat {
 
     public Color getBoatColor() {
         return boatColor;
+    }
+
+    public void setTimeSinceLastMark(Long timeSinceLastMark) {
+        this.timeSinceLastMark = timeSinceLastMark;
     }
 }

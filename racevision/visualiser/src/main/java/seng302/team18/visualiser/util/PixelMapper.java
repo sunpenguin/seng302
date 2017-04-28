@@ -10,13 +10,23 @@ import seng302.team18.util.XYPair;
  * Created by dhl25 on 30/03/17.
  */
 public class PixelMapper {
+
+    private Course course;
+    private Pane pane;
+    private Double padding;
+
+    public PixelMapper(Course course, Pane pane, Double padding) {
+        this.course = course;
+        this.pane = pane;
+        this.padding = padding;
+    }
+
     /**
      * Converts the latitude / longitude coordinates to pixel coordinates.
      * @param coord Coordinates to be converted
      * @return x and y pixel coordinates of the given coordinates
      */
-    public static XYPair convertCoordPixel
-            (Coordinate coord, double padding, Pane pane, Course course) {
+    public XYPair convertCoordPixel(Coordinate coord) {
 
         GPSCalculations calculator = new GPSCalculations(course);
         double pixelWidth = pane.getWidth() - padding * 2;

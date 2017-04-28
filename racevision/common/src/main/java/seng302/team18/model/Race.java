@@ -5,6 +5,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -235,6 +236,9 @@ public class Race {
 
     public void setParticipantIds(List<Integer> participantIds) {
         this.participantIds = participantIds;
+        startingList = startingList.stream()
+                .filter(boat -> participantIds.contains(boat.getId()))
+                .collect(Collectors.toList());
     }
 
     public void setCurrentTime(ZonedDateTime currentTime) {

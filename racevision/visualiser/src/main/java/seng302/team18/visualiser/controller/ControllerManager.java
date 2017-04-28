@@ -1,25 +1,25 @@
 package seng302.team18.visualiser.controller;
 
-import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import seng302.team18.data.*;
+import seng302.team18.messageparsing.*;
+//import seng302.team18.visualiser.messageinterpreting.RaceClockInterpreter;
+import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.model.Race;
-import seng302.team18.visualiser.RaceLoop;
-import seng302.team18.visualiser.display.RaceRenderer;
+import seng302.team18.visualiser.messageinterpreting.RaceClockInterpreter;
 
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
+ * The Main Controller that manages the other controller classes.
  * Created by dhl25 on 17/04/17.
  */
 public class ControllerManager {
@@ -30,9 +30,8 @@ public class ControllerManager {
     private Stage primaryStage;
 
     private SocketMessageReceiver receiver;
-    private RaceMessageInterpreter interpreter;
+    private MessageInterpreter interpreter;
     private Race race;
-
 
 
     public ControllerManager(Stage primaryStage, String mainControllerPath, String preRacePath) {
@@ -43,13 +42,13 @@ public class ControllerManager {
 
 
     public void start() throws Exception {
-
         receiver = getPort();
         race = new Race();
-        interpreter = new RaceMessageInterpreter(race);
+        interpreter = new CompositeMessageInterpreter();
+        initialiseInterpreter();
         MessageBody message = receiver.nextMessage();
         while(message == null || AC35MessageType.from(message.getType()) != AC35MessageType.RACE_STATUS) {
-            interpreter.interpretMessage(message);
+            interpreter.interpret(message);
             message = receiver.nextMessage();
         }
 
@@ -68,18 +67,31 @@ public class ControllerManager {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
             while(true) {
-                MessageBody messageBody = null;
+                MessageBody messageBody;
                 try {
                     messageBody = receiver.nextMessage();
                 } catch (Exception e) {
                     return; // ignore if anything goes wrong
                 }
-                interpreter.interpretMessage(messageBody);
+                interpreter.interpret(messageBody);
             }
         });
 
     }
 
+
+    private void initialiseInterpreter() {
+        interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
+        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
+        interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceTimeInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindDirectionInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new EstimatedTimeInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishersListInterpreter(race));
+        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLocationInterpreter(race));
+        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
+        interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
+    }
 
 
     public void showMainView() throws IOException {
@@ -92,6 +104,8 @@ public class ControllerManager {
         primaryStage.show();
 
         mainController.setUp(race, interpreter, receiver);
+
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(mainController.getRaceClock()));
     }
 
 
