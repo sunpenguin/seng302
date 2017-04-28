@@ -14,7 +14,7 @@ public class CRCGenerator {
     /*
     Calculate CRC32 checksum for header and message body.
      */
-    public byte[] generateCRC(byte[] message) {
+    public static byte[] generateCRC(byte[] message) {
 
         // calculate the checksum for given message
         Checksum checksum = new CRC32();
