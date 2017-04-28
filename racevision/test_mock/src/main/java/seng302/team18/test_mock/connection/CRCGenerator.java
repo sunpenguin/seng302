@@ -22,7 +22,7 @@ public class CRCGenerator {
         long checksumValue = checksum.getValue();
 
 //        System.out.println(checksum);
-        System.out.println(checksumValue);
+        //System.out.println(checksumValue);
 
 //        byte[] check = ByteCheck.convertLongTo6ByteArray(checksumValue);
 //        System.out.println(check);
@@ -44,7 +44,7 @@ public class CRCGenerator {
             result[i] = result[result.length - i - 1];
             result[result.length - i - 1] = temp;
         }
-        System.out.println(result);
+        //System.out.println(result);
         return result;
     }
 }
