@@ -38,10 +38,11 @@ public class Race {
      * @param course       Course object
      */
     public Race(List<Boat> startingList, Course course) {
-        startingList.sort(Comparator.comparingDouble(Boat::getSpeed));
+//        startingList.sort(Comparator.comparingDouble(Boat::getSpeed));
         this.startingList = startingList;
         this.course = course;
         finishedList = new ArrayList<>();
+        participantIds = new ArrayList<>();
         //setCourseForBoats();
 //        duration = 60;
     }
@@ -81,7 +82,7 @@ public class Race {
     /**
      * Starting list getter.
      *
-     * @return ObservableList holding all entered boats
+     * @return list holding all entered boats.
      */
     public List<Boat> getStartingList() {
         return startingList;
@@ -90,7 +91,7 @@ public class Race {
     /**
      * Starting list setter.
      *
-     * @param startingList Arraylist holding all entered boats
+     * @param startingList ArrayList holding all entered boats
      */
     public void setStartingList(List<Boat> startingList) {
         if (participantIds.size() == 0) {
