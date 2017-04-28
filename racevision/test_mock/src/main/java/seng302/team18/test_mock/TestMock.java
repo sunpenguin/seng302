@@ -105,7 +105,9 @@ public class TestMock {
      * Initialise the generators for scheduled messages
      */
     private void initMessageGenerators() {
-        messages.add(new BoatMessageGenerator());
+        for(Boat b : race.getStartingList()){
+            messages.add(new BoatMessageGenerator(b));
+        }
         messages.add(new RaceMessageGenerator(race));
         messages.add(new HeartBeatMessageGenerator());
     }

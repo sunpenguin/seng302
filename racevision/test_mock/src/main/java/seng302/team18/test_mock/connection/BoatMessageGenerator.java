@@ -12,15 +12,15 @@ import java.util.List;
  * Generator for boat messages (see #4.9 in the AC35 Streaming protocol spec.)
  */
 public class BoatMessageGenerator extends ScheduledMessage {
-    private List<Boat> boats;
     private Boat b;
     final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
     final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
     final int MMPS_TO_KMPH = 36 / 10000;
     final double KMPH_TO_MMPS = 277.778;
 
-    public BoatMessageGenerator() {
+    public BoatMessageGenerator(Boat b) {
         super(5, 37); //TODO magic number: fix this
+        this.b = b;
 
     }
 
