@@ -46,7 +46,7 @@ public class AC35XMLParserFactory implements MessageParserFactory {
             }
 
             @Override
-            public Boolean isValid(byte[] checkSum, byte[] messageBytes) {
+            public Boolean isValid(byte[] checkSum, byte[] messageBytes, byte[] headerBytes) {
                 return true;
             }
         };
