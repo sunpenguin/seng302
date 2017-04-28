@@ -11,9 +11,13 @@ import seng302.team18.model.Race;
 import seng302.team18.visualiser.messageinterpreting.RaceClockInterpreter;
 
 import java.io.IOException;
+import java.sql.Array;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -125,21 +129,32 @@ public class ControllerManager {
     private SocketMessageReceiver getPort() {
         Scanner scanner = new Scanner(System.in);
         String decision = "";
-        while (!decision.toUpperCase().equals("Y") && !decision.toUpperCase().equals("N")) {
-            System.out.println("Would you like a live race? (Y/N)");
+        List<String> validChoices = new ArrayList<>(Arrays.asList("1", "2", "3"));
+        while (!validChoices.contains(decision)) {
+            System.out.println("What race type do you want?");
+            System.out.println("1: TestMock, 2: TestStream, 3: LiveStream");
             if (scanner.hasNext()) {
-                decision = scanner.next().toUpperCase();
-            } else {
-                scanner.next();
+                decision = scanner.next();
             }
         }
 
-        if (decision.equals("Y")){
+        if (decision.equals("1")){
             try {
-                SocketMessageReceiver receiver = new SocketMessageReceiver(4941, new AC35MessageParserFactory());
-                return receiver;
+                return new SocketMessageReceiver("127.0.0.1", 5005, new AC35MessageParserFactory());
             } catch (IOException e) {
-                System.out.println("try again");
+                System.out.println("Could not establish connection to mock Host/Port");
+            }
+        } else if (decision.equals("2")) {
+            try {
+                return new SocketMessageReceiver("livedata.americascup.com", 4941, new AC35MessageParserFactory());
+            } catch (IOException e) {
+                System.out.println("Could not establish connection to test Host/Port");
+            }
+        } else if (decision.equals("3")) {
+            try {
+                return new SocketMessageReceiver("livedata.americascup.com", 4940, new AC35MessageParserFactory());
+            } catch (IOException e) {
+                System.out.println("Could not establish connection to stream Host/Port");
             }
         }
         return getPort();

@@ -16,10 +16,10 @@ public class SocketMessageReceiver {
     private MessageParserFactory parserFactory;
 
 
-    public SocketMessageReceiver(int portNumber, MessageParserFactory parserFactory) throws IOException {
+    public SocketMessageReceiver(String host, int portNumber, MessageParserFactory parserFactory) throws IOException {
         this.parserFactory = parserFactory;
         // Create input and output streams for reading in messageparsing
-        socket = new Socket("livedata.americascup.com", portNumber);
+        socket = new Socket(host, portNumber); // "livedata.americascup.com" 4941
         inStream = socket.getInputStream();
         if (!inStream.markSupported()) {
             inStream = new BufferedInputStream(inStream);
