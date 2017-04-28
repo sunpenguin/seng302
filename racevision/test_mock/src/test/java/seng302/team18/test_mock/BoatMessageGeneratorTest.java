@@ -3,7 +3,6 @@ package seng302.team18.test_mock;
 import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.test_mock.connection.BoatMessageGenerator;
-import seng302.team18.test_mock.connection.ScheduledMessage;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;

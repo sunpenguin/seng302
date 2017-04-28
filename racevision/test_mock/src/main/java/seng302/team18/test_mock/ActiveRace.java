@@ -1,6 +1,7 @@
 package seng302.team18.test_mock;
 
 import seng302.team18.model.*;
+import seng302.team18.test_mock.connection.MarkRoundingEvent;
 import seng302.team18.util.GPSCalculations;
 
 import java.util.ArrayList;
@@ -182,6 +183,8 @@ public class ActiveRace extends Race {
         boat.setPlace(passedMark.getPassed().indexOf(boat) + 1);
         boat.setDestination(nextLeg.getDestination().getMidCoordinate());
         boat.setLeg(nextLeg);
+
+        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, passedMark));
         //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
     }
 
@@ -235,4 +238,13 @@ public class ActiveRace extends Race {
     public void setRaceStatusNumber(byte raceStatusNumber) {
         this.raceStatusNumber = raceStatusNumber;
     }
+
+    private List<MarkRoundingEvent> markRoundingEvents = new ArrayList<>();
+
+    public List<MarkRoundingEvent> popMarkRoundingEvents() {
+        List<MarkRoundingEvent> events = markRoundingEvents;
+        markRoundingEvents = new ArrayList<>();
+        return events;
+    }
+
 }

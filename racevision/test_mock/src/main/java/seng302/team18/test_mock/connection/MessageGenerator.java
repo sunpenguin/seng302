@@ -4,41 +4,26 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Abstract base class for messages to be sent on a regular schedule.
+ * Created by afj19 on 28/04/17.
  */
-public abstract class ScheduledMessage {
-    private long lastSent;
-    private final int frequency;
+public abstract class MessageGenerator {
     private int type;
 
-    ScheduledMessage(int frequency , int type) {
-        this.frequency = frequency;
+    public MessageGenerator(int type) {
         this.type = type;
     }
 
     /**
-     * Checks if it is time to send the message, delegating this if it is
+     * Gets the message of a ScheduledMessageGenerator with header payload and CRC.
      *
-     * @param currTime the current time
-     */
-    public boolean isTimeToSend(long currTime) {
-        if ((currTime - lastSent) > (1000 / frequency)) {
-            lastSent = currTime;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Gets the message of a ScheduledMessage with header payload and CRC.
      * @return byte[] of the message
      */
-    public byte[] getMessage(){
+    public byte[] getMessage() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         byte[] payload;
         try {
             payload = getPayload();
-            byte[] header = HeaderGenerator.generateHeader(type, (short)payload.length);
+            byte[] header = HeaderGenerator.generateHeader(type, (short) payload.length);
             //TODO get CRC
             outputStream.write(header);
             outputStream.write(payload);
@@ -55,6 +40,5 @@ public abstract class ScheduledMessage {
     /**
      * Overridden by base classes to define behaviour when it is time to send a message/s
      */
-    public abstract byte[] getPayload() throws IOException;
-
+    protected abstract byte[] getPayload() throws IOException;
 }

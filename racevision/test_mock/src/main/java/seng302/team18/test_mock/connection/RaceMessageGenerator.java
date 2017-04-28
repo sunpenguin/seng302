@@ -1,25 +1,16 @@
 package seng302.team18.test_mock.connection;
 
-import seng302.team18.model.*;
+import seng302.team18.model.Boat;
 import seng302.team18.test_mock.ActiveRace;
 import seng302.team18.util.ByteCheck;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by hqi19 on 21/04/17.
  */
-public class RaceMessageGenerator extends ScheduledMessage {
+public class RaceMessageGenerator extends ScheduledMessageGenerator {
 
     private ActiveRace race;
     private String message;

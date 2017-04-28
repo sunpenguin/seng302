@@ -1,13 +1,14 @@
 package seng302.team18.test_mock.connection;
 
 import seng302.team18.util.ByteCheck;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
  * A class that generates the heartbeat for messages.
  */
-public class HeartBeatMessageGenerator extends ScheduledMessage{
+public class HeartBeatMessageGenerator extends ScheduledMessageGenerator {
 
     private int seqNo = 0;
 

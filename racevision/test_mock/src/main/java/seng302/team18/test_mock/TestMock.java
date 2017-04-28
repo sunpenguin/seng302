@@ -4,8 +4,6 @@ import seng302.team18.model.*;
 import seng302.team18.test_mock.XMLparsers.*;
 import seng302.team18.test_mock.connection.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +32,7 @@ public class TestMock {
     /**
      * The messages to be sent on a schedule during race simulation
      */
-    private List<ScheduledMessage> messages = new ArrayList<>();
+    private List<ScheduledMessageGenerator> scheduledMessages = new ArrayList<>();
 
     //TODO give real port
     private Server server = new Server(5005, regattaXML, boatsXML, raceXML);
@@ -89,7 +87,7 @@ public class TestMock {
 
         server.openServer();
 
-        initMessageGenerators();
+        initialiseScheduledMessages();
         runSimulation();
 
         server.closeServer();
@@ -104,12 +102,12 @@ public class TestMock {
     /**
      * Initialise the generators for scheduled messages
      */
-    private void initMessageGenerators() {
+    private void initialiseScheduledMessages() {
         for(Boat b : race.getStartingList()){
-            messages.add(new BoatMessageGenerator(b));
+            scheduledMessages.add(new BoatMessageGenerator(b));
         }
-        messages.add(new RaceMessageGenerator(race));
-        messages.add(new HeartBeatMessageGenerator());
+        scheduledMessages.add(new RaceMessageGenerator(race));
+        scheduledMessages.add(new HeartBeatMessageGenerator());
     }
 
 
@@ -131,8 +129,13 @@ public class TestMock {
             race.setRaceStatusNumber((byte) 3);
             race.updateBoats((timeCurr - timeLast) * 1e3);
 
+            // Send mark rounding messages for all mark roundings that occured
+            for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
+                server.broadcast((new MarkRoundingMessageGenerator(rounding, race)).getMessage());
+            }
+
             // Send messages if needed
-            for (ScheduledMessage sendable : messages) {
+            for (ScheduledMessageGenerator sendable : scheduledMessages) {
                 if (sendable.isTimeToSend(timeCurr)) {
                     server.broadcast(sendable.getMessage());
                 }

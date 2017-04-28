@@ -2,16 +2,15 @@ package seng302.team18.test_mock.connection;
 
 import seng302.team18.model.Boat;
 import seng302.team18.util.ByteCheck;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.sql.Timestamp;
-import java.io.ByteArrayOutputStream;
-import java.util.List;
 
 /**
  * Generator for boat messages (see #4.9 in the AC35 Streaming protocol spec.)
  */
-public class BoatMessageGenerator extends ScheduledMessage {
+public class BoatMessageGenerator extends ScheduledMessageGenerator {
     private Boat b;
     final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
     final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
