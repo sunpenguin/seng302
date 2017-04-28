@@ -3,6 +3,9 @@ package seng302.team18.data;
 import seng302.team18.util.ByteCheck;
 import seng302.team18.model.Coordinate;
 
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+
 /**
  * Created by dhl25 on 10/04/17.
  */
@@ -23,11 +26,13 @@ public class AC35BoatLocationParser implements MessageBodyParser {
 
     @Override
     public MessageBody parse(byte[] bytes) { // more final declarations than actual code LOL
+
         int sourceID = ByteCheck.byteToIntConverter(bytes, SOURCE_ID_INDEX, SOURCE_ID_LENGTH);
         double lat = ByteCheck.byteToIntConverter(bytes, LAT_INDEX, LAT_LENGTH) * BYTE_COORDINATE_TO_DOUBLE;
         double longitude = ByteCheck.byteToIntConverter(bytes, LONG_INDEX, LONG_LENGTH) * BYTE_COORDINATE_TO_DOUBLE;
         double heading = ByteCheck.byteToIntConverter(bytes, HEADING_INDEX, HEADING_LENGTH) * BYTE_HEADING_TO_DOUBLE;
         double speed = ByteCheck.byteToIntConverter(bytes, SPEED_INDEX, SPEED_LENGTH) * MMPS_TO_KMPH; // mm/s -> km/h
+
         return new AC35BoatLocationMessage(sourceID, new Coordinate(lat, longitude), heading, speed);
     }
 

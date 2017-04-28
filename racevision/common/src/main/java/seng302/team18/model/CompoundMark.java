@@ -3,6 +3,7 @@ package seng302.team18.model;
 import seng302.team18.util.GPSCalculations;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,9 +24,9 @@ public class CompoundMark {
 //        passed = new ArrayList<>();
 //    }
 
-    public CompoundMark(String name, List<Mark> marks, int id) {
+    public CompoundMark(String name, Collection<Mark> marks, int id) {
         this.name = name;
-        this.marks = marks;
+        this.marks = new ArrayList<>(marks);
         this.id = id;
         passed = new ArrayList<>();
     }

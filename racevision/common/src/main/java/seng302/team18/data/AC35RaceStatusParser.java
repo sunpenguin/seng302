@@ -26,6 +26,7 @@ public class AC35RaceStatusParser implements MessageBodyParser {
 
     @Override
     public MessageBody parse(byte[] bytes) { // more final declarations than actual code LOL
+
         Map<Integer, Long> boatStatus = new HashMap<>();
         long currentTime = ByteCheck.byteToLongConverter(bytes, CURRENT_TIME_INDEX, CURRENT_TIME_LENGTH);
         long startTime = ByteCheck.byteToLongConverter(bytes, START_TIME_INDEX, START_TIME_LENGTH);

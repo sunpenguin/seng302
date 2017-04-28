@@ -102,6 +102,27 @@ public class CourseRenderer {
         XYPair pixelCoordinates = PixelMapper.convertCoordPixel(coordinate, PADDING, pane, course);
         rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
         rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
+//        System.out.println(mark.getId());
+//        System.out.println(mark.getCoordinate());
+//        System.out.println(pixelCoordinates.getX());
+//        System.out.println(pixelCoordinates.getY());
+//        System.out.println(marks.get(mark.getId()));
+//        System.out.println(rectangle);
+//        if (mark.getId() == 126) {
+//            System.out.println(126);
+//            System.out.println(mark.getCoordinate());
+//            System.out.println(pixelCoordinates.getX());
+//            System.out.println(pixelCoordinates.getY());
+//            System.out.println(rectangle);
+//        } else if (mark.getId() == 127) {
+//            System.out.println(127);
+//            System.out.println(mark.getCoordinate());
+//            System.out.println(pixelCoordinates.getX());
+//            System.out.println(pixelCoordinates.getY());
+//            System.out.println(rectangle);
+//        }
+//        System.out.println(marks);
+//        System.out.println();
     }
 
 
@@ -122,11 +143,9 @@ public class CourseRenderer {
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */
     private void renderGate(CompoundMark compoundMark) {
-
         List<XYPair> endPoints = new ArrayList<>();
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
-
             Rectangle rectangle = marks.get(mark.getId());
             if (rectangle == null) {
                 rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
