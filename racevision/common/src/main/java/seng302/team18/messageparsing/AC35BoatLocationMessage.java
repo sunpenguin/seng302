@@ -3,7 +3,7 @@ package seng302.team18.messageparsing;
 import seng302.team18.model.Coordinate;
 
 /**
- * Created by dhl25 on 10/04/17.
+ * MessageBody that contains information about a boats location / status.
  */
 public class AC35BoatLocationMessage implements MessageBody {
     private Integer sourceId;
@@ -11,6 +11,14 @@ public class AC35BoatLocationMessage implements MessageBody {
     private Double heading;
     private Double speed;
 
+    /**
+     * Constructor for AC35BoatLocationMessage.
+     *
+     * @param sourceId of the boat.
+     * @param coordinate of the boat.
+     * @param heading of the boat.
+     * @param speed of the boat.
+     */
     public AC35BoatLocationMessage(int sourceId, Coordinate coordinate, double heading, double speed) {
         this.sourceId = sourceId;
         this.coordinate = coordinate;
@@ -23,18 +31,34 @@ public class AC35BoatLocationMessage implements MessageBody {
         return AC35MessageType.BOAT_LOCATION.getCode();
     }
 
+    /**
+     * Getter for boat source id.
+     * @return the boats sourceId.
+     */
     public Integer getSourceId() {
         return sourceId;
     }
 
+    /**
+     * Getter for boats coordinate.
+     * @return the boats coordinate.
+     */
     public Coordinate getCoordinate() {
         return coordinate;
     }
 
+    /**
+     * Getter for the boats heading.
+     * @return the boats heading.
+     */
     public Double getHeading() {
         return heading;
     }
 
+    /**
+     * Getter for boats speed.
+     * @return the boats speed.
+     */
     public Double getSpeed() {
         return speed;
     }

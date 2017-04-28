@@ -9,12 +9,17 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 
 /**
- * Created by dhl25 on 27/04/17.
+ * A MessageInterpreter that takes a AC35RaceStatusMessage and updates the current time and start time of a Race.
  */
 public class RaceTimeInterpreter extends MessageInterpreter {
 
     private Race race;
 
+    /**
+     * Constructor for RaceTimeInterpreter. Takes a Race as a parameter which it updates every time a
+     * AC35RaceStatusMessage is interpreted.
+     * @param race to be updated.
+     */
     public RaceTimeInterpreter(Race race) {
         this.race = race;
     }

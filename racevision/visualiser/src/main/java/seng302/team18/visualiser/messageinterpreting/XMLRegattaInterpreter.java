@@ -9,12 +9,17 @@ import seng302.team18.model.Race;
 import java.time.ZoneId;
 
 /**
- * Created by dhl25 on 27/04/17.
+ * A MessageInterpreter that takes a AC35XMLRegattaMessage and updates the central coordinate and timezone of a Race.
  */
 public class XMLRegattaInterpreter extends MessageInterpreter {
 
     private Race race;
 
+    /**
+     * Constructor for XMLRegattaInterpreter. Takes a Race as a parameter which it updates every time a
+     * AC35XMLRegattaMessage is interpreted.
+     * @param race to be updated.
+     */
     public XMLRegattaInterpreter(Race race) {
         this.race = race;
     }

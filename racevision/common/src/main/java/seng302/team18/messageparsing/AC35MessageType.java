@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by dhl25 on 10/04/17.
+ * Enum for the different types of messages for the AC35 streaming protocol and their associated codes.
  */
 public enum AC35MessageType {
     YACHT_EVENT (29), BOAT_LOCATION (37), MARK_ROUNDING (38),
@@ -18,18 +18,31 @@ public enum AC35MessageType {
     private static final Map<Integer, AC35MessageType> CODE_MAP = Collections.unmodifiableMap(initializeMapping());
 
 
-    AC35MessageType(int code) {
+    private AC35MessageType(int code) {
         this.code = code;
     }
 
+    /**
+     * Returns the AC35MessageType associated with a code. If none exists then it returns null.
+     * @param code representing the AC35MessageType.
+     * @return the AC35MessageType associated with a code.
+     */
     public static AC35MessageType from(int code) {
         return CODE_MAP.get(code);
     }
 
+    /**
+     * Getter for the code of the message type.
+     * @return the code of the message type.
+     */
     public int getCode() {
         return code;
     }
 
+    /**
+     * Creates a map between a code and its message type.
+     * @return a map between all codes and their message type.
+     */
     private static Map<Integer, AC35MessageType> initializeMapping() {
         Map<Integer, AC35MessageType> codeMap = new HashMap<>();
         for (AC35MessageType type : AC35MessageType.values()) {
