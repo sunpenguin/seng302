@@ -1,4 +1,4 @@
-package seng302.team18.messageinterpreting;
+package seng302.team18.visualiser.messageinterpreting;
 
 import seng302.team18.messageparsing.AC35RaceStatusMessage;
 import seng302.team18.messageparsing.MessageBody;
@@ -11,11 +11,11 @@ import java.util.Map;
 /**
  * Created by dhl25 on 27/04/17.
  */
-public class FinishersListInterpreter extends MessageInterpreter {
+public class EstimatedTimeInterpreter extends MessageInterpreter {
 
     private Race race;
 
-    public FinishersListInterpreter(Race race) {
+    public EstimatedTimeInterpreter(Race race) {
         this.race = race;
     }
 
@@ -23,12 +23,12 @@ public class FinishersListInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof AC35RaceStatusMessage) {
             AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
-            List<Boat> finishedList = race.getFinishedList();
             Map<Integer, List> boatStatus = statusMessage.getBoatStatus();
             for (Boat boat : race.getStartingList()) {
-                if (!finishedList.contains(boat) &&
-                            (int) boatStatus.get(boat.getId()).get(statusMessage.getBoatStatusPosition()) == 3) {
-                    finishedList.add(boat);
+                if (boatStatus.containsKey(boat.getId())) {
+                    double timeTilNextMark = ((long) boatStatus.get(boat.getId())
+                            .get(statusMessage.getEstimatedTimePosition()) - statusMessage.getCurrentTime()) / 1000d;
+                    boat.setTimeTilNextMark((long) timeTilNextMark);
                 }
             }
         }

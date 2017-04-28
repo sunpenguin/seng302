@@ -2,7 +2,7 @@ package seng302.team18.visualiser;
 
 import javafx.animation.AnimationTimer;
 import seng302.team18.messageparsing.*;
-import seng302.team18.messageinterpreting.MessageInterpreter;
+import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.CourseRenderer;
 import seng302.team18.visualiser.display.FPSReporter;

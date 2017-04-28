@@ -5,10 +5,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import seng302.team18.messageparsing.*;
-//import seng302.team18.visualiser.display.RaceClockInterpreter;
-import seng302.team18.messageinterpreting.*;
+//import seng302.team18.visualiser.messageinterpreting.RaceClockInterpreter;
+import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.model.Race;
-import seng302.team18.visualiser.display.RaceClockInterpreter;
+import seng302.team18.visualiser.messageinterpreting.RaceClockInterpreter;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -44,8 +44,8 @@ public class ControllerManager {
     public void start() throws Exception {
         receiver = getPort();
         race = new Race();
-        interpreter = new RaceMessageInterpreter();
-        setHashMap();
+        interpreter = new CompositeMessageInterpreter();
+        initialiseInterpreter();
         MessageBody message = receiver.nextMessage();
         while(message == null || AC35MessageType.from(message.getType()) != AC35MessageType.RACE_STATUS) {
             interpreter.interpret(message);
@@ -80,7 +80,7 @@ public class ControllerManager {
     }
 
 
-    private void setHashMap() {
+    private void initialiseInterpreter() {
         interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
@@ -105,7 +105,7 @@ public class ControllerManager {
 
         mainController.setUp(race, interpreter, receiver);
 
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(mainController.getRaceClock(), race.getCourse().getTimeZone()));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(mainController.getRaceClock()));
     }
 
 

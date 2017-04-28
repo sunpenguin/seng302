@@ -1,4 +1,4 @@
-package seng302.team18.messageinterpreting;
+package seng302.team18.visualiser.messageinterpreting;
 
 import seng302.team18.messageparsing.MessageBody;
 
@@ -10,11 +10,11 @@ import java.util.Map;
 /**
  * Created by david on 4/13/17.
  */
-public class RaceMessageInterpreter extends MessageInterpreter {
+public class CompositeMessageInterpreter extends MessageInterpreter {
 
     private Map<Integer, List<MessageInterpreter>> interpreterMap;
 
-    public RaceMessageInterpreter() {
+    public CompositeMessageInterpreter() {
         interpreterMap = new HashMap<>();
     }
 

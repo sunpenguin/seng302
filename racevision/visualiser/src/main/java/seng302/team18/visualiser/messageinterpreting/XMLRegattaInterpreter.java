@@ -1,4 +1,4 @@
-package seng302.team18.messageinterpreting;
+package seng302.team18.visualiser.messageinterpreting;
 
 import seng302.team18.messageparsing.AC35XMLRegattaMessage;
 import seng302.team18.messageparsing.MessageBody;

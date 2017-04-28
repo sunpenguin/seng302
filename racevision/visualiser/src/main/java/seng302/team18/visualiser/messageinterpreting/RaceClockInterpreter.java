@@ -1,13 +1,11 @@
-package seng302.team18.visualiser.display;
+package seng302.team18.visualiser.messageinterpreting;
 
 import seng302.team18.messageparsing.AC35RaceStatusMessage;
 import seng302.team18.messageparsing.MessageBody;
-import seng302.team18.messageinterpreting.MessageInterpreter;
+import seng302.team18.visualiser.display.RaceClock;
+import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -16,11 +14,9 @@ import java.time.temporal.ChronoUnit;
 public class RaceClockInterpreter extends MessageInterpreter {
 
     private RaceClock raceClock;
-    private ZoneId timeZone;
 
-    public RaceClockInterpreter(RaceClock raceClock, ZoneId timeZone) {
+    public RaceClockInterpreter(RaceClock raceClock) {
         this.raceClock = raceClock;
-        this.timeZone = timeZone;
     }
 
     @Override
