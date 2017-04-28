@@ -6,14 +6,14 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by jds112 on 10/04/2017.
+ * Created by jds112 on 10/04/2017
  */
 public class CRCCheckerTest {
-    byte[] messageBytes;
-    byte[] headerBytes;
-    byte[] checkSum;
-    byte[] wrongCheckSum;
-    CRCChecker checker;
+    private byte[] messageBytes;
+    private byte[] headerBytes;
+    private byte[] checkSum;
+    private byte[] wrongCheckSum;
+    private CRCChecker checker;
 
     @Before
     public void setUp() throws Exception {
@@ -30,12 +30,10 @@ public class CRCCheckerTest {
 
     @Test
     public void isValid() throws Exception {
-        boolean expected = true;
         boolean result = checker.isValid(checkSum, messageBytes, headerBytes);
-        assertEquals("The calculated checksum from the isValid method was not correct.", expected, result);
-        expected = false;
+        assertEquals("The calculated checksum from the isValid method was not correct.", true, result);
         result = checker.isValid(wrongCheckSum, messageBytes, headerBytes);
-        assertEquals("The calculated checksum from the isValid method was not correct.", expected, result);
+        assertEquals("The calculated checksum from the isValid method was not correct.", false, result);
     }
 
 }

@@ -51,23 +51,7 @@ public class SocketMessageReceiver {
         if (detector.isValid(checkBytes, bodyBytes, headerBytes) && bodyParser != null) {
             return bodyParser.parse(bodyBytes);
         }
-        for (byte b: bodyBytes) {
-            System.out.print(b + ", ");
-        }
-        System.out.println();
-        for (byte b: headerBytes) {
-            System.out.print(b + ", ");
-        }
-        System.out.println();
-        for (byte b: checkBytes) {
-            System.out.print(b + ", ");
-        }
-        System.out.println();
-        System.out.println("========================================================================================");
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
+
         return null;
     }
 

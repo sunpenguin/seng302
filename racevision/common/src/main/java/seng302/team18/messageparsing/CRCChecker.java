@@ -1,9 +1,7 @@
-package seng302.team18.data;
+package seng302.team18.messageparsing;
 
 import seng302.team18.util.ByteCheck;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.zip.CRC32;
 
 /**
