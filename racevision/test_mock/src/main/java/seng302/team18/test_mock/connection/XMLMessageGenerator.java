@@ -39,10 +39,10 @@ public class XMLMessageGenerator {
         try {
             payload = getPayload();
             byte[] header = getMessageHeader();
-            //TODO get CRC
             outputStream.write(header);
             outputStream.write(payload);
-            //outputStream.write(CRC);
+            byte[] crc = CRCGenerator.generateCRC(outputStream.toByteArray());
+            outputStream.write(crc);
             byte[] message = outputStream.toByteArray();
             return message;
         } catch (IOException e) {
