@@ -47,7 +47,7 @@ public class ActiveRace extends Race {
      */
     private void setInitialSpeed(){
         for(Boat b: startingList){
-            b.setSpeed(70);
+            b.setSpeed(0.005); // TODO find out what is going on with speed needing to be so low
         }
     }
 

@@ -84,40 +84,35 @@
         <BoatShape ShapeID="5" />
     </BoatShapes>
     <Boats>
-        <Boat Type="RC" SourceID="121" ShapeID="0" HullNum="RG01" StoweName="PRO" ShortName="PRO"
-              BoatName="Regardless">
-            <GPSposition Z="6.840" Y="7.800" X="0.000" />
-            <FlagPosition Z="0.000" Y="7.800" X="0.000" />
-        </Boat>
-        <Boat Type="Mark" SourceID="122" ShapeID="1" HullNum="LC05" StoweName="CON" ShortName="Constellation"
+        <Boat Type="Mark" SourceID="101" ShapeID="1" HullNum="LC05" StoweName="CON" ShortName="Constellation"
               BoatName="Constellation">
             <GPSposition Z="5.334" Y="3.804" X="0.000" />
             <FlagPosition Z="0.000" Y="3.426" X="0.000" />
         </Boat>
-        <Boat Type="Mark" SourceID="123" ShapeID="1" HullNum="LC04" StoweName="MIS" ShortName="Mischief"
+        <Boat Type="Mark" SourceID="102" ShapeID="1" HullNum="LC04" StoweName="MIS" ShortName="Mischief"
               BoatName="Mischief">
             <GPSposition Z="5.334" Y="3.804" X="0.000" />
             <FlagPosition Z="0.000" Y="3.426" X="0.000" />
         </Boat>
-        <Boat Type="Mark" SourceID="124" ShapeID="1" HullNum="LC03" ShortName="Atalanta" BoatName="Atalanta">
+        <Boat Type="Mark" SourceID="103" ShapeID="1" HullNum="LC03" ShortName="Atalanta" BoatName="Atalanta">
             <GPSposition Z="5.334" Y="3.804" X="0.000" />
             <FlagPosition Z="0.000" Y="3.426" X="0.000" />
         </Boat>
-        <Boat SourceID="125" ShapeID="1" StoweName="VOL" HullNum="LC01" ShortName="Volunteer"
-              BoatName="Volunteer">
-            <GPSposition Z="5.334" Y="3.804" X="0.000" />
-            <FlagPosition Z="0.000" Y="3.426" X="0.000" />
-        </Boat>
-        <Boat Type="Mark" SourceID="126" ShapeID="1" HullNum="LC13" StoweName="MS2" ShortName="Defender"
+        <Boat Type="Mark" SourceID="104" ShapeID="1" HullNum="LC13" StoweName="MS2" ShortName="Defender"
               BoatName="Defender">
             <GPSposition Z="5.334" Y="3.804" X="0.000" />
             <FlagPosition Z="0.000" Y="3.426" X="0.000" />
         </Boat>
-        <Boat Type="Mark" SourceID="128" ShapeID="1" HullNum="LC01" ShortName="Shamrock" BoatName="Shamrock">
+        <Boat Type="Mark" SourceID="105" ShapeID="1" HullNum="LC01" ShortName="Shamrock" BoatName="Shamrock">
             <GPSposition Z="5.334" Y="3.804" X="0.000" />
             <FlagPosition Z="0.000" Y="3.426" X="0.000" />
         </Boat>
-        <Boat Type="Yacht" SourceID="101" ShapeID="4" HullNum="AC4501" StoweName="KOR" ShortName="TEAM KOREA"
+        <Boat Type="Mark" SourceID="106" ShapeID="0" HullNum="RG01" StoweName="PRO" ShortName="PRO"
+              BoatName="Regardless">
+            <GPSposition Z="6.840" Y="7.800" X="0.000" />
+            <FlagPosition Z="0.000" Y="7.800" X="0.000" />
+        </Boat>
+        <Boat Type="Yacht" SourceID="200" ShapeID="4" HullNum="AC4501" StoweName="KOR" ShortName="TEAM KOREA"
               BoatName="TEAM KOREA" Country="KOR">
             <GPSposition Z="1.738" Y="0.625" X="0.001" />
             <MastTop Z="21.496" Y="4.233" X="0.000" />

@@ -106,7 +106,7 @@ public class TestMock {
      */
     private void initMessageGenerators() {
         for(Boat b : race.getStartingList()){
-            messages.add(new BoatMessageGenerator(b));
+           messages.add(new BoatMessageGenerator(b));
         }
         messages.add(new RaceMessageGenerator(race));
         messages.add(new HeartBeatMessageGenerator());
