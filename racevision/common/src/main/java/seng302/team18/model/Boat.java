@@ -18,6 +18,8 @@ public class Boat {
     private Coordinate destination;
     private IntegerProperty place;
     private SimpleLongProperty timeTilNextMark;
+    private Long timeSinceLastMark;
+    private Long timeAtLastMark;
 
     /**
      * A constructor for the Boat class
@@ -32,6 +34,8 @@ public class Boat {
         speed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty();
         timeTilNextMark = new SimpleLongProperty();
+        timeSinceLastMark = 0L;
+        timeAtLastMark = 0L;
     }
 
     /**
@@ -182,5 +186,21 @@ public class Boat {
 
     public void setTimeTilNextMark(long timeTilNextMark) {
         this.timeTilNextMark.set(timeTilNextMark);
+    }
+
+    public Long getTimeSinceLastMark() {
+        return timeSinceLastMark;
+    }
+
+    public void setTimeSinceLastMark(long timeSinceLastMark) {
+        this.timeSinceLastMark = timeSinceLastMark;
+    }
+
+    public Long getTimeAtLastMark() {
+        return timeAtLastMark;
+    }
+
+    public void setTimeAtLastMark(Long timeAtLastMark) {
+        this.timeAtLastMark = timeAtLastMark;
     }
 }

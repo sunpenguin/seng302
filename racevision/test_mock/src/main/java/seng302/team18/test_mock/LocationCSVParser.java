@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Random;
 
 /**
- * Class to parse race data from a CSV.
+ * Class to parse race messageparsing from a CSV.
  * Data is to be used to create Regatta.xml.
  * CSV should have lines in the format of:
  * Regatta ID, Regatta Name, Course Name, UTC, Magnetic Variation, Race ID, Race Type, Race Start Time, top left Lat, top left long, top right Lat, top right long, bottom right Lat, bottom right long, top left Lat, top left long

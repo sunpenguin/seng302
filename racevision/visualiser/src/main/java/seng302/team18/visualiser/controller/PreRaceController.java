@@ -36,16 +36,6 @@ public class PreRaceController {
     @FXML
     public void initialize() {
 
-//        Timeline showLive = new Timeline(new KeyFrame(
-////                Duration.seconds(Race.WARNING_TIME_SECONDS / timeScaleFactor),
-//                Duration.seconds(Race.WARNING_TIME_SECONDS),
-//                event -> showLiveRaceView()));
-//        showLive.setCycleCount(1);
-//        showLive.play();
-//
-//        setUpList();
-//        startClock();
-//        displayTimeZone();
     }
 
 
@@ -55,63 +45,37 @@ public class PreRaceController {
         startClock(currentTime, currentTime.getZone());
         displayTimeZone(currentTime);
         startTimeLabel.setText(startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-
+        setUpLists(boats);
         if (duration > 0) {
             Timeline showLive = new Timeline(new KeyFrame(
                     Duration.seconds(duration),
                     event -> {
-                        showLiveRaceView(boats);
+                        showLiveRaceView();
                     }));
 
             showLive.setCycleCount(1);
             showLive.play();
         }else{
-            showLiveRaceView(boats);
+            showLiveRaceView();
         }
     }
 
 
-    public void showLiveRaceView(List<Boat> boats) {
-//        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
-//        try {
-//            Parent root = loader.load(); // throws IOException
-//            Stage stage = (Stage) listView.getScene().getWindow();
-//            MainWindowController mainWindowController = loader.getController();
-////            mainWindowController.setRace(race);
-//            mainWindowController.startRace((long) Race.PREP_TIME_SECONDS);
-//            Scene scene = new Scene(root);
-//            stage.setScene(scene);
-//            preRaceClock.stop();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+    public void showLiveRaceView() {
         try {
             manager.showMainView();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setUpLists(boats);
     }
 
 
     private void startClock(ZonedDateTime currentTime, ZoneId timeZone) {
-        final double KMPH_TO_MPS = 1000.0 / 3600.0;
-//        double timeScaleFactor = race.getCourse().getCourseDistance()
-//                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
-//        preRaceClock = new ZoneTimeClock(timeLabel, timeScaleFactor, race.getCourse().getTimeZone());
         preRaceClock = new ZoneTimeClock(timeLabel, timeZone, currentTime);
         preRaceClock.start();
     }
 
     private void displayTimeZone(ZonedDateTime zoneTime) {
-        final int MILLI_TO_HOUR = 3600000;
-        final int MILLI_TO_MINUTE = 60000;
-        final int SCALER_FOR_MINUTE = 60;
-//        TimeZone timeZone = TimeZone.getTimeZone(race.getCourse().getTimeZone());
-//        Calendar cal = GregorianCalendar.getInstance(timeZone);
-//        int offsetInMillis = timeZone.getOffset(cal.getTimeInMillis());
-//        String offset = String.format("%02d:%02d", Math.abs(offsetInMillis / MILLI_TO_HOUR), Math.abs((offsetInMillis / MILLI_TO_MINUTE) % SCALER_FOR_MINUTE));
-//        offset = (offsetInMillis >= 0 ? "+" : "-") + offset;
         timeZoneLabel.setText("UTC " + zoneTime.getOffset().toString());
     }
 
