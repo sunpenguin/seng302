@@ -29,6 +29,8 @@ public class Course {
             legs.add(new Leg(compoundMarks.get(i), compoundMarks.get(i + 1), i));
         }
         markRoundings = new ArrayList<>();
+
+        centralCoordinate = new Coordinate(0d, 0d);
     }
 
     public Course() {
