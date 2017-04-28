@@ -49,8 +49,10 @@ public class Server {
      * @throws IOException if an I/O exception occurs
      */
     private void sendXmls(ClientConnection client) throws IOException {
-        client.sendMessage(regattaXMLMessageGenerator.getMessage());
         client.sendMessage(raceXMLMessageGenerator.getMessage());
+
+        client.sendMessage(regattaXMLMessageGenerator.getMessage());
+
         client.sendMessage(boatsXMLMessageGenerator.getMessage());
     }
 
