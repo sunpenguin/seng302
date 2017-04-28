@@ -9,7 +9,8 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 
 /**
- * A MessageInterpreter that takes a AC35RaceStatusMessage and updates the current time and start time of a Race.
+ * A MessageInterpreter that takes a AC35RaceStatusMessage and updates the current time and start time of a Race and
+ * also updates races boats time elapsed since passing last mark.
  */
 public class RaceTimeInterpreter extends MessageInterpreter {
 
@@ -40,6 +41,11 @@ public class RaceTimeInterpreter extends MessageInterpreter {
         }
     }
 
+    /**
+     * Updates the time elapsed since passing last mark for all given boats.
+     * @param boats to be updated.
+     * @param time elapsed since passing last mark.
+     */
     private void updateBoatMarkTimes(Iterable<Boat> boats, long time) {
         for (Boat boat : boats) {
             if (!boat.getTimeAtLastMark().equals(0L)) {

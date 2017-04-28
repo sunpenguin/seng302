@@ -8,7 +8,7 @@ import javafx.beans.property.*;
  */
 
 public class Boat {
-    private StringProperty boatName;
+    private String boatName;
     private String shortName;
     private DoubleProperty speed;
     private Leg leg;
@@ -17,7 +17,7 @@ public class Boat {
     private Coordinate coordinate;
     private Coordinate destination;
     private IntegerProperty place;
-    private SimpleLongProperty timeTilNextMark;
+    private Long timeTilNextMark;
     private Long timeSinceLastMark;
     private Long timeAtLastMark;
 
@@ -28,12 +28,12 @@ public class Boat {
      * @param id The id of the boat
      */
     public Boat(String boatName, String shortName, int id) {
-        this.boatName = new SimpleStringProperty(boatName);
+        this.boatName = boatName;
         this.shortName = shortName;
         this.id = id;
         speed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty();
-        timeTilNextMark = new SimpleLongProperty();
+        timeTilNextMark = 0L;
         timeSinceLastMark = 0L;
         timeAtLastMark = 0L;
     }
@@ -43,19 +43,6 @@ public class Boat {
      * @return The boatName
      */
     public String getBoatName() {
-        return boatName.get();
-    }
-
-    /**
-     * A setter for the name of the boat
-     * @param name The name the boatName will be set to
-     */
-    public void setBoatName(String name) {
-        this.boatName.set(name);
-    }
-
-
-    public StringProperty boatNameProperty() {
         return boatName;
     }
 
@@ -86,13 +73,6 @@ public class Boat {
         return shortName;
     }
 
-    /**
-     * A setter for the team name that the boat belongs to
-     * @param name The name that the teamName variable will be set to
-     */
-    public void setShortName(String name) {
-        this.shortName = name;
-    }
 
     /**
      * A getter for the speed of the boat
@@ -110,9 +90,11 @@ public class Boat {
         this.speed.setValue(speed);
     }
 
+
     public DoubleProperty speedProperty() {
         return speed;
     }
+
 
     public Leg getLeg() {
         return leg;
@@ -143,25 +125,16 @@ public class Boat {
         this.destination = destination;
     }
 
-    /**
-     * An overidden toString for the boat objects which displays all of the boats variables
-     * @return A string showing all the boats variables
-     */
-    @Override
-    public String toString() {
-        return "Boat{" +
-                "boatName='" + boatName + '\'' +
-                ", teamName='" + shortName + '\'' +
-                '}';
-    }
 
     public int getPlace() {
         return place.get();
     }
 
+
     public void setPlace(int place) {
         this.place.set(place);
     }
+
 
     public IntegerProperty placeProperty() {
         return place;
@@ -172,35 +145,52 @@ public class Boat {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public long getTimeTilNextMark() {
-        return timeTilNextMark.get();
-    }
-
-    public SimpleLongProperty timeTilNextMarkProperty() {
         return timeTilNextMark;
     }
 
+
     public void setTimeTilNextMark(long timeTilNextMark) {
-        this.timeTilNextMark.set(timeTilNextMark);
+        this.timeTilNextMark = timeTilNextMark;
     }
+
 
     public Long getTimeSinceLastMark() {
         return timeSinceLastMark;
     }
 
+
     public void setTimeSinceLastMark(long timeSinceLastMark) {
         this.timeSinceLastMark = timeSinceLastMark;
     }
+
 
     public Long getTimeAtLastMark() {
         return timeAtLastMark;
     }
 
+
     public void setTimeAtLastMark(Long timeAtLastMark) {
         this.timeAtLastMark = timeAtLastMark;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Boat{" +
+                "boatName=" + boatName +
+                ", shortName='" + shortName + '\'' +
+                ", speed=" + speed +
+                ", leg=" + leg +
+                ", id=" + id +
+                ", heading=" + heading +
+                ", coordinate=" + coordinate +
+                ", destination=" + destination +
+                ", place=" + place +
+                ", timeTilNextMark=" + timeTilNextMark +
+                ", timeSinceLastMark=" + timeSinceLastMark +
+                ", timeAtLastMark=" + timeAtLastMark +
+                '}';
     }
 }
