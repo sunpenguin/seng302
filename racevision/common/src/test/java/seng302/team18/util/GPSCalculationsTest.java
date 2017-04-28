@@ -3,7 +3,6 @@ package seng302.team18.util;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
-import seng302.team18.data.XMLCourseParser;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 

@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
-import seng302.team18.data.XMLCourseParser;
 import seng302.team18.util.GPSCalculations;
 
 import javax.xml.parsers.ParserConfigurationException;
