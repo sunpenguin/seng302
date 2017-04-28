@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class CompoundMark {
 
-    public static int GATE_SIZE = 2;
-    public static int MARK_SIZE = 1;
+    public final static int GATE_SIZE = 2;
+    public final static int MARK_SIZE = 1;
     private String name;
     private Integer id;
     private List<Mark> marks;
@@ -87,5 +87,9 @@ public class CompoundMark {
         result = 31 * result + (marks != null ? marks.hashCode() : 0);
         result = 31 * result + (passed != null ? passed.hashCode() : 0);
         return result;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }
