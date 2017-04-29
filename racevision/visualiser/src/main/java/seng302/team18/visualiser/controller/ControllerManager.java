@@ -71,6 +71,7 @@ public class ControllerManager {
                 try {
                     messageBody = receiver.nextMessage();
                 } catch (Exception e) {
+                    e.printStackTrace();
                     return; // ignore if anything goes wrong
                 }
                 interpreter.interpret(messageBody);

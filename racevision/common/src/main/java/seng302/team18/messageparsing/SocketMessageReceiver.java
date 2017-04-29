@@ -19,7 +19,8 @@ public class SocketMessageReceiver {
     public SocketMessageReceiver(int portNumber, MessageParserFactory parserFactory) throws IOException {
         this.parserFactory = parserFactory;
         // Create input and output streams for reading in messageparsing
-        socket = new Socket("livedata.americascup.com", portNumber);
+//        socket = new Socket("livedata.americascup.com", portNumber);
+        socket = new Socket("132.181.12.11", 5005);
         inStream = socket.getInputStream();
         if (!inStream.markSupported()) {
             inStream = new BufferedInputStream(inStream);
@@ -29,6 +30,7 @@ public class SocketMessageReceiver {
 
 
     public MessageBody nextMessage() throws IOException {
+        System.out.println("Woooo");
         MessageHeadParser headParser = parserFactory.makeHeadParser();
         if (inStream.available() <= headParser.headerSize()) {
             return null;
@@ -48,11 +50,12 @@ public class SocketMessageReceiver {
 
         inStream.read(bodyBytes);
         inStream.read(checkBytes);
-        if (detector.isValid(checkBytes, bodyBytes, headerBytes) && bodyParser != null) {
-            return bodyParser.parse(bodyBytes);
-        }
-
-        return null;
+//        if (detector.isValid(checkBytes, bodyBytes, headerBytes) && bodyParser != null) {
+//            return bodyParser.parse(bodyBytes);
+//        }
+//
+//        return null;
+        return bodyParser == null ? null : bodyParser.parse(bodyBytes);
     }
 
 

@@ -19,6 +19,7 @@ public class AC35MessageHeadParser implements MessageHeadParser {
         int type = header[TYPE_INDEX];
         AC35MessageType messageType = AC35MessageType.from(type);
         int len = ByteCheck.byteToIntConverter(header, LEN_START_INDEX, LEN_LENGTH);
+        System.out.println(len);
 //        Old Conversion here: ((header[13] & 0xff) << 8) | (header[14] & 0xff);
         return new AC35MessageHead(messageType, len);
     }
