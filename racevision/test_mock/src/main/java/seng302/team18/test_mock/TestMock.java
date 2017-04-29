@@ -86,20 +86,20 @@ public class TestMock {
         readFiles();
         generateClasses();
 
-        try {
-            byte[] header = HeaderGenerator.generateHeader(26, (short) 8);
-            RaceMessageGenerator racemsg = new RaceMessageGenerator(race);
-            byte[] raceBody = racemsg.getPayload();
-
-            byte[] combined = new byte[header.length + raceBody.length];
-            System.arraycopy(header,0,combined,0         ,header.length);
-            System.arraycopy(raceBody,0,combined,header.length,raceBody.length);
-
-            CRCGenerator crcGenerator = new CRCGenerator();
-            crcGenerator.generateCRC(combined);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            byte[] header = HeaderGenerator.generateHeader(26, (short) 8);
+//            RaceMessageGenerator racemsg = new RaceMessageGenerator(race);
+//            byte[] raceBody = racemsg.getPayload();
+//
+//            byte[] combined = new byte[header.length + raceBody.length];
+//            System.arraycopy(header,0,combined,0         ,header.length);
+//            System.arraycopy(raceBody,0,combined,header.length,raceBody.length);
+//
+//            CRCGenerator crcGenerator = new CRCGenerator();
+//            crcGenerator.generateCRC(combined);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         server.openServer();
 
@@ -123,7 +123,7 @@ public class TestMock {
            messages.add(new BoatMessageGenerator(b));
         }
         messages.add(new RaceMessageGenerator(race));
-        //messages.add(new HeartBeatMessageGenerator());
+        messages.add(new HeartBeatMessageGenerator());
     }
 
 

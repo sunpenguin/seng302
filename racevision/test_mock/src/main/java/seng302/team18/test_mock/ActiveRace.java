@@ -196,10 +196,7 @@ public class ActiveRace extends Race {
         double speed = boat.getSpeed();
         double mpsSpeed = speed * 0.27778;//convert to metres/second
         double secondsTime = time / 1000;
-        System.out.println("S " + mpsSpeed);
-        System.out.println("t " + secondsTime);
         double distanceTravelled = mpsSpeed * secondsTime;
-        System.out.println("d " + distanceTravelled);
         // set next position based on current coordinate, distance travelled, and heading.
         boat.setCoordinate(gpsCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
