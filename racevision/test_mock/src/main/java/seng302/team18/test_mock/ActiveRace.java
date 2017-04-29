@@ -47,7 +47,7 @@ public class ActiveRace extends Race {
      */
     private void setInitialSpeed(){
         for(Boat b: startingList){
-            b.setSpeed(0.005); // TODO find out what is going on with speed needing to be so low
+            b.setSpeed(40); //kph
         }
     }
 
@@ -193,11 +193,15 @@ public class ActiveRace extends Race {
      * @param time that has passed
      */
     private void updatePosition(Boat boat, double time) {
-        final double KMPH_TO_MPS = 1000.0 / 3600.0;
-        double speed = boat.getSpeed() * KMPH_TO_MPS;
-        double distanceTravelled = speed * time;
-        boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
-                gpsCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+        double speed = boat.getSpeed();
+        double mpsSpeed = speed * 0.27778;//convert to metres/second
+        double secondsTime = time / 1000;
+        System.out.println("S " + mpsSpeed);
+        System.out.println("t " + secondsTime);
+        double distanceTravelled = mpsSpeed * secondsTime;
+        System.out.println("d " + distanceTravelled);
+        // set next position based on current coordinate, distance travelled, and heading.
+        boat.setCoordinate(gpsCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
 
 

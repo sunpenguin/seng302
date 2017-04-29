@@ -29,13 +29,13 @@ public class CRCGenerator {
 //        System.out.println(b);
 
 //        System.out.println(message);
-        System.out.println(checksumValue);
+        //System.out.println(checksumValue);
 
 //        byte[] bytes = ByteBuffer.allocate(Long.SIZE / Byte.SIZE).putLong(checksumValue).array();
 //        System.out.println(bytes+" length:8");
 
         byte[] value = toByteArray(checksumValue);
-        System.out.println(value+" length: "+value.length);
+        //System.out.println(value+" length: "+value.length);
 //        System.out.println(ByteCheck.byteToLongConverter(bytes, 0, 4));
 
 //        byte[] check = ByteCheck.convertLongTo6ByteArray(checksumValue);

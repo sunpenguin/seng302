@@ -123,7 +123,7 @@ public class TestMock {
            messages.add(new BoatMessageGenerator(b));
         }
         messages.add(new RaceMessageGenerator(race));
-        messages.add(new HeartBeatMessageGenerator());
+        //messages.add(new HeartBeatMessageGenerator());
     }
 
 
@@ -131,7 +131,7 @@ public class TestMock {
      * Simulate the race will sending the scheduled messages
      */
     private void runSimulation() {
-        final int LOOP_FREQUENCY = 10;
+        final int LOOP_FREQUENCY = 60;
 
         long timeCurr = System.currentTimeMillis();
         long timeLast;
@@ -143,7 +143,7 @@ public class TestMock {
 
             // Update simulation
             race.setRaceStatusNumber((byte) 3);
-            race.updateBoats((timeCurr - timeLast) * 1e3);
+            race.updateBoats((timeCurr - timeLast));
 
             // Send messages if needed
             for (ScheduledMessage sendable : messages) {
