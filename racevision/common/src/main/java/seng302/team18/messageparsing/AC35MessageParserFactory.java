@@ -23,7 +23,7 @@ public class AC35MessageParserFactory implements MessageParserFactory {
 
     @Override
     public MessageErrorDetector makeDetector() {
-        return new CRCChecker(); // TODO JESS
+        return new CRCChecker();
     }
 
     private Map<AC35MessageType, MessageBodyParser> initialiseMap() {

@@ -5,13 +5,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import seng302.team18.messageparsing.*;
-//import seng302.team18.visualiser.messageinterpreting.RaceClockInterpreter;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.messageinterpreting.RaceClockInterpreter;
 
 import java.io.IOException;
-import java.sql.Array;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
