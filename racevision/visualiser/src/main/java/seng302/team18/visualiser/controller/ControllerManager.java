@@ -127,10 +127,10 @@ public class ControllerManager {
     private SocketMessageReceiver getPort() {
         Scanner scanner = new Scanner(System.in);
         String decision = "";
-        List<String> validChoices = new ArrayList<>(Arrays.asList("1", "2", "3"));
+        List<String> validChoices = new ArrayList<>(Arrays.asList("1", "2", "3", "4"));
         while (!validChoices.contains(decision)) {
             System.out.println("What race type do you want?");
-            System.out.println("1: TestMock, 2: TestStream, 3: LiveStream");
+            System.out.println("1: TestMock, 2: TestStream, 3: LiveStream, 4: Custom Host");
             if (scanner.hasNext()) {
                 decision = scanner.next();
             }
@@ -154,7 +154,32 @@ public class ControllerManager {
             } catch (IOException e) {
                 System.out.println("Could not establish connection to stream Host/Port");
             }
+        }else if (decision.equals("4")) {
+            try {
+                ArrayList<String> portAndHost = getCustomConnection();
+                return new SocketMessageReceiver(portAndHost.get(1), Integer.parseInt(portAndHost.get(0)), new AC35MessageParserFactory());
+            }catch (Exception e) {
+                System.out.println("Could not establish connection to stream Host/Port");
+            }
         }
         return getPort();
+    }
+
+    private ArrayList<String> getCustomConnection() {
+        ArrayList<String> portAndHost = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter a port number: ");
+        while (portAndHost.isEmpty()) {
+            if (scanner.hasNext()) {
+               portAndHost.add(scanner.next());
+            }
+        }
+        System.out.println("Please enter a host name: ");
+        while (portAndHost.size() == 1) {
+            if (scanner.hasNext()) {
+                portAndHost.add(scanner.next());
+            }
+        }
+        return portAndHost;
     }
 }
