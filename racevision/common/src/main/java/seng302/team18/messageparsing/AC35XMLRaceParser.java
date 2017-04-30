@@ -13,6 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -30,11 +31,12 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         final String COMPOUND_MARK_SEQUENCE = "CompoundMarkSequence";
         final String COURSE_BOUNDARIES_ELEMENT = "CourseLimit";
 
-        InputStream stream = new ByteArrayInputStream(bytes);
+//        InputStream stream = new ByteArrayInputStream(bytes);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         Document doc;
         try {
+            InputStream stream = new ByteArrayInputStream(new String(bytes, StandardCharsets.UTF_8).trim().getBytes());
             builder = factory.newDocumentBuilder(); // parser configuration exception
             doc = builder.parse(stream); // io exception
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -69,9 +71,15 @@ public class AC35XMLRaceParser implements MessageBodyParser {
 
 
     private String parseRaceTime(Node startTimeNode) {
-        final String TIME = "Start"; // if program breaks change this to "Time"
+        final String START = "Start"; // if program breaks change this to "Time"
+        final String TIME = "Time";
         if (startTimeNode.getNodeType() == Node.ELEMENT_NODE) {
-            return ((Element) startTimeNode).getAttribute(TIME);
+            String time = ((Element) startTimeNode).getAttribute(TIME);
+            if ("".equals(time)) {
+                return ((Element) startTimeNode).getAttribute(START);
+            } else {
+                return time;
+            }
         }
         return "";
     }

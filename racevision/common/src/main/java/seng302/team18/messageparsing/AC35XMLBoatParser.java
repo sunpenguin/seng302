@@ -13,6 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,15 +36,15 @@ public class AC35XMLBoatParser implements MessageBodyParser {
 //            System.out.println("b");
 //        }
 
-        InputStream stream = new ByteArrayInputStream(bytes);
+
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         Document doc;
         try {
+            InputStream stream = new ByteArrayInputStream(new String(bytes, StandardCharsets.UTF_8).trim().getBytes());
             builder = factory.newDocumentBuilder();
             doc = builder.parse(stream);
         } catch (ParserConfigurationException | SAXException | IOException e) {
-            e.printStackTrace();
             return null;
         }
         doc.getDocumentElement().normalize();

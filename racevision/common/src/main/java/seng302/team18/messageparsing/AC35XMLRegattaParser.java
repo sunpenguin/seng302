@@ -10,6 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by david on 4/12/17.
@@ -23,7 +24,7 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
         final String CENTER_LAT = "CentralLatitude";
         final String CENTER_LONG = "CentralLongitude";
         final String UTC_OFFSET = "UtcOffset";
-        InputStream stream = new ByteArrayInputStream(bytes);
+//        InputStream stream = new ByteArrayInputStream(bytes);
 //        System.out.println("AC35XMLRegattaParser::parse called");
 //        try {
 //            System.out.println(new String(Arrays.copyOfRange(bytes, 14, bytes.length), "UTF-8"));
@@ -38,6 +39,7 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
         DocumentBuilder builder;
         Document doc;
         try {
+            InputStream stream = new ByteArrayInputStream(new String(bytes, StandardCharsets.UTF_8).trim().getBytes());
             builder = factory.newDocumentBuilder(); // parser configuration exception
             doc = builder.parse(stream); // io exception, SAXException
         } catch (ParserConfigurationException | SAXException | IOException e) {
