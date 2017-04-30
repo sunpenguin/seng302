@@ -86,20 +86,20 @@ public class TestMock {
         readFiles();
         generateClasses();
 
-        try {
-            byte[] header = HeaderGenerator.generateHeader(26, (short) 8);
-            RaceMessageGenerator racemsg = new RaceMessageGenerator(race);
-            byte[] raceBody = racemsg.getPayload();
-
-            byte[] combined = new byte[header.length + raceBody.length];
-            System.arraycopy(header,0,combined,0         ,header.length);
-            System.arraycopy(raceBody,0,combined,header.length,raceBody.length);
-
-            CRCGenerator crcGenerator = new CRCGenerator();
-            crcGenerator.generateCRC(combined);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            byte[] header = HeaderGenerator.generateHeader(26, (short) 8);
+//            RaceMessageGenerator racemsg = new RaceMessageGenerator(race);
+//            byte[] raceBody = racemsg.getPayload();
+//
+//            byte[] combined = new byte[header.length + raceBody.length];
+//            System.arraycopy(header,0,combined,0         ,header.length);
+//            System.arraycopy(raceBody,0,combined,header.length,raceBody.length);
+//
+//            CRCGenerator crcGenerator = new CRCGenerator();
+//            crcGenerator.generateCRC(combined);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         server.openServer();
 
@@ -131,7 +131,7 @@ public class TestMock {
      * Simulate the race will sending the scheduled messages
      */
     private void runSimulation() {
-        final int LOOP_FREQUENCY = 10;
+        final int LOOP_FREQUENCY = 60;
 
         long timeCurr = System.currentTimeMillis();
         long timeLast;
@@ -143,7 +143,7 @@ public class TestMock {
 
             // Update simulation
             race.setRaceStatusNumber((byte) 3);
-            race.updateBoats((timeCurr - timeLast) * 1e3);
+            race.updateBoats((timeCurr - timeLast));
 
             // Send messages if needed
             for (ScheduledMessage sendable : messages) {
