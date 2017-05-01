@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Race>
+
+    <RaceID>11080703</RaceID>
+    <RaceType>Match</RaceType>
+    <CreationTimeDate>2011-08-06T13:25:00-0000</CreationTimeDate >
+    <RaceStartTime Postpone="true" />
+
+    <Participants>
+        <Yacht SourceID="121" Entry="Port" />
+        <Yacht SourceID="122" Entry="Stbd" />
+        <Yacht SourceID="123" Entry="Stbd" />
+        <Yacht SourceID="124" Entry="Port" />
+        <Yacht SourceID="125" Entry="Stbd" />
+        <Yacht SourceID="126" Entry="Port" />
+    </Participants>
+
+    <Course>
+        <CompoundMark CompoundMarkID="11" Name="StartLine">
+            <Mark SeqID="1" Name="PRO" TargetLat="32.296577" TargetLng=" -64.854304" SourceID="131" />
+            <Mark SeqID="2" Name="PIN" TargetLat="32.296577" TargetLng="-64.854304" SourceID="132" />
+        </CompoundMark>
+
+        <CompoundMark CompoundMarkID="12" Name="Mark">
+            <Mark Name="M1" TargetLat="32.293039" TargetLng="-64.843983" SourceID="133" />
+        </CompoundMark>
+
+        <CompoundMark CompoundMarkID="13" Name="NorthGate">
+            <Mark SeqID="1" Name="G1" TargetLat="32.309693" TargetLng="64.835249" SourceID="134" />
+            <Mark SeqID="2" Name="G2" TargetLat="32.309693" TargetLng="64.835249" SourceID="135" />
+        </CompoundMark>
+
+        <CompoundMark CompoundMarkID="14" Name="SouthGate">
+            <Mark SeqID="1" Name="G1" TargetLat="32.284680" TargetLng="-64.850045" SourceID="136" />
+            <Mark SeqID="2" Name="G2" TargetLat="32.284680" TargetLng="-64.850045" SourceID="137" />
+        </CompoundMark>
+
+        <CompoundMark CompoundMarkID="15" Name="FinishLine">
+            <Mark SeqID="1" Name="G1" TargetLat="32.317379" TargetLng="-64.839291" SourceID="138" />
+            <Mark SeqID="2" Name="G2" TargetLat="32.317379" TargetLng="-64.839291" SourceID="139" />
+        </CompoundMark>
+    </Course>
+
+    <CompoundMarkSequence>
+        <Corner SeqID="1" CompoundMarkID="11" Rounding="SP" ZoneSize="3" />
+        <Corner SeqID="2" CompoundMarkID="12" Rounding="Port" ZoneSize="3" />
+        <Corner SeqID="3" CompoundMarkID="13" Rounding="PS" ZoneSize="6" />
+        <Corner SeqID="4" CompoundMarkID="14" Rounding="PS" ZoneSize="6" />
+        <Corner SeqID="5" CompoundMarkID="15" Rounding="SP" ZoneSize="3" />
+    </CompoundMarkSequence>
+
+    <CourseLimit>
+        <Limit SeqID="1" Lat="-64.8575" Lon="32.277"/>
+        <Limit SeqID="2" Lat="-64.8295" Lon="32.277"/>
+        <Limit SeqID="3" Lat="-64.8295" Lon="32.32"/>
+        <Limit SeqID="4" Lat="-64.8575" Lon="32.32"/>
+    </CourseLimit>
+
+</Race>

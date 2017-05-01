@@ -14,6 +14,7 @@ public class AC35XMLHeadParser implements MessageHeadParser {
         final int LEN_LENGTH = 2;
         AC35MessageType type = AC35MessageType.from((int) header[TYPE_INDEX]);
         int len = ByteCheck.byteToIntConverter(header, LEN_INDEX, LEN_LENGTH);
+
         return new AC35XMLHead(type, len);
     }
 

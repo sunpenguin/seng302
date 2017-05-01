@@ -77,16 +77,16 @@ public class GPSCalculations {
     }
 
 
-//    public double retrieveHeading(Coordinate c1, Coordinate c2) {
-//        double lon1 = Math.toRadians(c1.getLongitude());
-//        double lat1 = Math.toRadians(c1.getLatitude());
-//        double lon2 = Math.toRadians(c2.getLongitude());
-//        double lat2 = Math.toRadians(c2.getLatitude());
-//
-//        double x = Math.cos(lat2) * Math.sin(lon2 - lon1);
-//        double y = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
-//        return Math.toDegrees(Math.atan2(x, y));
-//    }
+    public double retrieveHeading(Coordinate c1, Coordinate c2) {
+        double lon1 = Math.toRadians(c1.getLongitude());
+        double lat1 = Math.toRadians(c1.getLatitude());
+        double lon2 = Math.toRadians(c2.getLongitude());
+        double lat2 = Math.toRadians(c2.getLatitude());
+
+        double x = Math.cos(lat2) * Math.sin(lon2 - lon1);
+        double y = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
+        return Math.toDegrees(Math.atan2(x, y));
+    }
 
     /**
      * Given 2 sets GPS coordinates in signed decimal degrees, return the coordinates
@@ -96,7 +96,7 @@ public class GPSCalculations {
      * @param point2 Coordinates for point2
      * @return The coordinates of the midpoint
      */
-    public Coordinate gpsMidpoint(Coordinate point1, Coordinate point2) {
+    public static Coordinate gpsMidpoint(Coordinate point1, Coordinate point2) {
 
         double lat1 = point1.getLatitude();
         double long1 = point1.getLongitude();

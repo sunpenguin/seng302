@@ -3,6 +3,7 @@ package seng302.team18.messageparsing;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 
 /**

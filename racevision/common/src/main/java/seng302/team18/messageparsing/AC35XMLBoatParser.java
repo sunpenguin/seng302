@@ -65,7 +65,7 @@ public class AC35XMLBoatParser implements MessageBodyParser {
         return message;
     }
 
-    private List<Boat> parseBoats(Node boatsNode) {
+    public List<Boat> parseBoats(Node boatsNode) {
         // A boat has Type, SourceID, ShapeID, HullNum, StoweName with elements GPSposition and FlagPosition
         final String BOAT_ELEMENT = "Boat";
         final String BOAT_NAME = "BoatName";
