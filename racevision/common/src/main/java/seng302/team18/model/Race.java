@@ -57,7 +57,7 @@ public class Race {
      */
     private void setInitialSpeed(){
         for(Boat b: startingList){
-            b.setSpeed(4000); //kph
+            b.setSpeed(200); //kph
         }
     }
 
