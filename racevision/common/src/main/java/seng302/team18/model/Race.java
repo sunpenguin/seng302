@@ -53,7 +53,7 @@ public class Race {
 
 
     /**
-     * Sets the speed of the boats at the start line to 5
+     * Sets the speed of the boats at the start line
      */
     private void setInitialSpeed(){
         for(Boat b: startingList){

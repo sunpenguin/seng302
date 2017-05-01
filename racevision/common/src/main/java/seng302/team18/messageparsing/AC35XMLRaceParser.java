@@ -155,9 +155,9 @@ public class AC35XMLRaceParser implements MessageBodyParser {
 
     private List<MarkRounding> parseMarkRoundings(Node markSequenceNode, Map<Integer, CompoundMark> compoundMarks) {
         final String CORNER = "Corner";
-            final String MARK_SEQUENCE_ID = "SeqID";
-            //final String COMPOUND_MARK_ID = "CompoundMarkID";
-            final String ROUNDING = "Rounding";
+        final String MARK_SEQUENCE_ID = "SeqID";
+        //final String COMPOUND_MARK_ID = "CompoundMarkID";
+        final String ROUNDING = "Rounding";
         List<MarkRounding> markRoundings = new ArrayList<>();
         if (markSequenceNode.getNodeType() == Node.ELEMENT_NODE) {
             Element markSequenceElement = (Element) markSequenceNode;
