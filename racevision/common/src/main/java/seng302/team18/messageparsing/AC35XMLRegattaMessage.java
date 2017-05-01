@@ -7,8 +7,10 @@ public class AC35XMLRegattaMessage implements MessageBody {
     private double centralLat;
     private double centralLong;
     private String utcOffset;
+    private int id;
 
-    public AC35XMLRegattaMessage(double centralLat, double centralLong, String utcOffset) {
+    public AC35XMLRegattaMessage(int id, double centralLat, double centralLong, String utcOffset) {
+        this.id = id;
         this.centralLat = centralLat;
         this.centralLong = centralLong;
         this.utcOffset = utcOffset;
@@ -33,5 +35,9 @@ public class AC35XMLRegattaMessage implements MessageBody {
 
     public String getUtcOffset() {
         return utcOffset;
+    }
+
+    public int getId() {
+        return id;
     }
 }

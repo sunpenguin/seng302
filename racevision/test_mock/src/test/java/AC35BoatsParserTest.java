@@ -1,6 +1,6 @@
 import org.junit.Test;
-import seng302.team18.test_mock.XMLparsers.AC35BoatsContainer;
-import seng302.team18.test_mock.XMLparsers.AC35BoatsParser;
+import seng302.team18.messageparsing.AC35XMLBoatMessage;
+import seng302.team18.messageparsing.AC35XMLBoatParser;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,11 +9,11 @@ import static org.junit.Assert.assertEquals;
  */
 public class AC35BoatsParserTest {
 
-    private AC35BoatsContainer boatsContainer;
+    private AC35XMLBoatMessage boatsMessage;
 
     public AC35BoatsParserTest() {
-        AC35BoatsParser boatsParser = new AC35BoatsParser();
-        boatsContainer = boatsParser.parse(this.getClass().getResourceAsStream("/boats_test1.xml"));
+        AC35XMLBoatParser boatsParser = new AC35XMLBoatParser();
+        boatsMessage = boatsParser.parse(this.getClass().getResourceAsStream("/boats_test1.xml"));
     }
 
     /*
@@ -22,7 +22,7 @@ public class AC35BoatsParserTest {
     @Test
     public void boatNumTest() {
         int expectedBoatNum = 6;
-        int actual = boatsContainer.getBoats().size();
+        int actual = boatsMessage.getBoats().size();
         assertEquals(expectedBoatNum, actual);
     }
 
@@ -31,17 +31,17 @@ public class AC35BoatsParserTest {
      */
     @Test
     public void boatNameTest() {
-        String boat1 = boatsContainer.getBoats().get(0).getBoatName();
+        String boat1 = boatsMessage.getBoats().get(0).getBoatName();
         assertEquals("Emirates Team New Zealand", boat1);
-        String boat2 = boatsContainer.getBoats().get(1).getBoatName();
+        String boat2 = boatsMessage.getBoats().get(1).getBoatName();
         assertEquals("Oracle Team USA", boat2);
-        String boat3 = boatsContainer.getBoats().get(2).getBoatName();
+        String boat3 = boatsMessage.getBoats().get(2).getBoatName();
         assertEquals("Artemis Racing", boat3);
-        String boat4 = boatsContainer.getBoats().get(3).getBoatName();
+        String boat4 = boatsMessage.getBoats().get(3).getBoatName();
         assertEquals("Groupama Team France", boat4);
-        String boat5 = boatsContainer.getBoats().get(4).getBoatName();
+        String boat5 = boatsMessage.getBoats().get(4).getBoatName();
         assertEquals("Land Rover BAR", boat5);
-        String boat6 = boatsContainer.getBoats().get(5).getBoatName();
+        String boat6 = boatsMessage.getBoats().get(5).getBoatName();
         assertEquals("Softbank Team Japan", boat6);
     }
 
@@ -50,17 +50,17 @@ public class AC35BoatsParserTest {
      */
     @Test
     public void boatShortNameTest() {
-        String boat1 = boatsContainer.getBoats().get(0).getShortName();
+        String boat1 = boatsMessage.getBoats().get(0).getShortName();
         assertEquals("TEAM New Zealand", boat1);
-        String boat2 = boatsContainer.getBoats().get(1).getShortName();
+        String boat2 = boatsMessage.getBoats().get(1).getShortName();
         assertEquals("TEAM USA", boat2);
-        String boat3 = boatsContainer.getBoats().get(2).getShortName();
+        String boat3 = boatsMessage.getBoats().get(2).getShortName();
         assertEquals("TEAM SWISE", boat3);
-        String boat4 = boatsContainer.getBoats().get(3).getShortName();
+        String boat4 = boatsMessage.getBoats().get(3).getShortName();
         assertEquals("TEAM France", boat4);
-        String boat5 = boatsContainer.getBoats().get(4).getShortName();
+        String boat5 = boatsMessage.getBoats().get(4).getShortName();
         assertEquals("TEAM Britain", boat5);
-        String boat6 = boatsContainer.getBoats().get(5).getShortName();
+        String boat6 = boatsMessage.getBoats().get(5).getShortName();
         assertEquals("TEAM Japan", boat6);
     }
 
@@ -69,17 +69,17 @@ public class AC35BoatsParserTest {
      */
     @Test
     public void boatIDTest() {
-        int boat1 = boatsContainer.getBoats().get(0).getId();
+        int boat1 = boatsMessage.getBoats().get(0).getId();
         assertEquals(111, boat1);
-        int boat2 = boatsContainer.getBoats().get(1).getId();
+        int boat2 = boatsMessage.getBoats().get(1).getId();
         assertEquals(112, boat2);
-        int boat3 = boatsContainer.getBoats().get(2).getId();
+        int boat3 = boatsMessage.getBoats().get(2).getId();
         assertEquals(113, boat3);
-        int boat4 = boatsContainer.getBoats().get(3).getId();
+        int boat4 = boatsMessage.getBoats().get(3).getId();
         assertEquals(114, boat4);
-        int boat5 = boatsContainer.getBoats().get(4).getId();
+        int boat5 = boatsMessage.getBoats().get(4).getId();
         assertEquals(115, boat5);
-        int boat6 = boatsContainer.getBoats().get(5).getId();
+        int boat6 = boatsMessage.getBoats().get(5).getId();
         assertEquals(116, boat6);
     }
 }

@@ -24,24 +24,16 @@ import java.util.List;
 public class AC35XMLBoatParser implements MessageBodyParser {
 
     @Override
-    public MessageBody parse(byte[] bytes) {
+    public AC35XMLBoatMessage parse(InputStream stream) {
         final String BOATS_ELEMENT = "BoatConfig";
         final String BOAT_SETTINGS = "Settings";
         final String BOAT_SHAPES = "BoatShapes";
         final String BOATS = "Boats";
 
-//        if (bytes[bytes.length - 1] == 0x00) {
-//            System.out.println("a");
-//        } else {
-//            System.out.println("b");
-//        }
-
-
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         Document doc;
         try {
-            InputStream stream = new ByteArrayInputStream(new String(bytes, StandardCharsets.UTF_8).trim().getBytes());
             builder = factory.newDocumentBuilder();
             doc = builder.parse(stream);
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -64,6 +56,14 @@ public class AC35XMLBoatParser implements MessageBodyParser {
         message.setBoats(boats);
         return message;
     }
+
+
+    @Override
+    public AC35XMLBoatMessage parse(byte[] bytes) {
+        InputStream stream = new ByteArrayInputStream(new String(bytes, StandardCharsets.UTF_8).trim().getBytes());
+        return parse(stream);
+    }
+
 
     public List<Boat> parseBoats(Node boatsNode) {
         // A boat has Type, SourceID, ShapeID, HullNum, StoweName with elements GPSposition and FlagPosition

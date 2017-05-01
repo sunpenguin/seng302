@@ -1,7 +1,7 @@
 import org.junit.Before;
 import org.junit.Test;
-import seng302.team18.test_mock.XMLparsers.AC35RegattaContainer;
-import seng302.team18.test_mock.XMLparsers.AC35RegattaParser;
+import seng302.team18.messageparsing.AC35XMLRegattaMessage;
+import seng302.team18.messageparsing.AC35XMLRegattaParser;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,21 +9,21 @@ import static org.junit.Assert.assertEquals;
  * Created by hqi19 on 20/04/17.
  */
 public class AC35RegattaParserTest {
-    private AC35RegattaContainer ac35RegattaContainer;
+    private AC35XMLRegattaMessage regattaMessage;
 
     @Before
     public void setup() {
-        AC35RegattaParser ac35RegattaParser = new AC35RegattaParser();
-        ac35RegattaContainer = ac35RegattaParser.parse(this.getClass().getResourceAsStream("/regatta_test1.xml"));
+        AC35XMLRegattaParser ac35RegattaParser = new AC35XMLRegattaParser();
+        regattaMessage = ac35RegattaParser.parse(this.getClass().getResourceAsStream("/regatta_test1.xml"));
     }
 
     @Test
     public void testParser() {
         // Retrieve everything from the container
-        int regattaID = ac35RegattaContainer.getRegattaID();
-        double centralLat = ac35RegattaContainer.getCentralLatitude();
-        double centralLong = ac35RegattaContainer.getCentralLongtitude();
-        String uTcOffset = ac35RegattaContainer.getuTcOffset();
+        int regattaID = regattaMessage.getId();
+        double centralLat = regattaMessage.getCentralLat();
+        double centralLong = regattaMessage.getCentralLong();
+        String uTcOffset = regattaMessage.getUtcOffset();
 
         // Assert that everything in the container is correct
         assertEquals(4, regattaID);

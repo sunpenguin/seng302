@@ -1,8 +1,8 @@
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.messageparsing.AC35XMLRaceMessage;
+import seng302.team18.messageparsing.AC35XMLRaceParser;
 import seng302.team18.model.*;
-import seng302.team18.test_mock.XMLparsers.AC35RaceContainer;
-import seng302.team18.test_mock.XMLparsers.AC35RaceParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,22 +13,22 @@ import static org.junit.Assert.assertEquals;
 
 public class AC35RaceParserTest {
 
-    private AC35RaceContainer ac35RaceContainer;
+    private AC35XMLRaceMessage raceMessage;
 
     @Before
     public void setup() {
-        AC35RaceParser ac35RaceParser = new AC35RaceParser();
-        ac35RaceContainer = ac35RaceParser.parse(this.getClass().getResourceAsStream("/AC35race.xml"));
+        AC35XMLRaceParser ac35RaceParser = new AC35XMLRaceParser();
+        raceMessage = ac35RaceParser.parse(this.getClass().getResourceAsStream("/AC35race.xml"));
     }
 
     @Test
     public void testParser() {
         // Retrieve everything from the container
-        String startTime = ac35RaceContainer.getStartTime();
-        List<BoundaryMark> boundaryMarks = ac35RaceContainer.getBoundaryMark();
-        Map<Integer, CompoundMark> actualCompoundMarkMap = ac35RaceContainer.getCompoundMarks();
-        List<Integer> participantIDs = ac35RaceContainer.getParticipantIDs();
-        List<MarkRounding> markRoundings = ac35RaceContainer.getMarkRoundings();
+        String startTime = raceMessage.getRaceStartTime();
+        List<BoundaryMark> boundaryMarks = raceMessage.getBoundaryMarks();
+        List<CompoundMark> actualCompoundMarkMap = raceMessage.getCompoundMarks();
+        List<Integer> participantIDs = raceMessage.getParticipantIDs();
+        List<MarkRounding> markRoundings = raceMessage.getMarkRoundings();
 
         // Assert the start time is correct
         assertEquals("2011-08-06T13:30:00-07:00", startTime);

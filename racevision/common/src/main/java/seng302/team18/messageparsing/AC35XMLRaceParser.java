@@ -23,20 +23,19 @@ public class AC35XMLRaceParser implements MessageBodyParser {
 
 
     @Override
-    public MessageBody parse(byte[] bytes) {
+    public AC35XMLRaceMessage parse(InputStream stream) {
         final String RACE_ELEMENT = "Race";
+        final String RACE_ID = "RaceID";
         final String START_DATE_TIME_ELEMENT = "RaceStartTime";
         final String PARTICIPANTS_ELEMENT = "Participants";
         final String COURSE_ELEMENT = "Course";
         final String COMPOUND_MARK_SEQUENCE = "CompoundMarkSequence";
         final String COURSE_BOUNDARIES_ELEMENT = "CourseLimit";
 
-//        InputStream stream = new ByteArrayInputStream(bytes);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         Document doc;
         try {
-            InputStream stream = new ByteArrayInputStream(new String(bytes, StandardCharsets.UTF_8).trim().getBytes());
             builder = factory.newDocumentBuilder(); // parser configuration exception
             doc = builder.parse(stream); // io exception
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -44,6 +43,9 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         }
         doc.getDocumentElement().normalize();
         Element raceElement = (Element) doc.getElementsByTagName(RACE_ELEMENT).item(0);
+
+        Node idNode = raceElement.getElementsByTagName(RACE_ID).item(0); // race id
+        int id = parseRaceId(idNode);
 
         Node startTimeNode = raceElement.getElementsByTagName(START_DATE_TIME_ELEMENT).item(0); // start time
         String startTimeString = parseRaceTime(startTimeNode);
@@ -61,6 +63,7 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         List<BoundaryMark> boundaries = parseBoundaries(boundariesNode);
 
         AC35XMLRaceMessage message = new AC35XMLRaceMessage();
+        message.setRaceID(id);
         message.setRaceStartTime(startTimeString);
         message.setBoundaryMarks(boundaries);
         message.setCompoundMarks(new ArrayList<>(compoundMarks.values()));
@@ -69,11 +72,18 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         return message;
     }
 
-    public int parseRaceID(Node raceIDNode) {
+    @Override
+    public AC35XMLRaceMessage parse(byte[] bytes) {
+        InputStream stream = new ByteArrayInputStream(new String(bytes, StandardCharsets.UTF_8).trim().getBytes());
+        return parse(stream);
+    }
+
+    private int parseRaceId(Node raceIDNode) {
         return Integer.parseInt(raceIDNode.getTextContent());
     }
 
-    public String parseRaceTime(Node startTimeNode) {
+
+    private String parseRaceTime(Node startTimeNode) {
         final String START = "Start"; // if program breaks change this to "Time"
         final String TIME = "Time";
         if (startTimeNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -87,7 +97,7 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         return "";
     }
 
-    public List<Integer> parseParticipantIDs(Node participantsNode) {
+    private List<Integer> parseParticipantIDs(Node participantsNode) {
         final String PARTICIPANT_ELEMENT = "Yacht";
             final String PARTICIPANT_ID = "SourceID";
         List<Integer> participantIDs = new ArrayList<>();
@@ -106,7 +116,7 @@ public class AC35XMLRaceParser implements MessageBodyParser {
     }
 
 
-    public Map<Integer, CompoundMark> parseCompoundMarks(Node courseNode) {
+    private Map<Integer, CompoundMark> parseCompoundMarks(Node courseNode) {
         final String COMPOUND_MARK_ELEMENT = "CompoundMark";
             final String COMPOUND_MARK_ID = "CompoundMarkID";
             final String COMPOUND_MARK_NAME = "Name";
@@ -143,7 +153,7 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         return compoundMarks;
     }
 
-    public List<MarkRounding> parseMarkRoundings(Node markSequenceNode, Map<Integer, CompoundMark> compoundMarks) {
+    private List<MarkRounding> parseMarkRoundings(Node markSequenceNode, Map<Integer, CompoundMark> compoundMarks) {
         final String CORNER = "Corner";
             final String MARK_SEQUENCE_ID = "SeqID";
             //final String COMPOUND_MARK_ID = "CompoundMarkID";
@@ -165,7 +175,7 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         return markRoundings;
     }
 
-    public List<BoundaryMark> parseBoundaries(Node boundariesNode) {
+    private List<BoundaryMark> parseBoundaries(Node boundariesNode) {
         final String COURSE_BOUNDARY_ELEMENT = "Limit";
             final String BOUNDARY_SEQUENCE_ID = "SeqID";
             final String BOUNDARY_LAT = "Lat";
