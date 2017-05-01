@@ -2,6 +2,7 @@ package seng302.team18.test_mock;
 
 import org.junit.Test;
 import seng302.team18.model.Boat;
+import seng302.team18.model.Race;
 import seng302.team18.test_mock.connection.BoatMessageGenerator;
 import seng302.team18.test_mock.connection.ScheduledMessage;
 import seng302.team18.util.ByteCheck;
@@ -62,7 +63,7 @@ public class BoatMessageGeneratorTest {
     @Test
     public void boatMessageGeneratorTest() throws IOException {
         TestMock testMock = new TestMock();
-        ActiveRace testRace = testMock.testRun();
+        Race testRace = testMock.testRun();
         byte[] generatedBytes;
         List<BoatMessageGenerator> messages = new ArrayList<>();
         for (Boat boat: testRace.getStartingList()) {

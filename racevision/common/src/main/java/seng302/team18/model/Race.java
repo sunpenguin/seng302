@@ -1,9 +1,9 @@
 package seng302.team18.model;
 
-import java.time.LocalDateTime;
+import seng302.team18.util.GPSCalculations;
+
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,8 +19,9 @@ public class Race {
     private ZonedDateTime startTime;
     private ZonedDateTime currentTime;
     private List<Integer> participantIds;
-    public static final double WARNING_TIME_SECONDS = 60;
-    public static final double PREP_TIME_SECONDS = 120;
+    private int id;
+    private byte status;
+    public static int PREP_TIME_SECONDS = 120;
 
 
     public Race() {
@@ -28,6 +29,8 @@ public class Race {
         startingList = new ArrayList<>();
         course = new Course();
         finishedList = new ArrayList<>();
+        id = 0;
+//        setInitialSpeed();
     }
 
 
@@ -37,15 +40,27 @@ public class Race {
      * @param startingList ArrayList holding all entered boats
      * @param course       Course object
      */
-    public Race(List<Boat> startingList, Course course) {
-//        startingList.sort(Comparator.comparingDouble(Boat::getSpeed));
+    public Race(List<Boat> startingList, Course course, int raceId) {
         this.startingList = startingList;
         this.course = course;
         finishedList = new ArrayList<>();
-        participantIds = new ArrayList<>();
+        participantIds = startingList.stream().map(Boat::getId).collect(Collectors.toList());
+        this.id = raceId;
         setCourseForBoats();
-//        duration = 60;
+        setInitialSpeed();
     }
+
+
+
+    /**
+     * Sets the speed of the boats at the start line to 5
+     */
+    private void setInitialSpeed(){
+        for(Boat b: startingList){
+            b.setSpeed(100); //kph
+        }
+    }
+
 
     /**
      * Convert a value given in knots to meters per second.
@@ -54,7 +69,7 @@ public class Race {
      * @return speed in meters per second.
      * TODO: Put this somewhere more reasonable
      */
-    public static double knotsToMetersPerSecond(double knots) {
+    public double knotsToMetersPerSecond(double knots) {
         return ((knots * 1.852) / 3.6);
     }
 
@@ -75,7 +90,7 @@ public class Race {
                 Coordinate midPoint = course.getCompoundMarks().get(0).getMidCoordinate();
                 boat.setCoordinate(midPoint);
                 // Set Heading
-//                boat.setHeading(boat.getCoordinate().retrieveHeading(boat.getDestination()));
+                boat.setHeading(boat.getCoordinate().retrieveHeading(boat.getDestination()));
             }
         }
     }
@@ -83,7 +98,7 @@ public class Race {
     /**
      * Starting list getter.
      *
-     * @return list holding all entered boats.
+     * @return List holding all entered boats.
      */
     public List<Boat> getStartingList() {
         return startingList;
@@ -174,7 +189,8 @@ public class Race {
                 setNextLeg(boat, nextLeg);
             }
         }
-//        boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+        GPSCalculations gps = new GPSCalculations(course);
+        boat.setHeading(gps.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
     }
 
 
@@ -201,13 +217,13 @@ public class Race {
      * @param time that has passed
      */
     private void updatePosition(Boat boat, double time) {
-        final double KMPH_TO_MPS = 1000.0 / 3600.0;
-        double speed = boat.getSpeed() * KMPH_TO_MPS;
-        double distanceTravelled = speed * time;
-//        double distanceTravelled = speed * time
-//                / (duration / (course.getCourseDistance() / (startingList.get(0).getSpeed() * KMPH_TO_MPS))); // meters
-//        boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
-//                GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+        double speed = boat.getSpeed();
+        double mpsSpeed = speed * 0.27778;//convert to metres/second
+        double secondsTime = time / 1000;
+        double distanceTravelled = mpsSpeed * secondsTime;
+        GPSCalculations gps = new GPSCalculations(course);
+        // set next position based on current coordinate, distance travelled, and heading.
+        boat.setCoordinate(gps.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
 
 
@@ -248,4 +264,20 @@ public class Race {
     }
 
     public ZonedDateTime getCurrentTime() {return currentTime; }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(byte status) {
+        this.status = status;
+    }
 }

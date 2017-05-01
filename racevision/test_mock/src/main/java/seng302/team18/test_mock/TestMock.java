@@ -18,7 +18,7 @@ public class TestMock {
 
     private Regatta regatta;
     private Course course;
-    private ActiveRace race;
+    private Race race;
 
     private String regattaXML = "/AC35regatta.xml";
     private String boatsXML = "/AC35boats.xml";
@@ -106,7 +106,7 @@ public class TestMock {
         server.closeServer();
     }
 
-    public ActiveRace testRun() {
+    public Race testRun() {
         readFiles();
         generateClasses();
         return race;
@@ -134,12 +134,11 @@ public class TestMock {
         long timeLast;
         List<Boat> boats = race.getStartingList();
         do {
-
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
             // Update simulation
-            race.setRaceStatusNumber((byte) 3);
+            race.setStatus((byte) 3);
             race.updateBoats((timeCurr - timeLast));
 
             // Send messages if needed
@@ -185,7 +184,7 @@ public class TestMock {
         List<Boat> startingList = boatMessage.getBoats();
         int raceID = raceMessage.getRaceID();
 
-        race = new ActiveRace(startingList, course, raceID);
+        race = new Race(startingList, course, raceID);
 
 //        RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
 //        raceMessageGenerator.getMessage();

@@ -1,30 +1,20 @@
 package seng302.team18.test_mock.connection;
 
 import seng302.team18.model.*;
-import seng302.team18.test_mock.ActiveRace;
 import seng302.team18.util.ByteCheck;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by hqi19 on 21/04/17.
  */
 public class RaceMessageGenerator extends ScheduledMessage {
 
-    private ActiveRace race;
+    private Race race;
     private String message;
 
-    public RaceMessageGenerator(ActiveRace race) {
+    public RaceMessageGenerator(Race race) {
         super(2, 12);
 
         this.race = race;
@@ -39,9 +29,9 @@ public class RaceMessageGenerator extends ScheduledMessage {
 
         byte[] currentTimeBytes = ByteCheck.getCurrentTime6Bytes();
 
-        byte[] raceIDBytes = ByteCheck.intToByteArray(race.getRaceID());
+        byte[] raceIDBytes = ByteCheck.intToByteArray(race.getId());
 
-        byte raceStatusByte = race.getRaceStatusNumber();
+        byte raceStatusByte = race.getStatus();
 
         byte[] expectedStartTimeBytes = ByteCheck.getCurrentTime6Bytes(); // TODO: Use a reasonable starting time
 
