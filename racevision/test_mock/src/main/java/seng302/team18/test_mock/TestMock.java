@@ -166,6 +166,8 @@ public class TestMock {
         List<BoundaryMark> boundaryMarks = raceMessage.getBoundaryMarks();
         double windDirection = 0;
 
+        List<MarkRounding> markRoundings = raceMessage.getMarkRoundings();
+
         ZoneId zoneId;
         String utcOffset = regattaMessage.getUtcOffset();
         if (utcOffset.startsWith("+") || utcOffset.startsWith("-")) {
@@ -176,7 +178,7 @@ public class TestMock {
 
         Coordinate central = new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong());
 
-        course = new Course(compoundMarks, boundaryMarks, windDirection, zoneId);
+        course = new Course(compoundMarks, boundaryMarks, windDirection, zoneId, markRoundings);
         course.setCentralCoordinate(central);
     }
 

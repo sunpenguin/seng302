@@ -18,17 +18,15 @@ public class Course {
     //private List<MarkRounding> markRoundings;
     private Coordinate centralCoordinate;
     private ZoneId timeZone;
+    private List<MarkRounding> markRoundings;
 
-    public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, ZoneId timeZone) {
+    public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, ZoneId timeZone, List<MarkRounding> markRoundings) {
         this.compoundMarks = new ArrayList<>(marks);
         this.windDirection = windDirection;
         this.boundaries = new ArrayList<>(boundaries);
         this.timeZone = timeZone;
-        legs = new ArrayList<>();
-        for (int i = 0; i < marks.size() - 1; i++) {
-            legs.add(new Leg(compoundMarks.get(i), compoundMarks.get(i + 1), i));
-        }
-//        markRoundings = new ArrayList<>();
+        this.markRoundings = markRoundings;
+        setupLegs();
         centralCoordinate = new Coordinate(0d, 0d);
     }
 
@@ -113,10 +111,19 @@ public class Course {
 
 
     public Leg getNextLeg(Leg leg) {
-        if (leg.getLegNumber() + 1 >= legs.size()) {
+        if (leg.getLegNumber() == legs.size()) {
             return leg;
         }
-        return legs.get(leg.getLegNumber() + 1);
+        return legs.get(leg.getLegNumber());
+    }
+
+    private void setupLegs(){
+        legs = new ArrayList<>();
+         for (int i = 0; i < markRoundings.size() - 1; i++) {
+             CompoundMark dep = markRoundings.get(i).getCompoundMark();
+             CompoundMark dest = markRoundings.get(i + 1).getCompoundMark();
+             legs.add(new Leg(dep, dest, i + 1));
+         }
     }
 }
 
