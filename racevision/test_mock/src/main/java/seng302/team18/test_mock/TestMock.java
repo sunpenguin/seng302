@@ -3,6 +3,7 @@ package seng302.team18.test_mock;
 import seng302.team18.messageparsing.*;
 import seng302.team18.model.*;
 import seng302.team18.test_mock.connection.*;
+import seng302.team18.test_mock.parsers.PolarParser;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -19,10 +20,12 @@ public class TestMock {
     private Regatta regatta;
     private Course course;
     private Race race;
+    private Polar polarsMap;
 
     private String regattaXML = "/AC35regatta.xml";
     private String boatsXML = "/AC35boats.xml";
     private String raceXML = "/AC35race.xml";
+    private String polars = "/polar.txt";
 
     private AC35XMLRegattaMessage regattaMessage;
     private AC35XMLBoatMessage boatMessage;
@@ -57,6 +60,9 @@ public class TestMock {
 
         AC35XMLRaceParser raceParser = new AC35XMLRaceParser();
         raceMessage = raceParser.parse(this.getClass().getResourceAsStream(raceXML));
+
+        PolarParser polarParser = new PolarParser();
+        polarsMap = polarParser.parse(this.getClass().getResourceAsStream(polars));
     }
 
     public void run() {
@@ -184,7 +190,7 @@ public class TestMock {
         List<Boat> startingList = boatMessage.getBoats();
         int raceID = raceMessage.getRaceID();
 
-        race = new Race(startingList, course, raceID);
+        race = new Race(startingList, course, raceID, polarsMap);
 
 //        RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
 //        raceMessageGenerator.getMessage();

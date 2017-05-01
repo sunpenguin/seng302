@@ -15,8 +15,8 @@ public class PolarParser {
 
     public Polar parse(InputStream stream) {
         final int POLAR_INDEX = 0;
-        final int UP_TWA_INDEX = 2; // true wind angle
-        final int UP_BOAT_SPEED_INDEX = 3;
+        final int UP_TWA_INDEX = 3; // true wind angle
+        final int UP_BOAT_SPEED_INDEX = 4;
         final int DOWN_TWA_INDEX = 13; // true wind angle
         final int DOWN_BOAT_SPEED_INDEX = 14;
         Scanner scanner = new Scanner(stream);
