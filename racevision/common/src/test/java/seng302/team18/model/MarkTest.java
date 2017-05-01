@@ -11,24 +11,20 @@ public class MarkTest {
 
     @Test
     public void nameTest() {
-        String expected = "HAHAhOHo";
-        Mark actual = new Mark("HAHAhOHo", new Coordinate(1, 1));
-        assertEquals(expected, actual.getName());
-
-        expected = "Lol123";
-        actual.setName("Lol123");
-        assertEquals(expected, actual.getName());
+        Integer expected = 100;
+        Mark actual = new Mark(100, new Coordinate(1, 1));
+        assertEquals(expected, actual.getId());
     }
 
     @Test
     public void coordinateTest() {
         Coordinate expected = new Coordinate(1, 1);
-        Mark actual = new Mark("HAHAhOHo", new Coordinate(1, 1));
-        assertEquals(expected, actual.getCoordinates());
+        Mark actual = new Mark(0, new Coordinate(1, 1));
+        assertEquals(expected, actual.getCoordinate());
 
         expected = new Coordinate(2.5, 4);
-        actual.setCoordinates(new Coordinate(2.5, 4));
-        assertEquals(expected, actual.getCoordinates());
+        actual.setCoordinate(new Coordinate(2.5, 4));
+        assertEquals(expected, actual.getCoordinate());
     }
 
 

@@ -21,7 +21,7 @@ public class Leg {
     public Leg(CompoundMark departure, CompoundMark destination, int legNumber) {
         this.destination = destination;
         this.departure = departure;
-        this.heading = GPSCalculations.findAngle(departure.getMidCoordinate(), destination.getMidCoordinate());
+//        this.heading = GPSCalculations.findAngle(departure.getMidCoordinate(), destination.getMidCoordinate());
         this.legNumber = legNumber; // TODO this is a kinda shitty way of doing it might change later
     }
 

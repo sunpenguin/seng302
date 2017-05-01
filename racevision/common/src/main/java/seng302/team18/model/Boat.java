@@ -8,28 +8,34 @@ import javafx.beans.property.*;
  */
 
 public class Boat {
-
-    private StringProperty boatName;
-    private String teamName;
+    private String boatName;
+    private String shortName;
     private DoubleProperty speed;
     private Leg leg;
-//    private double position;
+    private Integer id;
     private double heading;
     private Coordinate coordinate;
     private Coordinate destination;
     private IntegerProperty place;
+    private Long timeTilNextMark;
+    private Long timeSinceLastMark;
+    private Long timeAtLastMark;
 
     /**
      * A constructor for the Boat class
      * @param boatName The name of the boat
-     * @param teamName The name of the team the boat belongs to
-     * @param speed The speed of the boat
+     * @param shortName The name of the team the boat belongs to
+     * @param id The id of the boat
      */
-    public Boat(String boatName, String teamName, double speed) {
-        this.boatName = new SimpleStringProperty(boatName);
-        this.teamName = teamName;
-        this.speed = new SimpleDoubleProperty(speed);
-        place = new SimpleIntegerProperty(0);
+    public Boat(String boatName, String shortName, int id) {
+        this.boatName = boatName;
+        this.shortName = shortName;
+        this.id = id;
+        speed = new SimpleDoubleProperty();
+        place = new SimpleIntegerProperty();
+        timeTilNextMark = 0L;
+        timeSinceLastMark = 0L;
+        timeAtLastMark = 0L;
     }
 
     /**
@@ -37,19 +43,6 @@ public class Boat {
      * @return The boatName
      */
     public String getBoatName() {
-        return boatName.get();
-    }
-
-    /**
-     * A setter for the name of the boat
-     * @param name The name the boatName will be set to
-     */
-    public void setBoatName(String name) {
-        this.boatName.set(name);
-    }
-
-
-    public StringProperty boatNameProperty() {
         return boatName;
     }
 
@@ -74,19 +67,12 @@ public class Boat {
 
     /**
      * A getter for the team name that the boat belongs to
-     * @return The teamName
+     * @return The shortName
      */
-    public String getTeamName() {
-        return teamName;
+    public String getShortName() {
+        return shortName;
     }
 
-    /**
-     * A setter for the team name that the boat belongs to
-     * @param name The name that the teamName variable will be set to
-     */
-    public void setTeamName(String name) {
-        this.teamName = name;
-    }
 
     /**
      * A getter for the speed of the boat
@@ -101,12 +87,14 @@ public class Boat {
      * @param speed the speed of the boat
      */
     public void setSpeed(double speed) {
-        this.speed.set(speed);
+        this.speed.setValue(speed);
     }
+
 
     public DoubleProperty speedProperty() {
         return speed;
     }
+
 
     public Leg getLeg() {
         return leg;
@@ -137,29 +125,72 @@ public class Boat {
         this.destination = destination;
     }
 
-    /**
-     * An overidden toString for the boat objects which displays all of the boats variables
-     * @return A string showing all the boats variables
-     */
-    @Override
-    public String toString() {
-        return "Boat{" +
-                "boatName='" + boatName + '\'' +
-                ", teamName='" + teamName + '\'' +
-                '}';
-    }
 
     public int getPlace() {
         return place.get();
     }
 
+
     public void setPlace(int place) {
         this.place.set(place);
     }
+
 
     public IntegerProperty placeProperty() {
         return place;
     }
 
 
+    public Integer getId() {
+        return id;
+    }
+
+
+    public long getTimeTilNextMark() {
+        return timeTilNextMark;
+    }
+
+
+    public void setTimeTilNextMark(long timeTilNextMark) {
+        this.timeTilNextMark = timeTilNextMark;
+    }
+
+
+    public Long getTimeSinceLastMark() {
+        return timeSinceLastMark;
+    }
+
+
+    public void setTimeSinceLastMark(long timeSinceLastMark) {
+        this.timeSinceLastMark = timeSinceLastMark;
+    }
+
+
+    public Long getTimeAtLastMark() {
+        return timeAtLastMark;
+    }
+
+
+    public void setTimeAtLastMark(Long timeAtLastMark) {
+        this.timeAtLastMark = timeAtLastMark;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Boat{" +
+                "boatName=" + boatName +
+                ", shortName='" + shortName + '\'' +
+                ", speed=" + speed +
+                ", leg=" + leg +
+                ", id=" + id +
+                ", heading=" + heading +
+                ", coordinate=" + coordinate +
+                ", destination=" + destination +
+                ", place=" + place +
+                ", timeTilNextMark=" + timeTilNextMark +
+                ", timeSinceLastMark=" + timeSinceLastMark +
+                ", timeAtLastMark=" + timeAtLastMark +
+                '}';
+    }
 }

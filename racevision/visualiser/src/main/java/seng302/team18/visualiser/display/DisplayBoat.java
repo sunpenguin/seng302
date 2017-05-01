@@ -9,23 +9,31 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import seng302.team18.util.XYPair;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
  * Created by david on 4/8/17.
  */
 public class DisplayBoat {
-    private String name;
     private Polyline boat;
     private Color boatColor;
     private Polygon wake;
     private Color wakeColor;
+    private double wakeScaleFactor;
+    private double minWakeSize;
+
+    private Text annotation;
+    private String name;
+    private Long estimatedTime;
+    private Long timeSinceLastMark;
     private Double heading;
     private Double speed;
-    private Double wakeScaleFactor;
-    private Text annotation;
+    private int decimalPlaces; // for speed annotation
     private Map<AnnotationType, Boolean> visibleAnnotations;
 
     private final int ANNOTATION_OFFSET_X = 10;
@@ -43,27 +51,37 @@ public class DisplayBoat {
             10.0, 20.0 };
 
 
-    public DisplayBoat(String name, Double heading, Double speed, Color boatColor) {
+    public DisplayBoat(String name, Double heading, Double speed, Color boatColor, Long estimatedTime) {
         this.name = name;
         this.heading = heading;
         this.speed = speed;
         this.boatColor = boatColor;
+        this.estimatedTime = estimatedTime;
         // default values
-        wakeColor = Color.ALICEBLUE;
-        wakeScaleFactor = 1d / 60d; // the wake is at normal size when the boat is moving 60 speed
+        wakeColor = Color.CADETBLUE;
+        wakeScaleFactor = 1.0d / 32.0d; // the wake is at normal size when the boat is moving 40 speed
         boat = new Polyline();
         boat.getPoints().addAll(BOAT_SHAPE);
         boat.setFill(boatColor); // this isn't default
         wake = new Polygon();
         wake.getPoints().addAll(WAKE_SHAPE);
         wake.setFill(wakeColor);
+        decimalPlaces = 1;
+        minWakeSize = 0.1;
+
         // initial rotation + wake size
         Rotate rotation = new Rotate(this.heading, BOAT_PIVOT_X, BOAT_PIVOT_Y);
         wake.getTransforms().add(rotation);
         boat.getTransforms().add(rotation);
-        double scale = speed * wakeScaleFactor;
-        Scale wakeSize = new Scale(scale, scale, BOAT_PIVOT_X, BOAT_PIVOT_Y);
-        wake.getTransforms().add(wakeSize);
+        if (speed != 0) {
+            double scale = speed * wakeScaleFactor;
+            Scale wakeSize = new Scale(scale, scale, BOAT_PIVOT_X, BOAT_PIVOT_Y);
+            wake.getTransforms().add(wakeSize);
+        } else {
+            double scale = minWakeSize;
+            Scale wakeSize = new Scale(scale, scale, BOAT_PIVOT_X, BOAT_PIVOT_Y);
+            wake.getTransforms().add(wakeSize);
+        }
         setUpAnnotations();
     }
 
@@ -80,13 +98,21 @@ public class DisplayBoat {
 
     private void updateAnnotationText() {
         String textToDisplay = "";
-        for (Map.Entry<AnnotationType, Boolean> entry : visibleAnnotations.entrySet()) {
+        List<Map.Entry<AnnotationType, Boolean>> sortedEntries = visibleAnnotations
+                .entrySet()
+                .stream()
+                .sorted(Comparator.comparingInt(entry -> entry.getKey().getCode()))
+                .collect(Collectors.toList());
+        for (Map.Entry<AnnotationType, Boolean> entry : sortedEntries) {
             if (entry.getValue()) {
                 if (entry.getKey().equals(AnnotationType.NAME)) {
                     textToDisplay += name + "\n";
                 } else if (entry.getKey().equals(AnnotationType.SPEED)) {
-                    textToDisplay += speed + " km/h\n";
-                }
+                    textToDisplay += String.format("%." + decimalPlaces + "f", speed) + " km/h\n";
+                } else if (entry.getKey().equals(AnnotationType.ESTIMATED_TIME_NEXT_MARK) && estimatedTime > 0) {
+                    textToDisplay += estimatedTime + "\n";
+                } else if (entry.getKey().equals(AnnotationType.TIME_SINCE_LAST_MARK))
+                    textToDisplay += timeSinceLastMark + "\n";
             }
         }
         annotation.setText(textToDisplay);
@@ -111,7 +137,14 @@ public class DisplayBoat {
      * @param speed the new speed of the boat.
      */
     public void setSpeed(double speed) {
-        double scale = speed / this.speed;
+        double scale;
+        if (this.speed != 0 && speed != 0) {
+            scale = speed / this.speed;
+        } else if (this.speed == 0 && speed != 0) {
+            scale = (speed * wakeScaleFactor) / minWakeSize;
+        } else {
+            scale = minWakeSize;
+        }
         Scale wakeSize = new Scale(scale, scale, BOAT_PIVOT_X, BOAT_PIVOT_Y);
         wake.getTransforms().add(wakeSize);
         this.speed = speed;
@@ -130,6 +163,9 @@ public class DisplayBoat {
         this.heading = heading;
     }
 
+    public void setEstimatedTime(Long estimatedTime) {
+        this.estimatedTime = estimatedTime;
+    }
 
     public void addToGroup(Group group) {
         group.getChildren().add(boat);
@@ -138,7 +174,7 @@ public class DisplayBoat {
     }
 
 
-    public void setAnnotationVisibile(AnnotationType type, Boolean isVisible) {
+    public void setAnnotationVisible(AnnotationType type, Boolean isVisible) {
         visibleAnnotations.replace(type, isVisible);
         updateAnnotationText();
     }
@@ -154,5 +190,9 @@ public class DisplayBoat {
 
     public Color getBoatColor() {
         return boatColor;
+    }
+
+    public void setTimeSinceLastMark(Long timeSinceLastMark) {
+        this.timeSinceLastMark = timeSinceLastMark;
     }
 }

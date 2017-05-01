@@ -6,88 +6,89 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import seng302.team18.model.Race;
 
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 
 /**
  * Class to Display time on a JavaFX label in a stop-watch fashion.
  */
-public class RaceClock extends AnimationTimer{
+public class RaceClock extends AnimationTimer {
 
-    private Label timerLabel;
-    private Race race;
-    private double timeScaleFactor;
-    private final double KMPH_TO_MPS = 1000.0 / 3600.0;
-    private String timeString;
-
-    private double previousTime;
-    private double totalTime;
-
+    private Label timeLabel;
+    private Long time;
 
     /**
      * Construct a new RaceClock.
-     * @param timerLabel JavaFX Label to display the time on.
-     * @param race The associated race for getting the required time scaling.
-     * @param startTime The initial time to set the clock to.
+     * @param timeLabel JavaFX Label to display the time on.
      */
-    public RaceClock(Label timerLabel, Race race, double startTime) {
-        this.timerLabel = timerLabel;
-        this.race = race;
-        this.timeScaleFactor = race.getCourse().getCourseDistance()
-                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
-        totalTime = startTime;
-
-        timerLabel.setTextFill(Color.BLACK);
-        timerLabel.setStyle("-fx-font-size: 2em;");
-
-        secondsToString(totalTime);
-        timerLabel.setText(timeString);
+    public RaceClock(Label timeLabel) {
+        this.timeLabel = timeLabel;
+        time = 0L;
+        timeLabel.setTextFill(Color.BLACK);
+        timeLabel.setStyle("-fx-font-size: 2em;");
+        timeLabel.setText("");
     }
 
 
     /**
-     * Overridden handle method.
-     * Each frame, update the label by the time since the last frame multiplied by the timeScaleFactor
-     * @param currentTime The timestamp of the current frame given in nanoseconds.
+     * Sets the time of the clock in seconds.
+     * @param time in seconds.
      */
-    @Override
-    public void handle(long currentTime) {
-        if (previousTime == 0) {
-            previousTime = currentTime;
-            return;
-        }
-
-        if (race.isFinished()) {
-            stop();
-        } else {
-            double secondsElapsed = ((currentTime - previousTime) / 1e9f) * timeScaleFactor; // converting from nanoseconds to seconds
-            previousTime = currentTime;
-            totalTime += secondsElapsed;
-            secondsToString(totalTime);
-            timerLabel.setText(timeString);
-        }
+    public void setTime(Long time) { // seconds please
+        this.time = time;
     }
 
+
+    /**
+     * Updates the label to match the time set in setTime.
+     * @param now unused.
+     */
     @Override
-    public void stop() {
-        super.stop();
-        previousTime = 0;
+    public void handle(long now) {
+        timeLabel.setText(secondsToString(time.doubleValue()));
     }
 
 
     /**
      * Given a double, set the string displayed on the label to in MM:SS format
-     * @param pTime The time to display.
+     * @param seconds The time to display.
      */
-    private void secondsToString(double pTime) {
-        pTime = (int) pTime;
-        if (pTime > 0) {
-            timeString = String.format(" %02.0f:%02.0f", Math.floor(Math.abs(pTime / 60)), Math.abs(pTime) % 60);
+    private String secondsToString(double seconds) {
+        String timeString;
+        if (seconds > 0) {
+            timeString = String.format(" %02.0f:%02.0f", Math.floor(Math.abs(seconds / 60)), Math.abs(seconds) % 60);
         } else {
-            timeString = String.format("-%02.0f:%02.0f", Math.floor(Math.abs(pTime / 60)), Math.abs(pTime) % 60);
+            timeString = String.format("-%02.0f:%02.0f", Math.floor(Math.abs(seconds / 60)), Math.abs(seconds) % 60);
         }
+        return timeString;
     }
-    public void setRaceDuration(double raceDuration) {
-        this.timeScaleFactor = race.getCourse().getCourseDistance()
-                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / raceDuration;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        RaceClock raceClock = (RaceClock) o;
+
+        if (timeLabel != null ? !timeLabel.equals(raceClock.timeLabel) : raceClock.timeLabel != null) return false;
+        return time != null ? time.equals(raceClock.time) : raceClock.time == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = timeLabel != null ? timeLabel.hashCode() : 0;
+        result = 31 * result + (time != null ? time.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "RaceClock{" +
+                "timeLabel=" + timeLabel +
+                ", time=" + time +
+                '}';
     }
 }
 

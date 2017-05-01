@@ -1,21 +1,19 @@
 package seng302.team18.model;
 
 /**
- *  A class that represents a mark on the race course, used to create compound marks to be drawn on the course
+ *  A class that represents a mark on the race course
  */
 public class Mark {
 
     private String name;
     private Coordinate coordinates;
+    private Integer id;
+    private Coordinate targetCoordinates;
 
-    /**
-     * A constructor for the Mark class
-     * @param name The name of the mark
-     * @param coordinates The coordinate the Mark is located at
-     */
-    public Mark(String name, Coordinate coordinates) {
-        this.name = name;
+    public Mark(int id, Coordinate coordinates) {
+        this.id = id;
         this.coordinates = coordinates;
+        targetCoordinates = coordinates;
     }
 
 
@@ -23,7 +21,7 @@ public class Mark {
      * Getter for the mark's coordinates
      * @return the coordinates
      */
-    public Coordinate getCoordinates() {
+    public Coordinate getCoordinate() {
         return this.coordinates;
     }
 
@@ -32,7 +30,7 @@ public class Mark {
      * Setter for mark's coordinates
      * @param coordinates the coordinates
      */
-    public void setCoordinates(Coordinate coordinates) {
+    public void setCoordinate(Coordinate coordinates) {
         this.coordinates = coordinates;
     }
 
@@ -54,6 +52,18 @@ public class Mark {
      */
     public void setName(String markName) {
         this.name = markName;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public Coordinate getTargetCoordinates() {
+        return targetCoordinates;
+    }
+
+    public void setTargetCoordinates(Coordinate targetCoordinates) {
+        this.targetCoordinates = targetCoordinates;
     }
 }
 
