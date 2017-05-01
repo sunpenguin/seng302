@@ -22,7 +22,6 @@ import java.util.concurrent.Executors;
 
 /**
  * The Main Controller that manages the other controller classes.
- * Created by dhl25 on 17/04/17.
  */
 public class ControllerManager {
     private MainWindowController mainController;
@@ -156,7 +155,7 @@ public class ControllerManager {
             }
         }else if (decision.equals("4")) {
             try {
-                ArrayList<String> portAndHost = getCustomConnection();
+                List<String> portAndHost = getCustomConnection();
                 return new SocketMessageReceiver(portAndHost.get(1), Integer.parseInt(portAndHost.get(0)), new AC35MessageParserFactory());
             }catch (Exception e) {
                 System.out.println("Could not establish connection to stream Host/Port");
@@ -165,8 +164,8 @@ public class ControllerManager {
         return getPort();
     }
 
-    private ArrayList<String> getCustomConnection() {
-        ArrayList<String> portAndHost = new ArrayList<>();
+    private List<String> getCustomConnection() {
+        List<String> portAndHost = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter a port number: ");
         while (portAndHost.isEmpty()) {
