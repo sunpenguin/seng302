@@ -12,7 +12,7 @@ import java.util.List;
 public class Course {
 
     private List<CompoundMark> compoundMarks;
-//    private List<Leg> legs;
+    private List<Leg> legs;
     private double windDirection;
     private List<BoundaryMark> boundaries;
     //private List<MarkRounding> markRoundings;
@@ -24,11 +24,12 @@ public class Course {
         this.windDirection = windDirection;
         this.boundaries = new ArrayList<>(boundaries);
         this.timeZone = timeZone;
-//        legs = new ArrayList<>();
-//        for (int i = 0; i < marks.size() - 1; i++) {
-//            legs.add(new Leg(compoundMarks.get(i), compoundMarks.get(i + 1), i));
-//        }
-        //markRoundings = new ArrayList<>();
+        legs = new ArrayList<>();
+        for (int i = 0; i < marks.size() - 1; i++) {
+            legs.add(new Leg(compoundMarks.get(i), compoundMarks.get(i + 1), i));
+        }
+//        markRoundings = new ArrayList<>();
+        centralCoordinate = new Coordinate(0d, 0d);
     }
 
     public Course() {
@@ -94,7 +95,7 @@ public class Course {
 //        this.markRoundings = markRoundings;
 //    }
 
-    public List<MarkRounding> getMarkRoundings() {return markRoundings;}
+//    public List<MarkRounding> getMarkRoundings() {return markRoundings;}
 
     public void setCentralCoordinate(Coordinate centralCoordinate) {
         if (this.centralCoordinate.getLatitude() == 0d && this.centralCoordinate.getLongitude() == 0d) {
@@ -104,6 +105,18 @@ public class Course {
 
     public Coordinate getCentralCoordinate() {
         return centralCoordinate;
+    }
+
+    public List<Leg> getLegs() {
+        return legs;
+    }
+
+
+    public Leg getNextLeg(Leg leg) {
+        if (leg.getLegNumber() + 1 >= legs.size()) {
+            return leg;
+        }
+        return legs.get(leg.getLegNumber() + 1);
     }
 }
 

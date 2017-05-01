@@ -1,4 +1,4 @@
-package seng302.team18.data;
+package seng302.team18.messageparsing;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

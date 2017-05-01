@@ -5,8 +5,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import seng302.team18.data.AC35XMLRaceMessage;
-import seng302.team18.data.AC35XMLRaceParser;
+import seng302.team18.messageparsing.AC35XMLRaceMessage;
+import seng302.team18.messageparsing.AC35XMLRaceParser;
 import seng302.team18.model.*;
 
 import javax.xml.parsers.DocumentBuilder;
