@@ -8,15 +8,12 @@ public class Mark {
     private String name;
     private Coordinate coordinates;
     private Integer id;
-
-    public Mark(String name, Coordinate coordinates) {
-        this.name = name;
-        this.coordinates = coordinates;
-    }
+    private Coordinate targetCoordinates;
 
     public Mark(int id, Coordinate coordinates) {
         this.id = id;
         this.coordinates = coordinates;
+        targetCoordinates = coordinates;
     }
 
 
@@ -59,6 +56,14 @@ public class Mark {
 
     public Integer getId() {
         return id;
+    }
+
+    public Coordinate getTargetCoordinates() {
+        return targetCoordinates;
+    }
+
+    public void setTargetCoordinates(Coordinate targetCoordinates) {
+        this.targetCoordinates = targetCoordinates;
     }
 }
 
