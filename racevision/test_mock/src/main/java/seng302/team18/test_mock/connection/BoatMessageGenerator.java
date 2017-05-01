@@ -47,11 +47,11 @@ public class BoatMessageGenerator extends ScheduledMessage {
         byte[] headingBytes = ByteCheck.shortToByteArray(headingShort);
         byte[] pitch = ByteBuffer.allocate(2).array();
         byte[] roll = ByteBuffer.allocate(2).array();
-        Double speed = b.getSpeed() * KMPH_TO_MMPS;
-        short speedShort = speed.shortValue();
-        byte[] speedBytes = ByteCheck.shortToByteArray(speedShort);
+        byte[] speedBytes = ByteBuffer.allocate(2).array();
         byte[] cog = ByteBuffer.allocate(2).array();
-        byte[] sog = ByteBuffer.allocate(2).array();
+        Double speedOverGround = b.getSpeed() * KMPH_TO_MMPS;
+        short speedOverGroundShort = speedOverGround.shortValue();
+        byte[] sog = ByteCheck.shortToByteArray(speedOverGroundShort);
         byte[] windInfo = ByteBuffer.allocate(10).array();
         byte[] drift = ByteBuffer.allocate(2).array();
         byte[] set = ByteBuffer.allocate(2).array();

@@ -88,9 +88,7 @@ public class BoatMessageGeneratorTest {
             double actualHeading = ByteCheck.byteToIntConverter(generatedBytes,
                     HEADING_I, HEADING_L) * BYTE_HEADING_TO_DOUBLE;
             double actualSpeed = ByteCheck.byteToIntConverter(generatedBytes,
-                    SPEED_I, SPEED_L) * MMPS_TO_KMPH;
-
-            System.out.println(expectedSpeed + " " + actualSpeed);
+                    SOG_I, SOG_L) * MMPS_TO_KMPH;
 
             assertEquals(expectedVersionNum, actualVersionNum);
             assertEquals(expectedSourceID, actualSourceID);

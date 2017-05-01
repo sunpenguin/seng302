@@ -11,9 +11,6 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Justin on 20/04/2017.
- */
 public class AC35RaceParserTest {
 
     private AC35RaceContainer ac35RaceContainer;
@@ -34,7 +31,7 @@ public class AC35RaceParserTest {
         List<MarkRounding> markRoundings = ac35RaceContainer.getMarkRoundings();
 
         // Assert the start time is correct
-        assertEquals("2011-08-06T13:30:00-0700", startTime);
+        assertEquals("2011-08-06T13:30:00-07:00", startTime);
         // =============================================================================================================
 
         // Assert the boundary marks are correct
@@ -81,7 +78,7 @@ public class AC35RaceParserTest {
         // set up compoundMark3 ----------------------------------------------------------------------------------------
         List<Mark> m2Mark = new ArrayList<>();
 
-        Mark mark4 = new Mark(102, new Coordinate(-36.83, 174.80));
+        Mark mark4 = new Mark(104, new Coordinate(-36.83, 174.80));
         mark4.setName("M2");
 
         m2Mark.add(mark4);
@@ -91,10 +88,10 @@ public class AC35RaceParserTest {
         // set up compoundMark 4 ---------------------------------------------------------------------------------------
         List<Mark> gateMarks = new ArrayList<>();
 
-        Mark mark5 = new Mark(104, new Coordinate(-36.63566590, 174.97205159));
+        Mark mark5 = new Mark(105, new Coordinate(-36.63566590, 174.97205159));
         mark5.setName("G1");
 
-        Mark mark6 = new Mark(105, new Coordinate(-36.64566590, 174.98205159));
+        Mark mark6 = new Mark(106, new Coordinate(-36.64566590, 174.98205159));
         mark6.setName("G2");
 
         gateMarks.add(mark5);
@@ -125,8 +122,7 @@ public class AC35RaceParserTest {
 
         // Assert participantIDs are correct
         List<Integer> expectedIDs = new ArrayList<>();
-        expectedIDs.add(107);
-        expectedIDs.add(108);
+        expectedIDs.add(200);
 
         assertEquals(expectedIDs.size(), participantIDs.size());
 

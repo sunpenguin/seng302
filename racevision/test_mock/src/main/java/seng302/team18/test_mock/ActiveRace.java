@@ -47,7 +47,7 @@ public class ActiveRace extends Race {
      */
     private void setInitialSpeed(){
         for(Boat b: startingList){
-            b.setSpeed(40); //kph
+            b.setSpeed(100); //kph
         }
     }
 
