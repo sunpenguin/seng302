@@ -16,13 +16,15 @@ import static java.lang.Thread.sleep;
  */
 public class TestMock {
 
-    private Regatta regatta;
     private Course course;
     private Race race;
 
-    private String regattaXML = "/AC35regatta.xml";
-    private String boatsXML = "/AC35boats.xml";
-    private String raceXML = "/AC35race.xml";
+//    private String regattaXML = "/AC35regatta.xml";
+//    private String boatsXML = "/AC35boats.xml";
+//    private String raceXML = "/AC35race.xml";
+    private String regattaXML = "/regatta_test1.xml";
+    private String boatsXML = "/boats_test2.xml";
+    private String raceXML = "/race_test2.xml";
 
     private AC35XMLRegattaMessage regattaMessage;
     private AC35XMLBoatMessage boatMessage;
@@ -60,43 +62,9 @@ public class TestMock {
     }
 
     public void run() {
-        // comment out to see checksum result.
-//        byte[] message = new byte[4];
-//        message[0] = 0;
-//        message[1] = 1;
-//        message[2] = 2;
-//        message[3] = 3;
-//
-//        ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
-//
-//        try {
-//            outputSteam.write(message);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        byte[] check = outputSteam.toByteArray();
-//
-//        CRCGenerator crcGenerator = new CRCGenerator();
-//        crcGenerator.generateCRC(check);
 
         readFiles();
         generateClasses();
-
-//        try {
-//            byte[] header = HeaderGenerator.generateHeader(26, (short) 8);
-//            RaceMessageGenerator racemsg = new RaceMessageGenerator(race);
-//            byte[] raceBody = racemsg.getPayload();
-//
-//            byte[] combined = new byte[header.length + raceBody.length];
-//            System.arraycopy(header,0,combined,0         ,header.length);
-//            System.arraycopy(raceBody,0,combined,header.length,raceBody.length);
-//
-//            CRCGenerator crcGenerator = new CRCGenerator();
-//            crcGenerator.generateCRC(combined);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
         server.openServer();
 

@@ -4,10 +4,6 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import seng302.team18.visualiser.controller.ControllerManager;
 
-
-/**
- * Created by afj19 on 11/04/17.
- */
 public class Main extends Application {
 
     @Override
