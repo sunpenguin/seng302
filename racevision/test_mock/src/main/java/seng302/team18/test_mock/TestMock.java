@@ -20,7 +20,7 @@ public class TestMock {
     private Regatta regatta;
     private Course course;
     private Race race;
-    private Polar polarsMap;
+    private List<Polar> listOfPolars;
 
     private String regattaXML = "/AC35regatta.xml";
     private String boatsXML = "/AC35boats.xml";
@@ -62,7 +62,7 @@ public class TestMock {
         raceMessage = raceParser.parse(this.getClass().getResourceAsStream(raceXML));
 
         PolarParser polarParser = new PolarParser();
-        polarsMap = polarParser.parse(this.getClass().getResourceAsStream(polars));
+        listOfPolars = polarParser.parse(this.getClass().getResourceAsStream(polars));
     }
 
     public void run() {
@@ -190,7 +190,7 @@ public class TestMock {
         List<Boat> startingList = boatMessage.getBoats();
         int raceID = raceMessage.getRaceID();
 
-        race = new Race(startingList, course, raceID, polarsMap);
+        race = new Race(startingList, course, raceID, listOfPolars);
 
 //        RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
 //        raceMessageGenerator.getMessage();

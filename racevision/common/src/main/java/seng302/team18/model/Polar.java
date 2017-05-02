@@ -34,4 +34,27 @@ public class Polar {
         mapSpeedAtAngles.put(trueWindAngle,boatSpeed);
     }
 
+    public double getWindSpeed() {
+        return windSpeed;
+    }
+
+    public Map<Double, Double> getMapSpeedAtAngles() {
+        return mapSpeedAtAngles;
+    }
+
+    public double getUpWindAngle() {
+        return upWindAngle;
+    }
+
+    public double getUpWindSpeed() {
+        return upWindSpeed;
+    }
+
+    public double getDownWindAngle() {
+        return downWindAngle;
+    }
+
+    public double getDownWindSpeed() {
+        return downWindSpeed;
+    }
 }

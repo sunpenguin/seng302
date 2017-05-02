@@ -23,7 +23,7 @@ public class Race {
     private byte status;
     public static int PREP_TIME_SECONDS = 120;
 
-    private Polar polarsMap;
+    private List<Polar> listOfPolars;
 
     public Race() {
         participantIds = new ArrayList<>();
@@ -41,13 +41,13 @@ public class Race {
      * @param startingList ArrayList holding all entered boats
      * @param course       Course object
      */
-    public Race(List<Boat> startingList, Course course, int raceId, Polar polarsMap) {
+    public Race(List<Boat> startingList, Course course, int raceId, List<Polar> listOfPolars) {
         this.startingList = startingList;
         this.course = course;
         finishedList = new ArrayList<>();
         participantIds = startingList.stream().map(Boat::getId).collect(Collectors.toList());
         this.id = raceId;
-        this.polarsMap = polarsMap;
+        this.listOfPolars = listOfPolars;
         setCourseForBoats();
         setInitialSpeed();
     }
@@ -283,7 +283,7 @@ public class Race {
         this.status = status;
     }
 
-    public Polar getPolarsMap() {
-        return polarsMap;
+    public List<Polar> listOfPolars() {
+        return listOfPolars;
     }
 }
