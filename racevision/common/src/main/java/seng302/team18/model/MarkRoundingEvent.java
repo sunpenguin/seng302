@@ -1,7 +1,4 @@
-package seng302.team18.test_mock.connection;
-
-import seng302.team18.model.Boat;
-import seng302.team18.model.CompoundMark;
+package seng302.team18.model;
 
 /**
  * Created by afj19 on 28/04/17.

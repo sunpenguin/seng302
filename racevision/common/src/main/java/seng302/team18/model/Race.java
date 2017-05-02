@@ -206,6 +206,8 @@ public class Race {
         boat.setPlace(passedMark.getPassed().indexOf(boat) + 1);
         boat.setDestination(nextLeg.getDestination().getMidCoordinate());
         boat.setLeg(nextLeg);
+
+        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, passedMark));
         //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
     }
 
@@ -279,5 +281,13 @@ public class Race {
 
     public void setStatus(byte status) {
         this.status = status;
+    }
+
+    private List<MarkRoundingEvent> markRoundingEvents = new ArrayList<>();
+
+    public List<MarkRoundingEvent> popMarkRoundingEvents() {
+        List<MarkRoundingEvent> events = markRoundingEvents;
+        markRoundingEvents = new ArrayList<>();
+        return events;
     }
 }
