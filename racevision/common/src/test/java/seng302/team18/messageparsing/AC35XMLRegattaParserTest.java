@@ -16,7 +16,7 @@ public class AC35XMLRegattaParserTest {
 
     @Test
     public void runTest() throws IOException {
-        InputStream testFile = new BufferedInputStream(getClass().getResourceAsStream("/Regatta.xml"));
+        InputStream testFile = new BufferedInputStream(getClass().getClassLoader().getResourceAsStream("regatta.xml"));
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         int nRead;

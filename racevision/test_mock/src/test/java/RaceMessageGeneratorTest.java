@@ -1,6 +1,6 @@
 import org.junit.Test;
 import seng302.team18.model.Boat;
-import seng302.team18.test_mock.ActiveRace;
+import seng302.team18.model.Race;
 import seng302.team18.test_mock.TestMock;
 import seng302.team18.test_mock.connection.RaceMessageGenerator;
 import seng302.team18.util.ByteCheck;
@@ -50,7 +50,7 @@ public class RaceMessageGeneratorTest {
     @Test
     public void raceStatusMessageTest() {
         TestMock testMock = new TestMock();
-        ActiveRace testRace = testMock.testRun();
+        Race testRace = testMock.testRun();
         byte[] generatedBytes;
 
         RaceMessageGenerator generator = new RaceMessageGenerator(testRace);
@@ -62,8 +62,8 @@ public class RaceMessageGeneratorTest {
 
             int expectedMsgVersion = 2;
             long expectedCurrentTime = System.currentTimeMillis();
-            int expectedRaceID = testRace.getRaceID();
-            int expectedRaceStatus = testRace.getRaceStatusNumber();
+            int expectedRaceID = testRace.getId();
+            int expectedRaceStatus = testRace.getStatus();
             long expectedStartTime = System.currentTimeMillis();
             int expectedWindDirection = 0x4000;
             int expectedWindSpeed = 5000;

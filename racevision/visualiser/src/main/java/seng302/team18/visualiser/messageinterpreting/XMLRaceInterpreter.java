@@ -9,12 +9,17 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Created by dhl25 on 27/04/17.
+ * A MessageInterpreter that takes a AC35XMLRaceMessage and updates the start time, participants, and course of a Race.
  */
 public class XMLRaceInterpreter extends MessageInterpreter {
 
     private Race race;
 
+    /**
+     * Constructor for XMLRaceInterpreter. Takes a Race as a parameter which it updates every time a
+     * AC35XMLBoatMessage is interpreted.
+     * @param race to be updated.
+     */
     public XMLRaceInterpreter(Race race) {
         this.race = race;
     }
@@ -28,7 +33,7 @@ public class XMLRaceInterpreter extends MessageInterpreter {
             race.setParticipantIds(raceMessage.getParticipantIDs());
 
             Course course = race.getCourse();
-            course.setMarkRoundings(raceMessage.getMarkRoundings());
+            //course.setMarkRoundings(raceMessage.getMarkRoundings());
             course.setCompoundMarks(raceMessage.getCompoundMarks());
             course.setBoundaries(raceMessage.getBoundaryMarks());
         }

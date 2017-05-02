@@ -16,6 +16,7 @@ public class AC35XMLRaceMessage implements MessageBody {
     private List<CompoundMark> compoundMarks;
     private List<MarkRounding> markRoundings;
     private List<BoundaryMark> boundaryMarks;
+    private int raceID;
 
     @Override
     public int getType() {
@@ -60,5 +61,13 @@ public class AC35XMLRaceMessage implements MessageBody {
 
     public void setBoundaryMarks(List<BoundaryMark> boundaryMarks) {
         this.boundaryMarks = boundaryMarks;
+    }
+
+    public int getRaceID() {
+        return raceID;
+    }
+
+    public void setRaceID(int raceID) {
+        this.raceID = raceID;
     }
 }

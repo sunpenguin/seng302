@@ -23,14 +23,7 @@ public class HeartBeatMessageGenerator extends ScheduledMessageGenerator {
     @Override
     public byte[] getPayload()  throws IOException {
         byte[] seqNum = ByteCheck.intToByteArray(seqNo);
-
-        ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
-
-        outputSteam.write(seqNum);
-
-        byte[] heartBeat = outputSteam.toByteArray();
-
         seqNo += 1;
-        return ByteCheck.convertToLittleEndian(heartBeat, 4);
+        return seqNum;
     }
 }

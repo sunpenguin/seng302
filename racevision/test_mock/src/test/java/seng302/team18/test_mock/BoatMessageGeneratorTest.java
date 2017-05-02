@@ -2,6 +2,7 @@ package seng302.team18.test_mock;
 
 import org.junit.Test;
 import seng302.team18.model.Boat;
+import seng302.team18.model.Race;
 import seng302.team18.test_mock.connection.BoatMessageGenerator;
 import seng302.team18.util.ByteCheck;
 
@@ -61,7 +62,7 @@ public class BoatMessageGeneratorTest {
     @Test
     public void boatMessageGeneratorTest() throws IOException {
         TestMock testMock = new TestMock();
-        ActiveRace testRace = testMock.testRun();
+        Race testRace = testMock.testRun();
         byte[] generatedBytes;
         List<BoatMessageGenerator> messages = new ArrayList<>();
         for (Boat boat: testRace.getStartingList()) {
@@ -87,9 +88,7 @@ public class BoatMessageGeneratorTest {
             double actualHeading = ByteCheck.byteToIntConverter(generatedBytes,
                     HEADING_I, HEADING_L) * BYTE_HEADING_TO_DOUBLE;
             double actualSpeed = ByteCheck.byteToIntConverter(generatedBytes,
-                    SPEED_I, SPEED_L) * MMPS_TO_KMPH;
-
-            System.out.println(expectedSpeed + " " + actualSpeed);
+                    SOG_I, SOG_L) * MMPS_TO_KMPH;
 
             assertEquals(expectedVersionNum, actualVersionNum);
             assertEquals(expectedSourceID, actualSourceID);

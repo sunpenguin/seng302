@@ -9,12 +9,18 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 
 /**
- * Created by dhl25 on 27/04/17.
+ * A MessageInterpreter that takes a AC35RaceStatusMessage and updates the current time and start time of a Race and
+ * also updates races boats time elapsed since passing last mark.
  */
 public class RaceTimeInterpreter extends MessageInterpreter {
 
     private Race race;
 
+    /**
+     * Constructor for RaceTimeInterpreter. Takes a Race as a parameter which it updates every time a
+     * AC35RaceStatusMessage is interpreted.
+     * @param race to be updated.
+     */
     public RaceTimeInterpreter(Race race) {
         this.race = race;
     }
@@ -35,6 +41,11 @@ public class RaceTimeInterpreter extends MessageInterpreter {
         }
     }
 
+    /**
+     * Updates the time elapsed since passing last mark for all given boats.
+     * @param boats to be updated.
+     * @param time elapsed since passing last mark.
+     */
     private void updateBoatMarkTimes(Iterable<Boat> boats, long time) {
         for (Boat boat : boats) {
             if (!boat.getTimeAtLastMark().equals(0L)) {

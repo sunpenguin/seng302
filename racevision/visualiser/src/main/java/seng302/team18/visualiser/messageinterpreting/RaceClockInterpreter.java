@@ -3,18 +3,22 @@ package seng302.team18.visualiser.messageinterpreting;
 import seng302.team18.messageparsing.AC35RaceStatusMessage;
 import seng302.team18.messageparsing.MessageBody;
 import seng302.team18.visualiser.display.RaceClock;
-import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 /**
- * Created by spe76 on 27/04/17.
+ * A MessageInterpreter that takes a AC35RaceStatusMessage and updates the time on a RaceClock.
  */
 public class RaceClockInterpreter extends MessageInterpreter {
 
     private RaceClock raceClock;
 
+    /**
+     * Constructor for RaceClockInterpreter. Takes a RaceClock as a parameter which it updates every time a
+     * AC35RaceStatusMessage is interpreted.
+     * @param raceClock to be updated.
+     */
     public RaceClockInterpreter(RaceClock raceClock) {
         this.raceClock = raceClock;
     }

@@ -5,6 +5,7 @@ import seng302.team18.util.ByteCheck;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
@@ -39,10 +40,10 @@ public class XMLMessageGenerator {
         try {
             payload = getPayload();
             byte[] header = getMessageHeader();
-            //TODO get CRC
             outputStream.write(header);
             outputStream.write(payload);
-            //outputStream.write(CRC);
+            byte[] crc = CRCGenerator.generateCRC(outputStream.toByteArray());
+            outputStream.write(crc);
             byte[] message = outputStream.toByteArray();
             return message;
         } catch (IOException e) {
@@ -81,7 +82,7 @@ public class XMLMessageGenerator {
     }
 
     private byte[] getXMLAsBytes()throws IOException{
-        File XML = new File(this.getClass().getResource(pathToFile).getFile());
+        InputStream XML = this.getClass().getResourceAsStream(pathToFile);
         String content = new Scanner(XML).useDelimiter("\\Z").next();
         byte[] xmlBytes =  content.getBytes(StandardCharsets.UTF_8);
         lengthOfXML = (short)xmlBytes.length;

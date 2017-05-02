@@ -5,15 +5,21 @@ import seng302.team18.messageparsing.MessageBody;
 import seng302.team18.model.Race;
 
 /**
- * Created by dhl25 on 27/04/17.
+ * A MessageInterpreter that takes a AC35XMLBoatMessage and updates the boats of a Race.
  */
 public class XMLBoatInterpreter extends MessageInterpreter {
 
     private Race race;
 
+    /**
+     * Constructor for XMLBoatInterpreter. Takes a Race as a parameter which it updates every time a
+     * AC35XMLBoatMessage is interpreted.
+     * @param race to be updated.
+     */
     public XMLBoatInterpreter(Race race) {
         this.race = race;
     }
+
 
     @Override
     public void interpret(MessageBody message) {

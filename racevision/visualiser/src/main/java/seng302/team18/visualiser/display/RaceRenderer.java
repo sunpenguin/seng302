@@ -121,7 +121,9 @@ public class RaceRenderer {
         PixelMapper pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, PADDING);
         for (Boat boat : boats) {
             DisplayTrail trail = trailMap.get(boat.getShortName());
-            trail.reDraw(pixelMapper);
+            if (trail != null) {
+                trail.reDraw(pixelMapper);
+            }
         }
     }
 
