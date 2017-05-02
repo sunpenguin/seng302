@@ -2,9 +2,10 @@ package seng302.team18.model;
 
 import seng302.team18.util.GPSCalculations;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -15,32 +16,60 @@ public class Race {
     private List<Boat> startingList;
     private Course course;
     private List<Boat> finishedList;
-    private double duration;
-    public static final double WARNING_TIME_SECONDS = 30; // TODO change this to 60
-    public static final double PREP_TIME_SECONDS = 60; // TODO change this to 120
+    private ZonedDateTime startTime;
+    private ZonedDateTime currentTime;
+    private List<Integer> participantIds;
+    private int id;
+    private byte status;
+    public static int PREP_TIME_SECONDS = 120;
+
+
+    public Race() {
+        participantIds = new ArrayList<>();
+        startingList = new ArrayList<>();
+        course = new Course();
+        finishedList = new ArrayList<>();
+        id = 0;
+//        setInitialSpeed();
+    }
+
 
     /**
      * Race class constructor.
      *
-     * @param startingList Arraylist holding all entered boats
+     * @param startingList ArrayList holding all entered boats
      * @param course       Course object
      */
-    public Race(List<Boat> startingList, Course course) {
-        startingList.sort(Comparator.comparingDouble(Boat::getSpeed));
+    public Race(List<Boat> startingList, Course course, int raceId) {
         this.startingList = startingList;
         this.course = course;
         finishedList = new ArrayList<>();
+        participantIds = startingList.stream().map(Boat::getId).collect(Collectors.toList());
+        this.id = raceId;
         setCourseForBoats();
-        duration = 60;
+        setInitialSpeed();
     }
+
+
+
+    /**
+     * Sets the speed of the boats at the start line
+     */
+    private void setInitialSpeed(){
+        for(Boat b: startingList){
+            b.setSpeed(200); //kph
+        }
+    }
+
 
     /**
      * Convert a value given in knots to meters per second.
      *
      * @param knots speed in knots.
      * @return speed in meters per second.
+     * TODO: Put this somewhere more reasonable
      */
-    public static double knotsToMetersPerSecond(double knots) {
+    public double knotsToMetersPerSecond(double knots) {
         return ((knots * 1.852) / 3.6);
     }
 
@@ -51,23 +80,25 @@ public class Race {
      * current(starting CompoundMark) and next CompoundMark.
      */
     private void setCourseForBoats() {
-        for (Boat boat : startingList) {
-            // Set Leg
-            boat.setLeg(course.getLegs().get(0));
-            // Set Dest
-            boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
-            // Set Coordinate
-            Coordinate midPoint = course.getCompoundMarks().get(0).getMidCoordinate();
-            boat.setCoordinate(midPoint);
-            // Set Heading
-            boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+        if (course.getLegs().size() > 0) {
+            for (Boat boat : startingList) {
+                // Set Leg
+                boat.setLeg(course.getLegs().get(0));
+                // Set Dest
+                boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
+                // Set Coordinate
+                Coordinate midPoint = boat.getLeg().getDeparture().getMidCoordinate();
+                boat.setCoordinate(midPoint);
+                // Set Heading
+                boat.setHeading(boat.getCoordinate().retrieveHeading(boat.getDestination()));
+            }
         }
     }
 
     /**
      * Starting list getter.
      *
-     * @return ObservableList holding all entered boats
+     * @return List holding all entered boats.
      */
     public List<Boat> getStartingList() {
         return startingList;
@@ -76,10 +107,19 @@ public class Race {
     /**
      * Starting list setter.
      *
-     * @param startingList Arraylist holding all entered boats
+     * @param startingList ArrayList holding all entered boats
      */
     public void setStartingList(List<Boat> startingList) {
-        this.startingList = startingList;
+        if (participantIds.size() == 0) {
+            this.startingList = startingList;
+        } else {
+            this.startingList.clear();
+            for (Boat boat : startingList) {
+                if (participantIds.contains(boat.getId())) {
+                    this.startingList.add(boat);
+                }
+            }
+        }
     }
 
     /**
@@ -143,13 +183,14 @@ public class Race {
                 return;
             }
             if (boat.getLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
-                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinates())) { // and it hasn't gone around the gate
-                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinates()); // move around the gate
+                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinate())) { // and it hasn't gone around the gate
+                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinate()); // move around the gate
             } else { // the destination was a mark or is already gone around gate so move onto the next leg
                 setNextLeg(boat, nextLeg);
             }
         }
-        boat.setHeading(GPSCalculations.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+        GPSCalculations gps = new GPSCalculations(course);
+        boat.setHeading(gps.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
     }
 
 
@@ -176,12 +217,13 @@ public class Race {
      * @param time that has passed
      */
     private void updatePosition(Boat boat, double time) {
-        final double KMPH_TO_MPS = 1000.0 / 3600.0;
-        double speed = boat.getSpeed() * KMPH_TO_MPS;
-        double distanceTravelled = speed * time
-                / (duration / (course.getCourseDistance() / (startingList.get(0).getSpeed() * KMPH_TO_MPS))); // meters
-        boat.setCoordinate( // set next position based on current coordinate, distance travelled, and heading.
-                GPSCalculations.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+        double speed = boat.getSpeed();
+        double mpsSpeed = speed * 0.27778;//convert to metres/second
+        double secondsTime = time / 1000;
+        double distanceTravelled = mpsSpeed * secondsTime;
+        GPSCalculations gps = new GPSCalculations(course);
+        // set next position based on current coordinate, distance travelled, and heading.
+        boat.setCoordinate(gps.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
 
 
@@ -190,16 +232,52 @@ public class Race {
     }
 
 
-    public void setDuration(double duration) {
-        this.duration = duration;
-    }
-
-    public double getDuration() {
-        return duration;
-    }
+//    public void setDuration(double duration) {
+//        this.duration = duration;
+//    }
+//
+//    public double getDuration() {
+//        return duration;
+//    }
 
     public boolean isFinished() {
         return startingList.size() == finishedList.size();
     }
 
+    public ZonedDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(ZonedDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setParticipantIds(List<Integer> participantIds) {
+        this.participantIds = participantIds;
+        startingList = startingList.stream()
+                .filter(boat -> participantIds.contains(boat.getId()))
+                .collect(Collectors.toList());
+    }
+
+    public void setCurrentTime(ZonedDateTime currentTime) {
+        this.currentTime = currentTime;
+    }
+
+    public ZonedDateTime getCurrentTime() {return currentTime; }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(byte status) {
+        this.status = status;
+    }
 }

@@ -1,9 +1,6 @@
 package seng302.team18.util;
 
-import seng302.team18.model.CompoundMark;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
-import seng302.team18.model.Mark;
+import seng302.team18.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +12,12 @@ import java.util.List;
 
 public class GPSCalculations {
 
-    private static double aveLat;
+//    private double aveLat;
     private double minX = Double.MAX_VALUE;
     private double maxX = -(Double.MAX_VALUE);
     private double minY = Double.MAX_VALUE;
     private double maxY = -(Double.MAX_VALUE);
+    private Course course;
 
 
     /**
@@ -28,71 +26,43 @@ public class GPSCalculations {
      * @param course a given course
      */
     public GPSCalculations(Course course) {
-        ArrayList<XYPair> XY = new ArrayList<>();
-        int totalMarks = 0;
-
-        for (CompoundMark cM : course.getCompoundMarks()) {
-            for (Mark m : cM.getMarks()) {
-                double lat = m.getCoordinates().getLatitude();
-                double lon = m.getCoordinates().getLongitude();
-                XYPair xy = GPSxy(new Coordinate(lat, lon));
-                XY.add(totalMarks, xy);
-                totalMarks += 1;
-            }
-        }
-
-        int i;
-        double latTotal = 0;
-        double lonTotal = 0;
-        double Z = 0;
-
-        for (i = 0; i < XY.size(); i++) {
-            latTotal += XY.get(i).getX();
-            lonTotal += XY.get(i).getY();
-            Z += Math.sin(XY.get(i).getX());
-        }
-
-        double x = latTotal / totalMarks;
-        double y = lonTotal / totalMarks;
-        double z = Z / totalMarks;
-        double hyp = Math.sqrt(x * x + y * y);
-        aveLat = Math.atan2(z, hyp);
+        this.course = course;
     }
 
-    /**
-     * Given 2 sets of GPS coordinates in signed decimal degrees, return the distance
-     * in metres between them.
-     *
-     * @param point1 Coordinates for point1
-     * @param point2 Coordinates for point2
-     * @return The distance in metres
-     */
-    public static double GPSDistance(Coordinate point1, Coordinate point2) {
+//    /**
+//     * Given 2 sets of GPS coordinates in signed decimal degrees, return the distance
+//     * in metres between them.
+//     *
+//     * @param point1 Coordinates for point1
+//     * @param point2 Coordinates for point2
+//     * @return The distance in metres
+//     */
+//    public double gpsDistance(Coordinate point1, Coordinate point2) {
+//
+//        double lat1 = point1.getLatitude();
+//        double long1 = point1.getLongitude();
+//
+//        double lat2 = point2.getLatitude();
+//        double long2 = point2.getLongitude();
+//
+//        double earthRadius = 6371e3; // meters
+//
+//        double lat1Rad = Math.toRadians(lat1);
+//        double lat2Rad = Math.toRadians(lat2);
+//
+//        double difLatitudeRad = Math.toRadians(lat2 - lat1);
+//        double difLongitudeRad = Math.toRadians(long2 - long1);
+//
+//        double a = Math.sin(difLatitudeRad / 2) * Math.sin(difLatitudeRad / 2) +
+//                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+//                        Math.sin(difLongitudeRad / 2) * Math.sin(difLongitudeRad / 2);
+//
+//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//
+//        return earthRadius * c;
+//    }
 
-        double lat1 = point1.getLatitude();
-        double long1 = point1.getLongitude();
-
-        double lat2 = point2.getLatitude();
-        double long2 = point2.getLongitude();
-
-        double earthRadius = 6371e3; // meters
-
-        double lat1Rad = Math.toRadians(lat1);
-        double lat2Rad = Math.toRadians(lat2);
-
-        double difLatitudeRad = Math.toRadians(lat2 - lat1);
-        double difLongitudeRad = Math.toRadians(long2 - long1);
-
-        double a = Math.sin(difLatitudeRad / 2) * Math.sin(difLatitudeRad / 2) +
-                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-                        Math.sin(difLongitudeRad / 2) * Math.sin(difLongitudeRad / 2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return earthRadius * c;
-    }
-
-    public static Coordinate coordinateToCoordinate(Coordinate initialCoord, double bearing, double distance) {
+    public Coordinate coordinateToCoordinate(Coordinate initialCoord, double bearing, double distance) {
 
         double bR = Math.toRadians(bearing);
         double lat1R = Math.toRadians(initialCoord.getLatitude());
@@ -107,7 +77,7 @@ public class GPSCalculations {
     }
 
 
-    public static double retrieveHeading(Coordinate c1, Coordinate c2) {
+    public double retrieveHeading(Coordinate c1, Coordinate c2) {
         double lon1 = Math.toRadians(c1.getLongitude());
         double lat1 = Math.toRadians(c1.getLatitude());
         double lon2 = Math.toRadians(c2.getLongitude());
@@ -126,7 +96,7 @@ public class GPSCalculations {
      * @param point2 Coordinates for point2
      * @return The coordinates of the midpoint
      */
-    public static Coordinate GPSMidpoint(Coordinate point1, Coordinate point2) {
+    public static Coordinate gpsMidpoint(Coordinate point1, Coordinate point2) {
 
         double lat1 = point1.getLatitude();
         double long1 = point1.getLongitude();
@@ -159,25 +129,25 @@ public class GPSCalculations {
      *
      * @param point The coordinates to convert
      */
-    public static XYPair GPSxy(Coordinate point) {
+    public XYPair coordinateToPixel(Coordinate point) {
         double earthRadius = 6371e3; // meters
-        double aspectLat = Math.cos(aveLat);
+        double aspectLat = Math.cos(course.getCentralCoordinate().getLatitude());
         double x = earthRadius * Math.toRadians(point.getLongitude()) * aspectLat;
         double y = earthRadius * Math.toRadians(point.getLatitude());
         return new XYPair(x, y);
     }
 
-    public static Coordinate XYToCoordinate(XYPair point) {
+    public Coordinate pixelToCoordinate(XYPair point) {
         double earthRadius = 6371e3; // meters
-        double aspectLat = Math.cos(aveLat);
+        double aspectLat = Math.cos(course.getCentralCoordinate().getLatitude());
         double latitude = Math.toDegrees(point.getY() / earthRadius);
         double longitude = Math.toDegrees((point.getX() / earthRadius) / aspectLat);
         return new Coordinate(latitude, longitude);
     }
 
-    public static double findAngle(Coordinate departure, Coordinate destination) {
-        XYPair origin = GPSCalculations.GPSxy(departure);
-        XYPair target = GPSCalculations.GPSxy(destination);
+    public double findAngle(Coordinate departure, Coordinate destination) {
+        XYPair origin = coordinateToPixel(departure);
+        XYPair target = coordinateToPixel(destination);
         double angle = Math.toDegrees(Math.atan2(target.getY() - origin.getY(), target.getX() - origin.getX())) - 90;
         if (angle < 0) {
             angle += 360;
@@ -188,8 +158,8 @@ public class GPSCalculations {
     }
 
     public void findMinMaxPoints(Course course) {
-        for (Coordinate boundary : course.getBoundaries()) {
-            XYPair boundaryXYValues = GPSxy(boundary);
+        for (BoundaryMark boundary : course.getBoundaries()) {
+            XYPair boundaryXYValues = coordinateToPixel(boundary.getCoordinate());
             double xValue = boundaryXYValues.getX();
             double yValue = boundaryXYValues.getY();
             if (xValue < minX) {
@@ -207,7 +177,7 @@ public class GPSCalculations {
         }
         for (CompoundMark compoundMark : course.getCompoundMarks()) {
             for (Mark mark : compoundMark.getMarks()) {
-                XYPair markXYValues = GPSxy(mark.getCoordinates());
+                XYPair markXYValues = coordinateToPixel(mark.getCoordinate());
                 double xValue = markXYValues.getX();
                 double yValue = markXYValues.getY();
                 if (xValue < minX) {
@@ -227,7 +197,7 @@ public class GPSCalculations {
     }
 
 
-    public static Coordinate getCentralCoordinate(List<Coordinate> geoCoordinates) {
+    public Coordinate getCentralCoordinate(List<Coordinate> geoCoordinates) {
         double x = 0;
         double y = 0;
         double z = 0;
