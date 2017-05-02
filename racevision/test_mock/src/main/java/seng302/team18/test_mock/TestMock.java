@@ -184,6 +184,7 @@ public class TestMock {
 
         course = new Course(compoundMarks, boundaryMarks, windDirection, zoneId);
         course.setCentralCoordinate(central);
+        course.setWindSpeed(12d);
     }
 
     private void generateRace() {
