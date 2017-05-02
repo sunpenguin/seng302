@@ -57,7 +57,6 @@ public class MarkRoundingMessageGenerator extends MessageGenerator {
         // Mark id
         outputSteam.write(markRoundingEvent.getCompoundMark().getId());
 
-        byte[] message_body = outputSteam.toByteArray();
-        return ByteCheck.convertToLittleEndian(message_body, 4);
+        return outputSteam.toByteArray();
     }
 }

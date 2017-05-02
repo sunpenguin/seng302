@@ -207,6 +207,8 @@ public class Race {
         boat.setDestination(nextLeg.getDestination().getMidCoordinate());
         boat.setLeg(nextLeg);
 
+        System.out.println("boat: " + boat.getBoatName() + " passed mark: " + passedMark.getName());
+        // TODO when this is enabled it causes the visualiser to freeze, likely due to malformed packets
         markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, passedMark));
         //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
     }

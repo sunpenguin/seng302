@@ -1,6 +1,7 @@
 package seng302.team18.test_mock.connection;
 
 import seng302.team18.util.ByteCheck;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -40,9 +41,7 @@ public class HeaderGenerator {
         outputSteam.write(sourceID);
         outputSteam.write(messageLen);
 
-        byte header[] = outputSteam.toByteArray();
-
-        return ByteCheck.convertToLittleEndian(header,15);
+        return outputSteam.toByteArray();
     }
 
 }

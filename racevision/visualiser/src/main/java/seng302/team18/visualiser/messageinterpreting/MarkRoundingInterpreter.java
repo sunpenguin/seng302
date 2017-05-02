@@ -26,6 +26,7 @@ public class MarkRoundingInterpreter extends MessageInterpreter {
             for (Boat boat : boats) {
                 if (boat.getId().equals(roundingMessage.getBoatId())) {
                     boat.setTimeAtLastMark(roundingMessage.getTime());
+                    System.out.println("boat: " + boat.getBoatName() + " passed a mark");
                 }
             }
         }

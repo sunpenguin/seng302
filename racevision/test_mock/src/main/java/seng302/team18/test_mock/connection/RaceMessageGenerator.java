@@ -74,9 +74,7 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
             outputSteam.write(estTimeAtFinish);
         }
 
-        byte payLoad[] = outputSteam.toByteArray();
-
-        return ByteCheck.convertToLittleEndian(payLoad, payLoad.length);
+        return outputSteam.toByteArray();
     }
 
     private String fixLength(String s, int len) { //TODO move to super class so all subclasses can use this

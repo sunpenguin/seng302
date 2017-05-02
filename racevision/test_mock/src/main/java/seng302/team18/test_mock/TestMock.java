@@ -28,13 +28,15 @@ public class TestMock {
     private AC35XMLBoatMessage boatMessage;
     private AC35XMLRaceMessage raceMessage;
 
+    private final static int SERVER_PORT = 5006;
+
     /**
      * The messages to be sent on a schedule during race simulation
      */
     private List<ScheduledMessageGenerator> scheduledMessages = new ArrayList<>();
 
     //TODO give real port
-    private Server server = new Server(5005, regattaXML, boatsXML, raceXML);
+    private Server server = new Server(SERVER_PORT, regattaXML, boatsXML, raceXML);
 
     /**
      * Generate the classes necessary to visualise a mock race.

@@ -75,9 +75,7 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
         outStream.write(set);
         outStream.write(rudderAng);
 
-        byte boatMessage[] = outStream.toByteArray();
-        boatMessage = ByteCheck.convertToLittleEndian(boatMessage, LENGTH);
-        return boatMessage;
+        return outStream.toByteArray();
     }
 
     public Boat getB() {
