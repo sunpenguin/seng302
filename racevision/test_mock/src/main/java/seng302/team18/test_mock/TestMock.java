@@ -20,9 +20,12 @@ public class TestMock {
     private Course course;
     private Race race;
 
-    private String regattaXML = "/AC35regatta.xml";
-    private String boatsXML = "/AC35boats.xml";
-    private String raceXML = "/AC35race.xml";
+//    private String regattaXML = "/AC35regatta.xml";
+//    private String boatsXML = "/AC35boats.xml";
+//    private String raceXML = "/AC35race.xml";
+private String regattaXML = "/regatta_test1.xml";
+    private String boatsXML = "/boats_test2.xml";
+    private String raceXML = "/race_test2.xml";
 
     private AC35XMLRegattaMessage regattaMessage;
     private AC35XMLBoatMessage boatMessage;
