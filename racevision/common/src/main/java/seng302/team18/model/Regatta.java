@@ -9,6 +9,8 @@ public class Regatta {
     private String RegattaName;
     private String UTcOffset;
 
+    public Regatta() {}
+
     public int getRegattaID() {
         return RegattaID;
     }

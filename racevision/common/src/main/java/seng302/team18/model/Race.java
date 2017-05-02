@@ -1,6 +1,7 @@
 package seng302.team18.model;
 
 import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.XYPair;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -174,6 +175,7 @@ public class Race {
      * @param boat to be updated
      */
     private void updateHeading(Boat boat) {
+        GPSCalculations gps = new GPSCalculations(course);
         // if boat gets within range of its next destination changes its destination and heading
         if ((Math.abs(boat.getDestination().getLongitude() - boat.getCoordinate().getLongitude()) < 0.0001)
                 && (Math.abs(boat.getDestination().getLatitude() - boat.getCoordinate().getLatitude()) < 0.0001)) {
@@ -184,6 +186,11 @@ public class Race {
                 boat.setSpeed(0d);
                 return;
             }
+//            XYPair speedHeading = PolarCalculator.getBest(course.getWindSpeed(), );
+//            Coordinate departure = boat.getLeg().getDeparture().getMarks().get(0).getCoordinate();
+//            double distance = departure.distance(boat.getDestination()) / Math.cos(speedHeading.getY());
+//            Coordinate destination = gps.coordinateToCoordinate(boat.getCoordinate(), speedHeading.getY(), distance);
+//            boat.setDestination(destination);
             if (boat.getLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
                     !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinate())) { // and it hasn't gone around the gate
                 boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinate()); // move around the gate
@@ -191,7 +198,7 @@ public class Race {
                 setNextLeg(boat, nextLeg);
             }
         }
-        GPSCalculations gps = new GPSCalculations(course);
+
         boat.setHeading(gps.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
     }
 
