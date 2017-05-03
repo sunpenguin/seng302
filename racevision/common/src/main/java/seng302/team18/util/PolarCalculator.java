@@ -20,7 +20,7 @@ public class PolarCalculator {
      * @param windSpeed Speed of the wind (must match the windspeed of a polar)
      * @param heading The heading of the boats destination
      * @param windHeading The heading of the wind
-     * @return A list holding the speed at which the boat with travel and angle from the original heading it should travel
+     * @return An XYPair holding the speed at which the boat with travel and angle from the original heading it should travel
      */
     public XYPair getBest(double windSpeed, double heading, double windHeading) {
         //Find polar with correct wind speed
@@ -70,7 +70,7 @@ public class PolarCalculator {
         return new XYPair(speed, angle);
     }
 
-    private static double getTrueWindAngle(double windHeading, double heading){
+    protected static double getTrueWindAngle(double windHeading, double heading){
         double offset = heading - windHeading;
 
         if (offset < 0){
