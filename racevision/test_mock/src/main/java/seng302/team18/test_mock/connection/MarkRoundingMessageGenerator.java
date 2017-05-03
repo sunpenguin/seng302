@@ -1,5 +1,6 @@
 package seng302.team18.test_mock.connection;
 
+import seng302.team18.messageparsing.AC35MessageType;
 import seng302.team18.model.CompoundMark;
 import seng302.team18.model.MarkRoundingEvent;
 import seng302.team18.model.Race;
@@ -19,7 +20,7 @@ public class MarkRoundingMessageGenerator extends MessageGenerator {
     private Race race;
 
     public MarkRoundingMessageGenerator(MarkRoundingEvent event, Race race) {
-        super(0x38);
+        super(AC35MessageType.MARK_ROUNDING.getCode());
 
         markRoundingEvent = event;
         this.race = race;
