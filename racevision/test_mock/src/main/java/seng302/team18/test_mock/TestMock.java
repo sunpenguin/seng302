@@ -155,9 +155,6 @@ public class TestMock {
         int raceID = raceMessage.getRaceID();
 
         race = new Race(startingList, course, raceID);
-
-//        RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
-//        raceMessageGenerator.getMessage();
     }
 
     public String getRegattaXML() {
