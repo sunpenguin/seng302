@@ -57,11 +57,13 @@ public class Race {
 
 
     /**
-     * Sets the speed of the boats at the start line to 5
+     * Sets the speed of the boats at the start line
      */
     private void setInitialSpeed(){
+        int speed = 200;
         for(Boat b: startingList){
-            b.setSpeed(100); //kph
+            b.setSpeed(speed); //kph
+            speed -= 25;
         }
     }
 
@@ -91,7 +93,7 @@ public class Race {
                 // Set Dest
                 boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
                 // Set Coordinate
-                Coordinate midPoint = course.getCompoundMarks().get(0).getMidCoordinate();
+                Coordinate midPoint = boat.getLeg().getDeparture().getMidCoordinate();
                 boat.setCoordinate(midPoint);
                 // Set Heading
                 boat.setHeading(boat.getCoordinate().retrieveHeading(boat.getDestination()));

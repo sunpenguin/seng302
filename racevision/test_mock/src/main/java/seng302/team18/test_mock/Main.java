@@ -3,6 +3,7 @@ package seng302.team18.test_mock;
 import seng302.team18.test_mock.connection.CRCGenerator;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
 /**
