@@ -10,6 +10,7 @@ public class Leg {
     private CompoundMark departure;
     private double heading;
     private int legNumber;
+    private int numberPassed;
 
     public Leg(CompoundMark departure, CompoundMark destination, int legNumber) {
         this.destination = destination;
@@ -32,6 +33,14 @@ public class Leg {
 
     public int getLegNumber() {
         return legNumber;
+    }
+
+    public int getNumberPassed() {
+        return numberPassed;
+    }
+
+    public void incrementNumberPassed() {
+        this.numberPassed++;
     }
 
     @Override

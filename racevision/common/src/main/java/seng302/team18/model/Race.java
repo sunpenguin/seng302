@@ -202,7 +202,7 @@ public class Race {
      * @param boat
      * @param nextLeg
      */
-    private void setNextLeg(Boat boat, Leg nextLeg) {
+    public void setNextLeg(Boat boat, Leg nextLeg) {
         CompoundMark passedMark = boat.getLeg().getDestination();
         passedMark.addPassed(boat);
         boat.setPlace(passedMark.getPassed().indexOf(boat) + 1);

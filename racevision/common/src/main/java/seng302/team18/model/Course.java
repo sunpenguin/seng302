@@ -15,7 +15,6 @@ public class Course {
     private List<Leg> legs;
     private double windDirection;
     private List<BoundaryMark> boundaries;
-    //private List<MarkRounding> markRoundings;
     private Coordinate centralCoordinate;
     private ZoneId timeZone;
     private List<MarkRounding> markRoundings;
@@ -33,7 +32,7 @@ public class Course {
     public Course() {
         compoundMarks = new ArrayList<>();
         boundaries = new ArrayList<>();
-        //markRoundings = new ArrayList<>();
+        markRoundings = new ArrayList<>();
         timeZone = ZoneId.systemDefault();
         windDirection = 0d;
         centralCoordinate = new Coordinate(0d, 0d);
@@ -53,6 +52,11 @@ public class Course {
         this.compoundMarks.addAll(compoundMarks);
     }
 
+    public void setMarkRoundings(Collection<MarkRounding> markRoundings) {
+        this.markRoundings.clear();
+        this.markRoundings.addAll(markRoundings);
+        setupLegs();
+    }
 
     public double getWindDirection() {
         return windDirection;
@@ -122,7 +126,7 @@ public class Course {
          for (int i = 0; i < markRoundings.size() - 1; i++) {
              CompoundMark dep = markRoundings.get(i).getCompoundMark();
              CompoundMark dest = markRoundings.get(i + 1).getCompoundMark();
-             legs.add(new Leg(dep, dest, i + 1));
+             legs.add(new Leg(dep, dest, markRoundings.get(i).getSequenceNumber()));
          }
     }
 }
