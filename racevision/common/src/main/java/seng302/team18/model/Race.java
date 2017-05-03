@@ -1,6 +1,7 @@
 package seng302.team18.model;
 
 import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.PolarCalculator;
 import seng302.team18.util.XYPair;
 
 import java.time.ZonedDateTime;
@@ -24,7 +25,7 @@ public class Race {
     private byte status;
     public static int PREP_TIME_SECONDS = 120;
 
-    private List<Polar> listOfPolars;
+    private PolarCalculator polars;
 
     public Race() {
         participantIds = new ArrayList<>();
@@ -42,13 +43,13 @@ public class Race {
      * @param startingList ArrayList holding all entered boats
      * @param course       Course object
      */
-    public Race(List<Boat> startingList, Course course, int raceId, List<Polar> listOfPolars) {
+    public Race(List<Boat> startingList, Course course, int raceId, PolarCalculator polars) {
         this.startingList = startingList;
         this.course = course;
         finishedList = new ArrayList<>();
         participantIds = startingList.stream().map(Boat::getId).collect(Collectors.toList());
         this.id = raceId;
-        this.listOfPolars = listOfPolars;
+        this.polars = polars;
         setCourseForBoats();
         setInitialSpeed();
     }
@@ -176,30 +177,54 @@ public class Race {
      */
     private void updateHeading(Boat boat) {
         GPSCalculations gps = new GPSCalculations(course);
+        Coordinate oldDestination = boat.getDestination();
         // if boat gets within range of its next destination changes its destination and heading
-        if ((Math.abs(boat.getDestination().getLongitude() - boat.getCoordinate().getLongitude()) < 0.0001)
-                && (Math.abs(boat.getDestination().getLatitude() - boat.getCoordinate().getLatitude()) < 0.0001)) {
+        if ((Math.abs(oldDestination.getLongitude() - oldDestination.getLongitude()) < 0.0001)
+                && (Math.abs(oldDestination.getLatitude() - oldDestination.getLatitude()) < 0.0001)) {
+
+
+            XYPair speedHeading;
             Leg nextLeg = course.getNextLeg(boat.getLeg()); // find next leg
-            // if current leg is the last leg boat is now finished
-            if (nextLeg.equals(boat.getLeg())) {
-                finishedList.add(boat);
-                boat.setSpeed(0d);
-                return;
+            Coordinate destination = nextLeg.getDestination().getMarks().get(0).getCoordinate();
+            Coordinate departure = nextLeg.getDeparture().getMarks().get(0).getCoordinate();
+            if (nextLeg.equals(boat.getLeg())) { // on last leg
+                if (oldDestination.equals(destination)) { // if current leg is the last leg boat is now finished
+                    finishedList.add(boat);
+                    boat.setSpeed(0d);
+                    return;
+                }
+            }
+            if (boat.getDestination().equals(departure)) { // starting new leg
+                double newHeading = boat.getCoordinate().retrieveHeading(destination);
+                speedHeading = polars.getBest(course.getWindSpeed(), newHeading, course.getWindDirection());
+                boat.setSpeed(speedHeading.getX());
+                boat.setHeading(speedHeading.getY());
+                Coordinate boatCoord = boat.getCoordinate();
+                double legDistance = gps.gpsDistance(boatCoord, destination);
+                Coordinate halfWay = gps.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), legDistance);
+                boat.setDestination(halfWay);
+                setNextLeg(boat, nextLeg);
+            } else { // Half way through the leg;
+                double newHeading = boat.getCoordinate().retrieveHeading(destination);
+                speedHeading = polars.getBest(course.getWindSpeed(), newHeading, course.getWindDirection());
+                boat.setSpeed(speedHeading.getX());
+                boat.setHeading(speedHeading.getY());
+                boat.setDestination(destination);
             }
 //            XYPair speedHeading = PolarCalculator.getBest(course.getWindSpeed(), );
 //            Coordinate departure = boat.getLeg().getDeparture().getMarks().get(0).getCoordinate();
 //            double distance = departure.distance(boat.getDestination()) / Math.cos(speedHeading.getY());
 //            Coordinate destination = gps.coordinateToCoordinate(boat.getCoordinate(), speedHeading.getY(), distance);
 //            boat.setDestination(destination);
-            if (boat.getLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
-                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinate())) { // and it hasn't gone around the gate
-                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinate()); // move around the gate
-            } else { // the destination was a mark or is already gone around gate so move onto the next leg
-                setNextLeg(boat, nextLeg);
-            }
+//            if (boat.getLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
+//                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinate())) { // and it hasn't gone around the gate
+//                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinate()); // move around the gate
+//            } else { // the destination was a mark or is already gone around gate so move onto the next leg
+//                setNextLeg(boat, nextLeg);
+//            }
         }
 
-        boat.setHeading(gps.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+//        boat.setHeading(gps.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
     }
 
 
@@ -241,13 +266,6 @@ public class Race {
     }
 
 
-//    public void setDuration(double duration) {
-//        this.duration = duration;
-//    }
-//
-//    public double getDuration() {
-//        return duration;
-//    }
 
     public boolean isFinished() {
         return startingList.size() == finishedList.size();
@@ -290,7 +308,4 @@ public class Race {
         this.status = status;
     }
 
-    public List<Polar> listOfPolars() {
-        return listOfPolars;
-    }
 }

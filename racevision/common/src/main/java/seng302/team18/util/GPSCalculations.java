@@ -29,38 +29,38 @@ public class GPSCalculations {
         this.course = course;
     }
 
-//    /**
-//     * Given 2 sets of GPS coordinates in signed decimal degrees, return the distance
-//     * in metres between them.
-//     *
-//     * @param point1 Coordinates for point1
-//     * @param point2 Coordinates for point2
-//     * @return The distance in metres
-//     */
-//    public double gpsDistance(Coordinate point1, Coordinate point2) {
-//
-//        double lat1 = point1.getLatitude();
-//        double long1 = point1.getLongitude();
-//
-//        double lat2 = point2.getLatitude();
-//        double long2 = point2.getLongitude();
-//
-//        double earthRadius = 6371e3; // meters
-//
-//        double lat1Rad = Math.toRadians(lat1);
-//        double lat2Rad = Math.toRadians(lat2);
-//
-//        double difLatitudeRad = Math.toRadians(lat2 - lat1);
-//        double difLongitudeRad = Math.toRadians(long2 - long1);
-//
-//        double a = Math.sin(difLatitudeRad / 2) * Math.sin(difLatitudeRad / 2) +
-//                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-//                        Math.sin(difLongitudeRad / 2) * Math.sin(difLongitudeRad / 2);
-//
-//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-//
-//        return earthRadius * c;
-//    }
+    /**
+     * Given 2 sets of GPS coordinates in signed decimal degrees, return the distance
+     * in metres between them.
+     *
+     * @param point1 Coordinates for point1
+     * @param point2 Coordinates for point2
+     * @return The distance in metres
+     */
+    public double gpsDistance(Coordinate point1, Coordinate point2) {
+
+        double lat1 = point1.getLatitude();
+        double long1 = point1.getLongitude();
+
+        double lat2 = point2.getLatitude();
+        double long2 = point2.getLongitude();
+
+        double earthRadius = 6371e3; // meters
+
+        double lat1Rad = Math.toRadians(lat1);
+        double lat2Rad = Math.toRadians(lat2);
+
+        double difLatitudeRad = Math.toRadians(lat2 - lat1);
+        double difLongitudeRad = Math.toRadians(long2 - long1);
+
+        double a = Math.sin(difLatitudeRad / 2) * Math.sin(difLatitudeRad / 2) +
+                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+                        Math.sin(difLongitudeRad / 2) * Math.sin(difLongitudeRad / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return earthRadius * c;
+    }
 
     public Coordinate coordinateToCoordinate(Coordinate initialCoord, double bearing, double distance) {
 

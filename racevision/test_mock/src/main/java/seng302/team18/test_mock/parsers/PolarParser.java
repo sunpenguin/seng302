@@ -1,6 +1,7 @@
 package seng302.team18.test_mock.parsers;
 
 import seng302.team18.model.Polar;
+import seng302.team18.util.PolarCalculator;
 
 import java.io.InputStream;
 import java.util.*;
@@ -16,7 +17,7 @@ public class PolarParser {
      * @param stream
      * @return List<Polar>
      */
-    public List<Polar> parse(InputStream stream) {
+    public PolarCalculator parse(InputStream stream) {
         //set up scanner
         Scanner scanner = new Scanner(stream);
         if (scanner.hasNextLine()) {
@@ -34,11 +35,11 @@ public class PolarParser {
             //Add polar to polar list
             polarList.add(newPolar);
         }
-        return polarList;
+        return new PolarCalculator(polarList);
     }
 
     private Polar parseLine(String line){
-        //indecies for values
+        //indices for values
         final int WIND_SPEED_INDEX = 0;
         final int TWA0_INDEX = 1;
         final int BSP0_INDEX = 2;

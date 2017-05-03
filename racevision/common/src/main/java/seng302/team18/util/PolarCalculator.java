@@ -9,18 +9,23 @@ import java.util.*;
  */
 public class PolarCalculator {
 
+    private List<Polar> polars;
+
+    public PolarCalculator(List<Polar> polars) {
+        this.polars = polars;
+    }
+
     /**
      * A method to get the best angles for a boat to move in using its polar pattern
      * @param windSpeed Speed of the wind (must match the windspeed of a polar)
      * @param heading The heading of the boats destination
      * @param windHeading The heading of the wind
-     * @param listOfPolars THe list of Polars for the boat
      * @return A list holding the speed at which the boat with travel and angle from the original heading it should travel
      */
-    public static List<Double> getBest(double windSpeed, double heading, double windHeading, List<Polar> listOfPolars){
+    public XYPair getBest(double windSpeed, double heading, double windHeading) {
         //Find polar with correct wind speed
-        Polar polarToUse = listOfPolars.get(0);
-        for(Polar polar : listOfPolars){
+        Polar polarToUse = polars.get(0);
+        for(Polar polar : polars){
             if(polar.getWindSpeed() == windSpeed){
                 polarToUse = polar;
             }
@@ -29,18 +34,17 @@ public class PolarCalculator {
         //get boats true wind angle
         double trueWindAngle = getTrueWindAngle(windHeading, heading);
 
-
         double angle;
         double speed = 0;
 
         //get angle from heading
-        if(trueWindAngle <= polarToUse.getUpWindAngle()){
+        if (trueWindAngle <= polarToUse.getUpWindAngle()) {
             angle = Math.abs(polarToUse.getUpWindAngle() - trueWindAngle);
             speed = polarToUse.getUpWindSpeed();
-        }else if(trueWindAngle >= polarToUse.getDownWindAngle()) {
+        } else if (trueWindAngle >= polarToUse.getDownWindAngle()) {
             angle = Math.abs(polarToUse.getDownWindAngle() - trueWindAngle);
             speed = polarToUse.getDownWindSpeed();
-        }else{
+        } else {
             angle = 0;
 
             //initialize minDifference
@@ -63,7 +67,7 @@ public class PolarCalculator {
                 it.remove();
             }
         }
-        return new ArrayList<Double>(Arrays.asList(speed, angle));
+        return new XYPair(speed, angle);
     }
 
     private static double getTrueWindAngle(double windHeading, double heading){
