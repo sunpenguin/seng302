@@ -3,7 +3,6 @@ package seng302.team18.test_mock.connection;
 import seng302.team18.messageparsing.AC35MessageType;
 import seng302.team18.model.CompoundMark;
 import seng302.team18.model.MarkRoundingEvent;
-import seng302.team18.model.Race;
 import seng302.team18.util.ByteCheck;
 
 import java.io.ByteArrayOutputStream;
@@ -16,14 +15,14 @@ public class MarkRoundingMessageGenerator extends MessageGenerator {
     private final static int VERSION_NUMBER = 0x01;
     private final short ACK_NUMBER = 0x00;
 
-    private MarkRoundingEvent markRoundingEvent;
-    private Race race;
+    private final MarkRoundingEvent markRoundingEvent;
+    private final int raceId;
 
-    public MarkRoundingMessageGenerator(MarkRoundingEvent event, Race race) {
+    public MarkRoundingMessageGenerator(MarkRoundingEvent event, int raceId) {
         super(AC35MessageType.MARK_ROUNDING.getCode());
 
         markRoundingEvent = event;
-        this.race = race;
+        this.raceId = raceId;
     }
 
     @Override
@@ -37,7 +36,7 @@ public class MarkRoundingMessageGenerator extends MessageGenerator {
         //Ack number
         outputSteam.write(ByteCheck.shortToByteArray(ACK_NUMBER));
         // Race id
-        outputSteam.write(race.getId());
+        outputSteam.write(raceId);
         // Boat(source) id
         outputSteam.write(markRoundingEvent.getBoat().getId());
         // Boat status - defaulting to 0 for 'unknown'

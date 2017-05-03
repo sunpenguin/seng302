@@ -145,7 +145,7 @@ public class TestMock {
 
             // Send mark rounding messages for all mark roundings that occured
             for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
-                server.broadcast((new MarkRoundingMessageGenerator(rounding, race)).getMessage());
+                server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
             }
 
             // Send messages if needed
