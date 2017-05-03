@@ -52,33 +52,19 @@ public class Race {
         this.polars = polars;
         setCourseForBoats();
         setInitialSpeed();
+        System.out.println("WIND DIR " + course.getWindDirection());
     }
-
-
 
     /**
      * Sets the speed of the boats at the start line
      */
     private void setInitialSpeed(){
         int speed = 200;
-        for(Boat b: startingList){
-            b.setSpeed(speed); //kph
+        for(Boat boat: startingList){
+            boat.setSpeed(speed); //kph
             speed -= 25;
         }
     }
-
-
-    /**
-     * Convert a value given in knots to meters per second.
-     *
-     * @param knots speed in knots.
-     * @return speed in meters per second.
-     * TODO: Put this somewhere more reasonable
-     */
-    public double knotsToMetersPerSecond(double knots) {
-        return ((knots * 1.852) / 3.6);
-    }
-
 
     /**
      * Called in Race constructor.
@@ -90,15 +76,25 @@ public class Race {
             for (Boat boat : startingList) {
                 // Set Leg
                 boat.setLeg(course.getLegs().get(0));
-                // Set Dest
-                boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
                 // Set Coordinate
                 Coordinate midPoint = boat.getLeg().getDeparture().getMidCoordinate();
                 boat.setCoordinate(midPoint);
-                // Set Heading
-                boat.setHeading(boat.getCoordinate().retrieveHeading(boat.getDestination()));
+                // Set Destination
+                tackInitial(boat, boat.getLeg());
+                updatePosition(boat, 10);
             }
         }
+    }
+
+    /**
+     * Convert a value given in knots to meters per second.
+     *
+     * @param knots speed in knots.
+     * @return speed in meters per second.
+     * TODO: Put this somewhere more reasonable
+     */
+    public double knotsToMetersPerSecond(double knots) {
+        return ((knots * 1.852) / 3.6);
     }
 
     /**
@@ -178,11 +174,14 @@ public class Race {
      * @param boat to be updated
      */
     private void updateHeading(Boat boat) {
-        GPSCalculations gps = new GPSCalculations(course);
+//        GPSCalculations gps = new GPSCalculations(course);
         Coordinate oldDestination = boat.getDestination();
         // if boat gets within range of its next destination changes its destination and heading
-        if ((Math.abs(oldDestination.getLongitude() - oldDestination.getLongitude()) < 0.0001)
-                && (Math.abs(oldDestination.getLatitude() - oldDestination.getLatitude()) < 0.0001)) {
+        if ((Math.abs(oldDestination.getLongitude() - oldDestination.getLongitude()) < 0.001)
+                && (Math.abs(oldDestination.getLatitude() - oldDestination.getLatitude()) < 0.001)) {
+
+
+            System.out.println("reached destination");
 
 
             XYPair speedHeading;
@@ -190,43 +189,84 @@ public class Race {
             Coordinate destination = nextLeg.getDestination().getMarks().get(0).getCoordinate();
             Coordinate departure = nextLeg.getDeparture().getMarks().get(0).getCoordinate();
             if (nextLeg.equals(boat.getLeg())) { // on last leg
+
+
+                System.out.println("on last leg");
+
+
                 if (oldDestination.equals(destination)) { // if current leg is the last leg boat is now finished
+
+
+                    System.out.println("finished");
+
+
                     finishedList.add(boat);
-//                    boat.setSpeed(0d);
                     return;
                 }
             }
-            if (boat.getDestination().equals(departure)) { // starting new leg
-                double newHeading = boat.getCoordinate().retrieveHeading(destination);
-                speedHeading = polars.getBest(course.getWindSpeed(), newHeading, course.getWindDirection());
-                boat.setSpeed(speedHeading.getX());
-                boat.setHeading(speedHeading.getY());
-                Coordinate boatCoord = boat.getCoordinate();
-                double legDistance = gps.gpsDistance(boatCoord, destination);
-                Coordinate halfWay = gps.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), legDistance);
-                boat.setDestination(halfWay);
-                setNextLeg(boat, nextLeg);
-            } else { // Half way through the leg;
-                double newHeading = boat.getCoordinate().retrieveHeading(destination);
-                speedHeading = polars.getBest(course.getWindSpeed(), newHeading, course.getWindDirection());
-                boat.setSpeed(speedHeading.getX());
-                boat.setHeading(speedHeading.getY());
-                boat.setDestination(destination);
-            }
-//            XYPair speedHeading = PolarCalculator.getBest(course.getWindSpeed(), );
-//            Coordinate departure = boat.getLeg().getDeparture().getMarks().get(0).getCoordinate();
-//            double distance = departure.distance(boat.getDestination()) / Math.cos(speedHeading.getY());
-//            Coordinate destination = gps.coordinateToCoordinate(boat.getCoordinate(), speedHeading.getY(), distance);
-//            boat.setDestination(destination);
-//            if (boat.getLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
-//                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinate())) { // and it hasn't gone around the gate
-//                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinate()); // move around the gate
-//            } else { // the destination was a mark or is already gone around gate so move onto the next leg
-//                setNextLeg(boat, nextLeg);
-//            }
-        }
+            Coordinate endOfLeg = boat.getLeg().getDestination().getMarks().get(0).getCoordinate();
+//            System.out.println(endOfLeg);
+//            System.out.println(boat.getDestination());
+            if (boat.getDestination().equals(endOfLeg)) { // starting new leg
+                tackInitial(boat, nextLeg);
 
-//        boat.setHeading(gps.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+                System.out.println("starting new leg");
+//                double newHeading = boat.getCoordinate().retrieveHeading(destination);
+//                speedHeading = polars.getBest(course.getWindSpeed(), newHeading, course.getWindDirection());
+//                boat.setSpeed(speedHeading.getX());
+//                boat.setHeading(speedHeading.getY());
+//                Coordinate boatCoord = boat.getCoordinate();
+//                double legDistance = gps.gpsDistance(boatCoord, destination);
+//                Coordinate halfWay = gps.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), legDistance);
+//                boat.setDestination(halfWay);
+//                setNextLeg(boat, nextLeg);
+            } else { // Half way through the leg;
+                double directionToMark = boat.getCoordinate().retrieveHeading(destination);
+                speedHeading = polars.getBest(course.getWindSpeed(), directionToMark, course.getWindDirection());
+                boat.setSpeed(speedHeading.getX() * 4);
+                boat.setHeading(directionToMark + speedHeading.getY());
+                boat.setDestination(destination);
+
+//                System.out.println("Half way through the leg");
+//                System.out.println(directionToMark);
+//                System.out.println(directionToMark + speedHeading.getY());
+            }
+        }
+        System.out.println();
+    }
+
+    private void tackInitial(Boat boat, Leg leg) {
+//        GPSCalculations gps = new GPSCalculations(course);
+//        Coordinate destination = leg.getDestination().getMarks().get(0).getCoordinate();
+//        double directionToMark = boat.getCoordinate().retrieveHeading(destination);
+//        XYPair speedHeading = polars.getBest(course.getWindSpeed(), directionToMark, course.getWindDirection());
+//        boat.setSpeed(speedHeading.getX());
+//        boat.setHeading(directionToMark + speedHeading.getY());
+//        System.out.println(directionToMark);
+//        System.out.println(directionToMark + speedHeading.getY());
+//        System.out.println(90 - directionToMark + speedHeading.getY());
+//        System.out.println();
+//        Coordinate boatCoord = boat.getCoordinate();
+//        double legDistance = gps.gpsDistance(boatCoord, destination);
+//        Coordinate halfWay = gps.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), legDistance);
+//        boat.setDestination(halfWay);
+//        setNextLeg(boat, leg);
+
+        GPSCalculations gps = new GPSCalculations(course);
+        Coordinate destination = leg.getDestination().getMarks().get(0).getCoordinate();
+        double directionToMark = gps.retrieveHeading(boat.getCoordinate(), destination);
+        XYPair speedHeading = polars.getBest(course.getWindSpeed(), directionToMark, course.getWindDirection());
+        boat.setSpeed(speedHeading.getX());
+        boat.setHeading(directionToMark + speedHeading.getY());
+        Coordinate boatCoord = boat.getCoordinate();
+        double legDistance = gps.gpsDistance(boatCoord, destination);
+        Coordinate halfWay = gps.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), legDistance);
+        boat.setDestination(halfWay);
+
+        System.out.println("tackInitial");
+        System.out.println(directionToMark);
+        System.out.println(directionToMark + speedHeading.getY());
+        System.out.println(90 - directionToMark + speedHeading.getY());
     }
 
 
@@ -250,7 +290,7 @@ public class Race {
      * Updates the boats coordinates to move closer to the boats destination.
      * Amount moved is proportional to the time passed
      * @param boat to be moved
-     * @param time that has passed
+     * @param time that has passed in milliseconds
      */
     private void updatePosition(Boat boat, double time) {
         double speed = boat.getSpeed();

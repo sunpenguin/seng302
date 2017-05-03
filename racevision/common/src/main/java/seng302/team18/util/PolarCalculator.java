@@ -67,7 +67,7 @@ public class PolarCalculator {
                 it.remove();
             }
         }
-        return new XYPair(speed, angle);
+        return new XYPair(speed, angle + heading);
     }
 
     private static double getTrueWindAngle(double windHeading, double heading){
