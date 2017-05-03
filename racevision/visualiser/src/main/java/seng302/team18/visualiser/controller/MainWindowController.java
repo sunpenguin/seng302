@@ -53,7 +53,7 @@ public class MainWindowController {
     @FXML
     @SuppressWarnings("unused")
     public void initialize() {
-        onImportant = false;
+        onImportant = true;
         boatNameImportant = true;
         boatSpeedImportant = false;
         estimatedTimeImportant = false;

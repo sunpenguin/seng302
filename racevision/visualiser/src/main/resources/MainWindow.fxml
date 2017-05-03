@@ -80,7 +80,7 @@
                <columns>
                   <TableColumn fx:id="boatPositionColumn" text="Position" />
                   <TableColumn fx:id="boatNameColumn" prefWidth="240.0" text="Name" />
-                  <TableColumn fx:id="boatSpeedColumn" prefWidth="240.0" text="Speed" />
+                  <TableColumn fx:id="boatSpeedColumn" prefWidth="240.0" text="Speed km/h" />
                </columns>
             </TableView>
          </children>
