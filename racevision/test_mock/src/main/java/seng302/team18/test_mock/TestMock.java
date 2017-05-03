@@ -109,6 +109,12 @@ public class TestMock {
             race.setStatus((byte) 3);
             race.updateBoats((timeCurr - timeLast));
 
+            // Make a boat go faster over time to test updating of positions
+            Boat boatToChangeSpeed = race.getStartingList().get(1);
+            if (boatToChangeSpeed.getSpeed() <= 200) {
+                boatToChangeSpeed.setSpeed(boatToChangeSpeed.getSpeed() + 0.025);
+            }
+
             // Send messages if needed
             for (ScheduledMessage sendable : messages) {
                 if (sendable.isTimeToSend(timeCurr)) {

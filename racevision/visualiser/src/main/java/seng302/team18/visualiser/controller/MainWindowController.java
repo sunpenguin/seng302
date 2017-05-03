@@ -1,6 +1,7 @@
 package seng302.team18.visualiser.controller;
 
 import javafx.beans.Observable;
+import javafx.beans.property.IntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;

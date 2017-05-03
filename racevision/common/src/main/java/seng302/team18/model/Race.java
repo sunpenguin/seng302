@@ -56,10 +56,10 @@ public class Race {
      * Sets the speed of the boats at the start line
      */
     private void setInitialSpeed(){
-        int speed = 200;
+        int speed = 50;
         for(Boat b: startingList){
             b.setSpeed(speed); //kph
-            speed -= 25;
+            speed += 15;
         }
     }
 
@@ -206,7 +206,7 @@ public class Race {
         CompoundMark passedMark = boat.getLeg().getDestination();
         passedMark.addPassed(boat);
         boat.setPlace(passedMark.getPassed().indexOf(boat) + 1);
-        boat.setDestination(nextLeg.getDestination().getMidCoordinate());
+        boat.setDestination(nextLeg.getDestination().getMarks().get(0).getCoordinate());
         boat.setLeg(nextLeg);
         //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
     }
