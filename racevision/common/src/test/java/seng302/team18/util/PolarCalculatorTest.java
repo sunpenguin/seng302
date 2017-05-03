@@ -232,4 +232,8 @@ public class PolarCalculatorTest {
         assertEquals(0, WN2BN2, 0);
 
     }
+
+    @Test
+    public void getBestTests() {
+    }
 }
