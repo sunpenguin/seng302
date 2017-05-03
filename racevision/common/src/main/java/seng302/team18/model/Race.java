@@ -192,7 +192,7 @@ public class Race {
             if (nextLeg.equals(boat.getLeg())) { // on last leg
                 if (oldDestination.equals(destination)) { // if current leg is the last leg boat is now finished
                     finishedList.add(boat);
-                    boat.setSpeed(0d);
+//                    boat.setSpeed(0d);
                     return;
                 }
             }
