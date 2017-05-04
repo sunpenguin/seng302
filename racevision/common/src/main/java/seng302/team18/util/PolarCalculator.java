@@ -90,15 +90,22 @@ public class PolarCalculator {
      * @return True wind angle for the boat.
      */
     public double getTrueWindAngle(double windHeading, double heading) {
-        double offset = heading - windHeading;
-
-        if (offset < 0) {
-            offset = 360 + offset;
+        double theta = 180 - windHeading;
+        double boatPlusTheta = heading + theta;
+        double windPlusTheta = windHeading + theta; //will be 180
+        if (boatPlusTheta>360){
+            boatPlusTheta = boatPlusTheta-360;
         }
-
-        if (offset > 180) {
-            offset = offset - (offset - 180) * 2;
+        if (boatPlusTheta < 0){
+            boatPlusTheta = 360 + boatPlusTheta;
         }
-        return (180-offset);
+        double trueWindAngle;
+        if (boatPlusTheta > 180){
+            double angleFrom180 = boatPlusTheta - 180;
+            trueWindAngle = 180 - angleFrom180;
+        }else{
+            trueWindAngle = boatPlusTheta;
+        }
+        return trueWindAngle;
     }
 }

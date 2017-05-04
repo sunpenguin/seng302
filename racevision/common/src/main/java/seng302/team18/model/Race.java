@@ -51,18 +51,18 @@ public class Race {
         this.id = raceId;
         this.polars = polars;
         setCourseForBoats();
-        setInitialSpeed();
-        System.out.println("WIND DIR " + course.getWindDirection());
+//        setInitialSpeed();
+//        System.out.println("WIND DIR " + course.getWindDirection());
     }
 
     /**
      * Sets the speed of the boats at the start line
      */
     private void setInitialSpeed(){
-        int speed = 200;
+        int speed = 10;
         for(Boat boat: startingList){
             boat.setSpeed(speed); //kph
-            speed -= 25;
+            speed -= 0.5;
         }
     }
 
@@ -178,7 +178,7 @@ public class Race {
 
         System.out.println("updating heading");
 
-//        GPSCalculations gps = new GPSCalculations(course);
+        GPSCalculations gps = new GPSCalculations(course);
 //        Coordinate oldDestination = boat.getDestination();
         Coordinate legDestination = boat.getLeg().getDestination().getMarks().get(0).getCoordinate();
         Coordinate boatPos = boat.getCoordinate();
@@ -194,9 +194,10 @@ public class Race {
             System.out.println("on next leg");
 
         } else if (timeToTack(boat)) {
-            Coordinate departure = boat.getLeg().getDeparture().getMarks().get(0).getCoordinate();
+//            Coordinate departure = boat.getLeg().getDeparture().getMarks().get(0).getCoordinate();
+            Coordinate departure =boat.getCoordinate();
             Coordinate destination = boat.getLeg().getDestination().getMarks().get(0).getCoordinate();
-            tack(boat, departure, destination);
+            boat.setHeading(gps.retrieveHeading(departure,destination));
 
             System.out.println("time to tack back jack");
 
@@ -209,21 +210,30 @@ public class Race {
     private boolean timeToTack(Boat boat) {
         GPSCalculations gps = new GPSCalculations(course);
         Coordinate destination = boat.getLeg().getDestination().getMarks().get(0).getCoordinate();
-        double theta = boat.getHeading() - course.getWindDirection();
-        double headingToMark = gps.retrieveHeading(boat.getCoordinate(), destination);
+        double theta = Math.abs(boat.getHeading() - course.getWindDirection());
+        double headingToMark = Math.abs(gps.retrieveHeading(boat.getCoordinate(), destination));
+        double wantedheading = 360-theta;
 
-        return theta <= headingToMark;
+        return (headingToMark > 2 - wantedheading && headingToMark < wantedheading - 2);
     }
 
 
     private void tack(Boat boat, Coordinate departure, Coordinate destination) {
         //getBest(double windSpeed, double heading, double windHeading)
+        System.out.println("tack");
         GPSCalculations gps = new GPSCalculations(course);
         double heading = gps.retrieveHeading(departure, destination);
         XYPair speedHeading = polars.getBest(course.getWindSpeed(), heading, course.getWindDirection());
-        boat.setSpeed(speedHeading.getX());
-//        boat.setHeading(course.getWindDirection() + speedHeading.getY()); // TODO check what heading is relative to.
-        boat.setHeading(speedHeading.getY());
+        System.out.println();
+        double newheading;
+        if(heading >course.getWindDirection()){
+            newheading = course.getWindDirection() + (180 - speedHeading.getY());
+        }else{
+            newheading = course.getWindDirection() - (180 - speedHeading.getY());
+        }
+        boat.setSpeed(speedHeading.getX() * 50);
+        boat.setHeading(newheading); // TODO check what heading is relative to.
+//        boat.setHeading(speedHeading.getY());
     }
 
 
