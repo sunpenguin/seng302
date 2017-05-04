@@ -204,10 +204,6 @@ public class Race {
      */
 
     public void setNextLeg(Boat boat, Leg nextLeg) {
-//        CompoundMark passedMark = boat.getLeg().getDestination();
-//        passedMark.addPassed(boat);
-//        boat.setPlace(passedMark.getPassed().indexOf(boat) + 1);
-
         Leg currentLeg = boat.getLeg();
         currentLeg.addToBoatsCompleted(boat);
         boat.setPlace(currentLeg.getBoatsCompleted().indexOf(boat) + 1);
@@ -215,9 +211,8 @@ public class Race {
         boat.setDestination(nextLeg.getDestination().getMarks().get(0).getCoordinate());
         boat.setLeg(nextLeg);
 
-        System.out.println("boat: " + boat.getBoatName() + " passed mark: " + passedMark.getName());
         // TODO when this is enabled it causes the visualiser to freeze, likely due to malformed packets
-        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, passedMark));
+        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, boat.getLeg().getDeparture()));
         //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
     }
 
