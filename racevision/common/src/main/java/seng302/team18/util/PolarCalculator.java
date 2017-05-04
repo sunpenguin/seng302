@@ -21,9 +21,10 @@ public class PolarCalculator {
      * A method to get the best angles for a boat to move in using its polar pattern
      *
      * @param windSpeed   Speed of the wind (must match the windspeed of a polar)
-     * @param heading     The heading of the boats destination
+     * @param heading     The heading of the boats destination (not relative to wind)
      * @param windHeading The heading of the wind
-     * @return An XYPair holding the speed at which the boat with travel and angle from the original heading it should travel
+     * @return An XYPair holding the speed at which the boat with travel
+     * and angle from the original heading it should travel
      */
     public XYPair getBest(double windSpeed, double heading, double windHeading) {
         //Find polar with correct wind speed
@@ -48,7 +49,7 @@ public class PolarCalculator {
             angle = Math.abs(polarToUse.getDownWindAngle() - trueWindAngle);
             speed = polarToUse.getDownWindSpeed();
         } else {
-            angle = 0;
+            angle = trueWindAngle;
 
             //initialize minDifference
             double minDifference = Math.abs(polarToUse.getDownWindAngle() - trueWindAngle);
@@ -70,7 +71,7 @@ public class PolarCalculator {
                 it.remove();
             }
         }
-//        return new XYPair(speed, angle + heading);
+//        return new XYPair(speed, angle);
         return new XYPair(25, heading);
     }
 
@@ -85,6 +86,6 @@ public class PolarCalculator {
         if (offset > 180) {
             offset = offset - (offset - 180) * 2;
         }
-        return offset;
+        return 180 - offset;
     }
 }
