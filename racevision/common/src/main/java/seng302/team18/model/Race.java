@@ -4,6 +4,7 @@ import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.PolarCalculator;
 import seng302.team18.util.XYPair;
 
+import javax.sound.midi.Soundbank;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -191,9 +192,11 @@ public class Race {
             tack(boat, departure, destination);
             setNextLeg(boat, nextLeg);
 
+
+
             System.out.println("on next leg");
 
-        } else if (timeToTack(boat)) {
+        } else if (boat.hasTacked() && timeToTack(boat)) {
 //            Coordinate departure = boat.getLeg().getDeparture().getMarks().get(0).getCoordinate();
             Coordinate departure =boat.getCoordinate();
             Coordinate destination = boat.getLeg().getDestination().getMarks().get(0).getCoordinate();
@@ -210,9 +213,17 @@ public class Race {
     private boolean timeToTack(Boat boat) {
         GPSCalculations gps = new GPSCalculations(course);
         Coordinate destination = boat.getLeg().getDestination().getMarks().get(0).getCoordinate();
+        Polar polToUse = polars.getPolars().get(0);
+        for (Polar pol : polars.getPolars()){
+            if (pol.getUpWindSpeed() == course.getWindSpeed()){
+                polToUse = pol;
+            }
+        }
         double theta = Math.abs(boat.getHeading() - course.getWindDirection());
+        System.out.println(theta);
+        System.out.println(polToUse.getUpWindAngle());
         double headingToMark = Math.abs(gps.retrieveHeading(boat.getCoordinate(), destination));
-        double wantedheading = 360-theta;
+        double wantedheading = 360 - theta;
 
         return (headingToMark > 2 - wantedheading && headingToMark < wantedheading - 2);
     }
@@ -226,10 +237,15 @@ public class Race {
         XYPair speedHeading = polars.getBest(course.getWindSpeed(), heading, course.getWindDirection());
         System.out.println();
         double newheading;
-        if(heading >course.getWindDirection()){
+        if(heading > course.getWindDirection()){
             newheading = course.getWindDirection() + (180 - speedHeading.getY());
         }else{
             newheading = course.getWindDirection() - (180 - speedHeading.getY());
+        }
+        if (newheading == boat.getHeading()) {
+            boat.setTacked(true);
+        } else {
+            boat.setTacked(false);
         }
         boat.setSpeed(speedHeading.getX() * 50);
         boat.setHeading(newheading); // TODO check what heading is relative to.

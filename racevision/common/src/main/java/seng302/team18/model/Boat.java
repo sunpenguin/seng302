@@ -20,6 +20,7 @@ public class Boat {
     private Long timeTilNextMark;
     private Long timeSinceLastMark;
     private Long timeAtLastMark;
+    private boolean tacked = false;
 
     /**
      * A constructor for the Boat class
@@ -192,5 +193,13 @@ public class Boat {
                 ", timeSinceLastMark=" + timeSinceLastMark +
                 ", timeAtLastMark=" + timeAtLastMark +
                 '}';
+    }
+
+    public boolean hasTacked() {
+        return tacked;
+    }
+
+    public void setTacked(boolean tacked) {
+        this.tacked = tacked;
     }
 }

@@ -11,6 +11,8 @@ import java.util.Map;
  */
 public class PolarCalculator {
 
+
+
     private List<Polar> polars;
 
     public PolarCalculator(List<Polar> polars) {
@@ -107,5 +109,10 @@ public class PolarCalculator {
             trueWindAngle = boatPlusTheta;
         }
         return trueWindAngle;
+    }
+
+
+    public List<Polar> getPolars() {
+        return polars;
     }
 }
