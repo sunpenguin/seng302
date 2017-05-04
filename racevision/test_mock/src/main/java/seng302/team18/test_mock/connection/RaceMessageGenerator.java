@@ -1,22 +1,23 @@
 package seng302.team18.test_mock.connection;
 
-import seng302.team18.model.*;
+import seng302.team18.model.Boat;
+import seng302.team18.model.Race;
 import seng302.team18.util.ByteCheck;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Created by hqi19 on 21/04/17.
+ * Created by Alice on 21/04/17.
  */
-public class RaceMessageGenerator extends ScheduledMessage {
+public class RaceMessageGenerator extends ScheduledMessageGenerator {
 
     private Race race;
     private String message;
+    private long startTime = System.currentTimeMillis();
 
     public RaceMessageGenerator(Race race) {
         super(2, 12);
-
         this.race = race;
     }
 
@@ -33,7 +34,9 @@ public class RaceMessageGenerator extends ScheduledMessage {
 
         byte raceStatusByte = race.getStatus();
 
-        byte[] expectedStartTimeBytes = ByteCheck.getCurrentTime6Bytes(); // TODO: Use a reasonable starting time
+        long expectedStartTime = startTime;
+
+        byte[] expectedStartTimeBytes = ByteCheck.convertLongTo6ByteArray(expectedStartTime); // TODO: Use a reasonable starting time
 
         byte[] raceWindDirectionBytes = ByteCheck.shortToByteArray((short) 0x4000);
                 // Currently set to east TODO: make this a field of race or boat?
@@ -73,9 +76,7 @@ public class RaceMessageGenerator extends ScheduledMessage {
             outputSteam.write(estTimeAtFinish);
         }
 
-        byte payLoad[] = outputSteam.toByteArray();
-
-        return ByteCheck.convertToLittleEndian(payLoad, payLoad.length);
+        return outputSteam.toByteArray();
     }
 
     private String fixLength(String s, int len) { //TODO move to super class so all subclasses can use this

@@ -48,7 +48,9 @@ public class CourseRenderer {
         // Renders CompoundMarks
         for (int i = 0 ; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
-            if ((i == 0 || i == compoundMarks.size() - 1) && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) { // draw a line between the gate if its a start or finish
+            if ((course.getMarkRoundings().get(0).getCompoundMark().getId() == compoundMark.getId()
+                    || course.getMarkRoundings().get(course.getMarkRoundings().size() - 1).getCompoundMark().getId() == compoundMark.getId())
+                    && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) { // draw a line between the gate if its a start or finish
                 renderGate(compoundMark);
             } else {
                 renderCompoundMark(compoundMark);
@@ -104,27 +106,6 @@ public class CourseRenderer {
         XYPair pixelCoordinates = pixelMapper.convertCoordPixel(coordinate);
         rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
         rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
-//        System.out.println(mark.getId());
-//        System.out.println(mark.getCoordinate());
-//        System.out.println(pixelCoordinates.getX());
-//        System.out.println(pixelCoordinates.getY());
-//        System.out.println(marks.get(mark.getId()));
-//        System.out.println(rectangle);
-//        if (mark.getId() == 126) {
-//            System.out.println(126);
-//            System.out.println(mark.getCoordinate());
-//            System.out.println(pixelCoordinates.getX());
-//            System.out.println(pixelCoordinates.getY());
-//            System.out.println(rectangle);
-//        } else if (mark.getId() == 127) {
-//            System.out.println(127);
-//            System.out.println(mark.getCoordinate());
-//            System.out.println(pixelCoordinates.getX());
-//            System.out.println(pixelCoordinates.getY());
-//            System.out.println(rectangle);
-//        }
-//        System.out.println(marks);
-//        System.out.println();
     }
 
 

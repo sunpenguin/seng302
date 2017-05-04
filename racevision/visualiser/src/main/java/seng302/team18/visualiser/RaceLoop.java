@@ -50,14 +50,19 @@ public class RaceLoop extends AnimationTimer {
         updateView();
     }
 
-
+    /**
+     * Call each renderer and update the display of the race.
+     */
     private void updateView() {
         renderer.renderBoats();
         courseRenderer.renderCourse();
         renderer.drawTrails();
     }
 
-
+    /**
+     * Update the FPS label showing the current frame rate.
+     * @param secondsElapsed The seconds elapsed since the last update.
+     */
     private void updateFps(double secondsElapsed) {
         secondsElapsedSinceLastFpsUpdate += secondsElapsed;
         framesSinceLastFpsUpdate++;

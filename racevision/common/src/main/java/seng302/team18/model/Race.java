@@ -2,6 +2,7 @@ package seng302.team18.model;
 
 import seng302.team18.util.GPSCalculations;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,9 @@ public class Race {
         course = new Course();
         finishedList = new ArrayList<>();
         id = 0;
+        status = 0;
+        currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
+        startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
 //        setInitialSpeed();
     }
 
@@ -46,6 +50,7 @@ public class Race {
         finishedList = new ArrayList<>();
         participantIds = startingList.stream().map(Boat::getId).collect(Collectors.toList());
         this.id = raceId;
+        this.status = 0;
         setCourseForBoats();
         setInitialSpeed();
     }
@@ -56,8 +61,10 @@ public class Race {
      * Sets the speed of the boats at the start line
      */
     private void setInitialSpeed(){
+        int speed = 200;
         for(Boat b: startingList){
-            b.setSpeed(200); //kph
+            b.setSpeed(speed); //kph
+            speed -= 15;
         }
     }
 
@@ -200,12 +207,17 @@ public class Race {
      * @param boat
      * @param nextLeg
      */
-    private void setNextLeg(Boat boat, Leg nextLeg) {
-        CompoundMark passedMark = boat.getLeg().getDestination();
-        passedMark.addPassed(boat);
-        boat.setPlace(passedMark.getPassed().indexOf(boat) + 1);
-        boat.setDestination(nextLeg.getDestination().getMidCoordinate());
+
+    public void setNextLeg(Boat boat, Leg nextLeg) {
+        Leg currentLeg = boat.getLeg();
+        currentLeg.addToBoatsCompleted(boat);
+        boat.setPlace(currentLeg.getBoatsCompleted().indexOf(boat) + 1);
+
+        boat.setDestination(nextLeg.getDestination().getMarks().get(0).getCoordinate());
         boat.setLeg(nextLeg);
+
+        // TODO when this is enabled it causes the visualiser to freeze, likely due to malformed packets
+        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, boat.getLeg().getDeparture()));
         //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
     }
 
@@ -279,5 +291,13 @@ public class Race {
 
     public void setStatus(byte status) {
         this.status = status;
+    }
+
+    private List<MarkRoundingEvent> markRoundingEvents = new ArrayList<>();
+
+    public List<MarkRoundingEvent> popMarkRoundingEvents() {
+        List<MarkRoundingEvent> events = markRoundingEvents;
+        markRoundingEvents = new ArrayList<>();
+        return events;
     }
 }

@@ -2,6 +2,9 @@ package seng302.team18.model;
 
 import seng302.team18.util.GPSCalculations;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A class which denotes which two marks a boat is currently travelling between using a destination mark, a departure
  * mark, a heading and the number of the leg in the race
@@ -11,6 +14,7 @@ public class Leg {
     private CompoundMark departure;
     private double heading;
     private int legNumber;
+    private List<Boat> boatsCompleted;
 
     /**
      * A constructor for the Leg
@@ -23,6 +27,7 @@ public class Leg {
         this.departure = departure;
 //        this.heading = GPSCalculations.findAngle(departure.getMidCoordinate(), destination.getMidCoordinate());
         this.legNumber = legNumber; // TODO this is a kinda shitty way of doing it might change later
+        boatsCompleted = new ArrayList<>();
     }
 
     public CompoundMark getDestination() {
@@ -39,6 +44,14 @@ public class Leg {
 
     public int getLegNumber() {
         return legNumber;
+    }
+
+    public List<Boat> getBoatsCompleted() {
+        return boatsCompleted;
+    }
+
+    public void addToBoatsCompleted(Boat boat) {
+        boatsCompleted.add(boat);
     }
 
     @Override

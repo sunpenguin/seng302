@@ -9,16 +9,28 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by dhl25 on 27/04/17.
+ * The MarkLocationInterpreter that sets the mark location.
+ *
+ * @see MessageInterpreter
  */
 public class MarkLocationInterpreter extends MessageInterpreter {
-
     private Race race;
 
+    /**
+     * Constructor for MarkLocationInterpreter.
+     *
+     * @param race the race to be updated.
+     */
     public MarkLocationInterpreter(Race race) {
         this.race = race;
     }
 
+    /**
+     * Interpret method for MarkLocationInterpreter. Gets the mark coordinates from the message.
+     *
+     * @param message to be interpreted. Of type AC35BoatLocationMessage.
+     * @see AC35BoatLocationMessage
+     */
     @Override
     public void interpret(MessageBody message) {
         if (message instanceof AC35BoatLocationMessage) {

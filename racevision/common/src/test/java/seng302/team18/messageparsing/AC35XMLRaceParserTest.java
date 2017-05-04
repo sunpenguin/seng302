@@ -105,7 +105,7 @@ public class AC35XMLRaceParserTest {
     @Test
     public void parseAC35XMLRaceStartTimeTest() {
         String expectedTime = "2015-08-29T13:10:00+02:00";
-        String actualTime = raceMessageToTest.getRaceStartTime();
+        String actualTime = raceMessageToTest.getStartTime();
         Assert.assertEquals(expectedTime, actualTime);
     }
 

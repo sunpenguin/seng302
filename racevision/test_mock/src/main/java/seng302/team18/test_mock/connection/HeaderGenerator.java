@@ -1,6 +1,7 @@
 package seng302.team18.test_mock.connection;
 
 import seng302.team18.util.ByteCheck;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -11,6 +12,7 @@ public class HeaderGenerator {
 
     /**
      * A method used to generate the header for a message of a certain type.
+     *
      * @param type The type of the message the header is generated for.
      */
     public static byte[] generateHeader(int type, short lengthOfMessage) throws IOException {
@@ -40,9 +42,6 @@ public class HeaderGenerator {
         outputSteam.write(sourceID);
         outputSteam.write(messageLen);
 
-        byte header[] = outputSteam.toByteArray();
-
-        return ByteCheck.convertToLittleEndian(header,15);
+        return outputSteam.toByteArray();
     }
-
 }

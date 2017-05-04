@@ -9,16 +9,28 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by dhl25 on 27/04/17.
+ * The FinishersListInterpreter that adds a boat to the finishers list when it has finished the race.
+ *
+ * @see MessageInterpreter
  */
 public class FinishersListInterpreter extends MessageInterpreter {
-
     private Race race;
 
+    /**
+     * Constructor for FinishersListInterpreter.
+     *
+     * @param race the race to be updated.
+     */
     public FinishersListInterpreter(Race race) {
         this.race = race;
     }
 
+    /**
+     * Interpret method for FinishersListInterpreter. Gets the boat status from the message.
+     *
+     * @param message to be interpreted. Of type AC35RaceStatusMessage.
+     * @see AC35RaceStatusMessage
+     */
     @Override
     public void interpret(MessageBody message) {
         if (message instanceof AC35RaceStatusMessage) {

@@ -1,31 +1,12 @@
 package seng302.team18.visualiser.display;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Rectangle;
-import seng302.team18.model.CompoundMark;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
-import seng302.team18.model.Mark;
-
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-
 /**
  * Created by dhl25 on 30/03/17.
  */
 public class CourseRendererTest {
 
     //    @Test
-    public void renderCourseTest() {
+//    public void renderCourseTest() {
         // Setting up Course
 //        Pane pane = new Pane();
 //        pane.setPrefWidth(1280);
@@ -80,6 +61,6 @@ public class CourseRendererTest {
 //        for (int i = 0; i < expectedPoints.size(); i++) {
 //            assertEquals(expectedPoints.get(i), actualPoints.get(i), 0.1);
 //        }
-    }
+//    }
 
 }

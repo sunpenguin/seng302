@@ -1,9 +1,6 @@
+package seng302.team18.test_mock.connection;
+
 import org.junit.Test;
-import seng302.team18.model.Race;
-import seng302.team18.test_mock.TestMock;
-import seng302.team18.test_mock.connection.CRCGenerator;
-import seng302.team18.test_mock.connection.HeaderGenerator;
-import seng302.team18.test_mock.connection.RaceMessageGenerator;
 import seng302.team18.util.ByteCheck;
 
 import java.io.ByteArrayOutputStream;
@@ -46,6 +43,6 @@ public class CRCGeneratorTest {
         long checksumValue = checksum.getValue();
         String expectedCRC = Long.toHexString(checksumValue);
 
-        assertEquals(expectedCRC,actualCRC);
+        assertEquals(expectedCRC, actualCRC);
     }
 }

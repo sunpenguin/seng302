@@ -38,8 +38,15 @@ public class PreRaceController {
 
     }
 
-
-
+    /**
+     * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
+     * duration before the race starts.
+     * @param manager The controller manager for this instance of the program.
+     * @param currentTime The current time at the location of the race.
+     * @param startTime The official start time of the race.
+     * @param duration The length of time for which the controller should display the pre-race window.
+     * @param boats The boats participatin gin the race.
+     */
     public void setUp(ControllerManager manager, ZonedDateTime currentTime, ZonedDateTime startTime, long duration, List<Boat> boats) {
         this.manager = manager;
         startClock(currentTime, currentTime.getZone());
@@ -61,6 +68,9 @@ public class PreRaceController {
     }
 
 
+    /**
+     * Shows the live race view window.
+     */
     public void showLiveRaceView() {
         try {
             manager.showMainView();
@@ -79,6 +89,10 @@ public class PreRaceController {
         timeZoneLabel.setText("UTC " + zoneTime.getOffset().toString());
     }
 
+    /**
+     * Sets the list view of the participants in the race.
+     * @param boats The race participants
+     */
     private void setUpLists(List<Boat> boats) {
         listView.setItems(FXCollections.observableList(boats));
         listView.setCellFactory(param -> new ListCell<Boat>() {

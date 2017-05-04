@@ -1,11 +1,8 @@
 package seng302.team18.test_mock.connection;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketException;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 
 /**
  * Streaming server to connect test mock with clients.
@@ -89,6 +86,9 @@ public class Server {
             System.err.println("Exiting program");
             System.exit(-1);
         }
+
+        System.out.println("Stream opened successfully on port: " + PORT);
+
         acceptClientConnection();
 
         //connectionListener.run(); TODO make connection listener work

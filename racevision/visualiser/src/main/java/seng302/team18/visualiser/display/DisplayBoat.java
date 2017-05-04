@@ -7,12 +7,10 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
 import seng302.team18.util.XYPair;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -59,7 +57,7 @@ public class DisplayBoat {
         this.estimatedTime = estimatedTime;
         // default values
         wakeColor = Color.CADETBLUE;
-        wakeScaleFactor = 1.0d / 32.0d; // the wake is at normal size when the boat is moving 40 speed
+        wakeScaleFactor = 1.0d / 32.0d; // the wake is at normal size when the boat is moving 32 speed
         boat = new Polyline();
         boat.getPoints().addAll(BOAT_SHAPE);
         boat.setFill(boatColor); // this isn't default
@@ -137,14 +135,13 @@ public class DisplayBoat {
      * @param speed the new speed of the boat.
      */
     public void setSpeed(double speed) {
-        double scale;
-        if (this.speed != 0 && speed != 0) {
-            scale = speed / this.speed;
-        } else if (this.speed == 0 && speed != 0) {
-            scale = (speed * wakeScaleFactor) / minWakeSize;
-        } else {
-            scale = minWakeSize;
+        List<Transform> transforms = new ArrayList<>(wake.getTransforms());
+        for (Transform transform : transforms) {
+            if (transform instanceof Scale) {
+                wake.getTransforms().remove(transform);
+            }
         }
+        double scale = speed * wakeScaleFactor;
         Scale wakeSize = new Scale(scale, scale, BOAT_PIVOT_X, BOAT_PIVOT_Y);
         wake.getTransforms().add(wakeSize);
         this.speed = speed;
@@ -157,7 +154,14 @@ public class DisplayBoat {
      * @param heading the new heading of the boat
      */
     public void setHeading(double heading) {
-        Rotate rotation = new Rotate(heading - this.heading, BOAT_PIVOT_X, BOAT_PIVOT_Y);
+        List<Transform> transforms = new ArrayList<>(wake.getTransforms());
+        for (Transform transform : transforms) {
+            if (transform instanceof Rotate) {
+                wake.getTransforms().remove(transform);
+            }
+        }
+        boat.getTransforms().clear();
+        Rotate rotation = new Rotate(heading, BOAT_PIVOT_X, BOAT_PIVOT_Y);
         wake.getTransforms().add(rotation);
         boat.getTransforms().add(rotation);
         this.heading = heading;

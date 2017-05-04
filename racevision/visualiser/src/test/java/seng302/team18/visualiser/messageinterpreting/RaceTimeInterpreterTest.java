@@ -20,7 +20,7 @@ import java.util.List;
  * Created by david on 4/29/17.
  */
 public class RaceTimeInterpreterTest {
-    private Course course;
+
     private Race race;
     private MessageInterpreter raceTimeInterpreter;
     private Boat boat;
@@ -39,6 +39,9 @@ public class RaceTimeInterpreterTest {
         raceTimeInterpreter.interpret(message);
     }
 
+    /**
+     * test to see if ONLY the time values in boat have changed
+     */
     @Test
     public void boatsTest() {
         Boat expected = new Boat("test", "t", 0);
@@ -59,6 +62,9 @@ public class RaceTimeInterpreterTest {
         Assert.assertEquals(expected.getTimeTilNextMark(), actual.getTimeTilNextMark());
     }
 
+    /**
+     * test to see that nothing in course has changed.
+     */
     @Test
     public void courseTest() {
         Course expected = new Course();
@@ -75,9 +81,14 @@ public class RaceTimeInterpreterTest {
         }
     }
 
+    /**
+     * test to see that the time in race has changed
+     */
     @Test
     public void raceTest() {
         ZonedDateTime expected = ZonedDateTime.ofInstant(Instant.EPOCH, race.getCourse().getTimeZone()).plusSeconds(2);
         Assert.assertEquals(expected, race.getStartTime());
+        Assert.assertEquals(0, race.getId());
+        Assert.assertEquals(0, race.getStatus());
     }
 }
