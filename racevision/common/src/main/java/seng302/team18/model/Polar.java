@@ -15,7 +15,15 @@ public class Polar {
     private double downWindAngle;
     private double downWindSpeed;
 
-
+    /**
+     * Constructor for Polar.
+     * Note: Adds Upwind and down wind angles to hashmap also.
+     * @param windSpeed Speed of the wind
+     * @param upWindAngle Upwind threshold angle
+     * @param upWindSpeed Upwind speed
+     * @param downWindAngle Downwind threshold angle
+     * @param downWindSpeed Downwind speed
+     */
     public Polar(double windSpeed, double upWindAngle, double upWindSpeed, double downWindAngle, double downWindSpeed){
         this.windSpeed = windSpeed;
         this.upWindAngle = upWindAngle;
@@ -23,6 +31,8 @@ public class Polar {
         this.downWindAngle = downWindAngle;
         this.downWindSpeed = downWindSpeed;
         mapSpeedAtAngles = new HashMap<>();
+        addToMap(this.upWindAngle, this.upWindSpeed);
+        addToMap(this.downWindAngle, this.downWindSpeed);
     }
 
     /**

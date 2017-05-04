@@ -23,8 +23,7 @@ public class PolarCalculator {
      * @param windSpeed   Speed of the wind (must match the windspeed of a polar)
      * @param heading     The heading of the boats destination (not relative to wind)
      * @param windHeading The heading of the wind
-     * @return An XYPair holding the speed at which the boat with travel
-     * and angle from the original heading it should travel
+     * @return An XYPair holding the speed at which the boat with travel and the angle the boat should travel relative to the wind.
      */
     public XYPair getBest(double windSpeed, double heading, double windHeading) {
         //Find polar with correct wind speed
@@ -43,12 +42,13 @@ public class PolarCalculator {
 
         //get angle from heading
         if (trueWindAngle <= polarToUse.getUpWindAngle()) {
-            angle = Math.abs(polarToUse.getUpWindAngle() - trueWindAngle);
+            angle = Math.abs(polarToUse.getUpWindAngle());
             speed = polarToUse.getUpWindSpeed();
         } else if (trueWindAngle >= polarToUse.getDownWindAngle()) {
-            angle = Math.abs(polarToUse.getDownWindAngle() - trueWindAngle);
+            angle = Math.abs(polarToUse.getDownWindAngle());
             speed = polarToUse.getDownWindSpeed();
         } else {
+            //If between thresholds angle stays the same.
             angle = trueWindAngle;
 
             //initialize minDifference
@@ -63,19 +63,32 @@ public class PolarCalculator {
                 //get difference between current and true wind angle
                 double currentDifference = Math.abs((double) pair.getKey() - trueWindAngle);
 
-                if (currentDifference < minDifference) {
-                    //set min diff
-                    minDifference = currentDifference;
-                    speed = (double) pair.getValue();
+                if (currentDifference <= minDifference) {
+                    if (currentDifference < minDifference) {
+                        //set min diff
+                        minDifference = currentDifference;
+                        speed = (double) pair.getValue();
+                    }else{ //if equal
+                        //min diff is the same
+                        double equalAngleSpeed = (double)pair.getValue();
+                        //get faster speed
+                        if (equalAngleSpeed> speed){
+                            speed = equalAngleSpeed;
+                        }
+                    }
                 }
                 it.remove();
             }
         }
-//        return new XYPair(speed, angle);
-        return new XYPair(25, heading);
+        return new XYPair(speed, angle);
     }
 
-
+    /**
+     * Gets true wind angle for boat.
+     * @param windHeading Heading of the wind
+     * @param heading Heading of the boat
+     * @return True wind angle for the boat.
+     */
     public double getTrueWindAngle(double windHeading, double heading) {
         double offset = heading - windHeading;
 
@@ -86,6 +99,6 @@ public class PolarCalculator {
         if (offset > 180) {
             offset = offset - (offset - 180) * 2;
         }
-        return 180 - offset;
+        return (180-offset);
     }
 }
