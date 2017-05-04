@@ -1,15 +1,5 @@
 package seng302.team18.model;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
-
-import static org.junit.Assert.assertEquals;
-
 /**
  * Created by david on 3/21/17.
  */
@@ -34,7 +24,7 @@ public class CompoundMarkTest {
 //        testMarks.add(new Mark("test", new Coordinate(1, 1)));
 //        CompoundMark testCompoundMark1 = new CompoundMark("Test", testMarks);
 //        assertEquals("", errContent.toString());
-
+//
 //        testMarks.add(new Mark("test", new Coordinate(1, 1)));
 //        testMarks.add(new Mark("test", new Coordinate(1, 1)));
 //        CompoundMark testCompoundMark2 = new CompoundMark("Test", testMarks);

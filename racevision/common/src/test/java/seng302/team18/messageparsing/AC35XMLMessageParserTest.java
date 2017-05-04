@@ -1,4 +1,4 @@
-//package seng302.team18.data;
+//package seng302.team18.messageparsing;
 //
 //import org.junit.Before;
 //import org.junit.Test;

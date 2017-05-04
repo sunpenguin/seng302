@@ -1,11 +1,12 @@
+package seng302.team18.test_mock.connection;
+
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import seng302.team18.test_mock.connection.HeaderGenerator;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
-import java.sql.Timestamp;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by jth102 on 25/04/17.

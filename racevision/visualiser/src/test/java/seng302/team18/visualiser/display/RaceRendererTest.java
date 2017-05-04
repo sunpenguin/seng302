@@ -2,14 +2,10 @@ package seng302.team18.visualiser.display;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
-import seng302.team18.model.*;
 
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +20,7 @@ public class RaceRendererTest {
     private RaceRenderer actualRaceRenderer;
 
 //    @Before
-    public void setUp() {
+//    public void setUp() {
 //        AnchorPane raceViewAnchorPane = new AnchorPane();
 //        // Create expected
 //
@@ -50,7 +46,7 @@ public class RaceRendererTest {
 //        Group group = new Group();
 //        Race race = new Race(boats, course);
 //        actualRaceRenderer = new RaceRenderer(race, group, raceViewAnchorPane);
-    }
+//    }
 
 
     /**

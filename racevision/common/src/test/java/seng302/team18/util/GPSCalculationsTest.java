@@ -1,15 +1,6 @@
 package seng302.team18.util;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.xml.sax.SAXException;
-import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by jth102 on 17/03/17.
@@ -19,16 +10,16 @@ public class GPSCalculationsTest {
     private Course testCourse;
     private GPSCalculations g;
 
-    @Before
-    public void setUp() throws IOException, SAXException, ParserConfigurationException {
+//    @Before
+//    public void setUp() throws IOException, SAXException, ParserConfigurationException {
 //        testCourse = XMLCourseParser.parseCourse(new BufferedInputStream(getClass().getResourceAsStream("/test-course.xml")));
 //        g = new GPSCalculations(testCourse);
-    }
+//    }
 
 
-    @Test
-    public void findMinMaxPointsTest() throws IOException, SAXException, ParserConfigurationException {
-
+//    @Test
+//    public void findMinMaxPointsTest() throws IOException, SAXException, ParserConfigurationException {
+//
 //        g.findMinMaxPoints(testCourse);
 //
 //        double minX = g.getMinX();
@@ -45,5 +36,5 @@ public class GPSCalculationsTest {
 //        assertEquals(expectedMaxXCoord.getX(), maxX, 1);
 //        assertEquals(expectedMinYCoord.getY(), minY, 1);
 //        assertEquals(expectedMaxYCoord.getY(), maxY, 1);
-    }
+//    }
 }
