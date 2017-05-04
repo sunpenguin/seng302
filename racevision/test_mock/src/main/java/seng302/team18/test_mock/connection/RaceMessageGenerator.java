@@ -8,17 +8,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Created by hqi19 on 21/04/17.
+ * Created by Alice on 21/04/17.
  */
 public class RaceMessageGenerator extends ScheduledMessageGenerator {
 
     private Race race;
     private String message;
-    private long startTime = System.currentTimeMillis() + 122000;
+    private long startTime = System.currentTimeMillis();
 
     public RaceMessageGenerator(Race race) {
         super(2, 12);
-
         this.race = race;
     }
 
