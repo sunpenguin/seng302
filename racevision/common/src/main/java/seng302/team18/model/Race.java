@@ -56,8 +56,10 @@ public class Race {
      * Sets the speed of the boats at the start line
      */
     private void setInitialSpeed(){
+        int speed = 200;
         for(Boat b: startingList){
-            b.setSpeed(200); //kph
+            b.setSpeed(speed); //kph
+            speed -= 25;
         }
     }
 
