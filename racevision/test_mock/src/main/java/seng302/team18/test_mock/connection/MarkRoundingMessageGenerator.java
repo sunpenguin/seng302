@@ -8,9 +8,6 @@ import seng302.team18.util.ByteCheck;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-/**
- * Created by afj19 on 28/04/17.
- */
 public class MarkRoundingMessageGenerator extends MessageGenerator {
     private final static int VERSION_NUMBER = 0x01;
     private final short ACK_NUMBER = 0x00;
@@ -30,15 +27,15 @@ public class MarkRoundingMessageGenerator extends MessageGenerator {
         ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
 
         // Version number
-        outputSteam.write(ByteCheck.intToByteArray(VERSION_NUMBER));
+        outputSteam.write(0xFF & VERSION_NUMBER);
         // Time
         outputSteam.write(ByteCheck.convertLongTo6ByteArray(markRoundingEvent.getTime()));
         //Ack number
         outputSteam.write(ByteCheck.shortToByteArray(ACK_NUMBER));
         // Race id
-        outputSteam.write(raceId);
+        outputSteam.write(ByteCheck.intToByteArray(raceId));
         // Boat(source) id
-        outputSteam.write(markRoundingEvent.getBoat().getId());
+        outputSteam.write(ByteCheck.intToByteArray(markRoundingEvent.getBoat().getId()));
         // Boat status - defaulting to 0 for 'unknown'
         outputSteam.write(0x00);
         // Rounding side - defaulting to 0 for 'unknown'
