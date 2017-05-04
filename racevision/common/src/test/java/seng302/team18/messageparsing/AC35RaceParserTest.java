@@ -12,8 +12,10 @@ public class AC35RaceParserTest {
 //
 //    @Test
 //    public void testParser() {
-//        // Retrieve everything from the container
-//        String startTime = raceMessage.getRaceStartTime();
+    // Retrieve everything from the container\
+
+    //TODO this test needs to be reinstated
+//        String startTime = raceMessage.getStartTime();
 //        List<BoundaryMark> boundaryMarks = raceMessage.getBoundaryMarks();
 //        List<CompoundMark> actualCompoundMarkMap = raceMessage.getCompoundMarks();
 //        List<Integer> participantIDs = raceMessage.getParticipantIDs();
@@ -94,11 +96,11 @@ public class AC35RaceParserTest {
 //            List<Mark> actual = actualCompoundMarkMap.get(i).getMarks();
 //            List<Mark> expected = expectedCMM.get(i).getMarks();
 //
-//            assertEquals(expected.size(), actual.size());
-//            assertEquals(expectedCM.getName(), actualCM.getName());
+////            assertEquals(expected.size(), actual.size());
+////            assertEquals(expectedCM.getName(), actualCM.getName());
 //
 //            for (int j = 0; j < actual.size(); j++) {
-//                assertEquals(expected.get(j).getId(), actual.get(j).getId());
+////                assertEquals(expected.get(j).getId(), actual.get(j).getId());
 ////                assertEquals(expected.get(j).getName(), actual.get(j).getName()); TODO: if mark names are used we need to test them here
 //                assertEquals(expected.get(j).getCoordinate().getLatitude(), actual.get(j).getCoordinate().getLatitude(), 0.000001);
 //                assertEquals(expected.get(j).getCoordinate().getLongitude(), actual.get(j).getCoordinate().getLongitude(), 0.000001);
