@@ -23,6 +23,11 @@ import java.util.List;
  */
 public class AC35XMLBoatParser implements MessageBodyParser {
 
+    /**
+     * Parse an input stream to create a boat message holding boat information.
+     * @param stream The input stream from the data source.
+     * @return A message object holding the boat information
+     */
     @Override
     public AC35XMLBoatMessage parse(InputStream stream) {
         final String BOATS_ELEMENT = "BoatConfig";
@@ -52,19 +57,27 @@ public class AC35XMLBoatParser implements MessageBodyParser {
         Node boatsNode = boatsElement.getElementsByTagName(BOATS).item(0);
         List<Boat> boats = parseBoats(boatsNode);
 
-        AC35XMLBoatMessage message = new AC35XMLBoatMessage();
-        message.setBoats(boats);
+        AC35XMLBoatMessage message = new AC35XMLBoatMessage(boats);
         return message;
     }
 
 
+    /**
+     * Converts a byte array to a data stream which can be passed to the other parse method.
+     * @param bytes An array of bytes
+     * @return A boat message returned by the other parse method.
+     */
     @Override
     public AC35XMLBoatMessage parse(byte[] bytes) {
         InputStream stream = new ByteArrayInputStream(new String(bytes, StandardCharsets.UTF_8).trim().getBytes());
         return parse(stream);
     }
 
-
+    /**
+     * Used in the parse method to parse boats from a boat element in the boat xml file.
+     * @param boatsNode the noe of the boats element
+     * @return A list of particpating boats.
+     */
     public List<Boat> parseBoats(Node boatsNode) {
         // A boat has Type, SourceID, ShapeID, HullNum, StoweName with elements GPSposition and FlagPosition
         final String BOAT_ELEMENT = "Boat";

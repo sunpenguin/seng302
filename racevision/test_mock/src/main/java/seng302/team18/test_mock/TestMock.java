@@ -28,7 +28,7 @@ public class TestMock {
     private AC35XMLBoatMessage boatMessage;
     private AC35XMLRaceMessage raceMessage;
 
-    private final static int SERVER_PORT = 5006;
+    private final static int SERVER_PORT = 5005;
 
     /**
      * The messages to be sent on a schedule during race simulation

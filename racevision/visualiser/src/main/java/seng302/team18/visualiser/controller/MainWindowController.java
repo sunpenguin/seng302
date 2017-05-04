@@ -1,6 +1,7 @@
 package seng302.team18.visualiser.controller;
 
 import javafx.beans.Observable;
+import javafx.beans.property.IntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -126,6 +127,9 @@ public class MainWindowController {
     }
 
 
+    /**
+     * Sets the cell values for the race table, these are place, boat name and boat speed.
+     */
     private void setUpTable() {
         Callback<Boat, Observable[]> callback =(Boat boat) -> new Observable[]{
                 boat.placeProperty(),
@@ -185,6 +189,13 @@ public class MainWindowController {
 //    }
 
 
+    /**
+     * initialises race variables and begins the race loop. Adds listers to the race view to listen for when the window
+     * has been re-sized.
+     * @param race The race which is going to be displayed.
+     * @param interpreter A message interpreter.
+     * @param receiver A socket message receiver.
+     */
     public void setUp(Race race, MessageInterpreter interpreter, SocketMessageReceiver receiver) {
         this.race = race;
         raceRenderer = new RaceRenderer(race, group, raceViewPane);
@@ -194,6 +205,11 @@ public class MainWindowController {
         raceClock.start();
         raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), interpreter, receiver);
         startWindDirection();
+
+        for (Boat boat : race.getStartingList()) {
+            boat.setPlace(race.getStartingList().size());
+        }
+
         raceLoop.start();
 
         raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {

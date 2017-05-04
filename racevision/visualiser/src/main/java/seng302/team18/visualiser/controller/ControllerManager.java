@@ -42,6 +42,11 @@ public class ControllerManager {
     }
 
 
+    /**
+     * initialises the reciever, race and interpreter. Loops through messages recieved via the receiver and interprets
+     * them.
+     * @throws Exception
+     */
     public void start() throws Exception {
         receiver = getPort();
         race = new Race();
@@ -81,6 +86,9 @@ public class ControllerManager {
     }
 
 
+    /**
+     * Set up and intialise interpreter variables, adding interpreters of each relevant type to the glabal interpreter.
+     */
     private void initialiseInterpreter() {
         interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
@@ -89,12 +97,16 @@ public class ControllerManager {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindDirectionInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new EstimatedTimeInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishersListInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new LegNumberInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLocationInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
     }
 
-
+    /**
+     * Sets up the main GUI window, controlled by the main window controller.
+     * @throws IOException IO Exception thrown when loading FXML loader
+     */
     public void showMainView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(mainControllerPath));
         Parent root = loader.load(); // throws IOException
@@ -109,7 +121,13 @@ public class ControllerManager {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(mainController.getRaceClock()));
     }
 
-
+    /**
+     * Display the window with information about a race which hasn't started yet.
+     * @param currentTime The current time at the race location.
+     * @param startTime The start time of the race which is being streamed.
+     * @param duration The length of time until startTime
+     * @throws IOException IO Exception thrown when loading FXML loader
+     */
     private void showPreRace(ZonedDateTime currentTime, ZonedDateTime startTime, long duration) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(preRacePath));
         Parent root = loader.load(); // throws IOException
@@ -123,6 +141,11 @@ public class ControllerManager {
     }
 
 
+    /**
+     * Asks the user where they would like their data streamed from. They can use of four options: Test mock, test stream,
+     * live stream or they can specify their own custom  port number and address to stream from.
+     * @return A port and host combination
+     */
     private SocketMessageReceiver getPort() {
         Scanner scanner = new Scanner(System.in);
         String decision = "";
@@ -164,6 +187,11 @@ public class ControllerManager {
         return getPort();
     }
 
+    /**
+     * A companion method for getPort.
+     * Asks the user for thir custom port and address.
+     * @return A port and host combination
+     */
     private List<String> getCustomConnection() {
         List<String> portAndHost = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);

@@ -28,12 +28,14 @@ public class XMLRaceInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof AC35XMLRaceMessage) {
             AC35XMLRaceMessage raceMessage = (AC35XMLRaceMessage) message;
-            ZonedDateTime startTime = ZonedDateTime.parse(raceMessage.getRaceStartTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-            race.setStartTime(startTime);
+            ZonedDateTime start =
+                    ZonedDateTime.parse(raceMessage.getStartTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+            race.setStartTime(start);
+
             race.setParticipantIds(raceMessage.getParticipantIDs());
 
             Course course = race.getCourse();
-            //course.setMarkRoundings(raceMessage.getMarkRoundings());
+            course.setMarkRoundings(raceMessage.getMarkRoundings());
             course.setCompoundMarks(raceMessage.getCompoundMarks());
             course.setBoundaries(raceMessage.getBoundaryMarks());
         }

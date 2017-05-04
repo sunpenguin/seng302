@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * A factory which reads mxl message and parser types and creates parsers of the type corresponding to the stream
+ * information.
+ *
  * Created by david on 4/10/17.
  */
 public class AC35XMLParserFactory implements MessageParserFactory {
@@ -15,28 +18,21 @@ public class AC35XMLParserFactory implements MessageParserFactory {
         return new AC35XMLHeadParser();
     }
 
+    /**
+     * Create a message body parser of the given integer type.
+     * @param type An integer representation of the required type.
+     * @return A message body parser matching the given type.
+     */
     @Override
     public MessageBodyParser makeBodyParser(int type) {
         AC35MessageType xmlType = AC35MessageType.from(type);
         return parserMap.get(xmlType);
     }
 
-//    @Override
-//    public MessageBodyParser makeBodyParser(int type) {
-//        AC35MessageType xmlType = AC35MessageType.from(type);
-//        switch (xmlType) {
-//            case XML_REGATTA:
-//                return new AC35XMLRegattaParser();
-//            case XML_RACE:
-//                return new AC35XMLRaceParser();
-//            case XML_BOATS:
-//                return new AC35XMLBoatParser();
-//            default:
-//                return null;
-//        }
-//    }
-
-
+    /**
+     * Overriddes the current error detector methods and returns a new error detector.
+     * @return An error detector.
+     */
     @Override
     public MessageErrorDetector makeDetector() {
         return new MessageErrorDetector() {
@@ -52,6 +48,10 @@ public class AC35XMLParserFactory implements MessageParserFactory {
         };
     }
 
+    /**
+     * Maps each XML message type to its parser.
+     * @return A message body type and body parser map.
+     */
     private Map<AC35MessageType, MessageBodyParser> initialiseMap() {
         Map<AC35MessageType, MessageBodyParser> parserMap = new HashMap<>();
         parserMap.put(AC35MessageType.XML_REGATTA, new AC35XMLRegattaParser());
