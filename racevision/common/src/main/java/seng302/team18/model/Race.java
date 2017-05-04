@@ -180,9 +180,7 @@ public class Race {
         if ((Math.abs(oldDestination.getLongitude() - oldDestination.getLongitude()) < 0.001)
                 && (Math.abs(oldDestination.getLatitude() - oldDestination.getLatitude()) < 0.001)) {
 
-
             System.out.println("reached destination");
-
 
             XYPair speedHeading;
             Leg nextLeg = course.getNextLeg(boat.getLeg()); // find next leg
@@ -190,42 +188,34 @@ public class Race {
             Coordinate departure = nextLeg.getDeparture().getMarks().get(0).getCoordinate();
             if (nextLeg.equals(boat.getLeg())) { // on last leg
 
-
                 System.out.println("on last leg");
-
 
                 if (oldDestination.equals(destination)) { // if current leg is the last leg boat is now finished
 
-
                     System.out.println("finished");
-
 
                     finishedList.add(boat);
                     return;
                 }
             }
             Coordinate endOfLeg = boat.getLeg().getDestination().getMarks().get(0).getCoordinate();
-//            System.out.println(endOfLeg);
-//            System.out.println(boat.getDestination());
+
+            System.out.println(endOfLeg);
+            System.out.println(boat.getDestination());
+
             if (boat.getDestination().equals(endOfLeg)) { // starting new leg
                 tackInitial(boat, nextLeg);
 
                 System.out.println("starting new leg");
-//                double newHeading = boat.getCoordinate().retrieveHeading(destination);
-//                speedHeading = polars.getBest(course.getWindSpeed(), newHeading, course.getWindDirection());
-//                boat.setSpeed(speedHeading.getX());
-//                boat.setHeading(speedHeading.getY());
-//                Coordinate boatCoord = boat.getCoordinate();
-//                double legDistance = gps.gpsDistance(boatCoord, destination);
-//                Coordinate halfWay = gps.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), legDistance);
-//                boat.setDestination(halfWay);
-//                setNextLeg(boat, nextLeg);
+
             } else { // Half way through the leg;
                 double directionToMark = boat.getCoordinate().retrieveHeading(destination);
                 speedHeading = polars.getBest(course.getWindSpeed(), directionToMark, course.getWindDirection());
                 boat.setSpeed(speedHeading.getX() * 4);
-                boat.setHeading(directionToMark + speedHeading.getY());
+                boat.setHeading(speedHeading.getY());
                 boat.setDestination(destination);
+
+                System.out.println("Half Way");
 
 //                System.out.println("Half way through the leg");
 //                System.out.println(directionToMark);
@@ -257,16 +247,19 @@ public class Race {
         double directionToMark = gps.retrieveHeading(boat.getCoordinate(), destination);
         XYPair speedHeading = polars.getBest(course.getWindSpeed(), directionToMark, course.getWindDirection());
         boat.setSpeed(speedHeading.getX());
-        boat.setHeading(directionToMark + speedHeading.getY());
+        boat.setHeading(speedHeading.getY());
         Coordinate boatCoord = boat.getCoordinate();
         double legDistance = gps.gpsDistance(boatCoord, destination);
         Coordinate halfWay = gps.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), legDistance);
         boat.setDestination(halfWay);
 
+        setNextLeg(boat, leg);
+
         System.out.println("tackInitial");
         System.out.println(directionToMark);
         System.out.println(directionToMark + speedHeading.getY());
         System.out.println(90 - directionToMark + speedHeading.getY());
+        System.out.println();
     }
 
 

@@ -2,7 +2,9 @@ package seng302.team18.util;
 
 import seng302.team18.model.Polar;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by sbe67 on 2/05/17.
@@ -17,16 +19,17 @@ public class PolarCalculator {
 
     /**
      * A method to get the best angles for a boat to move in using its polar pattern
-     * @param windSpeed Speed of the wind (must match the windspeed of a polar)
-     * @param heading The heading of the boats destination
+     *
+     * @param windSpeed   Speed of the wind (must match the windspeed of a polar)
+     * @param heading     The heading of the boats destination
      * @param windHeading The heading of the wind
      * @return An XYPair holding the speed at which the boat with travel and angle from the original heading it should travel
      */
     public XYPair getBest(double windSpeed, double heading, double windHeading) {
         //Find polar with correct wind speed
         Polar polarToUse = polars.get(0);
-        for(Polar polar : polars){
-            if(polar.getWindSpeed() == windSpeed){
+        for (Polar polar : polars) {
+            if (polar.getWindSpeed() == windSpeed) {
                 polarToUse = polar;
             }
         }
@@ -54,31 +57,33 @@ public class PolarCalculator {
             //Iterate through hashmap
             Iterator it = polarToUse.getMapSpeedAtAngles().entrySet().iterator();
             while (it.hasNext()) {
-                Map.Entry pair = (Map.Entry)it.next();
+                Map.Entry pair = (Map.Entry) it.next();
 
                 //get difference between current and true wind angle
-                double currentDifference = Math.abs((double)pair.getKey() - trueWindAngle);
+                double currentDifference = Math.abs((double) pair.getKey() - trueWindAngle);
 
-                if(currentDifference < minDifference) {
+                if (currentDifference < minDifference) {
                     //set min diff
                     minDifference = currentDifference;
-                    speed = (double)pair.getValue();
+                    speed = (double) pair.getValue();
                 }
                 it.remove();
             }
         }
-        return new XYPair(speed, angle + heading);
+//        return new XYPair(speed, angle + heading);
+        return new XYPair(25, heading);
     }
 
-    protected static double getTrueWindAngle(double windHeading, double heading){
+
+    public double getTrueWindAngle(double windHeading, double heading) {
         double offset = heading - windHeading;
 
-        if (offset < 0){
+        if (offset < 0) {
             offset = 360 + offset;
         }
 
-        if(offset > 180){
-            offset = offset - (offset-180)*2;
+        if (offset > 180) {
+            offset = offset - (offset - 180) * 2;
         }
         return offset;
     }
