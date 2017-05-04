@@ -2,6 +2,9 @@ package seng302.team18.model;
 
 import seng302.team18.util.GPSCalculations;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by dhl25 on 18/03/17.
  */
@@ -10,13 +13,14 @@ public class Leg {
     private CompoundMark departure;
     private double heading;
     private int legNumber;
-    private int numberPassed;
+    private List<Boat> boatsCompleted;
 
     public Leg(CompoundMark departure, CompoundMark destination, int legNumber) {
         this.destination = destination;
         this.departure = departure;
 //        this.heading = GPSCalculations.findAngle(departure.getMidCoordinate(), destination.getMidCoordinate());
         this.legNumber = legNumber; // TODO this is a kinda shitty way of doing it might change later
+        boatsCompleted = new ArrayList<>();
     }
 
     public CompoundMark getDestination() {
@@ -35,12 +39,12 @@ public class Leg {
         return legNumber;
     }
 
-    public int getNumberPassed() {
-        return numberPassed;
+    public List<Boat> getBoatsCompleted() {
+        return boatsCompleted;
     }
 
-    public void incrementNumberPassed() {
-        this.numberPassed++;
+    public void addToBoatsCompleted(Boat boat) {
+        boatsCompleted.add(boat);
     }
 
     @Override

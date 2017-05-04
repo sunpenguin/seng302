@@ -195,6 +195,11 @@ public class MainWindowController {
         raceClock.start();
         raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), interpreter, receiver);
         startWindDirection();
+
+        for (Boat boat : race.getStartingList()) {
+            boat.setPlace(race.getStartingList().size());
+        }
+
         raceLoop.start();
 
         raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {

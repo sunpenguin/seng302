@@ -89,6 +89,7 @@ public class ControllerManager {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindDirectionInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new EstimatedTimeInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishersListInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new LegNumberInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLocationInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
