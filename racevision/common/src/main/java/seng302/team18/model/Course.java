@@ -58,6 +58,10 @@ public class Course {
         setupLegs();
     }
 
+    public List<MarkRounding> getMarkRoundings() {
+        return markRoundings;
+    }
+
     public double getWindDirection() {
         return windDirection;
     }
