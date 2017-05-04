@@ -1,7 +1,7 @@
 package seng302.team18.model;
 
 /**
- * Created by david on 4/12/17.
+ * Stores the direction taken to round a mark.
  */
 public class MarkRounding {
     private int sequenceNumber;

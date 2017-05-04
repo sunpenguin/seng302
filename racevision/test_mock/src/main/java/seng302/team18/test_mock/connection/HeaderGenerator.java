@@ -12,6 +12,7 @@ public class HeaderGenerator {
 
     /**
      * A method used to generate the header for a message of a certain type.
+     *
      * @param type The type of the message the header is generated for.
      */
     public static byte[] generateHeader(int type, short lengthOfMessage) throws IOException {
@@ -43,5 +44,4 @@ public class HeaderGenerator {
 
         return outputSteam.toByteArray();
     }
-
 }

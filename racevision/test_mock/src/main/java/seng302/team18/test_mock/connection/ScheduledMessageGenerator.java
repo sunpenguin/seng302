@@ -1,13 +1,16 @@
 package seng302.team18.test_mock.connection;
 
 /**
- * Abstract base class for messages to be sent on a regular schedule.
+ * Abstract base class to generate messages to be sent on a regular schedule.
  */
 public abstract class ScheduledMessageGenerator extends MessageGenerator {
     private long lastSent;
     private final int frequency;
 
-
+    /**
+     * @param frequency the frequency at which the message is to be sent (Hz)
+     * @param type      the message type
+     */
     ScheduledMessageGenerator(int frequency, int type) {
         super(type);
         this.frequency = frequency;

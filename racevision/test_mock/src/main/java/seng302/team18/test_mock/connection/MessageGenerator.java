@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Created by afj19 on 28/04/17.
+ * An abstract base class for message generators
  */
 public abstract class MessageGenerator {
     private int type;
@@ -14,7 +14,7 @@ public abstract class MessageGenerator {
     }
 
     /**
-     * Gets the message of a ScheduledMessageGenerator with header payload and CRC.
+     * Gets the message of a ScheduledMessageGenerator with header, payload and CRC.
      *
      * @return byte[] of the message
      */
