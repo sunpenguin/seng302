@@ -1,8 +1,4 @@
-import org.junit.Test;
-import seng302.team18.messageparsing.AC35XMLBoatMessage;
-import seng302.team18.messageparsing.AC35XMLBoatParser;
-
-import static org.junit.Assert.assertEquals;
+package seng302.team18.messageparsing;
 
 /**
  * Test the parser for boats.xml.

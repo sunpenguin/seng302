@@ -1,13 +1,14 @@
+package seng302.team18.test_mock.connection;
+
 import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.test_mock.TestMock;
-import seng302.team18.test_mock.connection.RaceMessageGenerator;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by jth102 on 25/04/17.

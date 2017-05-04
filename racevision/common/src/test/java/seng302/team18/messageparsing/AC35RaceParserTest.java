@@ -1,15 +1,4 @@
-import org.junit.Before;
-import org.junit.Test;
-import seng302.team18.messageparsing.AC35XMLRaceMessage;
-import seng302.team18.messageparsing.AC35XMLRaceParser;
-import seng302.team18.model.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
+package seng302.team18.messageparsing;
 
 public class AC35RaceParserTest {
 

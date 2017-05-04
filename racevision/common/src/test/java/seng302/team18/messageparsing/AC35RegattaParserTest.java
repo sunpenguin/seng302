@@ -1,9 +1,4 @@
-import org.junit.Before;
-import org.junit.Test;
-import seng302.team18.messageparsing.AC35XMLRegattaMessage;
-import seng302.team18.messageparsing.AC35XMLRegattaParser;
-
-import static org.junit.Assert.assertEquals;
+package seng302.team18.messageparsing;
 
 /**
  * Created by hqi19 on 20/04/17.
