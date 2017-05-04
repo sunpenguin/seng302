@@ -3,11 +3,9 @@ package seng302.team18.test_mock;
 import seng302.team18.messageparsing.*;
 import seng302.team18.model.*;
 import seng302.team18.test_mock.connection.*;
-
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-
 import static java.lang.Thread.sleep;
 
 

@@ -29,6 +29,9 @@ public class RaceClockInterpreter extends MessageInterpreter {
             AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
             Instant startIn = Instant.ofEpochMilli(statusMessage.getStartTime());
             Instant currentIn = Instant.ofEpochMilli(statusMessage.getCurrentTime());
+            System.out.println(currentIn);
+            System.out.println(startIn);
+            System.out.println(ChronoUnit.SECONDS.between(startIn, currentIn));
             raceClock.setTime(ChronoUnit.SECONDS.between(startIn, currentIn));
         }
     }
