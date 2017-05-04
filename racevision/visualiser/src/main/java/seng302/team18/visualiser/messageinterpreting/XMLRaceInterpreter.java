@@ -33,7 +33,7 @@ public class XMLRaceInterpreter extends MessageInterpreter {
             race.setParticipantIds(raceMessage.getParticipantIDs());
 
             Course course = race.getCourse();
-            //course.setMarkRoundings(raceMessage.getMarkRoundings());
+            course.setMarkRoundings(raceMessage.getMarkRoundings());
             course.setCompoundMarks(raceMessage.getCompoundMarks());
             course.setBoundaries(raceMessage.getBoundaryMarks());
         }

@@ -59,7 +59,7 @@ public class Race {
         int speed = 200;
         for(Boat b: startingList){
             b.setSpeed(speed); //kph
-            speed -= 25;
+            speed -= 15;
         }
     }
 
@@ -202,11 +202,17 @@ public class Race {
      * @param boat
      * @param nextLeg
      */
-    private void setNextLeg(Boat boat, Leg nextLeg) {
-        CompoundMark passedMark = boat.getLeg().getDestination();
-        passedMark.addPassed(boat);
-        boat.setPlace(passedMark.getPassed().indexOf(boat) + 1);
-        boat.setDestination(nextLeg.getDestination().getMidCoordinate());
+
+    public void setNextLeg(Boat boat, Leg nextLeg) {
+//        CompoundMark passedMark = boat.getLeg().getDestination();
+//        passedMark.addPassed(boat);
+//        boat.setPlace(passedMark.getPassed().indexOf(boat) + 1);
+
+        Leg currentLeg = boat.getLeg();
+        currentLeg.addToBoatsCompleted(boat);
+        boat.setPlace(currentLeg.getBoatsCompleted().indexOf(boat) + 1);
+
+        boat.setDestination(nextLeg.getDestination().getMarks().get(0).getCoordinate());
         boat.setLeg(nextLeg);
 
         System.out.println("boat: " + boat.getBoatName() + " passed mark: " + passedMark.getName());

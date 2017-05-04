@@ -1,6 +1,7 @@
 package seng302.team18.visualiser.controller;
 
 import javafx.beans.Observable;
+import javafx.beans.property.IntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -194,6 +195,11 @@ public class MainWindowController {
         raceClock.start();
         raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), interpreter, receiver);
         startWindDirection();
+
+        for (Boat boat : race.getStartingList()) {
+            boat.setPlace(race.getStartingList().size());
+        }
+
         raceLoop.start();
 
         raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
