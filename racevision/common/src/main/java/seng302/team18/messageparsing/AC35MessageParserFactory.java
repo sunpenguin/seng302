@@ -15,6 +15,11 @@ public class AC35MessageParserFactory implements MessageParserFactory {
         return new AC35MessageHeadParser();
     }
 
+    /**
+     * Creates a message parser of a specific type.
+     * @param type An integer value corresponding ot a specific type of message parser.
+     * @return A message parser of a specific type.
+     */
     @Override
     public MessageBodyParser makeBodyParser(int type) {
         AC35MessageType ac35Type = AC35MessageType.from(type);
@@ -26,6 +31,10 @@ public class AC35MessageParserFactory implements MessageParserFactory {
         return new CRCChecker();
     }
 
+    /**
+     * Tells the parser generator which type corresponds to which message parser
+     * @return A message parser corresponding to the given type
+     */
     private Map<AC35MessageType, MessageBodyParser> initialiseMap() {
         Map<AC35MessageType, MessageBodyParser> parserMap = new HashMap<>();
         parserMap.put(AC35MessageType.YACHT_EVENT, new AC35YachtEventParser());

@@ -28,7 +28,12 @@ public class SocketMessageReceiver {
     }
 
 
-
+    /**
+     * Reads the next message from the input stream. If it is of a type which the program can read then a parser and
+     * message are created. Otherwise the message is ignored and null is returned.
+     * @return A message body whose type matches the type required by the stream.
+     * @throws IOException if an error occurs with the input stream.
+     */
     public MessageBody nextMessage() throws IOException {
         MessageHeadParser headParser = parserFactory.makeHeadParser();
         if (inStream.available() <= headParser.headerSize()) {

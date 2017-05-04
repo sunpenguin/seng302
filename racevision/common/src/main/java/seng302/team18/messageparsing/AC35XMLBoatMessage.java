@@ -2,6 +2,7 @@ package seng302.team18.messageparsing;
 
 import seng302.team18.model.Boat;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -10,6 +11,10 @@ import java.util.List;
 public class AC35XMLBoatMessage implements MessageBody {
 
     private List<Boat> boats;
+
+    public AC35XMLBoatMessage(List<Boat> boats) {
+        this.boats = boats;
+    }
 
     @Override
     public int getType() {
@@ -20,7 +25,4 @@ public class AC35XMLBoatMessage implements MessageBody {
         return boats;
     }
 
-    public void setBoats(List<Boat> boats) {
-        this.boats = boats;
-    }
 }

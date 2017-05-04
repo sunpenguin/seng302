@@ -17,11 +17,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
+ * A parser which reads information from an XML stream and creates messages representing information about the race.
+ *
  * Created by dhl25 on 11/04/17.
  */
 public class AC35XMLRaceParser implements MessageBodyParser {
 
 
+    /**
+     * Select the relevant race elements from the input XML and creating a race message object to store this information.
+     * @param stream The input stream (XML).
+     * @return A race message holding the information read from the stream.
+     */
     @Override
     public AC35XMLRaceMessage parse(InputStream stream) {
         final String RACE_ELEMENT = "Race";
@@ -64,7 +71,7 @@ public class AC35XMLRaceParser implements MessageBodyParser {
 
         AC35XMLRaceMessage message = new AC35XMLRaceMessage();
         message.setRaceID(id);
-        message.setRaceStartTime(startTimeString);
+        message.setStartTime(startTimeString);
         message.setBoundaryMarks(boundaries);
         message.setCompoundMarks(new ArrayList<>(compoundMarks.values()));
         message.setParticipantIDs(participantIDs);
@@ -72,6 +79,12 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         return message;
     }
 
+    /**
+     * Converts the byte array an input stream of standard characters to be passed to the other parser so that a race
+     * message can be generated and returned.
+     * @param bytes The input byte stream.
+     * @return A race message holding the information read from the stream.
+     */
     @Override
     public AC35XMLRaceMessage parse(byte[] bytes) {
         InputStream stream = new ByteArrayInputStream(new String(bytes, StandardCharsets.UTF_8).trim().getBytes());
@@ -82,7 +95,11 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         return Integer.parseInt(raceIDNode.getTextContent());
     }
 
-
+    /**
+     * Reads the race time from the data stream.
+     * @param startTimeNode The element from the XML with information about the race time
+     * @return A string representation of the time of the race.
+     */
     private String parseRaceTime(Node startTimeNode) {
         final String START = "Start"; // if program breaks change this to "Time"
         final String TIME = "Time";
@@ -97,6 +114,11 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         return "";
     }
 
+    /**
+     * Reads the participants ID's from the XML.
+     * @param participantsNode The element from the XML with information about the participants.
+     * @return A list of integers (boat IDs)
+     */
     private List<Integer> parseParticipantIDs(Node participantsNode) {
         final String PARTICIPANT_ELEMENT = "Yacht";
             final String PARTICIPANT_ID = "SourceID";
@@ -115,7 +137,11 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         return participantIDs;
     }
 
-
+    /**
+     * Reads the compound marks from the XML.
+     * @param courseNode The element from the XML with information about the marks.
+     * @return A list mapping the integer ID and coordinate of the mark.
+     */
     private Map<Integer, CompoundMark> parseCompoundMarks(Node courseNode) {
         final String COMPOUND_MARK_ELEMENT = "CompoundMark";
             final String COMPOUND_MARK_ID = "CompoundMarkID";
@@ -153,6 +179,12 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         return compoundMarks;
     }
 
+    /**
+     * Reads the mark roundings from the XML.
+     * @param markSequenceNode The element from the XML with information about the mark sequence.
+     * @param compoundMarks A list mapping the integer ID and coordinate of the mark.
+     * @return A list of mark roundings as read bu the parser.
+     */
     private List<MarkRounding> parseMarkRoundings(Node markSequenceNode, Map<Integer, CompoundMark> compoundMarks) {
         final String CORNER = "Corner";
         final String MARK_SEQUENCE_ID = "SeqID";
@@ -176,6 +208,10 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         return markRoundings;
     }
 
+    /**Reads the boundary marks representing the outer edge of the course from the XML.
+     * @param boundariesNode The element from the XML with information about the mark sequence.
+     * @return A list of boundary marks mapping out the outer edge of the course.
+     */
     private List<BoundaryMark> parseBoundaries(Node boundariesNode) {
         final String COURSE_BOUNDARY_ELEMENT = "Limit";
             final String BOUNDARY_SEQUENCE_ID = "SeqID";
@@ -199,6 +235,4 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         }
         return boundaries;
     }
-
-
 }

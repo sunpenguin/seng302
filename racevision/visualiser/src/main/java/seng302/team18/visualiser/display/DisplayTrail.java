@@ -22,7 +22,6 @@ public class DisplayTrail {
     private Double headingVarience;
     private Integer length;
 
-
     public DisplayTrail(String name, Color color, double headingVariance, int length) {
         this.name = name;
         this.headingVarience = headingVariance;
@@ -33,7 +32,12 @@ public class DisplayTrail {
         heading = 1000000000d;
     }
 
-
+    /**
+     * Adds a coordinate to the list of coordinates forming the boat trail.
+     * @param coordinate The coordinate at which the boat was
+     * @param heading the heading of the boat at that point
+     * @param pixelMapper To create an XY coordinate pair
+     */
     public void addPoint(Coordinate coordinate, double heading, PixelMapper pixelMapper) {
         int trailSize = polyline.getPoints().size();
         if (Math.abs(this.heading - heading) < headingVarience && trailSize >= 4) {
@@ -53,6 +57,10 @@ public class DisplayTrail {
         }
     }
 
+    /**
+     * Re-draw the updated boat trail on the map display.
+     * @param pixelMapper To create an XY coordinate pair
+     */
     public void reDraw(PixelMapper pixelMapper) {
         List<Double> updatedTrailPoints = new ArrayList<>();
         for (Coordinate coordinate : coordinates) {

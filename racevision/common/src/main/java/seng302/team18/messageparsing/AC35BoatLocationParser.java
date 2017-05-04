@@ -6,10 +6,10 @@ import seng302.team18.model.Coordinate;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 
 /**
+ * A parser which reads information from a byte stream and creates message objects representing boat location information.
+ *
  * Created by dhl25 on 10/04/17.
  */
 public class AC35BoatLocationParser implements MessageBodyParser {
@@ -23,6 +23,11 @@ public class AC35BoatLocationParser implements MessageBodyParser {
         }
     }
 
+    /**
+     *
+     * @param bytes A list of bytes represent information about the locations of participants in the race.
+     * @return A location message holding location information about boats.
+     */
     @Override
     public MessageBody parse(byte[] bytes) { // more final declarations than actual code LOL
         final double MMPS_TO_KMPH = 36d / 10000d;

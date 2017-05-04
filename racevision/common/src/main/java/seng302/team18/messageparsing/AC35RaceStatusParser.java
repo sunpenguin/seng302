@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.util.*;
 
 /**
+ * A parser which reads information from a byte stream and creates message objects representing race status information.
+ *
  * Created by jds112 on 19/04/17.
  */
 public class AC35RaceStatusParser implements MessageBodyParser {
@@ -21,6 +23,10 @@ public class AC35RaceStatusParser implements MessageBodyParser {
         }
     }
 
+    /**
+     * @param bytes A list of bytes holding information about the race status
+     * @return A message holding information about the race status
+     */
     @Override
     public MessageBody parse(byte[] bytes) { // more final declarations than actual code LOL
         final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;

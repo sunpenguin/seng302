@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * A parser which reads information from a byte stream and creates message objects representing mark rounding information.
+ *
  * Created by dhl25 on 25/04/17.
  */
 public class AC35MarkRoundingParser implements MessageBodyParser {
@@ -20,6 +22,11 @@ public class AC35MarkRoundingParser implements MessageBodyParser {
         }
     }
 
+    /**
+     * Reads a byte array and associates the information read with a mark rounding message,
+     * @param bytes A list of bytes holding information about a mark rounding.
+     * @return A mark rounding message holding holding information about a mark rounding.
+     */
     @Override
     public MessageBody parse(byte[] bytes) {
         final int TIME_INDEX = 1;

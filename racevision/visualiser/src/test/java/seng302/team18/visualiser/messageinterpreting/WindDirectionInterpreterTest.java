@@ -10,67 +10,64 @@ import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by david on 4/29/17.
+ * Created by david on 5/2/17.
  */
-public class RaceTimeInterpreterTest {
+public class WindDirectionInterpreterTest {
 
     private Race race;
-    private MessageInterpreter raceTimeInterpreter;
+    private MessageInterpreter interpreter;
     private Boat boat;
-    private MessageBody message;
+    private double windDirection = 35.4d;
 
     @Before
     public void setUp() {
         boat = new Boat("test", "t", 0);
-        boat.setTimeAtLastMark(3000L);
         List<Boat> boats = new ArrayList<>();
         boats.add(boat);
         race = new Race();
         race.setStartingList(boats);
-        raceTimeInterpreter = new RaceTimeInterpreter(race);
-        message = new AC35RaceStatusMessage(13000, 0, 2000, 0, new HashMap<>());
-        raceTimeInterpreter.interpret(message);
+        interpreter = new WindDirectionInterpreter(race);
+        MessageBody message = new AC35RaceStatusMessage(0, 0, 0, windDirection, new HashMap<>());
+        interpreter.interpret(message);
     }
 
     /**
-     * test to see if ONLY the time values in boat have changed
+     * test to see if nothing in boats have changed
      */
     @Test
     public void boatsTest() {
         Boat expected = new Boat("test", "t", 0);
-        expected.setTimeAtLastMark(3000L);
-        expected.setTimeSinceLastMark(10L);
         Assert.assertEquals(1, race.getStartingList().size());
         Boat actual = race.getStartingList().get(0);
+        Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getTimeAtLastMark(), actual.getTimeAtLastMark());
         Assert.assertEquals(expected.getTimeSinceLastMark(), actual.getTimeSinceLastMark());
-        // everything below should not change at all.
         Assert.assertEquals(expected.getBoatName(), actual.getBoatName());
         Assert.assertEquals(expected.getShortName(), actual.getShortName());
         Assert.assertEquals(expected.getCoordinate(), actual.getCoordinate());
         Assert.assertEquals(expected.getHeading(), actual.getHeading(), 0.1);
-        Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getPlace(), actual.getPlace());
         Assert.assertEquals(expected.getSpeed(), actual.getSpeed(), 0.1);
         Assert.assertEquals(expected.getTimeTilNextMark(), actual.getTimeTilNextMark());
     }
 
     /**
-     * test to see that nothing in course has changed.
+     * test to see that ONLY wind direction has changed.
      */
     @Test
     public void courseTest() {
         Course expected = new Course();
         Course actual = race.getCourse();
-        Assert.assertEquals(expected.getCentralCoordinate(), actual.getCentralCoordinate());
+        Assert.assertEquals(windDirection, actual.getWindDirection(), 0.01);
         Assert.assertEquals(expected.getTimeZone(), actual.getTimeZone());
+        Assert.assertEquals(expected.getCentralCoordinate(), actual.getCentralCoordinate());
         Assert.assertEquals(expected.getBoundaries().size(), actual.getBoundaries().size());
         for (int i = 0; i < expected.getBoundaries().size(); i++) {
             Assert.assertEquals(expected.getBoundaries().get(i), actual.getBoundaries().get(i));
@@ -82,13 +79,15 @@ public class RaceTimeInterpreterTest {
     }
 
     /**
-     * test to see that the time in race has changed
+     * test to see that nothing in race has changed
      */
     @Test
     public void raceTest() {
-        ZonedDateTime expected = ZonedDateTime.ofInstant(Instant.EPOCH, race.getCourse().getTimeZone()).plusSeconds(2);
-        Assert.assertEquals(expected, race.getStartTime());
+        ZonedDateTime expectedTime = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
         Assert.assertEquals(0, race.getId());
         Assert.assertEquals(0, race.getStatus());
+        Assert.assertEquals(expectedTime, race.getCurrentTime());
+        Assert.assertEquals(expectedTime, race.getStartTime());
     }
+
 }

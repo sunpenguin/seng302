@@ -30,9 +30,9 @@ public class EstimatedTimeInterpreterTest {
         race.setParticipantIds(Arrays.asList(420, 100, 69));
         race.setStartingList(startingList);
         Map<Integer, List> boatStatus = new HashMap<>();
-        boatStatus.put(420, new ArrayList(Arrays.asList(2, 2, (long) 0)));
-        boatStatus.put(100, new ArrayList(Arrays.asList(2, 2, (long) 10000000)));
-        boatStatus.put(69, new ArrayList(Arrays.asList(2, 2, (long) -9999998)));
+        boatStatus.put(420, new ArrayList(Arrays.asList(2, 2, 0L)));
+        boatStatus.put(100, new ArrayList(Arrays.asList(2, 2, 10000000L)));
+        boatStatus.put(69, new ArrayList(Arrays.asList(2, 2, -9999998L)));
         message = new AC35RaceStatusMessage(1l, 1, 1l, 1, boatStatus);
         interpreter = new EstimatedTimeInterpreter(race);
     }

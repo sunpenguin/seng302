@@ -2,6 +2,7 @@ package seng302.team18.model;
 
 import seng302.team18.util.GPSCalculations;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,9 @@ public class Race {
         course = new Course();
         finishedList = new ArrayList<>();
         id = 0;
+        status = 0;
+        currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
+        startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
 //        setInitialSpeed();
     }
 
@@ -46,6 +50,7 @@ public class Race {
         finishedList = new ArrayList<>();
         participantIds = startingList.stream().map(Boat::getId).collect(Collectors.toList());
         this.id = raceId;
+        this.status = 0;
         setCourseForBoats();
         setInitialSpeed();
     }

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class AC35XMLRaceMessage implements MessageBody {
 
-    private String raceStartTime;
+    private String startTime;
     private List<Integer> participantIDs;
     private List<CompoundMark> compoundMarks;
     private List<MarkRounding> markRoundings;
@@ -23,12 +23,12 @@ public class AC35XMLRaceMessage implements MessageBody {
         return AC35MessageType.XML_RACE.getCode();
     }
 
-    public String getRaceStartTime() {
-        return raceStartTime;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setRaceStartTime(String raceStartTime) {
-        this.raceStartTime = raceStartTime;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
     public List<Integer> getParticipantIDs() {

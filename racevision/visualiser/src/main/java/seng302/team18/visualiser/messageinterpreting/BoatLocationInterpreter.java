@@ -9,16 +9,28 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by dhl25 on 27/04/17.
+ * The BoatLocationInterpreter that sets the boat speed, heading and coordinate.
+ *
+ * @see MessageInterpreter
  */
 public class BoatLocationInterpreter extends MessageInterpreter {
-
     private Race race;
 
+    /**
+     * Constructor for BoatLocationInterpreter.
+     *
+     * @param race the race to be updated.
+     */
     public BoatLocationInterpreter(Race race) {
         this.race = race;
     }
 
+    /**
+     * Interpret method for BoatLocationInterpreter. Gets the boat speed, heading and coordinate from the message.
+     *
+     * @param message to be interpreted. Of type AC35BoatLocationMessage.
+     * @see AC35BoatLocationMessage
+     */
     @Override
     public void interpret(MessageBody message) {
         if (message instanceof AC35BoatLocationMessage) {
@@ -32,7 +44,6 @@ public class BoatLocationInterpreter extends MessageInterpreter {
                 }
                 if (boat.getId().equals(locationMessage.getSourceId())) {
                     boat.setSpeed(locationMessage.getSpeed());
-//                System.out.println("Boat Heading: " + message.getHeading());
                     boat.setHeading(locationMessage.getHeading());
                     boat.setCoordinate(locationMessage.getCoordinate());
                 }
