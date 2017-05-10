@@ -1,6 +1,8 @@
 package seng302.team18.visualiser.display;
 
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -99,6 +101,14 @@ public class CourseRenderer {
         Rectangle rectangle = marks.get(mark.getId());
         if (rectangle == null) {
             rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
+
+            rectangle.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    System.out.println("CLICKED A MARK!");
+                }
+            });
+
             marks.put(mark.getId(), rectangle);
             group.getChildren().addAll(rectangle);
         }
@@ -133,6 +143,14 @@ public class CourseRenderer {
             Rectangle rectangle = marks.get(mark.getId());
             if (rectangle == null) {
                 rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
+
+                rectangle.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        System.out.println("CLICKED A GATE!");
+                    }
+                });
+
                 marks.put(mark.getId(), rectangle);
                 group.getChildren().addAll(rectangle);
             }
