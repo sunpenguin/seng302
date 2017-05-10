@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
@@ -128,6 +129,11 @@ public class CourseRenderer {
             Mark mark = compoundMark.getMarks().get(i);
             renderMark(mark);
         }
+//
+//        Rectangle r = new Rectangle(MARK_SIZE * 2, MARK_SIZE * 2, Color.BROWN);
+//        r.setX(1000);
+//        r.setY(100);
+//        group.getChildren().addAll(r);
     }
 
 

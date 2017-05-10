@@ -46,6 +46,12 @@ public class PixelMapper {
         gps.findMinMaxPoints(course);
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
+
+
+
+        double zoomPixelWidth = pixelWidth / 2;
+        double zoomPixelHeight = pixelHeight / 2;
+
         XYPair planeCoordinates = calculator.coordinateToPixel(coord);
         double aspectRatio = courseWidth / courseHeight;
 
@@ -58,6 +64,6 @@ public class PixelMapper {
         double widthRatio = (courseWidth - (gps.getMaxX() - planeCoordinates.getX())) / courseWidth;
         double heightRatio = (courseHeight - (gps.getMaxY() - planeCoordinates.getY())) / courseHeight;
 
-        return new XYPair(pixelWidth * widthRatio + padding, (pixelHeight * heightRatio + padding) * -1);
+        return new XYPair(pixelWidth * widthRatio + padding, ((pixelHeight * heightRatio + padding) * -1 + (pixelHeight + (padding * 2))));
     }
 }

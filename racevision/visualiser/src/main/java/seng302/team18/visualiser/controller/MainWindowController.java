@@ -59,6 +59,8 @@ public class MainWindowController {
         boatSpeedImportant = false;
         estimatedTimeImportant = false;
         timeSinceLastMarkImportant = false;
+        group.setManaged(false);
+        group.setLayoutY(0);
     }
 
 
