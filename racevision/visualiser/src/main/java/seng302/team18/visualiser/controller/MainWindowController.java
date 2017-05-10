@@ -1,7 +1,6 @@
 package seng302.team18.visualiser.controller;
 
 import javafx.beans.Observable;
-import javafx.beans.property.IntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -9,17 +8,16 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.util.Callback;
-import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.RaceLoop;
 import seng302.team18.visualiser.display.*;
-
-import java.time.format.DateTimeFormatter;
+import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 
 
 /**
@@ -36,6 +34,8 @@ public class MainWindowController {
     @FXML private TableColumn<Boat, Double> boatSpeedColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
+    @FXML
+    private ImageView imageViewMap;
 
     private Boolean onImportant;
     private Boolean boatNameImportant;
@@ -47,6 +47,7 @@ public class MainWindowController {
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
+    private BackgroundRenderer backgroundRenderer;
     private RaceClock raceClock;
     private WindDirection windDirection;
 
@@ -198,11 +199,15 @@ public class MainWindowController {
      */
     public void setUp(Race race, MessageInterpreter interpreter, SocketMessageReceiver receiver) {
         this.race = race;
+
         raceRenderer = new RaceRenderer(race, group, raceViewPane);
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
+        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), imageViewMap);
+
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
+
         raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), interpreter, receiver);
         startWindDirection();
 

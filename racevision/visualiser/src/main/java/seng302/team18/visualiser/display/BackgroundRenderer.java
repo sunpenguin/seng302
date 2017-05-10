@@ -13,17 +13,16 @@ import java.net.URL;
  * background of the course area.
  */
 public class BackgroundRenderer {
-    private Course course;
-    private ImageView imageView = new ImageView();
+    private final Course course;
+    private final ImageView imageView;
 
     private final String API_KEY = "AIzaSyBRLXKbFcgD00-3nUQoIut-8sALaFq4elg";
     private final String API_URL = "https://maps.googleapis.com/maps/api/staticmap";
 
 
-    public BackgroundRenderer(Group group, Course course) {
+    public BackgroundRenderer(Group group, Course course, ImageView imageView) {
         this.course = course;
-        group.getChildren().add(0, imageView);
-        imageView.toBack();
+        this.imageView = imageView;
 
         renderBackground();
     }
@@ -37,15 +36,12 @@ public class BackgroundRenderer {
         String urlString = getURL();
         try {
             URL url = new URL(urlString);
-
             imageView.setImage(new Image(url.openStream()));
 
         } catch (IOException e) {
             hideMap();
             System.err.println("Failed to download map from " + urlString.substring(0, urlString.length() - API_KEY.length()) + "****");
-            return;
         }
-
     }
 
     /**
