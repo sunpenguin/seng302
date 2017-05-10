@@ -4,22 +4,23 @@ import javafx.application.Platform;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RaceStatus;
-import seng302.team18.model.Race;
 import seng302.team18.visualiser.controller.ControllerManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by dhl25 on 10/05/17.
+ * Class for swapping views based on AC35RaceStatusMessages.
  */
 public class RaceStatusInterpreter extends MessageInterpreter {
 
 
     private ControllerManager controllerManager;
 
+    /**
+     * Constructor for RaceStatusInterpreter.
+     * @param controllerManager used for swapping views
+     */
     public RaceStatusInterpreter(ControllerManager controllerManager) {
         this.controllerManager = controllerManager;
     }

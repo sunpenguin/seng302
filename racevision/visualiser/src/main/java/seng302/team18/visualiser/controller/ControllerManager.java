@@ -38,6 +38,9 @@ public class ControllerManager {
     private MessageInterpreter interpreter;
     private Race race;
 
+    /**
+     * Private enum for keeping track of the current view.
+     */
     private enum ViewType {
         PRE_RACE(1), MAIN(2), NOT_SET(3);
 
@@ -50,8 +53,18 @@ public class ControllerManager {
         public int getCode() {
             return code;
         }
+
+        public boolean differentView(ViewType newView) {
+            return newView.getCode() != this.getCode();
+        }
     }
 
+    /**
+     * Constructor for ControllerManager
+     * @param primaryStage for showing views
+     * @param mainControllerPath path to the MainController.fxml
+     * @param preRacePath path to PreRace.fxml
+     */
     public ControllerManager(Stage primaryStage, String mainControllerPath, String preRacePath) {
         this.mainControllerPath = mainControllerPath;
         this.preRacePath = preRacePath;
@@ -73,6 +86,9 @@ public class ControllerManager {
     }
 
 
+    /**
+     * starts interpreting messages from the socket.
+     */
     private void interpretMessages() {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
@@ -115,17 +131,13 @@ public class ControllerManager {
     }
 
 
-    private boolean differentView(ViewType newView) {
-        return newView.getCode() != currentView.getCode();
-    }
-
 
     /**
      * Sets up the main GUI window, controlled by the main window controller.
      * @throws IOException IO Exception thrown when loading FXML loader
      */
     public void showMainView() throws IOException {
-        if (differentView(ViewType.MAIN)) {
+        if (currentView.differentView(ViewType.MAIN)) {
             currentView = ViewType.MAIN;
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(mainControllerPath));
             Parent root = loader.load(); // throws IOException
@@ -146,7 +158,7 @@ public class ControllerManager {
      * @throws IOException IO Exception thrown when loading FXML loader
      */
     public void showPreRace() throws IOException {
-        if (differentView(ViewType.PRE_RACE)) {
+        if (currentView.differentView(ViewType.PRE_RACE)) {
             currentView = ViewType.PRE_RACE;
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(preRacePath));
             Parent root = loader.load(); // throws IOException
