@@ -4,6 +4,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.AC35RaceStatusMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.model.Race;
@@ -21,7 +24,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * The Main Controller that manages the other controller classes.
+ * The App Controller that manages the other controller classes.
  */
 public class ControllerManager {
     private MainWindowController mainController;

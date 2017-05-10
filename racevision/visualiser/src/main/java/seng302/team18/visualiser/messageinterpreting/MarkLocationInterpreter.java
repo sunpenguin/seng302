@@ -1,7 +1,7 @@
 package seng302.team18.visualiser.messageinterpreting;
 
-import seng302.team18.messageparsing.AC35BoatLocationMessage;
-import seng302.team18.messageparsing.MessageBody;
+import seng302.team18.message.AC35BoatLocationMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.model.Mark;
 import seng302.team18.model.Race;
 

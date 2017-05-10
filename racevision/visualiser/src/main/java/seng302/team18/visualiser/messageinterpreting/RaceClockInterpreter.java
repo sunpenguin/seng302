@@ -1,7 +1,7 @@
 package seng302.team18.visualiser.messageinterpreting;
 
-import seng302.team18.messageparsing.AC35RaceStatusMessage;
-import seng302.team18.messageparsing.MessageBody;
+import seng302.team18.message.AC35RaceStatusMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.visualiser.display.RaceClock;
 
 import java.time.Instant;

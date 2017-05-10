@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import seng302.team18.visualiser.controller.ControllerManager;
 
-public class Main extends Application {
+public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {

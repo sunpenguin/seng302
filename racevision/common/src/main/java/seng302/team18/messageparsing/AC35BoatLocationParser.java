@@ -1,6 +1,8 @@
 package seng302.team18.messageparsing;
 
 import com.google.common.io.ByteStreams;
+import seng302.team18.message.AC35BoatLocationMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.util.ByteCheck;
 import seng302.team18.model.Coordinate;
 

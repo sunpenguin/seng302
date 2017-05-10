@@ -1,4 +1,4 @@
-package seng302.team18.messageparsing;
+package seng302.team18.message;
 
 import java.util.Collections;
 import java.util.HashMap;
