@@ -64,4 +64,15 @@ public class SocketMessageReceiver {
     }
 
 
+
+    public boolean close() {
+        try {
+            socket.close();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+
 }
