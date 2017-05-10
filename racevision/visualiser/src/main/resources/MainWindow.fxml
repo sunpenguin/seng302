@@ -27,6 +27,7 @@
                         <MenuItem fx:id="noneAnnotationLevel" mnemonicParsing="false" onAction="#setNoneAnnotationLevel" text="None" />
                     </items>
                   </Menu>
+                  <MenuItem mnemonicParsing="false" onAction="#toggleFPS" text="Toggle FPS" />
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
@@ -67,14 +68,11 @@
                      </font>
                   </Text>
                   <Text layoutX="455.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
-                  <ToggleButton fx:id="fpsToggler" layoutX="463.0" layoutY="393.0" mnemonicParsing="false" onAction="#toggleFPS" prefHeight="26.0" prefWidth="96.0" text="Toggle FPS" AnchorPane.rightAnchor="31.0" />
                   <Text layoutX="161.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Official Race Clock">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Text>
-                  <Label layoutX="196.0" layoutY="340.0" text="Important Annotation Settings" />
-                  <Separator layoutY="330.0" prefWidth="590.0" />
                </children>
             </AnchorPane>
             <TableView fx:id="tableView" layoutY="430.0" prefHeight="260.0" prefWidth="511.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

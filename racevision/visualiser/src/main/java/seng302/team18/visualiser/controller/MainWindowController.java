@@ -33,7 +33,6 @@ import java.time.format.DateTimeFormatter;
 public class MainWindowController {
     @FXML private Group group;
     @FXML private Label timerLabel;
-    @FXML private ToggleButton fpsToggler;
     @FXML private Label fpsLabel;
     @FXML private TableView tableView;
     @FXML private TableColumn<Boat, Integer> boatPositionColumn;
@@ -42,7 +41,9 @@ public class MainWindowController {
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
 
-    private Boolean onImportant;
+    private boolean fpsToggle;
+    private boolean onImportant;
+
     private Race race;
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
@@ -53,6 +54,7 @@ public class MainWindowController {
 
     @FXML
     public void initialize() {
+        fpsToggle = true;
         Session.getInstance().setBoatNameImportant(true);
         Session.getInstance().setBoatSpeedImportant(false);
         Session.getInstance().setEstimatedTimeImportant(false);
@@ -62,7 +64,8 @@ public class MainWindowController {
 
     @FXML
     public void toggleFPS() {
-        fpsLabel.setVisible(!fpsToggler.isSelected());
+        fpsToggle = !fpsToggle;
+        fpsLabel.setVisible(fpsToggle);
     }
 
 
