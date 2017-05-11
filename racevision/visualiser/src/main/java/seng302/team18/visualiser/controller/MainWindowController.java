@@ -1,16 +1,24 @@
 package seng302.team18.visualiser.controller;
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 import seng302.team18.messageparsing.SocketMessageReceiver;
@@ -49,6 +57,7 @@ public class MainWindowController {
     private CourseRenderer courseRenderer;
     private RaceClock raceClock;
     private WindDirection windDirection;
+    private static RerenderMain rerenderMain;
 
 
     @FXML
@@ -66,6 +75,7 @@ public class MainWindowController {
     @FXML
     private void zoomOutButtonAction() {
         race.getCourse().setViewCenter(null);
+        race.getCourse().setZoomLevel(1);
     }
 
 
@@ -219,20 +229,26 @@ public class MainWindowController {
 
         raceLoop.start();
 
+        rerenderMain = new RerenderMain(courseRenderer, raceRenderer, race);
         raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
-            courseRenderer.renderCourse();
-            raceRenderer.renderBoats();
-            raceRenderer.reDrawTrails(race.getStartingList());
+            rerenderMain.redrawFeatures();
+
         });
         raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
-            courseRenderer.renderCourse();
-            raceRenderer.renderBoats();
-            raceRenderer.reDrawTrails(race.getStartingList());
+            rerenderMain.redrawFeatures();
         });
+
+        race.getCourse().zoomLevelProperty().addListener((observable, oldValue, newValue) -> {
+          rerenderMain.redrawFeatures();
+        });
+
         setUpTable();
+
     }
 
     public RaceClock getRaceClock() {
         return raceClock;
     }
+
+
 }

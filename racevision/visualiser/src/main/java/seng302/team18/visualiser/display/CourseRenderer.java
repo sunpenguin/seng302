@@ -107,8 +107,8 @@ public class CourseRenderer {
             rectangle.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    System.out.println("CLICKED A MARK!");
                     course.setViewCenter(mark.getCoordinate());
+                    course.setZoomLevel(4);
                 }
             });
 
@@ -163,8 +163,7 @@ public class CourseRenderer {
                 rectangle.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-
-                        System.out.println("CLICKED A GATE!");
+                        course.setZoomLevel(4);
                         course.setViewCenter(mark.getCoordinate());
                     }
                 });

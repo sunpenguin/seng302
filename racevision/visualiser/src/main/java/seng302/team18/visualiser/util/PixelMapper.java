@@ -120,7 +120,7 @@ public class PixelMapper {
                                    ((zoomPixelHeight* heightRatio) * -1 + (zoomPixelHeight)) - (pan.getY() * 2));
 
         if (viewCentre != null) {
-            resultZoom.shiftX((zoomPixelWidth / zoom) + padding * 4);
+            resultZoom.shiftX((zoomPixelWidth / zoom) + padding * 6);
             resultZoom.shiftY((zoomPixelHeight / zoom)  + padding * 2);
         }
 

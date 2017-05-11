@@ -1,5 +1,8 @@
 package seng302.team18.model;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +22,7 @@ public class Course {
     private ZoneId timeZone;
     private List<MarkRounding> markRoundings;
     private Coordinate viewCenter;
+    private IntegerProperty zoomLevel;
 
     public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, ZoneId timeZone, List<MarkRounding> markRoundings) {
         this.compoundMarks = new ArrayList<>(marks);
@@ -37,6 +41,7 @@ public class Course {
         timeZone = ZoneId.systemDefault();
         windDirection = 0d;
         centralCoordinate = new Coordinate(0d, 0d);
+        this.zoomLevel = new SimpleIntegerProperty(1);
     }
 
     /**
@@ -141,6 +146,18 @@ public class Course {
 
     public void setViewCenter(Coordinate viewCenter) {
         this.viewCenter = viewCenter;
+    }
+
+    public int getZoomLevel() {
+        return zoomLevel.get();
+    }
+
+    public IntegerProperty zoomLevelProperty() {
+        return zoomLevel;
+    }
+
+    public void setZoomLevel(int zoomLevel) {
+        this.zoomLevel.set(zoomLevel);
     }
 }
 
