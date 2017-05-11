@@ -1,19 +1,32 @@
 package seng302.team18.visualiser.util;
 
 /**
- * Created by sbe67 on 10/05/17.
+ * The session class to hold variables between controller switching.
  */
 public class Session {
-    private static Session instance = new Session();
 
     private Boolean boatNameImportant;
     private Boolean boatSpeedImportant;
     private Boolean estimatedTimeImportant;
     private Boolean timeSinceLastMarkImportant;
 
+    /**
+     * Constructs a single instance of the session.
+     * Static method.
+     */
+    private static Session instance = new Session();
+
+    /**
+     * Private constructor to construct the singleton session class.
+     */
     private Session() {
     }
 
+    /**
+     * Getter to return the current instance of the session class.
+     * Static method.
+     * @return the current instance.
+     */
     public static Session getInstance() {
         return instance;
     }

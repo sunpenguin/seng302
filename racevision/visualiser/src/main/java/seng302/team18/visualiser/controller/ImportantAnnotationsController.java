@@ -1,6 +1,5 @@
 package seng302.team18.visualiser.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -12,7 +11,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by sbe67 on 10/05/17.
+ * The controller class for the pop-up window ImportantAnnotationsPopup.fxml.
+ * Uses the Session class to get data across controllers.
  */
 public class ImportantAnnotationsController implements Initializable {
 
