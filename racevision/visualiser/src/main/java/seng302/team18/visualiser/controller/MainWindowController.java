@@ -60,7 +60,12 @@ public class MainWindowController {
         estimatedTimeImportant = false;
         timeSinceLastMarkImportant = false;
         group.setManaged(false);
-        group.setLayoutY(0);
+    }
+
+
+    @FXML
+    private void zoomOutButtonAction() {
+        race.getCourse().setViewCenter(null);
     }
 
 
