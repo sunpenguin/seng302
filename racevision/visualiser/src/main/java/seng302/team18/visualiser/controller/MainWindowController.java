@@ -29,7 +29,8 @@ import java.util.List;
 
 
 /**
- * Created by dhl25 on 15/03/17.
+ * The controller class for the Main Window.
+ * The main window consists of the right hand pane with various displays and the race on the left.
  */
 public class MainWindowController {
     @FXML private Group group;
@@ -102,6 +103,10 @@ public class MainWindowController {
         raceRenderer.setVisibleAnnotations(AnnotationType.TIME_SINCE_LAST_MARK, Session.getInstance().getTimeSinceLastMarkImportant());
     }
 
+    /**
+     * Brings up a pop-up window, showing all possible annotation options that the user can toggle on and off.
+     * Only shows when the annotation level is on important.
+     */
     @FXML
     public void setImportant(){
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ImportantAnnotationsPopup.fxml"));
@@ -111,7 +116,7 @@ public class MainWindowController {
         } catch (IOException e) {
             return;
         }
-        Stage inputStage = new Stage();;
+        Stage inputStage = new Stage();
         inputStage.setScene(newScene);
         inputStage.showAndWait();
 
