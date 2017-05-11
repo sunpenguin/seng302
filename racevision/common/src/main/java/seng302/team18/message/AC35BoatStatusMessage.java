@@ -43,14 +43,14 @@ public class AC35BoatStatusMessage {
     /**
      * Getter for the boats status.
      *
-     * 0 -> Undefined
-     * 1 -> Prestart
-     * 2 -> Racing
-     * 3 -> Finished
-     * 4 -> DNS (did not start)
-     * 5 -> DNF (did not finish)
-     * 6 -> DSQ (disqualified)
-     * 7 -> OCS (On Course Side – across start line early)
+     * 0 Undefined
+     * 1 Prestart
+     * 2 Racing
+     * 3 Finished
+     * 4 DNS (did not start)
+     * 5 DNF (did not finish)
+     * 6 DSQ (disqualified)
+     * 7 OCS (On Course Side – across start line early)
      *
      * @return int that represents the boats status.
      */

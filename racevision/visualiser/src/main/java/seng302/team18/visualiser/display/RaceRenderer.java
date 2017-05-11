@@ -21,10 +21,7 @@ public class RaceRenderer {
     private Group group;
     private Race race;
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
-//    private Map<String, List<Circle>> trailMap = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
-    private Map<Integer, List<Coordinate>> trailCoordinateMap;
-//    private Map<Circle, Coordinate> circleCoordMap = new HashMap<>();
     private Map<String, Double> headingMap;
     private Pane raceViewPane;
     private final double PADDING = 20.0;
@@ -45,7 +42,6 @@ public class RaceRenderer {
         this.group = group;
         this.raceViewPane = raceViewPane;
         headingMap = new HashMap<>();
-        trailCoordinateMap =  new HashMap<>();
     }
 
 
@@ -68,12 +64,14 @@ public class RaceRenderer {
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
                 XYPair pixels = pixelMapper.convertCoordPixel(boatCoordinates);
-                displayBoat.toFront();
                 displayBoat.moveBoat(pixels);
                 displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
+                for (DisplayBoat dBoat : displayBoats.values()) {
+                    dBoat.toFront();
+                }
             }
         }
     }
