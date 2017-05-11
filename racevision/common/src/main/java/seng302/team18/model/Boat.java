@@ -2,6 +2,7 @@ package seng302.team18.model;
 
 
 import javafx.beans.property.*;
+import javafx.scene.chart.XYChart;
 
 /**
  * A class which represents a boat in the text based Application
@@ -20,6 +21,7 @@ public class Boat {
     private Long timeTilNextMark;
     private Long timeSinceLastMark;
     private Long timeAtLastMark;
+    private XYChart.Series sparklineSeries;
 
     /**
      * A constructor for the Boat class
@@ -36,6 +38,15 @@ public class Boat {
         timeTilNextMark = 0L;
         timeSinceLastMark = 0L;
         timeAtLastMark = 0L;
+        sparklineSeries = new XYChart.Series();
+        sparklineSeries.setName(boatName);
+    }
+
+    public void addSparklineData(){
+        String legNoString = new String(((Integer)leg.getLegNumber()).toString());
+        String placeNoString = new String(((Integer)place.intValue()).toString());
+        sparklineSeries.getData().add(new XYChart.Data(legNoString, placeNoString));
+        //Todo:update chart
     }
 
     /**

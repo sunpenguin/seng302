@@ -9,12 +9,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import jdk.nashorn.internal.codegen.CompilerConstants;
 import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Boat;
@@ -42,6 +45,7 @@ public class MainWindowController {
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
+    @FXML private LineChart<? ,?> sparklinesChart;
 
     private boolean fpsToggle;
     private boolean onImportant;
@@ -61,11 +65,53 @@ public class MainWindowController {
         Session.getInstance().setBoatSpeedImportant(false);
         Session.getInstance().setEstimatedTimeImportant(false);
         Session.getInstance().setTimeSinceLastMarkImportant(false);
-        setUpSparklinesCategory();
     }
 
     private void setUpSparklinesCategory() {
-        yPositionsAxis.setCategories(FXCollections.observableArrayList("6th", "5th", "4th", "3rd", "2nd", "1st"));
+        yPositionsAxis.setCategories(FXCollections.observableArrayList("6", "5", "4", "3", "2", "1"));
+//        XYChart.Series series1 = new XYChart.Series();
+//        XYChart.Series series2 = new XYChart.Series();
+//        XYChart.Series series3 = new XYChart.Series();
+//        XYChart.Series series4 = new XYChart.Series();
+//        XYChart.Series series5 = new XYChart.Series();
+//        XYChart.Series series6 = new XYChart.Series();
+//
+//        series1.getData().add(new XYChart.Data("1", "1"));
+//        series1.getData().add(new XYChart.Data("2", "2"));
+//        series1.getData().add(new XYChart.Data("3", "3"));
+//        series1.getData().add(new XYChart.Data("4", "4"));
+
+//        series2.getData().add(new XYChart.Data("1", "2nd"));
+//        series2.getData().add(new XYChart.Data("2", "1st"));
+//        series2.getData().add(new XYChart.Data("3", "1st"));
+//        series2.getData().add(new XYChart.Data("4", "2nd"));
+//
+//        series3.getData().add(new XYChart.Data("1", "3rd"));
+//        series3.getData().add(new XYChart.Data("2", "3rd"));
+//        series3.getData().add(new XYChart.Data("3", "2nd"));
+//        series3.getData().add(new XYChart.Data("4", "1st"));
+//
+//        series4.getData().add(new XYChart.Data("1", "6th"));
+//        series4.getData().add(new XYChart.Data("2", "5th"));
+//        series4.getData().add(new XYChart.Data("3", "6th"));
+//        series4.getData().add(new XYChart.Data("4", "6th"));
+//
+//        series5.getData().add(new XYChart.Data("1", "5th"));
+//        series5.getData().add(new XYChart.Data("2", "4th"));
+//        series5.getData().add(new XYChart.Data("3", "4th"));
+//        series5.getData().add(new XYChart.Data("4", "5th"));
+//
+//        series6.getData().add(new XYChart.Data("1", "4th"));
+//        series6.getData().add(new XYChart.Data("2", "6th"));
+//        series6.getData().add(new XYChart.Data("3", "5th"));
+//        series6.getData().add(new XYChart.Data("4", "4th"));
+//
+//        sparklinesChart.getData().addAll(series1);
+//        sparklinesChart.getData().addAll(series2);
+//        sparklinesChart.getData().addAll(series3);
+//        sparklinesChart.getData().addAll(series4);
+//        sparklinesChart.getData().addAll(series5);
+//        sparklinesChart.getData().addAll(series6);
     }
 
     @FXML
@@ -197,6 +243,7 @@ public class MainWindowController {
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
+        setUpSparklinesCategory();
         raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), interpreter, receiver);
         startWindDirection();
 

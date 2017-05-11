@@ -212,13 +212,13 @@ public class Race {
         Leg currentLeg = boat.getLeg();
         currentLeg.addToBoatsCompleted(boat);
         boat.setPlace(currentLeg.getBoatsCompleted().indexOf(boat) + 1);
-
         boat.setDestination(nextLeg.getDestination().getMarks().get(0).getCoordinate());
         boat.setLeg(nextLeg);
 
         // TODO when this is enabled it causes the visualiser to freeze, likely due to malformed packets
         markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, boat.getLeg().getDeparture()));
         //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
+        boat.addSparklineData();
     }
 
 
