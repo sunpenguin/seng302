@@ -112,14 +112,6 @@ public class CourseRenderer {
                 }
             });
 
-//            rectangle.setOnZoom(new EventHandler<ZoomEvent>() {
-//                @Override public void handle(ZoomEvent event) {
-//                    rectangle.setScaleX(rectangle.getScaleX() * event.getZoomFactor());
-//                    rectangle.setScaleY(rectangle.getScaleY() * event.getZoomFactor());
-//                    event.consume();
-//                }
-//            });
-
             marks.put(mark.getId(), rectangle);
             group.getChildren().addAll(rectangle);
         }
@@ -139,11 +131,6 @@ public class CourseRenderer {
             Mark mark = compoundMark.getMarks().get(i);
             renderMark(mark);
         }
-//
-//        Rectangle r = new Rectangle(MARK_SIZE * 2, MARK_SIZE * 2, Color.BROWN);
-//        r.setX(1000);
-//        r.setY(100);
-//        group.getChildren().addAll(r);
     }
 
 

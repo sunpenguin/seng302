@@ -17,6 +17,10 @@ public class RerenderMain {
         this.race = race;
     }
 
+    /**
+     * To call when course features need redrawing.
+     * (For example, when zoom in, the course features are required to change)
+     */
     public void redrawFeatures() {
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
