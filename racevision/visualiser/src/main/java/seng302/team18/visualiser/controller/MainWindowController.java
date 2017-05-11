@@ -1,7 +1,6 @@
 package seng302.team18.visualiser.controller;
 
 import javafx.beans.Observable;
-import javafx.beans.property.IntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -9,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
@@ -24,7 +24,8 @@ import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.util.Session;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -40,6 +41,7 @@ public class MainWindowController {
     @FXML private TableColumn<Boat, Double> boatSpeedColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
+    @FXML private CategoryAxis yPositionsAxis;
 
     private boolean fpsToggle;
     private boolean onImportant;
@@ -59,8 +61,12 @@ public class MainWindowController {
         Session.getInstance().setBoatSpeedImportant(false);
         Session.getInstance().setEstimatedTimeImportant(false);
         Session.getInstance().setTimeSinceLastMarkImportant(false);
+        setUpSparklinesCategory();
     }
 
+    private void setUpSparklinesCategory() {
+        yPositionsAxis.setCategories(FXCollections.observableArrayList("6th", "5th", "4th", "3rd", "2nd", "1st"));
+    }
 
     @FXML
     public void toggleFPS() {
