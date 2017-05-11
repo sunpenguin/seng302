@@ -3,6 +3,7 @@ package seng302.team18.visualiser.display;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -107,8 +108,17 @@ public class CourseRenderer {
                 @Override
                 public void handle(MouseEvent event) {
                     System.out.println("CLICKED A MARK!");
+                    course.setViewCenter(mark.getCoordinate());
                 }
             });
+
+//            rectangle.setOnZoom(new EventHandler<ZoomEvent>() {
+//                @Override public void handle(ZoomEvent event) {
+//                    rectangle.setScaleX(rectangle.getScaleX() * event.getZoomFactor());
+//                    rectangle.setScaleY(rectangle.getScaleY() * event.getZoomFactor());
+//                    event.consume();
+//                }
+//            });
 
             marks.put(mark.getId(), rectangle);
             group.getChildren().addAll(rectangle);
@@ -153,7 +163,9 @@ public class CourseRenderer {
                 rectangle.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
+
                         System.out.println("CLICKED A GATE!");
+                        course.setViewCenter(mark.getCoordinate());
                     }
                 });
 

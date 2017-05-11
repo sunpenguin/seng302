@@ -18,6 +18,7 @@ public class Course {
     private Coordinate centralCoordinate;
     private ZoneId timeZone;
     private List<MarkRounding> markRoundings;
+    private Coordinate viewCenter;
 
     public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, ZoneId timeZone, List<MarkRounding> markRoundings) {
         this.compoundMarks = new ArrayList<>(marks);
@@ -132,6 +133,14 @@ public class Course {
              CompoundMark dest = markRoundings.get(i + 1).getCompoundMark();
              legs.add(new Leg(dep, dest, markRoundings.get(i).getSequenceNumber()));
          }
+    }
+
+    public Coordinate getViewCenter() {
+        return viewCenter;
+    }
+
+    public void setViewCenter(Coordinate viewCenter) {
+        this.viewCenter = viewCenter;
     }
 }
 
