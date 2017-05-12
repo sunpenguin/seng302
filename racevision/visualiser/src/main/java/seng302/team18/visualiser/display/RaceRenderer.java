@@ -77,6 +77,9 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Draws all the boats trails.
+     */
     public void drawTrails() {
         PixelMapper pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, PADDING);
         for (int i = 0; i < race.getStartingList().size(); i++) {
@@ -89,12 +92,11 @@ public class RaceRenderer {
     }
 
 
-//    /**
-//     * Drop a circle on the raceView to visualise the boat's route through the race.
-//     * Add the circle to the group and map the circle to it's coordinates.
-//     * @param boat Boat to put circle behind.
-//     * @param pixels point to place the circle at.
-//     */
+    /**
+     * Update a single boats trail.
+     * @param boat the trail belongs to.
+     * @param pixelMapper used to map a coordinate to a point on the screen.
+     */
     private void drawTrail(Boat boat, PixelMapper pixelMapper) {
         final double MAX_HEADING_DIFFERENCE = 0.75d; // smaller => smoother trail, higher => more fps
         DisplayTrail trail = trailMap.get(boat.getShortName());
@@ -110,11 +112,10 @@ public class RaceRenderer {
     }
 
 
-//    /**
-//     * Redraw the the trails behind each boat by looking into the Map of circles and coordinates and
-//     * resetting the points.
-//     * @param boats Collection of displayBoats racing.
-//     */
+    /**
+     * Redraw the the trails behind each boat.
+     * @param boats Collection of displayBoats racing.
+     */
     public void reDrawTrails(Collection<Boat> boats) {
         PixelMapper pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, PADDING);
         for (Boat boat : boats) {
