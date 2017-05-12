@@ -74,8 +74,9 @@ public class MainWindowController {
 
     @FXML
     private void zoomOutButtonAction() {
-        race.getCourse().setViewCenter(null);
-        race.getCourse().setZoomLevel(1);
+        race.getCourse().setViewCenter(race.getCourse().getCentralCoordinate());
+        race.getCourse().setZoomLevel(0);
+        race.getCourse().setZoomId(0);
     }
 
 

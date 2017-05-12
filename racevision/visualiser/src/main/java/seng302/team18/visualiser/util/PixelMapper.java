@@ -93,12 +93,12 @@ public class PixelMapper {
         double zoomPixelHeight = pixelHeight;
         Coordinate viewCentre = course.getViewCenter();
         XYPair pan = new XYPair(0, 0);
-        if (viewCentre != null) {
-            if (true) {
+        if (course.getZoomId() != 0) {
+            if (course.getZoomLevel() != 0) {
                 // 4x zoom
-                zoom = 4;
-                zoomPixelWidth *= 2;
-                zoomPixelHeight *= 2;
+                zoom = course.getZoomLevel();
+                zoomPixelWidth *= (zoom / 2);
+                zoomPixelHeight *= (zoom / 2);
                 pan = convertCoordPixelNoZoom(viewCentre);
             }
         }
@@ -126,7 +126,7 @@ public class PixelMapper {
         XYPair resultZoom = new XYPair((zoomPixelWidth * widthRatio - (pan.getX() * 2)) + centerXDifference,
                                    ((zoomPixelHeight* heightRatio) * -1 + (zoomPixelHeight)) - (pan.getY() * 2) + centerYDifference);
 
-        if (viewCentre != null) {
+        if (course.getZoomId() != 0) {
             resultZoom.shiftX((zoomPixelWidth / zoom));
             resultZoom.shiftY((zoomPixelHeight / zoom));
         }

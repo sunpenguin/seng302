@@ -22,8 +22,8 @@ public class Course {
     private ZoneId timeZone;
     private List<MarkRounding> markRoundings;
     private Coordinate viewCenter;
-    private IntegerProperty zoomLevel;
-    private IntegerProperty zoomId;
+    private IntegerProperty zoomLevel; // the level of zooming a feature when course view center is updated and redraw course features
+    private IntegerProperty zoomId; // used when course view center is updated and redraw course features (value of markId or boatId)
 
     public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, ZoneId timeZone, List<MarkRounding> markRoundings) {
         this.compoundMarks = new ArrayList<>(marks);
@@ -42,8 +42,8 @@ public class Course {
         timeZone = ZoneId.systemDefault();
         windDirection = 0d;
         centralCoordinate = new Coordinate(0d, 0d);
-        this.zoomLevel = new SimpleIntegerProperty(1);
-        this.zoomId = new SimpleIntegerProperty();
+        this.zoomLevel = new SimpleIntegerProperty(0);
+        this.zoomId = new SimpleIntegerProperty(0); // not zoomed on a particular mark or boat
     }
 
     /**
