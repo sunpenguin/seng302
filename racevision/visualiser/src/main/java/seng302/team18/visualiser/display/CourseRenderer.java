@@ -109,6 +109,7 @@ public class CourseRenderer {
                 public void handle(MouseEvent event) {
                     course.setViewCenter(mark.getCoordinate());
                     course.setZoomLevel(4);
+                    course.setZoomId(mark.getId());
                 }
             });
 
@@ -152,6 +153,7 @@ public class CourseRenderer {
                     public void handle(MouseEvent event) {
                         course.setZoomLevel(4);
                         course.setViewCenter(mark.getCoordinate());
+                        course.setZoomId(mark.getId());
                     }
                 });
 

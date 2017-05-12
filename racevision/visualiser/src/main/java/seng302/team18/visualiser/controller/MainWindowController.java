@@ -242,6 +242,10 @@ public class MainWindowController {
           rerenderMain.redrawFeatures();
         });
 
+        race.getCourse().zoomIdProperty().addListener((observable, oldValue, newValue) -> {
+            rerenderMain.redrawFeatures();
+        });
+
         setUpTable();
 
     }

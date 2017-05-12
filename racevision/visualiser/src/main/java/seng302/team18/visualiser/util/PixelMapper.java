@@ -24,11 +24,11 @@ public class PixelMapper {
     public XYPair convertCoordPixelNoZoom(Coordinate coord) {
 
         GPSCalculations calculator = new GPSCalculations(course);
-        double pixelWidth = pane.getWidth() - padding * 2;
-        double pixelHeight = pane.getHeight() - padding * 2;
+        double pixelWidth = pane.getWidth();
+        double pixelHeight = pane.getHeight();
         if (pixelHeight <= 0 || pixelWidth <= 0) {
-            pixelWidth = pane.getPrefWidth() - padding * 2;
-            pixelHeight = pane.getPrefHeight() - padding * 2;
+            pixelWidth = pane.getPrefWidth();
+            pixelHeight = pane.getPrefHeight();
         }
 
         if (pixelHeight > pixelWidth) {
@@ -54,7 +54,7 @@ public class PixelMapper {
         double widthRatio = (courseWidth - (gps.getMaxX() - planeCoordinates.getX())) / courseWidth;
         double heightRatio = (courseHeight - (gps.getMaxY() - planeCoordinates.getY())) / courseHeight;
 
-        XYPair result = new XYPair(pixelWidth * widthRatio + padding, ((pixelHeight * heightRatio + padding) * -1 + (pixelHeight + (padding * 2))));
+        XYPair result = new XYPair(pixelWidth * widthRatio, ((pixelHeight * heightRatio) * -1 + (pixelHeight)));
         return result;
     }
 
@@ -66,11 +66,11 @@ public class PixelMapper {
     public XYPair convertCoordPixel(Coordinate coord) {
 
         GPSCalculations calculator = new GPSCalculations(course);
-        double pixelWidth = pane.getWidth() - padding * 2;
-        double pixelHeight = pane.getHeight() - padding * 2;
+        double pixelWidth = pane.getWidth();
+        double pixelHeight = pane.getHeight();
         if (pixelHeight <= 0 || pixelWidth <= 0) {
-            pixelWidth = pane.getPrefWidth() - padding * 2;
-            pixelHeight = pane.getPrefHeight() - padding * 2;
+            pixelWidth = pane.getPrefWidth();
+            pixelHeight = pane.getPrefHeight();
         }
 
         if (pixelHeight > pixelWidth) {
@@ -84,6 +84,8 @@ public class PixelMapper {
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
 
+        double horizontalSpace = pane.getWidth() - courseWidth;
+        double verticalSpace = pane.getHeight() - courseHeight;
 
         // Zooming
         int zoom = 0;
@@ -113,15 +115,20 @@ public class PixelMapper {
             zoomPixelHeight *= aspectRatio;
         }
 
+//        double centerXDifference = ((1 - aspectRatio) * pixelWidth) / 2;
+        double centerXDifference = 0;
+        double centerYDifference = 0;
+
+
         double widthRatio = (courseWidth - (gps.getMaxX() - planeCoordinates.getX())) / courseWidth;
         double heightRatio = (courseHeight - (gps.getMaxY() - planeCoordinates.getY())) / courseHeight;
 
-        XYPair resultZoom = new XYPair(zoomPixelWidth * widthRatio - (pan.getX() * 2),
-                                   ((zoomPixelHeight* heightRatio) * -1 + (zoomPixelHeight)) - (pan.getY() * 2));
+        XYPair resultZoom = new XYPair((zoomPixelWidth * widthRatio - (pan.getX() * 2)) + centerXDifference,
+                                   ((zoomPixelHeight* heightRatio) * -1 + (zoomPixelHeight)) - (pan.getY() * 2) + centerYDifference);
 
         if (viewCentre != null) {
-            resultZoom.shiftX((zoomPixelWidth / zoom) + padding * 6);
-            resultZoom.shiftY((zoomPixelHeight / zoom)  + padding * 2);
+            resultZoom.shiftX((zoomPixelWidth / zoom));
+            resultZoom.shiftY((zoomPixelHeight / zoom));
         }
 
         return resultZoom;

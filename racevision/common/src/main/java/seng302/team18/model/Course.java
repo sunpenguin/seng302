@@ -23,6 +23,7 @@ public class Course {
     private List<MarkRounding> markRoundings;
     private Coordinate viewCenter;
     private IntegerProperty zoomLevel;
+    private IntegerProperty zoomId;
 
     public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, ZoneId timeZone, List<MarkRounding> markRoundings) {
         this.compoundMarks = new ArrayList<>(marks);
@@ -42,6 +43,7 @@ public class Course {
         windDirection = 0d;
         centralCoordinate = new Coordinate(0d, 0d);
         this.zoomLevel = new SimpleIntegerProperty(1);
+        this.zoomId = new SimpleIntegerProperty();
     }
 
     /**
@@ -158,6 +160,18 @@ public class Course {
 
     public void setZoomLevel(int zoomLevel) {
         this.zoomLevel.set(zoomLevel);
+    }
+
+    public int getZoomId() {
+        return zoomId.get();
+    }
+
+    public IntegerProperty zoomIdProperty() {
+        return zoomId;
+    }
+
+    public void setZoomId(int zoomId) {
+        this.zoomId.set(zoomId);
     }
 }
 
