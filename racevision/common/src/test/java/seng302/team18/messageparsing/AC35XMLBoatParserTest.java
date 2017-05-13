@@ -47,7 +47,7 @@ public class AC35XMLBoatParserTest {
             assertEquals(exp.getCoordinate(), act.getCoordinate());
             assertEquals(exp.getDestination(), act.getDestination());
             assertEquals(exp.getHeading(), act.getHeading(), 0.1);
-            assertEquals(exp.getLeg(), act.getLeg());
+            assertEquals(exp.getBoatLegNumber(), act.getBoatLegNumber());
             assertEquals(exp.getPlace(), act.getPlace());
             assertEquals(exp.getSpeed(), act.getSpeed(), 0.1);
         }

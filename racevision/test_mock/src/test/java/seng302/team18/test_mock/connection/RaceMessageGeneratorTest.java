@@ -97,7 +97,7 @@ public class RaceMessageGeneratorTest {
             for (Boat boat : testRace.getStartingList()) {
                 int expectedBoatID = boat.getId();
                 int expectedBoatStatus = 2;
-                int expectedLegNum = boat.getLeg().getLegNumber();
+                int expectedLegNum = boat.getBoatLegNumber();
                 int expectedPenAwarded = 7;
                 int expectedPenServed = 4;
                 long expectedTimeMark = 11111111111L;

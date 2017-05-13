@@ -90,11 +90,11 @@ public class Race {
         if (course.getLegs().size() > 0) {
             for (Boat boat : startingList) {
                 // Set Leg
-                boat.setLeg(course.getLegs().get(0));
+                boat.setBoatLegNumber(course.getLegs().get(0).getLegNumber());
                 // Set Dest
-                boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
+                boat.setDestination(course.getLegFromLefNumber(boat.getBoatLegNumber()).getDestination().getMidCoordinate());
                 // Set Coordinate
-                Coordinate midPoint = boat.getLeg().getDeparture().getMidCoordinate();
+                Coordinate midPoint = course.getLegFromLefNumber(boat.getBoatLegNumber()).getDeparture().getMidCoordinate();
                 boat.setCoordinate(midPoint);
                 // Set Heading
                 boat.setHeading(boat.getCoordinate().retrieveHeading(boat.getDestination()));
@@ -182,14 +182,14 @@ public class Race {
         // if boat gets within range of its next destination changes its destination and heading
         if ((Math.abs(boat.getDestination().getLongitude() - boat.getCoordinate().getLongitude()) < 0.0001)
                 && (Math.abs(boat.getDestination().getLatitude() - boat.getCoordinate().getLatitude()) < 0.0001)) {
-            Leg nextLeg = course.getNextLeg(boat.getLeg()); // find next leg
+            Leg nextLeg = course.getNextLeg(course.getLegFromLefNumber(boat.getBoatLegNumber())); // find next leg
             // if current leg is the last leg boat is now finished
-            if (nextLeg.equals(boat.getLeg())) {
+            if (nextLeg.equals(course.getLegFromLefNumber(boat.getBoatLegNumber()))) {
                 finishedList.add(boat);
                 boat.setSpeed(0d);
                 return;
             }
-            if (boat.getLeg().getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
+            if (course.getLegFromLefNumber(boat.getBoatLegNumber()).getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
                     !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinate())) { // and it hasn't gone around the gate
                 boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinate()); // move around the gate
             } else { // the destination was a mark or is already gone around gate so move onto the next leg
@@ -209,16 +209,15 @@ public class Race {
      */
 
     public void setNextLeg(Boat boat, Leg nextLeg) {
-        Leg currentLeg = boat.getLeg();
+        Leg currentLeg = course.getLegFromLefNumber(boat.getBoatLegNumber());
         currentLeg.addToBoatsCompleted(boat);
         boat.setPlace(currentLeg.getBoatsCompleted().indexOf(boat) + 1);
         boat.setDestination(nextLeg.getDestination().getMarks().get(0).getCoordinate());
-        boat.setLeg(nextLeg);
+        boat.setBoatLegNumber(nextLeg.getLegNumber());
 
         // TODO when this is enabled it causes the visualiser to freeze, likely due to malformed packets
-        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, boat.getLeg().getDeparture()));
+        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getLegFromLefNumber(boat.getBoatLegNumber()).getDeparture()));
         //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
-        boat.addSparklineData();
     }
 
 

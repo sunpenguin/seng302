@@ -12,7 +12,8 @@ public class Boat {
     private String boatName;
     private String shortName;
     private DoubleProperty speed;
-    private Leg leg;
+    //Set to -1 initially to prevent null pointer problems
+    private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
     private Integer id;
     private double heading;
     private Coordinate coordinate;
@@ -21,7 +22,6 @@ public class Boat {
     private Long timeTilNextMark;
     private Long timeSinceLastMark;
     private Long timeAtLastMark;
-    private XYChart.Series sparklineSeries;
 
     /**
      * A constructor for the Boat class
@@ -38,15 +38,6 @@ public class Boat {
         timeTilNextMark = 0L;
         timeSinceLastMark = 0L;
         timeAtLastMark = 0L;
-        sparklineSeries = new XYChart.Series();
-        sparklineSeries.setName(boatName);
-    }
-
-    public void addSparklineData(){
-        String legNoString = new String(((Integer)leg.getLegNumber()).toString());
-        String placeNoString = new String(((Integer)place.intValue()).toString());
-        sparklineSeries.getData().add(new XYChart.Data(legNoString, placeNoString));
-        //Todo:update chart
     }
 
     /**
@@ -107,15 +98,18 @@ public class Boat {
     }
 
 
-    public Leg getLeg() {
-        return leg;
+    public int getBoatLegNumber() {
+        return boatLegNumber.get();
     }
 
-
-    public void setLeg(Leg leg) {
-        this.leg = leg;
+    public IntegerProperty boatLegNumberProperty() {
+        return boatLegNumber;
     }
 
+    public void setBoatLegNumber(int boatLegNumber) {
+        this.boatLegNumber.set(boatLegNumber);
+        System.out.println(boatLegNumber);
+    }
 
     public Coordinate getCoordinate() {
         return coordinate;
@@ -193,7 +187,7 @@ public class Boat {
                 "boatName=" + boatName +
                 ", shortName='" + shortName + '\'' +
                 ", speed=" + speed +
-                ", leg=" + leg +
+                ", leg=" + boatLegNumber +
                 ", id=" + id +
                 ", heading=" + heading +
                 ", coordinate=" + coordinate +
