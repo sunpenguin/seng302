@@ -90,6 +90,10 @@ public class PixelMapper {
      * Finds the min and max points of a course using boundaries.
      */
     private void findMinMaxPoints() {
+        minX = Double.MAX_VALUE;
+        maxX = -(Double.MAX_VALUE);
+        minY = Double.MAX_VALUE;
+        maxY = -(Double.MAX_VALUE);
         for (BoundaryMark boundary : course.getBoundaries()) {
             XYPair boundaryXYValues = coordinateToPlane(boundary.getCoordinate());
             double xValue = boundaryXYValues.getX();
