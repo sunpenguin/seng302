@@ -31,9 +31,13 @@ public class SparklineDataQueue {
      * @return sparkline data point at the front of the queue
      */
     public SparklineDataPoint dequeue(){
-        SparklineDataPoint data = queue.get(0);
-        queue.remove(0);
-        return data;
+        if(queue.isEmpty()){
+            return null;
+        }else {
+            SparklineDataPoint data = queue.get(0);
+            queue.remove(0);
+            return data;
+        }
     }
 
 }

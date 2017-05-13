@@ -25,6 +25,9 @@ import seng302.team18.model.Race;
 import seng302.team18.visualiser.RaceLoop;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.util.Session;
+import seng302.team18.visualiser.util.SparklineDataQueue;
+import seng302.team18.visualiser.util.SparklineDataGetter;
+import seng302.team18.visualiser.util.SparklineDataQueue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,49 +73,13 @@ public class MainWindowController {
 
     private void setUpSparklinesCategory() {
         yPositionsAxis.setCategories(FXCollections.observableArrayList("6", "5", "4", "3", "2", "1"));
-//        XYChart.Series series1 = new XYChart.Series();
-//        XYChart.Series series2 = new XYChart.Series();
-//        XYChart.Series series3 = new XYChart.Series();
-//        XYChart.Series series4 = new XYChart.Series();
-//        XYChart.Series series5 = new XYChart.Series();
-//        XYChart.Series series6 = new XYChart.Series();
-//
-//        series1.getData().add(new XYChart.Data("1", "1"));
-//        series1.getData().add(new XYChart.Data("2", "2"));
-//        series1.getData().add(new XYChart.Data("3", "3"));
-//        series1.getData().add(new XYChart.Data("4", "4"));
+//        yPositionsAxis.
+        SparklineDataQueue dataQueue = new SparklineDataQueue();
+        SparklineDataGetter dataGetter = new SparklineDataGetter(race.getStartingList(), dataQueue);
+        dataGetter.ListenToBoat();
+        DisplaySparkline displaySparkline = new DisplaySparkline(dataQueue, race.getStartingList(), sparklinesChart);
+        displaySparkline.start();
 
-//        series2.getData().add(new XYChart.Data("1", "2nd"));
-//        series2.getData().add(new XYChart.Data("2", "1st"));
-//        series2.getData().add(new XYChart.Data("3", "1st"));
-//        series2.getData().add(new XYChart.Data("4", "2nd"));
-//
-//        series3.getData().add(new XYChart.Data("1", "3rd"));
-//        series3.getData().add(new XYChart.Data("2", "3rd"));
-//        series3.getData().add(new XYChart.Data("3", "2nd"));
-//        series3.getData().add(new XYChart.Data("4", "1st"));
-//
-//        series4.getData().add(new XYChart.Data("1", "6th"));
-//        series4.getData().add(new XYChart.Data("2", "5th"));
-//        series4.getData().add(new XYChart.Data("3", "6th"));
-//        series4.getData().add(new XYChart.Data("4", "6th"));
-//
-//        series5.getData().add(new XYChart.Data("1", "5th"));
-//        series5.getData().add(new XYChart.Data("2", "4th"));
-//        series5.getData().add(new XYChart.Data("3", "4th"));
-//        series5.getData().add(new XYChart.Data("4", "5th"));
-//
-//        series6.getData().add(new XYChart.Data("1", "4th"));
-//        series6.getData().add(new XYChart.Data("2", "6th"));
-//        series6.getData().add(new XYChart.Data("3", "5th"));
-//        series6.getData().add(new XYChart.Data("4", "4th"));
-//
-//        sparklinesChart.getData().addAll(series1);
-//        sparklinesChart.getData().addAll(series2);
-//        sparklinesChart.getData().addAll(series3);
-//        sparklinesChart.getData().addAll(series4);
-//        sparklinesChart.getData().addAll(series5);
-//        sparklinesChart.getData().addAll(series6);
     }
 
     @FXML

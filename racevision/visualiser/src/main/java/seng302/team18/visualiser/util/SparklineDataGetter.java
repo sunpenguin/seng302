@@ -1,4 +1,4 @@
-package seng302.team18.visualiser.display;
+package seng302.team18.visualiser.util;
 
 import seng302.team18.model.Boat;
 import seng302.team18.visualiser.util.SparklineDataPoint;
