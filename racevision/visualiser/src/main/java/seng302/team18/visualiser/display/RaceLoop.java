@@ -1,4 +1,4 @@
-package seng302.team18.visualiser;
+package seng302.team18.visualiser.display;
 
 import javafx.animation.AnimationTimer;
 import seng302.team18.messageparsing.*;

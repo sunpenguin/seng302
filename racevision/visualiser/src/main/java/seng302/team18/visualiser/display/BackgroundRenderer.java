@@ -3,10 +3,14 @@ package seng302.team18.visualiser.display;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
+import seng302.team18.util.GPSCalculations;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Using the geographic course information, requests a map image from the google map API and renders it in the
@@ -23,8 +27,6 @@ public class BackgroundRenderer {
     public BackgroundRenderer(Group group, Course course, ImageView imageView) {
         this.course = course;
         this.imageView = imageView;
-
-        renderBackground();
     }
 
     /**
@@ -32,16 +34,10 @@ public class BackgroundRenderer {
      * <br />
      * If the map cannot be downloaded, the background image becomes transparent, and a message is written to stderr
      */
-    public void renderBackground() {
+    public void renderBackground() throws IOException {
         String urlString = getURL();
-        try {
-            URL url = new URL(urlString);
-            imageView.setImage(new Image(url.openStream()));
-
-        } catch (IOException e) {
-            hideMap();
-            System.err.println("Failed to download map from " + urlString.substring(0, urlString.length() - API_KEY.length()) + "****");
-        }
+        URL url = new URL(urlString);
+        imageView.setImage(new Image(url.openStream()));
     }
 
     /**
@@ -51,7 +47,18 @@ public class BackgroundRenderer {
      * @return the URL for the API request
      */
     private String getURL() {
-        String string = API_URL + "?center=40.714728,-73.998672&zoom=12&size=400x400&key=" + API_KEY;
+        GPSCalculations gps = new GPSCalculations(course);
+        List<Coordinate> coordinates = course.getBoundaries()
+                .stream()
+                .map(boundaryMark -> boundaryMark.getCoordinate())
+                .collect(Collectors.toList());
+        Coordinate centerCoordinate = gps.getCentralCoordinate(coordinates);
+        System.out.println(centerCoordinate);
+//        gps.get
+//        String string = API_URL + "?center=40.714728,-73.998672&zoom=12&size=400x400&key=" + API_KEY;
+        double centerLat = centerCoordinate.getLatitude();
+        double centerLong = centerCoordinate.getLongitude();
+        String string = API_URL + "?center=" + centerLat + "," + centerLong +"&zoom=15&size=400x400&key=" + API_KEY;
         return string;
     }
 
@@ -59,7 +66,7 @@ public class BackgroundRenderer {
      * Hides the map by setting the image to null.
      * Currently relies on the group providing a suitable default background.
      */
-    private void hideMap() {
+    public void hideMap() {
         imageView.setImage(null);
     }
 }

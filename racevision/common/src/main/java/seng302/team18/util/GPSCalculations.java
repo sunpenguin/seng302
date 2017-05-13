@@ -157,7 +157,7 @@ public class GPSCalculations {
         return 360 - angle;
     }
 
-    public void findMinMaxPoints(Course course) {
+    public void findMinMaxPoints() {
         for (BoundaryMark boundary : course.getBoundaries()) {
             XYPair boundaryXYValues = coordinateToPixel(boundary.getCoordinate());
             double xValue = boundaryXYValues.getX();
@@ -202,8 +202,7 @@ public class GPSCalculations {
         double y = 0;
         double z = 0;
 
-        for (Coordinate geoCoordinate : geoCoordinates)
-        {
+        for (Coordinate geoCoordinate : geoCoordinates) {
             double latitude = geoCoordinate.getLatitude() * Math.PI / 180;
             double longitude = geoCoordinate.getLongitude() * Math.PI / 180;
 

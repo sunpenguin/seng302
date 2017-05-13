@@ -43,7 +43,7 @@ public class PixelMapper {
         }
 
         GPSCalculations gps = new GPSCalculations(course);
-        gps.findMinMaxPoints(course);
+        gps.findMinMaxPoints();
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
         XYPair planeCoordinates = calculator.coordinateToPixel(coord);

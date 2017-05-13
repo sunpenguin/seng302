@@ -25,7 +25,6 @@ public class CourseRenderer {
     private Polyline border = new Polyline();
     private Map<Integer, Rectangle> marks = new HashMap<>();
     private Map<String, Line> gates = new HashMap<>();
-    private Map<String, CompoundMark> compoundMarkMap = new HashMap<>();
     private Course course;
     private Group group;
     private Pane pane;
@@ -48,8 +47,8 @@ public class CourseRenderer {
         // Renders CompoundMarks
         for (int i = 0 ; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
-            if ((course.getMarkRoundings().get(0).getCompoundMark().getId() == compoundMark.getId()
-                    || course.getMarkRoundings().get(course.getMarkRoundings().size() - 1).getCompoundMark().getId() == compoundMark.getId())
+            if ((course.getMarkRoundings().get(0).getCompoundMark().getId().equals(compoundMark.getId())
+                    || course.getMarkRoundings().get(course.getMarkRoundings().size() - 1).getCompoundMark().getId().equals(compoundMark.getId()))
                     && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) { // draw a line between the gate if its a start or finish
                 renderGate(compoundMark);
             } else {

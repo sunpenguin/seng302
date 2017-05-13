@@ -15,9 +15,11 @@ import javafx.util.Callback;
 import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.visualiser.RaceLoop;
+import seng302.team18.visualiser.display.RaceLoop;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
+
+import java.io.IOException;
 
 
 /**
@@ -204,6 +206,13 @@ public class MainWindowController {
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
         backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), imageViewMap);
+        try {
+            backgroundRenderer.renderBackground();
+        } catch (IOException e) {
+            // TODO make pop up maybe or just handle it
+            backgroundRenderer.hideMap();
+            e.printStackTrace();
+        }
 
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
