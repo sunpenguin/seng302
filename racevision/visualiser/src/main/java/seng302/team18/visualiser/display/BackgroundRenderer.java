@@ -3,6 +3,7 @@ package seng302.team18.visualiser.display;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import seng302.team18.model.BoundaryMark;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 import seng302.team18.util.GPSCalculations;
@@ -48,17 +49,19 @@ public class BackgroundRenderer {
      */
     private String getURL() {
         GPSCalculations gps = new GPSCalculations(course);
-        List<Coordinate> coordinates = course.getBoundaries()
+        String coordinates = course.getBoundaries()
                 .stream()
-                .map(boundaryMark -> boundaryMark.getCoordinate())
-                .collect(Collectors.toList());
-        Coordinate centerCoordinate = gps.getCentralCoordinate(coordinates);
-        System.out.println(centerCoordinate);
+                .map(BoundaryMark::getCoordinate)
+                .map(coordinate -> "" + coordinate.getLatitude() + "," + coordinate.getLongitude())
+                .collect(Collectors.joining("|"));
+//        Coordinate centerCoordinate = gps.getCentralCoordinate(coordinates);
+//        System.out.println(centerCoordinate);
 //        gps.get
 //        String string = API_URL + "?center=40.714728,-73.998672&zoom=12&size=400x400&key=" + API_KEY;
-        double centerLat = centerCoordinate.getLatitude();
-        double centerLong = centerCoordinate.getLongitude();
-        String string = API_URL + "?center=" + centerLat + "," + centerLong +"&zoom=15&size=400x400&key=" + API_KEY;
+//        double centerLat = centerCoordinate.getLatitude();
+//        double centerLong = centerCoordinate.getLongitude();
+        String string = API_URL + "?markers=" + coordinates +"&size=600x600&scale=10&key=" + API_KEY;
+//        String string = API_URL + "?visible=" + coordinates +"&size=600x600&scale=10&key=" + API_KEY; // uncomment to make markers invisible
         return string;
     }
 

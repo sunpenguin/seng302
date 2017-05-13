@@ -27,6 +27,7 @@ public class GPSCalculations {
      */
     public GPSCalculations(Course course) {
         this.course = course;
+        findMinMaxPoints();
     }
 
 //    /**
@@ -128,6 +129,7 @@ public class GPSCalculations {
      * Source: http://stackoverflow.com/questions/16266809/convert-from-latitude-longitude-to-x-y
      *
      * @param point The coordinates to convert
+     * @return
      */
     public XYPair coordinateToPixel(Coordinate point) {
         double earthRadius = 6371e3; // meters
@@ -157,7 +159,7 @@ public class GPSCalculations {
         return 360 - angle;
     }
 
-    public void findMinMaxPoints() {
+    private void findMinMaxPoints() {
         for (BoundaryMark boundary : course.getBoundaries()) {
             XYPair boundaryXYValues = coordinateToPixel(boundary.getCoordinate());
             double xValue = boundaryXYValues.getX();
