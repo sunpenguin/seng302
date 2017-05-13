@@ -108,7 +108,6 @@ public class Boat {
 
     public void setBoatLegNumber(int boatLegNumber) {
         this.boatLegNumber.set(boatLegNumber);
-        System.out.println(boatLegNumber);
     }
 
     public Coordinate getCoordinate() {

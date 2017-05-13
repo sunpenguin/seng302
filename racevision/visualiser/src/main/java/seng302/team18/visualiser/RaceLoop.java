@@ -57,6 +57,7 @@ public class RaceLoop extends AnimationTimer {
         renderer.renderBoats();
         courseRenderer.renderCourse();
         renderer.drawTrails();
+//        updateSparklines();
     }
 
     /**
