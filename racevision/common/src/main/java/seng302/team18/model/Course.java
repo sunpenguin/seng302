@@ -140,7 +140,6 @@ public class Course {
      * @param legNumber integer, the leg number of the leg to be found.
      * @return Leg with the same leg number as the integer given.
      */
-    //TODO:test
     public Leg getLegFromLefNumber(int legNumber){
         Leg foundLeg = legs.get(0);
         for(Leg leg : legs){
