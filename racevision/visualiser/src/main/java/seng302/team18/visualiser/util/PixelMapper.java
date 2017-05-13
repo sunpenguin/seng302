@@ -73,6 +73,9 @@ public class PixelMapper {
             pixelHeight = pane.getPrefHeight();
         }
 
+        /*
+            so we map only to values in a square region
+         */
         if (pixelHeight > pixelWidth) {
             pixelHeight = pixelWidth;
         } else if (pixelWidth > pixelHeight) {
@@ -84,23 +87,30 @@ public class PixelMapper {
         double courseWidth = gps.getMaxX() - gps.getMinX();
         double courseHeight = gps.getMaxY() - gps.getMinY();
 
-        double horizontalSpace = pane.getWidth() - courseWidth;
-        double verticalSpace = pane.getHeight() - courseHeight;
-
         // Zooming
         int zoom = 0;
         double zoomPixelWidth = pixelWidth;
         double zoomPixelHeight = pixelHeight;
         Coordinate viewCentre = course.getViewCenter();
         XYPair pan = new XYPair(0, 0);
-        if (course.getZoomId() != 0) {
-            if (course.getZoomLevel() != 0) {
-                // 4x zoom
-                zoom = course.getZoomLevel();
-                zoomPixelWidth *= (zoom / 2);
-                zoomPixelHeight *= (zoom / 2);
-                pan = convertCoordPixelNoZoom(viewCentre);
-            }
+        if (course.getZoomId() != 0) { /* If zoomId is 0, then no zoom should be applied */
+            zoom = course.getZoomLevel();
+
+            /*   Example: zoom = 8. Now effective pixel width and height are 4x as large.
+                         Features will only be seen if the pixel value they receive falls
+                         within the resolution of the race-view section of the window.
+                         With the larger pixel height and width we will only see 1/8th of
+                         the original view, and will give the effect of zooming.
+            */
+            zoomPixelWidth *= (zoom / 2);
+            zoomPixelHeight *= (zoom / 2);
+
+            /*
+                We need to pan the viewable area of the scene to where feature the user
+                chose is. This however will cause the feature they chose to be at the top
+                left of the screen. It still has to be centered.
+             */
+            pan = convertCoordPixelNoZoom(viewCentre);
         }
 
 
@@ -116,16 +126,20 @@ public class PixelMapper {
         }
 
 //        double centerXDifference = ((1 - aspectRatio) * pixelWidth) / 2;
-        double centerXDifference = 0;
-        double centerYDifference = 0;
 
 
         double widthRatio = (courseWidth - (gps.getMaxX() - planeCoordinates.getX())) / courseWidth;
         double heightRatio = (courseHeight - (gps.getMaxY() - planeCoordinates.getY())) / courseHeight;
 
-        XYPair resultZoom = new XYPair((zoomPixelWidth * widthRatio - (pan.getX() * 2)) + centerXDifference,
-                                   ((zoomPixelHeight* heightRatio) * -1 + (zoomPixelHeight)) - (pan.getY() * 2) + centerYDifference);
+        XYPair resultZoom = new XYPair((zoomPixelWidth * widthRatio - (pan.getX() * (zoom / 2))),
+                                   ((zoomPixelHeight * heightRatio) * -1 + (zoomPixelHeight)) - (pan.getY() * (zoom / 2)));
 
+        /*
+            Now we center the zoomed view by shifting it by the necessary amount so that
+            what was the top left corner is now the center of the zoomed view.
+            Example: zoomPixelWidth = 2000, zoom = 8. Then to center the view we have to shift by
+                     2000 / 8 pixels to the left and up.
+         */
         if (course.getZoomId() != 0) {
             resultZoom.shiftX((zoomPixelWidth / zoom));
             resultZoom.shiftY((zoomPixelHeight / zoom));
