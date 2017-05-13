@@ -2,6 +2,7 @@ package seng302.team18.visualiser;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import seng302.team18.model.Coordinate;
 import seng302.team18.visualiser.controller.ControllerManager;
 
 public class Main extends Application {

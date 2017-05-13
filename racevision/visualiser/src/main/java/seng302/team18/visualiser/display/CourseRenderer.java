@@ -84,7 +84,7 @@ public class CourseRenderer {
      */
     private void renderBoundary(Polyline border, Coordinate boundary) {
         PixelMapper pixelMapper = new PixelMapper(course, pane, PADDING);
-        XYPair boundaryPixels = pixelMapper.convertCoordPixel(boundary);
+        XYPair boundaryPixels = pixelMapper.coordToPixel(boundary);
         border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
     }
 
@@ -102,7 +102,7 @@ public class CourseRenderer {
             group.getChildren().addAll(rectangle);
         }
         Coordinate coordinate = mark.getCoordinate();
-        XYPair pixelCoordinates = pixelMapper.convertCoordPixel(coordinate);
+        XYPair pixelCoordinates = pixelMapper.coordToPixel(coordinate);
         rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
         rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
     }
@@ -137,7 +137,7 @@ public class CourseRenderer {
             }
 
             Coordinate coordinate = mark.getCoordinate();
-            XYPair pixelCoordinates = pixelMapper.convertCoordPixel(coordinate);
+            XYPair pixelCoordinates = pixelMapper.coordToPixel(coordinate);
             rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
             rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
             endPoints.add(pixelCoordinates);

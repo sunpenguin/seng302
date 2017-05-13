@@ -48,7 +48,6 @@ public class BackgroundRenderer {
      * @return the URL for the API request
      */
     private String getURL() {
-        GPSCalculations gps = new GPSCalculations(course);
         String coordinates = course.getBoundaries()
                 .stream()
                 .map(BoundaryMark::getCoordinate)
@@ -60,7 +59,7 @@ public class BackgroundRenderer {
 //        String string = API_URL + "?center=40.714728,-73.998672&zoom=12&size=400x400&key=" + API_KEY;
 //        double centerLat = centerCoordinate.getLatitude();
 //        double centerLong = centerCoordinate.getLongitude();
-        String string = API_URL + "?markers=" + coordinates +"&size=600x600&scale=10&key=" + API_KEY;
+        String string = API_URL + "?markers=" + coordinates +"&size=400x400&key=" + API_KEY;
 //        String string = API_URL + "?visible=" + coordinates +"&size=600x600&scale=10&key=" + API_KEY; // uncomment to make markers invisible
         return string;
     }

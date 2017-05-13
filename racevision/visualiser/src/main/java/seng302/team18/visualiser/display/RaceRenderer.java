@@ -3,8 +3,6 @@ package seng302.team18.visualiser.display;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polyline;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
@@ -67,7 +65,7 @@ public class RaceRenderer {
 
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
-                XYPair pixels = pixelMapper.convertCoordPixel(boatCoordinates);
+                XYPair pixels = pixelMapper.coordToPixel(boatCoordinates);
                 displayBoat.toFront();
                 displayBoat.moveBoat(pixels);
                 displayBoat.setSpeed(boat.getSpeed());

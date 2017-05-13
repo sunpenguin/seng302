@@ -1,19 +1,21 @@
 package seng302.team18.visualiser.util;
 
 import javafx.scene.layout.Pane;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.model.*;
 import seng302.team18.util.XYPair;
 
 /**
- * Created by dhl25 on 30/03/17.
+ * Class for mapping coordinates on to a pane.
  */
 public class PixelMapper {
 
     private Course course;
     private Pane pane;
     private Double padding;
+    private double minX = Double.MAX_VALUE;
+    private double maxX = -(Double.MAX_VALUE);
+    private double minY = Double.MAX_VALUE;
+    private double maxY = -(Double.MAX_VALUE);
 
     public PixelMapper(Course course, Pane pane, Double padding) {
         this.course = course;
@@ -26,9 +28,9 @@ public class PixelMapper {
      * @param coord Coordinates to be converted
      * @return x and y pixel coordinates of the given coordinates
      */
-    public XYPair convertCoordPixel(Coordinate coord) {
+    public XYPair coordToPixel(Coordinate coord) {
 
-        GPSCalculations calculator = new GPSCalculations(course);
+        findMinMaxPoints();
         double pixelWidth = pane.getWidth() - padding * 2;
         double pixelHeight = pane.getHeight() - padding * 2;
         if (pixelHeight <= 0 || pixelWidth <= 0) {
@@ -42,10 +44,9 @@ public class PixelMapper {
             pixelWidth = pixelHeight;
         }
 
-        GPSCalculations gps = new GPSCalculations(course);
-        double courseWidth = gps.getMaxX() - gps.getMinX();
-        double courseHeight = gps.getMaxY() - gps.getMinY();
-        XYPair planeCoordinates = calculator.coordinateToPixel(coord);
+        double courseWidth = maxX - minX;
+        double courseHeight = maxY - minY;
+        XYPair planeCoordinates = coordinateToPlane(coord);
         double aspectRatio = courseWidth / courseHeight;
 
         if (courseHeight > courseWidth) {
@@ -54,9 +55,77 @@ public class PixelMapper {
             pixelHeight *= aspectRatio;
         }
 
-        double widthRatio = (courseWidth - (gps.getMaxX() - planeCoordinates.getX())) / courseWidth;
-        double heightRatio = (courseHeight - (gps.getMaxY() - planeCoordinates.getY())) / courseHeight;
+        double widthRatio = (courseWidth - (maxX - planeCoordinates.getX())) / courseWidth;
+        double heightRatio = (courseHeight - (maxY - planeCoordinates.getY())) / courseHeight;
 
-        return new XYPair(pixelWidth * widthRatio + padding, (pixelHeight * heightRatio + padding) * -1);
+        return new XYPair(pixelWidth * widthRatio + padding, (pixelHeight * heightRatio + padding) * - 1);
+    }
+
+
+    /**
+     * Method to convert a given Coordinate from longitude and latitude to x, y values.
+     * Source: http://stackoverflow.com/questions/16266809/convert-from-latitude-longitude-to-x-y
+     *
+     * @param point The coordinates to convert.
+     * @return the coordinate mapped to a plane.
+     */
+    private XYPair coordinateToPlane(Coordinate point) {
+        double earthRadius = 6371e3; // meters
+        double aspectLat = Math.cos(course.getCentralCoordinate().getLatitude());
+        double x = earthRadius * Math.toRadians(point.getLongitude()) * aspectLat;
+        double y = earthRadius * Math.toRadians(point.getLatitude());
+        return new XYPair(x, y);
+    }
+
+//    public Coordinate pixelToCoordinate(XYPair point) {
+//        double earthRadius = 6371e3; // meters
+//        double aspectLat = Math.cos(course.getCentralCoordinate().getLatitude());
+//        double latitude = Math.toDegrees(point.getY() / earthRadius);
+//        double longitude = Math.toDegrees((point.getX() / earthRadius) / aspectLat);
+//        return new Coordinate(latitude, longitude);
+//    }
+
+
+    /**
+     * Finds the min and max points of a course using boundaries.
+     */
+    private void findMinMaxPoints() {
+        for (BoundaryMark boundary : course.getBoundaries()) {
+            XYPair boundaryXYValues = coordinateToPlane(boundary.getCoordinate());
+            double xValue = boundaryXYValues.getX();
+            double yValue = boundaryXYValues.getY();
+            if (xValue < minX) {
+                minX = xValue;
+            }
+            if (xValue > maxX) {
+                maxX = xValue;
+            }
+            if (yValue < minY) {
+                minY = yValue;
+            }
+            if (yValue > maxY) {
+                maxY = yValue;
+            }
+        }
+//        for (CompoundMark compoundMark : course.getCompoundMarks()) {
+//            for (Mark mark : compoundMark.getMarks()) {
+//                XYPair markXYValues = coordinateToPlane(mark.getCoordinate());
+//                double xValue = markXYValues.getX();
+//                double yValue = markXYValues.getY();
+//                if (xValue < minX) {
+//                    minX = xValue;
+//                }
+//                if (xValue > maxX) {
+//                    maxX = xValue;
+//                }
+//                if (yValue < minY) {
+//                    minY = yValue;
+//                }
+//                if (yValue > maxY) {
+//                    maxY = yValue;
+//                }
+//            }
     }
 }
+
+

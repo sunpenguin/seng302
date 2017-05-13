@@ -50,7 +50,8 @@ public class CompoundMark {
 
         if (marks.size() == GATE_SIZE) {
 //            return marks.get(0).getCoordinate().distance(marks.get(1).getCoordinate());
-            return GPSCalculations.gpsMidpoint(marks.get(0).getCoordinate(), marks.get(1).getCoordinate());
+            GPSCalculations gps = new GPSCalculations();
+            return gps.midPoint(marks.get(0).getCoordinate(), marks.get(1).getCoordinate());
         } else if (marks.size() == MARK_SIZE) {
             return marks.get(0).getCoordinate();
         } else {
