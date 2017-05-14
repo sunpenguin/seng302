@@ -1,34 +1,22 @@
 package seng302.team18.visualiser.controller;
 
-import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.visualiser.display.RaceLoop;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
-
-import java.io.IOException;
 
 
 /**
@@ -224,14 +212,14 @@ public class MainWindowController {
         raceRenderer = new RaceRenderer(race, group, raceViewPane);
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
-        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), imageViewMap);
-        try {
-            backgroundRenderer.renderBackground();
-        } catch (IOException e) {
-            // TODO make pop up maybe or just handle it
-            backgroundRenderer.hideMap();
-            e.printStackTrace();
-        }
+//        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), imageViewMap);
+//        try {
+//            backgroundRenderer.renderBackground();
+//        } catch (IOException e) {
+//            // TODO make pop up maybe or just handle it
+//            backgroundRenderer.hideMap();
+//            e.printStackTrace();
+//        }
 
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
