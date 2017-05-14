@@ -11,6 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
+import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Boat;
@@ -36,8 +37,7 @@ public class MainWindowController {
     @FXML private TableColumn<Boat, Double> boatSpeedColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
-    @FXML
-    private ImageView imageViewMap;
+    @FXML private WebView map;
 
     private Boolean onImportant;
     private Boolean boatNameImportant;
@@ -205,12 +205,12 @@ public class MainWindowController {
         raceRenderer = new RaceRenderer(race, group, raceViewPane);
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
-        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), imageViewMap);
+        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), map);
         try {
             backgroundRenderer.renderBackground();
         } catch (IOException e) {
             // TODO make pop up maybe or just handle it
-            backgroundRenderer.hideMap();
+//            backgroundRenderer.hideMap();
             e.printStackTrace();
         }
 

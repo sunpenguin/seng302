@@ -172,7 +172,8 @@ public class ControllerManager {
             }
         } else if (decision.equals("3")) {
             try {
-                return new SocketMessageReceiver("livedata.americascup.com", 4940, new AC35MessageParserFactory());
+//                return new SocketMessageReceiver("livedata.americascup.com", 4940, new AC35MessageParserFactory());
+                return new SocketMessageReceiver("csse-s302staff.canterbury.ac.nz", 4941, new AC35MessageParserFactory());
             } catch (IOException e) {
                 System.out.println("Could not establish connection to stream Host/Port");
             }

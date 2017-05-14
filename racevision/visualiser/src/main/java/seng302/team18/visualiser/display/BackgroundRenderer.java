@@ -1,16 +1,13 @@
 package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import seng302.team18.model.BoundaryMark;
-import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
-import seng302.team18.util.GPSCalculations;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -19,15 +16,18 @@ import java.util.stream.Collectors;
  */
 public class BackgroundRenderer {
     private final Course course;
-    private final ImageView imageView;
+    private final WebView map;
+    private final WebEngine webEngine;
 
     private final String API_KEY = "AIzaSyBRLXKbFcgD00-3nUQoIut-8sALaFq4elg";
     private final String API_URL = "https://maps.googleapis.com/maps/api/staticmap";
+    private final String mapURL = getClass().getResource("/googlemaps.html").toExternalForm();
 
 
-    public BackgroundRenderer(Group group, Course course, ImageView imageView) {
+    public BackgroundRenderer(Group group, Course course, WebView map) {
         this.course = course;
-        this.imageView = imageView;
+        this.map = map;
+        webEngine = map.getEngine();
     }
 
     /**
@@ -36,9 +36,10 @@ public class BackgroundRenderer {
      * If the map cannot be downloaded, the background image becomes transparent, and a message is written to stderr
      */
     public void renderBackground() throws IOException {
-        String urlString = getURL();
-        URL url = new URL(urlString);
-        imageView.setImage(new Image(url.openStream()));
+//        String urlString = getURL();
+//        URL url = new URL(urlString);
+        webEngine.load(mapURL);
+//        imageView.setImage(new Image(url.openStream()));
     }
 
     /**
@@ -64,11 +65,11 @@ public class BackgroundRenderer {
         return string;
     }
 
-    /**
-     * Hides the map by setting the image to null.
-     * Currently relies on the group providing a suitable default background.
-     */
-    public void hideMap() {
-        imageView.setImage(null);
-    }
+//    /**
+//     * Hides the map by setting the image to null.
+//     * Currently relies on the group providing a suitable default background.
+//     */
+//    public void hideMap() {
+//        imageView.setImage(null);
+//    }
 }
