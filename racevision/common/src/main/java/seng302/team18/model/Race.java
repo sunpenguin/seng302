@@ -88,6 +88,7 @@ public class Race {
      */
     private void setCourseForBoats() {
         if (course.getLegs().size() > 0) {
+            GPSCalculations gps = new GPSCalculations();
             for (Boat boat : startingList) {
                 // Set Leg
                 boat.setLeg(course.getLegs().get(0));
@@ -97,7 +98,7 @@ public class Race {
                 Coordinate midPoint = boat.getLeg().getDeparture().getMidCoordinate();
                 boat.setCoordinate(midPoint);
                 // Set Heading
-                boat.setHeading(boat.getCoordinate().retrieveHeading(boat.getDestination()));
+                boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
             }
         }
     }
@@ -196,8 +197,8 @@ public class Race {
                 setNextLeg(boat, nextLeg);
             }
         }
-        GPSCalculations gps = new GPSCalculations(course);
-        boat.setHeading(gps.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+        GPSCalculations gps = new GPSCalculations();
+        boat.setHeading(gps.getBearing(boat.getCoordinate(), boat.getDestination()));
     }
 
 
@@ -233,9 +234,9 @@ public class Race {
         double mpsSpeed = speed * 0.27778;//convert to metres/second
         double secondsTime = time / 1000;
         double distanceTravelled = mpsSpeed * secondsTime;
-        GPSCalculations gps = new GPSCalculations(course);
+        GPSCalculations gps = new GPSCalculations();
         // set next position based on current coordinate, distance travelled, and heading.
-        boat.setCoordinate(gps.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+        boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
 
 

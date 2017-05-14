@@ -4,7 +4,6 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -46,7 +45,7 @@ public class DisplayTrail {
             coordinates.remove(coordinates.size() - 1);
         }
         this.heading = heading;
-        XYPair pixel = pixelMapper.convertCoordPixel(coordinate);
+        XYPair pixel = pixelMapper.coordToPixel(coordinate);
         polyline.getPoints().addAll(pixel.getX(), pixel.getY());
         coordinates.add(coordinate);
         if (coordinates.size() > length) {
@@ -64,7 +63,7 @@ public class DisplayTrail {
     public void reDraw(PixelMapper pixelMapper) {
         List<Double> updatedTrailPoints = new ArrayList<>();
         for (Coordinate coordinate : coordinates) {
-            XYPair newPixels = pixelMapper.convertCoordPixel(coordinate);
+            XYPair newPixels = pixelMapper.coordToPixel(coordinate);
             updatedTrailPoints.add(newPixels.getX());
             updatedTrailPoints.add(newPixels.getY());
         }

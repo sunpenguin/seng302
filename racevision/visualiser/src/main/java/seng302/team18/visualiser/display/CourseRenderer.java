@@ -29,7 +29,6 @@ public class CourseRenderer {
     private Polyline border = new Polyline();
     private Map<Integer, Rectangle> marks = new HashMap<>();
     private Map<String, Line> gates = new HashMap<>();
-    private Map<String, CompoundMark> compoundMarkMap = new HashMap<>();
     private Course course;
     private Group group;
     private Pane pane;
@@ -52,8 +51,8 @@ public class CourseRenderer {
         // Renders CompoundMarks
         for (int i = 0 ; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
-            if ((course.getMarkRoundings().get(0).getCompoundMark().getId() == compoundMark.getId()
-                    || course.getMarkRoundings().get(course.getMarkRoundings().size() - 1).getCompoundMark().getId() == compoundMark.getId())
+            if ((course.getMarkRoundings().get(0).getCompoundMark().getId().equals(compoundMark.getId())
+                    || course.getMarkRoundings().get(course.getMarkRoundings().size() - 1).getCompoundMark().getId().equals(compoundMark.getId()))
                     && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) { // draw a line between the gate if its a start or finish
                 renderGate(compoundMark);
             } else {
@@ -89,7 +88,7 @@ public class CourseRenderer {
      */
     private void renderBoundary(Polyline border, Coordinate boundary) {
         PixelMapper pixelMapper = new PixelMapper(course, pane, PADDING);
-        XYPair boundaryPixels = pixelMapper.convertCoordPixel(boundary);
+        XYPair boundaryPixels = pixelMapper.coordToPixel(boundary);
         border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
     }
 
@@ -117,7 +116,7 @@ public class CourseRenderer {
             group.getChildren().addAll(rectangle);
         }
         Coordinate coordinate = mark.getCoordinate();
-        XYPair pixelCoordinates = pixelMapper.convertCoordPixel(coordinate);
+        XYPair pixelCoordinates = pixelMapper.coordToPixel(coordinate);
         rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
         rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
     }
@@ -162,7 +161,7 @@ public class CourseRenderer {
             }
 
             Coordinate coordinate = mark.getCoordinate();
-            XYPair pixelCoordinates = pixelMapper.convertCoordPixel(coordinate);
+            XYPair pixelCoordinates = pixelMapper.coordToPixel(coordinate);
             rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
             rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
             endPoints.add(pixelCoordinates);

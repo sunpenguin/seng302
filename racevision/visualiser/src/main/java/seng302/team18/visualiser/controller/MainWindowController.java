@@ -16,18 +16,19 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
-import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.visualiser.RaceLoop;
+import seng302.team18.visualiser.display.RaceLoop;
 import seng302.team18.visualiser.display.*;
+import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 
-import java.time.format.DateTimeFormatter;
+import java.io.IOException;
 
 
 /**
@@ -44,6 +45,8 @@ public class MainWindowController {
     @FXML private TableColumn<Boat, Double> boatSpeedColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
+    @FXML
+    private ImageView imageViewMap;
 
     private Boolean onImportant;
     private Boolean boatNameImportant;
@@ -55,6 +58,7 @@ public class MainWindowController {
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
+    private BackgroundRenderer backgroundRenderer;
     private RaceClock raceClock;
     private WindDirection windDirection;
     private static RerenderMain rerenderMain;
@@ -216,11 +220,22 @@ public class MainWindowController {
      */
     public void setUp(Race race, MessageInterpreter interpreter, SocketMessageReceiver receiver) {
         this.race = race;
+
         raceRenderer = new RaceRenderer(race, group, raceViewPane);
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
+        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), imageViewMap);
+        try {
+            backgroundRenderer.renderBackground();
+        } catch (IOException e) {
+            // TODO make pop up maybe or just handle it
+            backgroundRenderer.hideMap();
+            e.printStackTrace();
+        }
+
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
+
         raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), interpreter, receiver);
         startWindDirection();
 

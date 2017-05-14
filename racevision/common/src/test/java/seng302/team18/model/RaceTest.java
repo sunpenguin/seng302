@@ -27,7 +27,7 @@ public class RaceTest {
 ////        Race race = new Race(boats, course);
 ////        race.updateBoats(time);
 ////        double distance = (boat1.getSpeed()/3.6)*time;
-////        Coordinate testCoord = GPSCalculations.coordinateToCoordinate(start.getMidCoordinate(),
+////        Coordinate testCoord = GPSCalculations.toCoordinate(start.getMidCoordinate(),
 ////                boat1.getHeading(), distance);
 ////        assertEquals(testCoord.getLatitude(), boat1.getCoordinate().getLatitude(), 0.01);
 ////        assertEquals(testCoord.getLongitude(), boat1.getCoordinate().getLongitude(), 0.01);

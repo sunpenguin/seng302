@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Group?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.MainWindowController">
    <children>
     <AnchorPane fx:id="raceViewPane" layoutY="30.0" minHeight="0.0" minWidth="0.0" prefHeight="690.0" prefWidth="690.0" style="-fx-background-color: lightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="590.0" AnchorPane.topAnchor="30.0">
          <children>
+             <ImageView fx:id="imageViewMap" fitHeight="690.0" fitWidth="690.0" pickOnBounds="true" preserveRatio="true"
+                        AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                        AnchorPane.topAnchor="0.0"/>
             <Group fx:id="group" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
             <Label fx:id="fpsLabel" layoutX="611.0" prefHeight="15.0" prefWidth="79.0" text="FPS:" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <font>
