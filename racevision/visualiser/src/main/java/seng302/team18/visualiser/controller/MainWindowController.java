@@ -202,13 +202,13 @@ public class MainWindowController {
         raceRenderer = new RaceRenderer(race, group, raceViewPane);
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
-        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), map.getEngine());
+        backgroundRenderer = new BackgroundRenderer(race, map.getEngine());
 
 
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
 
-        raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), backgroundRenderer);
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), backgroundRenderer);
         startWindDirection();
 
         for (Boat boat : race.getStartingList()) {

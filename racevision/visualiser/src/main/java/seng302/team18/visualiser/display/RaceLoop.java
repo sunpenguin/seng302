@@ -17,7 +17,6 @@ public class RaceLoop extends AnimationTimer {
     private long previousTime = 0;
     private double secondsElapsedSinceLastFpsUpdate = 0d;
     private int framesSinceLastFpsUpdate = 0;
-    private Race race;
     private RaceRenderer renderer;
     private CourseRenderer courseRenderer;
     private FPSReporter fpsReporter;
@@ -26,11 +25,12 @@ public class RaceLoop extends AnimationTimer {
     /**
      * Constructor for the RaceLoop class.
      *
-     * @param race the race to be updated
-     * @param renderer the renderer that updates with the race
+     * @param renderer thing that renders the boats
+     * @param courseRenderer thing that renders the course
+     * @param fpsReporter thing that updates fps
+     * @param backgroundRenderer thing that renders background
      */
-    public RaceLoop(Race race, RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter, BackgroundRenderer backgroundRenderer) {
-        this.race = race;
+    public RaceLoop(RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter, BackgroundRenderer backgroundRenderer) {
         this.renderer = renderer;
         this.fpsReporter = fpsReporter;
         this.courseRenderer = courseRenderer;
