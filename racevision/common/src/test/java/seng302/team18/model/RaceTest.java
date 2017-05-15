@@ -1,8 +1,5 @@
 package seng302.team18.model;
 
-import static org.junit.Assert.assertEquals;
-
-
 /**
  * Test class for the Race class
  */
@@ -27,7 +24,7 @@ public class RaceTest {
 ////        Race race = new Race(boats, course);
 ////        race.updateBoats(time);
 ////        double distance = (boat1.getSpeed()/3.6)*time;
-////        Coordinate testCoord = GPSCalculations.toCoordinate(start.getMidCoordinate(),
+////        Coordinate testCoord = GPSCalculations.toCoordinate(start.getCoordinate(),
 ////                boat1.getHeading(), distance);
 ////        assertEquals(testCoord.getLatitude(), boat1.getCoordinate().getLatitude(), 0.01);
 ////        assertEquals(testCoord.getLongitude(), boat1.getCoordinate().getLongitude(), 0.01);
@@ -50,8 +47,8 @@ public class RaceTest {
 ////        Race testRace = new Race(boats, course);
 ////        CompoundMark expectedMark = course.getCompoundMarks().get(1);
 ////        CompoundMark actualMark = boat1.getLeg().getDestination();
-////        assertEquals(expectedMark.getMidCoordinate().getLatitude(), actualMark.getMidCoordinate().getLatitude(), 0.01);
-////        assertEquals(expectedMark.getMidCoordinate().getLongitude(), actualMark.getMidCoordinate().getLongitude(), 0.01);
+////        assertEquals(expectedMark.getCoordinate().getLatitude(), actualMark.getCoordinate().getLatitude(), 0.01);
+////        assertEquals(expectedMark.getCoordinate().getLongitude(), actualMark.getCoordinate().getLongitude(), 0.01);
 //    }
 //
 //    /**

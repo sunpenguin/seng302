@@ -71,7 +71,8 @@
             </TableView>
          </children>
       </AnchorPane>
-      <MenuBar prefHeight="30.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+       <MenuBar prefHeight="30.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Race">
             <items>

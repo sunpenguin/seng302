@@ -1,8 +1,7 @@
 package seng302.team18.util;
 
-import seng302.team18.model.*;
+import seng302.team18.model.Coordinate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,37 +16,37 @@ public class GPSCalculations {
     public GPSCalculations() {
     }
 
-//    /**
-//     * Given 2 sets of GPS coordinates in signed decimal degrees, return the distance in metres between them.
-//     *
-//     * @param point1 Coordinates for point1
-//     * @param point2 Coordinates for point2
-//     * @return The distance in metres
-//     */
-//    public double distance(Coordinate point1, Coordinate point2) {
-//
-//        double lat1 = point1.getLatitude();
-//        double long1 = point1.getLongitude();
-//
-//        double lat2 = point2.getLatitude();
-//        double long2 = point2.getLongitude();
-//
-//        double earthRadius = 6371e3; // meters
-//
-//        double lat1Rad = Math.toRadians(lat1);
-//        double lat2Rad = Math.toRadians(lat2);
-//
-//        double difLatitudeRad = Math.toRadians(lat2 - lat1);
-//        double difLongitudeRad = Math.toRadians(long2 - long1);
-//
-//        double a = Math.sin(difLatitudeRad / 2) * Math.sin(difLatitudeRad / 2) +
-//                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-//                        Math.sin(difLongitudeRad / 2) * Math.sin(difLongitudeRad / 2);
-//
-//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-//
-//        return earthRadius * c;
-//    }
+    /**
+     * Given 2 sets of GPS coordinates in signed decimal degrees, return the distance in metres between them.
+     *
+     * @param point1 Coordinates for point1
+     * @param point2 Coordinates for point2
+     * @return The distance in metres
+     */
+    public static double distance(Coordinate point1, Coordinate point2) {
+
+        double lat1 = point1.getLatitude();
+        double long1 = point1.getLongitude();
+
+        double lat2 = point2.getLatitude();
+        double long2 = point2.getLongitude();
+
+        double earthRadius = 6371e3; // meters
+
+        double lat1Rad = Math.toRadians(lat1);
+        double lat2Rad = Math.toRadians(lat2);
+
+        double difLatitudeRad = Math.toRadians(lat2 - lat1);
+        double difLongitudeRad = Math.toRadians(long2 - long1);
+
+        double a = Math.sin(difLatitudeRad / 2) * Math.sin(difLatitudeRad / 2) +
+                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
+                        Math.sin(difLongitudeRad / 2) * Math.sin(difLongitudeRad / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return earthRadius * c;
+    }
 
 
     /**
@@ -59,7 +58,7 @@ public class GPSCalculations {
      * @param distance the distance from the initial coordinate to the destination coordinate
      * @return the destination coordinate
      */
-    public Coordinate toCoordinate(Coordinate initialCoord, double bearing, double distance) {
+    public static Coordinate toCoordinate(Coordinate initialCoord, double bearing, double distance) {
 
         double bR = Math.toRadians(bearing);
         double lat1R = Math.toRadians(initialCoord.getLatitude());
@@ -82,7 +81,7 @@ public class GPSCalculations {
      * @param point2 Coordinates for point2
      * @return The coordinates of the midPoint
      */
-    public Coordinate midPoint(Coordinate point1, Coordinate point2) {
+    public static Coordinate midPoint(Coordinate point1, Coordinate point2) {
 
         double lat1 = point1.getLatitude();
         double long1 = point1.getLongitude();
@@ -122,7 +121,7 @@ public class GPSCalculations {
      * @param destination end point.
      * @return angle from north to destination calculated at origin.
      */
-    public double getBearing(Coordinate origin, Coordinate destination) {
+    public static double getBearing(Coordinate origin, Coordinate destination) {
         double deltaLong = (destination.getLongitude() - origin.getLongitude());
 
         double y = Math.sin(deltaLong) * Math.cos(destination.getLatitude());
@@ -138,37 +137,38 @@ public class GPSCalculations {
     }
 
 
-//    /**
-//     * Gets the central coordinate calculated from the list of given coordinates.
-//     * @param coordinates you want to find the center of
-//     * @return the central coordinate.
-//     */
-//    public Coordinate getCentralCoordinate(List<Coordinate> coordinates) {
-//        double x = 0;
-//        double y = 0;
-//        double z = 0;
-//
-//        for (Coordinate coordinate : coordinates) {
-//            double latitude = coordinate.getLatitude() * Math.PI / 180;
-//            double longitude = coordinate.getLongitude() * Math.PI / 180;
-//
-//            x += Math.cos(latitude) * Math.cos(longitude);
-//            y += Math.cos(latitude) * Math.sin(longitude);
-//            z += Math.sin(latitude);
-//        }
-//
-//        double total = coordinates.size();
-//
-//        x = x / total;
-//        y = y / total;
-//        z = z / total;
-//
-//        double centralLongitude = Math.atan2(y, x);
-//        double centralSquareRoot = Math.sqrt(x * x + y * y);
-//        double centralLatitude = Math.atan2(z, centralSquareRoot);
-//
-//        return new Coordinate(centralLatitude * 180 / Math.PI, centralLongitude * 180 / Math.PI);
-//    }
+    /**
+     * Gets the central coordinate calculated from the list of given coordinates.
+     *
+     * @param coordinates you want to find the center of
+     * @return the central coordinate.
+     */
+    public static Coordinate getCentralCoordinate(List<Coordinate> coordinates) {
+        double x = 0;
+        double y = 0;
+        double z = 0;
+
+        for (Coordinate coordinate : coordinates) {
+            double latitude = coordinate.getLatitude() * Math.PI / 180;
+            double longitude = coordinate.getLongitude() * Math.PI / 180;
+
+            x += Math.cos(latitude) * Math.cos(longitude);
+            y += Math.cos(latitude) * Math.sin(longitude);
+            z += Math.sin(latitude);
+        }
+
+        double total = coordinates.size();
+
+        x = x / total;
+        y = y / total;
+        z = z / total;
+
+        double centralLongitude = Math.atan2(y, x);
+        double centralSquareRoot = Math.sqrt(x * x + y * y);
+        double centralLatitude = Math.atan2(z, centralSquareRoot);
+
+        return new Coordinate(centralLatitude * 180 / Math.PI, centralLongitude * 180 / Math.PI);
+    }
 
 
 }

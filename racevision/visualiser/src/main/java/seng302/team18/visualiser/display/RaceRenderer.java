@@ -29,6 +29,7 @@ public class RaceRenderer {
     private int numBoats;
     private final List<Color> BOAT_COLOURS = new ArrayList<>(
             Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
+    private PixelMapper pixelMapper;
 
 
     /**
@@ -38,10 +39,11 @@ public class RaceRenderer {
      * @param group the group to be drawn on
      * @param raceViewPane The AnchorPane the group is on
      */
-    public RaceRenderer(Race race, Group group, Pane raceViewPane) {
+    public RaceRenderer(PixelMapper pixelMapper, Race race, Group group, Pane raceViewPane) {
         this.race = race;
         this.group = group;
         this.raceViewPane = raceViewPane;
+        this.pixelMapper = pixelMapper;
         headingMap = new HashMap<>();
         trailCoordinateMap =  new HashMap<>();
     }
@@ -51,7 +53,6 @@ public class RaceRenderer {
      * Draws displayBoats in the Race on the Group as well as the visible annotations
      */
     public void renderBoats() {
-        PixelMapper pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, PADDING);
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
 
@@ -78,7 +79,6 @@ public class RaceRenderer {
 
 
     public void drawTrails() {
-        PixelMapper pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, PADDING);
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
@@ -116,7 +116,6 @@ public class RaceRenderer {
 //     * @param boats Collection of displayBoats racing.
 //     */
     public void reDrawTrails(Collection<Boat> boats) {
-        PixelMapper pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, PADDING);
         for (Boat boat : boats) {
             DisplayTrail trail = trailMap.get(boat.getShortName());
             if (trail != null) {

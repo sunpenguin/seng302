@@ -93,9 +93,9 @@ public class Race {
                 // Set Leg
                 boat.setLeg(course.getLegs().get(0));
                 // Set Dest
-                boat.setDestination(boat.getLeg().getDestination().getMidCoordinate());
+                boat.setDestination(boat.getLeg().getDestination().getCoordinate());
                 // Set Coordinate
-                Coordinate midPoint = boat.getLeg().getDeparture().getMidCoordinate();
+                Coordinate midPoint = boat.getLeg().getDeparture().getCoordinate();
                 boat.setCoordinate(midPoint);
                 // Set Heading
                 boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));

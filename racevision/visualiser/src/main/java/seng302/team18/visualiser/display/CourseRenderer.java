@@ -3,10 +3,8 @@ package seng302.team18.visualiser.display;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
@@ -32,12 +30,14 @@ public class CourseRenderer {
     private Course course;
     private Group group;
     private Pane pane;
+    private PixelMapper pixelMapper;
 
 
-    public CourseRenderer(Course course, Group group, Pane pane) {
+    public CourseRenderer(PixelMapper pixelMapper, Course course, Group group, Pane pane) {
         this.course = course;
         this.group = group;
         this.pane = pane;
+        this.pixelMapper = pixelMapper;
     }
 
 
@@ -87,7 +87,6 @@ public class CourseRenderer {
      * @param boundary the point to reset
      */
     private void renderBoundary(Polyline border, Coordinate boundary) {
-        PixelMapper pixelMapper = new PixelMapper(course, pane, PADDING);
         XYPair boundaryPixels = pixelMapper.coordToPixel(boundary);
         border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
     }
@@ -98,7 +97,6 @@ public class CourseRenderer {
      * @param mark Mark to reset
      */
     private void renderMark(Mark mark) {
-        PixelMapper pixelMapper = new PixelMapper(course, pane, PADDING);
         Rectangle rectangle = marks.get(mark.getId());
         if (rectangle == null) {
             rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
@@ -139,7 +137,6 @@ public class CourseRenderer {
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */
     private void renderGate(CompoundMark compoundMark) {
-        PixelMapper pixelMapper = new PixelMapper(course, pane, PADDING);
         List<XYPair> endPoints = new ArrayList<>();
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);

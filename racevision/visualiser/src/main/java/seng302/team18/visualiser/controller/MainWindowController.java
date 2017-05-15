@@ -13,10 +13,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.util.Callback;
 import seng302.team18.messageparsing.SocketMessageReceiver;
-import seng302.team18.model.Boat;
-import seng302.team18.model.Race;
+import seng302.team18.model.*;
+import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
+import seng302.team18.visualiser.util.PixelMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -200,7 +204,7 @@ public class MainWindowController {
 
 
     /**
-     * initialises race variables and begins the race loop. Adds listers to the race view to listen for when the window
+     * initialises race variables and begins the race loop. Adds listeners to the race view to listen for when the window
      * has been re-sized.
      * @param race The race which is going to be displayed.
      * @param interpreter A message interpreter.
@@ -208,10 +212,12 @@ public class MainWindowController {
      */
     public void setUp(Race race, MessageInterpreter interpreter, SocketMessageReceiver receiver) {
         this.race = race;
+        setCourseCenter(race.getCourse());
 
-        raceRenderer = new RaceRenderer(race, group, raceViewPane);
+        PixelMapper pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
+        raceRenderer = new RaceRenderer(pixelMapper, race, group, raceViewPane);
         raceRenderer.renderBoats();
-        courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
+        courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
 //        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), imageViewMap);
 //        try {
 //            backgroundRenderer.renderBackground();
@@ -258,5 +264,18 @@ public class MainWindowController {
         return raceClock;
     }
 
+    private void setCourseCenter(Course course) {
+        List<Coordinate> points = new ArrayList<>();
+        for (BoundaryMark boundaryMark : course.getBoundaries()) {
+            points.add(boundaryMark.getCoordinate());
+        }
+        for (CompoundMark compoundMark : course.getCompoundMarks()) {
+            for (Mark mark : compoundMark.getMarks()) {
+                points.add(mark.getCoordinate());
+            }
+        }
+
+        race.getCourse().setCentralCoordinate(GPSCalculations.getCentralCoordinate(points));
+    }
 
 }
