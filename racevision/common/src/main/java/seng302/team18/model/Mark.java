@@ -3,7 +3,7 @@ package seng302.team18.model;
 /**
  *  A class that represents a mark on the race course
  */
-public class Mark {
+public class Mark implements GeographicLocation {
 
     private String name;
     private Coordinate coordinates;
