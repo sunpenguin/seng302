@@ -1,31 +1,68 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <style>
-       #map {
-        height: 400px;
-        width: 100%;
-       }
-    </style>
-  </head>
-  <body>
-    <h3>My Google Maps Demo</h3>
-    <div id="map"></div>
-    <script>
-      function initMap() {
-        var uluru = {lat: -25.363, lng: 131.044};
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 4,
-          center: uluru
-        });
-        var marker = new google.maps.Marker({
-          position: uluru,
-          map: map
-        });
-      }
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEPZMfQYbi9GPoO_Jy6Q1W9aocnTQiUYc&callback=initMap">
-    </script>
-  </body>
+    <head>
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            #map {
+                height: 100%;
+            }
+            #floating-panel {
+                position: absolute;
+                top: 40px;
+                left: 10px;
+                z-index: 5;
+                background-color: #fff;
+                padding: 5px;
+                border: 1px solid #999;
+                text-align: left;
+                font-family: 'Roboto','sans-serif';
+                line-height: 20px;
+                padding-left: 10px;
+                font-family: Roboto, Arial, sans-serif;
+                font-size: 11px;
+            }
+        </style>
+        <!--<script src="http://maps.google.com/maps/api/js?sensor=false"></script>-->
+    </head>
+    <body>
+        <div id="map"></div>
+        <script
+                src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+                integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+                crossorigin="anonymous"></script>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEPZMfQYbi9GPoO_Jy6Q1W9aocnTQiUYc&callback=initMap">
+        </script>
+        <script>
+                var map;
+                var centerCoordinate = {lat: 0, lng: 0};
+                function initMap() {
+                    var options = {
+                        zoom: 4,
+                        center: centerCoordinate,
+                        mapTypeControl: false,
+                    draggable: false,
+                        scaleControl: false,
+                        scrollwheel: false,
+                        navigationControl: false,
+                        streetViewControl: false,
+                        keyboardShortcuts: false,
+                        disableDefaultUI: true
+                    };
+
+                    map = new google.maps.Map(document.getElementById('map'),
+                        options);
+                }
+
+                function setCenter(lat, long) {
+                    map.setCenter({lat: lat, lng:long});
+                    return 0;
+                }
+        </script>
+
+    </body>
 </html>

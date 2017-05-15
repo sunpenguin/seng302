@@ -20,11 +20,9 @@ import seng302.team18.visualiser.display.RaceLoop;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 
-import java.io.IOException;
-
 
 /**
- * Created by dhl25 on 15/03/17.
+ * The Controller class for the Main Window view.
  */
 public class MainWindowController {
     @FXML private Group group;
@@ -55,7 +53,6 @@ public class MainWindowController {
 
 
     @FXML
-    @SuppressWarnings("unused")
     public void initialize() {
         onImportant = true;
         boatNameImportant = true;
@@ -205,19 +202,13 @@ public class MainWindowController {
         raceRenderer = new RaceRenderer(race, group, raceViewPane);
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
-        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), map);
-        try {
-            backgroundRenderer.renderBackground();
-        } catch (IOException e) {
-            // TODO make pop up maybe or just handle it
-//            backgroundRenderer.hideMap();
-            e.printStackTrace();
-        }
+        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), map.getEngine());
+
 
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
 
-        raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), interpreter, receiver);
+        raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), backgroundRenderer);
         startWindDirection();
 
         for (Boat boat : race.getStartingList()) {
@@ -230,11 +221,13 @@ public class MainWindowController {
             courseRenderer.renderCourse();
             raceRenderer.renderBoats();
             raceRenderer.reDrawTrails(race.getStartingList());
+            backgroundRenderer.renderBackground();
         });
         raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
             courseRenderer.renderCourse();
             raceRenderer.renderBoats();
             raceRenderer.reDrawTrails(race.getStartingList());
+            backgroundRenderer.renderBackground();
         });
         setUpTable();
     }
@@ -242,4 +235,5 @@ public class MainWindowController {
     public RaceClock getRaceClock() {
         return raceClock;
     }
+
 }

@@ -1,13 +1,14 @@
 package seng302.team18.visualiser.display;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.scene.Group;
 import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import seng302.team18.model.BoundaryMark;
+import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.stream.Collectors;
 
 /**
@@ -15,31 +16,55 @@ import java.util.stream.Collectors;
  * background of the course area.
  */
 public class BackgroundRenderer {
-    private final Course course;
-    private final WebView map;
-    private final WebEngine webEngine;
 
+    private final WebEngine webEngine;
     private final String API_KEY = "AIzaSyBRLXKbFcgD00-3nUQoIut-8sALaFq4elg";
     private final String API_URL = "https://maps.googleapis.com/maps/api/staticmap";
-    private final String mapURL = getClass().getResource("/googlemaps.html").toExternalForm();
+    private String mapURL = getClass().getResource("/googlemaps.html").toExternalForm();
+
+    private final Course course;
+    private Coordinate center;
 
 
-    public BackgroundRenderer(Group group, Course course, WebView map) {
+    public BackgroundRenderer(Group group, Course course, WebEngine webEngine) {
         this.course = course;
-        this.map = map;
-        webEngine = map.getEngine();
+        center = new Coordinate(0, 0);
+        this.webEngine = webEngine;
+        webEngine.load(mapURL);
+        webEngine.setJavaScriptEnabled(true);
+//        webEngine.getLoadWorker().stateProperty().addListener(
+//                new ChangeListener<Worker.State>() {
+//                    public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
+//                        if (newState == Worker.State.SUCCEEDED) {
+//                            Coordinate center = course.getCentralCoordinate();
+//                            webEngine.executeScript("plspls(" + center.getLatitude() + ", " + center.getLongitude() + ");");
+//                            System.out.println("I am called");
+//                            webEngine.executeScript("map.setCenter({lat:" + center.getLatitude() + ", lng:" + center.getLongitude() + "});");
+//                            webEngine.executeScript("console.log(\"loggedd\")");
+//                        }
+//                    }
+//                });
+
     }
 
     /**
      * Updates the map shown in the background of the race view, based on the current course.
      * <br />
-     * If the map cannot be downloaded, the background image becomes transparent, and a message is written to stderr
+     * @return true if the map was updated false otherwise.
      */
-    public void renderBackground() throws IOException {
-//        String urlString = getURL();
-//        URL url = new URL(urlString);
-        webEngine.load(mapURL);
-//        imageView.setImage(new Image(url.openStream()));
+    public boolean renderBackground() {
+        Coordinate newCenter = course.getCentralCoordinate();
+        if (!center.equals(newCenter)) {
+            try {
+//            webEngine.executeScript("map.setCenter({lat:" + center.getLatitude() + ", lng:" + center.getLongitude() + "});");
+                webEngine.executeScript("setCenter(" + newCenter.getLatitude() + ", " + newCenter.getLongitude() + ");");
+                center = newCenter;
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return false;
     }
 
     /**
@@ -65,11 +90,4 @@ public class BackgroundRenderer {
         return string;
     }
 
-//    /**
-//     * Hides the map by setting the image to null.
-//     * Currently relies on the group providing a suitable default background.
-//     */
-//    public void hideMap() {
-//        imageView.setImage(null);
-//    }
 }
