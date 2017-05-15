@@ -275,7 +275,8 @@ public class MainWindowController {
             }
         }
 
-        race.getCourse().setCentralCoordinate(GPSCalculations.getCentralCoordinate(points));
+        List<Coordinate> extremes = GPSCalculations.findMinMaxPoints(race.getCourse());
+        race.getCourse().setCentralCoordinate(GPSCalculations.midPoint(extremes.get(0), extremes.get(1)));
     }
 
 }

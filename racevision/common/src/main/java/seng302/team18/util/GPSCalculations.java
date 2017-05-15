@@ -1,7 +1,9 @@
 package seng302.team18.util;
 
-import seng302.team18.model.Coordinate;
+import javafx.scene.control.ListView;
+import seng302.team18.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -139,6 +141,7 @@ public class GPSCalculations {
 
     /**
      * Gets the central coordinate calculated from the list of given coordinates.
+     * NOTE: Calculates the center of gravity
      *
      * @param coordinates you want to find the center of
      * @return the central coordinate.
@@ -170,7 +173,67 @@ public class GPSCalculations {
         return new Coordinate(centralLatitude * 180 / Math.PI, centralLongitude * 180 / Math.PI);
     }
 
+    /**
+     * Calculate the coordinates of the upper-left and lower-right coordinates of a bounding box of a
+     * given list of coordinates
+     *
+     * @param points list of coordinates
+     * @return The list of coordinates where index 0 is the upper left and index 1 is the lower right
+     */
+    public static List<Coordinate> findMinMaxPoints(List<Coordinate> points) {
+        // TODO write test
+        List<Coordinate> result = new ArrayList<>();
+        double minLong = 180;
+        double maxLong = -180;
+        double minLat = 90;
+        double maxLat = -90;
 
+        for (Coordinate point : points) {
+            if (point.getLongitude() < minLong) {
+                minLong = point.getLongitude();
+            }
+
+            if (point.getLongitude() > maxLong) {
+                maxLong = point.getLongitude();
+            }
+
+            if (point.getLatitude() < minLat) {
+                minLat = point.getLatitude();
+            }
+
+            if (point.getLatitude() > maxLat) {
+                maxLat = point.getLatitude();
+            }
+        }
+
+        result.add(new Coordinate(maxLat, minLong)); // North East
+        result.add(new Coordinate(minLat, maxLong)); // South West
+
+        return result;
+    }
+
+    /**
+     * Calculate the coordinates of the upper-left and lower-right coordinates of a bounding box of a
+     * given course
+     *
+     * @param course The course
+     * @return The list of coordinates where index 0 is the upper left and index 1 is the lower right
+     */
+    public static List<Coordinate> findMinMaxPoints(Course course) {
+        List<Coordinate> points = new ArrayList<>();
+
+        for (BoundaryMark boundaryMark : course.getBoundaries()) {
+            points.add(boundaryMark.getCoordinate());
+        }
+
+        for (CompoundMark compoundMark : course.getCompoundMarks()) {
+            for (Mark mark : compoundMark.getMarks()) {
+                points.add(mark.getCoordinate());
+            }
+        }
+
+        return findMinMaxPoints(points);
+    }
 }
 
 
