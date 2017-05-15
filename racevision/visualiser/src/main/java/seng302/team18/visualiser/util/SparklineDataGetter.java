@@ -44,14 +44,20 @@ public class SparklineDataGetter {
      * @param boat
      */
     private void addData(Boat boat){
-        if(boat.getBoatLegNumber() == 2){ //assumed that the second leg always has legno of 2 TODO:check
-            String startLine = "Startline";
-            SparklineDataPoint data = new SparklineDataPoint(boat, startLine);
+        if(boat.getBoatLegNumber() == -1){
+            String finishLine = "Finsihline";
+            SparklineDataPoint data = new SparklineDataPoint(boat, finishLine);
+            dataQueue.enqueue(data);
+        }else {
+            if (boat.getBoatLegNumber() == 2) { //assumed that the second leg always has legno of 2 TODO:check
+                String startLine = "Startline";
+                SparklineDataPoint data = new SparklineDataPoint(boat, startLine);
+                dataQueue.enqueue(data);
+            }
+            String markPassedName = course.getLegFromLefNumber(boat.getBoatLegNumber()).getDeparture().getName();
+            SparklineDataPoint data = new SparklineDataPoint(boat, markPassedName);
             dataQueue.enqueue(data);
         }
-        String markPassedName = course.getLegFromLefNumber(boat.getBoatLegNumber()).getDeparture().getName();
-        SparklineDataPoint data = new SparklineDataPoint(boat, markPassedName);
-        dataQueue.enqueue(data);
     }
 
 }

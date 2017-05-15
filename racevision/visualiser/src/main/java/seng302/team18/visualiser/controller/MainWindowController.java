@@ -72,8 +72,6 @@ public class MainWindowController {
     }
 
     private void setUpSparklinesCategory() {
-        yPositionsAxis.setCategories(FXCollections.observableArrayList("6", "5", "4", "3", "2", "1"));
-//        yPositionsAxis.
         SparklineDataQueue dataQueue = new SparklineDataQueue();
         SparklineDataGetter dataGetter = new SparklineDataGetter(race.getStartingList(), dataQueue, race.getCourse());
         dataGetter.ListenToBoat();
