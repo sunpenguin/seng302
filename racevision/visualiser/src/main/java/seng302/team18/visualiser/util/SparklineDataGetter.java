@@ -1,6 +1,7 @@
 package seng302.team18.visualiser.util;
 
 import seng302.team18.model.Boat;
+import seng302.team18.model.Course;
 import seng302.team18.visualiser.util.SparklineDataPoint;
 import seng302.team18.visualiser.util.SparklineDataQueue;
 
@@ -14,15 +15,17 @@ public class SparklineDataGetter {
 
     private List<Boat> boats;
     private SparklineDataQueue dataQueue;
+    private Course course;
 
     /**
      * Constructor
      * @param boats
      * @param dataQueue
      */
-    public SparklineDataGetter(List<Boat> boats , SparklineDataQueue dataQueue){
+    public SparklineDataGetter(List<Boat> boats , SparklineDataQueue dataQueue, Course course){
         this.boats = boats;
         this.dataQueue = dataQueue;
+        this.course = course;
     }
 
     /**
@@ -41,7 +44,13 @@ public class SparklineDataGetter {
      * @param boat
      */
     private void addData(Boat boat){
-        SparklineDataPoint data = new SparklineDataPoint(boat);
+        if(boat.getBoatLegNumber() == 2){ //assumed that the second leg always has legno of 2 TODO:check
+            String startLine = "Startline";
+            SparklineDataPoint data = new SparklineDataPoint(boat, startLine);
+            dataQueue.enqueue(data);
+        }
+        String markPassedName = course.getLegFromLefNumber(boat.getBoatLegNumber()).getDeparture().getName();
+        SparklineDataPoint data = new SparklineDataPoint(boat, markPassedName);
         dataQueue.enqueue(data);
     }
 

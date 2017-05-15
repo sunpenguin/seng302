@@ -9,18 +9,19 @@ public class SparklineDataPoint {
 
     private String boatName;
     private int boatPlace;
-    private int leg;
+    private String markPassedName;
 
     /**
      * Constructor, takes a boat and creates a sparkline data point that holds
      * the boats name, place and leg number.
      * @param boat
      */
-    public SparklineDataPoint(Boat boat){
+    public SparklineDataPoint(Boat boat, String markPassedName){
         boatName = boat.getBoatName();
         boatPlace = boat.getPlace();
-        leg = boat.getBoatLegNumber();
+        this.markPassedName = markPassedName;
     }
+
 
     public String getBoatName() {
         return boatName;
@@ -30,7 +31,7 @@ public class SparklineDataPoint {
         return boatPlace;
     }
 
-    public int getLeg() {
-        return leg;
+    public String getMarkPassedName() {
+        return markPassedName;
     }
 }

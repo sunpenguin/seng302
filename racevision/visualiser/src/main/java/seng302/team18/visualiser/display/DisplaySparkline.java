@@ -59,8 +59,23 @@ public class DisplaySparkline extends AnimationTimer {
     private void editSingleSeries( String boatName, SparklineDataPoint data){
         for(XYChart.Series series : sparklineSeries){
             if(series.getName() == boatName){
-                series.getData().add(new XYChart.Data(String.valueOf(data.getLeg()), String.valueOf(data.getBoatPlace())));
+                String cat = String.valueOf(data.getMarkPassedName());
+                while(catInXofSeries(series, cat)){
+                    cat = cat + " "; //Doesn't display whitespace :) TODO:why?
+                }
+                series.getData().add(new XYChart.Data(cat, String.valueOf(data.getBoatPlace())));
             }
         }
+    }
+
+    private boolean catInXofSeries(XYChart.Series series, String category){
+        boolean answer = false;
+        ObservableList<XYChart.Data<?,?>> seriesData = series.getData();
+        for(XYChart.Data datapoint : seriesData) {
+            if (datapoint.getXValue().equals(category)) {
+                answer = true;
+            }
+        }
+        return answer;
     }
 }
