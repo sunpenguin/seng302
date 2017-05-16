@@ -1,11 +1,15 @@
 package seng302.team18.visualiser.util;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.layout.Pane;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.XYPair;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 /**
@@ -14,17 +18,43 @@ import java.util.List;
  */
 public class PixelMapper {
 
+    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
     private final Course course;
     private final Pane pane;
-    private int zoomLevel = 0;
-    private Coordinate viewPortCenter;
     private final double MAP_SCALE_CORRECTION = 0.95;
+    private Coordinate viewPortCenter;
+    private final IntegerProperty zoomLevel = new SimpleIntegerProperty(0);
+
+    public static final int ZOOM_LEVEL_4X = 1;
 
     public PixelMapper(Course course, Pane pane) {
         this.course = course;
         this.pane = pane;
 
         viewPortCenter = course.getCentralCoordinate();
+    }
+
+    public void addViewCenterListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener("viewPortCenter", listener);
+    }
+
+    public void removeViewCenterListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener("viewPortCenter", listener);
+    }
+
+    public void setViewPortCenter(Coordinate center) {
+        Coordinate old = viewPortCenter;
+        viewPortCenter = center;
+        propertyChangeSupport.firePropertyChange("viewPortCenter", old, center);
+    }
+
+    public IntegerProperty zoomLevelProperty() {
+        return zoomLevel;
+    }
+
+    public void setZoomLevel(int level) {
+        zoomLevel.set(level);
     }
 
     /**
@@ -52,7 +82,7 @@ public class PixelMapper {
         } else {
             mappingScale = paneHeight / courseHeight;
         }
-        mappingScale *= MAP_SCALE_CORRECTION;
+        mappingScale *= MAP_SCALE_CORRECTION  * Math.pow(2, zoomLevel.intValue());
 
         XYPair worldCoordinates = coordinateToPlane(coord);
         XYPair viewCenter = coordinateToPlane(viewPortCenter);
@@ -63,9 +93,9 @@ public class PixelMapper {
         double x = dX * mappingScale + paneWidth / 2;
         double y = dY * mappingScale + paneHeight / 2;
 
-        if (x < 0 || y < 0) {
-            System.out.println(coord.toString() + " " + x + " " + y);
-        }
+//        if (x < 0 || y < 0) {
+//            System.out.println(coord.toString() + " " + x + " " + y);
+//        }
 
         return new XYPair(x, y);
     }
@@ -77,7 +107,7 @@ public class PixelMapper {
      * @return longitude in Web Mercator scale
      */
     private double webMercatorLongitude(double longitude) {
-        double x = 128 * Math.pow(2, zoomLevel) * (longitude + Math.PI) / Math.PI;
+        double x = 128 * (longitude + Math.PI) / Math.PI;
         return x;
     }
 
@@ -88,7 +118,7 @@ public class PixelMapper {
      * @return latitude in Web Mercator scale
      */
     private double webMercatorLatitude(double latitude) {
-        double y = 128 * Math.pow(2, zoomLevel) * (Math.PI - Math.log(Math.tan((Math.PI / 4) + (latitude / 2)))) / Math.PI;
+        double y = 128 * (Math.PI - Math.log(Math.tan((Math.PI / 4) + (latitude / 2)))) / Math.PI;
         return y;
     }
 

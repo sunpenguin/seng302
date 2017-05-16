@@ -27,16 +27,26 @@ import java.util.List;
  * Created by dhl25 on 15/03/17.
  */
 public class MainWindowController {
-    @FXML private Group group;
-    @FXML private Label timerLabel;
-    @FXML private ToggleButton fpsToggler;
-    @FXML private Label fpsLabel;
-    @FXML private TableView tableView;
-    @FXML private TableColumn<Boat, Integer> boatPositionColumn;
-    @FXML private TableColumn<Boat, String> boatNameColumn;
-    @FXML private TableColumn<Boat, Double> boatSpeedColumn;
-    @FXML private Pane raceViewPane;
-    @FXML private Polygon arrow;
+    @FXML
+    private Group group;
+    @FXML
+    private Label timerLabel;
+    @FXML
+    private ToggleButton fpsToggler;
+    @FXML
+    private Label fpsLabel;
+    @FXML
+    private TableView tableView;
+    @FXML
+    private TableColumn<Boat, Integer> boatPositionColumn;
+    @FXML
+    private TableColumn<Boat, String> boatNameColumn;
+    @FXML
+    private TableColumn<Boat, Double> boatSpeedColumn;
+    @FXML
+    private Pane raceViewPane;
+    @FXML
+    private Polygon arrow;
     @FXML
     private ImageView imageViewMap;
 
@@ -54,6 +64,7 @@ public class MainWindowController {
     private RaceClock raceClock;
     private WindDirection windDirection;
     private static RerenderMain rerenderMain;
+    private PixelMapper pixelMapper;
 
 
     @FXML
@@ -70,9 +81,8 @@ public class MainWindowController {
 
     @FXML
     private void zoomOutButtonAction() {
-        race.getCourse().setViewCenter(race.getCourse().getCentralCoordinate());
-        race.getCourse().setZoomLevel(0);
-        race.getCourse().setZoomId(0);
+        pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
+        pixelMapper.setZoomLevel(0);
     }
 
 
@@ -145,7 +155,7 @@ public class MainWindowController {
      * Sets the cell values for the race table, these are place, boat name and boat speed.
      */
     private void setUpTable() {
-        Callback<Boat, Observable[]> callback =(Boat boat) -> new Observable[]{
+        Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
                 boat.placeProperty(),
         };
         ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
@@ -153,9 +163,9 @@ public class MainWindowController {
 
         SortedList<Boat> sortedList = new SortedList<>(observableList,
                 (Boat boat1, Boat boat2) -> {
-                    if( boat1.getPlace() < boat2.getPlace() ) {
+                    if (boat1.getPlace() < boat2.getPlace()) {
                         return -1;
-                    } else if( boat1.getPlace() > boat2.getPlace() ) {
+                    } else if (boat1.getPlace() > boat2.getPlace()) {
                         return 1;
                     } else {
                         return 0;
@@ -168,7 +178,7 @@ public class MainWindowController {
         boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
             @Override
             public void updateItem(Double speed, boolean empty) {
-                super.updateItem(speed, empty) ;
+                super.updateItem(speed, empty);
                 if (empty) {
                     setText(null);
                 } else {
@@ -206,15 +216,16 @@ public class MainWindowController {
     /**
      * initialises race variables and begins the race loop. Adds listeners to the race view to listen for when the window
      * has been re-sized.
-     * @param race The race which is going to be displayed.
+     *
+     * @param race        The race which is going to be displayed.
      * @param interpreter A message interpreter.
-     * @param receiver A socket message receiver.
+     * @param receiver    A socket message receiver.
      */
     public void setUp(Race race, MessageInterpreter interpreter, SocketMessageReceiver receiver) {
         this.race = race;
         setCourseCenter(race.getCourse());
 
-        PixelMapper pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
+        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
         raceRenderer = new RaceRenderer(pixelMapper, race, group, raceViewPane);
         raceRenderer.renderBoats();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
@@ -240,21 +251,12 @@ public class MainWindowController {
         raceLoop.start();
 
         rerenderMain = new RerenderMain(courseRenderer, raceRenderer, race);
-        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
-            rerenderMain.redrawFeatures();
 
-        });
-        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
-            rerenderMain.redrawFeatures();
-        });
+        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> rerenderMain.redrawFeatures());
+        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> rerenderMain.redrawFeatures());
 
-        race.getCourse().zoomLevelProperty().addListener((observable, oldValue, newValue) -> {
-          rerenderMain.redrawFeatures();
-        });
-
-        race.getCourse().zoomIdProperty().addListener((observable, oldValue, newValue) -> {
-            rerenderMain.redrawFeatures();
-        });
+        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> rerenderMain.redrawFeatures());
+        pixelMapper.addViewCenterListener(propertyChangeEvent -> rerenderMain.redrawFeatures());
 
         setUpTable();
 

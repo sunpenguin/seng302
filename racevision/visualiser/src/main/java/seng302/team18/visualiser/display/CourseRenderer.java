@@ -49,7 +49,7 @@ public class CourseRenderer {
 //        System.out.println(course.getCompoundMarks());
         List<CompoundMark> compoundMarks = course.getCompoundMarks();
         // Renders CompoundMarks
-        for (int i = 0 ; i < compoundMarks.size(); i++) {
+        for (int i = 0; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
             if ((course.getMarkRoundings().get(0).getCompoundMark().getId().equals(compoundMark.getId())
                     || course.getMarkRoundings().get(course.getMarkRoundings().size() - 1).getCompoundMark().getId().equals(compoundMark.getId()))
@@ -83,7 +83,8 @@ public class CourseRenderer {
 
     /**
      * Reset a point on the border due to resizing
-     * @param border Polyline for the border
+     *
+     * @param border   Polyline for the border
      * @param boundary the point to reset
      */
     private void renderBoundary(Polyline border, Coordinate boundary) {
@@ -94,6 +95,7 @@ public class CourseRenderer {
 
     /**
      * Reset a point for a mark due to resizing
+     *
      * @param mark Mark to reset
      */
     private void renderMark(Mark mark) {
@@ -101,13 +103,9 @@ public class CourseRenderer {
         if (rectangle == null) {
             rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
 
-            rectangle.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    course.setViewCenter(mark.getCoordinate());
-                    course.setZoomLevel(4);
-                    course.setZoomId(mark.getId());
-                }
+            rectangle.setOnMouseClicked((event) -> {
+                pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                pixelMapper.setViewPortCenter(mark.getCoordinate());
             });
 
             marks.put(mark.getId(), rectangle);
@@ -122,6 +120,7 @@ public class CourseRenderer {
 
     /**
      * Call each Mark in a CompoundMark to reset it's point due to resizing
+     *
      * @param compoundMark CompoundMark to reset.
      */
     private void renderCompoundMark(CompoundMark compoundMark) {
@@ -134,6 +133,7 @@ public class CourseRenderer {
 
     /**
      * Reset the points for the endpoints of a gate as well as the line between them due to resizing
+     *
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */
     private void renderGate(CompoundMark compoundMark) {
@@ -147,9 +147,8 @@ public class CourseRenderer {
                 rectangle.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        course.setZoomLevel(4);
-                        course.setViewCenter(mark.getCoordinate());
-                        course.setZoomId(mark.getId());
+                        pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                        pixelMapper.setViewPortCenter(mark.getCoordinate());
                     }
                 });
 
@@ -173,6 +172,7 @@ public class CourseRenderer {
             line.setStyle("-fx-stroke: red");
             gates.put(compoundMark.getName(), line);
             group.getChildren().addAll(line);
+            line.toBack();
         }
 
         line.setStartX(endPoints.get(0).getX());

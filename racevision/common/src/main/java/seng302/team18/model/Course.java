@@ -21,9 +21,6 @@ public class Course {
     private Coordinate centralCoordinate;
     private ZoneId timeZone;
     private List<MarkRounding> markRoundings;
-    private Coordinate viewCenter;
-    private IntegerProperty zoomLevel; // the level of zooming a feature when course view center is updated and redraw course features
-    private IntegerProperty zoomId; // used when course view center is updated and redraw course features (value of markId or boatId)
 
     public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, ZoneId timeZone, List<MarkRounding> markRoundings) {
         this.compoundMarks = new ArrayList<>(marks);
@@ -42,8 +39,6 @@ public class Course {
         timeZone = ZoneId.systemDefault();
         windDirection = 0d;
         centralCoordinate = new Coordinate(0d, 0d);
-        this.zoomLevel = new SimpleIntegerProperty(0);
-        this.zoomId = new SimpleIntegerProperty(0); // not zoomed on a particular mark or boat
     }
 
     /**
@@ -105,12 +100,6 @@ public class Course {
         return timeZone;
     }
 
-//    public void setMarkRoundings(List<MarkRounding> markRoundings) {
-//        this.markRoundings = markRoundings;
-//    }
-
-//    public List<MarkRounding> getMarkRoundings() {return markRoundings;}
-
     public void setCentralCoordinate(Coordinate centralCoordinate) {
         if (this.centralCoordinate.getLatitude() == 0d && this.centralCoordinate.getLongitude() == 0d) {
             this.centralCoordinate = centralCoordinate;
@@ -140,38 +129,6 @@ public class Course {
              CompoundMark dest = markRoundings.get(i + 1).getCompoundMark();
              legs.add(new Leg(dep, dest, markRoundings.get(i).getSequenceNumber()));
          }
-    }
-
-    public Coordinate getViewCenter() {
-        return viewCenter;
-    }
-
-    public void setViewCenter(Coordinate viewCenter) {
-        this.viewCenter = viewCenter;
-    }
-
-    public int getZoomLevel() {
-        return zoomLevel.get();
-    }
-
-    public IntegerProperty zoomLevelProperty() {
-        return zoomLevel;
-    }
-
-    public void setZoomLevel(int zoomLevel) {
-        this.zoomLevel.set(zoomLevel);
-    }
-
-    public int getZoomId() {
-        return zoomId.get();
-    }
-
-    public IntegerProperty zoomIdProperty() {
-        return zoomId;
-    }
-
-    public void setZoomId(int zoomId) {
-        this.zoomId.set(zoomId);
     }
 }
 
