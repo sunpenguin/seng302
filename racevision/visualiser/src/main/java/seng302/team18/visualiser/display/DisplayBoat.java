@@ -178,6 +178,18 @@ public class DisplayBoat {
         this.heading = heading;
     }
 
+    /**
+     * Scales boat and wake shapes
+     *
+     * @param scaleFactor factor by which to scale them
+     */
+    public void setScale(double scaleFactor) {
+        boat.setScaleX(scaleFactor);
+        boat.setScaleY(scaleFactor);
+        wake.setScaleX(scaleFactor);
+        wake.setScaleY(scaleFactor);
+    }
+
     public void setEstimatedTime(Long estimatedTime) {
         this.estimatedTime = estimatedTime;
     }

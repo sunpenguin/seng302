@@ -19,10 +19,11 @@ import java.util.*;
  */
 public class CourseRenderer {
 
-    private final Color MARK_COLOR = Color.BLACK;
+    private final Color MARK_COLOR = Color.GREY;
     private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
     private final double BOUNDARY_OPACITY = 0.3;
     private final double MARK_SIZE = 10.0;
+    private final double LINE_WEIGHT = 1.0;
     private final double PADDING = 20.0;
     private Polyline border = new Polyline();
     private Map<Integer, Rectangle> marks = new HashMap<>();
@@ -99,9 +100,11 @@ public class CourseRenderer {
      * @param mark Mark to reset
      */
     private void renderMark(Mark mark) {
+        double scaledMarkSize = getScaledMarkSize();
+
         Rectangle rectangle = marks.get(mark.getId());
         if (rectangle == null) {
-            rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
+            rectangle = new Rectangle(scaledMarkSize, scaledMarkSize, MARK_COLOR);
 
             rectangle.setOnMouseClicked((event) -> {
                 pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
@@ -111,10 +114,14 @@ public class CourseRenderer {
             marks.put(mark.getId(), rectangle);
             group.getChildren().addAll(rectangle);
         }
+
+        rectangle.setWidth(scaledMarkSize);
+        rectangle.setHeight(scaledMarkSize);
+
         Coordinate coordinate = mark.getCoordinate();
         XYPair pixelCoordinates = pixelMapper.coordToPixel(coordinate);
-        rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
-        rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
+        rectangle.setX(pixelCoordinates.getX() - (scaledMarkSize / 2.0));
+        rectangle.setY(pixelCoordinates.getY() - (scaledMarkSize / 2.0));
     }
 
 
@@ -137,12 +144,14 @@ public class CourseRenderer {
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */
     private void renderGate(CompoundMark compoundMark) {
+        double scaledMarkSize = getScaledMarkSize();
+
         List<XYPair> endPoints = new ArrayList<>();
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
             Rectangle rectangle = marks.get(mark.getId());
             if (rectangle == null) {
-                rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
+                rectangle = new Rectangle(scaledMarkSize, scaledMarkSize, MARK_COLOR);
 
                 rectangle.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
@@ -156,10 +165,13 @@ public class CourseRenderer {
                 group.getChildren().addAll(rectangle);
             }
 
+            rectangle.setWidth(scaledMarkSize);
+            rectangle.setHeight(scaledMarkSize);
+
             Coordinate coordinate = mark.getCoordinate();
             XYPair pixelCoordinates = pixelMapper.coordToPixel(coordinate);
-            rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
-            rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
+            rectangle.setX(pixelCoordinates.getX() - (scaledMarkSize / 2));
+            rectangle.setY(pixelCoordinates.getY() - (scaledMarkSize / 2));
             endPoints.add(pixelCoordinates);
         }
 
@@ -175,6 +187,7 @@ public class CourseRenderer {
             line.toBack();
         }
 
+        line.setStrokeWidth(geScaledLineWeight());
         line.setStartX(endPoints.get(0).getX());
         line.setStartY(endPoints.get(0).getY());
         line.setEndX(endPoints.get(1).getX());
@@ -183,5 +196,23 @@ public class CourseRenderer {
 
     public Group getGroup() {
         return group;
+    }
+
+    /**
+     * Gets MARK_SIZE, scaling it to the current zoom.
+     *
+     * @return scaled mark size
+     */
+    private double getScaledMarkSize() {
+        return MARK_SIZE * pixelMapper.getZoomFactor();
+    }
+
+    /**
+     * Gets LINE_WEIGHT, scaling it to the current zoom.
+     *
+     * @return scaled line weight
+     */
+    private double geScaledLineWeight() {
+        return LINE_WEIGHT * pixelMapper.getZoomFactor();
     }
 }

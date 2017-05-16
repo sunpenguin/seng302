@@ -58,6 +58,15 @@ public class PixelMapper {
     }
 
     /**
+     * Get the current linear zoom factor
+     *
+     * @return the zoom factor
+     */
+    public double getZoomFactor() {
+        return Math.pow(2, zoomLevel.intValue());
+    }
+
+    /**
      * Maps a coordinate to a pixel value relative to the current resolution and zoom of the race view pane
      * NOTE: Origin is at the top left corner (X and Y increase to the right and downwards respectively)
      *
@@ -82,7 +91,7 @@ public class PixelMapper {
         } else {
             mappingScale = paneHeight / courseHeight;
         }
-        mappingScale *= MAP_SCALE_CORRECTION  * Math.pow(2, zoomLevel.intValue());
+        mappingScale *= MAP_SCALE_CORRECTION * Math.pow(2, zoomLevel.intValue());
 
         XYPair worldCoordinates = coordinateToPlane(coord);
         XYPair viewCenter = coordinateToPlane(viewPortCenter);
