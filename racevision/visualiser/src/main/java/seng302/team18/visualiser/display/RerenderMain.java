@@ -10,10 +10,12 @@ public class RerenderMain {
     private Race race;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
+    private BackgroundRenderer backgroundRenderer;
 
-    public RerenderMain(CourseRenderer courseRenderer, RaceRenderer raceRenderer, Race race) {
+    public RerenderMain(CourseRenderer courseRenderer, RaceRenderer raceRenderer, BackgroundRenderer backgroundRenderer, Race race) {
         this.courseRenderer = courseRenderer;
         this.raceRenderer = raceRenderer;
+        this.backgroundRenderer = backgroundRenderer;
         this.race = race;
     }
 
@@ -25,5 +27,6 @@ public class RerenderMain {
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
         raceRenderer.reDrawTrails(race.getStartingList());
+        backgroundRenderer.renderBackground();
     }
 }

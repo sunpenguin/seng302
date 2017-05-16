@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.web.WebView;
@@ -217,7 +216,7 @@ public class MainWindowController {
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
         raceRenderer = new RaceRenderer(pixelMapper, race, group, raceViewPane);
         raceRenderer.renderBoats();
-        courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
+        courseRenderer =  new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
         backgroundRenderer = new BackgroundRenderer(race, map.getEngine());
 
 
@@ -233,16 +232,26 @@ public class MainWindowController {
 
         raceLoop.start();
 
-        rerenderMain = new RerenderMain(courseRenderer, raceRenderer, race);
+        rerenderMain = new RerenderMain(courseRenderer, raceRenderer, backgroundRenderer, race);
 
-        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> rerenderMain.redrawFeatures());
-        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> rerenderMain.redrawFeatures());
+        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
+        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> redrawFeatures());
 
-        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> rerenderMain.redrawFeatures());
-        pixelMapper.addViewCenterListener(propertyChangeEvent -> rerenderMain.redrawFeatures());
+        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
+        pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
 
         setUpTable();
+    }
 
+    /**
+     * To call when course features need redrawing.
+     * (For example, when zoom in, the course features are required to change)
+     */
+    public void redrawFeatures() {
+        courseRenderer.renderCourse();
+        raceRenderer.renderBoats();
+        raceRenderer.reDrawTrails(race.getStartingList());
+        backgroundRenderer.renderBackground();
     }
 
     public RaceClock getRaceClock() {
