@@ -180,3 +180,4 @@ local.properties
 /app.iml
 /racevision/racevision.iml
 /racevision/visualiser/visualiser.iml
+/.idea/misc.xml

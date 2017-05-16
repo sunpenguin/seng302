@@ -14,11 +14,14 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.web.WebView;
 import javafx.util.Callback;
 import seng302.team18.messageparsing.SocketMessageReceiver;
-import seng302.team18.model.Boat;
-import seng302.team18.model.Race;
-import seng302.team18.visualiser.display.RaceLoop;
+import seng302.team18.model.*;
+import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
+import seng302.team18.visualiser.util.PixelMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -50,6 +53,8 @@ public class MainWindowController {
     private BackgroundRenderer backgroundRenderer;
     private RaceClock raceClock;
     private WindDirection windDirection;
+    private static RerenderMain rerenderMain;
+    private PixelMapper pixelMapper;
 
 
     @FXML
@@ -59,6 +64,14 @@ public class MainWindowController {
         boatSpeedImportant = false;
         estimatedTimeImportant = false;
         timeSinceLastMarkImportant = false;
+        group.setManaged(false);
+    }
+
+
+    @FXML
+    private void zoomOutButtonAction() {
+        pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
+        pixelMapper.setZoomLevel(0);
     }
 
 
@@ -131,7 +144,7 @@ public class MainWindowController {
      * Sets the cell values for the race table, these are place, boat name and boat speed.
      */
     private void setUpTable() {
-        Callback<Boat, Observable[]> callback =(Boat boat) -> new Observable[]{
+        Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
                 boat.placeProperty(),
         };
         ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
@@ -139,9 +152,9 @@ public class MainWindowController {
 
         SortedList<Boat> sortedList = new SortedList<>(observableList,
                 (Boat boat1, Boat boat2) -> {
-                    if( boat1.getPlace() < boat2.getPlace() ) {
+                    if (boat1.getPlace() < boat2.getPlace()) {
                         return -1;
-                    } else if( boat1.getPlace() > boat2.getPlace() ) {
+                    } else if (boat1.getPlace() > boat2.getPlace()) {
                         return 1;
                     } else {
                         return 0;
@@ -154,7 +167,7 @@ public class MainWindowController {
         boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
             @Override
             public void updateItem(Double speed, boolean empty) {
-                super.updateItem(speed, empty) ;
+                super.updateItem(speed, empty);
                 if (empty) {
                     setText(null);
                 } else {
@@ -190,16 +203,19 @@ public class MainWindowController {
 
 
     /**
-     * initialises race variables and begins the race loop. Adds listers to the race view to listen for when the window
+     * initialises race variables and begins the race loop. Adds listeners to the race view to listen for when the window
      * has been re-sized.
-     * @param race The race which is going to be displayed.
+     *
+     * @param race        The race which is going to be displayed.
      * @param interpreter A message interpreter.
-     * @param receiver A socket message receiver.
+     * @param receiver    A socket message receiver.
      */
     public void setUp(Race race, MessageInterpreter interpreter, SocketMessageReceiver receiver) {
         this.race = race;
+        setCourseCenter(race.getCourse());
 
-        raceRenderer = new RaceRenderer(race, group, raceViewPane);
+        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
+        raceRenderer = new RaceRenderer(pixelMapper, race, group, raceViewPane);
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
         backgroundRenderer = new BackgroundRenderer(race, map.getEngine());
@@ -217,23 +233,35 @@ public class MainWindowController {
 
         raceLoop.start();
 
-        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
-            courseRenderer.renderCourse();
-            raceRenderer.renderBoats();
-            raceRenderer.reDrawTrails(race.getStartingList());
-            backgroundRenderer.renderBackground();
-        });
-        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
-            courseRenderer.renderCourse();
-            raceRenderer.renderBoats();
-            raceRenderer.reDrawTrails(race.getStartingList());
-            backgroundRenderer.renderBackground();
-        });
+        rerenderMain = new RerenderMain(courseRenderer, raceRenderer, race);
+
+        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> rerenderMain.redrawFeatures());
+        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> rerenderMain.redrawFeatures());
+
+        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> rerenderMain.redrawFeatures());
+        pixelMapper.addViewCenterListener(propertyChangeEvent -> rerenderMain.redrawFeatures());
+
         setUpTable();
+
     }
 
     public RaceClock getRaceClock() {
         return raceClock;
+    }
+
+    private void setCourseCenter(Course course) {
+        List<Coordinate> points = new ArrayList<>();
+        for (BoundaryMark boundaryMark : course.getBoundaries()) {
+            points.add(boundaryMark.getCoordinate());
+        }
+        for (CompoundMark compoundMark : course.getCompoundMarks()) {
+            for (Mark mark : compoundMark.getMarks()) {
+                points.add(mark.getCoordinate());
+            }
+        }
+
+        List<Coordinate> extremes = GPSCalculations.findMinMaxPoints(race.getCourse());
+        race.getCourse().setCentralCoordinate(GPSCalculations.midPoint(extremes.get(0), extremes.get(1)));
     }
 
 }

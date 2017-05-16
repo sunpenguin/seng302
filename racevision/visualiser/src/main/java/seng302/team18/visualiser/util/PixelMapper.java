@@ -1,134 +1,181 @@
 package seng302.team18.visualiser.util;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.layout.Pane;
-import seng302.team18.model.*;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Course;
+import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.XYPair;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.List;
 
 /**
  * Class for mapping coordinates on to a pane.
+ * Conversions from GPS to cartesian coordinates done using the Web Mercator system.
  */
 public class PixelMapper {
 
-    private Course course;
-    private Pane pane;
-    private Double padding;
-    private double minX = Double.MAX_VALUE;
-    private double maxX = -(Double.MAX_VALUE);
-    private double minY = Double.MAX_VALUE;
-    private double maxY = -(Double.MAX_VALUE);
+    private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    public PixelMapper(Course course, Pane pane, Double padding) {
+    private final Course course;
+    private final Pane pane;
+    private final double MAP_SCALE_CORRECTION = 0.95;
+    private Coordinate viewPortCenter;
+    private final IntegerProperty zoomLevel = new SimpleIntegerProperty(0);
+
+    public static final int ZOOM_LEVEL_4X = 1;
+
+    public PixelMapper(Course course, Pane pane) {
         this.course = course;
         this.pane = pane;
-        this.padding = padding;
+
+        viewPortCenter = course.getCentralCoordinate();
+    }
+
+    public void addViewCenterListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener("viewPortCenter", listener);
+    }
+
+    public void removeViewCenterListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener("viewPortCenter", listener);
+    }
+
+    public void setViewPortCenter(Coordinate center) {
+        Coordinate old = viewPortCenter;
+        viewPortCenter = center;
+        propertyChangeSupport.firePropertyChange("viewPortCenter", old, center);
+    }
+
+    public IntegerProperty zoomLevelProperty() {
+        return zoomLevel;
+    }
+
+    public void setZoomLevel(int level) {
+        zoomLevel.set(level);
     }
 
     /**
-     * Converts the latitude / longitude coordinates to pixel coordinates.
-     * @param coord Coordinates to be converted
-     * @return x and y pixel coordinates of the given coordinates
+     * Get the current linear zoom factor
+     *
+     * @return the zoom factor
+     */
+    public double getZoomFactor() {
+        return Math.pow(2, zoomLevel.intValue());
+    }
+
+    /**
+     * Maps a coordinate to a pixel value relative to the current resolution and zoom of the race view pane
+     * NOTE: Origin is at the top left corner (X and Y increase to the right and downwards respectively)
+     *
+     * @param coord Coordinate to map
+     * @return XYPair containing the x and y pixel values
      */
     public XYPair coordToPixel(Coordinate coord) {
+        List<Coordinate> points = GPSCalculations.findMinMaxPoints(course);
 
-        findMinMaxPoints();
-        double pixelWidth = pane.getWidth() - padding * 2;
-        double pixelHeight = pane.getHeight() - padding * 2;
-        if (pixelHeight <= 0 || pixelWidth <= 0) {
-            pixelWidth = pane.getPrefWidth() - padding * 2;
-            pixelHeight = pane.getPrefHeight() - padding * 2;
+        double courseWidth = calcCourseWidth(points.get(0).getLongitude(), points.get(1).getLongitude());
+        double courseHeight = calcCourseHeight(points.get(0).getLatitude(), points.get(1).getLatitude());
+        double paneWidth = pane.getWidth();
+        double paneHeight = pane.getHeight();
+        if (paneHeight <= 0 || paneWidth <= 0) {
+            paneWidth = pane.getPrefWidth();
+            paneHeight = pane.getPrefHeight();
         }
 
-        if (pixelHeight > pixelWidth) {
-            pixelHeight = pixelWidth;
-        } else if (pixelWidth > pixelHeight) {
-            pixelWidth = pixelHeight;
-        }
-
-        double courseWidth = maxX - minX;
-        double courseHeight = maxY - minY;
-        XYPair planeCoordinates = coordinateToPlane(coord);
-        double aspectRatio = courseWidth / courseHeight;
-
-        if (courseHeight > courseWidth) {
-            pixelWidth *= aspectRatio;
+        double mappingScale;
+        if (courseWidth / courseHeight > paneWidth / paneHeight) {
+            mappingScale = paneWidth / courseWidth;
         } else {
-            pixelHeight *= aspectRatio;
+            mappingScale = paneHeight / courseHeight;
         }
+        mappingScale *= MAP_SCALE_CORRECTION * Math.pow(2, zoomLevel.intValue());
 
-        double widthRatio = (courseWidth - (maxX - planeCoordinates.getX())) / courseWidth;
-        double heightRatio = (courseHeight - (maxY - planeCoordinates.getY())) / courseHeight;
+        XYPair worldCoordinates = coordinateToPlane(coord);
+        XYPair viewCenter = coordinateToPlane(viewPortCenter);
 
-        return new XYPair(pixelWidth * widthRatio + padding, (pixelHeight * heightRatio + padding) * - 1);
-    }
+        double dX = worldCoordinates.getX() - viewCenter.getX();
+        double dY = worldCoordinates.getY() - viewCenter.getY();
 
+        double x = dX * mappingScale + paneWidth / 2;
+        double y = dY * mappingScale + paneHeight / 2;
 
-    /**
-     * Method to convert a given Coordinate from longitude and latitude to x, y values.
-     * Source: http://stackoverflow.com/questions/16266809/convert-from-latitude-longitude-to-x-y
-     *
-     * @param point The coordinates to convert.
-     * @return the coordinate mapped to a plane.
-     */
-    private XYPair coordinateToPlane(Coordinate point) {
-        double earthRadius = 6371e3; // meters
-        double aspectLat = Math.cos(course.getCentralCoordinate().getLatitude());
-        double x = earthRadius * Math.toRadians(point.getLongitude()) * aspectLat;
-        double y = earthRadius * Math.toRadians(point.getLatitude());
+//        if (x < 0 || y < 0) {
+//            System.out.println(coord.toString() + " " + x + " " + y);
+//        }
+
         return new XYPair(x, y);
     }
 
-//    public Coordinate pixelToCoordinate(XYPair point) {
-//        double earthRadius = 6371e3; // meters
-//        double aspectLat = Math.cos(course.getCentralCoordinate().getLatitude());
-//        double latitude = Math.toDegrees(point.getY() / earthRadius);
-//        double longitude = Math.toDegrees((point.getX() / earthRadius) / aspectLat);
-//        return new Coordinate(latitude, longitude);
-//    }
-
+    /**
+     * Converts the given longitude to a value in [0, 256 * 2 ^ zoomLevel]
+     *
+     * @param longitude longitude to convert
+     * @return longitude in Web Mercator scale
+     */
+    private double webMercatorLongitude(double longitude) {
+        double x = 128 * (longitude + Math.PI) / Math.PI;
+        return x;
+    }
 
     /**
-     * Finds the min and max points of a course using boundaries.
+     * Converts the given latitude to a value in [0, 256 * 2 ^ zoomLevel]
+     *
+     * @param latitude Latitude to convert
+     * @return latitude in Web Mercator scale
      */
-    private void findMinMaxPoints() {
-        minX = Double.MAX_VALUE;
-        maxX = -(Double.MAX_VALUE);
-        minY = Double.MAX_VALUE;
-        maxY = -(Double.MAX_VALUE);
-        for (BoundaryMark boundary : course.getBoundaries()) {
-            XYPair boundaryXYValues = coordinateToPlane(boundary.getCoordinate());
-            double xValue = boundaryXYValues.getX();
-            double yValue = boundaryXYValues.getY();
-            if (xValue < minX) {
-                minX = xValue;
-            }
-            if (xValue > maxX) {
-                maxX = xValue;
-            }
-            if (yValue < minY) {
-                minY = yValue;
-            }
-            if (yValue > maxY) {
-                maxY = yValue;
-            }
-        }
-//        for (CompoundMark compoundMark : course.getCompoundMarks()) {
-//            for (Mark mark : compoundMark.getMarks()) {
-//                XYPair markXYValues = coordinateToPlane(mark.getCoordinate());
-//                double xValue = markXYValues.getX();
-//                double yValue = markXYValues.getY();
-//                if (xValue < minX) {
-//                    minX = xValue;
-//                }
-//                if (xValue > maxX) {
-//                    maxX = xValue;
-//                }
-//                if (yValue < minY) {
-//                    minY = yValue;
-//                }
-//                if (yValue > maxY) {
-//                    maxY = yValue;
-//                }
-//            }
+    private double webMercatorLatitude(double latitude) {
+        double y = 128 * (Math.PI - Math.log(Math.tan((Math.PI / 4) + (latitude / 2)))) / Math.PI;
+        return y;
+    }
+
+    /**
+     * Converts a coordinate from GPS coordinates to cartesian coordinates in the range [0, 256 * 2 ^ zoomLevel] for
+     * both x and y
+     *
+     * @param point Coordinate to convert
+     * @return converted coordinate
+     */
+    private XYPair coordinateToPlane(Coordinate point) {
+        return new XYPair(webMercatorLongitude(point.getLongitude()), webMercatorLatitude(point.getLatitude()));
+    }
+
+    /**
+     * Calculates the width of the course
+     *
+     * @param westernBound Longitude of western most point
+     * @param easternBound Longitude of eastern most point
+     * @return the width of the course using Web Mercator cartesian coordinates
+     */
+    private double calcCourseWidth(double westernBound, double easternBound) {
+        Coordinate west = new Coordinate(course.getCentralCoordinate().getLatitude(), westernBound);
+        Coordinate east = new Coordinate(course.getCentralCoordinate().getLatitude(), easternBound);
+
+        double dWest = GPSCalculations.distance(west, course.getCentralCoordinate());
+        double dEast = GPSCalculations.distance(course.getCentralCoordinate(), east);
+
+        Coordinate furthest = (dWest > dEast) ? west : east;
+        return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getX() - coordinateToPlane(furthest).getX()) * 2;
+    }
+
+    /**
+     * Calculates the height of the course
+     *
+     * @param northernBound Latitude of northern most point
+     * @param southernBound Latitude of southern most point
+     * @return the width of the course using Web Mercator cartesian coordinates
+     */
+    private double calcCourseHeight(double northernBound, double southernBound) {
+        Coordinate north = new Coordinate(northernBound, course.getCentralCoordinate().getLongitude());
+        Coordinate south = new Coordinate(southernBound, course.getCentralCoordinate().getLongitude());
+
+        double dNorth = GPSCalculations.distance(north, course.getCentralCoordinate());
+        double dSouth = GPSCalculations.distance(south, course.getCentralCoordinate());
+
+        Coordinate furthest = (dNorth > dSouth) ? north : south;
+        return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getY() - coordinateToPlane(furthest).getY()) * 2;
     }
 }
 

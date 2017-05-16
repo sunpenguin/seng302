@@ -1,6 +1,8 @@
 package seng302.team18.visualiser.display;
 
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Polyline;
@@ -59,6 +61,15 @@ public class DisplayBoat {
         wakeColor = Color.CADETBLUE;
         wakeScaleFactor = 1.0d / 32.0d; // the wake is at normal size when the boat is moving 32 speed
         boat = new Polyline();
+
+        boat.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println("CLICKED: " + name);
+            }
+        });
+
+
         boat.getPoints().addAll(BOAT_SHAPE);
         boat.setFill(boatColor); // this isn't default
         wake = new Polygon();
@@ -165,6 +176,18 @@ public class DisplayBoat {
         wake.getTransforms().add(rotation);
         boat.getTransforms().add(rotation);
         this.heading = heading;
+    }
+
+    /**
+     * Scales boat and wake shapes
+     *
+     * @param scaleFactor factor by which to scale them
+     */
+    public void setScale(double scaleFactor) {
+        boat.setScaleX(scaleFactor);
+        boat.setScaleY(scaleFactor);
+        wake.setScaleX(scaleFactor);
+        wake.setScaleY(scaleFactor);
     }
 
     public void setEstimatedTime(Long estimatedTime) {

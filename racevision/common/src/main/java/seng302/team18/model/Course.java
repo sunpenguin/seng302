@@ -1,5 +1,8 @@
 package seng302.team18.model;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -96,12 +99,6 @@ public class Course {
     public ZoneId getTimeZone() {
         return timeZone;
     }
-
-//    public void setMarkRoundings(List<MarkRounding> markRoundings) {
-//        this.markRoundings = markRoundings;
-//    }
-
-//    public List<MarkRounding> getMarkRoundings() {return markRoundings;}
 
     public void setCentralCoordinate(Coordinate centralCoordinate) {
         if (this.centralCoordinate.getLatitude() == 0d && this.centralCoordinate.getLongitude() == 0d) {
