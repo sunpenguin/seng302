@@ -182,25 +182,6 @@ public class MainWindowController {
         windDirection.start();
     }
 
-
-//    public void startRace(long secondsDelay) {
-//        final double KMPH_TO_MPS = 1000.0 / 3600.0;
-////        double timeScaleFactor = race.getCourse().getCourseDistance()
-////                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
-////        secondsDelay /= (double) timeScaleFactor;
-//        raceClock.start();
-//        Timeline showLive = new Timeline(new KeyFrame(
-//                Duration.seconds(secondsDelay),
-//                event -> {
-//                    raceClock = new RaceClock(timerLabel, race, 0d);
-//                    raceClock.start();
-//                    raceLoop.start();
-//                }));
-//        showLive.setCycleCount(1);
-//        showLive.play();
-//    }
-
-
     /**
      * initialises race variables and begins the race loop. Adds listeners to the race view to listen for when the window
      * has been re-sized.
@@ -252,7 +233,6 @@ public class MainWindowController {
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
         raceRenderer.reDrawTrails(race.getStartingList());
-
     }
 
     public RaceClock getRaceClock() {
