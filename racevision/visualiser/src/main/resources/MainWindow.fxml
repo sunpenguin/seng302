@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.MainWindowController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightblue;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.MainWindowController">
    <children>
       <AnchorPane fx:id="raceViewPane" layoutY="30.0" minHeight="0.0" minWidth="0.0" prefHeight="690.0" prefWidth="822.0" style="-fx-background-color: lightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="458.0" AnchorPane.topAnchor="30.0">
          <children>
@@ -59,7 +59,7 @@
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <Polygon fx:id="arrow" fill="#ff1f1f" layoutX="371.0" layoutY="91.0" stroke="BLACK" strokeType="INSIDE">
+                        <Polygon fx:id="arrow" fill="#ff1f1f" layoutX="371.0" layoutY="91.0" scaleX="0.5" stroke="BLACK" strokeType="INSIDE">
                            <points>
                               <Double fx:value="-50.0" />
                               <Double fx:value="40.0" />

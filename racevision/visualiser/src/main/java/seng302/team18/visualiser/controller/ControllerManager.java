@@ -114,6 +114,7 @@ public class ControllerManager {
         primaryStage.setTitle("RaceVision");
         Scene scene = new Scene(root, 1280, 720);
         primaryStage.setScene(scene);
+        primaryStage.setOnCloseRequest(event -> System.exit(0));
         primaryStage.show();
 
         mainController.setUp(race, interpreter, receiver);
@@ -135,6 +136,7 @@ public class ControllerManager {
         primaryStage.setTitle("RaceVision");
         Scene scene = new Scene(root, 1280, 720);
         primaryStage.setScene(scene);
+        primaryStage.setOnCloseRequest(event -> System.exit(0));
         primaryStage.show();
 
         preRaceController.setUp(this, currentTime, startTime, duration, race.getStartingList());

@@ -1,0 +1,13 @@
+.root{
+    -fx-font-family: "Courier New";
+    -fx-base: #ee82ee;
+    -fx-background: #f6e0f9;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-legend {
+    -fx-background-color:  transparent;
+}
