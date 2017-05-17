@@ -67,7 +67,7 @@ public class RaceRenderer {
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
                 XYPair pixels = pixelMapper.coordToPixel(boatCoordinates);
-                displayBoat.toFront();
+                displayBoat.setDisplayOrder();
                 displayBoat.moveBoat(pixels);
                 displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());
