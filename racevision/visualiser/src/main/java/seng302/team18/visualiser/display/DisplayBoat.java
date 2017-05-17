@@ -7,7 +7,9 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
+import seng302.team18.model.Coordinate;
 import seng302.team18.util.XYPair;
+import seng302.team18.visualiser.util.PixelMapper;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -33,6 +35,7 @@ public class DisplayBoat {
     private Long estimatedTime;
     private Long timeSinceLastMark;
     private Double speed;
+    private Coordinate location;
     private int decimalPlaces = 1; // for speed annotation
     private Map<AnnotationType, Boolean> visibleAnnotations;
 
@@ -64,6 +67,8 @@ public class DisplayBoat {
     private final Scale tfmWakeZoom = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
     private final Scale tfmBoatZoom = new Scale(1, 1, 0, 0);
 
+    private final PixelMapper pixelMapper;
+
     /**
      * Creates a new instance of DisplayBoat
      *
@@ -73,7 +78,8 @@ public class DisplayBoat {
      * @param boatColor     the color to display the boat in
      * @param estimatedTime the estimated time until the boat reaches the next mark
      */
-    public DisplayBoat(String name, Double heading, Double speed, Color boatColor, Long estimatedTime) {
+    public DisplayBoat(PixelMapper pixelMapper, String name, Double heading, Double speed, Color boatColor, Long estimatedTime) {
+        this.pixelMapper = pixelMapper;
         this.name = name;
         this.boatColor = boatColor;
         this.estimatedTime = estimatedTime;
@@ -90,7 +96,12 @@ public class DisplayBoat {
         boat = new Polyline();
         boat.getPoints().addAll(BOAT_SHAPE);
         boat.setFill(boatColor);
-        boat.setOnMouseClicked(event -> System.out.println("CLICKED: " + name));
+        boat.setOnMouseClicked(event -> {
+            if (location != null) {
+                pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                pixelMapper.setViewPortCenter(location);
+            }
+        });
         boat.getTransforms().addAll(tfmRotation, tfmBoatZoom);
 
         wake = new Polygon();
@@ -139,9 +150,11 @@ public class DisplayBoat {
     /**
      * Update the position of a boat's image and it's wake.
      *
-     * @param pixels New position to update to.
+     * @param coordinate new position of the boat
      */
-    public void moveBoat(XYPair pixels) {
+    public void moveBoat(Coordinate coordinate) {
+        location = coordinate;
+        XYPair pixels = pixelMapper.coordToPixel(coordinate);
         boat.setLayoutX(pixels.getX());
         boat.setLayoutY(pixels.getY());
         wake.setLayoutX(pixels.getX());

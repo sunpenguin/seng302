@@ -6,7 +6,6 @@ import javafx.scene.paint.Color;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
-import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
 import java.util.*;
@@ -58,17 +57,18 @@ public class RaceRenderer {
 
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             if (displayBoat == null) {
-                displayBoat = new DisplayBoat
-                        (boat.getShortName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(numBoats++), boat.getTimeTilNextMark());
+                displayBoat = new DisplayBoat(
+                        pixelMapper, boat.getShortName(), boat.getHeading(), boat.getSpeed(),
+                        BOAT_COLOURS.get(numBoats++), boat.getTimeTilNextMark()
+                );
                 displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
 
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
-                XYPair pixels = pixelMapper.coordToPixel(boatCoordinates);
                 displayBoat.setDisplayOrder();
-                displayBoat.moveBoat(pixels);
+                displayBoat.moveBoat(boatCoordinates);
                 displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
