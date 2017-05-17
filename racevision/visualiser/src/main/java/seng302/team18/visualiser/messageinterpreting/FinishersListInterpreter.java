@@ -1,7 +1,8 @@
 package seng302.team18.visualiser.messageinterpreting;
 
-import seng302.team18.messageparsing.AC35RaceStatusMessage;
-import seng302.team18.messageparsing.MessageBody;
+import seng302.team18.message.AC35BoatStatusMessage;
+import seng302.team18.message.AC35RaceStatusMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 
@@ -35,14 +36,21 @@ public class FinishersListInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof AC35RaceStatusMessage) {
             AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
+            List<AC35BoatStatusMessage> boatStates = statusMessage.getBoatStatus();
             List<Boat> finishedList = race.getFinishedList();
-            Map<Integer, List> boatStatus = statusMessage.getBoatStatus();
-            for (Boat boat : race.getStartingList()) {
-                if (!finishedList.contains(boat) &&
-                            (int) boatStatus.get(boat.getId()).get(statusMessage.getBoatStatusPosition()) == 3) {
-                    finishedList.add(boat);
-                }
+            for (AC35BoatStatusMessage boatStatus : boatStates) {
+                race.getStartingList()
+                        .stream()
+                        .filter(boat -> boat.getId().equals(boatStatus.getBoatId()) && boatStatus.getBoatStatus() == 3)
+                        .forEach(finishedList::add);
             }
+//            Map<Integer, List> boatStatus = statusMessage.getBoatStatus();
+//            for (Boat boat : race.getStartingList()) {
+//                if (!finishedList.contains(boat) &&
+//                            (int) boatStatus.get(boat.getId()).get(statusMessage.getBoatStatusPosition()) == 3) {
+//                    finishedList.add(boat);
+//                }
+//            }
         }
     }
 }

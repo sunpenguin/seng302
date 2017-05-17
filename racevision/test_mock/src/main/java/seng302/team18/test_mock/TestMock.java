@@ -1,5 +1,8 @@
 package seng302.team18.test_mock;
 
+import seng302.team18.message.AC35XMLBoatMessage;
+import seng302.team18.message.AC35XMLRaceMessage;
+import seng302.team18.message.AC35XMLRegattaMessage;
 import seng302.team18.messageparsing.*;
 import seng302.team18.model.*;
 import seng302.team18.test_mock.connection.*;

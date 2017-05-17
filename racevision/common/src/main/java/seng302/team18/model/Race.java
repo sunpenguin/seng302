@@ -48,7 +48,9 @@ public class Race {
         this.startingList = startingList;
         this.course = course;
         finishedList = new ArrayList<>();
-        participantIds = startingList.stream().map(Boat::getId).collect(Collectors.toList());
+        participantIds = startingList.stream()
+                .map(Boat::getId)
+                .collect(Collectors.toList());
         this.id = raceId;
         this.status = 0;
         setCourseForBoats();
@@ -118,7 +120,8 @@ public class Race {
      */
     public void setStartingList(List<Boat> startingList) {
         if (participantIds.size() == 0) {
-            this.startingList = startingList;
+            this.startingList.clear();
+            this.startingList.addAll(startingList);
         } else {
             this.startingList.clear();
             for (Boat boat : startingList) {
@@ -265,9 +268,11 @@ public class Race {
 
     public void setParticipantIds(List<Integer> participantIds) {
         this.participantIds = participantIds;
-        startingList = startingList.stream()
+        List<Boat> newList = startingList.stream()
                 .filter(boat -> participantIds.contains(boat.getId()))
                 .collect(Collectors.toList());
+        startingList.clear();
+        startingList.addAll(newList);
     }
 
     public void setCurrentTime(ZonedDateTime currentTime) {

@@ -2,7 +2,7 @@ package seng302.team18.visualiser.messageinterpreting;
 
 import org.junit.Before;
 import org.junit.Test;
-import seng302.team18.messageparsing.AC35MessageType;
+import seng302.team18.message.AC35MessageType;
 import seng302.team18.model.Race;
 
 /**

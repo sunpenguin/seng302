@@ -4,6 +4,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.AC35RaceStatusMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.model.Race;
@@ -21,7 +24,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * The Main Controller that manages the other controller classes.
+ * The App Controller that manages the other controller classes.
  */
 public class ControllerManager {
     private MainWindowController mainController;
@@ -29,47 +32,64 @@ public class ControllerManager {
     private PreRaceController preRaceController;
     private String preRacePath;
     private Stage primaryStage;
+    private ViewType currentView = ViewType.NOT_SET;
 
     private SocketMessageReceiver receiver;
     private MessageInterpreter interpreter;
     private Race race;
 
+    /**
+     * Private enum for keeping track of the current view.
+     */
+    private enum ViewType {
+        PRE_RACE(1), MAIN(2), NOT_SET(3);
 
+        private int code;
+
+        private ViewType(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public boolean differentView(ViewType newView) {
+            return newView.getCode() != this.getCode();
+        }
+    }
+
+    /**
+     * Constructor for ControllerManager
+     * @param primaryStage for showing views
+     * @param mainControllerPath path to the MainController.fxml
+     * @param preRacePath path to PreRace.fxml
+     */
     public ControllerManager(Stage primaryStage, String mainControllerPath, String preRacePath) {
         this.mainControllerPath = mainControllerPath;
         this.preRacePath = preRacePath;
         this.primaryStage = primaryStage;
+
     }
 
 
     /**
-     * initialises the reciever, race and interpreter. Loops through messages recieved via the receiver and interprets
+     * Initialises the receiver, race and interpreter. Loops through messages received via the receiver and interprets
      * them.
      * @throws Exception
      */
     public void start() throws Exception {
-        receiver = getPort();
+        receiver = getSocket();
         race = new Race();
-        interpreter = new CompositeMessageInterpreter();
         initialiseInterpreter();
-        MessageBody message = receiver.nextMessage();
-        while(message == null || AC35MessageType.from(message.getType()) != AC35MessageType.RACE_STATUS) {
-            interpreter.interpret(message);
-            message = receiver.nextMessage();
-        }
+        interpretMessages();
+    }
 
-        AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
-        Instant startIn = Instant.ofEpochMilli(statusMessage.getStartTime());
-        Instant currentIn = Instant.ofEpochMilli(statusMessage.getCurrentTime());
-        ZonedDateTime startTime = ZonedDateTime.ofInstant(startIn, race.getCourse().getTimeZone());
-        ZonedDateTime currentTime = ZonedDateTime.ofInstant(currentIn, race.getCourse().getTimeZone());
 
-        if (currentTime.isBefore(startTime.plusSeconds((long) Race.PREP_TIME_SECONDS))) {
-            showPreRace(currentTime, startTime, ChronoUnit.SECONDS.between(currentTime, startTime) - (long) Race.PREP_TIME_SECONDS);
-        } else {
-            showMainView();
-        }
-
+    /**
+     * starts interpreting messages from the socket.
+     */
+    private void interpretMessages() {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
             while(true) {
@@ -83,13 +103,18 @@ public class ControllerManager {
             }
         });
 
+        primaryStage.setOnCloseRequest((event) -> {
+            executor.shutdownNow();
+            while (!receiver.close()) {}
+        });
     }
 
 
     /**
-     * Set up and intialise interpreter variables, adding interpreters of each relevant type to the glabal interpreter.
+     * Set up and initialise interpreter variables, adding interpreters of each relevant type to the glabal interpreter.
      */
     private void initialiseInterpreter() {
+        interpreter = new CompositeMessageInterpreter();
         interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
@@ -101,43 +126,50 @@ public class ControllerManager {
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLocationInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
+
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
     }
+
+
 
     /**
      * Sets up the main GUI window, controlled by the main window controller.
      * @throws IOException IO Exception thrown when loading FXML loader
      */
     public void showMainView() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(mainControllerPath));
-        Parent root = loader.load(); // throws IOException
-        mainController = loader.getController();
-        primaryStage.setTitle("RaceVision");
-        Scene scene = new Scene(root, 1280, 720);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        if (currentView.differentView(ViewType.MAIN)) {
+            currentView = ViewType.MAIN;
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(mainControllerPath));
+            Parent root = loader.load(); // throws IOException
+            mainController = loader.getController();
+            primaryStage.setTitle("RaceVision");
+            Scene scene = new Scene(root, 1280, 720);
+            primaryStage.setScene(scene);
+            primaryStage.show();
 
-        mainController.setUp(race, interpreter, receiver);
+            mainController.setUp(race, interpreter, receiver);
 
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(mainController.getRaceClock()));
+            interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(mainController.getRaceClock()));
+        }
     }
 
     /**
      * Display the window with information about a race which hasn't started yet.
-     * @param currentTime The current time at the race location.
-     * @param startTime The start time of the race which is being streamed.
-     * @param duration The length of time until startTime
      * @throws IOException IO Exception thrown when loading FXML loader
      */
-    private void showPreRace(ZonedDateTime currentTime, ZonedDateTime startTime, long duration) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(preRacePath));
-        Parent root = loader.load(); // throws IOException
-        preRaceController = loader.getController();
-        primaryStage.setTitle("RaceVision");
-        Scene scene = new Scene(root, 1280, 720);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+    public void showPreRace() throws IOException {
+        if (currentView.differentView(ViewType.PRE_RACE)) {
+            currentView = ViewType.PRE_RACE;
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(preRacePath));
+            Parent root = loader.load(); // throws IOException
+            preRaceController = loader.getController();
+            primaryStage.setTitle("RaceVision");
+            Scene scene = new Scene(root, 1280, 720);
+            primaryStage.setScene(scene);
+            primaryStage.show();
 
-        preRaceController.setUp(this, currentTime, startTime, duration, race.getStartingList());
+            preRaceController.setUp(race.getCurrentTime(), race.getStartTime(), race.getStartingList());
+        }
     }
 
 
@@ -146,7 +178,7 @@ public class ControllerManager {
      * live stream or they can specify their own custom  port number and address to stream from.
      * @return A port and host combination
      */
-    private SocketMessageReceiver getPort() {
+    private SocketMessageReceiver getSocket() {
         Scanner scanner = new Scanner(System.in);
         String decision = "";
         List<String> validChoices = new ArrayList<>(Arrays.asList("1", "2", "3", "4"));
@@ -184,12 +216,12 @@ public class ControllerManager {
                 System.out.println("Could not establish connection to stream Host/Port");
             }
         }
-        return getPort();
+        return getSocket();
     }
 
     /**
-     * A companion method for getPort.
-     * Asks the user for thir custom port and address.
+     * A companion method for getSocket.
+     * Asks the user for the custom port and address.
      * @return A port and host combination
      */
     private List<String> getCustomConnection() {

@@ -3,8 +3,8 @@ package seng302.team18.visualiser.messageinterpreting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import seng302.team18.messageparsing.AC35RaceStatusMessage;
-import seng302.team18.messageparsing.MessageBody;
+import seng302.team18.message.AC35RaceStatusMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
@@ -34,7 +34,7 @@ public class WindDirectionInterpreterTest {
         race = new Race();
         race.setStartingList(boats);
         interpreter = new WindDirectionInterpreter(race);
-        MessageBody message = new AC35RaceStatusMessage(0, 0, 0, windDirection, new HashMap<>());
+        MessageBody message = new AC35RaceStatusMessage(0, 0, 0, windDirection, new ArrayList<>());
         interpreter.interpret(message);
     }
 

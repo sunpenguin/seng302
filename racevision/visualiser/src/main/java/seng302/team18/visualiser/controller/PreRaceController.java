@@ -30,7 +30,6 @@ public class PreRaceController {
     @FXML
     private Label timeZoneLabel;
 
-    private ControllerManager manager;
     private ZoneTimeClock preRaceClock;
 
     @FXML
@@ -41,43 +40,17 @@ public class PreRaceController {
     /**
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
      * duration before the race starts.
-     * @param manager The controller manager for this instance of the program.
      * @param currentTime The current time at the location of the race.
      * @param startTime The official start time of the race.
-     * @param duration The length of time for which the controller should display the pre-race window.
      * @param boats The boats participatin gin the race.
      */
-    public void setUp(ControllerManager manager, ZonedDateTime currentTime, ZonedDateTime startTime, long duration, List<Boat> boats) {
-        this.manager = manager;
+    public void setUp(ZonedDateTime currentTime, ZonedDateTime startTime, List<Boat> boats) {
         startClock(currentTime, currentTime.getZone());
-        displayTimeZone(currentTime);
+        displayTimeZone(startTime);
         startTimeLabel.setText(startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         setUpLists(boats);
-        if (duration > 0) {
-            Timeline showLive = new Timeline(new KeyFrame(
-                    Duration.seconds(duration),
-                    event -> {
-                        showLiveRaceView();
-                    }));
-
-            showLive.setCycleCount(1);
-            showLive.play();
-        }else{
-            showLiveRaceView();
-        }
     }
 
-
-    /**
-     * Shows the live race view window.
-     */
-    public void showLiveRaceView() {
-        try {
-            manager.showMainView();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     private void startClock(ZonedDateTime currentTime, ZoneId timeZone) {
@@ -88,6 +61,7 @@ public class PreRaceController {
     private void displayTimeZone(ZonedDateTime zoneTime) {
         timeZoneLabel.setText("UTC " + zoneTime.getOffset().toString());
     }
+
 
     /**
      * Sets the list view of the participants in the race.
