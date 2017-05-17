@@ -1,39 +1,39 @@
 .root{
     -fx-font-family: "Courier New";
-    -fx-base: deeppink;
-    -fx-background: #ee8fff;
+    -fx-base: steelblue;
+    -fx-background: slategrey;
 }
 
 .menu-item:focused {
-    -fx-background-color: #ee8fff;
+    -fx-background-color: slategrey;
 }
 
 .menu-item:selected {
-    -fx-background-color: #ee8fff;
+    -fx-background-color: slategrey;
 }
 
 .menu:focused{
-    -fx-background-color: #ee8fff;
+    -fx-background-color: slategrey;
 }
 
 .menu:selected {
-    -fx-background-color: #ee8fff;
+    -fx-background-color: slategrey;
 }
 
 .menu:showing {
-    -fx-background-color: #ee8fff;
+    -fx-background-color: slategrey;
 }
 
 
 .menu:hover {
-    -fx-background-color: #ee8fff;
+    -fx-background-color: slategrey;
 }
 
 
 
 .menu-bar{
-    -fx-background-color: deeppink;
-    -fx-border-color:  deeppink;
+    -fx-background-color: steelblue;
+    -fx-border-color:  steelblue;
     -fx-border-width: 1
 
 }
@@ -47,7 +47,7 @@
 
 
 .menu:hover {
-    -fx-background-color: #ee8fff;
+    -fx-background-color: slategrey;
 }
 
 .menu-item .label{
@@ -75,7 +75,7 @@
     Struktur column-header-background -> column-header */
 
 .table-view .column-header-background{
-    -fx-background-color: linear-gradient(deeppink 0%, #ee8fff 100%);
+    -fx-background-color: linear-gradient(steelblue 0%, slategrey 100%);
 }
 
 .table-view .column-header-background .label{
@@ -92,13 +92,13 @@
 }
 
 .table-row-cell{
-    -fx-background-color: -fx-table-cell-border-color, #ee82ee;
+    -fx-background-color: -fx-table-cell-border-color, slategrey;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */
 }
 
 .table-row-cell:odd{
-    -fx-background-color: -fx-table-cell-border-color, deeppink;
+    -fx-background-color: -fx-table-cell-border-color, steelblue;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */
 }
