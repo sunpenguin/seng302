@@ -58,13 +58,13 @@
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Rectangle arcHeight="5.0" arcWidth="5.0" height="50.0" layoutX="140.0" layoutY="56.0" stroke="BLACK" strokeType="INSIDE" width="179.0" />
-                        <Text layoutX="160.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Official Race Clock">
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" height="50.0" layoutX="140.0" layoutY="40.0" stroke="BLACK" strokeType="INSIDE" width="179.0" />
+                        <Text layoutX="159.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Official Race Clock">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Text>
-                        <Label fx:id="timerLabel" layoutX="182.0" layoutY="56.0" prefHeight="50.0" prefWidth="96.0" text=" -00:00" textAlignment="CENTER" textFill="#3cf55b">
+                        <Label fx:id="timerLabel" layoutX="182.0" layoutY="40.0" prefHeight="50.0" prefWidth="96.0" text=" -00:00" textAlignment="CENTER" textFill="#3cf55b">
                            <font>
                               <Font size="24.0" />
                            </font>
