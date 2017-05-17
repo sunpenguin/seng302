@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.control.Label?>
@@ -7,31 +8,40 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.PreRaceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="578.0" prefWidth="777.0" styleClass="background" stylesheets="@stylesheets/preRaceStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.PreRaceController">
    <children>
-      <ListView fx:id="listView" layoutX="165.0" layoutY="46.0" prefHeight="674.0" prefWidth="280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1000.0" AnchorPane.topAnchor="46.0" />
-      <Label fx:id="timeLabel" layoutX="824.0" layoutY="300.0" prefHeight="71.0" prefWidth="171.0" text="Local time" AnchorPane.rightAnchor="285.0" />
-      <Label fx:id="timeZoneLabel" layoutX="824.0" layoutY="390.0" prefHeight="30.0" prefWidth="100.0" text="Timezone" AnchorPane.rightAnchor="356.0" />
-      <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Starting List" wrappingWidth="280.0">
+      <AnchorPane layoutX="199.0" layoutY="113.0" minWidth="-Infinity" prefHeight="195.0" prefWidth="497.0">
+         <children>
+            <Label fx:id="timeZoneLabel" layoutX="268.0" layoutY="146.0" prefHeight="30.0" prefWidth="100.0" text="Timezone" AnchorPane.rightAnchor="129.0" />
+            <Text layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Local Time:" AnchorPane.rightAnchor="260.46875">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <Text layoutX="80.62890625" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Local Time Zone:" AnchorPane.rightAnchor="261.4638671875">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Text layoutX="35.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Race Start Time:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <Label fx:id="timeLabel" layoutX="268.0" layoutY="118.0" prefHeight="28.0" prefWidth="171.0" text="Local time" AnchorPane.rightAnchor="58.0" />
+            <Label fx:id="startTimeLabel" layoutX="268.0" layoutY="23.0" prefHeight="71.0" prefWidth="171.0" text="Start time" />
+         </children>
+      </AnchorPane>
+      <Text layoutX="311.0" layoutY="366.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" Starting List" wrappingWidth="154.9072265625">
          <font>
             <Font size="24.0" />
          </font>
       </Text>
-      <Text layoutX="556.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Local Time:" AnchorPane.rightAnchor="487.46875">
+      <ListView fx:id="listView" layoutX="249.0" layoutY="385.0" prefHeight="179.0" prefWidth="280.0" />
+      <Label layoutX="182.0" layoutY="22.0" stylesheets="@stylesheets/preRaceStyle.css" text="Welcome to RaceVision!">
          <font>
-            <Font size="24.0" />
+            <Font size="34.0" />
          </font>
-      </Text>
-      <Text layoutX="638.0" layoutY="411.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Local Time Zone:" AnchorPane.rightAnchor="487.0927734375">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Text>
-      <Text layoutX="591.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Race Start Time:">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Text>
-      <Label fx:id="startTimeLabel" layoutX="824.0" layoutY="225.0" prefHeight="71.0" prefWidth="171.0" text="Start time" />
+      </Label>
    </children>
 </AnchorPane>

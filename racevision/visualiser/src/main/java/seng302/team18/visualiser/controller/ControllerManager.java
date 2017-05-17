@@ -114,6 +114,7 @@ public class ControllerManager {
         primaryStage.setTitle("RaceVision");
         Scene scene = new Scene(root, 1280, 720);
         primaryStage.setScene(scene);
+        primaryStage.setResizable(true);
         primaryStage.setOnCloseRequest(event -> System.exit(0));
         primaryStage.show();
 
@@ -134,8 +135,9 @@ public class ControllerManager {
         Parent root = loader.load(); // throws IOException
         preRaceController = loader.getController();
         primaryStage.setTitle("RaceVision");
-        Scene scene = new Scene(root, 1280, 720);
+        Scene scene = new Scene(root, 777, 578);
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.setOnCloseRequest(event -> System.exit(0));
         primaryStage.show();
 
