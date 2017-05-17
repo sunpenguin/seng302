@@ -64,6 +64,7 @@ public class MainWindowController {
 
     @FXML
     public void initialize() {
+        sparklinesChart.setAlternativeRowFillVisible(false);
         fpsToggle = true;
         Session.getInstance().setBoatNameImportant(true);
         Session.getInstance().setBoatSpeedImportant(false);
@@ -176,6 +177,7 @@ public class MainWindowController {
     }
 
     private void startWindDirection() {
+        arrow.setScaleX(0.4);
         windDirection = new WindDirection(race, arrow, race.getCourse().getWindDirection());
         windDirection.start();
     }

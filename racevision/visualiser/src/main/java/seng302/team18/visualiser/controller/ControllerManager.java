@@ -110,9 +110,11 @@ public class ControllerManager {
     public void showMainView() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(mainControllerPath));
         Parent root = loader.load(); // throws IOException
+        //root.getStylesheets().add(getClass().getResource("/team-18.css").toString());
         mainController = loader.getController();
         primaryStage.setTitle("RaceVision");
         Scene scene = new Scene(root, 1280, 720);
+        //scene.getStylesheets().add("/team-18.css");
         primaryStage.setScene(scene);
         primaryStage.setResizable(true);
         primaryStage.setOnCloseRequest(event -> System.exit(0));

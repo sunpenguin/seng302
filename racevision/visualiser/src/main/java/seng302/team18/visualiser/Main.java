@@ -1,5 +1,6 @@
 package seng302.team18.visualiser;
 
+import com.guigarage.flatterfx.FlatterFX;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import seng302.team18.visualiser.controller.ControllerManager;
