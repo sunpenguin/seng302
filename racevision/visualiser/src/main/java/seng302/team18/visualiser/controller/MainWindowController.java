@@ -31,6 +31,7 @@ import seng302.team18.visualiser.util.SparklineDataQueue;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -72,12 +73,17 @@ public class MainWindowController {
     }
 
     private void setUpSparklinesCategory() {
+        List<String> list = new ArrayList<>();
+        for (int i = race.getStartingList().size(); i > 0; i --){
+            list.add(String.valueOf(i));
+        }
+        ObservableList<String> observableList = FXCollections.observableList(list);
+        yPositionsAxis.setCategories(observableList);
         SparklineDataQueue dataQueue = new SparklineDataQueue();
         SparklineDataGetter dataGetter = new SparklineDataGetter(race.getStartingList(), dataQueue, race.getCourse());
         dataGetter.ListenToBoat();
         DisplaySparkline displaySparkline = new DisplaySparkline(dataQueue, race.getStartingList(), sparklinesChart);
         displaySparkline.start();
-
     }
 
     @FXML
