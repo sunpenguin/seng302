@@ -13,6 +13,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
@@ -29,6 +30,8 @@ import seng302.team18.visualiser.util.SparklineDataQueue;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataQueue;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +53,7 @@ public class MainWindowController {
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<? ,?> sparklinesChart;
+    @FXML private Menu raceMenu;
 
     private boolean fpsToggle;
     private boolean onImportant;
@@ -64,12 +68,21 @@ public class MainWindowController {
 
     @FXML
     public void initialize() {
+        loadIcon();
         sparklinesChart.setAlternativeRowFillVisible(false);
         fpsToggle = true;
         Session.getInstance().setBoatNameImportant(true);
         Session.getInstance().setBoatSpeedImportant(false);
         Session.getInstance().setEstimatedTimeImportant(false);
         Session.getInstance().setTimeSinceLastMarkImportant(false);
+    }
+
+
+    private void loadIcon(){
+        ImageView icon = new ImageView("/images/sailboat-512.png");
+        icon.setFitHeight(18);
+        icon.setFitWidth(18);
+        raceMenu.setGraphic(icon);
     }
 
     private void setUpSparklinesCategory() {

@@ -112,7 +112,7 @@
       </AnchorPane>
       <MenuBar prefHeight="30.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <menus>
-            <Menu mnemonicParsing="false" text="Race">
+            <Menu fx:id="raceMenu" mnemonicParsing="false" text="Race">
                <items>
                   <Menu mnemonicParsing="false" text="Annotation level">
                      <items>

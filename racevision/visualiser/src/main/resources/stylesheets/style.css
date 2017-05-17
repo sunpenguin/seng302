@@ -4,6 +4,11 @@
     -fx-background: slategrey;
 }
 
+
+.menu-item{
+    -fx-background-color: steelblue;
+}
+
 .menu-item:focused {
     -fx-background-color: slategrey;
 }
