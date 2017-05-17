@@ -2,6 +2,7 @@ package seng302.team18.visualiser.util;
 
 import seng302.team18.model.Boat;
 import seng302.team18.model.Course;
+import seng302.team18.model.Race;
 
 import java.util.List;
 
@@ -10,28 +11,27 @@ import java.util.List;
  */
 public class SparklineDataGetter {
 
-    private List<Boat> boats;
+    private Race race;
     private SparklineDataQueue dataQueue;
-    private Course course;
 
     /**
      * Constructor
      *
-     * @param boats
+     * @param race
      * @param dataQueue
      */
-    public SparklineDataGetter(List<Boat> boats, SparklineDataQueue dataQueue, Course course) {
-        this.boats = boats;
+    public SparklineDataGetter(SparklineDataQueue dataQueue, Race race) {
+        this.race = race;
         this.dataQueue = dataQueue;
-        this.course = course;
     }
 
     /**
      * Listen to thhe changes of the boats leg number
      */
     public void listenToBoat() {
-        for (Boat boat : boats) {
+        for (Boat boat : race.getStartingList()) {
             boat.boatLegNumberProperty().addListener((observableValue, oldleg, newleg) -> {
+                System.out.println("called" + boat.getBoatName());
                 addData(boat);
             });
         }
@@ -43,19 +43,24 @@ public class SparklineDataGetter {
      * @param boat
      */
     private void addData(Boat boat) {
-        if (boat.getBoatLegNumber() == -1) {
+//        System.out.println(race.getFinishedList());
+//        if (race.getFinishedList().contains(boat)) {
+//            System.out.println("finished");
+//        System.out.println("boat status = " + boat.getStatus());
+        if (boat.getStatus() == 3) {
             String finishLine = "Finsihline";
             SparklineDataPoint data = new SparklineDataPoint(boat, finishLine);
             dataQueue.enqueue(data);
         } else {
-            if (boat.getBoatLegNumber() == 2) { // assumed that the second leg always has legno of 2 TODO:check
+            if (boat.getLegNumber() == 2) { // assumed that the second leg always has legno of 2 TODO:check
                 String startLine = "Startline";
                 SparklineDataPoint data = new SparklineDataPoint(boat, startLine);
                 dataQueue.enqueue(data);
             }
-            String markPassedName = course.getLeg(boat.getBoatLegNumber()).getDeparture().getName();
+            String markPassedName = race.getCourse().getLeg(boat.getLegNumber()).getDeparture().getName();
             SparklineDataPoint data = new SparklineDataPoint(boat, markPassedName);
             dataQueue.enqueue(data);
+
         }
     }
 

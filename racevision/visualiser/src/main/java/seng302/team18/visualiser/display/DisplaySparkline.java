@@ -20,7 +20,7 @@ public class DisplaySparkline extends AnimationTimer {
     private SparklineDataQueue dataQueue;
     private List<Boat> boats;
     private List<XYChart.Series> sparklineSeries = new ArrayList<>();
-    private LineChart<?, ?> sparklinesChart;
+    private LineChart sparklinesChart;
 
     /**
      * Constructor, also creates the series
@@ -28,7 +28,7 @@ public class DisplaySparkline extends AnimationTimer {
      * @param dataQueue to to take sparkline data from.
      * @param boats
      */
-    public DisplaySparkline(SparklineDataQueue dataQueue, List<Boat> boats, LineChart<?, ?> sparklinesChart) {
+    public DisplaySparkline(SparklineDataQueue dataQueue, List<Boat> boats, LineChart sparklinesChart) {
         this.dataQueue = dataQueue;
         this.boats = boats;
         setupSeries();
@@ -65,8 +65,8 @@ public class DisplaySparkline extends AnimationTimer {
                 while (catInXofSeries(series, cat)) {
                     cat = cat + " "; // TODO: Doesn't display whitespace :)
                 }
-                series.getData().add(new XYChart.Data(cat, data.getBoatPlace()));
-//                series.getData().add(new XYChart.Data(cat, String.valueOf(data.getBoatPlace())));
+//                series.getData().add(new XYChart.Data(cat, data.getBoatPlace()));
+                series.getData().add(new XYChart.Data(cat, String.valueOf(data.getBoatPlace())));
             }
         }
     }

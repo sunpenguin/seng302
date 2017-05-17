@@ -22,6 +22,7 @@ public class Boat {
     private Long timeTilNextMark;
     private Long timeSinceLastMark;
     private Long timeAtLastMark;
+    private int status;
 
     /**
      * A constructor for the Boat class
@@ -98,7 +99,7 @@ public class Boat {
     }
 
 
-    public int getBoatLegNumber() {
+    public int getLegNumber() {
         return boatLegNumber.get();
     }
 
@@ -106,7 +107,7 @@ public class Boat {
         return boatLegNumber;
     }
 
-    public void setBoatLegNumber(int boatLegNumber) {
+    public void setLegNumber(int boatLegNumber) {
         this.boatLegNumber.set(boatLegNumber);
     }
 
@@ -196,5 +197,13 @@ public class Boat {
                 ", timeSinceLastMark=" + timeSinceLastMark +
                 ", timeAtLastMark=" + timeAtLastMark +
                 '}';
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

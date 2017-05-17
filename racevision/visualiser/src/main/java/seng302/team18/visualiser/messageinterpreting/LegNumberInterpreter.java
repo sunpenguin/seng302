@@ -8,8 +8,6 @@ import seng302.team18.model.Leg;
 import seng302.team18.model.Race;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Created by jth102 on 4/05/17.
@@ -32,7 +30,10 @@ public class LegNumberInterpreter extends MessageInterpreter {
                 race.getStartingList()
                         .stream()
                         .filter(boat -> boat.getId().equals(boatStatus.getBoatId()))
-                        .forEach(boat -> setLeg(boat, realLegNumber));
+                        .forEach(boat -> {
+                            boat.setStatus(boatStatus.getBoatStatus());
+                            setLeg(boat, realLegNumber);
+                        });
             }
 
 //            Map<Integer, List> boats = statusMessage.getBoatStatus();
@@ -62,15 +63,17 @@ public class LegNumberInterpreter extends MessageInterpreter {
 
 
     private void setLeg(Boat boat, int realLegNumber) {
-        Leg currentLeg = boat.getLeg();
+        Leg currentLeg = race.getCourse().getLeg(boat.getLegNumber());
         if (currentLeg == null) { // If: no leg has been set yet
             if (realLegNumber != 0) { // If: not in pre-start
-                boat.setLeg(race.getCourse().getLegs().get(realLegNumber - 1));
+                boat.setLegNumber((race.getCourse().getLegs().get(realLegNumber - 1)).getLegNumber());
             }
         } else {
             Leg nextLeg = race.getCourse().getNextLeg(currentLeg);
-
-            if (currentLeg.getLegNumber() != realLegNumber) {
+//            race.setNextLeg(boat, nextLeg);
+            if (realLegNumber == race.getCourse().getLegs().size()) {
+                boat.setLegNumber(realLegNumber);
+            } else if (currentLeg.getLegNumber() != realLegNumber) {
                 race.setNextLeg(boat, nextLeg);
             }
         }
