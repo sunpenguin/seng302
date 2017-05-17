@@ -32,7 +32,7 @@ public class LegNumberInterpreter extends MessageInterpreter {
 
                 List<Boat> b = raceBoats.stream().filter(boat -> boat.getId().equals(entry.getKey())).collect(Collectors.toList());
                 Boat boat = b.get(0);
-                Leg currentLeg = race.getCourse().getLegFromLefNumber(boat.getBoatLegNumber());
+                Leg currentLeg = race.getCourse().getLeg(boat.getBoatLegNumber());
 
                 if (currentLeg == null) { // If: no leg has been set yet
                     if (realLegNumber != 0) { // If: not in pre-start

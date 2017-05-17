@@ -4,9 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.ZoneId;
-import java.time.zone.ZoneRules;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -91,8 +89,8 @@ public class CourseTest {
 
     @Test
     public void getLegFromLefNumberTest(){
-        Leg actualLeg1 = course.getLegFromLefNumber(0);
-        Leg actualLeg2 = course.getLegFromLefNumber(1);
+        Leg actualLeg1 = course.getLeg(0);
+        Leg actualLeg2 = course.getLeg(1);
 
         Leg expectedLeg1 = course.getLegs().get(0);
         Leg expectedLeg2 = course.getLegs().get(1);

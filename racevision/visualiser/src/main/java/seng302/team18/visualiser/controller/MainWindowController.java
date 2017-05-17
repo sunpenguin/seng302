@@ -10,7 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
@@ -50,7 +50,7 @@ public class MainWindowController {
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
-    @FXML private LineChart<? ,?> sparklinesChart;
+    @FXML private LineChart<?, ?> sparklinesChart;
 
     private boolean fpsToggle;
     private boolean onImportant;
@@ -81,9 +81,10 @@ public class MainWindowController {
         yPositionsAxis.setCategories(observableList);
         SparklineDataQueue dataQueue = new SparklineDataQueue();
         SparklineDataGetter dataGetter = new SparklineDataGetter(race.getStartingList(), dataQueue, race.getCourse());
-        dataGetter.ListenToBoat();
+        dataGetter.listenToBoat();
         DisplaySparkline displaySparkline = new DisplaySparkline(dataQueue, race.getStartingList(), sparklinesChart);
         displaySparkline.start();
+
     }
 
     @FXML

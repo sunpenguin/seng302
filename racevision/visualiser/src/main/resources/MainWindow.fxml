@@ -81,7 +81,15 @@
                                   <CategoryAxis side="BOTTOM" />
                                 </xAxis>
                                 <yAxis>
-                                  <CategoryAxis fx:id="yPositionsAxis" label="Position" side="LEFT"/>
+                                  <!--<CategoryAxis fx:id="yPositionsAxis" label="Position" side="LEFT"/>-->
+                                    <javafx.scene.chart.NumberAxis
+                                            label="Position"
+                                            lowerBound="6"
+                                            upperBound="1"
+                                            tickUnit="2"
+                                            autoRanging="false"
+                                            tickLabelGap="1"
+                                    />
                                 </yAxis>
                               </LineChart>
                            </children>
