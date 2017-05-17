@@ -12,6 +12,7 @@ public class Boat {
     private String boatName;
     private String shortName;
     private DoubleProperty speed;
+    private DoubleProperty knotsSpeed;
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
     private Integer id;
@@ -34,6 +35,7 @@ public class Boat {
         this.shortName = shortName;
         this.id = id;
         speed = new SimpleDoubleProperty();
+        knotsSpeed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty();
         timeTilNextMark = 0L;
         timeSinceLastMark = 0L;
@@ -196,5 +198,17 @@ public class Boat {
                 ", timeSinceLastMark=" + timeSinceLastMark +
                 ", timeAtLastMark=" + timeAtLastMark +
                 '}';
+    }
+
+    public double getKnotsSpeed() {
+        return knotsSpeed.get();
+    }
+
+    public DoubleProperty knotsSpeedProperty() {
+        return knotsSpeed;
+    }
+
+    public void setKnotsSpeed(double knotsSpeed) {
+        this.knotsSpeed.set(knotsSpeed);
     }
 }

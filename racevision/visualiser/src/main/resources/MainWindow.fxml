@@ -94,7 +94,7 @@
                                  <columns>
                                     <TableColumn fx:id="boatPositionColumn" prefWidth="87.0" text="Position" />
                                     <TableColumn fx:id="boatNameColumn" minWidth="0.0" prefWidth="253.0" text="Name" />
-                                    <TableColumn fx:id="boatSpeedColumn" maxWidth="173.0" prefWidth="112.0" text="Speed km/h" />
+                                    <TableColumn fx:id="boatSpeedColumn" maxWidth="173.0" prefWidth="112.0" text="Speed (knots)" />
                                  </columns>
                               </TableView>
                            </children>

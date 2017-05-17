@@ -117,6 +117,8 @@ public class ControllerManager {
         //scene.getStylesheets().add("/team-18.css");
         primaryStage.setScene(scene);
         primaryStage.setResizable(true);
+        primaryStage.setMinHeight(700);
+        primaryStage.setMinWidth(1000);
         primaryStage.setOnCloseRequest(event -> System.exit(0));
         primaryStage.show();
 

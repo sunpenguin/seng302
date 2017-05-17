@@ -161,7 +161,7 @@ public class MainWindowController {
         tableView.setItems(sortedList);
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
-        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
+        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("knotsSpeed"));
         boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
             @Override
             public void updateItem(Double speed, boolean empty) {
