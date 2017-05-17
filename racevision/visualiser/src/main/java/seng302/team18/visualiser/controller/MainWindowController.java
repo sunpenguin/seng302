@@ -27,17 +27,28 @@ import java.util.List;
  * The Controller class for the Main Window view.
  */
 public class MainWindowController {
-    @FXML private Group group;
-    @FXML private Label timerLabel;
-    @FXML private ToggleButton fpsToggler;
-    @FXML private Label fpsLabel;
-    @FXML private TableView tableView;
-    @FXML private TableColumn<Boat, Integer> boatPositionColumn;
-    @FXML private TableColumn<Boat, String> boatNameColumn;
-    @FXML private TableColumn<Boat, Double> boatSpeedColumn;
-    @FXML private Pane raceViewPane;
-    @FXML private Polygon arrow;
-    @FXML private WebView map;
+    @FXML
+    private Group group;
+    @FXML
+    private Label timerLabel;
+    @FXML
+    private ToggleButton fpsToggler;
+    @FXML
+    private Label fpsLabel;
+    @FXML
+    private TableView tableView;
+    @FXML
+    private TableColumn<Boat, Integer> boatPositionColumn;
+    @FXML
+    private TableColumn<Boat, String> boatNameColumn;
+    @FXML
+    private TableColumn<Boat, Double> boatSpeedColumn;
+    @FXML
+    private Pane raceViewPane;
+    @FXML
+    private Polygon arrow;
+    @FXML
+    private WebView map;
 
     private Boolean onImportant;
     private Boolean boatNameImportant;
@@ -182,25 +193,6 @@ public class MainWindowController {
         windDirection.start();
     }
 
-
-//    public void startRace(long secondsDelay) {
-//        final double KMPH_TO_MPS = 1000.0 / 3600.0;
-////        double timeScaleFactor = race.getCourse().getCourseDistance()
-////                / (race.getStartingList().get(0).getSpeed() * KMPH_TO_MPS) / race.getDuration();
-////        secondsDelay /= (double) timeScaleFactor;
-//        raceClock.start();
-//        Timeline showLive = new Timeline(new KeyFrame(
-//                Duration.seconds(secondsDelay),
-//                event -> {
-//                    raceClock = new RaceClock(timerLabel, race, 0d);
-//                    raceClock.start();
-//                    raceLoop.start();
-//                }));
-//        showLive.setCycleCount(1);
-//        showLive.play();
-//    }
-
-
     /**
      * initialises race variables and begins the race loop. Adds listeners to the race view to listen for when the window
      * has been re-sized.
@@ -216,7 +208,7 @@ public class MainWindowController {
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
         raceRenderer = new RaceRenderer(pixelMapper, race, group, raceViewPane);
         raceRenderer.renderBoats();
-        courseRenderer =  new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
+        courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
         backgroundRenderer = new BackgroundRenderer(race, map.getEngine());
 
 
