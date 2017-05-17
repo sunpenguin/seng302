@@ -22,15 +22,17 @@ public class PixelMapper {
 
     private final Course course;
     private final Pane pane;
-    private final double MAP_SCALE_CORRECTION = 0.95;
+    private final double MAP_SCALE_CORRECTION = 1;
     private Coordinate viewPortCenter;
     private final IntegerProperty zoomLevel = new SimpleIntegerProperty(0);
+    private List<Coordinate> bounds;
 
     public static final int ZOOM_LEVEL_4X = 1;
 
     public PixelMapper(Course course, Pane pane) {
         this.course = course;
         this.pane = pane;
+        bounds = GPSCalculations.findMinMaxPoints(course);
 
         viewPortCenter = course.getCentralCoordinate();
     }
@@ -74,10 +76,10 @@ public class PixelMapper {
      * @return XYPair containing the x and y pixel values
      */
     public XYPair coordToPixel(Coordinate coord) {
-        List<Coordinate> points = GPSCalculations.findMinMaxPoints(course);
 
-        double courseWidth = calcCourseWidth(points.get(0).getLongitude(), points.get(1).getLongitude());
-        double courseHeight = calcCourseHeight(points.get(0).getLatitude(), points.get(1).getLatitude());
+
+        double courseWidth = calcCourseWidth();
+        double courseHeight = calcCourseHeight();
         double paneWidth = pane.getWidth();
         double paneHeight = pane.getHeight();
         if (paneHeight <= 0 || paneWidth <= 0) {
@@ -99,7 +101,7 @@ public class PixelMapper {
         double dX = worldCoordinates.getX() - viewCenter.getX();
         double dY = worldCoordinates.getY() - viewCenter.getY();
 
-        double x = dX * mappingScale + paneWidth / 2;
+        double x = (dX * mappingScale + paneWidth / 2);
         double y = dY * mappingScale + paneHeight / 2;
 
 //        if (x < 0 || y < 0) {
@@ -145,37 +147,27 @@ public class PixelMapper {
     /**
      * Calculates the width of the course
      *
-     * @param westernBound Longitude of western most point
-     * @param easternBound Longitude of eastern most point
      * @return the width of the course using Web Mercator cartesian coordinates
      */
-    private double calcCourseWidth(double westernBound, double easternBound) {
-        Coordinate west = new Coordinate(course.getCentralCoordinate().getLatitude(), westernBound);
-        Coordinate east = new Coordinate(course.getCentralCoordinate().getLatitude(), easternBound);
-
-        double dWest = GPSCalculations.distance(west, course.getCentralCoordinate());
-        double dEast = GPSCalculations.distance(course.getCentralCoordinate(), east);
-
-        Coordinate furthest = (dWest > dEast) ? west : east;
-        return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getX() - coordinateToPlane(furthest).getX()) * 2;
+    private double calcCourseWidth() {
+        Coordinate NW = bounds.get(0);
+        Coordinate SE = bounds.get(1);
+        return Math.abs(coordinateToPlane(NW).getX() - coordinateToPlane(SE).getX());
     }
 
     /**
      * Calculates the height of the course
      *
-     * @param northernBound Latitude of northern most point
-     * @param southernBound Latitude of southern most point
      * @return the width of the course using Web Mercator cartesian coordinates
      */
-    private double calcCourseHeight(double northernBound, double southernBound) {
-        Coordinate north = new Coordinate(northernBound, course.getCentralCoordinate().getLongitude());
-        Coordinate south = new Coordinate(southernBound, course.getCentralCoordinate().getLongitude());
+    private double calcCourseHeight() {
+        Coordinate NW = bounds.get(0);
+        Coordinate SE = bounds.get(1);
+        return Math.abs(coordinateToPlane(NW).getY() - coordinateToPlane(SE).getY());
+    }
 
-        double dNorth = GPSCalculations.distance(north, course.getCentralCoordinate());
-        double dSouth = GPSCalculations.distance(south, course.getCentralCoordinate());
-
-        Coordinate furthest = (dNorth > dSouth) ? north : south;
-        return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getY() - coordinateToPlane(furthest).getY()) * 2;
+    public void setBounds(List<Coordinate> bounds) {
+        this.bounds = bounds;
     }
 }
 

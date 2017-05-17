@@ -122,7 +122,6 @@ public class CourseRenderer {
         XYPair pixelCoordinates = pixelMapper.coordToPixel(coordinate);
         rectangle.setX(pixelCoordinates.getX() - (scaledMarkSize / 2.0));
         rectangle.setY(pixelCoordinates.getY() - (scaledMarkSize / 2.0));
-//        System.out.println(pixelCoordinates.getX() + " " + pixelCoordinates.getY());
     }
 
 

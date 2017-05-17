@@ -214,10 +214,10 @@ public class MainWindowController {
         setCourseCenter(race.getCourse());
 
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
+        backgroundRenderer = new BackgroundRenderer(pixelMapper, race, map.getEngine());
         raceRenderer = new RaceRenderer(pixelMapper, race, group, raceViewPane);
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
-        backgroundRenderer = new BackgroundRenderer(race, map.getEngine());
 
 
         raceClock = new RaceClock(timerLabel);
@@ -248,10 +248,11 @@ public class MainWindowController {
      * (For example, when zoom in, the course features are required to change)
      */
     public void redrawFeatures() {
+        backgroundRenderer.renderBackground();
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
         raceRenderer.reDrawTrails(race.getStartingList());
-        backgroundRenderer.renderBackground();
+
     }
 
     public RaceClock getRaceClock() {

@@ -40,12 +40,18 @@
         <script>
                 var map;
                 var centerCoordinate = {lat: 0, lng: 0};
+                var markers = [];
+                var s;
+                var w;
+                var n;
+                var e;
                 function initMap() {
                     var options = {
-                        zoom: 4,
+                        zoom: 1,
                         center: centerCoordinate,
+                        mapTypeId: 'terrain',
                         mapTypeControl: false,
-                    draggable: false,
+                        draggable: false,
                         scaleControl: false,
                         scrollwheel: false,
                         navigationControl: false,
@@ -53,9 +59,52 @@
                         keyboardShortcuts: false,
                         disableDefaultUI: true
                     };
-
                     map = new google.maps.Map(document.getElementById('map'),
                         options);
+
+                    google.maps.event.addListener(map, 'bounds_changed', function() {
+
+                        var bounds = new google.maps.LatLngBounds();
+                        for (var i = 0; i < markers.length; i++) {
+                            bounds.extend(markers[i].getPosition());
+                        }
+                        map.fitBounds(bounds);
+
+                        s = map.getBounds().getSouthWest().lat();
+                        w = map.getBounds().getSouthWest().lng();
+                        n = map.getBounds().getNorthEast().lat();
+                        e = map.getBounds().getNorthEast().lng();
+                    });
+                }
+
+                function resetMarkers() {
+                    markers = [];
+//                    bounds = new google.maps.LatLngBounds();
+                }
+
+                function addMarker (lat, long) {
+                    marker = new google.maps.Marker({
+                        position: {lat: lat, lng: long},
+                        map: map,
+//                        visible: false
+                    });
+                    markers.push(marker);
+                }
+
+                function getS() {
+                  return s;
+                }
+
+                function getW() {
+                    return w;
+                }
+
+                function getN() {
+                    return n;
+                }
+
+                function getE() {
+                    return e;
                 }
 
                 function setCenter(lat, long) {

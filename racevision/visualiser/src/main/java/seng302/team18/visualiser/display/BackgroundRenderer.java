@@ -5,11 +5,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.scene.Group;
 import javafx.scene.web.WebEngine;
-import seng302.team18.model.BoundaryMark;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
-import seng302.team18.model.Race;
+import seng302.team18.model.*;
+import seng302.team18.visualiser.util.PixelMapper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 /**
@@ -23,14 +23,21 @@ public class BackgroundRenderer {
 
     private final Race race;
     private Coordinate center;
-
+    private PixelMapper pixelMapper;
+    private Coordinate NW = new Coordinate(0, 0);
+    private Coordinate SE = new Coordinate(0, 0);
+    private  double n = 0;
+    private double s = 0;
+    private double e = 0;
+    private double w = 0;
 
     /**
      * Constructor for the BackgroundRenderer
      * @param race yes
      * @param webEngine also yes
      */
-    public BackgroundRenderer(Race race, WebEngine webEngine) {
+    public BackgroundRenderer(PixelMapper pixelMapper, Race race, WebEngine webEngine) {
+        this.pixelMapper = pixelMapper;
         this.race = race;
         center = new Coordinate(0, 0);
         this.webEngine = webEngine;
@@ -45,14 +52,34 @@ public class BackgroundRenderer {
      */
     public boolean renderBackground() {
         Coordinate newCenter = race.getCourse().getCentralCoordinate();
+
+        try {
+            n = (double) webEngine.executeScript("getN();");
+            s = (double) webEngine.executeScript("getS();");
+            e = (double) webEngine.executeScript("getE();");
+            w = (double) webEngine.executeScript("getW();");
+            NW.setLatitude(n);
+            NW.setLongitude(w);
+            SE.setLatitude(s);
+            SE.setLongitude(e);
+            pixelMapper.setBounds(new ArrayList<>(Arrays.asList(NW, SE)));
+        } catch (Exception ex) {
+
+        }
         if (!center.equals(newCenter)) {
             try {
                 final String centerCommand =
                         "setCenter(" + newCenter.getLatitude() + ", " + newCenter.getLongitude() + ")";
                 webEngine.executeScript(centerCommand);
                 center = newCenter;
+
+                webEngine.executeScript("resetMarkers();");
+                for(BoundaryMark mark : race.getCourse().getBoundaries()) {
+                    webEngine.executeScript("addMarker(" + mark.getCoordinate().getLatitude() + ", " + mark.getCoordinate().getLongitude() + ");");
+                }
+
                 return true;
-            } catch (Exception e) {
+            } catch (Exception ex) {
                 return false;
             }
         }
