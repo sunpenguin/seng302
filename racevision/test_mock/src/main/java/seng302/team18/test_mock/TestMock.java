@@ -103,7 +103,6 @@ public class TestMock {
 
         long timeCurr = System.currentTimeMillis();
         long timeLast;
-        List<Boat> boats = race.getStartingList();
         do {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();

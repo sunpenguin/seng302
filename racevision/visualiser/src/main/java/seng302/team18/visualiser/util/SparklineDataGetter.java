@@ -43,10 +43,6 @@ public class SparklineDataGetter {
      * @param boat
      */
     private void addData(Boat boat) {
-//        System.out.println(race.getFinishedList());
-//        if (race.getFinishedList().contains(boat)) {
-//            System.out.println("finished");
-//        System.out.println("boat status = " + boat.getStatus());
         if (boat.getStatus() == 3) {
             String finishLine = "Finsihline";
             SparklineDataPoint data = new SparklineDataPoint(boat, finishLine);

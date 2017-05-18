@@ -71,7 +71,8 @@ public class LegNumberInterpreter extends MessageInterpreter {
         } else {
             Leg nextLeg = race.getCourse().getNextLeg(currentLeg);
 //            race.setNextLeg(boat, nextLeg);
-            if (realLegNumber == race.getCourse().getLegs().size()) {
+            System.out.println(realLegNumber);
+            if (realLegNumber == race.getCourse().getLegs().size() + 1) {
                 boat.setLegNumber(realLegNumber);
             } else if (currentLeg.getLegNumber() != realLegNumber) {
                 race.setNextLeg(boat, nextLeg);

@@ -80,7 +80,6 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
             outputSteam.write(estTimeAtNextMark);
             outputSteam.write(estTimeAtFinish);
         }
-
         return outputSteam.toByteArray();
     }
 
