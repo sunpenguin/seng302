@@ -3,32 +3,26 @@ package seng302.team18.visualiser.display;
 import javafx.animation.AnimationTimer;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import seng302.team18.model.Boat;
 import seng302.team18.visualiser.util.SparklineDataPoint;
-import seng302.team18.visualiser.util.SparklineDataQueue;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Class to display sparklines
  */
 public class DisplaySparkline extends AnimationTimer {
 
-    private SparklineDataQueue dataQueue;
+    private Queue<SparklineDataPoint> dataQueue;
     private List<Boat> boats;
     private List<XYChart.Series> sparklineSeries = new ArrayList<>();
     private LineChart sparklinesChart;
 
-    /**
-     * Constructor, also creates the series
-     *
-     * @param dataQueue to to take sparkline data from.
-     * @param boats
-     */
-    public DisplaySparkline(SparklineDataQueue dataQueue, List<Boat> boats, LineChart sparklinesChart) {
+
+    public DisplaySparkline(Queue<SparklineDataPoint> dataQueue, List<Boat> boats, LineChart sparklinesChart) {
         this.dataQueue = dataQueue;
         this.boats = boats;
         setupSeries();
@@ -43,15 +37,14 @@ public class DisplaySparkline extends AnimationTimer {
     private void setupSeries() {
         for (Boat boat : boats) {
             XYChart.Series boatSeries = new XYChart.Series();
-            boatSeries.setName(boat.getBoatName());
+            boatSeries.setName(boat.getName());
             sparklineSeries.add(boatSeries);
         }
     }
 
     @Override
     public void handle(long currentTime) {
-        //Dequeue
-        SparklineDataPoint data = dataQueue.dequeue();
+        SparklineDataPoint data = dataQueue.poll();
         if (data != null) {
             //Add data to relevant series
             editSingleSeries(data.getBoatName(), data);
@@ -65,7 +58,6 @@ public class DisplaySparkline extends AnimationTimer {
                 while (catInXofSeries(series, cat)) {
                     cat = cat + " "; // TODO: Doesn't display whitespace :)
                 }
-//                series.getData().add(new XYChart.Data(cat, data.getBoatPlace()));
                 series.getData().add(new XYChart.Data(cat, String.valueOf(data.getBoatPlace())));
             }
         }

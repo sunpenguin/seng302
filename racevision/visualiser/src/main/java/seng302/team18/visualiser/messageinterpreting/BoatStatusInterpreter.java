@@ -12,10 +12,10 @@ import java.util.List;
 /**
  * Created by jth102 on 4/05/17.
  */
-public class LegNumberInterpreter extends MessageInterpreter {
+public class BoatStatusInterpreter extends MessageInterpreter {
     private Race race;
 
-    public LegNumberInterpreter(Race race) {
+    public BoatStatusInterpreter(Race race) {
         this.race = race;
     }
 
@@ -35,29 +35,6 @@ public class LegNumberInterpreter extends MessageInterpreter {
                             setLeg(boat, realLegNumber);
                         });
             }
-
-//            Map<Integer, List> boats = statusMessage.getBoatStatus();
-//            List<Boat> raceBoats = race.getStartingList();
-//
-//            for (Map.Entry<Integer, List> entry : boats.entrySet()) {
-//                int realLegNumber = (int) entry.getValue().get(statusMessage.getLegPosition());
-//
-//                List<Boat> b = raceBoats.stream().filter(boat -> boat.getId().equals(entry.getKey())).collect(Collectors.toList());
-//                Boat boat = b.get(0);
-//                Leg currentLeg = boat.getLeg();
-//
-//                if (currentLeg == null) { // If: no leg has been set yet
-//                    if (realLegNumber != 0) { // If: not in pre-start
-//                        boat.setLeg(race.getCourse().getLegs().get(realLegNumber - 1));
-//                    }
-//                } else {
-//                    Leg nextLeg = race.getCourse().getNextLeg(currentLeg);
-//
-//                    if (currentLeg.getLegNumber() != realLegNumber) {
-//                        race.setNextLeg(boat, nextLeg);
-//                    }
-//                }
-//            }
         }
     }
 
@@ -70,8 +47,6 @@ public class LegNumberInterpreter extends MessageInterpreter {
             }
         } else {
             Leg nextLeg = race.getCourse().getNextLeg(currentLeg);
-//            race.setNextLeg(boat, nextLeg);
-            System.out.println(realLegNumber);
             if (realLegNumber == race.getCourse().getLegs().size() + 1) {
                 boat.setLegNumber(realLegNumber);
             } else if (currentLeg.getLegNumber() != realLegNumber) {

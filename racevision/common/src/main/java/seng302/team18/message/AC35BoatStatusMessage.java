@@ -5,10 +5,10 @@ package seng302.team18.message;
  */
 public class AC35BoatStatusMessage {
 
-    int boatId;
-    int legNumber;
-    int boatStatus;
-    long estimatedTimeAtNextMark;
+    private int boatId;
+    private int legNumber;
+    private int boatStatus;
+    private long estimatedTimeAtNextMark;
 
     /**
      * Constructor for the AC35BoatStatusMessage. Contains information on a boats status.

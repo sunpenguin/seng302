@@ -45,7 +45,7 @@ public class Boat {
      * A getter for the name of the boat
      * @return The boatName
      */
-    public String getBoatName() {
+    public String getName() {
         return boatName;
     }
 

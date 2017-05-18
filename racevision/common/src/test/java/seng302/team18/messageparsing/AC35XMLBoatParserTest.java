@@ -43,7 +43,7 @@ public class AC35XMLBoatParserTest {
         for (int i = 0; i < expected.size(); i++) {
             Boat exp = expected.get(i);
             Boat act = actual.get(i);
-            assertEquals(exp.getBoatName(), act.getBoatName());
+            assertEquals(exp.getName(), act.getName());
             assertEquals(exp.getShortName(), act.getShortName());
             assertEquals(exp.getCoordinate(), act.getCoordinate());
             assertEquals(exp.getDestination(), act.getDestination());

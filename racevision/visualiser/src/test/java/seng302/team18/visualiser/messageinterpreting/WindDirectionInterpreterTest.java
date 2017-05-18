@@ -13,7 +13,6 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -49,7 +48,7 @@ public class WindDirectionInterpreterTest {
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getTimeAtLastMark(), actual.getTimeAtLastMark());
         Assert.assertEquals(expected.getTimeSinceLastMark(), actual.getTimeSinceLastMark());
-        Assert.assertEquals(expected.getBoatName(), actual.getBoatName());
+        Assert.assertEquals(expected.getName(), actual.getName());
         Assert.assertEquals(expected.getShortName(), actual.getShortName());
         Assert.assertEquals(expected.getCoordinate(), actual.getCoordinate());
         Assert.assertEquals(expected.getHeading(), actual.getHeading(), 0.1);

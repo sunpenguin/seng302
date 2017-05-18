@@ -11,9 +11,7 @@ import seng302.team18.model.Race;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -52,7 +50,7 @@ public class RaceTimeInterpreterTest {
         Assert.assertEquals(expected.getTimeAtLastMark(), actual.getTimeAtLastMark());
         Assert.assertEquals(expected.getTimeSinceLastMark(), actual.getTimeSinceLastMark());
         // everything below should not change at all.
-        Assert.assertEquals(expected.getBoatName(), actual.getBoatName());
+        Assert.assertEquals(expected.getName(), actual.getName());
         Assert.assertEquals(expected.getShortName(), actual.getShortName());
         Assert.assertEquals(expected.getCoordinate(), actual.getCoordinate());
         Assert.assertEquals(expected.getHeading(), actual.getHeading(), 0.1);

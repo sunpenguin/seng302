@@ -1,17 +1,13 @@
 package seng302.team18.visualiser.controller;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.util.Duration;
 import seng302.team18.model.Boat;
 import seng302.team18.visualiser.display.ZoneTimeClock;
 
-import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -76,7 +72,7 @@ public class PreRaceController {
                 if (empty || boat == null) {
                     setText(null);
                 } else {
-                    setText(boat.getBoatName());
+                    setText(boat.getName());
                 }
             }
         });
