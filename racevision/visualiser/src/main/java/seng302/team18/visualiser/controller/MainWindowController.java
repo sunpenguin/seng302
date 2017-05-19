@@ -159,20 +159,24 @@ public class MainWindowController {
                 });
         tableView.setItems(sortedList);
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
-        boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
+        boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
         boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
             @Override
             public void updateItem(Double speed, boolean empty) {
-                super.updateItem(speed, empty) ;
+                super.updateItem(speed, empty);
                 if (empty) {
                     setText(null);
                 } else {
-                    setText(String.format("%.3f", speed));
+                    setText(String.format("%.2f", speed));
                 }
             }
         });
+        boatPositionColumn.setSortable(false);
+        boatNameColumn.setSortable(false);
+        boatSpeedColumn.setSortable(false);
         tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
+
     }
 
     private void startWindDirection() {
