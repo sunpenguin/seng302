@@ -3,6 +3,7 @@ package seng302.team18.visualiser.util;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.layout.Pane;
+import javafx.scene.web.WebEngine;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 import seng302.team18.util.GPSCalculations;
@@ -22,16 +23,22 @@ public class PixelMapper {
 
     private final Course course;
     private final Pane pane;
-    private final double MAP_SCALE_CORRECTION = 1;
     private Coordinate viewPortCenter;
     private final IntegerProperty zoomLevel = new SimpleIntegerProperty(0);
-    private List<Coordinate> bounds;
+    private List<Coordinate> bounds; // 2 coordinates: NW bound, SE bound
+    private WebEngine webEngine;
+    private XYPair nwBound = new XYPair(0, 0); // Pixel coordinates for the NW bound of the map on screen
+    private  XYPair seBound = new XYPair(0, 0); // Pixel coordinates for the SE bound of the map on screen
+    private int previousZoomLevel = 0;
+    private XYPair worldCoordinatesCartesian = new XYPair(0, 0);
+    private XYPair viewCenterCartesian = new XYPair(0, 0);
 
     public static final int ZOOM_LEVEL_4X = 1;
 
-    public PixelMapper(Course course, Pane pane) {
+    public PixelMapper(Course course, Pane pane, WebEngine webEngine) {
         this.course = course;
         this.pane = pane;
+        this.webEngine = webEngine;
         bounds = GPSCalculations.findMinMaxPoints(course);
 
         viewPortCenter = course.getCentralCoordinate();
@@ -77,71 +84,64 @@ public class PixelMapper {
      */
     public XYPair coordToPixel(Coordinate coord) {
 
+        IntegerProperty mapZoom = new SimpleIntegerProperty(0);
+
+        try {
+            worldCoordinatesCartesian.setX((double) webEngine.executeScript("convertCoordX(" + coord.getLatitude() + ","
+                    + coord.getLongitude() + ");"));
+            worldCoordinatesCartesian.setY((double) webEngine.executeScript("convertCoordY(" + coord.getLatitude() + ","
+                    + coord.getLongitude() + ");"));
+
+            viewCenterCartesian.setX((double) webEngine.executeScript("convertCoordX(" + viewPortCenter.getLatitude() + ","
+                    + viewPortCenter.getLongitude() + ");"));
+            viewCenterCartesian.setY((double) webEngine.executeScript("convertCoordY(" + viewPortCenter.getLatitude() + ","
+                    + viewPortCenter.getLongitude() + ");"));
+
+            nwBound.setX((double) webEngine.executeScript("convertCoordX(" + bounds.get(0).getLatitude() + ","
+                    + bounds.get(0).getLongitude() + ");"));
+            nwBound.setY((double) webEngine.executeScript("convertCoordY(" + bounds.get(0).getLatitude() + ","
+                    + bounds.get(0).getLongitude() + ");"));
+
+            seBound.setX((double) webEngine.executeScript("convertCoordX(" + bounds.get(1).getLatitude() + ","
+                    + bounds.get(1).getLongitude() + ");"));
+            seBound.setY((double) webEngine.executeScript("convertCoordY(" + bounds.get(1).getLatitude() + ","
+                    + bounds.get(1).getLongitude() + ");"));
+
+//            if (previousZoomLevel != zoomLevel.intValue()) {
+//                webEngine.executeScript("toggleZoomed();");
+//                previousZoomLevel = zoomLevel.intValue();
+//            }
+        } catch (Exception e) {
+            // The maps have not loaded yet
+        }
 
         double courseWidth = calcCourseWidth();
         double courseHeight = calcCourseHeight();
         double paneWidth = pane.getWidth();
         double paneHeight = pane.getHeight();
+
         if (paneHeight <= 0 || paneWidth <= 0) {
             paneWidth = pane.getPrefWidth();
             paneHeight = pane.getPrefHeight();
         }
 
         double mappingScale;
+
         if (courseWidth / courseHeight > paneWidth / paneHeight) {
             mappingScale = paneWidth / courseWidth;
         } else {
             mappingScale = paneHeight / courseHeight;
         }
-        mappingScale *= MAP_SCALE_CORRECTION * Math.pow(2, zoomLevel.intValue());
 
-        XYPair worldCoordinates = coordinateToPlane(coord);
-        XYPair viewCenter = coordinateToPlane(viewPortCenter);
+        mappingScale *= Math.pow(2, zoomLevel.intValue());
 
-        double dX = worldCoordinates.getX() - viewCenter.getX();
-        double dY = worldCoordinates.getY() - viewCenter.getY();
+        double dX = worldCoordinatesCartesian.getX() - viewCenterCartesian.getX();
+        double dY = worldCoordinatesCartesian.getY() - viewCenterCartesian.getY();
 
-        double x = (dX * mappingScale + paneWidth / 2);
+        double x = dX * mappingScale + paneWidth / 2;
         double y = dY * mappingScale + paneHeight / 2;
 
-//        if (x < 0 || y < 0) {
-//            System.out.println(coord.toString() + " " + x + " " + y);
-//        }
-
         return new XYPair(x, y);
-    }
-
-    /**
-     * Converts the given longitude to a value in [0, 256 * 2 ^ zoomLevel]
-     *
-     * @param longitude longitude to convert
-     * @return longitude in Web Mercator scale
-     */
-    private double webMercatorLongitude(double longitude) {
-        double x = 128 * (longitude + Math.PI) / Math.PI;
-        return x;
-    }
-
-    /**
-     * Converts the given latitude to a value in [0, 256 * 2 ^ zoomLevel]
-     *
-     * @param latitude Latitude to convert
-     * @return latitude in Web Mercator scale
-     */
-    private double webMercatorLatitude(double latitude) {
-        double y = 128 * (Math.PI - Math.log(Math.tan((Math.PI / 4) + (latitude / 2)))) / Math.PI;
-        return y;
-    }
-
-    /**
-     * Converts a coordinate from GPS coordinates to cartesian coordinates in the range [0, 256 * 2 ^ zoomLevel] for
-     * both x and y
-     *
-     * @param point Coordinate to convert
-     * @return converted coordinate
-     */
-    private XYPair coordinateToPlane(Coordinate point) {
-        return new XYPair(webMercatorLongitude(point.getLongitude()), webMercatorLatitude(point.getLatitude()));
     }
 
     /**
@@ -150,9 +150,7 @@ public class PixelMapper {
      * @return the width of the course using Web Mercator cartesian coordinates
      */
     private double calcCourseWidth() {
-        Coordinate NW = bounds.get(0);
-        Coordinate SE = bounds.get(1);
-        return Math.abs(coordinateToPlane(NW).getX() - coordinateToPlane(SE).getX());
+        return Math.abs(nwBound.getX() - seBound.getX());
     }
 
     /**
@@ -161,9 +159,7 @@ public class PixelMapper {
      * @return the width of the course using Web Mercator cartesian coordinates
      */
     private double calcCourseHeight() {
-        Coordinate NW = bounds.get(0);
-        Coordinate SE = bounds.get(1);
-        return Math.abs(coordinateToPlane(NW).getY() - coordinateToPlane(SE).getY());
+        return Math.abs(nwBound.getY() - nwBound.getY());
     }
 
     public void setBounds(List<Coordinate> bounds) {

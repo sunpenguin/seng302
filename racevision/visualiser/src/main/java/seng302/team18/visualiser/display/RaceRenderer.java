@@ -116,8 +116,8 @@ public class RaceRenderer {
 //     * resetting the points.
 //     * @param boats Collection of displayBoats racing.
 //     */
-    public void reDrawTrails(Collection<Boat> boats) {
-        for (Boat boat : boats) {
+    public void reDrawTrails() {
+        for (Boat boat : race.getStartingList()) {
             DisplayTrail trail = trailMap.get(boat.getShortName());
             if (trail != null) {
                 trail.reDraw(pixelMapper);

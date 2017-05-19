@@ -45,6 +45,9 @@
                 var w;
                 var n;
                 var e;
+                var zoomed = false;
+                var bounds = new google.maps.LatLngBounds();
+
                 function initMap() {
                     var options = {
                         zoom: 1,
@@ -63,12 +66,16 @@
                         options);
 
                     google.maps.event.addListener(map, 'bounds_changed', function() {
-
-                        var bounds = new google.maps.LatLngBounds();
+                        bounds = new google.maps.LatLngBounds();
                         for (var i = 0; i < markers.length; i++) {
                             bounds.extend(markers[i].getPosition());
                         }
+
                         map.fitBounds(bounds);
+
+//                        if (zoomed) {
+//                            map.setZoom(20);
+//                        }
 
                         s = map.getBounds().getSouthWest().lat();
                         w = map.getBounds().getSouthWest().lng();
@@ -82,17 +89,17 @@
 //                    bounds = new google.maps.LatLngBounds();
                 }
 
-                function addMarker (lat, long) {
+                function addMarker (lat, lng) {
                     marker = new google.maps.Marker({
-                        position: {lat: lat, lng: long},
+                        position: {lat: lat, lng: lng},
                         map: map,
-//                        visible: false
+                        visible: false
                     });
                     markers.push(marker);
                 }
 
                 function getS() {
-                  return s;
+                    return s;
                 }
 
                 function getW() {
@@ -107,11 +114,28 @@
                     return e;
                 }
 
-                function setCenter(lat, long) {
-                    map.setCenter({lat: lat, lng:long});
+                function setCenter(lat, lng) {
+                    map.setCenter({lat: lat, lng:lng});
                     return 0;
                 }
-        </script>
 
+                function convertCoordX(lat, lng) {
+                    var coord = new google.maps.LatLng(lat, lng);
+                    var projection = map.getProjection();
+                    var point = projection.fromLatLngToPoint(coord);
+                    return point.x;
+                }
+
+                function convertCoordY(lat, lng) {
+                    var coord = new google.maps.LatLng(lat, lng);
+                    var projection = map.getProjection();
+                    var point = projection.fromLatLngToPoint(coord);
+                    return point.y;
+                }
+
+                function toggleZoomed() {
+                    zoomed = !zoomed;
+                }
+        </script>
     </body>
 </html>

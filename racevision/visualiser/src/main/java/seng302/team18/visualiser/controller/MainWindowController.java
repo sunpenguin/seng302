@@ -52,7 +52,6 @@ public class MainWindowController {
     private BackgroundRenderer backgroundRenderer;
     private RaceClock raceClock;
     private WindDirection windDirection;
-    private static RerenderMain rerenderMain;
     private PixelMapper pixelMapper;
 
 
@@ -194,7 +193,7 @@ public class MainWindowController {
         this.race = race;
         setCourseCenter(race.getCourse());
 
-        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
+        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, map.getEngine());
         backgroundRenderer = new BackgroundRenderer(pixelMapper, race, map.getEngine());
         raceRenderer = new RaceRenderer(pixelMapper, race, group, raceViewPane);
         raceRenderer.renderBoats();
@@ -213,8 +212,6 @@ public class MainWindowController {
 
         raceLoop.start();
 
-        rerenderMain = new RerenderMain(courseRenderer, raceRenderer, backgroundRenderer, race);
-
         raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
         raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> redrawFeatures());
 
@@ -232,7 +229,7 @@ public class MainWindowController {
         backgroundRenderer.renderBackground();
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
-        raceRenderer.reDrawTrails(race.getStartingList());
+        raceRenderer.reDrawTrails();
     }
 
     public RaceClock getRaceClock() {
