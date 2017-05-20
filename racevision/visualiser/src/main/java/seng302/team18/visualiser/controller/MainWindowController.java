@@ -46,7 +46,7 @@ public class MainWindowController {
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
-    @FXML private LineChart sparklinesChart;
+    //@FXML private LineChart sparklinesChart;
     @FXML private LineChart<? ,?> sparklinesChart;
     @FXML private Menu raceMenu;
 
@@ -174,7 +174,7 @@ public class MainWindowController {
                 });
         tableView.setItems(sortedList);
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
-        boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
+        boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("knotsSpeed"));
         boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
             @Override

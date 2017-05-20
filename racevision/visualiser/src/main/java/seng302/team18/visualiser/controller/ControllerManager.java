@@ -140,21 +140,12 @@ public class ControllerManager {
             mainController = loader.getController();
             primaryStage.setTitle("RaceVision");
             Scene scene = new Scene(root, 1280, 720);
+            primaryStage.setResizable(true);
+            primaryStage.setMinHeight(700);
+            primaryStage.setMinWidth(1000);
+            primaryStage.setOnCloseRequest(event -> System.exit(0));
             primaryStage.setScene(scene);
             primaryStage.show();
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(mainControllerPath));
-        Parent root = loader.load(); // throws IOException
-        //root.getStylesheets().add(getClass().getResource("/team-18.css").toString());
-        mainController = loader.getController();
-        primaryStage.setTitle("RaceVision");
-        Scene scene = new Scene(root, 1280, 720);
-        //scene.getStylesheets().add("/team-18.css");
-        primaryStage.setScene(scene);
-        primaryStage.setResizable(true);
-        primaryStage.setMinHeight(700);
-        primaryStage.setMinWidth(1000);
-        primaryStage.setOnCloseRequest(event -> System.exit(0));
-        primaryStage.show();
 
             mainController.setUp(race, interpreter, receiver);
 
@@ -173,19 +164,11 @@ public class ControllerManager {
             Parent root = loader.load(); // throws IOException
             preRaceController = loader.getController();
             primaryStage.setTitle("RaceVision");
-            Scene scene = new Scene(root, 1280, 720);
+            Scene scene = new Scene(root, 777, 578);
             primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.setOnCloseRequest(event -> System.exit(0));
             primaryStage.show();
-    private void showPreRace(ZonedDateTime currentTime, ZonedDateTime startTime, long duration) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(preRacePath));
-        Parent root = loader.load(); // throws IOException
-        preRaceController = loader.getController();
-        primaryStage.setTitle("RaceVision");
-        Scene scene = new Scene(root, 777, 578);
-        primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
-        primaryStage.setOnCloseRequest(event -> System.exit(0));
-        primaryStage.show();
 
             preRaceController.setUp(race.getCurrentTime(), race.getStartTime(), race.getStartingList());
         }
