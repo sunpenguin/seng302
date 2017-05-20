@@ -54,7 +54,7 @@ public class RaceRenderer {
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             if (displayBoat == null) {
                 displayBoat = new DisplayBoat
-                        (boat.getShortName(), boat.getHeading(), boat.getKnotsSpeed(), BOAT_COLOURS.get(numBoats++), boat.getTimeTilNextMark());
+                        (pixelMapper, boat.getShortName(), boat.getHeading(), boat.getKnotsSpeed(), BOAT_COLOURS.get(numBoats++), boat.getTimeTilNextMark());
                 displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);
             }

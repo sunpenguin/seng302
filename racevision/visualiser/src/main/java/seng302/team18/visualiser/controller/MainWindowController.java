@@ -23,7 +23,6 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.visualiser.RaceLoop;
 import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
@@ -56,10 +55,6 @@ public class MainWindowController implements Observer {
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
-    @FXML private LineChart sparklinesChart;
-    @FXML
-    private ImageView imageViewMap;
-    //@FXML private LineChart sparklinesChart;
     @FXML private LineChart<? ,?> sparklinesChart;
     @FXML private Menu raceMenu;
 
