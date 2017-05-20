@@ -46,13 +46,14 @@
                 var n;
                 var e;
                 var zoomed = false;
+                var oldZoom = false;
                 var bounds = new google.maps.LatLngBounds();
 
                 function initMap() {
                     var options = {
                         zoom: 1,
                         center: centerCoordinate,
-                        mapTypeId: 'terrain',
+                        mapTypeId: 'satellite',
                         mapTypeControl: false,
                         draggable: false,
                         scaleControl: false,
@@ -73,11 +74,11 @@
 
                         if (!zoomed) {
                              map.fitBounds(bounds);
-                        }
 
-//                        if (zoomed) {
-//                            map.setZoom(20);
-//                        }
+                        }
+                        if (zoomed) {
+                            map.setZoom(16);
+                        }
 
                         s = map.getBounds().getSouthWest().lat();
                         w = map.getBounds().getSouthWest().lng();

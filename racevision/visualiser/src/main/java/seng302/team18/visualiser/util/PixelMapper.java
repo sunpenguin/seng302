@@ -102,11 +102,6 @@ public class PixelMapper {
                 previousViewCenter = viewPortCenter;
                 previousZoomLevel = zoomLevel.intValue();
             }
-
-//            if (previousZoomLevel != zoomLevel.intValue()) {
-//                webEngine.executeScript("toggleZoomed();");
-//                previousZoomLevel = zoomLevel.intValue();
-//            }
         } catch (Exception e) {
             // The maps have not loaded yet
         }
@@ -129,7 +124,7 @@ public class PixelMapper {
             mappingScale = paneHeight / courseHeight;
         }
 
-        mappingScale *= Math.pow(2, zoomLevel.intValue());
+//        mappingScale *= Math.pow(2, zoomLevel.intValue());
 //        if(mappingScale != 1){
 //            mappingScale = mappingScale/2;
 //        }
