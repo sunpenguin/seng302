@@ -7,79 +7,111 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
-import javafx.scene.transform.Transform;
+import seng302.team18.model.Coordinate;
 import seng302.team18.util.XYPair;
+import seng302.team18.visualiser.util.PixelMapper;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
 /**
- * Created by david on 4/8/17.
+ * Manages the rendering of a boat and its associated effects (wake and annotations)
  */
 public class DisplayBoat {
     private Polyline boat;
     private Color boatColor;
+
     private Polygon wake;
-    private Color wakeColor;
-    private double wakeScaleFactor;
-    private double minWakeSize;
+    private Color wakeColor = Color.CADETBLUE;
+    private double wakeScaleFactor = 1.0d / 32.0d; // the wake is at normal size when the boat is moving 32 speed
+    private double minWakeSize = 0.1;
 
     private Text annotation;
     private String name;
     private Long estimatedTime;
     private Long timeSinceLastMark;
-    private Double heading;
     private Double speed;
-    private int decimalPlaces; // for speed annotation
+    private Coordinate location;
+    private int decimalPlaces = 1; // for speed annotation
     private Map<AnnotationType, Boolean> visibleAnnotations;
 
     private final int ANNOTATION_OFFSET_X = 10;
-    private final double BOAT_PIVOT_X = 5;
-    private final double BOAT_PIVOT_Y = 0;
-    private final Double[] BOAT_SHAPE = new Double[] {
-            BOAT_PIVOT_X, BOAT_PIVOT_Y,
-            10.0, 10.0,
-            0.0, 10.0,
-            BOAT_PIVOT_X, BOAT_PIVOT_Y,
-            5.0, 10.0 };
-    private final Double[] WAKE_SHAPE = new Double[] {
-            BOAT_PIVOT_X, BOAT_PIVOT_Y,
-            0.0, 20.0,
-            10.0, 20.0 };
 
+    private final double BOAT_HEIGHT = 10;
+    private final double BOAT_WIDTH = 10;
+    private final double WAKE_OFFSET = 0;
+    private final double WAKE_WIDTH = 10;
+    private final double WAKE_HEIGHT = 20;
 
-    public DisplayBoat(String name, Double heading, Double speed, Color boatColor, Long estimatedTime) {
+    private final Double[] BOAT_SHAPE = new Double[]{
+            0.0, BOAT_HEIGHT / -2,
+            0.0, BOAT_HEIGHT / 2,
+            BOAT_WIDTH / -2, BOAT_HEIGHT / 2,
+            0.0, BOAT_HEIGHT / -2,
+            BOAT_WIDTH / 2, BOAT_HEIGHT / 2,
+            0.0, BOAT_HEIGHT / 2
+    };
+
+    private final Double[] WAKE_SHAPE = new Double[]{
+            0.0, WAKE_OFFSET / 2,
+            WAKE_WIDTH / -2, WAKE_OFFSET / 2 + WAKE_HEIGHT,
+            WAKE_WIDTH / 2, WAKE_OFFSET / 2 + WAKE_HEIGHT
+    };
+
+    private final Rotate tfmRotation = new Rotate(0, 0, 0);
+    private final Scale tfmWakeSpeed = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
+    private final Scale tfmWakeZoom = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
+    private final Scale tfmBoatZoom = new Scale(1, 1, 0, 0);
+
+    private final PixelMapper pixelMapper;
+
+    /**
+     * Creates a new instance of DisplayBoat
+     *
+     * @param name          the name of the boat
+     * @param heading       the boat's heading
+     * @param speed         the boat's speed over ground
+     * @param boatColor     the color to display the boat in
+     * @param estimatedTime the estimated time until the boat reaches the next mark
+     */
+    public DisplayBoat(PixelMapper pixelMapper, String name, Double heading, Double speed, Color boatColor, Long estimatedTime) {
+        this.pixelMapper = pixelMapper;
         this.name = name;
-        this.heading = heading;
-        this.speed = speed;
         this.boatColor = boatColor;
         this.estimatedTime = estimatedTime;
         // default values
         wakeColor = Color.CADETBLUE;
         wakeScaleFactor = 1.0d / 16.0d; // the wake is at normal size when the boat is moving 32 speed
+
+        // Speed
+        this.speed = speed;
+        double scale = (speed != 0) ? speed * wakeScaleFactor : minWakeSize;
+        tfmWakeSpeed.setX(scale);
+        tfmWakeSpeed.setY(scale);
+
+        // Heading
+        tfmRotation.setAngle(heading);
+
         boat = new Polyline();
         boat.getPoints().addAll(BOAT_SHAPE);
-        boat.setFill(boatColor); // this isn't default
+        boat.setFill(boatColor);
+        boat.setOnMouseClicked(event -> {
+            if (location != null) {
+                pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                pixelMapper.setViewPortCenter(location);
+            }
+        });
+        boat.getTransforms().addAll(tfmRotation, tfmBoatZoom);
+
         wake = new Polygon();
         wake.getPoints().addAll(WAKE_SHAPE);
         wake.setFill(wakeColor);
-        decimalPlaces = 1;
-        minWakeSize = 0.1;
+        wake.getTransforms().addAll(tfmWakeSpeed, tfmRotation, tfmWakeZoom);
 
-        // initial rotation + wake size
-        Rotate rotation = new Rotate(this.heading, BOAT_PIVOT_X, BOAT_PIVOT_Y);
-        wake.getTransforms().add(rotation);
-        boat.getTransforms().add(rotation);
-        if (speed != 0) {
-            double scale = speed * wakeScaleFactor;
-            Scale wakeSize = new Scale(scale, scale, BOAT_PIVOT_X, BOAT_PIVOT_Y);
-            wake.getTransforms().add(wakeSize);
-        } else {
-            double scale = minWakeSize;
-            Scale wakeSize = new Scale(scale, scale, BOAT_PIVOT_X, BOAT_PIVOT_Y);
-            wake.getTransforms().add(wakeSize);
-        }
         setUpAnnotations();
     }
 
@@ -120,51 +152,53 @@ public class DisplayBoat {
 
     /**
      * Update the position of a boat's image and it's wake.
-     * @param pixels New position to update to.
+     *
+     * @param coordinate new position of the boat
      */
-    public void moveBoat(XYPair pixels) {
-        boat.setLayoutX(pixels.getX() - BOAT_PIVOT_X); // The boats are 5px from middle to outside so this will center the boat
+    public void moveBoat(Coordinate coordinate) {
+        location = coordinate;
+        XYPair pixels = pixelMapper.coordToPixel(coordinate);
+        boat.setLayoutX(pixels.getX());
         boat.setLayoutY(pixels.getY());
-        wake.setLayoutX(pixels.getX() - BOAT_PIVOT_X); // Also need to center the wake
+        wake.setLayoutX(pixels.getX());
         wake.setLayoutY(pixels.getY());
         updateAnnotationText();
     }
 
     /**
      * Set the speed of the DisplayBoat. This will update the boats wake and annotations
+     *
      * @param speed the new speed of the boat.
      */
     public void setSpeed(double speed) {
-        List<Transform> transforms = new ArrayList<>(wake.getTransforms());
-        for (Transform transform : transforms) {
-            if (transform instanceof Scale) {
-                wake.getTransforms().remove(transform);
-            }
-        }
-        double scale = speed * wakeScaleFactor;
-        Scale wakeSize = new Scale(scale, scale, BOAT_PIVOT_X, BOAT_PIVOT_Y);
-        wake.getTransforms().add(wakeSize);
         this.speed = speed;
+        double scale = (speed != 0) ? speed * wakeScaleFactor : minWakeSize;
+        tfmWakeSpeed.setX(scale);
+        tfmWakeSpeed.setY(scale);
+
         updateAnnotationText();
     }
 
 
     /**
      * Rotate the boat and it's wake according to it's heading.
+     *
      * @param heading the new heading of the boat
      */
     public void setHeading(double heading) {
-        List<Transform> transforms = new ArrayList<>(wake.getTransforms());
-        for (Transform transform : transforms) {
-            if (transform instanceof Rotate) {
-                wake.getTransforms().remove(transform);
-            }
-        }
-        boat.getTransforms().clear();
-        Rotate rotation = new Rotate(heading, BOAT_PIVOT_X, BOAT_PIVOT_Y);
-        wake.getTransforms().add(rotation);
-        boat.getTransforms().add(rotation);
-        this.heading = heading;
+        tfmRotation.setAngle(heading);
+    }
+
+    /**
+     * Scales boat and wake shapes
+     *
+     * @param scaleFactor factor by which to scale them
+     */
+    public void setScale(double scaleFactor) {
+        tfmBoatZoom.setX(scaleFactor);
+        tfmBoatZoom.setY(scaleFactor);
+        tfmWakeZoom.setX(scaleFactor);
+        tfmWakeZoom.setY(scaleFactor);
     }
 
     public void setEstimatedTime(Long estimatedTime) {
@@ -187,8 +221,11 @@ public class DisplayBoat {
         return visibleAnnotations.get(type);
     }
 
-    public void toFront() {
-        //wake.toFront();
+    /**
+     * Forces wake to render at the back at boat at the front
+     */
+    public void setDisplayOrder() {
+        wake.toBack();
         boat.toFront();
     }
 

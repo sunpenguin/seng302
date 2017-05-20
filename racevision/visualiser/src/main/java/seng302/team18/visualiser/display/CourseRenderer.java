@@ -1,6 +1,8 @@
 package seng302.team18.visualiser.display;
 
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -17,24 +19,26 @@ import java.util.*;
  */
 public class CourseRenderer {
 
-    private final Color MARK_COLOR = Color.BLACK;
+    private final Color MARK_COLOR = Color.GREY;
     private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
     private final double BOUNDARY_OPACITY = 0.3;
     private final double MARK_SIZE = 10.0;
+    private final double LINE_WEIGHT = 1.0;
     private final double PADDING = 20.0;
     private Polyline border = new Polyline();
     private Map<Integer, Rectangle> marks = new HashMap<>();
     private Map<String, Line> gates = new HashMap<>();
-    private Map<String, CompoundMark> compoundMarkMap = new HashMap<>();
     private Course course;
     private Group group;
     private Pane pane;
+    private PixelMapper pixelMapper;
 
 
-    public CourseRenderer(Course course, Group group, Pane pane) {
+    public CourseRenderer(PixelMapper pixelMapper, Course course, Group group, Pane pane) {
         this.course = course;
         this.group = group;
         this.pane = pane;
+        this.pixelMapper = pixelMapper;
     }
 
 
@@ -46,10 +50,10 @@ public class CourseRenderer {
 //        System.out.println(course.getCompoundMarks());
         List<CompoundMark> compoundMarks = course.getCompoundMarks();
         // Renders CompoundMarks
-        for (int i = 0 ; i < compoundMarks.size(); i++) {
+        for (int i = 0; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
-            if ((course.getMarkRoundings().get(0).getCompoundMark().getId() == compoundMark.getId()
-                    || course.getMarkRoundings().get(course.getMarkRoundings().size() - 1).getCompoundMark().getId() == compoundMark.getId())
+            if ((course.getMarkRoundings().get(0).getCompoundMark().getId().equals(compoundMark.getId())
+                    || course.getMarkRoundings().get(course.getMarkRoundings().size() - 1).getCompoundMark().getId().equals(compoundMark.getId()))
                     && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) { // draw a line between the gate if its a start or finish
                 renderGate(compoundMark);
             } else {
@@ -80,37 +84,50 @@ public class CourseRenderer {
 
     /**
      * Reset a point on the border due to resizing
-     * @param border Polyline for the border
+     *
+     * @param border   Polyline for the border
      * @param boundary the point to reset
      */
     private void renderBoundary(Polyline border, Coordinate boundary) {
-        PixelMapper pixelMapper = new PixelMapper(course, pane, PADDING);
-        XYPair boundaryPixels = pixelMapper.convertCoordPixel(boundary);
+        XYPair boundaryPixels = pixelMapper.coordToPixel(boundary);
         border.getPoints().addAll(boundaryPixels.getX(), boundaryPixels.getY());
     }
 
 
     /**
      * Reset a point for a mark due to resizing
+     *
      * @param mark Mark to reset
      */
     private void renderMark(Mark mark) {
-        PixelMapper pixelMapper = new PixelMapper(course, pane, PADDING);
+        double scaledMarkSize = getScaledMarkSize();
+
         Rectangle rectangle = marks.get(mark.getId());
         if (rectangle == null) {
-            rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
+            rectangle = new Rectangle(scaledMarkSize, scaledMarkSize, MARK_COLOR);
+
+            rectangle.setOnMouseClicked((event) -> {
+                pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                pixelMapper.setViewPortCenter(mark.getCoordinate());
+            });
+
             marks.put(mark.getId(), rectangle);
             group.getChildren().addAll(rectangle);
         }
+
+        rectangle.setWidth(scaledMarkSize);
+        rectangle.setHeight(scaledMarkSize);
+
         Coordinate coordinate = mark.getCoordinate();
-        XYPair pixelCoordinates = pixelMapper.convertCoordPixel(coordinate);
-        rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2.0));
-        rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2.0));
+        XYPair pixelCoordinates = pixelMapper.coordToPixel(coordinate);
+        rectangle.setX(pixelCoordinates.getX() - (scaledMarkSize / 2.0));
+        rectangle.setY(pixelCoordinates.getY() - (scaledMarkSize / 2.0));
     }
 
 
     /**
      * Call each Mark in a CompoundMark to reset it's point due to resizing
+     *
      * @param compoundMark CompoundMark to reset.
      */
     private void renderCompoundMark(CompoundMark compoundMark) {
@@ -123,24 +140,38 @@ public class CourseRenderer {
 
     /**
      * Reset the points for the endpoints of a gate as well as the line between them due to resizing
+     *
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */
     private void renderGate(CompoundMark compoundMark) {
-        PixelMapper pixelMapper = new PixelMapper(course, pane, PADDING);
+        double scaledMarkSize = getScaledMarkSize();
+
         List<XYPair> endPoints = new ArrayList<>();
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
             Rectangle rectangle = marks.get(mark.getId());
             if (rectangle == null) {
-                rectangle = new Rectangle(MARK_SIZE, MARK_SIZE, MARK_COLOR);
+                rectangle = new Rectangle(scaledMarkSize, scaledMarkSize, MARK_COLOR);
+
+                rectangle.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                        pixelMapper.setViewPortCenter(mark.getCoordinate());
+                    }
+                });
+
                 marks.put(mark.getId(), rectangle);
                 group.getChildren().addAll(rectangle);
             }
 
+            rectangle.setWidth(scaledMarkSize);
+            rectangle.setHeight(scaledMarkSize);
+
             Coordinate coordinate = mark.getCoordinate();
-            XYPair pixelCoordinates = pixelMapper.convertCoordPixel(coordinate);
-            rectangle.setX(pixelCoordinates.getX() - (MARK_SIZE / 2));
-            rectangle.setY(pixelCoordinates.getY() - (MARK_SIZE / 2));
+            XYPair pixelCoordinates = pixelMapper.coordToPixel(coordinate);
+            rectangle.setX(pixelCoordinates.getX() - (scaledMarkSize / 2));
+            rectangle.setY(pixelCoordinates.getY() - (scaledMarkSize / 2));
             endPoints.add(pixelCoordinates);
         }
 
@@ -153,8 +184,10 @@ public class CourseRenderer {
             line.setStyle("-fx-stroke: red");
             gates.put(compoundMark.getName(), line);
             group.getChildren().addAll(line);
+            line.toBack();
         }
 
+        line.setStrokeWidth(geScaledLineWeight());
         line.setStartX(endPoints.get(0).getX());
         line.setStartY(endPoints.get(0).getY());
         line.setEndX(endPoints.get(1).getX());
@@ -163,5 +196,23 @@ public class CourseRenderer {
 
     public Group getGroup() {
         return group;
+    }
+
+    /**
+     * Gets MARK_SIZE, scaling it to the current zoom.
+     *
+     * @return scaled mark size
+     */
+    private double getScaledMarkSize() {
+        return MARK_SIZE * pixelMapper.getZoomFactor();
+    }
+
+    /**
+     * Gets LINE_WEIGHT, scaling it to the current zoom.
+     *
+     * @return scaled line weight
+     */
+    private double geScaledLineWeight() {
+        return LINE_WEIGHT * pixelMapper.getZoomFactor();
     }
 }

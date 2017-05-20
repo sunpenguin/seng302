@@ -10,8 +10,12 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
@@ -20,13 +24,20 @@ import javafx.util.Callback;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.RaceLoop;
+import seng302.team18.messageparsing.SocketMessageReceiver;
+import seng302.team18.model.*;
+import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.util.*;
+import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
+import seng302.team18.visualiser.util.PixelMapper;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -36,6 +47,7 @@ import java.util.*;
 public class MainWindowController implements Observer {
     @FXML private Group group;
     @FXML private Label timerLabel;
+    @FXML private ToggleButton fpsToggler;
     @FXML private Label fpsLabel;
     @FXML private TableView tableView;
     @FXML private TableColumn<Boat, Integer> boatPositionColumn;
@@ -44,6 +56,9 @@ public class MainWindowController implements Observer {
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
+    @FXML private LineChart sparklinesChart;
+    @FXML
+    private ImageView imageViewMap;
     //@FXML private LineChart sparklinesChart;
     @FXML private LineChart<? ,?> sparklinesChart;
     @FXML private Menu raceMenu;
@@ -55,8 +70,11 @@ public class MainWindowController implements Observer {
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
+    private BackgroundRenderer backgroundRenderer;
     private RaceClock raceClock;
     private WindDirection windDirection;
+    private static RerenderMain rerenderMain;
+    private PixelMapper pixelMapper;
 
     private Map<AnnotationType, Boolean> importantAnnotations;
 
@@ -68,6 +86,14 @@ public class MainWindowController implements Observer {
         for (AnnotationType type : AnnotationType.values()) {
             importantAnnotations.put(type, false);
         }
+        group.setManaged(false);
+    }
+
+
+    @FXML
+    private void zoomOutButtonAction() {
+        pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
+        pixelMapper.setZoomLevel(0);
     }
 
 
@@ -172,7 +198,7 @@ public class MainWindowController implements Observer {
      * Sets the cell values for the race table, these are place, boat name and boat speed.
      */
     private void setUpTable() {
-        Callback<Boat, Observable[]> callback =(Boat boat) -> new Observable[]{
+        Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
                 boat.placeProperty(),
         };
         ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
@@ -180,9 +206,9 @@ public class MainWindowController implements Observer {
 
         SortedList<Boat> sortedList = new SortedList<>(observableList,
                 (Boat boat1, Boat boat2) -> {
-                    if( boat1.getPlace() < boat2.getPlace() ) {
+                    if (boat1.getPlace() < boat2.getPlace()) {
                         return -1;
-                    } else if( boat1.getPlace() > boat2.getPlace() ) {
+                    } else if (boat1.getPlace() > boat2.getPlace()) {
                         return 1;
                     } else {
                         return 0;
@@ -218,15 +244,27 @@ public class MainWindowController implements Observer {
 
 
     /**
-     * initialises race variables and begins the race loop. Adds listers to the race view to listen for when the window
+     * initialises race variables and begins the race loop. Adds listeners to the race view to listen for when the window
      * has been re-sized.
      * @param race The race which is going to be displayed.
      */
     public void setUp(Race race) {
         this.race = race;
-        raceRenderer = new RaceRenderer(race, group, raceViewPane);
+        setCourseCenter(race.getCourse());
+
+        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
+        raceRenderer = new RaceRenderer(pixelMapper, race, group, raceViewPane);
         raceRenderer.renderBoats();
-        courseRenderer =  new CourseRenderer(race.getCourse(), group, raceViewPane);
+        courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
+//        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), imageViewMap);
+//        try {
+//            backgroundRenderer.renderBackground();
+//        } catch (IOException e) {
+//            // TODO make pop up maybe or just handle it
+//            backgroundRenderer.hideMap();
+//            e.printStackTrace();
+//        }
+
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
         setUpSparklinesCategory();
@@ -239,17 +277,16 @@ public class MainWindowController implements Observer {
 
         raceLoop.start();
 
-        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> {
-            courseRenderer.renderCourse();
-            raceRenderer.renderBoats();
-            raceRenderer.reDrawTrails(race.getStartingList());
-        });
-        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> {
-            courseRenderer.renderCourse();
-            raceRenderer.renderBoats();
-            raceRenderer.reDrawTrails(race.getStartingList());
-        });
+        rerenderMain = new RerenderMain(courseRenderer, raceRenderer, race);
+
+        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> rerenderMain.redrawFeatures());
+        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> rerenderMain.redrawFeatures());
+
+        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> rerenderMain.redrawFeatures());
+        pixelMapper.addViewCenterListener(propertyChangeEvent -> rerenderMain.redrawFeatures());
+
         setUpTable();
+
 
         setToImportantAnnotationLevel();
     }
@@ -276,4 +313,20 @@ public class MainWindowController implements Observer {
             }
         }
     }
+
+    private void setCourseCenter(Course course) {
+        List<Coordinate> points = new ArrayList<>();
+        for (BoundaryMark boundaryMark : course.getBoundaries()) {
+            points.add(boundaryMark.getCoordinate());
+        }
+        for (CompoundMark compoundMark : course.getCompoundMarks()) {
+            for (Mark mark : compoundMark.getMarks()) {
+                points.add(mark.getCoordinate());
+            }
+        }
+
+        List<Coordinate> extremes = GPSCalculations.findMinMaxPoints(race.getCourse());
+        race.getCourse().setCentralCoordinate(GPSCalculations.midPoint(extremes.get(0), extremes.get(1)));
+    }
+
 }

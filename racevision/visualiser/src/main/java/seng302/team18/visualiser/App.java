@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import seng302.team18.model.Coordinate;
 import seng302.team18.visualiser.controller.ControllerManager;
 
 import java.io.IOException;

@@ -1,14 +1,16 @@
 package seng302.team18.model;
 
 
-import javafx.beans.property.*;
-import javafx.scene.chart.XYChart;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  * A class which represents a boat in the text based Application
  */
 
-public class Boat {
+public class Boat implements GeographicLocation {
     private String boatName;
     private String shortName;
     private DoubleProperty speed;

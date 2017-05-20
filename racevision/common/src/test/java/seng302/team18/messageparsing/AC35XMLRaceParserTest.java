@@ -123,7 +123,7 @@ public class AC35XMLRaceParserTest {
         List<CompoundMark> actualCompoundMarks = raceMessageToTest.getCompoundMarks();
         // Checks for multiple things
         Assert.assertEquals(expectedCompoundMarks.size(), actualCompoundMarks.size());
-        Assert.assertEquals(expectedCompoundMarks.get(0).getMidCoordinate(), actualCompoundMarks.get(0).getMidCoordinate());
+        Assert.assertEquals(expectedCompoundMarks.get(0).getCoordinate(), actualCompoundMarks.get(0).getCoordinate());
         Assert.assertEquals(expectedCompoundMarks.get(3).getName(), actualCompoundMarks.get(3).getName());
         Assert.assertEquals(
                 expectedCompoundMarks.get(5).getMarks().get(0).getCoordinate().getLatitude(),
