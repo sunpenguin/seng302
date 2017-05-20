@@ -2,6 +2,7 @@ package seng302.team18.visualiser.controller;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -29,6 +30,8 @@ public class PreRaceController {
     private ListView<Boat> listView;
     @FXML
     private Label timeZoneLabel;
+    @FXML
+    private Button liveConnectButton;
 
     private ZoneTimeClock preRaceClock;
 
@@ -126,8 +129,12 @@ public class PreRaceController {
      * @throws Exception A connection error
      */
     private  void startConnection() throws Exception {
-        ControllerManager manager = new ControllerManager(new Stage(), "MainWindow.fxml", "PreRace.fxml");
+
+
+        Stage s = (Stage) liveConnectButton.getScene().getWindow();
+        ControllerManager manager = new ControllerManager(s, "MainWindow.fxml", "PreRace.fxml");
         manager.start();
+//        s.close();
     }
 
 }
