@@ -14,46 +14,41 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * Created by dhl25 on 27/03/17.
+ * Controller for the pre race view
  */
 public class PreRaceController {
-    @FXML
-    private Label timeLabel;
-    @FXML
-    private Label startTimeLabel;
-    @FXML
-    private ListView<Boat> listView;
-    @FXML
-    private Label timeZoneLabel;
+
+    @FXML private Label timeLabel;
+    @FXML private Label startTimeLabel;
+    @FXML private ListView<Boat> listView;
+    @FXML private Label timeZoneLabel;
 
     private ZoneTimeClock preRaceClock;
 
     @FXML
     public void initialize() {
+        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"));
 
     }
 
     /**
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
      * duration before the race starts.
-     * @param currentTime The current time at the location of the race.
      * @param startTime The official start time of the race.
      * @param boats The boats participatin gin the race.
      */
-    public void setUp(ZonedDateTime currentTime, ZonedDateTime startTime, List<Boat> boats) {
-        startClock(currentTime, currentTime.getZone());
+    public void setUp(ZonedDateTime startTime, List<Boat> boats) {
         displayTimeZone(startTime);
         startTimeLabel.setText(startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         setUpLists(boats);
-    }
-
-
-
-    private void startClock(ZonedDateTime currentTime, ZoneId timeZone) {
-        preRaceClock = new ZoneTimeClock(timeLabel, timeZone, currentTime);
         preRaceClock.start();
     }
 
+
+    /**
+     * SHOWS THE TIME ZONE OF THE RACE
+     * @param zoneTime USED TO GET THE UTC OFFSET
+     */
     private void displayTimeZone(ZonedDateTime zoneTime) {
         timeZoneLabel.setText("UTC " + zoneTime.getOffset().toString());
     }
@@ -76,6 +71,10 @@ public class PreRaceController {
                 }
             }
         });
+    }
+
+    public ZoneTimeClock getClock() {
+        return preRaceClock;
     }
 
 }

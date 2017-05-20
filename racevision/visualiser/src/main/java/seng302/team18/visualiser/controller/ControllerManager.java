@@ -161,7 +161,11 @@ public class ControllerManager {
             primaryStage.setScene(scene);
             primaryStage.show();
 
-            preRaceController.setUp(race.getCurrentTime(), race.getStartTime(), race.getStartingList());
+            interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new ZoneClockInterpreter(preRaceController.getClock(), race.getStartTime().getZone()));
+
+            preRaceController.setUp(race.getStartTime(), race.getStartingList());
+
+
         }
     }
 

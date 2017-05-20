@@ -18,6 +18,7 @@ public class SparklineDataGetter {
      * Constructor
      *
      * @param race
+     * @param dataQueue queue to add boat position data to.
      */
     public SparklineDataGetter(Queue<SparklineDataPoint> dataQueue, Race race) {
         this.race = race;
@@ -38,7 +39,7 @@ public class SparklineDataGetter {
     /**
      * Adds data to the dataQueue
      *
-     * @param boat
+     * @param boat to be added to dataQueue
      */
     private void addData(Boat boat) {
         if (boat.getStatus() == BoatStatus.FINISHED.code()) {

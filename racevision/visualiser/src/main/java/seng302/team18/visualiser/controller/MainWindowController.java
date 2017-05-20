@@ -65,6 +65,9 @@ public class MainWindowController implements Observer {
         }
     }
 
+    /**
+     * initialises the sparkline graph.
+     */
     private void setUpSparklinesCategory() {
         List<String> list = new ArrayList<>();
         for (int i = race.getStartingList().size(); i > 0; i--){
@@ -80,6 +83,9 @@ public class MainWindowController implements Observer {
 
     }
 
+    /**
+     * Toggles the fps by setting label to be visible / invisible.
+     */
     @FXML
     public void toggleFPS() {
         fpsOn = !fpsOn;
@@ -87,6 +93,9 @@ public class MainWindowController implements Observer {
     }
 
 
+    /**
+     * Sets the annotation level to be full (all annotations showing)
+     */
     @FXML
     public void setFullAnnotationLevel() {
         onImportant = false;
@@ -96,6 +105,9 @@ public class MainWindowController implements Observer {
     }
 
 
+    /**
+     * Sets the annotation level to be none (no annotations showing)
+     */
     @FXML
     public void setNoneAnnotationLevel() {
         onImportant = false;
@@ -105,6 +117,9 @@ public class MainWindowController implements Observer {
     }
 
 
+    /**
+     * Sets the annotation level to be important (user selects annotations showing)
+     */
     @FXML
     public void setToImportantAnnotationLevel() {
         onImportant = true;

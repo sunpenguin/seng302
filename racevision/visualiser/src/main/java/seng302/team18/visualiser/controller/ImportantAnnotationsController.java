@@ -12,7 +12,6 @@ import java.util.Observable;
 
 /**
  * The controller class for the pop-up window ImportantAnnotationsPopup.fxml.
- * Uses the Session class to get data across controllers.
  */
 public class ImportantAnnotationsController extends Observable {
 
@@ -27,6 +26,10 @@ public class ImportantAnnotationsController extends Observable {
     @FXML private Button doneButton;
 
 
+    /**
+     * Saves the selected annotations and passes them to the observers (args is a map from AnnotationType to Boolean).
+     * Closes the stage afterwards.
+     */
     @FXML
     private void doneButtonPressed() {
         Map<AnnotationType, Boolean> importantAnnotations = new HashMap<>();
@@ -49,6 +52,7 @@ public class ImportantAnnotationsController extends Observable {
         stage.close();
     }
 
+
     @FXML
     public void initialize() {
         checkBoxMap = new HashMap<>();
@@ -58,7 +62,10 @@ public class ImportantAnnotationsController extends Observable {
         checkBoxMap.put(AnnotationType.TIME_SINCE_LAST_MARK, timeSinceLastCheckbox);
     }
 
-
+    /**
+     * Sets all the check boxes selected property.
+     * @param importantAnnotations contains the selected value of each annotation.
+     */
     public void setImportant(Map<AnnotationType, Boolean> importantAnnotations) {
         for (Map.Entry<AnnotationType, Boolean> entry : importantAnnotations.entrySet()) {
             checkBoxMap.get(entry.getKey()).setSelected(entry.getValue());
