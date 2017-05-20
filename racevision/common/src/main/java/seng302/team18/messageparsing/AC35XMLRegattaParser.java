@@ -3,6 +3,7 @@ package seng302.team18.messageparsing;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
+import seng302.team18.message.AC35XMLRegattaMessage;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

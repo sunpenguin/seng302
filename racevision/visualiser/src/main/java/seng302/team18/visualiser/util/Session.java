@@ -62,4 +62,5 @@ public class Session {
     public void setTimeSinceLastMarkImportant(Boolean timeSinceLastMarkImportant) {
         this.timeSinceLastMarkImportant = timeSinceLastMarkImportant;
     }
+
 }

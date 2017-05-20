@@ -1,38 +1,34 @@
 package seng302.team18.visualiser.util;
 
+import seng302.team18.message.BoatStatus;
 import seng302.team18.model.Boat;
-import seng302.team18.model.Course;
-import seng302.team18.visualiser.util.SparklineDataPoint;
-import seng302.team18.visualiser.util.SparklineDataQueue;
+import seng302.team18.model.Race;
 
-import java.util.List;
-import java.util.Observable;
+import java.util.Queue;
 
 /**
  * Created by sbe67 on 13/05/17.
  */
 public class SparklineDataGetter {
 
-    private List<Boat> boats;
-    private SparklineDataQueue dataQueue;
-    private Course course;
+    private Race race;
+    private Queue<SparklineDataPoint> dataQueue;
 
     /**
      * Constructor
-     * @param boats
-     * @param dataQueue
+     *
+     * @param race
      */
-    public SparklineDataGetter(List<Boat> boats , SparklineDataQueue dataQueue, Course course){
-        this.boats = boats;
+    public SparklineDataGetter(Queue<SparklineDataPoint> dataQueue, Race race) {
+        this.race = race;
         this.dataQueue = dataQueue;
-        this.course = course;
     }
 
     /**
-     * Listen to thhe changes of the boats leg number
+     * Listen to the changes of the boats leg number
      */
-    public void ListenToBoat() {
-        for (Boat boat : boats) {
+    public void listenToBoat() {
+        for (Boat boat : race.getStartingList()) {
             boat.boatLegNumberProperty().addListener((observableValue, oldleg, newleg) -> {
                 addData(boat);
             });
@@ -41,22 +37,24 @@ public class SparklineDataGetter {
 
     /**
      * Adds data to the dataQueue
+     *
      * @param boat
      */
-    private void addData(Boat boat){
-        if(boat.getBoatLegNumber() == -1){
+    private void addData(Boat boat) {
+        if (boat.getStatus() == BoatStatus.FINISHED.code()) {
             String finishLine = "Finsihline";
-            SparklineDataPoint data = new SparklineDataPoint(boat, finishLine);
-            dataQueue.enqueue(data);
-        }else {
-            if (boat.getBoatLegNumber() == 2) { //assumed that the second leg always has legno of 2 TODO:check
+            SparklineDataPoint data = new SparklineDataPoint(boat.getName(), boat.getPlace(), finishLine);
+            dataQueue.add(data);
+        } else {
+            if (boat.getLegNumber() == 2) { // assumed that the second leg always has legno of 2 TODO:check
                 String startLine = "Startline";
-                SparklineDataPoint data = new SparklineDataPoint(boat, startLine);
-                dataQueue.enqueue(data);
+                SparklineDataPoint data = new SparklineDataPoint(boat.getName(), boat.getPlace(), startLine);
+                dataQueue.add(data);
             }
-            String markPassedName = course.getLegFromLefNumber(boat.getBoatLegNumber()).getDeparture().getName();
-            SparklineDataPoint data = new SparklineDataPoint(boat, markPassedName);
-            dataQueue.enqueue(data);
+            String markPassedName = race.getCourse().getLeg(boat.getLegNumber()).getDeparture().getName();
+            SparklineDataPoint data = new SparklineDataPoint(boat.getName(), boat.getPlace(), markPassedName);
+            dataQueue.add(data);
+
         }
     }
 

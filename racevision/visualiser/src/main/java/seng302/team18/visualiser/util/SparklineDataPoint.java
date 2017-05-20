@@ -12,13 +12,16 @@ public class SparklineDataPoint {
     private String markPassedName;
 
     /**
-     * Constructor, takes a boat and creates a sparkline data point that holds
+     * Constructor, takes a boat and creates a spark line data point that holds
      * the boats name, place and leg number.
-     * @param boat
+     *
+     * @param boatName name of the boat
+     * @param boatPlace position of the boat (1st, 2nd, 3rd...)
+     * @param markPassedName the name of the mark passed
      */
-    public SparklineDataPoint(Boat boat, String markPassedName){
-        boatName = boat.getBoatName();
-        boatPlace = boat.getPlace();
+    public SparklineDataPoint(String boatName, int boatPlace, String markPassedName) {
+        this.boatName = boatName;
+        this.boatPlace = boatPlace;
         this.markPassedName = markPassedName;
     }
 

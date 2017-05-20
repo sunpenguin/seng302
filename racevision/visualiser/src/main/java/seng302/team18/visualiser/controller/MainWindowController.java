@@ -10,7 +10,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
@@ -18,23 +17,18 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import jdk.nashorn.internal.codegen.CompilerConstants;
 import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.RaceLoop;
 import seng302.team18.visualiser.display.*;
-import seng302.team18.visualiser.util.Session;
-import seng302.team18.visualiser.util.SparklineDataQueue;
-import seng302.team18.visualiser.util.SparklineDataGetter;
-import seng302.team18.visualiser.util.SparklineDataQueue;
+import seng302.team18.visualiser.util.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -52,6 +46,7 @@ public class MainWindowController {
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
+    @FXML private LineChart sparklinesChart;
     @FXML private LineChart<? ,?> sparklinesChart;
     @FXML private Menu raceMenu;
 
@@ -86,9 +81,15 @@ public class MainWindowController {
     }
 
     private void setUpSparklinesCategory() {
-        SparklineDataQueue dataQueue = new SparklineDataQueue();
-        SparklineDataGetter dataGetter = new SparklineDataGetter(race.getStartingList(), dataQueue, race.getCourse());
-        dataGetter.ListenToBoat();
+        List<String> list = new ArrayList<>();
+        for (int i = race.getStartingList().size(); i > 0; i--){
+            list.add(String.valueOf(i));
+        }
+        ObservableList<String> observableList = FXCollections.observableList(list);
+        yPositionsAxis.setCategories(observableList);
+        Queue<SparklineDataPoint> dataQueue = new LinkedList<>();
+        SparklineDataGetter dataGetter = new SparklineDataGetter(dataQueue, race);
+        dataGetter.listenToBoat();
         DisplaySparkline displaySparkline = new DisplaySparkline(dataQueue, race.getStartingList(), sparklinesChart);
         displaySparkline.start();
 
@@ -178,15 +179,19 @@ public class MainWindowController {
         boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
             @Override
             public void updateItem(Double speed, boolean empty) {
-                super.updateItem(speed, empty) ;
+                super.updateItem(speed, empty);
                 if (empty) {
                     setText(null);
                 } else {
-                    setText(String.format("%.3f", speed));
+                    setText(String.format("%.2f", speed));
                 }
             }
         });
+        boatPositionColumn.setSortable(false);
+        boatNameColumn.setSortable(false);
+        boatSpeedColumn.setSortable(false);
         tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
+
     }
 
     private void startWindDirection() {
@@ -229,7 +234,7 @@ public class MainWindowController {
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
         setUpSparklinesCategory();
-        raceLoop = new RaceLoop(race, raceRenderer, courseRenderer, new FPSReporter(fpsLabel), interpreter, receiver);
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel));
         startWindDirection();
 
         for (Boat boat : race.getStartingList()) {

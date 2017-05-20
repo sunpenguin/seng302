@@ -3,6 +3,7 @@ package seng302.team18.messageparsing;
 
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.message.AC35XMLRegattaMessage;
 
 import static org.junit.Assert.assertEquals;
 

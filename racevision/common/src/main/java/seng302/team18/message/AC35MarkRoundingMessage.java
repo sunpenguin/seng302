@@ -1,4 +1,4 @@
-package seng302.team18.messageparsing;
+package seng302.team18.message;
 
 /**
  * MessageBody that contains information about a mark rounding.

@@ -188,7 +188,7 @@ public class DisplayBoat {
     }
 
     public void toFront() {
-        wake.toFront();
+        //wake.toFront();
         boat.toFront();
     }
 
