@@ -22,6 +22,8 @@ public class DisplaySparkline extends AnimationTimer {
 
 
     public DisplaySparkline(Queue<SparklineDataPoint> dataQueue, Map<Boat, Color> boats, LineChart<String, String> sparklinesChart) {
+        sparklinesChart.setCreateSymbols(false);
+        sparklinesChart.setLegendVisible(false);
         this.dataQueue = dataQueue;
         this.sparklinesChart = sparklinesChart;
 
@@ -73,12 +75,6 @@ public class DisplaySparkline extends AnimationTimer {
 //        for (Node n : nodes) {
 //            n.setStyle("-fx-stroke: blue; -fx-background-color: blue, white; ");
 //        }
-//
-//        sparklinesChart.applyCss();
-//        nodes = sparklinesChart.lookupAll(".series" + 1);
-//        for (Node n : nodes) {
-//            n.setStyle("-fx-stroke: red; -fx-background-color: red, white; ");
-//        }
     }
 
     private String getHex(Color color) {
@@ -103,13 +99,13 @@ public class DisplaySparkline extends AnimationTimer {
                 }
                 series.getData().add(new XYChart.Data<>(cat, String.valueOf(data.getBoatPlace())));
 
-                series.getNode().applyCss();
-                int i = seriesIndex.get(boatName);
-                Set<Node> nodes = sparklinesChart.lookupAll(".series" + i);
-                for (Node n : nodes) {
-                    n.setStyle(seriesStyle.get(i));
-                }
-                series.getNode().applyCss();
+//                series.getNode().applyCss();
+//                int i = seriesIndex.get(boatName);
+//                Set<Node> nodes = sparklinesChart.lookupAll(".series" + i);
+//                for (Node n : nodes) {
+//                    n.setStyle(seriesStyle.get(i));
+//                }
+//                series.getNode().applyCss();
             }
         }
     }

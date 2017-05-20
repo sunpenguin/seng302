@@ -25,7 +25,7 @@ public class RaceRenderer {
     private final double PADDING = 20.0;
     private int numBoats;
     private final List<Color> BOAT_COLOURS = new ArrayList<>(
-            Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
+            Arrays.asList(Color.VIOLET, Color.DARKVIOLET, Color.GREEN, Color.TOMATO, Color.YELLOWGREEN, Color.BROWN));
     private PixelMapper pixelMapper;
 
 
