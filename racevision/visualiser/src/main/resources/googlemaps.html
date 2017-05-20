@@ -71,7 +71,9 @@
                             bounds.extend(markers[i].getPosition());
                         }
 
-                        map.fitBounds(bounds);
+                        if (!zoomed) {
+                             map.fitBounds(bounds);
+                        }
 
 //                        if (zoomed) {
 //                            map.setZoom(20);

@@ -32,6 +32,7 @@ public class PixelMapper {
     private int previousZoomLevel = 0;
     private XYPair worldCoordinatesCartesian = new XYPair(0, 0);
     private XYPair viewCenterCartesian = new XYPair(0, 0);
+    private Coordinate previousViewCenter = new Coordinate(0, 0);
 
     public static final int ZOOM_LEVEL_4X = 1;
 
@@ -87,25 +88,20 @@ public class PixelMapper {
         IntegerProperty mapZoom = new SimpleIntegerProperty(0);
 
         try {
-            worldCoordinatesCartesian.setX((double) webEngine.executeScript("convertCoordX(" + coord.getLatitude() + ","
-                    + coord.getLongitude() + ");"));
-            worldCoordinatesCartesian.setY((double) webEngine.executeScript("convertCoordY(" + coord.getLatitude() + ","
-                    + coord.getLongitude() + ");"));
+            worldCoordinatesCartesian = getPixelsFromGoogle(coord);
+            viewCenterCartesian = getPixelsFromGoogle(viewPortCenter);
+            nwBound = getPixelsFromGoogle(bounds.get(0));
+            seBound = getPixelsFromGoogle(bounds.get(1));
 
-            viewCenterCartesian.setX((double) webEngine.executeScript("convertCoordX(" + viewPortCenter.getLatitude() + ","
-                    + viewPortCenter.getLongitude() + ");"));
-            viewCenterCartesian.setY((double) webEngine.executeScript("convertCoordY(" + viewPortCenter.getLatitude() + ","
-                    + viewPortCenter.getLongitude() + ");"));
-
-            nwBound.setX((double) webEngine.executeScript("convertCoordX(" + bounds.get(0).getLatitude() + ","
-                    + bounds.get(0).getLongitude() + ");"));
-            nwBound.setY((double) webEngine.executeScript("convertCoordY(" + bounds.get(0).getLatitude() + ","
-                    + bounds.get(0).getLongitude() + ");"));
-
-            seBound.setX((double) webEngine.executeScript("convertCoordX(" + bounds.get(1).getLatitude() + ","
-                    + bounds.get(1).getLongitude() + ");"));
-            seBound.setY((double) webEngine.executeScript("convertCoordY(" + bounds.get(1).getLatitude() + ","
-                    + bounds.get(1).getLongitude() + ");"));
+            if (previousViewCenter!= viewPortCenter || zoomLevel.intValue() != previousZoomLevel) {
+                webEngine.executeScript("map.setCenter({lat: " + viewPortCenter.getLatitude() +
+                        ", lng: " + viewPortCenter.getLongitude() + "});");
+                if(zoomLevel.intValue() != previousZoomLevel){
+                    webEngine.executeScript("toggleZoomed();");
+                }
+                previousViewCenter = viewPortCenter;
+                previousZoomLevel = zoomLevel.intValue();
+            }
 
 //            if (previousZoomLevel != zoomLevel.intValue()) {
 //                webEngine.executeScript("toggleZoomed();");
@@ -134,6 +130,9 @@ public class PixelMapper {
         }
 
         mappingScale *= Math.pow(2, zoomLevel.intValue());
+//        if(mappingScale != 1){
+//            mappingScale = mappingScale/2;
+//        }
 
         double dX = worldCoordinatesCartesian.getX() - viewCenterCartesian.getX();
         double dY = worldCoordinatesCartesian.getY() - viewCenterCartesian.getY();
@@ -164,6 +163,14 @@ public class PixelMapper {
 
     public void setBounds(List<Coordinate> bounds) {
         this.bounds = bounds;
+    }
+
+    private XYPair getPixelsFromGoogle(Coordinate coord) throws Exception {
+        double x = ((double) webEngine.executeScript("convertCoordX(" + coord.getLatitude() + ","
+                + coord.getLongitude() + ");"));
+        double y = ((double) webEngine.executeScript("convertCoordY(" + coord.getLatitude() + ","
+                + coord.getLongitude() + ");"));
+        return new XYPair(x, y);
     }
 }
 
