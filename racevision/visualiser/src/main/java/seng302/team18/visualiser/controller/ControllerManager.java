@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.controller;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -10,6 +11,7 @@ import seng302.team18.messageparsing.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.messageinterpreting.RaceClockInterpreter;
+import seng302.team18.visualiser.util.Session;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,7 +77,7 @@ public class ControllerManager {
      * @throws Exception
      */
     public void start() throws Exception {
-        receiver = getSocket();
+        receiver = Session.getInstance().getReceiver();
         race = new Race();
         initialiseInterpreter();
         interpretMessages();
@@ -153,6 +155,7 @@ public class ControllerManager {
         }
     }
 
+
     /**
      * Display the window with information about a race which hasn't started yet.
      * @throws IOException IO Exception thrown when loading FXML loader
@@ -174,59 +177,12 @@ public class ControllerManager {
         }
     }
 
-
-    /**
-     * Asks the user where they would like their data streamed from. They can use of four options: Test mock, test stream,
-     * live stream or they can specify their own custom  port number and address to stream from.
-     * @return A port and host combination
-     */
-    private SocketMessageReceiver getSocket() {
-        Scanner scanner = new Scanner(System.in);
-        String decision = "";
-        List<String> validChoices = new ArrayList<>(Arrays.asList("1", "2", "3", "4"));
-        while (!validChoices.contains(decision)) {
-            System.out.println("What race type do you want?");
-            System.out.println("1: TestMock, 2: TestStream, 3: LiveStream, 4: Custom Host");
-            if (scanner.hasNext()) {
-                decision = scanner.next();
-            }
-        }
-
-        if (decision.equals("1")){
-            try {
-                return new SocketMessageReceiver("127.0.0.1", 5005, new AC35MessageParserFactory());
-            } catch (IOException e) {
-                System.out.println("Could not establish connection to mock Host/Port");
-            }
-        } else if (decision.equals("2")) {
-            try {
-                return new SocketMessageReceiver("livedata.americascup.com", 4941, new AC35MessageParserFactory());
-            } catch (IOException e) {
-                System.out.println("Could not establish connection to test Host/Port");
-            }
-        } else if (decision.equals("3")) {
-            try {
-                return new SocketMessageReceiver("livedata.americascup.com", 4940, new AC35MessageParserFactory());
-            } catch (IOException e) {
-                System.out.println("Could not establish connection to stream Host/Port");
-            }
-        }else if (decision.equals("4")) {
-            try {
-                List<String> portAndHost = getCustomConnection();
-                return new SocketMessageReceiver(portAndHost.get(1), Integer.parseInt(portAndHost.get(0)), new AC35MessageParserFactory());
-            }catch (Exception e) {
-                System.out.println("Could not establish connection to stream Host/Port");
-            }
-        }
-        return getSocket();
-    }
-
     /**
      * A companion method for getSocket.
      * Asks the user for the custom port and address.
      * @return A port and host combination
      */
-    private List<String> getCustomConnection() {
+    private List<String> getCustomConnection() { // Leaving here for test purposes, but can be deleted.
         List<String> portAndHost = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter a port number: ");

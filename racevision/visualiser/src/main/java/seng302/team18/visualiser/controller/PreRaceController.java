@@ -5,8 +5,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.stage.Stage;
+import seng302.team18.messageparsing.AC35MessageParserFactory;
+import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Boat;
 import seng302.team18.visualiser.display.ZoneTimeClock;
+import seng302.team18.visualiser.util.Session;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -76,6 +80,54 @@ public class PreRaceController {
                 }
             }
         });
+    }
+
+    /**
+     * Called when the live connection button is selected, sets up a connection with the live AC35 feed
+     */
+    @FXML
+    public void openLiveStream() {
+        try {
+            Session.getInstance().setReceiver(new SocketMessageReceiver("livedata.americascup.com", 4940, new AC35MessageParserFactory()));
+            startConnection();
+        } catch (Exception e) {
+            System.out.println("Could not establish connection to stream Host/Port");
+        }
+    }
+
+    /**
+     * Called when the test connection button is selected, sets up a connection with the UC test feed
+     */
+    @FXML
+    public void openTestStream() {
+        try {
+            Session.getInstance().setReceiver(new SocketMessageReceiver("livedata.americascup.com", 4941, new AC35MessageParserFactory()));
+            startConnection();
+        } catch (Exception e) {
+            System.out.println("Could not establish connection to stream Host/Port");
+        }
+    }
+
+    /**
+     * Called when the mock connection button is selected, sets up a connection with the mock feed
+     */
+    @FXML
+    public void openMockStream() {
+        try {
+            Session.getInstance().setReceiver(new SocketMessageReceiver("127.0.0.1", 5005, new AC35MessageParserFactory()));
+            startConnection();
+        } catch (Exception e) {
+            System.out.println("Could not establish connection to stream Host/Port");
+        }
+    }
+
+    /**
+     * Creates a controller manager object and begins an instance of the program.
+     * @throws Exception A connection error
+     */
+    private  void startConnection() throws Exception {
+        ControllerManager manager = new ControllerManager(new Stage(), "MainWindow.fxml", "PreRace.fxml");
+        manager.start();
     }
 
 }

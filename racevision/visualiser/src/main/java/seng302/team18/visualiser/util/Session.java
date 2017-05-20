@@ -1,5 +1,7 @@
 package seng302.team18.visualiser.util;
 
+import seng302.team18.messageparsing.SocketMessageReceiver;
+
 /**
  * The session class to hold variables between controller switching.
  */
@@ -9,6 +11,7 @@ public class Session {
     private Boolean boatSpeedImportant;
     private Boolean estimatedTimeImportant;
     private Boolean timeSinceLastMarkImportant;
+    private SocketMessageReceiver receiver;
 
     /**
      * Constructs a single instance of the session.
@@ -63,4 +66,11 @@ public class Session {
         this.timeSinceLastMarkImportant = timeSinceLastMarkImportant;
     }
 
+    public SocketMessageReceiver getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(SocketMessageReceiver receiver) {
+        this.receiver = receiver;
+    }
 }
