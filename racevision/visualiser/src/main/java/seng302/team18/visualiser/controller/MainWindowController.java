@@ -10,31 +10,24 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import seng302.team18.model.Boat;
-import seng302.team18.model.Race;
-import seng302.team18.visualiser.RaceLoop;
-import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
-import seng302.team18.visualiser.util.*;
-import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 import seng302.team18.visualiser.util.PixelMapper;
+import seng302.team18.visualiser.util.SparklineDataGetter;
+import seng302.team18.visualiser.util.SparklineDataPoint;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -42,18 +35,30 @@ import java.util.List;
  * The main window consists of the right hand pane with various displays and the race on the left.
  */
 public class MainWindowController implements Observer {
-    @FXML private Group group;
-    @FXML private Label timerLabel;
-    @FXML private ToggleButton fpsToggler;
-    @FXML private Label fpsLabel;
-    @FXML private TableView tableView;
-    @FXML private TableColumn<Boat, Integer> boatPositionColumn;
-    @FXML private TableColumn<Boat, String> boatNameColumn;
-    @FXML private TableColumn<Boat, Double> boatSpeedColumn;
-    @FXML private Pane raceViewPane;
-    @FXML private Polygon arrow;
-    @FXML private CategoryAxis yPositionsAxis;
-    @FXML private LineChart sparklinesChart;
+    @FXML
+    private Group group;
+    @FXML
+    private Label timerLabel;
+    @FXML
+    private ToggleButton fpsToggler;
+    @FXML
+    private Label fpsLabel;
+    @FXML
+    private TableView tableView;
+    @FXML
+    private TableColumn<Boat, Integer> boatPositionColumn;
+    @FXML
+    private TableColumn<Boat, String> boatNameColumn;
+    @FXML
+    private TableColumn<Boat, Double> boatSpeedColumn;
+    @FXML
+    private Pane raceViewPane;
+    @FXML
+    private Polygon arrow;
+    @FXML
+    private CategoryAxis yPositionsAxis;
+    @FXML
+    private LineChart<String, String> sparklinesChart;
     @FXML
     private ImageView imageViewMap;
 
@@ -93,9 +98,9 @@ public class MainWindowController implements Observer {
     /**
      * initialises the sparkline graph.
      */
-    private void setUpSparklinesCategory() {
+    private void setUpSparklinesCategory(Map<Boat, Color> boatColors) {
         List<String> list = new ArrayList<>();
-        for (int i = race.getStartingList().size(); i > 0; i--){
+        for (int i = race.getStartingList().size(); i > 0; i--) {
             list.add(String.valueOf(i));
         }
         ObservableList<String> observableList = FXCollections.observableList(list);
@@ -103,7 +108,8 @@ public class MainWindowController implements Observer {
         Queue<SparklineDataPoint> dataQueue = new LinkedList<>();
         SparklineDataGetter dataGetter = new SparklineDataGetter(dataQueue, race);
         dataGetter.listenToBoat();
-        DisplaySparkline displaySparkline = new DisplaySparkline(dataQueue, race.getStartingList(), sparklinesChart);
+
+        DisplaySparkline displaySparkline = new DisplaySparkline(dataQueue, boatColors, sparklinesChart);
         displaySparkline.start();
 
     }
@@ -160,7 +166,7 @@ public class MainWindowController implements Observer {
      * Only shows when the annotation level is on important.
      */
     @FXML
-    public void openAnnotationsWindow(){
+    public void openAnnotationsWindow() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ImportantAnnotationsPopup.fxml"));
         Scene newScene;
         try {
@@ -231,6 +237,7 @@ public class MainWindowController implements Observer {
     /**
      * initialises race variables and begins the race loop. Adds listeners to the race view to listen for when the window
      * has been re-sized.
+     *
      * @param race The race which is going to be displayed.
      */
     public void setUp(Race race) {
@@ -238,7 +245,7 @@ public class MainWindowController implements Observer {
         setCourseCenter(race.getCourse());
 
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
-        raceRenderer = new RaceRenderer(pixelMapper, race, group, raceViewPane);
+        raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
 //        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), imageViewMap);
@@ -252,7 +259,12 @@ public class MainWindowController implements Observer {
 
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
-        setUpSparklinesCategory();
+//        Map<Boat, Color> boatColors = raceRenderer.boatColors()
+//                .entrySet()
+//                .stream()
+//                .map((name, color) -> race.getStartingList().stream().filter(boat -> true).count() > 0)
+//                .collect(Collectors::toMap);
+        setUpSparklinesCategory(raceRenderer.boatColors());
         raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel));
         startWindDirection();
 

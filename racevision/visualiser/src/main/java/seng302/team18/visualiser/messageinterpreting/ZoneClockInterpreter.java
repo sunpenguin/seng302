@@ -30,7 +30,6 @@ public class ZoneClockInterpreter extends MessageInterpreter {
     @Override
     public void interpret(MessageBody message) {
         if (message instanceof AC35RaceStatusMessage) {
-            System.out.println("status message got ");
             AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
             Instant currentIn = Instant.ofEpochMilli(statusMessage.getCurrentTime());
             clock.setTime(ZonedDateTime.ofInstant(currentIn, zoneId));

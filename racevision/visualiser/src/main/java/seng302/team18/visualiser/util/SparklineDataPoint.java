@@ -7,9 +7,9 @@ import seng302.team18.model.Boat;
  */
 public class SparklineDataPoint {
 
-    private String boatName;
-    private int boatPlace;
-    private String markPassedName;
+    private final String boatName;
+    private final int boatPlace;
+    private final String markPassedName;
 
     /**
      * Constructor, takes a boat and creates a spark line data point that holds
