@@ -35,4 +35,12 @@ public class XYPair {
     public double getY() {
         return this.y;
     }
+
+    public void shiftX(double x) {
+        this.x += x;
+    }
+
+    public void shiftY(double y) {
+        this.y += y;
+    }
 }

@@ -62,38 +62,8 @@ public class Coordinate {
         }
     }
 
-    public double retrieveHeading(Coordinate destination) {
-        double lon1 = Math.toRadians(longitude);
-        double lat1 = Math.toRadians(latitude);
-        double lon2 = Math.toRadians(destination.getLongitude());
-        double lat2 = Math.toRadians(destination.getLatitude());
 
-        double x = Math.cos(lat2) * Math.sin(lon2 - lon1);
-        double y = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(lon2 - lon1);
-        return Math.toDegrees(Math.atan2(x, y));
-    }
 
-    public double distance(Coordinate point) {
-        double lat1 = getLatitude();
-        double long1 = getLongitude();
-        double lat2 = point.getLatitude();
-        double long2 = point.getLongitude();
-        double earthRadius = 6371e3; // meters
-
-        double lat1Rad = Math.toRadians(lat1);
-        double lat2Rad = Math.toRadians(lat2);
-
-        double difLatitudeRad = Math.toRadians(lat2 - lat1);
-        double difLongitudeRad = Math.toRadians(long2 - long1);
-
-        double a = Math.sin(difLatitudeRad / 2) * Math.sin(difLatitudeRad / 2) +
-                Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-                        Math.sin(difLongitudeRad / 2) * Math.sin(difLongitudeRad / 2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        return earthRadius * c;
-    }
 
 
     @Override

@@ -1,5 +1,9 @@
 package seng302.team18.util;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 
 /**
@@ -7,34 +11,50 @@ import seng302.team18.model.Course;
  */
 public class GPSCalculationsTest {
 
-    private Course testCourse;
-    private GPSCalculations g;
+    private GPSCalculations gps;
 
-//    @Before
-//    public void setUp() throws IOException, SAXException, ParserConfigurationException {
-//        testCourse = XMLCourseParser.parseCourse(new BufferedInputStream(getClass().getResourceAsStream("/test-course.xml")));
-//        g = new GPSCalculations(testCourse);
-//    }
+    @Before
+    public void setUp() {
+        gps = new GPSCalculations();
+    }
 
 
-//    @Test
-//    public void findMinMaxPointsTest() throws IOException, SAXException, ParserConfigurationException {
-//
-//        g.findMinMaxPoints(testCourse);
-//
-//        double minX = g.getMinX();
-//        double maxX = g.getMaxX();
-//        double minY = g.getMinY();
-//        double maxY = g.getMaxY();
-//
-//        XYPair expectedMinXCoord = GPSCalculations.GPSxy(new Coordinate(51.0, -81.0));
-//        XYPair expectedMaxXCoord = GPSCalculations.GPSxy(new Coordinate(30.0, -60.0));
-//        XYPair expectedMinYCoord = GPSCalculations.GPSxy(new Coordinate(30.0, -60.0));
-//        XYPair expectedMaxYCoord = GPSCalculations.GPSxy(new Coordinate(51.0, -81.0));
-//
-//        assertEquals(expectedMinXCoord.getX(), minX, 1);
-//        assertEquals(expectedMaxXCoord.getX(), maxX, 1);
-//        assertEquals(expectedMinYCoord.getY(), minY, 1);
-//        assertEquals(expectedMaxYCoord.getY(), maxY, 1);
-//    }
+    @Test
+    public void getBearingTest() {
+        double expected = 21.8774307492418;
+        double delta = 0.0001;
+
+        Coordinate origin = new Coordinate(0, 0);
+        Coordinate destination = new Coordinate(90, 180);
+
+        double actual = gps.getBearing(origin, destination);
+        Assert.assertEquals(expected, actual, delta);
+    }
+
+
+    @Test
+    public void midPointTest() {
+        Coordinate expected = new Coordinate(0, 0);
+        double delta = 0.0001;
+
+        Coordinate coordinate1 = new Coordinate(50, 10);
+        Coordinate coordinate2 = new Coordinate(-50, -10);
+
+        Coordinate actual = gps.midPoint(coordinate1, coordinate2);
+        Assert.assertEquals(expected.getLatitude(), actual.getLatitude(), delta);
+        Assert.assertEquals(expected.getLongitude(), actual.getLongitude(), delta);
+    }
+
+
+    @Test
+    public void toCoordinateTest() {
+        Coordinate expected = new Coordinate(0, 0);
+        double delta = 0.0001;
+
+        Coordinate origin = new Coordinate(0, 0);
+
+        Coordinate actual = gps.toCoordinate(origin, 10, 0);
+        Assert.assertEquals(expected.getLatitude(), actual.getLatitude(), delta);
+        Assert.assertEquals(expected.getLongitude(), actual.getLongitude(), delta);
+    }
 }

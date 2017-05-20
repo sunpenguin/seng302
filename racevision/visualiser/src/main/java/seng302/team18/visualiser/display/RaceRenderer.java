@@ -3,12 +3,9 @@ package seng302.team18.visualiser.display;
 import javafx.scene.Group;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polyline;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
-import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
 import java.util.*;
@@ -28,6 +25,7 @@ public class RaceRenderer {
     private int numBoats;
     private final List<Color> BOAT_COLOURS = new ArrayList<>(
             Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
+    private PixelMapper pixelMapper;
 
 
     /**
@@ -37,10 +35,11 @@ public class RaceRenderer {
      * @param group the group to be drawn on
      * @param raceViewPane The AnchorPane the group is on
      */
-    public RaceRenderer(Race race, Group group, Pane raceViewPane) {
+    public RaceRenderer(PixelMapper pixelMapper, Race race, Group group, Pane raceViewPane) {
         this.race = race;
         this.group = group;
         this.raceViewPane = raceViewPane;
+        this.pixelMapper = pixelMapper;
         headingMap = new HashMap<>();
     }
 
@@ -49,29 +48,28 @@ public class RaceRenderer {
      * Draws displayBoats in the Race on the Group as well as the visible annotations
      */
     public void renderBoats() {
-        PixelMapper pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, PADDING);
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
 
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             if (displayBoat == null) {
-                displayBoat = new DisplayBoat
-                        (boat.getShortName(), boat.getHeading(), boat.getSpeed(), BOAT_COLOURS.get(numBoats++), boat.getTimeTilNextMark());
+                displayBoat = new DisplayBoat(
+                        pixelMapper, boat.getShortName(), boat.getHeading(), boat.getSpeed(),
+                        BOAT_COLOURS.get(numBoats++), boat.getTimeTilNextMark()
+                );
                 displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
 
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
-                XYPair pixels = pixelMapper.convertCoordPixel(boatCoordinates);
-                displayBoat.moveBoat(pixels);
+                displayBoat.setDisplayOrder();
+                displayBoat.moveBoat(boatCoordinates);
                 displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
-                for (DisplayBoat dBoat : displayBoats.values()) {
-                    dBoat.toFront();
-                }
+                displayBoat.setScale(pixelMapper.getZoomFactor());
             }
         }
     }
@@ -81,7 +79,6 @@ public class RaceRenderer {
      * Draws all the boats trails.
      */
     public void drawTrails() {
-        PixelMapper pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, PADDING);
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
@@ -117,7 +114,6 @@ public class RaceRenderer {
      * @param boats Collection of displayBoats racing.
      */
     public void reDrawTrails(Collection<Boat> boats) {
-        PixelMapper pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, PADDING);
         for (Boat boat : boats) {
             DisplayTrail trail = trailMap.get(boat.getShortName());
             if (trail != null) {

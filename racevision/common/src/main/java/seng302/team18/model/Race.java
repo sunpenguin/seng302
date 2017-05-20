@@ -63,10 +63,10 @@ public class Race {
      * Sets the speed of the boats at the start line
      */
     private void setInitialSpeed(){
-        int speed = 2000;
+        int speed = 200;
         for(Boat b: startingList){
             b.setSpeed(speed); //kph
-            speed -= 200;
+            speed -= 15;
         }
     }
 
@@ -90,16 +90,17 @@ public class Race {
      */
     private void setCourseForBoats() {
         if (course.getLegs().size() > 0) {
+            GPSCalculations gps = new GPSCalculations();
             for (Boat boat : startingList) {
                 // Set Leg
                 boat.setLegNumber(course.getLegs().get(0).getLegNumber());
                 // Set Dest
-                boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getMidCoordinate());
+                boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCoordinate());
                 // Set Coordinate
-                Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getMidCoordinate();
+                Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
                 boat.setCoordinate(midPoint);
                 // Set Heading
-                boat.setHeading(boat.getCoordinate().retrieveHeading(boat.getDestination()));
+                boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
             }
         }
     }
@@ -200,8 +201,8 @@ public class Race {
                 setNextLeg(boat, nextLeg);
             }
         }
-        GPSCalculations gps = new GPSCalculations(course);
-        boat.setHeading(gps.retrieveHeading(boat.getCoordinate(), boat.getDestination()));
+        GPSCalculations gps = new GPSCalculations();
+        boat.setHeading(gps.getBearing(boat.getCoordinate(), boat.getDestination()));
     }
 
 
@@ -236,9 +237,9 @@ public class Race {
         double mpsSpeed = speed * 0.27778;//convert to metres/second
         double secondsTime = time / 1000;
         double distanceTravelled = mpsSpeed * secondsTime;
-        GPSCalculations gps = new GPSCalculations(course);
+        GPSCalculations gps = new GPSCalculations();
         // set next position based on current coordinate, distance travelled, and heading.
-        boat.setCoordinate(gps.coordinateToCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+        boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
 
 
