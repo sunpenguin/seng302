@@ -12,10 +12,7 @@ import seng302.team18.model.Race;
 import seng302.team18.visualiser.messageinterpreting.RaceClockInterpreter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -143,7 +140,7 @@ public class ControllerManager {
             primaryStage.setScene(scene);
             primaryStage.show();
 
-            mainController.setUp(race, interpreter, receiver);
+            mainController.setUp(race);
 
             interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(mainController.getRaceClock()));
         }
