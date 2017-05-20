@@ -120,7 +120,7 @@
                         <Menu mnemonicParsing="false" text="Important">
                            <items>
                               <MenuItem mnemonicParsing="false" onAction="#setToImportantAnnotationLevel" text="Important Only" />
-                              <MenuItem mnemonicParsing="false" onAction="#setImportant" text="Set Important" />
+                              <MenuItem mnemonicParsing="false" onAction="#openAnnotationsWindow" text="Set Important" />
                            </items>
                         </Menu>
                         <MenuItem fx:id="noneAnnotationLevel" mnemonicParsing="false" onAction="#setNoneAnnotationLevel" text="None" />

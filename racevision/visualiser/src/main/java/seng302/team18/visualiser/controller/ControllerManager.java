@@ -15,10 +15,7 @@ import seng302.team18.visualiser.messageinterpreting.RaceClockInterpreter;
 import seng302.team18.visualiser.util.Session;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -150,7 +147,7 @@ public class ControllerManager {
             primaryStage.setScene(scene);
             primaryStage.show();
 
-            mainController.setUp(race, interpreter, receiver);
+            mainController.setUp(race);
 
             interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(mainController.getRaceClock()));
         }
@@ -174,7 +171,11 @@ public class ControllerManager {
             primaryStage.setOnCloseRequest(event -> System.exit(0));
             primaryStage.show();
 
-            preRaceController.setUp(race.getCurrentTime(), race.getStartTime(), race.getStartingList());
+            interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new ZoneClockInterpreter(preRaceController.getClock(), race.getStartTime().getZone()));
+
+            preRaceController.setUp(race.getStartTime(), race.getStartingList());
+
+
         }
     }
 

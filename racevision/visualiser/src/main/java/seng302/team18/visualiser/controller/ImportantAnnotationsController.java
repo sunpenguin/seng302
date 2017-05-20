@@ -1,74 +1,74 @@
 package seng302.team18.visualiser.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
-import seng302.team18.visualiser.util.Session;
+import seng302.team18.visualiser.display.AnnotationType;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Observable;
 
 /**
  * The controller class for the pop-up window ImportantAnnotationsPopup.fxml.
- * Uses the Session class to get data across controllers.
  */
-public class ImportantAnnotationsController implements Initializable {
+public class ImportantAnnotationsController extends Observable {
 
-    private boolean boatNameImportant;
-    private boolean boatSpeedImportant;
-    private boolean estimatedTimeImportant;
-    private boolean timeSinceLastMarkImportant;
 
-    @FXML private CheckBox checkboxBoatName;
-    @FXML private CheckBox checkboxBoatSpeed;
-    @FXML private CheckBox checkboxEstTimeToNext;
-    @FXML private CheckBox checkboxTimeSinceLast;
+    private Map<AnnotationType, CheckBox> checkBoxMap;
 
+    @FXML private CheckBox boatNameCheckbox;
+    @FXML private CheckBox boatSpeedCheckbox;
+    @FXML private CheckBox estTimeToNextCheckbox;
+    @FXML private CheckBox timeSinceLastCheckbox;
+
+    @FXML private Button doneButton;
+
+
+    /**
+     * Saves the selected annotations and passes them to the observers (args is a map from AnnotationType to Boolean).
+     * Closes the stage afterwards.
+     */
     @FXML
-    private Button doneButton;
+    private void doneButtonPressed() {
+        Map<AnnotationType, Boolean> importantAnnotations = new HashMap<>();
+        importantAnnotations.put(AnnotationType.ESTIMATED_TIME_NEXT_MARK,
+                checkBoxMap.get(AnnotationType.ESTIMATED_TIME_NEXT_MARK).isSelected());
 
+        importantAnnotations.put(AnnotationType.NAME,
+                checkBoxMap.get(AnnotationType.NAME).isSelected());
 
-    public void toggleBoatName() {
-        boatNameImportant = !boatNameImportant;
+        importantAnnotations.put(AnnotationType.SPEED,
+                checkBoxMap.get(AnnotationType.SPEED).isSelected());
 
-    }
+        importantAnnotations.put(AnnotationType.TIME_SINCE_LAST_MARK,
+                checkBoxMap.get(AnnotationType.TIME_SINCE_LAST_MARK).isSelected());
 
-    public void toggleBoatSpeed() {
-        boatSpeedImportant = !boatSpeedImportant;
-    }
+        super.setChanged();
+        super.notifyObservers(importantAnnotations);
 
-    public void toggleEstimatedTime() {
-        estimatedTimeImportant = !estimatedTimeImportant;
-    }
-
-    public void toggleTimeSinceLastMark() {
-        timeSinceLastMarkImportant = !timeSinceLastMarkImportant;
-    }
-
-    @FXML
-    void doneButtonPressed() {
-        Session.getInstance().setBoatNameImportant(boatNameImportant);
-        Session.getInstance().setBoatSpeedImportant(boatSpeedImportant);
-        Session.getInstance().setEstimatedTimeImportant(estimatedTimeImportant);
-        Session.getInstance().setTimeSinceLastMarkImportant(timeSinceLastMarkImportant);
         Stage stage = (Stage) doneButton.getScene().getWindow();
         stage.close();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        //get values from session
-        boatNameImportant = Session.getInstance().getBoatNameImportant();
-        boatSpeedImportant = Session.getInstance().getBoatSpeedImportant();
-        estimatedTimeImportant = Session.getInstance().getEstimatedTimeImportant();
-        timeSinceLastMarkImportant = Session.getInstance().getTimeSinceLastMarkImportant();
 
-        //set checkboxes tickitude
-        checkboxBoatName.setSelected(boatNameImportant);
-        checkboxBoatSpeed.setSelected(boatSpeedImportant);
-        checkboxEstTimeToNext.setSelected(estimatedTimeImportant);
-        checkboxTimeSinceLast.setSelected(timeSinceLastMarkImportant);
+    @FXML
+    public void initialize() {
+        checkBoxMap = new HashMap<>();
+        checkBoxMap.put(AnnotationType.ESTIMATED_TIME_NEXT_MARK, estTimeToNextCheckbox);
+        checkBoxMap.put(AnnotationType.NAME, boatNameCheckbox);
+        checkBoxMap.put(AnnotationType.SPEED, boatSpeedCheckbox);
+        checkBoxMap.put(AnnotationType.TIME_SINCE_LAST_MARK, timeSinceLastCheckbox);
+    }
+
+    /**
+     * Sets all the check boxes selected property.
+     * @param importantAnnotations contains the selected value of each annotation.
+     */
+    public void setImportant(Map<AnnotationType, Boolean> importantAnnotations) {
+        for (Map.Entry<AnnotationType, Boolean> entry : importantAnnotations.entrySet()) {
+            checkBoxMap.get(entry.getKey()).setSelected(entry.getValue());
+        }
     }
 }

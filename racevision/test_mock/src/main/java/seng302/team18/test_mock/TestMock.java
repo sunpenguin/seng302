@@ -133,6 +133,9 @@ public class TestMock {
             }
 
         } while (!race.isFinished());
+
+        ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
+        server.broadcast(raceMessageGenerator.getMessage());
     }
 
     private void generateCourse() {
