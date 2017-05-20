@@ -44,6 +44,7 @@ public class BoatLocationInterpreter extends MessageInterpreter {
                 }
                 if (boat.getId().equals(locationMessage.getSourceId())) {
                     boat.setSpeed(locationMessage.getSpeed());
+                    boat.setKnotsSpeed(locationMessage.getSpeed() * 0.539957);
                     boat.setHeading(locationMessage.getHeading());
                     boat.setCoordinate(locationMessage.getCoordinate());
                 }

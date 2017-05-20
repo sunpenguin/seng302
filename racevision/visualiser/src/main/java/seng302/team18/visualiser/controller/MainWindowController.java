@@ -13,11 +13,16 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import seng302.team18.model.Boat;
+import seng302.team18.model.Race;
+import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
@@ -25,6 +30,8 @@ import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,32 +42,20 @@ import java.util.stream.Collectors;
  * The main window consists of the right hand pane with various displays and the race on the left.
  */
 public class MainWindowController implements Observer {
-    @FXML
-    private Group group;
-    @FXML
-    private Label timerLabel;
-    @FXML
-    private ToggleButton fpsToggler;
-    @FXML
-    private Label fpsLabel;
-    @FXML
-    private TableView tableView;
-    @FXML
-    private TableColumn<Boat, Integer> boatPositionColumn;
-    @FXML
-    private TableColumn<Boat, String> boatNameColumn;
-    @FXML
-    private TableColumn<Boat, Double> boatSpeedColumn;
-    @FXML
-    private Pane raceViewPane;
-    @FXML
-    private Polygon arrow;
-    @FXML
-    private CategoryAxis yPositionsAxis;
-    @FXML
-    private LineChart<String, String> sparklinesChart;
-    @FXML
-    private ImageView imageViewMap;
+    @FXML private Group group;
+    @FXML private Label timerLabel;
+    @FXML private ToggleButton fpsToggler;
+    @FXML private Label fpsLabel;
+    @FXML private TableView tableView;
+    @FXML private TableColumn<Boat, Integer> boatPositionColumn;
+    @FXML private TableColumn<Boat, String> boatNameColumn;
+    @FXML private TableColumn<Boat, Double> boatSpeedColumn;
+    @FXML private Pane raceViewPane;
+    @FXML private Polygon arrow;
+    @FXML private CategoryAxis yPositionsAxis;
+    @FXML private LineChart<String, String> sparklinesChart;
+    @FXML private ImageView imageViewMap;
+    @FXML private Menu raceMenu;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -93,6 +88,14 @@ public class MainWindowController implements Observer {
     private void zoomOutButtonAction() {
         pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
         pixelMapper.setZoomLevel(0);
+    }
+
+
+    private void loadIcon(){
+        ImageView icon = new ImageView("/images/sailboat-512.png");
+        icon.setFitHeight(18);
+        icon.setFitWidth(18);
+        raceMenu.setGraphic(icon);
     }
 
     /**
@@ -209,7 +212,7 @@ public class MainWindowController implements Observer {
         tableView.setItems(sortedList);
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
+        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("knotsSpeed"));
         boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
             @Override
             public void updateItem(Double speed, boolean empty) {
@@ -229,6 +232,7 @@ public class MainWindowController implements Observer {
     }
 
     private void startWindDirection() {
+        arrow.setScaleX(0.4);
         windDirection = new WindDirection(race, arrow, race.getCourse().getWindDirection());
         windDirection.start();
     }
