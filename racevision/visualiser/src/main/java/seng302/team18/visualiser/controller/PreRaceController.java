@@ -35,12 +35,6 @@ public class PreRaceController {
 
     private ZoneTimeClock preRaceClock;
 
-    @FXML
-    public void initialize() {
-        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"));
-
-    }
-
     /**
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
      * duration before the race starts.
@@ -48,6 +42,7 @@ public class PreRaceController {
      * @param boats The boats participatin gin the race.
      */
     public void setUp(ZonedDateTime startTime, List<Boat> boats) {
+        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"));
         displayTimeZone(startTime);
         startTimeLabel.setText(startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         setUpLists(boats);
