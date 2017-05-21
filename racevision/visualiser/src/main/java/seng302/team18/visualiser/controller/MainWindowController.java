@@ -13,16 +13,11 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import seng302.team18.model.Boat;
-import seng302.team18.model.Race;
-import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
@@ -30,11 +25,8 @@ import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 /**
@@ -42,20 +34,34 @@ import java.util.stream.Collectors;
  * The main window consists of the right hand pane with various displays and the race on the left.
  */
 public class MainWindowController implements Observer {
-    @FXML private Group group;
-    @FXML private Label timerLabel;
-    @FXML private ToggleButton fpsToggler;
-    @FXML private Label fpsLabel;
-    @FXML private TableView tableView;
-    @FXML private TableColumn<Boat, Integer> boatPositionColumn;
-    @FXML private TableColumn<Boat, String> boatNameColumn;
-    @FXML private TableColumn<Boat, Double> boatSpeedColumn;
-    @FXML private Pane raceViewPane;
-    @FXML private Polygon arrow;
-    @FXML private CategoryAxis yPositionsAxis;
-    @FXML private LineChart<String, String> sparklinesChart;
-    @FXML private ImageView imageViewMap;
-    @FXML private Menu raceMenu;
+    @FXML
+    private Group group;
+    @FXML
+    private Label timerLabel;
+    @FXML
+    private Label fpsLabel;
+    @FXML
+    private TableView<Boat> tableView;
+    @FXML
+    private TableColumn<Boat, Integer> boatPositionColumn;
+    @FXML
+    private TableColumn<Boat, String> boatNameColumn;
+    @FXML
+    private TableColumn<Boat, Double> boatSpeedColumn;
+    @FXML
+    private TableColumn<Boat, String> boatColorColumn;
+    @FXML
+    private Pane raceViewPane;
+    @FXML
+    private Polygon arrow;
+    @FXML
+    private CategoryAxis yPositionsAxis;
+    @FXML
+    private LineChart<String, String> sparklinesChart;
+    @FXML
+    private ImageView imageViewMap;
+    @FXML
+    private Menu raceMenu;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -90,8 +96,7 @@ public class MainWindowController implements Observer {
         pixelMapper.setZoomLevel(0);
     }
 
-
-    private void loadIcon(){
+    private void loadIcon() {
         ImageView icon = new ImageView("/images/sailboat-512.png");
         icon.setFitHeight(18);
         icon.setFitWidth(18);
@@ -192,7 +197,7 @@ public class MainWindowController implements Observer {
     /**
      * Sets the cell values for the race table, these are place, boat name and boat speed.
      */
-    private void setUpTable() {
+    private void setUpTable(Map<Boat, Color> boatColors) {
         Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
                 boat.placeProperty(),
         };
@@ -224,10 +229,27 @@ public class MainWindowController implements Observer {
                 }
             }
         });
+        boatColorColumn.setCellFactory(column -> new TableCell<Boat, String>() {
+            private final Map<Boat, Color> colors = boatColors;
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem("", empty);
+
+                Boat boat = (Boat) getTableRow().getItem();
+                if (boat != null) {
+                    Color color = colors.get(boat);
+                    if (color != null) {
+                        setStyle(String.format("-fx-background-color: #%02x%02x%02x", (int) (color.getRed() * 255), (int) (color.getGreen() * 255), (int) (color.getBlue() * 255)));
+                    }
+                }
+            }
+        });
         boatPositionColumn.setSortable(false);
         boatNameColumn.setSortable(false);
         boatSpeedColumn.setSortable(false);
-        tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
+        boatColorColumn.setSortable(false);
+        tableView.getColumns().setAll(boatPositionColumn, boatColorColumn, boatNameColumn, boatSpeedColumn);
 
     }
 
@@ -286,7 +308,7 @@ public class MainWindowController implements Observer {
         pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> rerenderMain.redrawFeatures());
         pixelMapper.addViewCenterListener(propertyChangeEvent -> rerenderMain.redrawFeatures());
 
-        setUpTable();
+        setUpTable(raceRenderer.boatColors());
 
 
         setToImportantAnnotationLevel();
