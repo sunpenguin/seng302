@@ -227,14 +227,17 @@ public class MainWindowController {
         raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> redrawFeatures());
         pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
         pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
+
+        // These listeners fire whenever the northern or southern bounds of the map change.
         backgroundRenderer.nProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
         backgroundRenderer.sProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
+
         setUpTable();
     }
 
     /**
      * To call when course features need redrawing.
-     * (For example, when zoom in, the course features are required to change)
+     * (For example, when zooming in, the course features are required to change)
      */
     public void redrawFeatures() {
         backgroundRenderer.renderBackground();
