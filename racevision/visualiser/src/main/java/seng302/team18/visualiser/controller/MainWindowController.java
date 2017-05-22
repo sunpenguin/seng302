@@ -78,6 +78,7 @@ public class MainWindowController implements Observer {
 
     @FXML
     public void initialize() {
+        loadIcon();
         fpsOn = true;
         importantAnnotations = new HashMap<>();
         for (AnnotationType type : AnnotationType.values()) {
@@ -95,7 +96,7 @@ public class MainWindowController implements Observer {
 
 
     private void loadIcon(){
-        ImageView icon = new ImageView("/images/sailboat-512.png");
+        ImageView icon = new ImageView("/images/boat-310164_640.png");
         icon.setFitHeight(18);
         icon.setFitWidth(18);
         raceMenu.setGraphic(icon);

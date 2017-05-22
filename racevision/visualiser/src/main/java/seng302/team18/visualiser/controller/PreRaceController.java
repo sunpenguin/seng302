@@ -125,7 +125,6 @@ public class PreRaceController {
      */
     private  void startConnection() throws Exception {
 
-
         Stage s = (Stage) liveConnectButton.getScene().getWindow();
         ControllerManager manager = new ControllerManager(s, "MainWindow.fxml", "PreRace.fxml");
         manager.start();
