@@ -23,6 +23,7 @@ public class Race {
     private int id;
     private byte status;
     public static int PREP_TIME_SECONDS = 120;
+    private String raceName;
 
 
     public Race() {
@@ -35,6 +36,7 @@ public class Race {
         currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
 //        setInitialSpeed();
+        raceName = "";
     }
 
 
@@ -305,5 +307,13 @@ public class Race {
         List<MarkRoundingEvent> events = markRoundingEvents;
         markRoundingEvents = new ArrayList<>();
         return events;
+    }
+
+    public String getRaceName() {
+        return raceName;
+    }
+
+    public void setRaceName(String raceName) {
+        this.raceName = raceName;
     }
 }

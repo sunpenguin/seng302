@@ -30,6 +30,7 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
     public AC35XMLRegattaMessage parse(InputStream stream) {
         final String REGATTA_TAG = "RegattaConfig";
         final String REGATTA_ID = "RegattaID";
+        final String REGATTA_NAME = "RegattaName";
         final String CENTER_LAT = "CentralLatitude";
         final String CENTER_LONG = "CentralLongitude";
         final String UTC_OFFSET = "UtcOffset";
@@ -47,6 +48,7 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
         Element regattaElement = (Element) doc.getElementsByTagName(REGATTA_TAG).item(0);
         int regattaID = Integer.parseInt(regattaElement.getElementsByTagName(REGATTA_ID).item(0).getTextContent());
 //        System.out.println(regattaElement.getElementsByTagName(CENTER_LAT).item(0).getTextContent());
+        String regattaName = regattaElement.getElementsByTagName(REGATTA_NAME).item(0).getTextContent();
 
         double centralLat =
                 Double.parseDouble(regattaElement.getElementsByTagName(CENTER_LAT).item(0).getTextContent());
@@ -55,7 +57,7 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
 
         String utcOffset = regattaElement.getElementsByTagName(UTC_OFFSET).item(0).getTextContent();
 
-        return new AC35XMLRegattaMessage(regattaID, centralLat, centralLong, utcOffset);
+        return new AC35XMLRegattaMessage(regattaID, regattaName, centralLat, centralLong, utcOffset);
     }
 
     /**

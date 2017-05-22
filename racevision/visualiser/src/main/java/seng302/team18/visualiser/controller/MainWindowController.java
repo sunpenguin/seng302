@@ -46,7 +46,6 @@ import java.util.List;
 public class MainWindowController implements Observer {
     @FXML private Group group;
     @FXML private Label timerLabel;
-    @FXML private ToggleButton fpsToggler;
     @FXML private Label fpsLabel;
     @FXML private TableView tableView;
     @FXML private TableColumn<Boat, Integer> boatPositionColumn;
@@ -57,6 +56,9 @@ public class MainWindowController implements Observer {
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<? ,?> sparklinesChart;
     @FXML private Menu raceMenu;
+    @FXML private CheckMenuItem fullAnnotationMenuItem;
+    @FXML private CheckMenuItem importantAnnotationMenuItem;
+    @FXML private CheckMenuItem noAnnotationMenuItem;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -133,6 +135,9 @@ public class MainWindowController implements Observer {
     @FXML
     public void setFullAnnotationLevel() {
         onImportant = false;
+        fullAnnotationMenuItem.setSelected(true);
+        importantAnnotationMenuItem.setSelected(false);
+        noAnnotationMenuItem.setSelected(false);
         for (AnnotationType type : AnnotationType.values()) {
             raceRenderer.setVisibleAnnotations(type, true);
         }
@@ -145,6 +150,9 @@ public class MainWindowController implements Observer {
     @FXML
     public void setNoneAnnotationLevel() {
         onImportant = false;
+        fullAnnotationMenuItem.setSelected(false);
+        importantAnnotationMenuItem.setSelected(false);
+        noAnnotationMenuItem.setSelected(true);
         for (AnnotationType type : AnnotationType.values()) {
             raceRenderer.setVisibleAnnotations(type, false);
         }
@@ -157,7 +165,9 @@ public class MainWindowController implements Observer {
     @FXML
     public void setToImportantAnnotationLevel() {
         onImportant = true;
-
+        fullAnnotationMenuItem.setSelected(false);
+        importantAnnotationMenuItem.setSelected(true);
+        noAnnotationMenuItem.setSelected(false);
         for (Map.Entry<AnnotationType, Boolean> importantAnnotation : importantAnnotations.entrySet()) {
             raceRenderer.setVisibleAnnotations(importantAnnotation.getKey(), importantAnnotation.getValue());
         }

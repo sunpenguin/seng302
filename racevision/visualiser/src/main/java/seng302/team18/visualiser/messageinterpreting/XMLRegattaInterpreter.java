@@ -27,6 +27,7 @@ public class XMLRegattaInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof AC35XMLRegattaMessage) {
             AC35XMLRegattaMessage regattaMessage = (AC35XMLRegattaMessage) message;
+            race.setRaceName(regattaMessage.getName());
             String utcOffset = regattaMessage.getUtcOffset();
             Course course = race.getCourse();
             if (utcOffset.startsWith("+") || utcOffset.startsWith("-")) {

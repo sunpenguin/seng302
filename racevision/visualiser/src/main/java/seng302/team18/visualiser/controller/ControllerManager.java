@@ -173,7 +173,7 @@ public class ControllerManager {
 
             interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new ZoneClockInterpreter(preRaceController.getClock(), race.getStartTime().getZone()));
 
-            preRaceController.setUp(race.getStartTime(), race.getStartingList());
+            preRaceController.setUp(race);
 
 
         }

@@ -25,6 +25,7 @@ public class ZoneTimeClock extends AnimationTimer {
     public ZoneTimeClock(Label timeLabel, DateTimeFormatter formatter) {
         this.timeLabel = timeLabel;
         this.formatter = formatter;
+        this.time = ZonedDateTime.now();
         timeLabel.setTextFill(Color.BLACK);
         timeLabel.setStyle("-fx-font-size: 2em;");
         timeLabel.setText("");

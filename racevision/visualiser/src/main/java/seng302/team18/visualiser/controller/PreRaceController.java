@@ -6,10 +6,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Boat;
+import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.util.Session;
 
@@ -22,30 +25,29 @@ import java.util.*;
  * Controller for the pre race view
  */
 public class PreRaceController {
-    @FXML
-    private Label timeLabel;
-    @FXML
-    private Label startTimeLabel;
-    @FXML
-    private ListView<Boat> listView;
-    @FXML
-    private Label timeZoneLabel;
-    @FXML
-    private Button liveConnectButton;
+    @FXML private Label timeLabel;
+    @FXML private Label startTimeLabel;
+    @FXML private ListView<Boat> listView;
+    @FXML private Label timeZoneLabel;
+    @FXML private Button liveConnectButton;
+    @FXML private Text raceNameText;
 
     private ZoneTimeClock preRaceClock;
 
     /**
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
      * duration before the race starts.
-     * @param startTime The official start time of the race.
-     * @param boats The boats participatin gin the race.
+     * @param race The race to be set up in the pre-race.
      */
-    public void setUp(ZonedDateTime startTime, List<Boat> boats) {
+    public void setUp(Race race) {
+        // ZonedDateTime startTime, List<Boat> boats
         preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"));
-        displayTimeZone(startTime);
-        startTimeLabel.setText(startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        setUpLists(boats);
+        raceNameText.setText(race.getRaceName());
+        displayTimeZone(race.getStartTime());
+        startTimeLabel.setText(race.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        startTimeLabel.setTextFill(Color.BLACK);
+        startTimeLabel.setStyle("-fx-font-size: 2em;");
+        setUpLists(race.getStartingList());
         preRaceClock.start();
     }
 
