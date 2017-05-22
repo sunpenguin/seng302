@@ -94,7 +94,9 @@ public class MainWindowController implements Observer {
         pixelMapper.setZoomLevel(0);
     }
 
-
+    /**
+     * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
+     */
     private void loadIcon(){
         ImageView icon = new ImageView("/images/boat-310164_640.png");
         icon.setFitHeight(18);
@@ -242,6 +244,9 @@ public class MainWindowController implements Observer {
 
     }
 
+    /**
+     * retrieves the wind direction, scales the size of the arrow and then draws it on the Group
+     */
     private void startWindDirection() {
         arrow.setScaleX(0.4);
         windDirection = new WindDirection(race, arrow, race.getCourse().getWindDirection());
@@ -302,6 +307,11 @@ public class MainWindowController implements Observer {
     }
 
 
+    /**
+     *
+     * @param o
+     * @param arg
+     */
     @Override
     public void update(java.util.Observable o, Object arg) {
         if (arg instanceof Map) {
@@ -320,6 +330,10 @@ public class MainWindowController implements Observer {
         }
     }
 
+    /**
+     * Extracts the central course coordinate from the course
+     * @param course The course for which the midpoint is calculated
+     */
     private void setCourseCenter(Course course) {
         List<Coordinate> points = new ArrayList<>();
         for (BoundaryMark boundaryMark : course.getBoundaries()) {
