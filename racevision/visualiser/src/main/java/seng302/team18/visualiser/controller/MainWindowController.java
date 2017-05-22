@@ -14,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.*;
@@ -56,7 +57,7 @@ public class MainWindowController {
     private RaceClock raceClock;
     private WindDirection windDirection;
     private PixelMapper pixelMapper;
-
+    private Stage stage;
 
     @FXML
     public void initialize() {
@@ -74,6 +75,10 @@ public class MainWindowController {
     private void zoomOutButtonAction() {
         pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
         pixelMapper.setZoomLevel(0);
+    }
+
+    @FXML void closeAppAction(){
+        stage.close();
     }
 
 
@@ -257,4 +262,11 @@ public class MainWindowController {
         race.getCourse().setCentralCoordinate(GPSCalculations.midPoint(extremes.get(0), extremes.get(1)));
     }
 
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 }

@@ -30,6 +30,7 @@ public class ControllerManager {
     private String preRacePath;
     private Stage primaryStage;
 
+
     private SocketMessageReceiver receiver;
     private MessageInterpreter interpreter;
     private Race race;
@@ -114,7 +115,7 @@ public class ControllerManager {
         Scene scene = new Scene(root, 1280, 720);
         primaryStage.setScene(scene);
         primaryStage.show();
-
+        mainController.setStage(primaryStage);
         mainController.setUp(race, interpreter, receiver);
 
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(mainController.getRaceClock()));
