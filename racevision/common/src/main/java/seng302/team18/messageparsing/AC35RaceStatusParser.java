@@ -1,6 +1,9 @@
 package seng302.team18.messageparsing;
 
 import com.google.common.io.ByteStreams;
+import seng302.team18.message.AC35BoatStatusMessage;
+import seng302.team18.message.AC35RaceStatusMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
@@ -14,6 +17,10 @@ import java.util.*;
  */
 public class AC35RaceStatusParser implements MessageBodyParser {
 
+    /**
+     * @param stream holds information about the race status
+     * @return A message holding information about the race status
+     */
     @Override
     public MessageBody parse(InputStream stream) {
         try {
@@ -47,25 +54,21 @@ public class AC35RaceStatusParser implements MessageBodyParser {
 
         final int SINGLE_BOAT_STATUS_LENGTH = 20;
 
-        Map<Integer, List> allBoatStatus = new HashMap<>();
+        List<AC35BoatStatusMessage> boatStates = new ArrayList<>();
         long currentTime = ByteCheck.byteToLongConverter(bytes, CURRENT_TIME_INDEX, CURRENT_TIME_LENGTH);
         int raceStatus = ByteCheck.byteToIntConverter(bytes, RACE_STATUS_INDEX, RACE_STATUS_LENGTH);
         long startTime = ByteCheck.byteToLongConverter(bytes, START_TIME_INDEX, START_TIME_LENGTH);
         double windDirection = ByteCheck.byteToIntConverter(bytes, WIND_DIRECTION_INDEX, WIND_DIRECTION_LENGTH) * BYTE_HEADING_TO_DOUBLE;
         int i = 0;
         while (BOAT_SOURCEID_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i) < bytes.length) {
-            List boatList = new ArrayList();
             int boatID = ByteCheck.byteToIntConverter(bytes, BOAT_SOURCEID_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), BOAT_SOURCEID_LENGTH);
             int boatStatus = ByteCheck.byteToIntConverter(bytes, BOAT_STATUS_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), BOAT_STATUS_LENGTH);
             int leg = ByteCheck.byteToIntConverter(bytes, 29 + (SINGLE_BOAT_STATUS_LENGTH * i), 1);
-//            System.out.println("Boat Status for " + boatID + ": " + boatStatus + " at leg " + leg);
             long estimatedTime = ByteCheck.byteToLongConverter(bytes, ESTIMATED_TIME_AT_NEXT_MARK_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), ESTIMATED_TIME_AT_NEXT_MARK_LENGTH);
-            boatList.add(boatStatus);
-            boatList.add(leg);
-            boatList.add(estimatedTime);
-            allBoatStatus.put(boatID, boatList);
+            AC35BoatStatusMessage boatStatusMessage = new AC35BoatStatusMessage(boatID, leg, boatStatus, estimatedTime);
+            boatStates.add(boatStatusMessage);
             i += 1;
         }
-        return new AC35RaceStatusMessage(currentTime, raceStatus, startTime, windDirection, allBoatStatus);
+        return new AC35RaceStatusMessage(currentTime, raceStatus, startTime, windDirection, boatStates);
     }
 }

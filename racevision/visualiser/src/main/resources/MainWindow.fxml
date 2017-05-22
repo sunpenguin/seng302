@@ -1,89 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.*?>
-<?import javafx.scene.shape.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Group?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
-<?import java.lang.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightblue;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.MainWindowController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightblue;" stylesheets="@stylesheets/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.MainWindowController">
    <children>
-      <MenuBar prefHeight="30.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="Race">
-            <items>
-                  <Menu mnemonicParsing="false" text="Annotation level">
-                    <items>
-                      <MenuItem fx:id="fullAnnotationLevel" mnemonicParsing="false" onAction="#setFullAnnotationLevel" text="Full" />
-                        <MenuItem mnemonicParsing="false" onAction="#setImportantAnnotationLevel" text="Important Only" />
-                        <MenuItem fx:id="noneAnnotationLevel" mnemonicParsing="false" onAction="#setNoneAnnotationLevel" text="None" />
-                    </items>
-                  </Menu>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-    <AnchorPane fx:id="raceViewPane" layoutY="30.0" minHeight="0.0" minWidth="0.0" prefHeight="690.0" prefWidth="690.0" style="-fx-background-color: lightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="590.0" AnchorPane.topAnchor="30.0">
-         <children>
-            <Group fx:id="group" layoutY="690.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
-            <Label fx:id="fpsLabel" layoutX="611.0" prefHeight="15.0" prefWidth="79.0" text="FPS:" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <font>
-                  <Font name="System Bold" size="13.0" />
-               </font>
-            </Label>
-         </children>
-      </AnchorPane>
-    <AnchorPane layoutX="690.0" layoutY="30.0" minHeight="0.0" minWidth="0.0" prefHeight="690.0" prefWidth="590.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
-         <children>
-            <AnchorPane prefHeight="430.0" prefWidth="511.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="258.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <Polygon fx:id="arrow" fill="#ff1f1f" layoutX="503.0" layoutY="131.0" scaleX="0.5" scaleY="1.2" stroke="BLACK" strokeType="INSIDE">
-                    <points>
-                      <Double fx:value="-50.0" />
-                      <Double fx:value="40.0" />
-                      <Double fx:value="50.0" />
-                      <Double fx:value="40.0" />
-                      <Double fx:value="0.0" />
-                      <Double fx:value="-60.0" />
-                    </points>
-                  </Polygon>
-                  <Label fx:id="timerLabel" layoutX="214.0" layoutY="131.0" prefHeight="50.0" prefWidth="135.0" text=" -00:00:00" textAlignment="CENTER">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
-                  <Text layoutX="495.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N" wrappingWidth="16.46484375">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <Text layoutX="455.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
-                  <ToggleButton fx:id="fpsToggler" layoutX="463.0" layoutY="393.0" mnemonicParsing="false" onAction="#toggleFPS" prefHeight="26.0" prefWidth="96.0" text="Toggle FPS" AnchorPane.rightAnchor="31.0" />
-                  <Text layoutX="161.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Official Race Clock">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Text>
-                  <CheckBox layoutX="14.0" layoutY="366.0" mnemonicParsing="false" onAction="#toggleBoatName" selected="true" text="Boat Name" />
-                  <CheckBox layoutX="124.0" layoutY="368.0" mnemonicParsing="false" onAction="#toggleBoatSpeed" text="Boat Speed" />
-                  <CheckBox layoutX="231.0" layoutY="368.0" mnemonicParsing="false" onAction="#toggleEstimatedTime" text="Estimated Time to Next Mark" />
-                  <Label layoutX="196.0" layoutY="340.0" text="Important Annotation Settings" />
-                  <Separator layoutY="330.0" prefWidth="590.0" />
-                  <CheckBox layoutX="14.0" layoutY="397.0" mnemonicParsing="false" onAction="#toggleTimeSinceLastMark" text="Time since Last Mark" />
-               </children>
-            </AnchorPane>
-            <TableView fx:id="tableView" layoutY="430.0" prefHeight="260.0" prefWidth="511.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <columns>
-                  <TableColumn fx:id="boatPositionColumn" text="Position" />
-                  <TableColumn fx:id="boatNameColumn" prefWidth="240.0" text="Name" />
-                  <TableColumn fx:id="boatSpeedColumn" prefWidth="240.0" text="Speed km/h" />
-               </columns>
-            </TableView>
-         </children>
-      </AnchorPane>
+       <AnchorPane fx:id="raceViewPane" layoutY="30.0" minHeight="0.0" minWidth="0.0" prefHeight="690.0" prefWidth="822.0" style="-fx-background-color: lightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="458.0" AnchorPane.topAnchor="30.0">
+           <children>
+               <ImageView fx:id="imageViewMap" fitHeight="690.0" fitWidth="690.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               <Group fx:id="group" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+               <Label fx:id="fpsLabel" layoutX="611.0" prefHeight="15.0" prefWidth="79.0" text="FPS:" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                   <font>
+                       <Font name="System Bold" size="13.0" />
+                   </font>
+               </Label>
+               <AnchorPane layoutX="2.0" layoutY="7.0" prefHeight="143.0" prefWidth="104.0">
+                   <children>
+                       <Polygon fx:id="arrow" layoutX="50.0" layoutY="63.0" scaleX="0.3" scaleY="0.6" stroke="BLACK" strokeType="INSIDE">
+                           <points>
+                               <Double fx:value="-50.0" />
+                               <Double fx:value="40.0" />
+                               <Double fx:value="50.0" />
+                               <Double fx:value="40.0" />
+                               <Double fx:value="0.0" />
+                               <Double fx:value="-60.0" />
+                           </points>
+                     <fill>
+                        <LinearGradient endX="0.5288461538461539" endY="0.625" startX="0.46634615384615374" startY="0.625">
+                           <stops>
+                              <Stop color="#ed0000d7" />
+                              <Stop color="WHITE" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                       </Polygon>
+                       <Text layoutX="43.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N" wrappingWidth="16.46484375">
+                           <font>
+                               <Font size="18.0" />
+                           </font>
+                       </Text>
+                       <Text layoutX="6.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
+                     <Button layoutX="10.0" layoutY="115.0" mnemonicParsing="false" onAction="#zoomOutButtonAction" text="Zoom Out" />
+                   </children>
+               </AnchorPane>
+            <AnchorPane layoutX="6.0" layoutY="643.0" prefHeight="42.0" prefWidth="96.0" />
+           </children>
+       </AnchorPane>
+       <AnchorPane layoutX="690.0" layoutY="30.0" minHeight="0.0" minWidth="0.0" prefHeight="690.0" prefWidth="458.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+           <children>
+               <GridPane layoutX="204.0" layoutY="211.0" prefHeight="690.0" prefWidth="590.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                   <columnConstraints>
+                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="5000.0" />
+                   </columnConstraints>
+                   <rowConstraints>
+                       <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="161.0" vgrow="SOMETIMES" />
+                       <RowConstraints maxHeight="475.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+                       <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="240.0" vgrow="SOMETIMES" />
+                       <RowConstraints maxHeight="475.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                       <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="215.0" vgrow="SOMETIMES" />
+                   </rowConstraints>
+                   <children>
+                       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                       <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                               <Rectangle arcHeight="5.0" arcWidth="5.0" height="50.0" layoutX="140.0" layoutY="40.0" stroke="BLACK" strokeType="INSIDE" width="179.0" />
+                               <Text layoutX="159.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Official Race Clock">
+                                   <font>
+                                       <Font size="15.0" />
+                                   </font>
+                               </Text>
+                               <Label fx:id="timerLabel" layoutX="182.0" layoutY="40.0" prefHeight="50.0" prefWidth="96.0" text=" -00:00" textAlignment="CENTER" textFill="#3cf55b">
+                                   <font>
+                                       <Font size="24.0" />
+                                   </font>
+                               </Label>
+                           </children>
+                       </AnchorPane>
+                       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+                           <children>
+                               <LineChart fx:id="sparklinesChart" prefHeight="240.0" prefWidth="499.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                   <xAxis>
+                                       <CategoryAxis side="BOTTOM" />
+                                   </xAxis>
+                                   <yAxis>
+                                       <CategoryAxis fx:id="yPositionsAxis" label="Position" side="LEFT" />
+                                   </yAxis>
+                               </LineChart>
+                           </children>
+                       </AnchorPane>
+                       <GridPane GridPane.rowIndex="4">
+                           <columnConstraints>
+                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="458.0" minWidth="10.0" prefWidth="443.0" />
+                               <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="5.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                               <RowConstraints maxHeight="209.0" minHeight="10.0" prefHeight="209.0" vgrow="SOMETIMES" />
+                               <RowConstraints maxHeight="0.0" minHeight="-Infinity" prefHeight="0.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                   <children>
+                                       <TableView fx:id="tableView" prefHeight="209.0" prefWidth="453.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                           <columns>
+                                               <TableColumn fx:id="boatPositionColumn" prefWidth="71.0" text="Position" />
+                                               <TableColumn fx:id="boatNameColumn" minWidth="0.0" prefWidth="257.0" text="Name" />
+                                               <TableColumn fx:id="boatSpeedColumn" maxWidth="173.0" prefWidth="120.0" text="Speed (knots)" />
+                                           </columns>
+                                       </TableView>
+                                   </children>
+                               </AnchorPane>
+                           </children>
+                       </GridPane>
+                   </children>
+               </GridPane>
+           </children>
+       </AnchorPane>
+       <MenuBar prefHeight="30.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+           <menus>
+               <Menu fx:id="raceMenu" mnemonicParsing="false" text="Race">
+                   <items>
+                       <Menu mnemonicParsing="false" text="Annotation level">
+                           <items>
+                        <CheckMenuItem fx:id="fullAnnotationMenuItem" mnemonicParsing="false" onAction="#setFullAnnotationLevel" text="Full" />
+                        <CheckMenuItem fx:id="importantAnnotationMenuItem" mnemonicParsing="false" onAction="#setToImportantAnnotationLevel" text="Important Only" />
+                        <CheckMenuItem fx:id="noAnnotationMenuItem" mnemonicParsing="false" onAction="#setNoneAnnotationLevel" text="None" />
+                           </items>
+                       </Menu>
+                       <MenuItem mnemonicParsing="false" onAction="#toggleFPS" text="Toggle FPS" />
+                           <MenuItem mnemonicParsing="false" onAction="#openAnnotationsWindow" text="Set Important Annotations" />
+                       <MenuItem mnemonicParsing="false" text="Close" />
+                   </items>
+               </Menu>
+           </menus>
+       </MenuBar>
    </children>
 </AnchorPane>

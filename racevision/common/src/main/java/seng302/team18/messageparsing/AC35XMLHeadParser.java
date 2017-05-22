@@ -1,5 +1,8 @@
 package seng302.team18.messageparsing;
 
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.AC35XMLHead;
+import seng302.team18.message.MessageHead;
 import seng302.team18.util.ByteCheck;
 
 /**

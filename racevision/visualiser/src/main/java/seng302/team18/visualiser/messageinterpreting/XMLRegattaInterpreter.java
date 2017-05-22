@@ -1,8 +1,7 @@
 package seng302.team18.visualiser.messageinterpreting;
 
-import seng302.team18.messageparsing.AC35XMLRegattaMessage;
-import seng302.team18.messageparsing.MessageBody;
-import seng302.team18.model.Coordinate;
+import seng302.team18.message.AC35XMLRegattaMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 
@@ -28,6 +27,7 @@ public class XMLRegattaInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof AC35XMLRegattaMessage) {
             AC35XMLRegattaMessage regattaMessage = (AC35XMLRegattaMessage) message;
+            race.setRaceName(regattaMessage.getName());
             String utcOffset = regattaMessage.getUtcOffset();
             Course course = race.getCourse();
             if (utcOffset.startsWith("+") || utcOffset.startsWith("-")) {
@@ -35,7 +35,7 @@ public class XMLRegattaInterpreter extends MessageInterpreter {
             } else {
                 course.setTimeZone(ZoneId.of("UTC+" + utcOffset));
             }
-            course.setCentralCoordinate(new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong()));
+            // course.setCentralCoordinate(new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong()));
         }
     }
 }

@@ -1,93 +1,65 @@
 package seng302.team18.visualiser.controller;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.util.Duration;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import seng302.team18.messageparsing.AC35MessageParserFactory;
+import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Boat;
+import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.ZoneTimeClock;
+import seng302.team18.visualiser.util.Session;
 
-import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * Created by dhl25 on 27/03/17.
+ * Controller for the pre race view
  */
 public class PreRaceController {
-    @FXML
-    private Label timeLabel;
-    @FXML
-    private Label startTimeLabel;
-    @FXML
-    private ListView<Boat> listView;
-    @FXML
-    private Label timeZoneLabel;
+    @FXML private Label timeLabel;
+    @FXML private Label startTimeLabel;
+    @FXML private ListView<Boat> listView;
+    @FXML private Label timeZoneLabel;
+    @FXML private Button liveConnectButton;
+    @FXML private Text raceNameText;
 
-    private ControllerManager manager;
     private ZoneTimeClock preRaceClock;
-
-    @FXML
-    public void initialize() {
-
-    }
 
     /**
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
      * duration before the race starts.
-     * @param manager The controller manager for this instance of the program.
-     * @param currentTime The current time at the location of the race.
-     * @param startTime The official start time of the race.
-     * @param duration The length of time for which the controller should display the pre-race window.
-     * @param boats The boats participatin gin the race.
+     * @param race The race to be set up in the pre-race.
      */
-    public void setUp(ControllerManager manager, ZonedDateTime currentTime, ZonedDateTime startTime, long duration, List<Boat> boats) {
-        this.manager = manager;
-        startClock(currentTime, currentTime.getZone());
-        displayTimeZone(currentTime);
-        startTimeLabel.setText(startTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        setUpLists(boats);
-        if (duration > 0) {
-            Timeline showLive = new Timeline(new KeyFrame(
-                    Duration.seconds(duration),
-                    event -> {
-                        showLiveRaceView();
-                    }));
-
-            showLive.setCycleCount(1);
-            showLive.play();
-        }else{
-            showLiveRaceView();
-        }
+    public void setUp(Race race) {
+        // ZonedDateTime startTime, List<Boat> boats
+        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        raceNameText.setText(race.getRaceName());
+        displayTimeZone(race.getStartTime());
+        startTimeLabel.setText(race.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+        startTimeLabel.setTextFill(Color.BLACK);
+        startTimeLabel.setStyle("-fx-font-size: 2em;");
+        setUpLists(race.getStartingList());
+        preRaceClock.start();
     }
 
 
     /**
-     * Shows the live race view window.
+     * SHOWS THE TIME ZONE OF THE RACE
+     * @param zoneTime USED TO GET THE UTC OFFSET
      */
-    public void showLiveRaceView() {
-        try {
-            manager.showMainView();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void startClock(ZonedDateTime currentTime, ZoneId timeZone) {
-        preRaceClock = new ZoneTimeClock(timeLabel, timeZone, currentTime);
-        preRaceClock.start();
-    }
-
     private void displayTimeZone(ZonedDateTime zoneTime) {
         timeZoneLabel.setText("UTC " + zoneTime.getOffset().toString());
     }
+
 
     /**
      * Sets the list view of the participants in the race.
@@ -102,10 +74,65 @@ public class PreRaceController {
                 if (empty || boat == null) {
                     setText(null);
                 } else {
-                    setText(boat.getBoatName());
+                    setText(boat.getName());
                 }
             }
         });
+    }
+
+    /**
+     * Called when the live connection button is selected, sets up a connection with the live AC35 feed
+     */
+    @FXML
+    public void openLiveStream() {
+        try {
+            Session.getInstance().setReceiver(new SocketMessageReceiver("livedata.americascup.com", 4940, new AC35MessageParserFactory()));
+            startConnection();
+        } catch (Exception e) {
+            System.out.println("Could not establish connection to stream Host/Port");
+        }
+    }
+
+    /**
+     * Called when the test connection button is selected, sets up a connection with the UC test feed
+     */
+    @FXML
+    public void openTestStream() {
+        try {
+            Session.getInstance().setReceiver(new SocketMessageReceiver("livedata.americascup.com", 4941, new AC35MessageParserFactory()));
+            startConnection();
+        } catch (Exception e) {
+            System.out.println("Could not establish connection to stream Host/Port");
+        }
+    }
+
+    /**
+     * Called when the mock connection button is selected, sets up a connection with the mock feed
+     */
+    @FXML
+    public void openMockStream() {
+        try {
+            Session.getInstance().setReceiver(new SocketMessageReceiver("127.0.0.1", 5005, new AC35MessageParserFactory()));
+            startConnection();
+        } catch (Exception e) {
+            System.out.println("Could not establish connection to stream Host/Port");
+        }
+    }
+
+    /**
+     * Creates a controller manager object and begins an instance of the program.
+     * @throws Exception A connection error
+     */
+    private  void startConnection() throws Exception {
+
+        Stage s = (Stage) liveConnectButton.getScene().getWindow();
+        ControllerManager manager = new ControllerManager(s, "MainWindow.fxml", "PreRace.fxml");
+        manager.start();
+//        s.close();
+    }
+
+    public ZoneTimeClock getClock() {
+        return preRaceClock;
     }
 
 }

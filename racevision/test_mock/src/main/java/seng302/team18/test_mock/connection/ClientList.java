@@ -17,7 +17,7 @@ class ClientList {
     }
 
     /**
-     * Removes all connections where the number of consecutive failed connedtions exeeds the threshold
+     * Removes all connections where the number of consecutive failed connections exceeds the threshold
      *
      * @see seng302.team18.test_mock.connection.ClientConnection#MAX_FAILURES
      */

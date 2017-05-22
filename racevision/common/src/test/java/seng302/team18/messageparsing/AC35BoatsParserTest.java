@@ -1,6 +1,7 @@
 package seng302.team18.messageparsing;
 
 import org.junit.Test;
+import seng302.team18.message.AC35XMLBoatMessage;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,17 +32,17 @@ public class AC35BoatsParserTest {
      */
     @Test
     public void boatNameTest() {
-        String boat1 = boatsMessage.getBoats().get(0).getBoatName();
+        String boat1 = boatsMessage.getBoats().get(0).getName();
         assertEquals("Emirates Team New Zealand", boat1);
-        String boat2 = boatsMessage.getBoats().get(1).getBoatName();
+        String boat2 = boatsMessage.getBoats().get(1).getName();
         assertEquals("Oracle Team USA", boat2);
-        String boat3 = boatsMessage.getBoats().get(2).getBoatName();
+        String boat3 = boatsMessage.getBoats().get(2).getName();
         assertEquals("Artemis Racing", boat3);
-        String boat4 = boatsMessage.getBoats().get(3).getBoatName();
+        String boat4 = boatsMessage.getBoats().get(3).getName();
         assertEquals("Groupama Team France", boat4);
-        String boat5 = boatsMessage.getBoats().get(4).getBoatName();
+        String boat5 = boatsMessage.getBoats().get(4).getName();
         assertEquals("Land Rover BAR", boat5);
-        String boat6 = boatsMessage.getBoats().get(5).getBoatName();
+        String boat6 = boatsMessage.getBoats().get(5).getName();
         assertEquals("Softbank Team Japan", boat6);
     }
 

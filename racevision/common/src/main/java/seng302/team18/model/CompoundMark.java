@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by csl62 on 15/03/17.
  */
-public class CompoundMark {
+public class CompoundMark implements GeographicLocation {
 
     public final static int GATE_SIZE = 2;
     public final static int MARK_SIZE = 1;
@@ -45,12 +45,18 @@ public class CompoundMark {
         return marks;
     }
 
-
-    public Coordinate getMidCoordinate() {;
+    /**
+     * Retrieves the central coordinates of the compound mark
+     *
+     * @return the central coordinate
+     */
+    public Coordinate getCoordinate() {
+        ;
 
         if (marks.size() == GATE_SIZE) {
 //            return marks.get(0).getCoordinate().distance(marks.get(1).getCoordinate());
-            return GPSCalculations.gpsMidpoint(marks.get(0).getCoordinate(), marks.get(1).getCoordinate());
+            GPSCalculations gps = new GPSCalculations();
+            return gps.midPoint(marks.get(0).getCoordinate(), marks.get(1).getCoordinate());
         } else if (marks.size() == MARK_SIZE) {
             return marks.get(0).getCoordinate();
         } else {

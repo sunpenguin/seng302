@@ -3,7 +3,7 @@ package seng302.team18.model;
 /**
  * Created by dhl25 on 11/04/17.
  */
-public class BoundaryMark {
+public class BoundaryMark implements GeographicLocation {
 
     private Integer sequenceID;
     private Coordinate coordinate;

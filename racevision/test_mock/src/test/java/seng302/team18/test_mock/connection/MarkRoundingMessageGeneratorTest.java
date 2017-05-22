@@ -1,7 +1,7 @@
 package seng302.team18.test_mock.connection;
 
 import org.junit.Test;
-import seng302.team18.messageparsing.AC35MessageType;
+import seng302.team18.message.AC35MessageType;
 import seng302.team18.model.Boat;
 import seng302.team18.model.CompoundMark;
 import seng302.team18.model.MarkRoundingEvent;

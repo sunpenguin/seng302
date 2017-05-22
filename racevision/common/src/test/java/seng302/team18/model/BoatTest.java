@@ -12,7 +12,7 @@ public class BoatTest {
     @Test
     public void testBoatName() {
         Boat testboat = new Boat("Enterprise", "Starfleet", 10);
-        assertEquals("Enterprise", testboat.getBoatName());
+        assertEquals("Enterprise", testboat.getName());
     }
 
 }

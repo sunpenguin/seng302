@@ -3,17 +3,15 @@ package seng302.team18.visualiser.messageinterpreting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import seng302.team18.messageparsing.AC35RaceStatusMessage;
-import seng302.team18.messageparsing.MessageBody;
+import seng302.team18.message.AC35RaceStatusMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -35,7 +33,7 @@ public class RaceTimeInterpreterTest {
         race = new Race();
         race.setStartingList(boats);
         raceTimeInterpreter = new RaceTimeInterpreter(race);
-        message = new AC35RaceStatusMessage(13000, 0, 2000, 0, new HashMap<>());
+        message = new AC35RaceStatusMessage(13000, 0, 2000, 0, new ArrayList<>());
         raceTimeInterpreter.interpret(message);
     }
 
@@ -52,7 +50,7 @@ public class RaceTimeInterpreterTest {
         Assert.assertEquals(expected.getTimeAtLastMark(), actual.getTimeAtLastMark());
         Assert.assertEquals(expected.getTimeSinceLastMark(), actual.getTimeSinceLastMark());
         // everything below should not change at all.
-        Assert.assertEquals(expected.getBoatName(), actual.getBoatName());
+        Assert.assertEquals(expected.getName(), actual.getName());
         Assert.assertEquals(expected.getShortName(), actual.getShortName());
         Assert.assertEquals(expected.getCoordinate(), actual.getCoordinate());
         Assert.assertEquals(expected.getHeading(), actual.getHeading(), 0.1);

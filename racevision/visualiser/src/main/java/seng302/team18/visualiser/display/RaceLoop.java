@@ -1,4 +1,4 @@
-package seng302.team18.visualiser;
+package seng302.team18.visualiser.display;
 
 import javafx.animation.AnimationTimer;
 import seng302.team18.messageparsing.*;
@@ -16,25 +16,14 @@ public class RaceLoop extends AnimationTimer {
     private long previousTime = 0;
     private double secondsElapsedSinceLastFpsUpdate = 0d;
     private int framesSinceLastFpsUpdate = 0;
-    private Race race;
     private RaceRenderer renderer;
     private CourseRenderer courseRenderer;
     private FPSReporter fpsReporter;
-    private MessageInterpreter interpreter;
-    private SocketMessageReceiver reader;
 
-    /**
-     * Constructor for the RaceLoop class.
-     *
-     * @param race the race to be updated
-     * @param renderer the renderer that updates with the race
-     */
-    public RaceLoop(Race race, RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter, MessageInterpreter interpreter, SocketMessageReceiver reader) {
-        this.race = race;
+
+    public RaceLoop(RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter) {
         this.renderer = renderer;
         this.fpsReporter = fpsReporter;
-        this.interpreter = interpreter;
-        this.reader = reader;
         this.courseRenderer = courseRenderer;
     }
 

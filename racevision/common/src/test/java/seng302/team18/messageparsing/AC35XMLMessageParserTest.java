@@ -24,7 +24,7 @@
 //        boatLocationHeaderBytes = bytes2;
 //
 //        yachtEvent = AC35MessageType.YACHT_EVENT.getCode();
-//        boatLocation = AC35MessageType.BOAT_LOCATION.getCode();
+//        boatLocation = AC35MessageType.BOAT_LOCATION.code();
 //    }
 //
 //    @Test

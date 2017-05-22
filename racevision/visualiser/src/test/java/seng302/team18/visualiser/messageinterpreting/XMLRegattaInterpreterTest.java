@@ -3,9 +3,9 @@ package seng302.team18.visualiser.messageinterpreting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import seng302.team18.messageparsing.AC35XMLBoatMessage;
-import seng302.team18.messageparsing.AC35XMLRegattaMessage;
-import seng302.team18.messageparsing.MessageBody;
+import seng302.team18.message.AC35XMLBoatMessage;
+import seng302.team18.message.AC35XMLRegattaMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.model.*;
 
 import java.time.Instant;
@@ -32,7 +32,7 @@ public class XMLRegattaInterpreterTest {
         race = new Race();
         interpreter = new XMLRegattaInterpreter(race);
 
-        MessageBody message = new AC35XMLRegattaMessage(12, 0, 0, utcOffset);
+        MessageBody message = new AC35XMLRegattaMessage(12, "The Best Race",0, 0, utcOffset);
         interpreter.interpret(message);
     }
 

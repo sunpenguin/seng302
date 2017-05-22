@@ -3,6 +3,8 @@ package seng302.team18.messageparsing;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.message.AC35XMLRaceMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.model.*;
 
 import java.io.BufferedInputStream;
@@ -121,7 +123,7 @@ public class AC35XMLRaceParserTest {
         List<CompoundMark> actualCompoundMarks = raceMessageToTest.getCompoundMarks();
         // Checks for multiple things
         Assert.assertEquals(expectedCompoundMarks.size(), actualCompoundMarks.size());
-        Assert.assertEquals(expectedCompoundMarks.get(0).getMidCoordinate(), actualCompoundMarks.get(0).getMidCoordinate());
+        Assert.assertEquals(expectedCompoundMarks.get(0).getCoordinate(), actualCompoundMarks.get(0).getCoordinate());
         Assert.assertEquals(expectedCompoundMarks.get(3).getName(), actualCompoundMarks.get(3).getName());
         Assert.assertEquals(
                 expectedCompoundMarks.get(5).getMarks().get(0).getCoordinate().getLatitude(),

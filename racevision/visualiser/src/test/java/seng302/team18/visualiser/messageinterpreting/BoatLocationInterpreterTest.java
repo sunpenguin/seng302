@@ -3,8 +3,8 @@ package seng302.team18.visualiser.messageinterpreting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import seng302.team18.messageparsing.AC35BoatLocationMessage;
-import seng302.team18.messageparsing.MessageBody;
+import seng302.team18.message.AC35BoatLocationMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
@@ -66,7 +66,7 @@ public class BoatLocationInterpreterTest {
         Boat boatToCheck = race.getStartingList().get(2);
         Assert.assertEquals(-10, boatToCheck.getSpeed(), delta);
         Assert.assertEquals(-10, boatToCheck.getHeading(), delta);
-        Assert.assertEquals(0, boatToCheck.getCoordinate().getLatitude(), delta);
-        Assert.assertEquals(0, boatToCheck.getCoordinate().getLongitude(), delta);
+        Assert.assertEquals(-1000, boatToCheck.getCoordinate().getLatitude(), delta);
+        Assert.assertEquals(-1000, boatToCheck.getCoordinate().getLongitude(), delta);
     }
 }

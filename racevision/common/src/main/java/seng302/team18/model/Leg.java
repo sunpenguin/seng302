@@ -1,7 +1,5 @@
 package seng302.team18.model;
 
-import seng302.team18.util.GPSCalculations;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +23,7 @@ public class Leg {
     public Leg(CompoundMark departure, CompoundMark destination, int legNumber) {
         this.destination = destination;
         this.departure = departure;
-//        this.heading = GPSCalculations.findAngle(departure.getMidCoordinate(), destination.getMidCoordinate());
+//        this.heading = GPSCalculations.findAngle(departure.getCoordinate(), destination.getCoordinate());
         this.legNumber = legNumber; // TODO this is a kinda shitty way of doing it might change later
         boatsCompleted = new ArrayList<>();
     }

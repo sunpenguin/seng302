@@ -1,9 +1,11 @@
 package seng302.team18.messageparsing;
 
+import seng302.team18.message.MessageBody;
+import seng302.team18.message.MessageHead;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 
 /**
@@ -59,6 +61,17 @@ public class SocketMessageReceiver {
         }
 
         return null;
+    }
+
+
+
+    public boolean close() {
+        try {
+            socket.close();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
 

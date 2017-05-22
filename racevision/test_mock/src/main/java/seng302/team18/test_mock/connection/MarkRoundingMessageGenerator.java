@@ -1,6 +1,6 @@
 package seng302.team18.test_mock.connection;
 
-import seng302.team18.messageparsing.AC35MessageType;
+import seng302.team18.message.AC35MessageType;
 import seng302.team18.model.CompoundMark;
 import seng302.team18.model.MarkRoundingEvent;
 import seng302.team18.util.ByteCheck;

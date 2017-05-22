@@ -1,4 +1,4 @@
-package seng302.team18.messageparsing;
+package seng302.team18.message;
 
 /**
  * Created by dhl25 on 11/04/17.
@@ -8,9 +8,11 @@ public class AC35XMLRegattaMessage implements MessageBody {
     private double centralLong;
     private String utcOffset;
     private int id;
+    private String name;
 
-    public AC35XMLRegattaMessage(int id, double centralLat, double centralLong, String utcOffset) {
+    public AC35XMLRegattaMessage(int id, String name, double centralLat, double centralLong, String utcOffset) {
         this.id = id;
+        this.name = name;
         this.centralLat = centralLat;
         this.centralLong = centralLong;
         this.utcOffset = utcOffset;
@@ -39,5 +41,9 @@ public class AC35XMLRegattaMessage implements MessageBody {
 
     public int getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -1,17 +1,22 @@
 package seng302.team18.model;
 
 
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  * A class which represents a boat in the text based Application
  */
 
-public class Boat {
+public class Boat implements GeographicLocation {
     private String boatName;
     private String shortName;
     private DoubleProperty speed;
-    private Leg leg;
+    private DoubleProperty knotsSpeed;
+    //Set to -1 initially to prevent null pointer problems
+    private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
     private Integer id;
     private double heading;
     private Coordinate coordinate;
@@ -20,6 +25,7 @@ public class Boat {
     private Long timeTilNextMark;
     private Long timeSinceLastMark;
     private Long timeAtLastMark;
+    private int status;
 
     /**
      * A constructor for the Boat class
@@ -32,6 +38,7 @@ public class Boat {
         this.shortName = shortName;
         this.id = id;
         speed = new SimpleDoubleProperty();
+        knotsSpeed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty();
         timeTilNextMark = 0L;
         timeSinceLastMark = 0L;
@@ -42,7 +49,7 @@ public class Boat {
      * A getter for the name of the boat
      * @return The boatName
      */
-    public String getBoatName() {
+    public String getName() {
         return boatName;
     }
 
@@ -96,15 +103,17 @@ public class Boat {
     }
 
 
-    public Leg getLeg() {
-        return leg;
+    public int getLegNumber() {
+        return boatLegNumber.get();
     }
 
-
-    public void setLeg(Leg leg) {
-        this.leg = leg;
+    public IntegerProperty boatLegNumberProperty() {
+        return boatLegNumber;
     }
 
+    public void setLegNumber(int boatLegNumber) {
+        this.boatLegNumber.set(boatLegNumber);
+    }
 
     public Coordinate getCoordinate() {
         return coordinate;
@@ -182,7 +191,7 @@ public class Boat {
                 "boatName=" + boatName +
                 ", shortName='" + shortName + '\'' +
                 ", speed=" + speed +
-                ", leg=" + leg +
+                ", leg=" + boatLegNumber +
                 ", id=" + id +
                 ", heading=" + heading +
                 ", coordinate=" + coordinate +
@@ -192,5 +201,25 @@ public class Boat {
                 ", timeSinceLastMark=" + timeSinceLastMark +
                 ", timeAtLastMark=" + timeAtLastMark +
                 '}';
+    }
+
+    public double getKnotsSpeed() {
+        return knotsSpeed.get();
+    }
+
+    public DoubleProperty knotsSpeedProperty() {
+        return knotsSpeed;
+    }
+
+    public void setKnotsSpeed(double knotsSpeed) {
+        this.knotsSpeed.set(knotsSpeed);
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
