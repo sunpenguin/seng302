@@ -28,6 +28,12 @@ public class BackgroundRenderer {
     private PixelMapper pixelMapper;
     private Coordinate NW = new Coordinate(0, 0);
     private Coordinate SE = new Coordinate(0, 0);
+
+    /*
+        These properties hold the current northern and southern latitudes
+        as well as eastern and western longitudes of what the map displays
+        at any given time
+    */
     private DoubleProperty n = new SimpleDoubleProperty(0);
     private DoubleProperty s = new SimpleDoubleProperty(0);
     private DoubleProperty e = new SimpleDoubleProperty(0);
@@ -35,8 +41,8 @@ public class BackgroundRenderer {
 
     /**
      * Constructor for the BackgroundRenderer
-     * @param race yes
-     * @param webEngine also yes
+     * @param race The race
+     * @param webEngine The WebEngine
      */
     public BackgroundRenderer(PixelMapper pixelMapper, Race race, WebEngine webEngine) {
         this.pixelMapper = pixelMapper;
@@ -49,6 +55,8 @@ public class BackgroundRenderer {
 
     /**
      * Updates the map shown in the background of the race view, based on the current course.
+     * Also sets the values for the coordinates which are currently the north west and south
+     * east bounds of what the map displays at any given time
      *
      * @return true if the map was updated false otherwise.
      */
@@ -95,13 +103,5 @@ public class BackgroundRenderer {
 
     public DoubleProperty sProperty() {
         return s;
-    }
-
-    public DoubleProperty eProperty() {
-        return e;
-    }
-
-    public DoubleProperty wProperty() {
-        return w;
     }
 }
