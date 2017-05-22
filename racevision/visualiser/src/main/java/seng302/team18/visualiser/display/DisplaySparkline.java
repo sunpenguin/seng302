@@ -21,6 +21,12 @@ public class DisplaySparkline extends AnimationTimer {
     private List<String> seriesStyle = new ArrayList<>();
 
 
+    /**
+     * Constructor.
+     * @param dataQueue a queue of SparklineDataPoints
+     * @param boats a list of Boats to create sparklines for
+     * @param sparklinesChart A linechart to display the sparklines on
+     */
     public DisplaySparkline(Queue<SparklineDataPoint> dataQueue, Map<Boat, Color> boats, LineChart<String, String> sparklinesChart) {
         sparklinesChart.setCreateSymbols(false);
         sparklinesChart.setLegendVisible(false);
@@ -33,6 +39,12 @@ public class DisplaySparkline extends AnimationTimer {
         setupSeries(boats);
     }
 
+    /**
+     * Called in constructor.
+     * Creates a  XYChart.Series<String, String> for each boat.
+     * Sets name of series to boat name and colour of series to the boat colour.
+     * @param boats HashMap in form <Boat, Color>
+     */
     private void setupSeries(Map<Boat, Color> boats) {
         sparklinesChart.applyCss();
         int i = 0;
@@ -81,6 +93,10 @@ public class DisplaySparkline extends AnimationTimer {
         return String.format("#%02x%02x%02x", (int) (color.getRed() * 255), (int) (color.getGreen() * 255), (int) (color.getBlue() * 255));
     }
 
+    /**
+     * Reads data from the data queue
+     * @param currentTime
+     */
     @Override
     public void handle(long currentTime) {
         SparklineDataPoint data = dataQueue.poll();
@@ -90,6 +106,11 @@ public class DisplaySparkline extends AnimationTimer {
         }
     }
 
+    /**
+     * Adds data to the correct series from the line chart.
+     * @param boatName Name of the boat the data is for (also name of the series).
+     * @param data SparklineDataPoint to be added to the series
+     */
     private void editSingleSeries(String boatName, SparklineDataPoint data) {
         for (XYChart.Series<String, String> series : sparklinesChart.getData()) {
             if (series.getName().equals(boatName)) {
@@ -110,6 +131,12 @@ public class DisplaySparkline extends AnimationTimer {
         }
     }
 
+    /**
+     * Checks if a category is already an X value in a series.
+     * @param series Series to be checked against
+     * @param category Category to check
+     * @return boolean, true if the category is an X value in the series.
+     */
     private boolean catInXofSeries(XYChart.Series<String, String> series, String category) {
         for (XYChart.Data<String, String> dataPoint : series.getData()) {
             if (dataPoint.getXValue().equals(category)) {
