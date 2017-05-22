@@ -41,7 +41,6 @@ public class PixelMapper {
         this.pane = pane;
         this.webEngine = webEngine;
         bounds = GPSCalculations.findMinMaxPoints(course);
-
         viewPortCenter = course.getCentralCoordinate();
     }
 

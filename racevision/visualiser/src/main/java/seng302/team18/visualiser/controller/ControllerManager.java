@@ -85,7 +85,6 @@ public class ControllerManager {
 
     }
 
-
     /**
      * Set up and intialise interpreter variables, adding interpreters of each relevant type to the glabal interpreter.
      */
@@ -139,7 +138,6 @@ public class ControllerManager {
 
         preRaceController.setUp(this, currentTime, startTime, duration, race.getStartingList());
     }
-
 
     /**
      * Asks the user where they would like their data streamed from. They can use of four options: Test mock, test stream,

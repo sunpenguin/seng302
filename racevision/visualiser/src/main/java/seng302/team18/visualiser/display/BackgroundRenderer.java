@@ -1,5 +1,7 @@
 package seng302.team18.visualiser.display;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -26,10 +28,10 @@ public class BackgroundRenderer {
     private PixelMapper pixelMapper;
     private Coordinate NW = new Coordinate(0, 0);
     private Coordinate SE = new Coordinate(0, 0);
-    private  double n = 0;
-    private double s = 0;
-    private double e = 0;
-    private double w = 0;
+    private DoubleProperty n = new SimpleDoubleProperty(0);
+    private DoubleProperty s = new SimpleDoubleProperty(0);
+    private DoubleProperty e = new SimpleDoubleProperty(0);
+    private DoubleProperty w = new SimpleDoubleProperty(0);
 
     /**
      * Constructor for the BackgroundRenderer
@@ -54,14 +56,14 @@ public class BackgroundRenderer {
         Coordinate newCenter = race.getCourse().getCentralCoordinate();
 
         try {
-            n = (double) webEngine.executeScript("getN();");
-            s = (double) webEngine.executeScript("getS();");
-            e = (double) webEngine.executeScript("getE();");
-            w = (double) webEngine.executeScript("getW();");
-            NW.setLatitude(n);
-            NW.setLongitude(w);
-            SE.setLatitude(s);
-            SE.setLongitude(e);
+            n.set((double) webEngine.executeScript("getN();"));
+            s.set((double) webEngine.executeScript("getS();"));
+            e.set((double) webEngine.executeScript("getE();"));
+            w.set((double) webEngine.executeScript("getW();"));
+            NW.setLatitude(n.getValue());
+            NW.setLongitude(w.getValue());
+            SE.setLatitude(s.getValue());
+            SE.setLongitude(e.getValue());
             pixelMapper.setBounds(new ArrayList<>(Arrays.asList(NW, SE)));
         } catch (Exception ex) {
 
@@ -86,4 +88,20 @@ public class BackgroundRenderer {
         return false;
     }
 
+
+    public DoubleProperty nProperty() {
+        return n;
+    }
+
+    public DoubleProperty sProperty() {
+        return s;
+    }
+
+    public DoubleProperty eProperty() {
+        return e;
+    }
+
+    public DoubleProperty wProperty() {
+        return w;
+    }
 }

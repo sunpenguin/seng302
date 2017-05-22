@@ -47,7 +47,6 @@ public class RaceRenderer {
         trailCoordinateMap =  new HashMap<>();
     }
 
-
     /**
      * Draws displayBoats in the Race on the Group as well as the visible annotations
      */
@@ -111,11 +110,10 @@ public class RaceRenderer {
     }
 
 
-//    /**
-//     * Redraw the the trails behind each boat by looking into the Map of circles and coordinates and
-//     * resetting the points.
-//     * @param boats Collection of displayBoats racing.
-//     */
+    /**
+     * Redraw the the trails behind each boat by looking into the Map of circles and coordinates and
+     * resetting the points.
+     */
     public void reDrawTrails() {
         for (Boat boat : race.getStartingList()) {
             DisplayTrail trail = trailMap.get(boat.getShortName());
@@ -129,14 +127,6 @@ public class RaceRenderer {
         return group;
     }
 
-//    public Map<String, Boolean> getVisibleAnnotations() {
-//        Map visibleAnnotations = new HashMap();
-//        DisplayBoat boat = displayBoats.values().iterator().next(); // get a boat from the map LOL
-//        for (AnnotationType type : AnnotationType.values()) {
-//            visibleAnnotations.put(type, boat.getAnnotationVisible(type));
-//        }
-//        return visibleAnnotations;
-//    }
 
     public void setVisibleAnnotations(AnnotationType type, Boolean isVisible) {
         for (DisplayBoat boat : displayBoats.values()) {

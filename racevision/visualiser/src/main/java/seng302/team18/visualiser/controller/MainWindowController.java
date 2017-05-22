@@ -1,9 +1,12 @@
 package seng302.team18.visualiser.controller;
 
 import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
@@ -63,6 +66,7 @@ public class MainWindowController {
         estimatedTimeImportant = false;
         timeSinceLastMarkImportant = false;
         group.setManaged(false);
+        map.setVisible(true);
     }
 
 
@@ -176,6 +180,9 @@ public class MainWindowController {
         tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
     }
 
+    /**
+     * sets teh wind direction of the app using the wind direction given
+     */
     private void startWindDirection() {
         windDirection = new WindDirection(race, arrow, race.getCourse().getWindDirection());
         windDirection.start();
@@ -199,7 +206,6 @@ public class MainWindowController {
         raceRenderer.renderBoats();
         courseRenderer =  new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
 
-
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
 
@@ -214,10 +220,10 @@ public class MainWindowController {
 
         raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
         raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> redrawFeatures());
-
         pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
         pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
-
+        backgroundRenderer.nProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
+        backgroundRenderer.sProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
         setUpTable();
     }
 
