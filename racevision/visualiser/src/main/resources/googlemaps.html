@@ -48,6 +48,8 @@
                 var zoomed = false;
                 var oldZoom = false;
                 var bounds = new google.maps.LatLngBounds();
+                var normalZoomlevel = 0;
+                var zoomlevel4x = 0;
 
                 function initMap() {
                     var options = {
@@ -73,11 +75,17 @@
                         }
 
                         if (!zoomed) {
-                             map.fitBounds(bounds);
-
+                            map.fitBounds(bounds);
+                            normalZoomlevel = map.getZoom();
+                            zoomlevel4x = normalZoomlevel + 1;
                         }
                         if (zoomed) {
-                            map.setZoom(16);
+//                            These commented lines are a work in progress to get zooming then resizing workinng
+//                            var zoomedBounds = new google.maps.LatLngBounds();
+//                            zoomedBounds.extend(map.getBounds().getSouthWest());
+//                            zoomedBounds.extend(map.getBounds().getNorthEast());
+//                            map.fitBounds(zoomedBounds);
+                            map.setZoom(zoomlevel4x);
                         }
 
                         s = map.getBounds().getSouthWest().lat();
