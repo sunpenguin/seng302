@@ -1,6 +1,5 @@
 package seng302.team18.util;
 
-import javafx.scene.control.ListView;
 import seng302.team18.model.*;
 
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class GPSCalculations {
      * @param point2 Coordinates for point2
      * @return The distance in metres
      */
-    public static double distance(Coordinate point1, Coordinate point2) {
+    public double distance(Coordinate point1, Coordinate point2) {
 
         double lat1 = point1.getLatitude();
         double long1 = point1.getLongitude();
@@ -60,7 +59,7 @@ public class GPSCalculations {
      * @param distance the distance from the initial coordinate to the destination coordinate
      * @return the destination coordinate
      */
-    public static Coordinate toCoordinate(Coordinate initialCoord, double bearing, double distance) {
+    public Coordinate toCoordinate(Coordinate initialCoord, double bearing, double distance) {
 
         double bR = Math.toRadians(bearing);
         double lat1R = Math.toRadians(initialCoord.getLatitude());
@@ -83,7 +82,7 @@ public class GPSCalculations {
      * @param point2 Coordinates for point2
      * @return The coordinates of the midPoint
      */
-    public static Coordinate midPoint(Coordinate point1, Coordinate point2) {
+    public Coordinate midPoint(Coordinate point1, Coordinate point2) {
 
         double lat1 = point1.getLatitude();
         double long1 = point1.getLongitude();
@@ -123,7 +122,7 @@ public class GPSCalculations {
      * @param destination end point.
      * @return angle from north to destination calculated at origin.
      */
-    public static double getBearing(Coordinate origin, Coordinate destination) {
+    public double getBearing(Coordinate origin, Coordinate destination) {
         double deltaLong = (destination.getLongitude() - origin.getLongitude());
 
         double y = Math.sin(deltaLong) * Math.cos(destination.getLatitude());
@@ -146,7 +145,7 @@ public class GPSCalculations {
      * @param coordinates you want to find the center of
      * @return the central coordinate.
      */
-    public static Coordinate getCentralCoordinate(List<Coordinate> coordinates) {
+    public Coordinate getCentralCoordinate(List<Coordinate> coordinates) {
         double x = 0;
         double y = 0;
         double z = 0;
@@ -180,7 +179,7 @@ public class GPSCalculations {
      * @param points list of coordinates
      * @return The list of coordinates where index 0 is the upper left and index 1 is the lower right
      */
-    public static List<Coordinate> findMinMaxPoints(List<Coordinate> points) {
+    public List<Coordinate> findMinMaxPoints(List<Coordinate> points) {
         // TODO write test
         List<Coordinate> result = new ArrayList<>();
         double minLong = 180;
@@ -219,7 +218,7 @@ public class GPSCalculations {
      * @param course The course
      * @return The list of coordinates where index 0 is the upper left and index 1 is the lower right
      */
-    public static List<Coordinate> findMinMaxPoints(Course course) {
+    public List<Coordinate> findMinMaxPoints(Course course) {
         List<Coordinate> points = new ArrayList<>();
 
         for (BoundaryMark boundaryMark : course.getBoundaries()) {

@@ -2,17 +2,13 @@ package seng302.team18.visualiser.display;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker;
-import javafx.scene.Group;
 import javafx.scene.web.WebEngine;
 import seng302.team18.model.*;
 import seng302.team18.visualiser.util.PixelMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
+
 
 /**
  * Using the geographic course information, requests a map image from the google map API and renders it in the
@@ -34,10 +30,11 @@ public class BackgroundRenderer {
         as well as eastern and western longitudes of what the map displays
         at any given time
     */
-    private DoubleProperty n = new SimpleDoubleProperty(0);
-    private DoubleProperty s = new SimpleDoubleProperty(0);
-    private DoubleProperty e = new SimpleDoubleProperty(0);
-    private DoubleProperty w = new SimpleDoubleProperty(0);
+    private DoubleProperty north = new SimpleDoubleProperty(0);
+    private DoubleProperty south = new SimpleDoubleProperty(0);
+    private DoubleProperty east = new SimpleDoubleProperty(0);
+    private DoubleProperty west = new SimpleDoubleProperty(0);
+
 
     /**
      * Constructor for the BackgroundRenderer
@@ -54,6 +51,25 @@ public class BackgroundRenderer {
     }
 
     /**
+     * sets the BackgroundRenderers variables using data from the web engine
+     */
+    private void setDirections(){
+        try {
+            north.set((double) webEngine.executeScript("getN();"));
+            south.set((double) webEngine.executeScript("getS();"));
+            east.set((double) webEngine.executeScript("getE();"));
+            west.set((double) webEngine.executeScript("getW();"));
+            NW.setLatitude(north.getValue());
+            NW.setLongitude(west.getValue());
+            SE.setLatitude(south.getValue());
+            SE.setLongitude(east.getValue());
+            pixelMapper.setBounds(new ArrayList<>(Arrays.asList(NW, SE)));
+        } catch (Exception ex) {
+
+        }
+    }
+
+    /**
      * Updates the map shown in the background of the race view, based on the current course.
      * Also sets the values for the coordinates which are currently the north west and south
      * east bounds of what the map displays at any given time
@@ -62,30 +78,16 @@ public class BackgroundRenderer {
      */
     public boolean renderBackground() {
         Coordinate newCenter = race.getCourse().getCentralCoordinate();
-
-        try {
-            n.set((double) webEngine.executeScript("getN();"));
-            s.set((double) webEngine.executeScript("getS();"));
-            e.set((double) webEngine.executeScript("getE();"));
-            w.set((double) webEngine.executeScript("getW();"));
-            NW.setLatitude(n.getValue());
-            NW.setLongitude(w.getValue());
-            SE.setLatitude(s.getValue());
-            SE.setLongitude(e.getValue());
-            pixelMapper.setBounds(new ArrayList<>(Arrays.asList(NW, SE)));
-        } catch (Exception ex) {
-
-        }
+        setDirections();
         if (!center.equals(newCenter)) {
             try {
-                final String centerCommand =
-                        "setCenter(" + newCenter.getLatitude() + ", " + newCenter.getLongitude() + ")";
+                final String centerCommand = "setCenter(" + newCenter.getLatitude() + ", " + newCenter.getLongitude() + ")";
                 webEngine.executeScript(centerCommand);
                 center = newCenter;
 
                 webEngine.executeScript("resetMarkers();");
                 for(BoundaryMark mark : race.getCourse().getBoundaries()) {
-                    webEngine.executeScript("addMarker(" + mark.getCoordinate().getLatitude() + ", " + mark.getCoordinate().getLongitude() + ");");
+                    addMark(mark);
                 }
 
                 return true;
@@ -97,11 +99,29 @@ public class BackgroundRenderer {
     }
 
 
-    public DoubleProperty nProperty() {
-        return n;
+    /**
+     * Adds a mark to be plotted on the map
+     * @param mark the mark to be plotted on the map
+     */
+    public void addMark(BoundaryMark mark) {
+        webEngine.executeScript("addMarker(" + mark.getCoordinate().getLatitude() + ", " + mark.getCoordinate().getLongitude() + ");");
     }
 
-    public DoubleProperty sProperty() {
-        return s;
+
+    /**
+     * Returns the DoubleProperty for north bound of the map.
+     * @return north bound
+     */
+    public DoubleProperty northProperty() {
+        return north;
+    }
+
+
+    /**
+     * Returns the DoubleProperty for south bound of the map.
+     * @return south bound
+     */
+    public DoubleProperty southProperty() {
+        return south;
     }
 }
