@@ -1,12 +1,9 @@
 package seng302.team18.visualiser.controller;
 
 import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
-import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
@@ -76,6 +73,7 @@ public class MainWindowController {
         pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
         pixelMapper.setZoomLevel(0);
     }
+
 
     @FXML void closeAppAction(){
         stage.close();
@@ -229,8 +227,8 @@ public class MainWindowController {
         pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
 
         // These listeners fire whenever the northern or southern bounds of the map change.
-        backgroundRenderer.nProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
-        backgroundRenderer.sProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
+        backgroundRenderer.northProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
+        backgroundRenderer.southProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
 
         setUpTable();
     }
@@ -261,8 +259,9 @@ public class MainWindowController {
             }
         }
 
-        List<Coordinate> extremes = GPSCalculations.findMinMaxPoints(race.getCourse());
-        race.getCourse().setCentralCoordinate(GPSCalculations.midPoint(extremes.get(0), extremes.get(1)));
+        GPSCalculations gpsCalculations = new GPSCalculations();
+        List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(race.getCourse());
+        race.getCourse().setCentralCoordinate(gpsCalculations.midPoint(extremes.get(0), extremes.get(1)));
     }
 
     public Stage getStage() {
