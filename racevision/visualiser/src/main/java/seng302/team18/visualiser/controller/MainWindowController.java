@@ -34,34 +34,22 @@ import java.util.*;
  * The main window consists of the right hand pane with various displays and the race on the left.
  */
 public class MainWindowController implements Observer {
-    @FXML
-    private Group group;
-    @FXML
-    private Label timerLabel;
-    @FXML
-    private Label fpsLabel;
-    @FXML
-    private TableView<Boat> tableView;
-    @FXML
-    private TableColumn<Boat, Integer> boatPositionColumn;
-    @FXML
-    private TableColumn<Boat, String> boatNameColumn;
-    @FXML
-    private TableColumn<Boat, Double> boatSpeedColumn;
-    @FXML
-    private TableColumn<Boat, String> boatColorColumn;
-    @FXML
-    private Pane raceViewPane;
-    @FXML
-    private Polygon arrow;
-    @FXML
-    private CategoryAxis yPositionsAxis;
-    @FXML
-    private LineChart<String, String> sparklinesChart;
-    @FXML
-    private ImageView imageViewMap;
-    @FXML
-    private Menu raceMenu;
+    @FXML private Group group;
+    @FXML private Label timerLabel;
+    @FXML private Label fpsLabel;
+    @FXML private TableView<Boat> tableView;
+    @FXML private TableColumn<Boat, Integer> boatPositionColumn;
+    @FXML private TableColumn<Boat, String> boatNameColumn;
+    @FXML private TableColumn<Boat, Double> boatSpeedColumn;
+    @FXMLprivate TableColumn<Boat, String> boatColorColumn;
+    @FXML private Pane raceViewPane;
+    @FXML private Polygon arrow;
+    @FXML private CategoryAxis yPositionsAxis;
+    @FXML private LineChart<String, String> sparklinesChart;
+    @FXMLprivate ImageView imageViewMap;
+    @FXML private Menu raceMenu;@FXML private CheckMenuItem fullAnnotationMenuItem;
+    @FXML private CheckMenuItem importantAnnotationMenuItem;
+    @FXML private CheckMenuItem noAnnotationMenuItem;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -81,6 +69,7 @@ public class MainWindowController implements Observer {
 
     @FXML
     public void initialize() {
+        loadIcon();
         fpsOn = true;
         importantAnnotations = new HashMap<>();
         for (AnnotationType type : AnnotationType.values()) {
@@ -96,8 +85,11 @@ public class MainWindowController implements Observer {
         pixelMapper.setZoomLevel(0);
     }
 
-    private void loadIcon() {
-        ImageView icon = new ImageView("/images/sailboat-512.png");
+
+/**
+     * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
+     */    private void loadIcon(){
+        ImageView icon = new ImageView("/images/boat-310164_640.png");
         icon.setFitHeight(18);
         icon.setFitWidth(18);
         raceMenu.setGraphic(icon);
@@ -138,6 +130,9 @@ public class MainWindowController implements Observer {
     @FXML
     public void setFullAnnotationLevel() {
         onImportant = false;
+        fullAnnotationMenuItem.setSelected(true);
+        importantAnnotationMenuItem.setSelected(false);
+        noAnnotationMenuItem.setSelected(false);
         for (AnnotationType type : AnnotationType.values()) {
             raceRenderer.setVisibleAnnotations(type, true);
         }
@@ -150,6 +145,9 @@ public class MainWindowController implements Observer {
     @FXML
     public void setNoneAnnotationLevel() {
         onImportant = false;
+        fullAnnotationMenuItem.setSelected(false);
+        importantAnnotationMenuItem.setSelected(false);
+        noAnnotationMenuItem.setSelected(true);
         for (AnnotationType type : AnnotationType.values()) {
             raceRenderer.setVisibleAnnotations(type, false);
         }
@@ -162,7 +160,9 @@ public class MainWindowController implements Observer {
     @FXML
     public void setToImportantAnnotationLevel() {
         onImportant = true;
-
+        fullAnnotationMenuItem.setSelected(false);
+        importantAnnotationMenuItem.setSelected(true);
+        noAnnotationMenuItem.setSelected(false);
         for (Map.Entry<AnnotationType, Boolean> importantAnnotation : importantAnnotations.entrySet()) {
             raceRenderer.setVisibleAnnotations(importantAnnotation.getKey(), importantAnnotation.getValue());
         }
@@ -253,6 +253,9 @@ public class MainWindowController implements Observer {
 
     }
 
+    /**
+     * retrieves the wind direction, scales the size of the arrow and then draws it on the Group
+     */
     private void startWindDirection() {
         arrow.setScaleX(0.4);
         windDirection = new WindDirection(race, arrow, race.getCourse().getWindDirection());
@@ -319,6 +322,11 @@ public class MainWindowController implements Observer {
     }
 
 
+    /**
+     *
+     * @param o
+     * @param arg
+     */
     @Override
     public void update(java.util.Observable o, Object arg) {
         if (arg instanceof Map) {
@@ -337,6 +345,10 @@ public class MainWindowController implements Observer {
         }
     }
 
+    /**
+     * Extracts the central course coordinate from the course
+     * @param course The course for which the midpoint is calculated
+     */
     private void setCourseCenter(Course course) {
         List<Coordinate> points = new ArrayList<>();
         for (BoundaryMark boundaryMark : course.getBoundaries()) {

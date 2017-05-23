@@ -1,39 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Polygon?>
-<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
-<?import java.lang.*?>
+
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightblue;" stylesheets="@stylesheets/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.MainWindowController">
    <children>
-       <MenuBar prefHeight="30.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-           <menus>
-               <Menu fx:id="raceMenu" mnemonicParsing="false" text="Race">
-                   <items>
-                       <Menu mnemonicParsing="false" text="Annotation level">
-                           <items>
-                               <MenuItem fx:id="fullAnnotationLevel" mnemonicParsing="false" onAction="#setFullAnnotationLevel" text="Full" />
-                               <Menu mnemonicParsing="false" text="Important">
-                                   <items>
-                                       <MenuItem mnemonicParsing="false" onAction="#setToImportantAnnotationLevel" text="Important Only" />
-                                       <MenuItem mnemonicParsing="false" onAction="#openAnnotationsWindow" text="Set Important" />
-                                   </items>
-                               </Menu>
-                               <MenuItem fx:id="noneAnnotationLevel" mnemonicParsing="false" onAction="#setNoneAnnotationLevel" text="None" />
-                           </items>
-                       </Menu>
-                       <MenuItem mnemonicParsing="false" onAction="#toggleFPS" text="Toggle FPS" />
-                       <MenuItem mnemonicParsing="false" text="Close" />
-                   </items>
-               </Menu>
-           </menus>
-       </MenuBar>
        <AnchorPane fx:id="raceViewPane" layoutY="30.0" minHeight="0.0" minWidth="0.0" prefHeight="690.0" prefWidth="822.0" style="-fx-background-color: lightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="458.0" AnchorPane.topAnchor="30.0">
            <children>
                <ImageView fx:id="imageViewMap" fitHeight="690.0" fitWidth="690.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
@@ -45,7 +26,7 @@
                </Label>
                <AnchorPane layoutX="2.0" layoutY="7.0" prefHeight="143.0" prefWidth="104.0">
                    <children>
-                       <Polygon fx:id="arrow" fill="#ff1f1f" layoutX="50.0" layoutY="63.0" scaleX="0.3" scaleY="0.6" stroke="BLACK" strokeType="INSIDE">
+                       <Polygon fx:id="arrow" layoutX="50.0" layoutY="63.0" scaleX="0.3" scaleY="0.6" stroke="BLACK" strokeType="INSIDE">
                            <points>
                                <Double fx:value="-50.0" />
                                <Double fx:value="40.0" />
@@ -54,6 +35,14 @@
                                <Double fx:value="0.0" />
                                <Double fx:value="-60.0" />
                            </points>
+                     <fill>
+                        <LinearGradient endX="0.5288461538461539" endY="0.625" startX="0.46634615384615374" startY="0.625">
+                           <stops>
+                              <Stop color="#ed0000d7" />
+                              <Stop color="WHITE" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </fill>
                        </Polygon>
                        <Text layoutX="43.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N" wrappingWidth="16.46484375">
                            <font>
@@ -123,12 +112,9 @@
                                    <children>
                                        <TableView fx:id="tableView" prefHeight="209.0" prefWidth="453.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                            <columns>
-                                               <TableColumn fx:id="boatPositionColumn" prefWidth="87.0" text="Position" />
-                                               <TableColumn fx:id="boatColorColumn" maxWidth="25.0" minWidth="-Infinity"
-                                                            prefWidth="25.0"/>
-                                               <TableColumn fx:id="boatNameColumn" minWidth="0.0" prefWidth="228.0"
-                                                            text="Name"/>
-                                               <TableColumn fx:id="boatSpeedColumn" maxWidth="173.0" prefWidth="112.0" text="Speed (knots)" />
+                                               <TableColumn fx:id="boatPositionColumn" prefWidth="71.0" text="Position" />
+                                               <TableColumn fx:id="boatNameColumn" minWidth="0.0" prefWidth="257.0" text="Name" />
+                                               <TableColumn fx:id="boatSpeedColumn" maxWidth="173.0" prefWidth="120.0" text="Speed (knots)" />
                                            </columns>
                                        </TableView>
                                    </children>
@@ -139,5 +125,23 @@
                </GridPane>
            </children>
        </AnchorPane>
+       <MenuBar prefHeight="30.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+           <menus>
+               <Menu fx:id="raceMenu" mnemonicParsing="false" text="Race">
+                   <items>
+                       <Menu mnemonicParsing="false" text="Annotation level">
+                           <items>
+                        <CheckMenuItem fx:id="fullAnnotationMenuItem" mnemonicParsing="false" onAction="#setFullAnnotationLevel" text="Full" />
+                        <CheckMenuItem fx:id="importantAnnotationMenuItem" mnemonicParsing="false" onAction="#setToImportantAnnotationLevel" text="Important Only" />
+                        <CheckMenuItem fx:id="noAnnotationMenuItem" mnemonicParsing="false" onAction="#setNoneAnnotationLevel" text="None" />
+                           </items>
+                       </Menu>
+                       <MenuItem mnemonicParsing="false" onAction="#toggleFPS" text="Toggle FPS" />
+                           <MenuItem mnemonicParsing="false" onAction="#openAnnotationsWindow" text="Set Important Annotations" />
+                       <MenuItem mnemonicParsing="false" text="Close" />
+                   </items>
+               </Menu>
+           </menus>
+       </MenuBar>
    </children>
 </AnchorPane>

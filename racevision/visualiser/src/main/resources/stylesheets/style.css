@@ -1,29 +1,31 @@
 .root{
     -fx-font-family: "Courier New";
-    -fx-base: steelblue;
+    -fx-base: transparent;
     -fx-background: slategrey;
 }
 
 
-.menu-item{
-    -fx-background-color: steelblue;
+.button{
+    -fx-background-color: #001f3f;
 }
 
-.menu-item:focused {
-    -fx-background-color: slategrey;
+
+.menu-bar .label {
+    -fx-font-size: 15 pt;
+    -fx-font-family: "Segoe UI Light";
+    -fx-text-fill: white;
 }
 
-.menu-item:selected {
-    -fx-background-color: slategrey;
-}
 
 .menu:focused{
     -fx-background-color: slategrey;
 }
 
+
 .menu:selected {
     -fx-background-color: slategrey;
 }
+
 
 .menu:showing {
     -fx-background-color: slategrey;
@@ -35,52 +37,56 @@
 }
 
 
-
 .menu-bar{
-    -fx-background-color: steelblue;
-    -fx-border-color:  steelblue;
+    -fx-background-color: #001f3f;
+    -fx-border-color:  #001f3f;
     -fx-border-width: 1
-
-}
-
-.menu-bar .label {
-    -fx-font-size: 15 pt;
-    -fx-font-family: "Segoe UI Light";
-    -fx-text-fill: white;
-
 }
 
 
-.menu:hover {
+.menu-item{
+    -fx-background-color: #001f3f;
+}
+
+
+.menu-item:focused {
     -fx-background-color: slategrey;
 }
+
+
+.menu-item:selected {
+    -fx-background-color: slategrey;
+}
+
 
 .menu-item .label{
     -fx-font-size: 15 pt;
     -fx-label-line-length: 8;
 }
 
+
 .chart-plot-background {
     -fx-background-color: transparent;
 }
+
 
 .chart-legend {
     -fx-background-color:  transparent;
 }
 
+
 .table-view{
     -fx-background-color: transparent;
 }
+
 
 .table-view:focused{
     -fx-background-color: transparent;
 }
 
-/* Spaltenköpfe
-    Struktur column-header-background -> column-header */
 
 .table-view .column-header-background{
-    -fx-background-color: linear-gradient(steelblue 0%, slategrey 100%);
+    -fx-background-color: #001f3f;
 }
 
 .table-view .column-header-background .label{
@@ -88,13 +94,16 @@
     -fx-text-fill: #ffffff;
 }
 
+
 .table-view .column-header {
     -fx-background-color: transparent;
 }
 
+
 .table-view .table-cell{
     -fx-text-fill: #ffffff;
 }
+
 
 .table-row-cell{
     -fx-background-color: -fx-table-cell-border-color, slategrey;
@@ -102,17 +111,20 @@
     -fx-padding: 0.0em; /* 0 */
 }
 
+
 .table-row-cell:odd{
-    -fx-background-color: -fx-table-cell-border-color, steelblue;
+    -fx-background-color: -fx-table-cell-border-color, #001f3f;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */
 }
 
+
 .table-row-cell:selected {
-    -fx-background-color: transparent;
+    -fx-background-color: black;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
+
 
 .table-view > .virtual-flow > .scroll-bar:vertical,
 .table-view > .virtual-flow > .scroll-bar:vertical > .track,
@@ -122,7 +134,6 @@
 .table-view > .virtual-flow > .scroll-bar:horizontal > .track-background {
     -fx-background-color: transparent;
 }
-
 
 
 .table-view > .virtual-flow > .scroll-bar > .increment-button,

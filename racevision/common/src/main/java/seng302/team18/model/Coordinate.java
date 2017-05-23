@@ -1,5 +1,9 @@
 package seng302.team18.model;
 
+/**
+ * A class that contains both a latitude and a longitude angle to represent a coordinate used to determine the position
+ * of both boats and Compound marks on the course
+ */
 public class Coordinate {
 
     private double latitude;
@@ -76,6 +80,7 @@ public class Coordinate {
         if (Double.compare(that.latitude, latitude) != 0) return false;
         return Double.compare(that.longitude, longitude) == 0;
     }
+
 
     @Override
     public int hashCode() {

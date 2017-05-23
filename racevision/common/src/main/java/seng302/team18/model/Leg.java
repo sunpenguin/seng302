@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dhl25 on 18/03/17.
+ * A class which denotes which two marks a boat is currently travelling between using a destination mark, a departure
+ * mark, a heading and the number of the leg in the race
  */
 public class Leg {
     private CompoundMark destination;
@@ -13,6 +14,12 @@ public class Leg {
     private int legNumber;
     private List<Boat> boatsCompleted;
 
+    /**
+     * A constructor for the Leg
+     * @param departure The CompoundMark at the beginning of the leg
+     * @param destination The CompoundMark at the end of the leg
+     * @param legNumber The number of the leg in the race
+     */
     public Leg(CompoundMark departure, CompoundMark destination, int legNumber) {
         this.destination = destination;
         this.departure = departure;
