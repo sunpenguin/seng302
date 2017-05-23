@@ -259,8 +259,9 @@ public class MainWindowController {
             }
         }
 
-        List<Coordinate> extremes = GPSCalculations.findMinMaxPoints(race.getCourse());
-        race.getCourse().setCentralCoordinate(GPSCalculations.midPoint(extremes.get(0), extremes.get(1)));
+        GPSCalculations gpsCalculations = new GPSCalculations();
+        List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(race.getCourse());
+        race.getCourse().setCentralCoordinate(gpsCalculations.midPoint(extremes.get(0), extremes.get(1)));
     }
 
     public Stage getStage() {
