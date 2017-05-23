@@ -25,6 +25,7 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
      */
     public BoatMessageGenerator(Boat boat) {
         super(5, AC35MessageType.BOAT_LOCATION.getCode());
+        this.boat = boat;
 
     }
 
