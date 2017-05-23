@@ -1,5 +1,6 @@
 package seng302.team18.test_mock.connection;
 
+import seng302.team18.message.AC35MessageType;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.util.ByteCheck;
@@ -8,7 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Created by Alice on 21/04/17.
+ * Generates race messages in the AC35 protocol.
  */
 public class RaceMessageGenerator extends ScheduledMessageGenerator {
 
@@ -16,8 +17,13 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
     private String message;
     private long startTime = System.currentTimeMillis();
 
+    /**
+     * Constructs a new instance of RaceMessageGenerator.
+     *
+     * @param race Race to generate messages from.
+     */
     public RaceMessageGenerator(Race race) {
-        super(2, 12);
+        super(2, AC35MessageType.RACE_STATUS.getCode());
         this.race = race;
     }
 
@@ -81,11 +87,5 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
             outputSteam.write(estTimeAtFinish);
         }
         return outputSteam.toByteArray();
-    }
-
-    private String fixLength(String s, int len) { //TODO move to super class so all subclasses can use this
-        StringBuilder str = new StringBuilder(s);
-        str.setLength(len);
-        return String.valueOf(str);
     }
 }

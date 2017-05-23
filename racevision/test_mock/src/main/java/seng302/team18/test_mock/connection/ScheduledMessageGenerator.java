@@ -8,6 +8,8 @@ public abstract class ScheduledMessageGenerator extends MessageGenerator {
     private final int frequency;
 
     /**
+     * Constructor used by subclasses.
+     *
      * @param frequency the frequency at which the message is to be sent (Hz)
      * @param type      the message type
      */

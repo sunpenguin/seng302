@@ -71,11 +71,11 @@ public class BoatMessageGeneratorTest {
         for(BoatMessageGenerator generator: messages){
             generatedBytes = generator.getPayload();
             int expectedVersionNum = 1;
-            int expectedSourceID = generator.getB().getId();
-            double expectedLat = (generator.getB().getCoordinate().getLatitude());
-            double expectedLong = (generator.getB().getCoordinate().getLongitude());
-            double expectedHeading = generator.getB().getHeading();
-            double expectedSpeed = generator.getB().getSpeed();
+            int expectedSourceID = generator.getBoat().getId();
+            double expectedLat = (generator.getBoat().getCoordinate().getLatitude());
+            double expectedLong = (generator.getBoat().getCoordinate().getLongitude());
+            double expectedHeading = generator.getBoat().getHeading();
+            double expectedSpeed = generator.getBoat().getSpeed();
 
             int actualVersionNum = ByteCheck.byteToIntConverter(generatedBytes,
                     VERSIONNUM_I, VERSIONNUM_L);

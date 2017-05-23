@@ -63,7 +63,7 @@ public class TestMock {
         AC35XMLRaceParser raceParser = new AC35XMLRaceParser();
         raceMessage = raceParser.parse(this.getClass().getResourceAsStream(raceXML));
     }
-
+    
     public void run() {
 
         readFiles();
@@ -77,6 +77,12 @@ public class TestMock {
         server.closeServer();
     }
 
+    /**
+     * Used for testing to avoid having to
+     * run test mock to test that messages
+     * encode correctly.
+     * @return
+     */
     public Race testRun() {
         readFiles();
         generateClasses();
@@ -134,6 +140,7 @@ public class TestMock {
 
         } while (!race.isFinished());
 
+        // Sends final message
         ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
         server.broadcast(raceMessageGenerator.getMessage());
     }
