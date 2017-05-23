@@ -17,12 +17,12 @@
 
     <Course>
         <CompoundMark CompoundMarkID="11" Name="Start/Finish Line">
-            <Mark SeqID="1" Name="PRO" TargetLat="32.296577" TargetLng="-64.854304" SourceID="131" />
+            <Mark SeqID="1" Name="PRO" TargetLat="32.298577" TargetLng="-64.854304" SourceID="131" />
             <Mark SeqID="2" Name="PIN" TargetLat="32.29658" TargetLng="-64.85900" SourceID="132" />
         </CompoundMark>
 
         <CompoundMark CompoundMarkID="12" Name="Mark">
-            <Mark Name="M1" TargetLat="32.29004" TargetLng="-64.84398" SourceID="133" />
+            <Mark Name="M1" TargetLat="32.29651" TargetLng="-64.8514" SourceID="133" />
         </CompoundMark>
 
         <CompoundMark CompoundMarkID="13" Name="EastGate">
