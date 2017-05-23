@@ -44,6 +44,7 @@ public class PixelMapper {
         viewPortCenter = course.getCentralCoordinate();
     }
 
+
     public void addViewCenterListener(PropertyChangeListener listener) {
         propertyChangeSupport.addPropertyChangeListener("viewPortCenter", listener);
     }

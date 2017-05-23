@@ -15,7 +15,7 @@ import seng302.team18.visualiser.util.PixelMapper;
 import java.util.*;
 
 /**
- * Created by dhl25 on 30/03/17.
+ * A class which renders the given course on the group so it can be displayed to the user.
  */
 public class CourseRenderer {
 
@@ -63,6 +63,9 @@ public class CourseRenderer {
         renderBoundaries();
     }
 
+    /**
+     * Renders all of the course boundaries again due to resizing
+     */
     private void renderBoundaries() {
         // Renders Boundaries
         group.getChildren().remove(border);
@@ -139,7 +142,7 @@ public class CourseRenderer {
 
 
     /**
-     * Reset the points for the endpoints of a gate as well as the line between them due to resizing
+     * Reset the points and line for the endpoints of a gate
      *
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */
@@ -174,7 +177,17 @@ public class CourseRenderer {
             rectangle.setY(pixelCoordinates.getY() - (scaledMarkSize / 2));
             endPoints.add(pixelCoordinates);
         }
+        renderGateConnection(endPoints, compoundMark);
 
+    }
+
+
+    /**
+     * Reset the lne between the endpoints of a gate
+     *
+     * @param compoundMark CompundMark to reset (Start/Finish only)
+     */
+    public void renderGateConnection(List<XYPair> endPoints, CompoundMark compoundMark){
         Line line = gates.get(compoundMark.getName());
         if (line == null) {
             line = new Line(
