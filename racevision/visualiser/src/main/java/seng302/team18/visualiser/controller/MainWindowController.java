@@ -41,13 +41,14 @@ public class MainWindowController implements Observer {
     @FXML private TableColumn<Boat, Integer> boatPositionColumn;
     @FXML private TableColumn<Boat, String> boatNameColumn;
     @FXML private TableColumn<Boat, Double> boatSpeedColumn;
-    @FXMLprivate TableColumn<Boat, String> boatColorColumn;
+    @FXML private TableColumn<Boat, String> boatColorColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
-    @FXMLprivate ImageView imageViewMap;
-    @FXML private Menu raceMenu;@FXML private CheckMenuItem fullAnnotationMenuItem;
+    @FXML private ImageView imageViewMap;
+    @FXML private Menu raceMenu;
+    @FXML private CheckMenuItem fullAnnotationMenuItem;
     @FXML private CheckMenuItem importantAnnotationMenuItem;
     @FXML private CheckMenuItem noAnnotationMenuItem;
 
