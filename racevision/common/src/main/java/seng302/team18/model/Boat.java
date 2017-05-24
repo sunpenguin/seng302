@@ -145,6 +145,9 @@ public class Boat implements GeographicLocation {
         this.place.set(place);
     }
 
+    public DoubleProperty knotsSpeedProperty() {
+        return knotsSpeed;
+    }
 
     public IntegerProperty placeProperty() {
         return place;
