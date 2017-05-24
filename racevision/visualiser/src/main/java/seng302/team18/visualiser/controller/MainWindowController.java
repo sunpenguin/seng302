@@ -12,6 +12,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -48,7 +49,6 @@ public class MainWindowController implements Observer {
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
-    @FXML private ImageView imageViewMap;
     @FXML private Menu raceMenu;
     @FXML private CheckMenuItem fullAnnotationMenuItem;
     @FXML private CheckMenuItem importantAnnotationMenuItem;
@@ -106,7 +106,7 @@ public class MainWindowController implements Observer {
     /**
      * initialises the sparkline graph.
      */
-    private void setUpSparklinesCategory(Map<Boat, Color> boatColors) {
+    private void setUpSparklinesCategory(Map<String, Color> boatColors) {
         List<String> list = new ArrayList<>();
         for (int i = race.getStartingList().size(); i > 0; i--) {
             list.add(String.valueOf(i));
@@ -204,7 +204,7 @@ public class MainWindowController implements Observer {
     /**
      * Sets the cell values for the race table, these are place, boat name and boat speed.
      */
-    private void setUpTable(Map<Boat, Color> boatColors) {
+    private void setUpTable(Map<String, Color> boatColors) {
         Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
                 boat.placeProperty(),
         };
@@ -237,7 +237,7 @@ public class MainWindowController implements Observer {
             }
         });
         boatColorColumn.setCellFactory(column -> new TableCell<Boat, String>() {
-            private final Map<Boat, Color> colors = boatColors;
+            private final Map<String, Color> colors = boatColors;
 
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -245,7 +245,7 @@ public class MainWindowController implements Observer {
 
                 Boat boat = (Boat) getTableRow().getItem();
                 if (boat != null) {
-                    Color color = colors.get(boat);
+                    Color color = colors.get(boat.getShortName());
                     if (color != null) {
                         setStyle(String.format("-fx-background-color: #%02x%02x%02x", (int) (color.getRed() * 255), (int) (color.getGreen() * 255), (int) (color.getBlue() * 255)));
                     }
@@ -281,7 +281,7 @@ public class MainWindowController implements Observer {
 
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, map.getEngine());
         backgroundRenderer = new BackgroundRenderer(pixelMapper, race, map.getEngine());
-        raceRenderer = new RaceRenderer(pixelMapper, race, group, raceViewPane);
+        raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
 
@@ -309,6 +309,8 @@ public class MainWindowController implements Observer {
         setUpTable(raceRenderer.boatColors());
 
         setToImportantAnnotationLevel();
+
+        setUpSparklinesCategory(raceRenderer.boatColors());
     }
 
     /**

@@ -1,7 +1,6 @@
 package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
@@ -18,13 +17,8 @@ public class RaceRenderer {
     private Group group;
     private Race race;
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
-//    private Map<String, List<Circle>> trailMap = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
-    private Map<Integer, List<Coordinate>> trailCoordinateMap;
-//    private Map<Circle, Coordinate> circleCoordMap = new HashMap<>();
     private Map<String, Double> headingMap;
-    private Pane raceViewPane;
-    private final double PADDING = 20.0;
     private int numBoats;
     private final List<Color> BOAT_COLOURS = new ArrayList<>(
             Arrays.asList(Color.VIOLET, Color.DARKVIOLET, Color.GREEN, Color.TOMATO, Color.YELLOWGREEN, Color.BROWN));
@@ -136,9 +130,13 @@ public class RaceRenderer {
         }
     }
 
-    public Map<Boat, Color> boatColors() {
-        Map<Boat, Color> boatColors = new HashMap<>();
-        for (Map.Entry<Boat, DisplayBoat> entry : displayBoats.entrySet()){
+    /**
+     *
+     * @return a map from boat short names to colors.
+     */
+    public Map<String, Color> boatColors() {
+        Map<String, Color> boatColors = new HashMap<>();
+        for (Map.Entry<String, DisplayBoat> entry : displayBoats.entrySet()) {
             boatColors.put(entry.getKey(), entry.getValue().getBoatColor());
         }
         return boatColors;
