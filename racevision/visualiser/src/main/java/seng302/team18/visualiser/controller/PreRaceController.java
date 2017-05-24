@@ -2,10 +2,7 @@ package seng302.team18.visualiser.controller;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -29,8 +26,10 @@ public class PreRaceController {
     @FXML private Label startTimeLabel;
     @FXML private ListView<Boat> listView;
     @FXML private Label timeZoneLabel;
-    @FXML private Button liveConnectButton;
     @FXML private Text raceNameText;
+    @FXML private Text errorText;
+    @FXML private TextField customPortField;
+    @FXML private TextField customHostField;
 
     private ZoneTimeClock preRaceClock;
 
@@ -45,7 +44,6 @@ public class PreRaceController {
         raceNameText.setText(race.getRaceName());
         displayTimeZone(race.getStartTime());
         startTimeLabel.setText(race.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        startTimeLabel.setTextFill(Color.BLACK);
         startTimeLabel.setStyle("-fx-font-size: 2em;");
         setUpLists(race.getStartingList());
         preRaceClock.start();
@@ -85,12 +83,7 @@ public class PreRaceController {
      */
     @FXML
     public void openLiveStream() {
-        try {
-            Session.getInstance().setReceiver(new SocketMessageReceiver("livedata.americascup.com", 4940, new AC35MessageParserFactory()));
-            startConnection();
-        } catch (Exception e) {
-            System.out.println("Could not establish connection to stream Host/Port");
-        }
+        openStream("livedata.americascup.com", 4940);
     }
 
     /**
@@ -98,12 +91,7 @@ public class PreRaceController {
      */
     @FXML
     public void openTestStream() {
-        try {
-            Session.getInstance().setReceiver(new SocketMessageReceiver("livedata.americascup.com", 4941, new AC35MessageParserFactory()));
-            startConnection();
-        } catch (Exception e) {
-            System.out.println("Could not establish connection to stream Host/Port");
-        }
+        openStream("livedata.americascup.com", 4941);
     }
 
     /**
@@ -111,11 +99,34 @@ public class PreRaceController {
      */
     @FXML
     public void openMockStream() {
+        openStream("127.0.0.1", 5005);
+    }
+
+    @FXML
+    public void openCustomStream() {
+        String host = customHostField.getText();
+        String portString = customPortField.getText();
+
+        if (host.isEmpty() || portString.isEmpty()) {
+            errorText.setText("Please enter a custom host and port");
+            return;
+        }
+
         try {
-            Session.getInstance().setReceiver(new SocketMessageReceiver("127.0.0.1", 5005, new AC35MessageParserFactory()));
+            int port = Integer.parseInt(portString);
+            openStream(host, port);
+        } catch (NumberFormatException e) {
+            errorText.setText("Please enter a valid port number");
+            return;
+        }
+    }
+
+    private void openStream(String host, int port) {
+        try {
+            Session.getInstance().setReceiver(new SocketMessageReceiver(host, port, new AC35MessageParserFactory()));
             startConnection();
         } catch (Exception e) {
-            System.out.println("Could not establish connection to stream Host/Port");
+            errorText.setText(String.format("Could not establish connection to stream at: %s:%d", host, port));
         }
     }
 
@@ -125,7 +136,7 @@ public class PreRaceController {
      */
     private  void startConnection() throws Exception {
 
-        Stage s = (Stage) liveConnectButton.getScene().getWindow();
+        Stage s = (Stage) errorText.getScene().getWindow();
         ControllerManager manager = new ControllerManager(s, "MainWindow.fxml", "PreRace.fxml");
         manager.start();
 //        s.close();

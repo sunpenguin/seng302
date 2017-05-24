@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
@@ -39,64 +40,91 @@
                         <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Text layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Local Time:" AnchorPane.rightAnchor="260.46875" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+                        <Text fill="WHITE" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Local Time:" AnchorPane.rightAnchor="260.46875" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
                            <font>
                               <Font size="24.0" />
                            </font>
                            <GridPane.margin>
                               <Insets right="25.0" />
                            </GridPane.margin>
+                           <effect>
+                              <DropShadow />
+                           </effect>
                         </Text>
-                        <Text layoutX="35.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Race Start Time:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                        <Text fill="WHITE" layoutX="35.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Race Start Time:" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                            <font>
                               <Font size="24.0" />
                            </font>
                            <GridPane.margin>
                               <Insets right="25.0" />
                            </GridPane.margin>
+                           <effect>
+                              <DropShadow />
+                           </effect>
                         </Text>
-                        <Label fx:id="startTimeLabel" layoutX="268.0" layoutY="23.0" prefHeight="71.0" prefWidth="171.0" text="Start time" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label fx:id="startTimeLabel" layoutX="268.0" layoutY="23.0" prefHeight="71.0" prefWidth="171.0" text="Start time" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets left="25.0" />
                            </GridPane.margin>
+                           <effect>
+                              <DropShadow />
+                           </effect>
                         </Label>
-                        <Text layoutX="80.62890625" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Local Time Zone:" AnchorPane.rightAnchor="261.4638671875" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                        <Text fill="WHITE" layoutX="80.62890625" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Local Time Zone:" AnchorPane.rightAnchor="261.4638671875" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <GridPane.margin>
                               <Insets right="25.0" />
                            </GridPane.margin>
+                           <effect>
+                              <DropShadow />
+                           </effect>
                         </Text>
-                        <Label fx:id="timeLabel" layoutX="268.0" layoutY="118.0" prefHeight="28.0" prefWidth="171.0" text="Local time" AnchorPane.rightAnchor="58.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label fx:id="timeLabel" layoutX="268.0" layoutY="118.0" prefHeight="28.0" prefWidth="171.0" text="Local time" textFill="WHITE" AnchorPane.rightAnchor="58.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets left="25.0" />
                            </GridPane.margin>
+                           <effect>
+                              <DropShadow />
+                           </effect>
                         </Label>
-                        <Label fx:id="timeZoneLabel" layoutX="268.0" layoutY="146.0" prefHeight="30.0" prefWidth="100.0" text="Timezone" AnchorPane.rightAnchor="129.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <Label fx:id="timeZoneLabel" layoutX="268.0" layoutY="146.0" prefHeight="30.0" prefWidth="100.0" text="Timezone" textFill="WHITE" AnchorPane.rightAnchor="129.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets left="25.0" />
                            </GridPane.margin>
+                           <effect>
+                              <DropShadow />
+                           </effect>
                         </Label>
-                        <Text fx:id="raceNameText" strokeType="OUTSIDE" strokeWidth="0.0" text="Race Name" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+                        <Text fx:id="raceNameText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Race Name" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
                            <font>
                               <Font size="24.0" />
                            </font>
+                           <effect>
+                              <DropShadow />
+                           </effect>
                         </Text>
                      </children>
                   </GridPane>
                </children>
             </AnchorPane>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" Starting List" wrappingWidth="154.9072265625" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text=" Starting List" wrappingWidth="154.9072265625" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                <font>
                   <Font size="24.0" />
                </font>
+               <effect>
+                  <DropShadow height="30.0" radius="14.5" width="30.0" />
+               </effect>
             </Text>
             <ListView fx:id="listView" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-            <Label stylesheets="@stylesheets/preRaceStyle.css" text="Welcome to RaceVision!" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+            <Label stylesheets="@stylesheets/preRaceStyle.css" text="Welcome to RaceVision!" textFill="WHITE" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
                <font>
                   <Font size="34.0" />
                </font>
+               <effect>
+                  <DropShadow />
+               </effect>
             </Label>
          </children>
       </GridPane>
