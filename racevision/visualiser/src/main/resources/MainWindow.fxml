@@ -123,21 +123,16 @@
                            </children>
                        </GridPane>
                   <Button fx:id="setAnnotations" mnemonicParsing="false" onAction="#openAnnotationsWindow" text="Set Annotation" textFill="#fffefe" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-                  <MenuButton mnemonicParsing="false" text="Select Annotations" GridPane.halignment="CENTER" GridPane.rowIndex="1">
-                    <items>
-                        <CheckMenuItem fx:id="fullAnnotationMenuItem" mnemonicParsing="false" onAction="#setFullAnnotationLevel" text="Full" />
-                        <CheckMenuItem fx:id="importantAnnotationMenuItem" mnemonicParsing="false" onAction="#setToImportantAnnotationLevel" text="Important Only" />
-                        <CheckMenuItem fx:id="noAnnotationMenuItem" mnemonicParsing="false" onAction="#setNoneAnnotationLevel" text="None" />
-                    </items>
-                     <GridPane.margin>
-                        <Insets left="12.0" />
-                     </GridPane.margin>
-                  </MenuButton>
                   <Button fx:id="toggleFps" mnemonicParsing="false" onAction="#toggleFPS" text="Toggle Fps" textFill="#fcf8f8" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </Button>
+                  <Slider fx:id="slider" blockIncrement="50.0" majorTickUnit="50.0" max="1.0" minorTickCount="0" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="115.0" right="110.0" />
+                     </GridPane.margin>
+                  </Slider>
                    </children>
                </GridPane>
            </children>

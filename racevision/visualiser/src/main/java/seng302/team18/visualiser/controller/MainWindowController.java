@@ -1,6 +1,8 @@
 package seng302.team18.visualiser.controller;
 
 import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
@@ -19,6 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
@@ -51,10 +54,8 @@ public class MainWindowController implements Observer {
     @FXML private Menu raceMenu;
     @FXML private MenuBar menuBar;
     @FXML private Button setAnnotations;
-    @FXML private Button toggleFps;
-    @FXML private CheckMenuItem fullAnnotationMenuItem;
-    @FXML private CheckMenuItem importantAnnotationMenuItem;
-    @FXML private CheckMenuItem noAnnotationMenuItem;
+    @FXML private Button toggle;
+    @FXML private Slider slider;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -74,7 +75,7 @@ public class MainWindowController implements Observer {
 
     @FXML
     public void initialize() {
-
+        sliderSetup();
         fpsOn = true;
         importantAnnotations = new HashMap<>();
         for (AnnotationType type : AnnotationType.values()) {
@@ -133,7 +134,52 @@ public class MainWindowController implements Observer {
         fpsLabel.setVisible(fpsOn);
     }
 
+    private void sliderSetup(){
+        slider.setSnapToTicks(true);
+        slider.setShowTickMarks(true);
+        slider.setShowTickLabels(true);
+        slider.setMajorTickUnit(0.5f);
+        slider.setBlockIncrement(0.5f);
+        slider.setLabelFormatter(new StringConverter<Double>() {
+            @Override
+            public String toString(Double n) {
+                if (n == 0) return "None";
+                if (n == 0.5) return "Important";
+                return "Full";
+            }
 
+            @Override
+            public Double fromString(String s) {
+                switch (s) {
+                    case "None":
+                        return 0d;
+                    case "Important":
+                        return 1d;
+                    case "Full":
+                        return 2d;
+                    default:
+                        return 1d;
+                }
+            }
+        });
+    }
+
+    private void setSlider() {
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val) {
+                if(new_val == (Number)0d){
+                    setNoneAnnotationLevel();
+                }
+                if(new_val == (Number)1d){
+                    setToImportantAnnotationLevel();
+                }
+                else{
+                    setFullAnnotationLevel();
+                }
+            }
+        });
+    }
 
 
     /**
@@ -142,9 +188,7 @@ public class MainWindowController implements Observer {
     @FXML
     public void setFullAnnotationLevel() {
         onImportant = false;
-        fullAnnotationMenuItem.setSelected(true);
-        importantAnnotationMenuItem.setSelected(false);
-        noAnnotationMenuItem.setSelected(false);
+
         for (AnnotationType type : AnnotationType.values()) {
             raceRenderer.setVisibleAnnotations(type, true);
         }
@@ -157,9 +201,7 @@ public class MainWindowController implements Observer {
     @FXML
     public void setNoneAnnotationLevel() {
         onImportant = false;
-        fullAnnotationMenuItem.setSelected(false);
-        importantAnnotationMenuItem.setSelected(false);
-        noAnnotationMenuItem.setSelected(true);
+
         for (AnnotationType type : AnnotationType.values()) {
             raceRenderer.setVisibleAnnotations(type, false);
         }
@@ -172,9 +214,6 @@ public class MainWindowController implements Observer {
     @FXML
     public void setToImportantAnnotationLevel() {
         onImportant = true;
-        fullAnnotationMenuItem.setSelected(false);
-        importantAnnotationMenuItem.setSelected(true);
-        noAnnotationMenuItem.setSelected(false);
         for (Map.Entry<AnnotationType, Boolean> importantAnnotation : importantAnnotations.entrySet()) {
             raceRenderer.setVisibleAnnotations(importantAnnotation.getKey(), importantAnnotation.getValue());
         }
