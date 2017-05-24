@@ -261,7 +261,7 @@ public class MainWindowController implements Observer {
      */
     private void setUpTable(Map<String, Color> boatColors) {
         Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
-                boat.placeProperty(),
+                boat.placeProperty(), boat.knotsSpeedProperty()
         };
         ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
         observableList.addAll(race.getStartingList());

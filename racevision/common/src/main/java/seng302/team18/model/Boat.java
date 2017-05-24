@@ -155,6 +155,9 @@ public class Boat implements GeographicLocation {
         return id;
     }
 
+    public DoubleProperty knotsSpeedProperty() {
+        return knotsSpeed;
+    }
 
     public long getTimeTilNextMark() {
         return timeTilNextMark;
