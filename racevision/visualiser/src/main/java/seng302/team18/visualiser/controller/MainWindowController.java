@@ -77,7 +77,7 @@ public class MainWindowController implements Observer {
 
     @FXML
     public void initialize() {
-        setSlider();
+        setSliderListener();
         sliderSetup();
         fpsOn = true;
         importantAnnotations = new HashMap<>();
@@ -138,7 +138,9 @@ public class MainWindowController implements Observer {
     }
 
 
-
+    /**
+     * Sets up the Slider so that it can be used to switch between the different levels of annotation
+     */
     private void sliderSetup(){
         TextArea t = new TextArea();
         t.setText("poop");
@@ -160,23 +162,15 @@ public class MainWindowController implements Observer {
 
             @Override
             public Double fromString(String s) {
-                switch (s) {
-                    case "Novice":
-                        return 0d;
-                    case "Intermediate":
-                        return 1d;
-                    case "Advanced":
-                        return 2d;
-                    case "Expert":
-                        return 3d;
-
-                    default:
-                        return 3d;
-                }
+                return 0.0;
             }
         });
     }
-    private void setSlider() {
+
+    /**
+     * Creates a listener so the slider knows when its value has changed and it can update the annotations accordingly
+     */
+    private void setSliderListener() {
         slider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
