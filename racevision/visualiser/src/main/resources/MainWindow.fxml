@@ -50,7 +50,7 @@
                            </font>
                        </Text>
                        <Text layoutX="6.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
-                     <Button layoutX="10.0" layoutY="115.0" mnemonicParsing="false" onAction="#zoomOutButtonAction" text="Zoom Out" textFill="#fffdfd" />
+                     <Button layoutX="10.0" layoutY="115.0" mnemonicParsing="false" onAction="#zoomOutButtonAction" text="Zoom Out" />
                    </children>
                </AnchorPane>
             <AnchorPane layoutX="6.0" layoutY="643.0" prefHeight="42.0" prefWidth="96.0" />
@@ -122,27 +122,25 @@
                                </AnchorPane>
                            </children>
                        </GridPane>
+                  <Button fx:id="setAnnotations" mnemonicParsing="false" onAction="#openAnnotationsWindow" text="Set Annotation" textFill="#fffefe" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+                  <MenuButton mnemonicParsing="false" text="Select Annotations" GridPane.halignment="CENTER" GridPane.rowIndex="1">
+                    <items>
+                        <CheckMenuItem fx:id="fullAnnotationMenuItem" mnemonicParsing="false" onAction="#setFullAnnotationLevel" text="Full" />
+                        <CheckMenuItem fx:id="importantAnnotationMenuItem" mnemonicParsing="false" onAction="#setToImportantAnnotationLevel" text="Important Only" />
+                        <CheckMenuItem fx:id="noAnnotationMenuItem" mnemonicParsing="false" onAction="#setNoneAnnotationLevel" text="None" />
+                    </items>
+                     <GridPane.margin>
+                        <Insets left="12.0" />
+                     </GridPane.margin>
+                  </MenuButton>
+                  <Button fx:id="toggleFps" mnemonicParsing="false" onAction="#toggleFPS" text="Toggle Fps" textFill="#fcf8f8" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
+                  </Button>
                    </children>
                </GridPane>
            </children>
        </AnchorPane>
-       <MenuBar fx:id="menuBar" prefHeight="30.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-           <menus>
-               <Menu fx:id="raceMenu" mnemonicParsing="false" text="Race">
-                   <items>
-                       <Menu mnemonicParsing="false" text="Annotation level">
-                           <items>
-                        <CheckMenuItem fx:id="fullAnnotationMenuItem" mnemonicParsing="false" onAction="#setFullAnnotationLevel" text="Full" />
-                        <CheckMenuItem fx:id="importantAnnotationMenuItem" mnemonicParsing="false" onAction="#setToImportantAnnotationLevel" text="Important Only" />
-                        <CheckMenuItem fx:id="noAnnotationMenuItem" mnemonicParsing="false" onAction="#setNoneAnnotationLevel" text="None" />
-                           </items>
-                       </Menu>
-                       <MenuItem mnemonicParsing="false" onAction="#toggleFPS" text="Toggle FPS" />
-                           <MenuItem mnemonicParsing="false" onAction="#openAnnotationsWindow" text="Set Important Annotations" />
-                       <MenuItem mnemonicParsing="false" text="Close" />
-                   </items>
-               </Menu>
-           </menus>
-       </MenuBar>
    </children>
 </AnchorPane>

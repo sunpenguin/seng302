@@ -1,5 +1,5 @@
 .root{
-    -fx-font-family: "Courier New";
+    -fx-font-family: "Arial";
     -fx-base: transparent;
     -fx-background: slategrey;
 }
@@ -9,10 +9,13 @@
     -fx-background-color: #001f3f;
 }
 
+.menu-button{
+    -fx-background-color: #001f3f;
+}
 
 .menu-bar .label {
     -fx-font-size: 15 pt;
-    -fx-font-family: "Segoe UI Light";
+    -fx-font-family: "Arial";
     -fx-text-fill: white;
 }
 

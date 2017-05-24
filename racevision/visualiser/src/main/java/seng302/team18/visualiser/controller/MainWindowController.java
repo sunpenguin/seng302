@@ -50,7 +50,8 @@ public class MainWindowController implements Observer {
     @FXML private ImageView imageViewMap;
     @FXML private Menu raceMenu;
     @FXML private MenuBar menuBar;
-    @FXML private Menu annotations;
+    @FXML private Button setAnnotations;
+    @FXML private Button toggleFps;
     @FXML private CheckMenuItem fullAnnotationMenuItem;
     @FXML private CheckMenuItem importantAnnotationMenuItem;
     @FXML private CheckMenuItem noAnnotationMenuItem;
@@ -73,8 +74,7 @@ public class MainWindowController implements Observer {
 
     @FXML
     public void initialize() {
-        setMenu();
-        loadIcon();
+
         fpsOn = true;
         importantAnnotations = new HashMap<>();
         for (AnnotationType type : AnnotationType.values()) {
@@ -96,14 +96,14 @@ public class MainWindowController implements Observer {
     }
 
 
-/**
-     * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
-     */    private void loadIcon(){
-        ImageView icon = new ImageView("/images/boat-310164_640.png");
-        icon.setFitHeight(18);
-        icon.setFitWidth(18);
-        raceMenu.setGraphic(icon);
-    }
+///**
+//     * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
+//     */    private void loadIcon(){
+//        ImageView icon = new ImageView("/images/boat-310164_640.png");
+//        icon.setFitHeight(18);
+//        icon.setFitWidth(18);
+//        raceMenu.setGraphic(icon);
+//    }
 
     /**
      * initialises the sparkline graph.
@@ -132,6 +132,8 @@ public class MainWindowController implements Observer {
         fpsOn = !fpsOn;
         fpsLabel.setVisible(fpsOn);
     }
+
+
 
 
     /**
