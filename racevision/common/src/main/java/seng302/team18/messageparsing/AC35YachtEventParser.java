@@ -1,5 +1,7 @@
 package seng302.team18.messageparsing;
 
+import seng302.team18.message.MessageBody;
+
 import java.io.InputStream;
 
 /**

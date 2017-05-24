@@ -83,6 +83,9 @@ public class DisplayBoat {
         this.name = name;
         this.boatColor = boatColor;
         this.estimatedTime = estimatedTime;
+        // default values
+        wakeColor = Color.CADETBLUE;
+        wakeScaleFactor = 1.0d / 16.0d; // the wake is at normal size when the boat is moving 32 speed
 
         // Speed
         this.speed = speed;
@@ -135,7 +138,7 @@ public class DisplayBoat {
                 if (entry.getKey().equals(AnnotationType.NAME)) {
                     textToDisplay += name + "\n";
                 } else if (entry.getKey().equals(AnnotationType.SPEED)) {
-                    textToDisplay += String.format("%." + decimalPlaces + "f", speed) + " km/h\n";
+                    textToDisplay += String.format("%." + decimalPlaces + "f", speed) + " knots\n";
                 } else if (entry.getKey().equals(AnnotationType.ESTIMATED_TIME_NEXT_MARK) && estimatedTime > 0) {
                     textToDisplay += estimatedTime + "\n";
                 } else if (entry.getKey().equals(AnnotationType.TIME_SINCE_LAST_MARK))

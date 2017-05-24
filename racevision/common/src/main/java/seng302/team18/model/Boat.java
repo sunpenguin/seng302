@@ -14,7 +14,9 @@ public class Boat implements GeographicLocation {
     private String boatName;
     private String shortName;
     private DoubleProperty speed;
-    private Leg leg;
+    private DoubleProperty knotsSpeed;
+    //Set to -1 initially to prevent null pointer problems
+    private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
     private Integer id;
     private double heading;
     private Coordinate coordinate;
@@ -23,6 +25,7 @@ public class Boat implements GeographicLocation {
     private Long timeTilNextMark;
     private Long timeSinceLastMark;
     private Long timeAtLastMark;
+    private int status;
 
     /**
      * A constructor for the Boat class
@@ -35,6 +38,7 @@ public class Boat implements GeographicLocation {
         this.shortName = shortName;
         this.id = id;
         speed = new SimpleDoubleProperty();
+        knotsSpeed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty();
         timeTilNextMark = 0L;
         timeSinceLastMark = 0L;
@@ -45,7 +49,7 @@ public class Boat implements GeographicLocation {
      * A getter for the name of the boat
      * @return The boatName
      */
-    public String getBoatName() {
+    public String getName() {
         return boatName;
     }
 
@@ -99,15 +103,17 @@ public class Boat implements GeographicLocation {
     }
 
 
-    public Leg getLeg() {
-        return leg;
+    public int getLegNumber() {
+        return boatLegNumber.get();
     }
 
-
-    public void setLeg(Leg leg) {
-        this.leg = leg;
+    public IntegerProperty boatLegNumberProperty() {
+        return boatLegNumber;
     }
 
+    public void setLegNumber(int boatLegNumber) {
+        this.boatLegNumber.set(boatLegNumber);
+    }
 
     public Coordinate getCoordinate() {
         return coordinate;
@@ -185,7 +191,7 @@ public class Boat implements GeographicLocation {
                 "boatName=" + boatName +
                 ", shortName='" + shortName + '\'' +
                 ", speed=" + speed +
-                ", leg=" + leg +
+                ", leg=" + boatLegNumber +
                 ", id=" + id +
                 ", heading=" + heading +
                 ", coordinate=" + coordinate +
@@ -195,5 +201,25 @@ public class Boat implements GeographicLocation {
                 ", timeSinceLastMark=" + timeSinceLastMark +
                 ", timeAtLastMark=" + timeAtLastMark +
                 '}';
+    }
+
+    public double getKnotsSpeed() {
+        return knotsSpeed.get();
+    }
+
+    public DoubleProperty knotsSpeedProperty() {
+        return knotsSpeed;
+    }
+
+    public void setKnotsSpeed(double knotsSpeed) {
+        this.knotsSpeed.set(knotsSpeed);
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

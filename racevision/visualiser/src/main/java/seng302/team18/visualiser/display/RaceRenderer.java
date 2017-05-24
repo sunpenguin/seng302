@@ -27,25 +27,25 @@ public class RaceRenderer {
     private final double PADDING = 20.0;
     private int numBoats;
     private final List<Color> BOAT_COLOURS = new ArrayList<>(
-            Arrays.asList(Color.VIOLET, Color.BEIGE, Color.GREEN, Color.YELLOW, Color.RED, Color.BROWN));
+            Arrays.asList(Color.VIOLET, Color.DARKVIOLET, Color.GREEN, Color.TOMATO, Color.YELLOWGREEN, Color.BROWN));
     private PixelMapper pixelMapper;
+
 
 
     /**
      * Constructor for RaceRenderer, takes a Race, Group  and AnchorPane as parameters.
      *
+     * @param pixelMapper for converting coordinates to pixel coordinates
      * @param race the race containing the displayBoats to be drawn
      * @param group the group to be drawn on
-     * @param raceViewPane The AnchorPane the group is on
      */
-    public RaceRenderer(PixelMapper pixelMapper, Race race, Group group, Pane raceViewPane) {
+    public RaceRenderer(PixelMapper pixelMapper, Race race, Group group) {
         this.race = race;
         this.group = group;
-        this.raceViewPane = raceViewPane;
         this.pixelMapper = pixelMapper;
         headingMap = new HashMap<>();
-        trailCoordinateMap =  new HashMap<>();
     }
+
 
     /**
      * Draws displayBoats in the Race on the Group as well as the visible annotations
@@ -68,7 +68,7 @@ public class RaceRenderer {
             if (boatCoordinates != null) {
                 displayBoat.setDisplayOrder();
                 displayBoat.moveBoat(boatCoordinates);
-                displayBoat.setSpeed(boat.getSpeed());
+                displayBoat.setSpeed(boat.getKnotsSpeed());
                 displayBoat.setHeading(boat.getHeading());
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
@@ -78,6 +78,9 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Draws all the boats trails.
+     */
     public void drawTrails() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
@@ -89,12 +92,11 @@ public class RaceRenderer {
     }
 
 
-//    /**
-//     * Drop a circle on the raceView to visualise the boat's route through the race.
-//     * Add the circle to the group and map the circle to it's coordinates.
-//     * @param boat Boat to put circle behind.
-//     * @param pixels point to place the circle at.
-//     */
+    /**
+     * Update a single boats trail.
+     * @param boat the trail belongs to.
+     * @param pixelMapper used to map a coordinate to a point on the screen.
+     */
     private void drawTrail(Boat boat, PixelMapper pixelMapper) {
         final double MAX_HEADING_DIFFERENCE = 0.75d; // smaller => smoother trail, higher => more fps
         DisplayTrail trail = trailMap.get(boat.getShortName());
@@ -132,5 +134,13 @@ public class RaceRenderer {
         for (DisplayBoat boat : displayBoats.values()) {
             boat.setAnnotationVisible(type, isVisible);
         }
+    }
+
+    public Map<Boat, Color> boatColors() {
+        Map<Boat, Color> boatColors = new HashMap<>();
+        for (Map.Entry<Boat, DisplayBoat> entry : displayBoats.entrySet()){
+            boatColors.put(entry.getKey(), entry.getValue().getBoatColor());
+        }
+        return boatColors;
     }
 }

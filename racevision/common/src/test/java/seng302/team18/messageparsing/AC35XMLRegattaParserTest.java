@@ -2,6 +2,9 @@ package seng302.team18.messageparsing;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+import seng302.team18.message.AC35XMLRegattaMessage;
+import seng302.team18.message.MessageBody;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

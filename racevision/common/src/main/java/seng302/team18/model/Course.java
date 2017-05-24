@@ -127,8 +127,24 @@ public class Course {
          for (int i = 0; i < markRoundings.size() - 1; i++) {
              CompoundMark dep = markRoundings.get(i).getCompoundMark();
              CompoundMark dest = markRoundings.get(i + 1).getCompoundMark();
-             legs.add(new Leg(dep, dest, markRoundings.get(i).getSequenceNumber()));
+             Leg currentLeg = new Leg(dep, dest, markRoundings.get(i).getSequenceNumber());
+             legs.add(currentLeg);
          }
+    }
+
+    /**
+     * Method find a leg with the correct legNumber from the courses legs.
+     * @param legNumber integer, the leg number of the leg to be found.
+     * @return Leg with the same leg number as the integer given.
+     */
+    public Leg getLeg(int legNumber){
+        Leg foundLeg = legs.get(0);
+        for(Leg leg : legs){
+            if (leg.getLegNumber() == legNumber){
+                foundLeg = leg;
+            }
+        }
+        return foundLeg;
     }
 }
 

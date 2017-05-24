@@ -5,46 +5,58 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
-import seng302.team18.visualiser.messageinterpreting.MessageInterpreter;
 import seng302.team18.visualiser.util.PixelMapper;
+import seng302.team18.visualiser.util.SparklineDataGetter;
+import seng302.team18.visualiser.util.SparklineDataPoint;
 
+import java.io.IOException;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * The Controller class for the Main Window view.
+ * The controller class for the Main Window.
+ * The main window consists of the right hand pane with various displays and the race on the left.
  */
-public class MainWindowController {
+public class MainWindowController implements Observer {
     @FXML private Group group;
     @FXML private Label timerLabel;
-    @FXML private ToggleButton fpsToggler;
     @FXML private Label fpsLabel;
-    @FXML private TableView tableView;
+    @FXML private TableView<Boat> tableView;
     @FXML private TableColumn<Boat, Integer> boatPositionColumn;
     @FXML private TableColumn<Boat, String> boatNameColumn;
     @FXML private TableColumn<Boat, Double> boatSpeedColumn;
+    @FXML private TableColumn<Boat, String> boatColorColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
+    @FXML private CategoryAxis yPositionsAxis;
+    @FXML private LineChart<String, String> sparklinesChart;
+    @FXML private ImageView imageViewMap;
+    @FXML private Menu raceMenu;
+    @FXML private CheckMenuItem fullAnnotationMenuItem;
+    @FXML private CheckMenuItem importantAnnotationMenuItem;
+    @FXML private CheckMenuItem noAnnotationMenuItem;
     @FXML private WebView map;
 
-    private Boolean onImportant;
-    private Boolean boatNameImportant;
-    private Boolean boatSpeedImportant;
-    private Boolean estimatedTimeImportant;
-    private Boolean timeSinceLastMarkImportant;
+    private boolean fpsOn;
+    private boolean onImportant;
 
     private Race race;
     private RaceLoop raceLoop;
@@ -54,17 +66,19 @@ public class MainWindowController {
     private RaceClock raceClock;
     private WindDirection windDirection;
     private PixelMapper pixelMapper;
+    private Map<AnnotationType, Boolean> importantAnnotations;
+
     private Stage stage;
 
     @FXML
     public void initialize() {
-        onImportant = true;
-        boatNameImportant = true;
-        boatSpeedImportant = false;
-        estimatedTimeImportant = false;
-        timeSinceLastMarkImportant = false;
+        loadIcon();
+        fpsOn = true;
+        importantAnnotations = new HashMap<>();
+        for (AnnotationType type : AnnotationType.values()) {
+            importantAnnotations.put(type, false);
+        }
         group.setManaged(false);
-        map.setVisible(true);
     }
 
 
@@ -80,75 +94,117 @@ public class MainWindowController {
     }
 
 
+/**
+     * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
+     */    private void loadIcon(){
+        ImageView icon = new ImageView("/images/boat-310164_640.png");
+        icon.setFitHeight(18);
+        icon.setFitWidth(18);
+        raceMenu.setGraphic(icon);
+    }
+
+    /**
+     * initialises the sparkline graph.
+     */
+    private void setUpSparklinesCategory(Map<Boat, Color> boatColors) {
+        List<String> list = new ArrayList<>();
+        for (int i = race.getStartingList().size(); i > 0; i--) {
+            list.add(String.valueOf(i));
+        }
+        ObservableList<String> observableList = FXCollections.observableList(list);
+        yPositionsAxis.setCategories(observableList);
+        Queue<SparklineDataPoint> dataQueue = new LinkedList<>();
+        SparklineDataGetter dataGetter = new SparklineDataGetter(dataQueue, race);
+        dataGetter.listenToBoat();
+
+        DisplaySparkline displaySparkline = new DisplaySparkline(dataQueue, boatColors, sparklinesChart);
+        displaySparkline.start();
+
+    }
+
+    /**
+     * Toggles the fps by setting label to be visible / invisible.
+     */
     @FXML
     public void toggleFPS() {
-        fpsLabel.setVisible(!fpsToggler.isSelected());
+        fpsOn = !fpsOn;
+        fpsLabel.setVisible(fpsOn);
     }
 
 
+    /**
+     * Sets the annotation level to be full (all annotations showing)
+     */
     @FXML
     public void setFullAnnotationLevel() {
         onImportant = false;
+        fullAnnotationMenuItem.setSelected(true);
+        importantAnnotationMenuItem.setSelected(false);
+        noAnnotationMenuItem.setSelected(false);
         for (AnnotationType type : AnnotationType.values()) {
             raceRenderer.setVisibleAnnotations(type, true);
         }
     }
 
 
+    /**
+     * Sets the annotation level to be none (no annotations showing)
+     */
     @FXML
     public void setNoneAnnotationLevel() {
         onImportant = false;
+        fullAnnotationMenuItem.setSelected(false);
+        importantAnnotationMenuItem.setSelected(false);
+        noAnnotationMenuItem.setSelected(true);
         for (AnnotationType type : AnnotationType.values()) {
             raceRenderer.setVisibleAnnotations(type, false);
         }
     }
 
 
+    /**
+     * Sets the annotation level to be important (user selects annotations showing)
+     */
     @FXML
-    public void setImportantAnnotationLevel() {
+    public void setToImportantAnnotationLevel() {
         onImportant = true;
-        raceRenderer.setVisibleAnnotations(AnnotationType.NAME, boatNameImportant);
-        raceRenderer.setVisibleAnnotations(AnnotationType.SPEED, boatSpeedImportant);
-        raceRenderer.setVisibleAnnotations(AnnotationType.ESTIMATED_TIME_NEXT_MARK, estimatedTimeImportant);
-        raceRenderer.setVisibleAnnotations(AnnotationType.TIME_SINCE_LAST_MARK, timeSinceLastMarkImportant);
-    }
-
-
-    public void toggleBoatName() {
-        boatNameImportant = !boatNameImportant;
-        if (onImportant) {
-            setImportantAnnotationLevel();
+        fullAnnotationMenuItem.setSelected(false);
+        importantAnnotationMenuItem.setSelected(true);
+        noAnnotationMenuItem.setSelected(false);
+        for (Map.Entry<AnnotationType, Boolean> importantAnnotation : importantAnnotations.entrySet()) {
+            raceRenderer.setVisibleAnnotations(importantAnnotation.getKey(), importantAnnotation.getValue());
         }
     }
 
 
-    public void toggleBoatSpeed() {
-        boatSpeedImportant = !boatSpeedImportant;
-        if (onImportant) {
-            setImportantAnnotationLevel();
+    /**
+     * Brings up a pop-up window, showing all possible annotation options that the user can toggle on and off.
+     * Only shows when the annotation level is on important.
+     */
+    @FXML
+    public void openAnnotationsWindow() {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ImportantAnnotationsPopup.fxml"));
+        Scene newScene;
+        try {
+            newScene = new Scene(loader.load());
+        } catch (IOException e) {
+            // TODO: pop up maybe
+            return;
         }
-    }
+        ImportantAnnotationsController controller = loader.getController();
+        controller.addObserver(this);
+        controller.setImportant(importantAnnotations);
 
-
-    public void toggleEstimatedTime() {
-        estimatedTimeImportant = !estimatedTimeImportant;
-        if (onImportant) {
-            setImportantAnnotationLevel();
-        }
-    }
-
-    public void toggleTimeSinceLastMark() {
-        timeSinceLastMarkImportant = !timeSinceLastMarkImportant;
-        if (onImportant) {
-            setImportantAnnotationLevel();
-        }
+        Stage inputStage = new Stage();
+        inputStage.setScene(newScene);
+        inputStage.showAndWait();
     }
 
 
     /**
      * Sets the cell values for the race table, these are place, boat name and boat speed.
      */
-    private void setUpTable() {
+    private void setUpTable(Map<Boat, Color> boatColors) {
         Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
                 boat.placeProperty(),
         };
@@ -167,8 +223,8 @@ public class MainWindowController {
                 });
         tableView.setItems(sortedList);
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
-        boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("boatName"));
-        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
+        boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("knotsSpeed"));
         boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
             @Override
             public void updateItem(Double speed, boolean empty) {
@@ -176,30 +232,50 @@ public class MainWindowController {
                 if (empty) {
                     setText(null);
                 } else {
-                    setText(String.format("%.3f", speed));
+                    setText(String.format("%.2f", speed));
                 }
             }
         });
-        tableView.getColumns().setAll(boatPositionColumn, boatNameColumn, boatSpeedColumn);
+        boatColorColumn.setCellFactory(column -> new TableCell<Boat, String>() {
+            private final Map<Boat, Color> colors = boatColors;
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem("", empty);
+
+                Boat boat = (Boat) getTableRow().getItem();
+                if (boat != null) {
+                    Color color = colors.get(boat);
+                    if (color != null) {
+                        setStyle(String.format("-fx-background-color: #%02x%02x%02x", (int) (color.getRed() * 255), (int) (color.getGreen() * 255), (int) (color.getBlue() * 255)));
+                    }
+                }
+            }
+        });
+        boatPositionColumn.setSortable(false);
+        boatNameColumn.setSortable(false);
+        boatSpeedColumn.setSortable(false);
+        boatColorColumn.setSortable(false);
+        tableView.getColumns().setAll(boatPositionColumn, boatColorColumn, boatNameColumn, boatSpeedColumn);
     }
 
     /**
-     * sets teh wind direction of the app using the wind direction given
+     * retrieves the wind direction, scales the size of the arrow and then draws it on the Group
      */
     private void startWindDirection() {
+        arrow.setScaleX(0.4);
         windDirection = new WindDirection(race, arrow, race.getCourse().getWindDirection());
         windDirection.start();
     }
+
 
     /**
      * initialises race variables and begins the race loop. Adds listeners to the race view to listen for when the window
      * has been re-sized.
      *
-     * @param race        The race which is going to be displayed.
-     * @param interpreter A message interpreter.
-     * @param receiver    A socket message receiver.
+     * @param race The race which is going to be displayed.
      */
-    public void setUp(Race race, MessageInterpreter interpreter, SocketMessageReceiver receiver) {
+    public void setUp(Race race) {
         this.race = race;
         setCourseCenter(race.getCourse());
 
@@ -207,7 +283,7 @@ public class MainWindowController {
         backgroundRenderer = new BackgroundRenderer(pixelMapper, race, map.getEngine());
         raceRenderer = new RaceRenderer(pixelMapper, race, group, raceViewPane);
         raceRenderer.renderBoats();
-        courseRenderer =  new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
+        courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
 
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
@@ -230,7 +306,9 @@ public class MainWindowController {
         backgroundRenderer.northProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
         backgroundRenderer.southProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
 
-        setUpTable();
+        setUpTable(raceRenderer.boatColors());
+
+        setToImportantAnnotationLevel();
     }
 
     /**
@@ -248,6 +326,35 @@ public class MainWindowController {
         return raceClock;
     }
 
+
+    /**
+     * Receives updates from the ImportantAnnotationController to update the important annotations
+     *
+     * @param o the observable object.
+     * @param arg an argument passed to the notifyObservers method.
+     */
+    @Override
+    public void update(java.util.Observable o, Object arg) {
+        if (arg instanceof Map) {
+            Map annotations = (Map) arg;
+            for (AnnotationType type : AnnotationType.values()) {
+                if (annotations.containsKey(type)) {
+                    Object on = annotations.get(type);
+                    if (on instanceof Boolean) {
+                        importantAnnotations.put(type, (Boolean) on);
+                    }
+                }
+            }
+            if (onImportant) {
+                setToImportantAnnotationLevel();
+            }
+        }
+    }
+
+    /**
+     * Extracts the central course coordinate from the course
+     * @param course The course for which the midpoint is calculated
+     */
     private void setCourseCenter(Course course) {
         List<Coordinate> points = new ArrayList<>();
         for (BoundaryMark boundaryMark : course.getBoundaries()) {

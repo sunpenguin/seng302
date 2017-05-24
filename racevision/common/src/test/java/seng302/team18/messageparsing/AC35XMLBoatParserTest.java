@@ -2,6 +2,7 @@ package seng302.team18.messageparsing;
 
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.model.Boat;
 
 import java.nio.file.Files;
@@ -42,12 +43,12 @@ public class AC35XMLBoatParserTest {
         for (int i = 0; i < expected.size(); i++) {
             Boat exp = expected.get(i);
             Boat act = actual.get(i);
-            assertEquals(exp.getBoatName(), act.getBoatName());
+            assertEquals(exp.getName(), act.getName());
             assertEquals(exp.getShortName(), act.getShortName());
             assertEquals(exp.getCoordinate(), act.getCoordinate());
             assertEquals(exp.getDestination(), act.getDestination());
             assertEquals(exp.getHeading(), act.getHeading(), 0.1);
-            assertEquals(exp.getLeg(), act.getLeg());
+            assertEquals(exp.getLegNumber(), act.getLegNumber());
             assertEquals(exp.getPlace(), act.getPlace());
             assertEquals(exp.getSpeed(), act.getSpeed(), 0.1);
         }

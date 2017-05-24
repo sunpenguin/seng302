@@ -1,4 +1,4 @@
-package seng302.team18.messageparsing;
+package seng302.team18.message;
 
 import java.util.List;
 import java.util.Map;
@@ -12,11 +12,8 @@ public class AC35RaceStatusMessage implements MessageBody {
     private int raceStatus;
     private long startTime;
     private double windDirection;
-    private Map <Integer, List> boatStatus;
+    private List<AC35BoatStatusMessage> boatStatus;
 
-    private int BOAT_STATUS_POSITION = 0;
-    private int LEG_POSITION = 1;
-    private int ESTIMATED_TIME_POSITION = 2;
 
 
     /**
@@ -25,9 +22,9 @@ public class AC35RaceStatusMessage implements MessageBody {
      * @param raceStatus of the race in Epoch milliseconds.
      * @param startTime of the race.
      * @param windDirection of the race.
-     * @param boatStatus a map of the boats id to the status, leg, and estimated time to next mark.
+     * @param boatStatus a list of the AC35BoatStatusMessages.
      */
-    public AC35RaceStatusMessage(long currentTime, int raceStatus, long startTime, double windDirection, Map <Integer, List> boatStatus) {
+    public AC35RaceStatusMessage(long currentTime, int raceStatus, long startTime, double windDirection, List<AC35BoatStatusMessage> boatStatus) {
         this.currentTime = currentTime;
         this.raceStatus = raceStatus;
         this.startTime = startTime;
@@ -68,32 +65,8 @@ public class AC35RaceStatusMessage implements MessageBody {
      * Getter for the map of the boats id to the status, leg, and estimated time to next mark.
      * @return the map of the boats id to the status, leg, and estimated time to next mark.
      */
-    public Map<Integer, List> getBoatStatus() {
+    public List<AC35BoatStatusMessage> getBoatStatus() {
         return boatStatus;
-    }
-
-    /**
-     * Getter for the index of the boat status.
-     * @return the index of the boat status.
-     */
-    public int getBoatStatusPosition() {
-        return BOAT_STATUS_POSITION;
-    }
-
-    /**
-     * Getter for the index of the leg number.
-     * @return the index of the leg number.
-     */
-    public int getLegPosition() {
-        return LEG_POSITION;
-    }
-
-    /**
-     * Getter for the index of the estimated time at next mark.
-     * @return the index of the estimated time at next mark.
-     */
-    public int getEstimatedTimePosition() {
-        return ESTIMATED_TIME_POSITION;
     }
 
     /**

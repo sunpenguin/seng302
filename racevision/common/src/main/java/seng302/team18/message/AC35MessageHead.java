@@ -1,4 +1,4 @@
-package seng302.team18.messageparsing;
+package seng302.team18.message;
 
 /**
  * MessageHead for the AC35 streaming protocol.

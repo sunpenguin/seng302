@@ -1,5 +1,6 @@
 package seng302.team18.test_mock.connection;
 
+import seng302.team18.message.AC35MessageType;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.util.ByteCheck;
@@ -8,7 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Created by Alice on 21/04/17.
+ * Generates race messages in the AC35 protocol.
  */
 public class RaceMessageGenerator extends ScheduledMessageGenerator {
 
@@ -16,8 +17,13 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
     private String message;
     private long startTime = System.currentTimeMillis();
 
+    /**
+     * Constructs a new instance of RaceMessageGenerator.
+     *
+     * @param race Race to generate messages from.
+     */
     public RaceMessageGenerator(Race race) {
-        super(2, 12);
+        super(2, AC35MessageType.RACE_STATUS.getCode());
         this.race = race;
     }
 
@@ -60,8 +66,13 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
 
         for (Boat boat : race.getStartingList()) {
             byte[] sourceIDBytes = ByteCheck.intToByteArray(boat.getId());
-            byte statusByte = 0x2; // TODO: Currently always "racing" need to add this to boat class, update as race goes on
-            byte legNumberByte = (byte) boat.getLeg().getLegNumber(); // TODO: Update leg numbers so that 0 is prestart, 1 is first leg and so on
+            byte statusByte;
+            if (race.getFinishedList().contains(boat)) {
+                statusByte = 0x3;
+            } else {
+                statusByte = 0x2;
+            }
+            byte legNumberByte = (byte) boat.getLegNumber(); // TODO: Update leg numbers so that 0 is prestart, 1 is first leg and so on
             byte numPenaltiesAwardedByte = 7; // TODO: Add this field to boat
             byte numPenaltiesServedByte = 4; // TODO: Add this field to boat
             byte[] estTimeAtNextMark = ByteCheck.convertLongTo6ByteArray(11111111111L); // TODO: calculate this value
@@ -75,13 +86,6 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
             outputSteam.write(estTimeAtNextMark);
             outputSteam.write(estTimeAtFinish);
         }
-
         return outputSteam.toByteArray();
-    }
-
-    private String fixLength(String s, int len) { //TODO move to super class so all subclasses can use this
-        StringBuilder str = new StringBuilder(s);
-        str.setLength(len);
-        return String.valueOf(str);
     }
 }

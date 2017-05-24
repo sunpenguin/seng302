@@ -13,7 +13,10 @@ public class HeaderGenerator {
     /**
      * A method used to generate the header for a message of a certain type.
      *
-     * @param type The type of the message the header is generated for.
+     * @param type            The type of the message the header is generated for.
+     * @param lengthOfMessage length of the message the header in generated for
+     * @return header as a byte array.
+     * @throws IOException if an I/O exception occurs is thrown by {@link java.io.OutputStream#write(byte[]) java.io.OutputStream#write(byte[])}
      */
     public static byte[] generateHeader(int type, short lengthOfMessage) throws IOException {
 

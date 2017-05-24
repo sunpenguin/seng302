@@ -9,8 +9,8 @@ import java.util.zip.Checksum;
 
 public class CRCGenerator {
 
-    /*
-    Calculate CRC32 checksum for header and message body.
+    /**
+     * Calculate CRC32 checksum for header and message body.
      */
     public static byte[] generateCRC(byte[] message) throws IOException {
 
@@ -24,8 +24,11 @@ public class CRCGenerator {
 
             // read 8 bits one at a time
             for (int i = 0; i < 8; i++) {
-                if ((temp & 1) == 1) temp = (temp >>> 1) ^ poly;
-                else                 temp = (temp >>> 1);
+                if ((temp & 1) == 1) {
+                    temp = (temp >>> 1) ^ poly;
+                } else {
+                    temp = (temp >>> 1);
+                }
             }
             crc = (crc >>> 8) ^ temp;
         }

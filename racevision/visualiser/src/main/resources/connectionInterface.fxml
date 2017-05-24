@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="578.0" prefWidth="777.0" styleClass="background" stylesheets="@stylesheets/preRaceStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.PreRaceController">
+   <children>
+      <Label layoutX="182.0" layoutY="22.0" text="Welcome to RaceVision!" textFill="WHITE">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
+      <Label layoutX="215.0" layoutY="137.0" text="Live AC35 Data Stream" textFill="WHITE">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Button fx:id="liveConnectButton" layoutX="431.0" layoutY="135.0" mnemonicParsing="false" onAction="#openLiveStream" text="Connect!" />
+      <Label layoutX="214.0" layoutY="179.0" text="Test AC35 Data Stream" textFill="WHITE">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <Button fx:id="TestConnectButton" layoutX="431.0" layoutY="176.0" mnemonicParsing="false" onAction="#openTestStream" text="Connect!" />
+      <Button fx:id="mockConnectButton" layoutX="431.0" layoutY="216.0" mnemonicParsing="false" onAction="#openMockStream" text="Connect!" />
+      <Label layoutX="236.0" layoutY="218.0" text="Mock Data Stream" textFill="WHITE">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

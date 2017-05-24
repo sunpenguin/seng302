@@ -1,4 +1,7 @@
-package seng302.team18.messageparsing;
+package seng302.team18.message;
+
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.MessageHead;
 
 /**
  * Created by david on 4/10/17.

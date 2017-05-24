@@ -13,36 +13,41 @@ import java.time.format.DateTimeFormatter;
  */
 public class ZoneTimeClock extends AnimationTimer {
 
-    private Label timerLabel;
-//    private double timeScaleFactor;
-    private ZonedDateTime zonedDateTime;
-    private ZoneId zoneId;
-    private long previousTime = 0;
-    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private Label timeLabel;
+    private ZonedDateTime time;
+    private DateTimeFormatter formatter;
 
-//    public ZoneTimeClock(Label timerLabel, double timeScale, ZoneId zoneId) {
-    public ZoneTimeClock(Label timerLabel, ZoneId zoneId, ZonedDateTime currentTime) {
-            this.timerLabel = timerLabel;
-//        this.timeScaleFactor = timeScale;
-
-        this.zoneId = zoneId;
-        zonedDateTime = currentTime;
-        timerLabel.setTextFill(Color.BLACK);
-        timerLabel.setStyle("-fx-font-size: 2em;");
+    /**
+     * Construct a new ZoneTimeClock.
+     * @param timeLabel JavaFX Label to display the time on.
+     * @param formatter formatter for time when displaying on label.
+     */
+    public ZoneTimeClock(Label timeLabel, DateTimeFormatter formatter) {
+        this.timeLabel = timeLabel;
+        this.formatter = formatter;
+        this.time = ZonedDateTime.now();
+        timeLabel.setTextFill(Color.BLACK);
+        timeLabel.setStyle("-fx-font-size: 2em;");
+        timeLabel.setText("");
     }
 
+
+    /**
+     * Sets the time of the clock in seconds.
+     * @param time current time.
+     */
+    public void setTime(ZonedDateTime time) { // seconds please
+        this.time = time;
+    }
+
+
+    /**
+     * Updates the label to match the time set in setTime.
+     * @param now unused.
+     */
     @Override
-    public void handle(long currentTime) {
-        if (previousTime == 0) {
-            previousTime = currentTime;
-            return;
-        }
-
-        double nanoSecondsElapsed = (currentTime - previousTime);// * timeScaleFactor;
-        previousTime = currentTime;
-
-        zonedDateTime = zonedDateTime.plusNanos((long) nanoSecondsElapsed);
-        timerLabel.setText(zonedDateTime.format(timeFormatter));
+    public void handle(long now) {
+        timeLabel.setText(time.format(formatter));
     }
 
 
