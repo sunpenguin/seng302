@@ -19,12 +19,7 @@
            <children>
                <ImageView fx:id="imageViewMap" fitHeight="690.0" fitWidth="690.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                <Group fx:id="group" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
-               <Label fx:id="fpsLabel" layoutX="611.0" prefHeight="15.0" prefWidth="79.0" text="FPS:" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                   <font>
-                       <Font name="System Bold" size="13.0" />
-                   </font>
-               </Label>
-               <AnchorPane layoutX="2.0" layoutY="7.0" prefHeight="143.0" prefWidth="104.0">
+               <AnchorPane layoutX="2.0" layoutY="-20.0" prefHeight="143.0" prefWidth="104.0">
                    <children>
                        <Polygon fx:id="arrow" layoutX="50.0" layoutY="63.0" scaleX="0.3" scaleY="0.6" stroke="BLACK" strokeType="INSIDE">
                            <points>
@@ -137,5 +132,10 @@
                </GridPane>
            </children>
        </AnchorPane>
+         <Label fx:id="fpsLabel" layoutX="808.0" layoutY="14.0" prefHeight="15.0" prefWidth="79.0" text="FPS:" AnchorPane.rightAnchor="393.0" AnchorPane.topAnchor="14.0">
+             <font>
+                 <Font name="System Bold" size="13.0" />
+             </font>
+         </Label>
    </children>
 </AnchorPane>
