@@ -20,20 +20,18 @@ import java.util.List;
 
 /**
  * The parser that will parse AC35 XML Boat message bodies.
- * Created by sungu on 16/04/2017.
  */
 public class AC35XMLBoatParser implements MessageBodyParser {
 
     /**
      * Parse an input stream to create a boat message holding boat information.
+     *
      * @param stream The input stream from the data source.
      * @return A message object holding the boat information
      */
     @Override
     public AC35XMLBoatMessage parse(InputStream stream) {
         final String BOATS_ELEMENT = "BoatConfig";
-        final String BOAT_SETTINGS = "Settings";
-        final String BOAT_SHAPES = "BoatShapes";
         final String BOATS = "Boats";
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -47,13 +45,6 @@ public class AC35XMLBoatParser implements MessageBodyParser {
         }
         doc.getDocumentElement().normalize();
         Element boatsElement = (Element) doc.getElementsByTagName(BOATS_ELEMENT).item(0);
-        // Settings contains RaceBoatType, BoatDimension, ZoneSize, ZoneLimits
-        Node settingsNode = boatsElement.getElementsByTagName(BOAT_SETTINGS).item(0);
-        // Currently not getting any information from it.
-
-        // Do we need boats shapes right now?
-        // Has BoatShape (ShapeID), which has Vertices (with Vtx) and can have Catamaran, Bowsprit, Trampoline
-        Node shapeNode = boatsElement.getElementsByTagName(BOAT_SHAPES).item(0);
 
         Node boatsNode = boatsElement.getElementsByTagName(BOATS).item(0);
         List<Boat> boats = parseBoats(boatsNode);
@@ -65,6 +56,7 @@ public class AC35XMLBoatParser implements MessageBodyParser {
 
     /**
      * Converts a byte array to a data stream which can be passed to the other parse method.
+     *
      * @param bytes An array of bytes
      * @return A boat message returned by the other parse method.
      */
@@ -76,11 +68,11 @@ public class AC35XMLBoatParser implements MessageBodyParser {
 
     /**
      * Used in the parse method to parse boats from a boat element in the boat xml file.
+     *
      * @param boatsNode the noe of the boats element
      * @return A list of particpating boats.
      */
     public List<Boat> parseBoats(Node boatsNode) {
-        // A boat has Type, SourceID, ShapeID, HullNum, StoweName with elements GPSposition and FlagPosition
         final String BOAT_ELEMENT = "Boat";
         final String BOAT_NAME = "BoatName";
         final String BOAT_SHORT_NAME = "ShortName";

@@ -16,15 +16,15 @@ public class Leg {
 
     /**
      * A constructor for the Leg
-     * @param departure The CompoundMark at the beginning of the leg
+     *
+     * @param departure   The CompoundMark at the beginning of the leg
      * @param destination The CompoundMark at the end of the leg
-     * @param legNumber The number of the leg in the race
+     * @param legNumber   The number of the leg in the race
      */
     public Leg(CompoundMark departure, CompoundMark destination, int legNumber) {
         this.destination = destination;
         this.departure = departure;
-//        this.heading = GPSCalculations.findAngle(departure.getCoordinate(), destination.getCoordinate());
-        this.legNumber = legNumber; // TODO this is a kinda shitty way of doing it might change later
+        this.legNumber = legNumber; // TODO this might be a bad way of doing it. Might need to change it later.
         boatsCompleted = new ArrayList<>();
     }
 

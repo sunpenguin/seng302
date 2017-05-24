@@ -8,8 +8,6 @@ import java.util.Map;
 /**
  * A factory which reads mxl message and parser types and creates parsers of the type corresponding to the stream
  * information.
- *
- * Created by david on 4/10/17.
  */
 public class AC35XMLParserFactory implements MessageParserFactory {
 
@@ -22,6 +20,7 @@ public class AC35XMLParserFactory implements MessageParserFactory {
 
     /**
      * Create a message body parser of the given integer type.
+     *
      * @param type An integer representation of the required type.
      * @return A message body parser matching the given type.
      */
@@ -33,6 +32,7 @@ public class AC35XMLParserFactory implements MessageParserFactory {
 
     /**
      * Overriddes the current error detector methods and returns a new error detector.
+     *
      * @return An error detector.
      */
     @Override
@@ -52,6 +52,7 @@ public class AC35XMLParserFactory implements MessageParserFactory {
 
     /**
      * Maps each XML message type to its parser.
+     *
      * @return A message body type and body parser map.
      */
     private Map<AC35MessageType, MessageBodyParser> initialiseMap() {
@@ -61,7 +62,6 @@ public class AC35XMLParserFactory implements MessageParserFactory {
         parserMap.put(AC35MessageType.XML_BOATS, new AC35XMLBoatParser());
         return parserMap;
     }
-
 
 
 }

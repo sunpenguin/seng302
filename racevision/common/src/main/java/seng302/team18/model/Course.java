@@ -1,8 +1,5 @@
 package seng302.team18.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,7 +72,7 @@ public class Course {
     }
 
 
-    public List<Mark> getMarks(){
+    public List<Mark> getMarks() {
         List<Mark> marks = new ArrayList<>();
         for (CompoundMark cMark : compoundMarks) {
             marks.addAll(cMark.getMarks());
@@ -122,25 +119,26 @@ public class Course {
         return legs.get(leg.getLegNumber());
     }
 
-    private void setupLegs(){
+    private void setupLegs() {
         legs = new ArrayList<>();
-         for (int i = 0; i < markRoundings.size() - 1; i++) {
-             CompoundMark dep = markRoundings.get(i).getCompoundMark();
-             CompoundMark dest = markRoundings.get(i + 1).getCompoundMark();
-             Leg currentLeg = new Leg(dep, dest, markRoundings.get(i).getSequenceNumber());
-             legs.add(currentLeg);
-         }
+        for (int i = 0; i < markRoundings.size() - 1; i++) {
+            CompoundMark dep = markRoundings.get(i).getCompoundMark();
+            CompoundMark dest = markRoundings.get(i + 1).getCompoundMark();
+            Leg currentLeg = new Leg(dep, dest, markRoundings.get(i).getSequenceNumber());
+            legs.add(currentLeg);
+        }
     }
 
     /**
      * Method find a leg with the correct legNumber from the courses legs.
+     *
      * @param legNumber integer, the leg number of the leg to be found.
      * @return Leg with the same leg number as the integer given.
      */
-    public Leg getLeg(int legNumber){
+    public Leg getLeg(int legNumber) {
         Leg foundLeg = legs.get(0);
-        for(Leg leg : legs){
-            if (leg.getLegNumber() == legNumber){
+        for (Leg leg : legs) {
+            if (leg.getLegNumber() == legNumber) {
                 foundLeg = leg;
             }
         }

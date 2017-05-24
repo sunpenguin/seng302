@@ -1,9 +1,14 @@
 package seng302.team18.message;
 
 /**
- * Created by dhl25 on 10/04/17.
+ * The interface for a MessageBody.
  */
 public interface MessageBody {
 
-    public int getType();
+    /**
+     * Gets the type of code from the message type.
+     *
+     * @return the code associated with the message type.
+     */
+    int getType();
 }

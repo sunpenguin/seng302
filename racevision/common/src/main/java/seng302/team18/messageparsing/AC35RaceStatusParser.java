@@ -12,14 +12,14 @@ import java.util.*;
 
 /**
  * A parser which reads information from a byte stream and creates message objects representing race status information.
- *
- * Created by jds112 on 19/04/17.
  */
 public class AC35RaceStatusParser implements MessageBodyParser {
 
     /**
-     * @param stream holds information about the race status
-     * @return A message holding information about the race status
+     * Reads a stream and associates the information read with a boat location message.
+     *
+     * @param stream holds information about the race status.
+     * @return A message holding information about the race status.
      */
     @Override
     public MessageBody parse(InputStream stream) {
@@ -31,8 +31,10 @@ public class AC35RaceStatusParser implements MessageBodyParser {
     }
 
     /**
-     * @param bytes A list of bytes holding information about the race status
-     * @return A message holding information about the race status
+     * Reads a byte array and associates the information read with a race status message.
+     *
+     * @param bytes A list of bytes holding information about the race status.
+     * @return A message holding information about the race status.
      */
     @Override
     public MessageBody parse(byte[] bytes) { // more final declarations than actual code LOL

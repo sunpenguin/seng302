@@ -5,8 +5,18 @@ package seng302.team18.message;
  */
 public interface MessageHead {
 
-    public int getType();
+    /**
+     * Gets the code of the message type.
+     *
+     * @return the code of the message type.
+     */
+    int getType();
 
-    public int bodySize();
+    /**
+     * Gets the size of the message body.
+     *
+     * @return the size of the message body.
+     */
+    int bodySize();
 
 }

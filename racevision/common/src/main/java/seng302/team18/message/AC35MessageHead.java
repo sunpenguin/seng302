@@ -10,8 +10,9 @@ public class AC35MessageHead implements MessageHead {
 
     /**
      * Constructor for the AC35MessageHead.
-     * @param type of the messages body.
-     * @param bodySize size of the messages body.
+     *
+     * @param type     of the message body.
+     * @param bodySize size of the message body.
      */
     public AC35MessageHead(AC35MessageType type, int bodySize) {
         this.type = type;

@@ -10,7 +10,6 @@ import java.net.Socket;
 
 /**
  * Sets up a client socket to read from the AC35 messageparsing stream.
- *
  */
 
 public class SocketMessageReceiver {
@@ -21,8 +20,7 @@ public class SocketMessageReceiver {
 
     public SocketMessageReceiver(String host, int portNumber, MessageParserFactory parserFactory) throws IOException {
         this.parserFactory = parserFactory;
-        // Create input and output streams for reading in messageparsing
-        socket = new Socket(host, portNumber); // "livedata.americascup.com" 4941
+        socket = new Socket(host, portNumber);
         inStream = socket.getInputStream();
         if (!inStream.markSupported()) {
             inStream = new BufferedInputStream(inStream);
@@ -33,6 +31,7 @@ public class SocketMessageReceiver {
     /**
      * Reads the next message from the input stream. If it is of a type which the program can read then a parser and
      * message are created. Otherwise the message is ignored and null is returned.
+     *
      * @return A message body whose type matches the type required by the stream.
      * @throws IOException if an error occurs with the input stream.
      */
@@ -63,8 +62,11 @@ public class SocketMessageReceiver {
         return null;
     }
 
-
-
+    /**
+     * Closes the socket data is coming from.
+     *
+     * @return if the socket successfully closed.
+     */
     public boolean close() {
         try {
             socket.close();

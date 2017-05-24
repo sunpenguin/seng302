@@ -24,6 +24,7 @@ public class GPSCalculations {
      * @param point2 Coordinates for point2
      * @return The distance in metres
      */
+    // TODO: Check if the method provides us any use. If not, can remove.
     public double distance(Coordinate point1, Coordinate point2) {
 
         double lat1 = point1.getLatitude();
@@ -55,8 +56,8 @@ public class GPSCalculations {
      * and a bearing from that coordinate to the destination coordinate
      *
      * @param initialCoord the initial coordinate
-     * @param bearing the bearing from the initial coordinate to the destination coordinate
-     * @param distance the distance from the initial coordinate to the destination coordinate
+     * @param bearing      the bearing from the initial coordinate to the destination coordinate
+     * @param distance     the distance from the initial coordinate to the destination coordinate
      * @return the destination coordinate
      */
     public Coordinate toCoordinate(Coordinate initialCoord, double bearing, double distance) {
@@ -112,13 +113,13 @@ public class GPSCalculations {
 
     /**
      * Returns the bearing (angle from north going clockwise) between the origin and destination.
-     *
+     * <p>
      * Pre condition: origin and destination are not null, have latitude between -90 and 90,
      * longitude between -180 and 180.
-     *
+     * <p>
      * Post condition: angle from north to destination calculated at origin.
      *
-     * @param origin starting point.
+     * @param origin      starting point.
      * @param destination end point.
      * @return angle from north to destination calculated at origin.
      */

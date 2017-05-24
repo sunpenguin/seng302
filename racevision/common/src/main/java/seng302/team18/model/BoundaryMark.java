@@ -1,7 +1,7 @@
 package seng302.team18.model;
 
 /**
- * Created by dhl25 on 11/04/17.
+ * A class which stores information about a boundary mark.
  */
 public class BoundaryMark implements GeographicLocation {
 

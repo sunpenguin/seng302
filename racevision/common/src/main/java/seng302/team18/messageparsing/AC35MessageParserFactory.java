@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by dhl25 on 10/04/17.
+ * Factory method for messages sent by the AC35 streaming protocol.
  */
 public class AC35MessageParserFactory implements MessageParserFactory {
 
@@ -19,6 +19,7 @@ public class AC35MessageParserFactory implements MessageParserFactory {
 
     /**
      * Creates a message parser of a specific type.
+     *
      * @param type An integer value corresponding ot a specific type of message parser.
      * @return A message parser of a specific type.
      */
@@ -35,6 +36,7 @@ public class AC35MessageParserFactory implements MessageParserFactory {
 
     /**
      * Tells the parser generator which type corresponds to which message parser
+     *
      * @return A message parser corresponding to the given type
      */
     private Map<AC35MessageType, MessageBodyParser> initialiseMap() {

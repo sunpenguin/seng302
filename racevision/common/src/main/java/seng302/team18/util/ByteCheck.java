@@ -5,25 +5,23 @@ import java.nio.ByteOrder;
 
 /**
  * This class stores the methods that are used for dealing with byte errors.
- * @author Sunguin Peng
  */
 public class ByteCheck {
 
     /**
      * Convert an int to a byte array of length 4. Endianness is little endian
+     *
      * @param value value to convert
      * @return converted byte array
      */
     public static byte[] intToByteArray(int value) {
-//        return ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(value).array();
         ByteBuffer buffer = ByteBuffer.allocate(Integer.BYTES);
         buffer.putInt(value);
 
         byte[] result = new byte[4];
         System.arraycopy(buffer.array(), 0, result, 0, 4);
 
-        for(int i = 0; i < result.length / 2; i++)
-        {
+        for (int i = 0; i < result.length / 2; i++) {
             byte temp = result[i];
             result[i] = result[result.length - i - 1];
             result[result.length - i - 1] = temp;
@@ -32,22 +30,21 @@ public class ByteCheck {
         return result;
     }
 
-//    Currently not in use
     /**
      * Convert an double to a byte array of length 8. Endianness is big endian
+     *
      * @param value value to convert
      * @return converted byte array
      */
+    // Currently not in use
     public static byte[] doubleToByteArray(double value) {
-//        return ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN).putDouble(value).array();
         ByteBuffer buffer = ByteBuffer.allocate(Double.BYTES);
         buffer.putDouble(value);
 
         byte[] result = new byte[8];
         System.arraycopy(buffer.array(), 0, result, 0, 8);
 
-        for(int i = 0; i < result.length / 2; i++)
-        {
+        for (int i = 0; i < result.length / 2; i++) {
             byte temp = result[i];
             result[i] = result[result.length - i - 1];
             result[result.length - i - 1] = temp;
@@ -56,22 +53,22 @@ public class ByteCheck {
         return result;
     }
 
-//    Currently not in use
+
     /**
      * Convert an long to a byte array of length 8. Endianness is big endian
+     *
      * @param value value to convert
      * @return converted byte array
      */
+    //    Currently not in use
     public static byte[] longToByteArray(long value) {
-//        return ByteBuffer.allocate(Long.BYTES).order(ByteOrder.BIG_ENDIAN).putLong(value).array();
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.putLong(value);
 
         byte[] result = new byte[8];
         System.arraycopy(buffer.array(), 0, result, 0, 8);
 
-        for(int i = 0; i < result.length / 2; i++)
-        {
+        for (int i = 0; i < result.length / 2; i++) {
             byte temp = result[i];
             result[i] = result[result.length - i - 1];
             result[result.length - i - 1] = temp;
@@ -82,19 +79,18 @@ public class ByteCheck {
 
     /**
      * Convert a short to a byte array of length 2. Endianness is little endian
+     *
      * @param value value to convert
      * @return converted byte array
      */
     public static byte[] shortToByteArray(short value) {
-//        return ByteBuffer.allocate(2).order(ByteOrder.BIG_ENDIAN).putShort(value).array();
         ByteBuffer buffer = ByteBuffer.allocate(Short.BYTES);
         buffer.putShort(value);
 
         byte[] result = new byte[2];
         System.arraycopy(buffer.array(), 0, result, 0, 2);
 
-        for(int i = 0; i < result.length / 2; i++)
-        {
+        for (int i = 0; i < result.length / 2; i++) {
             byte temp = result[i];
             result[i] = result[result.length - i - 1];
             result[result.length - i - 1] = temp;
@@ -113,8 +109,7 @@ public class ByteCheck {
         byte[] valueBytes = new byte[6];
         System.arraycopy(buffer.array(), 2, valueBytes, 0, 6);
 
-        for(int i = 0; i < valueBytes.length / 2; i++)
-        {
+        for (int i = 0; i < valueBytes.length / 2; i++) {
             byte temp = valueBytes[i];
             valueBytes[i] = valueBytes[valueBytes.length - i - 1];
             valueBytes[valueBytes.length - i - 1] = temp;
@@ -124,13 +119,12 @@ public class ByteCheck {
     }
 
 
-
-
     /**
      * The method which converts the byte array (little endian) to integer.
      * Corrects if there are less than 4 bytes.
-     * @param bytes The whole byte array in little endian
-     * @param index The index where the split begins
+     *
+     * @param bytes  The whole byte array in little endian
+     * @param index  The index where the split begins
      * @param length How long the split will be
      * @return The value that is calculated from the function.
      */
@@ -157,8 +151,9 @@ public class ByteCheck {
     /**
      * The method which converts the byte array (little endian) to long.
      * Corrects if there are less than 8 bytes.
-     * @param bytes The whole byte array in little endian
-     * @param index The index where the split begins
+     *
+     * @param bytes  The whole byte array in little endian
+     * @param index  The index where the split begins
      * @param length How long the split will be
      * @return The value that is calculated from the function.
      */
@@ -184,7 +179,8 @@ public class ByteCheck {
 
     /**
      * Method to convert a byte array to little endian format.
-     * @param bytes a byte array to be converted
+     *
+     * @param bytes  a byte array to be converted
      * @param length length of the byte array
      * @return the byte array in little endian format
      */

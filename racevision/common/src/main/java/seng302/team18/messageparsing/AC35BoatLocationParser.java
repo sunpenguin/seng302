@@ -11,11 +11,15 @@ import java.io.InputStream;
 
 /**
  * A parser which reads information from a byte stream and creates message objects representing boat location information.
- *
- * Created by dhl25 on 10/04/17.
  */
 public class AC35BoatLocationParser implements MessageBodyParser {
 
+    /**
+     * Reads a stream and associates the information read with a boat location message.
+     *
+     * @param stream holds information about the locations of participants in the race.
+     * @return A location message holding location information about boats.
+     */
     @Override
     public MessageBody parse(InputStream stream) {
         try {
@@ -26,6 +30,7 @@ public class AC35BoatLocationParser implements MessageBodyParser {
     }
 
     /**
+     * Reads a byte array and associates the information read with a boat location message.
      *
      * @param bytes A list of bytes represent information about the locations of participants in the race.
      * @return A location message holding location information about boats.

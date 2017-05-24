@@ -19,14 +19,13 @@ import java.util.*;
 
 /**
  * A parser which reads information from an XML stream and creates messages representing information about the race.
- *
- * Created by dhl25 on 11/04/17.
  */
 public class AC35XMLRaceParser implements MessageBodyParser {
 
 
     /**
      * Select the relevant race elements from the input XML and creating a race message object to store this information.
+     *
      * @param stream The input stream (XML).
      * @return A race message holding the information read from the stream.
      */
@@ -83,6 +82,7 @@ public class AC35XMLRaceParser implements MessageBodyParser {
     /**
      * Converts the byte array an input stream of standard characters to be passed to the other parser so that a race
      * message can be generated and returned.
+     *
      * @param bytes The input byte stream.
      * @return A race message holding the information read from the stream.
      */
@@ -98,6 +98,7 @@ public class AC35XMLRaceParser implements MessageBodyParser {
 
     /**
      * Reads the race time from the data stream.
+     *
      * @param startTimeNode The element from the XML with information about the race time
      * @return A string representation of the time of the race.
      */
@@ -117,12 +118,13 @@ public class AC35XMLRaceParser implements MessageBodyParser {
 
     /**
      * Reads the participants ID's from the XML.
+     *
      * @param participantsNode The element from the XML with information about the participants.
      * @return A list of integers (boat IDs)
      */
     private List<Integer> parseParticipantIDs(Node participantsNode) {
         final String PARTICIPANT_ELEMENT = "Yacht";
-            final String PARTICIPANT_ID = "SourceID";
+        final String PARTICIPANT_ID = "SourceID";
         List<Integer> participantIDs = new ArrayList<>();
         if (participantsNode.getNodeType() == Node.ELEMENT_NODE) {
             Element participantsElement = (Element) participantsNode;
@@ -140,17 +142,18 @@ public class AC35XMLRaceParser implements MessageBodyParser {
 
     /**
      * Reads the compound marks from the XML.
+     *
      * @param courseNode The element from the XML with information about the marks.
      * @return A list mapping the integer ID and coordinate of the mark.
      */
     private Map<Integer, CompoundMark> parseCompoundMarks(Node courseNode) {
         final String COMPOUND_MARK_ELEMENT = "CompoundMark";
-            final String COMPOUND_MARK_ID = "CompoundMarkID";
-            final String COMPOUND_MARK_NAME = "Name";
-            final String MARK_ELEMENT = "Mark";
-                final String MARK_ID = "SourceID";
-                final String MARK_LAT = "TargetLat";
-                final String MARK_LONG = "TargetLng";
+        final String COMPOUND_MARK_ID = "CompoundMarkID";
+        final String COMPOUND_MARK_NAME = "Name";
+        final String MARK_ELEMENT = "Mark";
+        final String MARK_ID = "SourceID";
+        final String MARK_LAT = "TargetLat";
+        final String MARK_LONG = "TargetLng";
         Map<Integer, CompoundMark> compoundMarks = new HashMap<>();
         if (courseNode.getNodeType() == Node.ELEMENT_NODE) {
             Element courseElement = (Element) courseNode;
@@ -182,8 +185,9 @@ public class AC35XMLRaceParser implements MessageBodyParser {
 
     /**
      * Reads the mark roundings from the XML.
+     *
      * @param markSequenceNode The element from the XML with information about the mark sequence.
-     * @param compoundMarks A list mapping the integer ID and coordinate of the mark.
+     * @param compoundMarks    A list mapping the integer ID and coordinate of the mark.
      * @return A list of mark roundings as read bu the parser.
      */
     private List<MarkRounding> parseMarkRoundings(Node markSequenceNode, Map<Integer, CompoundMark> compoundMarks) {
@@ -209,15 +213,17 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         return markRoundings;
     }
 
-    /**Reads the boundary marks representing the outer edge of the course from the XML.
+    /**
+     * Reads the boundary marks representing the outer edge of the course from the XML.
+     *
      * @param boundariesNode The element from the XML with information about the mark sequence.
      * @return A list of boundary marks mapping out the outer edge of the course.
      */
     private List<BoundaryMark> parseBoundaries(Node boundariesNode) {
         final String COURSE_BOUNDARY_ELEMENT = "Limit";
-            final String BOUNDARY_SEQUENCE_ID = "SeqID";
-            final String BOUNDARY_LAT = "Lat";
-            final String BOUNDARY_LONG = "Lon";
+        final String BOUNDARY_SEQUENCE_ID = "SeqID";
+        final String BOUNDARY_LAT = "Lat";
+        final String BOUNDARY_LONG = "Lon";
         List<BoundaryMark> boundaries = new ArrayList<>();
 
         if (boundariesNode.getNodeType() == Node.ELEMENT_NODE) {

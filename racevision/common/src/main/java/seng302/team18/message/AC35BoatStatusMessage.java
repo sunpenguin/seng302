@@ -1,7 +1,7 @@
 package seng302.team18.message;
 
 /**
- * Created by dhl25 on 10/05/17.
+ * MessageBody that contains information about a boats leg number, status and estimated time at next mark.
  */
 public class AC35BoatStatusMessage {
 
@@ -12,9 +12,10 @@ public class AC35BoatStatusMessage {
 
     /**
      * Constructor for the AC35BoatStatusMessage. Contains information on a boats status.
-     * @param boatId the boats id.
-     * @param legNumber sequence number of the current leg.
-     * @param boatStatus status of the boat.
+     *
+     * @param boatId                  the boats id.
+     * @param legNumber               sequence number of the current leg.
+     * @param boatStatus              status of the boat.
      * @param estimatedTimeAtNextMark in Epoch milliseconds.
      */
     public AC35BoatStatusMessage(int boatId, int legNumber, int boatStatus, long estimatedTimeAtNextMark) {
@@ -25,8 +26,9 @@ public class AC35BoatStatusMessage {
     }
 
     /**
-     * Getter for the boats Id.
-     * @return the boats id.
+     * Getter for the boats ID.
+     *
+     * @return the boats ID.
      */
     public int getBoatId() {
         return boatId;
@@ -34,6 +36,7 @@ public class AC35BoatStatusMessage {
 
     /**
      * Getter for legNumber.
+     *
      * @return the number of the leg the boat is on.
      */
     public int getLegNumber() {
@@ -60,6 +63,7 @@ public class AC35BoatStatusMessage {
 
     /**
      * Getter for the estimated time at the next mark.
+     *
      * @return estimated time at next mark in Epoch milliseconds.
      */
     public long getEstimatedTimeAtNextMark() {
