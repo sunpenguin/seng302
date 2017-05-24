@@ -7,6 +7,7 @@ import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.CourseRenderer;
 import seng302.team18.visualiser.display.FPSReporter;
 import seng302.team18.visualiser.display.RaceRenderer;
+import sun.print.BackgroundLookupListener;
 
 
 /**
@@ -19,12 +20,21 @@ public class RaceLoop extends AnimationTimer {
     private RaceRenderer renderer;
     private CourseRenderer courseRenderer;
     private FPSReporter fpsReporter;
+    private BackgroundRenderer backgroundRenderer;
 
-
-    public RaceLoop(RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter) {
+    /**
+     * Constructor for the RaceLoop class.
+     *
+     * @param renderer thing that renders the boats
+     * @param courseRenderer thing that renders the course
+     * @param fpsReporter thing that updates fps
+     * @param backgroundRenderer thing that renders background
+     */
+    public RaceLoop(RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter, BackgroundRenderer backgroundRenderer) {
         this.renderer = renderer;
         this.fpsReporter = fpsReporter;
         this.courseRenderer = courseRenderer;
+        this.backgroundRenderer = backgroundRenderer;
     }
 
     @Override
@@ -43,6 +53,7 @@ public class RaceLoop extends AnimationTimer {
      * Call each renderer and update the display of the race.
      */
     private void updateView() {
+        backgroundRenderer.renderBackground();
         renderer.renderBoats();
         courseRenderer.renderCourse();
         renderer.drawTrails();

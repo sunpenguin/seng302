@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.scene.paint.*?>
-<?import javafx.scene.image.*?>
 <?import java.lang.*?>
-<?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.Group?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
@@ -17,7 +14,7 @@
    <children>
        <AnchorPane fx:id="raceViewPane" layoutY="30.0" minHeight="0.0" minWidth="0.0" prefHeight="690.0" prefWidth="822.0" style="-fx-background-color: lightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="458.0" AnchorPane.topAnchor="30.0">
            <children>
-               <ImageView fx:id="imageViewMap" fitHeight="690.0" fitWidth="690.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <WebView fx:id="map" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                <Group fx:id="group" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
                <Label fx:id="fpsLabel" layoutX="611.0" prefHeight="15.0" prefWidth="79.0" text="FPS:" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                    <font>
@@ -113,8 +110,8 @@
                                        <TableView fx:id="tableView" prefHeight="209.0" prefWidth="453.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                            <columns>
                                                <TableColumn fx:id="boatPositionColumn" prefWidth="87.0" text="Position" />
-                                               <TableColumn fx:id="boatColorColumn" maxWidth="25.0" minWidth="-Infinity" prefWidth="25.0"/>
-                                               <TableColumn fx:id="boatNameColumn" minWidth="0.0" prefWidth="228.0" text="Name"/>
+                                               <TableColumn fx:id="boatColorColumn" maxWidth="25.0" minWidth="-Infinity" prefWidth="25.0" />
+                                               <TableColumn fx:id="boatNameColumn" minWidth="0.0" prefWidth="228.0" text="Name" />
                                                <TableColumn fx:id="boatSpeedColumn" maxWidth="173.0" prefWidth="112.0" text="Speed (knots)" />
                                            </columns>
                                        </TableView>

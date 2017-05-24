@@ -5,7 +5,6 @@ import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.paint.Color;
-import seng302.team18.model.Boat;
 import seng302.team18.visualiser.util.SparklineDataPoint;
 
 import java.util.*;
@@ -22,10 +21,10 @@ public class DisplaySparkline extends AnimationTimer {
     /**
      * Constructor.
      * @param dataQueue a queue of SparklineDataPoints
-     * @param boats a list of Boats to create sparklines for
+     * @param boatColors a map of Boats names to color to create sparklines for
      * @param sparklinesChart A linechart to display the sparklines on
      */
-    public DisplaySparkline(Queue<SparklineDataPoint> dataQueue, Map<Boat, Color> boats, LineChart<String, String> sparklinesChart) {
+    public DisplaySparkline(Queue<SparklineDataPoint> dataQueue, Map<String, Color> boatColors, LineChart<String, String> sparklinesChart) {
         sparklinesChart.setCreateSymbols(false);
         sparklinesChart.setLegendVisible(false);
         this.dataQueue = dataQueue;
@@ -33,25 +32,23 @@ public class DisplaySparkline extends AnimationTimer {
 
         sparklinesChart.getYAxis().setTickLabelGap(1);
 
-
-        setupSeries(boats);
+        setupSeries(boatColors);
     }
 
     /**
      * Called in constructor.
      * Creates a  XYChart.Series<String, String> for each boat.
      * Sets name of series to boat name and colour of series to the boat colour.
-     * @param boats HashMap in form <Boat, Color>
+     * @param boatColors HashMap in form <Boat, Color>
      */
-    private void setupSeries(Map<Boat, Color> boats) {
+    private void setupSeries(Map<String, Color> boatColors) {
         sparklinesChart.applyCss();
         int i = 0;
-        for (Boat boat : boats.keySet()) {
+        for (String shortBoatName : boatColors.keySet()) {
             XYChart.Series<String, String> boatSeries = new XYChart.Series<>();
-            boatSeries.setName(boat.getName());
+            boatSeries.setName(shortBoatName);
             sparklinesChart.getData().add(boatSeries);
-
-            String colorString = getHex(boats.get(boat));
+            String colorString = getHex(boatColors.get(shortBoatName));
             Set<Node> nodes = sparklinesChart.lookupAll(".series" + i);
             for (Node n : nodes) {
                 n.setStyle(String.format("-fx-stroke: %s; -fx-background-color: %s, white; ", colorString, colorString));

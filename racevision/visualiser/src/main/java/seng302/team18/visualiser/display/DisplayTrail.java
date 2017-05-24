@@ -47,10 +47,10 @@ public class DisplayTrail {
         this.heading = heading;
         XYPair pixel = pixelMapper.coordToPixel(coordinate);
         polyline.getPoints().addAll(pixel.getX(), pixel.getY());
+//        System.out.println(pixel.getX());
         coordinates.add(coordinate);
         if (coordinates.size() > length) {
             coordinates.remove(0);
-//            polyline.getPoints().remove(0, 1);
             polyline.getPoints().remove(0);
             polyline.getPoints().remove(0);
         }
@@ -68,7 +68,7 @@ public class DisplayTrail {
             updatedTrailPoints.add(newPixels.getY());
         }
         polyline.getPoints().clear();
-        polyline.getPoints().addAll(updatedTrailPoints);
+        polyline.getPoints().setAll(updatedTrailPoints);
     }
 
     public void addToGroup(Group group) {

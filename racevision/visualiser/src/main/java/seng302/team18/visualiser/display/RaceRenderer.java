@@ -1,8 +1,6 @@
 package seng302.team18.visualiser.display;
 
-import com.sun.org.apache.xpath.internal.axes.HasPositionalPredChecker;
 import javafx.scene.Group;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
@@ -18,11 +16,9 @@ public class RaceRenderer {
 
     private Group group;
     private Race race;
-    // Boat::getShortName is used as the key for all Maps
-    private Map<Boat, DisplayBoat> displayBoats = new HashMap<>();
-    private Map<Boat, DisplayTrail> trailMap = new HashMap<>();
-    private Map<Boat, Double> headingMap;
-    private final double PADDING = 20.0;
+    private Map<String, DisplayBoat> displayBoats = new HashMap<>();
+    private Map<String, DisplayTrail> trailMap = new HashMap<>();
+    private Map<String, Double> headingMap;
     private int numBoats;
     private final List<Color> BOAT_COLOURS = new ArrayList<>(
             Arrays.asList(Color.VIOLET, Color.DARKVIOLET, Color.GREEN, Color.TOMATO, Color.YELLOWGREEN, Color.BROWN));
@@ -52,12 +48,14 @@ public class RaceRenderer {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
 
-            DisplayBoat displayBoat = displayBoats.get(boat);
+            DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             if (displayBoat == null) {
-                displayBoat = new DisplayBoat
-                        (pixelMapper, boat.getShortName(), boat.getHeading(), boat.getKnotsSpeed(), BOAT_COLOURS.get(numBoats++), boat.getTimeTilNextMark());
+                displayBoat = new DisplayBoat(
+                        pixelMapper, boat.getShortName(), boat.getHeading(), boat.getSpeed(),
+                        BOAT_COLOURS.get(numBoats++), boat.getTimeTilNextMark()
+                );
                 displayBoat.addToGroup(group);
-                displayBoats.put(boat, displayBoat);
+                displayBoats.put(boat.getShortName(), displayBoat);
             }
 
             Coordinate boatCoordinates = boat.getCoordinate();
@@ -95,26 +93,26 @@ public class RaceRenderer {
      */
     private void drawTrail(Boat boat, PixelMapper pixelMapper) {
         final double MAX_HEADING_DIFFERENCE = 0.75d; // smaller => smoother trail, higher => more fps
-        DisplayTrail trail = trailMap.get(boat);
+        DisplayTrail trail = trailMap.get(boat.getShortName());
         if (trail == null) {
             final int MAX_TRAIL_LENGTH = 100;
-            DisplayBoat displayBoat = displayBoats.get(boat);
+            DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             trail = new DisplayTrail(boat.getShortName(), displayBoat.getBoatColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
-            trailMap.put(boat, trail);
+            trailMap.put(boat.getShortName(), trail);
             trail.addToGroup(group);
         }
-        headingMap.put(boat, boat.getHeading());
+        headingMap.put(boat.getShortName(), boat.getHeading());
         trail.addPoint(boat.getCoordinate(), boat.getHeading(), pixelMapper);
     }
 
 
     /**
-     * Redraw the the trails behind each boat.
-     * @param boats Collection of displayBoats racing.
+     * Redraw the the trails behind each boat by looking into the Map of circles and coordinates and
+     * resetting the points.
      */
-    public void reDrawTrails(Collection<Boat> boats) {
-        for (Boat boat : boats) {
-            DisplayTrail trail = trailMap.get(boat);
+    public void reDrawTrails() {
+        for (Boat boat : race.getStartingList()) {
+            DisplayTrail trail = trailMap.get(boat.getShortName());
             if (trail != null) {
                 trail.reDraw(pixelMapper);
             }
@@ -125,14 +123,6 @@ public class RaceRenderer {
         return group;
     }
 
-//    public Map<String, Boolean> getVisibleAnnotations() {
-//        Map visibleAnnotations = new HashMap();
-//        DisplayBoat boat = displayBoats.values().iterator().next(); // get a boat from the map LOL
-//        for (AnnotationType type : AnnotationType.values()) {
-//            visibleAnnotations.put(type, boat.getAnnotationVisible(type));
-//        }
-//        return visibleAnnotations;
-//    }
 
     public void setVisibleAnnotations(AnnotationType type, Boolean isVisible) {
         for (DisplayBoat boat : displayBoats.values()) {
@@ -140,9 +130,13 @@ public class RaceRenderer {
         }
     }
 
-    public Map<Boat, Color> boatColors() {
-        Map<Boat, Color> boatColors = new HashMap<>();
-        for (Map.Entry<Boat, DisplayBoat> entry : displayBoats.entrySet()){
+    /**
+     *
+     * @return a map from boat short names to colors.
+     */
+    public Map<String, Color> boatColors() {
+        Map<String, Color> boatColors = new HashMap<>();
+        for (Map.Entry<String, DisplayBoat> entry : displayBoats.entrySet()) {
             boatColors.put(entry.getKey(), entry.getValue().getBoatColor());
         }
         return boatColors;

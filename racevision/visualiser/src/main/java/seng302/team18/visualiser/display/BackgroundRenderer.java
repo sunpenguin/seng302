@@ -1,74 +1,127 @@
 package seng302.team18.visualiser.display;
 
-import javafx.scene.Group;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import seng302.team18.model.BoundaryMark;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
-import seng302.team18.util.GPSCalculations;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.web.WebEngine;
+import seng302.team18.model.*;
+import seng302.team18.visualiser.util.PixelMapper;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 
 /**
  * Using the geographic course information, requests a map image from the google map API and renders it in the
  * background of the course area.
  */
 public class BackgroundRenderer {
-    private final Course course;
-    private final ImageView imageView;
 
-    private final String API_KEY = "AIzaSyBRLXKbFcgD00-3nUQoIut-8sALaFq4elg";
-    private final String API_URL = "https://maps.googleapis.com/maps/api/staticmap";
+    private final WebEngine webEngine;
+    private String mapURL = getClass().getResource("/googlemaps.html").toExternalForm();
+
+    private final Race race;
+    private Coordinate center;
+    private PixelMapper pixelMapper;
+    private Coordinate NW = new Coordinate(0, 0);
+    private Coordinate SE = new Coordinate(0, 0);
+
+    /*
+        These properties hold the current northern and southern latitudes
+        as well as eastern and western longitudes of what the map displays
+        at any given time
+    */
+    private DoubleProperty north = new SimpleDoubleProperty(0);
+    private DoubleProperty south = new SimpleDoubleProperty(0);
+    private DoubleProperty east = new SimpleDoubleProperty(0);
+    private DoubleProperty west = new SimpleDoubleProperty(0);
 
 
-    public BackgroundRenderer(Group group, Course course, ImageView imageView) {
-        this.course = course;
-        this.imageView = imageView;
+    /**
+     * Constructor for the BackgroundRenderer
+     * @param race The race
+     * @param webEngine The WebEngine
+     */
+    public BackgroundRenderer(PixelMapper pixelMapper, Race race, WebEngine webEngine) {
+        this.pixelMapper = pixelMapper;
+        this.race = race;
+        center = new Coordinate(0, 0);
+        this.webEngine = webEngine;
+        webEngine.load(mapURL);
+        webEngine.setJavaScriptEnabled(true);
+    }
+
+    /**
+     * sets the BackgroundRenderers variables using data from the web engine
+     */
+    private void setDirections(){
+        try {
+            north.set((double) webEngine.executeScript("getN();"));
+            south.set((double) webEngine.executeScript("getS();"));
+            east.set((double) webEngine.executeScript("getE();"));
+            west.set((double) webEngine.executeScript("getW();"));
+            NW.setLatitude(north.getValue());
+            NW.setLongitude(west.getValue());
+            SE.setLatitude(south.getValue());
+            SE.setLongitude(east.getValue());
+            pixelMapper.setBounds(new ArrayList<>(Arrays.asList(NW, SE)));
+        } catch (Exception ex) {
+
+        }
     }
 
     /**
      * Updates the map shown in the background of the race view, based on the current course.
-     * <br />
-     * If the map cannot be downloaded, the background image becomes transparent, and a message is written to stderr
-     */
-    public void renderBackground() throws IOException {
-        String urlString = getURL();
-        URL url = new URL(urlString);
-        imageView.setImage(new Image(url.openStream()));
-    }
-
-    /**
-     * Constructs the API query, including all parameters.
-     * This should be called each time the required map changes, to generate the respective URL.
+     * Also sets the values for the coordinates which are currently the north west and south
+     * east bounds of what the map displays at any given time
      *
-     * @return the URL for the API request
+     * @return true if the map was updated false otherwise.
      */
-    private String getURL() {
-        String coordinates = course.getBoundaries()
-                .stream()
-                .map(BoundaryMark::getCoordinate)
-                .map(coordinate -> "" + coordinate.getLatitude() + "," + coordinate.getLongitude())
-                .collect(Collectors.joining("|"));
-//        Coordinate centerCoordinate = gps.getCentralCoordinate(coordinates);
-//        System.out.println(centerCoordinate);
-//        gps.get
-//        String string = API_URL + "?center=40.714728,-73.998672&zoom=12&size=400x400&key=" + API_KEY;
-//        double centerLat = centerCoordinate.getLatitude();
-//        double centerLong = centerCoordinate.getLongitude();
-        String string = API_URL + "?markers=" + coordinates +"&size=400x400&key=" + API_KEY;
-//        String string = API_URL + "?visible=" + coordinates +"&size=600x600&scale=10&key=" + API_KEY; // uncomment to make markers invisible
-        return string;
+    public boolean renderBackground() {
+        Coordinate newCenter = race.getCourse().getCentralCoordinate();
+        setDirections();
+        if (!center.equals(newCenter)) {
+            try {
+                final String centerCommand = "setCenter(" + newCenter.getLatitude() + ", " + newCenter.getLongitude() + ")";
+                webEngine.executeScript(centerCommand);
+                center = newCenter;
+
+                webEngine.executeScript("resetMarkers();");
+                for(BoundaryMark mark : race.getCourse().getBoundaries()) {
+                    addMark(mark);
+                }
+
+                return true;
+            } catch (Exception ex) {
+                return false;
+            }
+        }
+        return false;
     }
 
+
     /**
-     * Hides the map by setting the image to null.
-     * Currently relies on the group providing a suitable default background.
+     * Adds a mark to be plotted on the map
+     * @param mark the mark to be plotted on the map
      */
-    public void hideMap() {
-        imageView.setImage(null);
+    public void addMark(BoundaryMark mark) {
+        webEngine.executeScript("addMarker(" + mark.getCoordinate().getLatitude() + ", " + mark.getCoordinate().getLongitude() + ");");
+    }
+
+
+    /**
+     * Returns the DoubleProperty for north bound of the map.
+     * @return north bound
+     */
+    public DoubleProperty northProperty() {
+        return north;
+    }
+
+
+    /**
+     * Returns the DoubleProperty for south bound of the map.
+     * @return south bound
+     */
+    public DoubleProperty southProperty() {
+        return south;
     }
 }
