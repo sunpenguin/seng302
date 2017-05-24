@@ -5,12 +5,17 @@ import seng302.team18.model.Boat;
 import java.util.List;
 
 /**
- * Created by dhl25 on 11/04/17.
+ * MessageBody that contains the boat information from the XML file sent by the AC35 streaming protocol.
  */
 public class AC35XMLBoatMessage implements MessageBody {
 
     private List<Boat> boats;
 
+    /**
+     * Constructor for AC35XMLBoatMessage.
+     *
+     * @param boats the boats participating in the race.
+     */
     public AC35XMLBoatMessage(List<Boat> boats) {
         this.boats = boats;
     }

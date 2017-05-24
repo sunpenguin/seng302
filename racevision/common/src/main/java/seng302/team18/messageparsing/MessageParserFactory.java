@@ -1,17 +1,13 @@
 package seng302.team18.messageparsing;
 
 /**
- * Created by dhl25 on 10/04/17.
+ * Interface for MessageParserFactory.
  */
 public interface MessageParserFactory {
 
-//    public MessageHeadParser makeDefaultHeadParser();
-//
-//    public MessageHeadParser makeHeadParser(int type);
+    MessageHeadParser makeHeadParser();
 
-    public MessageHeadParser makeHeadParser();
+    MessageBodyParser makeBodyParser(int type);
 
-    public MessageBodyParser makeBodyParser(int type);
-
-    public MessageErrorDetector makeDetector();
+    MessageErrorDetector makeDetector();
 }

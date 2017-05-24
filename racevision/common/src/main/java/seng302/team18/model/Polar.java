@@ -1,10 +1,9 @@
 package seng302.team18.model;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by dhl25 on 1/05/17.
+ * A class which stores all polar information used for tacking/gybing.
  */
 public class Polar {
 

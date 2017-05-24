@@ -22,7 +22,6 @@ public class Race {
     private List<Integer> participantIds;
     private int id;
     private byte status;
-    public static int PREP_TIME_SECONDS = 120;
     private String raceName;
 
 
@@ -35,7 +34,6 @@ public class Race {
         status = 0;
         currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
-//        setInitialSpeed();
         raceName = "";
     }
 
@@ -60,13 +58,12 @@ public class Race {
     }
 
 
-
     /**
      * Sets the speed of the boats at the start line
      */
-    private void setInitialSpeed(){
+    private void setInitialSpeed() {
         int speed = 40;
-        for(Boat b: startingList){
+        for (Boat b : startingList) {
             b.setSpeed(speed); //kph
             speed -= 3;
         }
@@ -78,8 +75,8 @@ public class Race {
      *
      * @param knots speed in knots.
      * @return speed in meters per second.
-     * TODO: Put this somewhere more reasonable
      */
+    // TODO: Put this somewhere more reasonable
     public double knotsToMetersPerSecond(double knots) {
         return ((knots * 1.852) / 3.6);
     }
@@ -156,6 +153,7 @@ public class Race {
 
     /**
      * Updates the position and heading of every boat in the race.
+     *
      * @param time
      */
     public void updateBoats(double time) { // time in seconds
@@ -169,6 +167,7 @@ public class Race {
 
     /**
      * Updates a boats position then heading.
+     *
      * @param boat
      * @param time
      */
@@ -182,6 +181,7 @@ public class Race {
      * Changes the boats heading so that if it has reached its destination
      * it heads in the direction of its next destination. Otherwise set the heading
      * to be in the direction of its current destination.
+     *
      * @param boat to be updated
      */
     private void updateHeading(Boat boat) {
@@ -211,6 +211,7 @@ public class Race {
     /**
      * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
      * and sets the destination to the next marks coordinates.
+     *
      * @param boat
      * @param nextLeg
      */
@@ -231,6 +232,7 @@ public class Race {
     /**
      * Updates the boats coordinates to move closer to the boats destination.
      * Amount moved is proportional to the time passed
+     *
      * @param boat to be moved
      * @param time that has passed
      */
@@ -249,14 +251,6 @@ public class Race {
         return finishedList;
     }
 
-
-//    public void setDuration(double duration) {
-//        this.duration = duration;
-//    }
-//
-//    public double getDuration() {
-//        return duration;
-//    }
 
     public boolean isFinished() {
         return startingList.size() == finishedList.size();
@@ -283,7 +277,9 @@ public class Race {
         this.currentTime = currentTime;
     }
 
-    public ZonedDateTime getCurrentTime() {return currentTime; }
+    public ZonedDateTime getCurrentTime() {
+        return currentTime;
+    }
 
     public int getId() {
         return id;

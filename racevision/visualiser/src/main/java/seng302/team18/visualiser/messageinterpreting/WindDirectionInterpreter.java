@@ -4,6 +4,8 @@ import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Race;
 
+import static java.lang.Math.abs;
+
 /**
  * A MessageInterpreter that takes a AC35RaceStatusMessage and updates the wind direction of a Race.
  */
@@ -25,7 +27,8 @@ public class WindDirectionInterpreter extends MessageInterpreter {
         if (message instanceof AC35RaceStatusMessage) {
             AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
             double newDirection = statusMessage.getWindDirection();
-            race.getCourse().setWindDirection(newDirection);
+            // Wind blows in oposite direction to given angle, so flip arrow by 180 for accuracy/ Mod 360 to keep positive integers.
+            race.getCourse().setWindDirection(abs((newDirection - 180) % 360));
         }
     }
 }

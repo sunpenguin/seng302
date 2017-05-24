@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by csl62 on 15/03/17.
+ * A class which stores information about a compound mark.
  */
 public class CompoundMark implements GeographicLocation {
 
@@ -18,31 +18,11 @@ public class CompoundMark implements GeographicLocation {
     private List<Mark> marks;
     private List<Boat> passed;
 
-//    public CompoundMark(String name, List<Mark> marks) {
-//        this.name = name;
-//        this.marks = marks;
-//        passed = new ArrayList<>();
-//    }
-
     public CompoundMark(String name, Collection<Mark> marks, int id) {
         this.name = name;
         this.marks = new ArrayList<>(marks);
         this.id = id;
         passed = new ArrayList<>();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-    public List<Mark> getMarks() {
-        return marks;
     }
 
     /**
@@ -54,7 +34,6 @@ public class CompoundMark implements GeographicLocation {
         ;
 
         if (marks.size() == GATE_SIZE) {
-//            return marks.get(0).getCoordinate().distance(marks.get(1).getCoordinate());
             GPSCalculations gps = new GPSCalculations();
             return gps.midPoint(marks.get(0).getCoordinate(), marks.get(1).getCoordinate());
         } else if (marks.size() == MARK_SIZE) {
@@ -62,16 +41,6 @@ public class CompoundMark implements GeographicLocation {
         } else {
             return null;
         }
-    }
-
-
-    public List<Boat> getPassed() {
-        return passed;
-    }
-
-
-    public void addPassed(Boat passed) {
-        this.passed.add(passed);
     }
 
 
@@ -97,5 +66,20 @@ public class CompoundMark implements GeographicLocation {
 
     public Integer getId() {
         return id;
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public List<Mark> getMarks() {
+        return marks;
     }
 }

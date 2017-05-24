@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
- * A class which represents a boat in the text based Application
+ * A class which stores information about a boat.
  */
 
 public class Boat implements GeographicLocation {
@@ -29,9 +29,10 @@ public class Boat implements GeographicLocation {
 
     /**
      * A constructor for the Boat class
-     * @param boatName The name of the boat
+     *
+     * @param boatName  The name of the boat
      * @param shortName The name of the team the boat belongs to
-     * @param id The id of the boat
+     * @param id        The id of the boat
      */
     public Boat(String boatName, String shortName, int id) {
         this.boatName = boatName;
@@ -47,6 +48,7 @@ public class Boat implements GeographicLocation {
 
     /**
      * A getter for the name of the boat
+     *
      * @return The boatName
      */
     public String getName() {
@@ -56,6 +58,7 @@ public class Boat implements GeographicLocation {
 
     /**
      * A getter for the heading of the boat
+     *
      * @return The heading of the boat
      */
     public double getHeading() {
@@ -65,6 +68,7 @@ public class Boat implements GeographicLocation {
 
     /**
      * A setter for the heading of the boat
+     *
      * @param heading The value the boat heading will be set to
      */
     public void setHeading(double heading) {
@@ -74,6 +78,7 @@ public class Boat implements GeographicLocation {
 
     /**
      * A getter for the team name that the boat belongs to
+     *
      * @return The shortName
      */
     public String getShortName() {
@@ -83,6 +88,7 @@ public class Boat implements GeographicLocation {
 
     /**
      * A getter for the speed of the boat
+     *
      * @return The speed of the boat
      */
     public double getSpeed() {
@@ -91,17 +97,12 @@ public class Boat implements GeographicLocation {
 
     /**
      * A setter for the speed of the boat
+     *
      * @param speed the speed of the boat
      */
     public void setSpeed(double speed) {
         this.speed.setValue(speed);
     }
-
-
-    public DoubleProperty speedProperty() {
-        return speed;
-    }
-
 
     public int getLegNumber() {
         return boatLegNumber.get();
@@ -205,10 +206,6 @@ public class Boat implements GeographicLocation {
 
     public double getKnotsSpeed() {
         return knotsSpeed.get();
-    }
-
-    public DoubleProperty knotsSpeedProperty() {
-        return knotsSpeed;
     }
 
     public void setKnotsSpeed(double knotsSpeed) {

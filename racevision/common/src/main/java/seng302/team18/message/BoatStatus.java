@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by david on 5/19/17.
+ * Enum for the different types of boat statuses and their associated codes.
  */
 public enum BoatStatus {
     UNDEFINED(0),
@@ -20,18 +20,35 @@ public enum BoatStatus {
     private int code;
     private static final Map<Integer, BoatStatus> CODE_MAP = Collections.unmodifiableMap(initializeMapping());
 
-    private BoatStatus(int code) {
+    BoatStatus(int code) {
         this.code = code;
     }
 
-    public BoatStatus ofCode(int code) {
+    /**
+     * Returns the boat status associated with a code. If none exists then it returns null.
+     *
+     * @param code representing the boat status.
+     * @return the boat status associated with a code.
+     */
+    // Code not used for anything right now. Can be removed if not needed.
+    public BoatStatus from(int code) {
         return CODE_MAP.get(code);
     }
 
+    /**
+     * Getter for the code of the boat status type.
+     *
+     * @return the code of the boat status type.
+     */
     public int code() {
         return code;
     }
 
+    /**
+     * Creates a map between a code and its boat status type.
+     *
+     * @return a map between all codes and boat status type.
+     */
     private static Map<Integer, BoatStatus> initializeMapping() {
         Map<Integer, BoatStatus> statusMap = new HashMap<>();
         for (BoatStatus status : BoatStatus.values()) {

@@ -15,14 +15,13 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * A parser which reads information from an XML stream and creates messages representing information about the regatta.
- *
- * Created by david on 4/12/17.
  */
 public class AC35XMLRegattaParser implements MessageBodyParser {
 
     /**
      * Takes the input stream (XML holding information about the regatta) and creates a regatta message to hold this
      * information.
+     *
      * @param stream A stream of data in the form of an XML document.
      * @return A regatta message created by the parser with information from the input stream.
      */
@@ -47,7 +46,6 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
         doc.getDocumentElement().normalize();
         Element regattaElement = (Element) doc.getElementsByTagName(REGATTA_TAG).item(0);
         int regattaID = Integer.parseInt(regattaElement.getElementsByTagName(REGATTA_ID).item(0).getTextContent());
-//        System.out.println(regattaElement.getElementsByTagName(CENTER_LAT).item(0).getTextContent());
         String regattaName = regattaElement.getElementsByTagName(REGATTA_NAME).item(0).getTextContent();
 
         double centralLat =
@@ -63,6 +61,7 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
     /**
      * Converts the input byte stream to standarad characters and passes these the the parser to read them and create the
      * regatta message.
+     *
      * @param bytes an array of bytes from the input stream
      * @return a regatta message parsed from the input byte stream
      */

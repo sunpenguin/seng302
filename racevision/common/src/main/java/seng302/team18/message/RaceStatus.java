@@ -1,12 +1,10 @@
 package seng302.team18.message;
 
-import seng302.team18.model.Regatta;
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dhl25 on 10/05/17.
+ * Enum for the different types of race status for the AC35 streaming protocol and their associated codes.
  */
 public enum RaceStatus {
     NOT_ACTIVE(0), WARNING(1), PREPARATORY(2), STARTED(3), FINISHED(4), RETIRED(5),
@@ -14,10 +12,15 @@ public enum RaceStatus {
 
     private int code;
 
-    private RaceStatus(int code) {
+    RaceStatus(int code) {
         this.code = code;
     }
 
+    /**
+     * Gets the codes used in the pre-race.
+     *
+     * @return a list of codes used in the pre-race.
+     */
     public static List<Integer> preRaceCodes() {
         List<Integer> codes = new ArrayList<>();
         codes.add(WARNING.getCode());
@@ -25,6 +28,11 @@ public enum RaceStatus {
         return codes;
     }
 
+    /**
+     * Getter for the code of the race status type.
+     *
+     * @return the code of the race status type.
+     */
     public int getCode() {
         return this.code;
     }

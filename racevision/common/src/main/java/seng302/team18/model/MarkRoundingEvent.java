@@ -4,6 +4,7 @@ package seng302.team18.model;
  * Represents a boat "rounding" (passing) a mark (or gate)
  */
 public class MarkRoundingEvent {
+
     private final long time;
     private final Boat boat;
     private final CompoundMark compoundMark;

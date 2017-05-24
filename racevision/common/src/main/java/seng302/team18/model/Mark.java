@@ -1,7 +1,7 @@
 package seng302.team18.model;
 
 /**
- *  A class that represents a mark on the race course
+ * A class that represents a mark on the race course
  */
 public class Mark implements GeographicLocation {
 
@@ -19,6 +19,7 @@ public class Mark implements GeographicLocation {
 
     /**
      * Getter for the mark's coordinates
+     *
      * @return the coordinates
      */
     public Coordinate getCoordinate() {
@@ -28,6 +29,7 @@ public class Mark implements GeographicLocation {
 
     /**
      * Setter for mark's coordinates
+     *
      * @param coordinates the coordinates
      */
     public void setCoordinate(Coordinate coordinates) {
@@ -56,14 +58,6 @@ public class Mark implements GeographicLocation {
 
     public Integer getId() {
         return id;
-    }
-
-    public Coordinate getTargetCoordinates() {
-        return targetCoordinates;
-    }
-
-    public void setTargetCoordinates(Coordinate targetCoordinates) {
-        this.targetCoordinates = targetCoordinates;
     }
 }
 

@@ -9,6 +9,7 @@ public class AC35MarkRoundingMessage implements MessageBody {
 
     /**
      * Constructor for AC35MarkRoundingMessage
+     *
      * @param boatId
      * @param time
      */
@@ -24,6 +25,7 @@ public class AC35MarkRoundingMessage implements MessageBody {
 
     /**
      * Getter for the boats id.
+     *
      * @return the boats id.
      */
     public int getBoatId() {
@@ -32,6 +34,7 @@ public class AC35MarkRoundingMessage implements MessageBody {
 
     /**
      * Getter for the time at which the mark was past.
+     *
      * @return the time at which the mark was past.
      */
     public long getTime() {

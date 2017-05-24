@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -21,6 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -33,6 +35,8 @@ import seng302.team18.visualiser.util.SparklineDataPoint;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -52,12 +56,15 @@ public class MainWindowController implements Observer {
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
-    @FXML private ImageView imageViewMap;
     @FXML private Menu raceMenu;
     @FXML private MenuBar menuBar;
     @FXML private Button setAnnotations;
     @FXML private Button toggle;
     @FXML private Slider slider;
+    @FXML private CheckMenuItem fullAnnotationMenuItem;
+    @FXML private CheckMenuItem importantAnnotationMenuItem;
+    @FXML private CheckMenuItem noAnnotationMenuItem;
+    @FXML private WebView map;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -69,11 +76,10 @@ public class MainWindowController implements Observer {
     private BackgroundRenderer backgroundRenderer;
     private RaceClock raceClock;
     private WindDirection windDirection;
-    private static RerenderMain rerenderMain;
     private PixelMapper pixelMapper;
-
     private Map<AnnotationType, Boolean> importantAnnotations;
 
+    private Stage stage;
 
     @FXML
     public void initialize() {
@@ -100,19 +106,25 @@ public class MainWindowController implements Observer {
     }
 
 
-///**
-//     * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
-//     */    private void loadIcon(){
-//        ImageView icon = new ImageView("/images/boat-310164_640.png");
-//        icon.setFitHeight(18);
-//        icon.setFitWidth(18);
-//        raceMenu.setGraphic(icon);
-//    }
+    @FXML void closeAppAction(){
+        stage.close();
+    }
+
+
+    /**
+     * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
+     */
+    private void loadIcon() {
+        ImageView icon = new ImageView("/images/boat-310164_640.png");
+        icon.setFitHeight(18);
+        icon.setFitWidth(18);
+        raceMenu.setGraphic(icon);
+    }
 
     /**
      * initialises the sparkline graph.
      */
-    private void setUpSparklinesCategory(Map<Boat, Color> boatColors) {
+    private void setUpSparklinesCategory(Map<String, Color> boatColors) {
         List<String> list = new ArrayList<>();
         for (int i = race.getStartingList().size(); i > 0; i--) {
             list.add(String.valueOf(i));
@@ -143,7 +155,7 @@ public class MainWindowController implements Observer {
      */
     private void sliderSetup(){
         TextArea t = new TextArea();
-        t.setText("poop");
+        t.setText("Annotation Slider");
         IntegerProperty sliderValue = new SimpleIntegerProperty(0);
         slider.setSnapToTicks(true);
         slider.setShowTickMarks(true);
@@ -253,14 +265,13 @@ public class MainWindowController implements Observer {
         Stage inputStage = new Stage();
         inputStage.setScene(newScene);
         inputStage.showAndWait();
-
     }
 
 
     /**
      * Sets the cell values for the race table, these are place, boat name and boat speed.
      */
-    private void setUpTable(Map<Boat, Color> boatColors) {
+    private void setUpTable(Map<String, Color> boatColors) {
         Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
                 boat.placeProperty(),
         };
@@ -292,8 +303,9 @@ public class MainWindowController implements Observer {
                 }
             }
         });
+
         boatColorColumn.setCellFactory(column -> new TableCell<Boat, String>() {
-            private final Map<Boat, Color> colors = boatColors;
+            private final Map<String, Color> colors = boatColors;
 
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -301,19 +313,41 @@ public class MainWindowController implements Observer {
 
                 Boat boat = (Boat) getTableRow().getItem();
                 if (boat != null) {
-                    Color color = colors.get(boat);
+                    Color color = colors.get(boat.getShortName());
                     if (color != null) {
                         setStyle(String.format("-fx-background-color: #%02x%02x%02x", (int) (color.getRed() * 255), (int) (color.getGreen() * 255), (int) (color.getBlue() * 255)));
                     }
                 }
             }
         });
-        boatPositionColumn.setSortable(false);
-        boatNameColumn.setSortable(false);
-        boatSpeedColumn.setSortable(false);
-        boatColorColumn.setSortable(false);
-        tableView.getColumns().setAll(boatPositionColumn, boatColorColumn, boatNameColumn, boatSpeedColumn);
 
+        Collection<TableColumn<Boat, ?>> columns = new ArrayList<>();
+        columns.add(boatPositionColumn);
+        columns.add(boatColorColumn);
+        columns.add(boatNameColumn);
+        columns.add(boatSpeedColumn);
+
+        for (TableColumn<Boat, ?> column : columns) {
+            column.setResizable(false);
+            column.setSortable(false);
+        }
+
+        tableView.getColumns().setAll(columns);
+
+        // Resets the columns to the original order whenever the user tries to change them
+        tableView.getColumns().addListener(new ListChangeListener<TableColumn<Boat, ?>>() {
+            public boolean suspended;
+
+            @Override
+            public void onChanged(Change change) {
+                change.next();
+                if (change.wasReplaced() && !suspended) {
+                    this.suspended = true;
+                    tableView.getColumns().setAll(columns);
+                    this.suspended = false;
+                }
+            }
+        });
     }
 
     /**
@@ -336,28 +370,16 @@ public class MainWindowController implements Observer {
         this.race = race;
         setCourseCenter(race.getCourse());
 
-        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
+        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, map.getEngine());
+        backgroundRenderer = new BackgroundRenderer(pixelMapper, race, map.getEngine());
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
-//        backgroundRenderer = new BackgroundRenderer(group, race.getCourse(), imageViewMap);
-//        try {
-//            backgroundRenderer.renderBackground();
-//        } catch (IOException e) {
-//            // TODO make pop up maybe or just handle it
-//            backgroundRenderer.hideMap();
-//            e.printStackTrace();
-//        }
 
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
-//        Map<Boat, Color> boatColors = raceRenderer.boatColors()
-//                .entrySet()
-//                .stream()
-//                .map((name, color) -> race.getStartingList().stream().filter(boat -> true).count() > 0)
-//                .collect(Collectors::toMap);
-        setUpSparklinesCategory(raceRenderer.boatColors());
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel));
+
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), backgroundRenderer);
         startWindDirection();
 
         for (Boat boat : race.getStartingList()) {
@@ -366,18 +388,31 @@ public class MainWindowController implements Observer {
 
         raceLoop.start();
 
-        rerenderMain = new RerenderMain(courseRenderer, raceRenderer, race);
+        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
+        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> redrawFeatures());
+        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
+        pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
 
-        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> rerenderMain.redrawFeatures());
-        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> rerenderMain.redrawFeatures());
-
-        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> rerenderMain.redrawFeatures());
-        pixelMapper.addViewCenterListener(propertyChangeEvent -> rerenderMain.redrawFeatures());
+        // These listeners fire whenever the northern or southern bounds of the map change.
+        backgroundRenderer.northProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
+        backgroundRenderer.southProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
 
         setUpTable(raceRenderer.boatColors());
 
-
         setToImportantAnnotationLevel();
+
+        setUpSparklinesCategory(raceRenderer.boatColors());
+    }
+
+    /**
+     * To call when course features need redrawing.
+     * (For example, when zooming in, the course features are required to change)
+     */
+    public void redrawFeatures() {
+        backgroundRenderer.renderBackground();
+        courseRenderer.renderCourse();
+        raceRenderer.renderBoats();
+        raceRenderer.reDrawTrails();
     }
 
     public RaceClock getRaceClock() {
@@ -386,9 +421,10 @@ public class MainWindowController implements Observer {
 
 
     /**
+     * Receives updates from the ImportantAnnotationController to update the important annotations
      *
-     * @param o
-     * @param arg
+     * @param o the observable object.
+     * @param arg an argument passed to the notifyObservers method.
      */
     @Override
     public void update(java.util.Observable o, Object arg) {
@@ -410,6 +446,7 @@ public class MainWindowController implements Observer {
 
     /**
      * Extracts the central course coordinate from the course
+     *
      * @param course The course for which the midpoint is calculated
      */
     private void setCourseCenter(Course course) {
@@ -423,8 +460,16 @@ public class MainWindowController implements Observer {
             }
         }
 
-        List<Coordinate> extremes = GPSCalculations.findMinMaxPoints(race.getCourse());
-        race.getCourse().setCentralCoordinate(GPSCalculations.midPoint(extremes.get(0), extremes.get(1)));
+        GPSCalculations gpsCalculations = new GPSCalculations();
+        List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(race.getCourse());
+        race.getCourse().setCentralCoordinate(gpsCalculations.midPoint(extremes.get(0), extremes.get(1)));
     }
 
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 }

@@ -14,10 +14,10 @@ public class AC35BoatLocationMessage implements MessageBody {
     /**
      * Constructor for AC35BoatLocationMessage.
      *
-     * @param sourceId of the boat.
+     * @param sourceId   of the boat.
      * @param coordinate of the boat.
-     * @param heading of the boat.
-     * @param speed of the boat.
+     * @param heading    of the boat.
+     * @param speed      of the boat.
      */
     public AC35BoatLocationMessage(int sourceId, Coordinate coordinate, double heading, double speed) {
         this.sourceId = sourceId;
@@ -33,6 +33,7 @@ public class AC35BoatLocationMessage implements MessageBody {
 
     /**
      * Getter for boat source id.
+     *
      * @return the boats sourceId.
      */
     public Integer getSourceId() {
@@ -41,6 +42,7 @@ public class AC35BoatLocationMessage implements MessageBody {
 
     /**
      * Getter for boats coordinate.
+     *
      * @return the boats coordinate.
      */
     public Coordinate getCoordinate() {
@@ -49,6 +51,7 @@ public class AC35BoatLocationMessage implements MessageBody {
 
     /**
      * Getter for the boats heading.
+     *
      * @return the boats heading.
      */
     public Double getHeading() {
@@ -57,6 +60,7 @@ public class AC35BoatLocationMessage implements MessageBody {
 
     /**
      * Getter for boats speed.
+     *
      * @return the boats speed.
      */
     public Double getSpeed() {

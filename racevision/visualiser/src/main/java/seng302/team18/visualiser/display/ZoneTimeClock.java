@@ -16,17 +16,17 @@ public class ZoneTimeClock extends AnimationTimer {
     private Label timeLabel;
     private ZonedDateTime time;
     private DateTimeFormatter formatter;
+    private ZoneId raceZone;
 
     /**
      * Construct a new ZoneTimeClock.
      * @param timeLabel JavaFX Label to display the time on.
      * @param formatter formatter for time when displaying on label.
      */
-    public ZoneTimeClock(Label timeLabel, DateTimeFormatter formatter) {
+    public ZoneTimeClock(Label timeLabel, DateTimeFormatter formatter, ZoneId raceZone) {
         this.timeLabel = timeLabel;
         this.formatter = formatter;
-        this.time = ZonedDateTime.now();
-        timeLabel.setTextFill(Color.BLACK);
+        this.raceZone = raceZone;
         timeLabel.setStyle("-fx-font-size: 2em;");
         timeLabel.setText("");
     }
@@ -47,7 +47,8 @@ public class ZoneTimeClock extends AnimationTimer {
      */
     @Override
     public void handle(long now) {
-        timeLabel.setText(time.format(formatter));
+        ZonedDateTime displayTime = (time != null) ? time : ZonedDateTime.now(raceZone);
+        timeLabel.setText(displayTime.format(formatter));
     }
 
 

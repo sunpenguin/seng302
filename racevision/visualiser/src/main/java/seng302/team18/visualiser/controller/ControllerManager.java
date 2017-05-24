@@ -65,7 +65,6 @@ public class ControllerManager {
         this.mainControllerPath = mainControllerPath;
         this.preRacePath = preRacePath;
         this.primaryStage = primaryStage;
-
     }
 
 
@@ -76,6 +75,7 @@ public class ControllerManager {
      */
     public void start() throws Exception {
         receiver = Session.getInstance().getReceiver();
+//        receiver = getPort();
         race = new Race();
         initialiseInterpreter();
         interpretMessages();
@@ -153,7 +153,6 @@ public class ControllerManager {
         }
     }
 
-
     /**
      * Display the window with information about a race which hasn't started yet.
      * @throws IOException IO Exception thrown when loading FXML loader
@@ -174,8 +173,6 @@ public class ControllerManager {
             interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new ZoneClockInterpreter(preRaceController.getClock(), race.getStartTime().getZone()));
 
             preRaceController.setUp(race);
-
-
         }
     }
 

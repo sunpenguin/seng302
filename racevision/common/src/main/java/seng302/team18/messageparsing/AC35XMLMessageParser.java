@@ -10,8 +10,6 @@ import java.io.InputStream;
 /**
  * A parser which reads information from an XML stream and creates parsers of the type corresponding to the stream
  * information.
- *
- * Created by dhl25 on 10/04/17.
  */
 public class AC35XMLMessageParser implements MessageBodyParser {
 
@@ -25,11 +23,12 @@ public class AC35XMLMessageParser implements MessageBodyParser {
     /**
      * Converts the input stream to a byte array which is then passed to a parse method to read in which type of
      * message body needs to be created.
+     *
      * @param stream A data stream
      * @return A message body created by the other parse method.
      */
     @Override
-    public MessageBody parse(InputStream stream) { // wrapper
+    public MessageBody parse(InputStream stream) {
         try {
             return parse(ByteStreams.toByteArray(stream));
         } catch (IOException e) {
@@ -41,6 +40,7 @@ public class AC35XMLMessageParser implements MessageBodyParser {
     /**
      * Takes a byte array and creates and returns a message body of the type indicated by the body bytes.
      * Uses the body parser to parse all of the body bytes.
+     *
      * @param bytes A list of bytes
      * @return A message body with the body bytes parsed into it
      */
@@ -57,7 +57,7 @@ public class AC35XMLMessageParser implements MessageBodyParser {
         MessageHead head = headParser.parse(headerBytes);
         MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.getType());
 
-        return bodyParser == null ? null : bodyParser. parse(bodyBytes);
+        return bodyParser == null ? null : bodyParser.parse(bodyBytes);
     }
 
 }

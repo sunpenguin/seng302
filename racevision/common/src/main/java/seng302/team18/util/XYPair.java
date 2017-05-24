@@ -10,6 +10,7 @@ public class XYPair {
     /**
      * Constructor for XYPair class.
      * Used to hold x, y catersian coordinates
+     *
      * @param x x coordinate
      * @param y y coordinate
      */
@@ -21,6 +22,7 @@ public class XYPair {
 
     /**
      * Getter for the x coordinate
+     *
      * @return x coordinate
      */
     public double getX() {
@@ -30,17 +32,18 @@ public class XYPair {
 
     /**
      * Getter for the y coordinate
+     *
      * @return y coordinate
      */
     public double getY() {
         return this.y;
     }
 
-    public void shiftX(double x) {
-        this.x += x;
+    public void setX(double x) {
+        this.x = x;
     }
 
-    public void shiftY(double y) {
-        this.y += y;
+    public void setY(double y) {
+        this.y = y;
     }
 }
