@@ -256,13 +256,13 @@ public class MainWindowController implements Observer {
             }
         });
 
-        Collection<TableColumn<String, String>> columns = new ArrayList<>();
+        Collection<TableColumn<Boat, ?>> columns = new ArrayList<>();
         columns.add(boatPositionColumn);
         columns.add(boatColorColumn);
         columns.add(boatNameColumn);
         columns.add(boatSpeedColumn);
 
-        for (TableColumn<String, String> column : columns) {
+        for (TableColumn<Boat, ?> column : columns) {
             column.setResizable(false);
             column.setSortable(false);
         }
@@ -270,7 +270,7 @@ public class MainWindowController implements Observer {
         tableView.getColumns().setAll(columns);
 
         // Resets the columns to the original order whenever the user tries to change them
-        tableView.getColumns().addListener(new ListChangeListener<TableColumn<String, String>>() {
+        tableView.getColumns().addListener(new ListChangeListener<TableColumn<Boat, ?>>() {
             public boolean suspended;
 
             @Override
