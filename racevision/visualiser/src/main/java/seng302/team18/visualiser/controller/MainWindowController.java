@@ -1,6 +1,8 @@
 package seng302.team18.visualiser.controller;
 
 import javafx.beans.Observable;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -75,6 +77,7 @@ public class MainWindowController implements Observer {
 
     @FXML
     public void initialize() {
+        setSlider();
         sliderSetup();
         fpsOn = true;
         importantAnnotations = new HashMap<>();
@@ -134,47 +137,62 @@ public class MainWindowController implements Observer {
         fpsLabel.setVisible(fpsOn);
     }
 
+
+
     private void sliderSetup(){
+        TextArea t = new TextArea();
+        t.setText("poop");
+        IntegerProperty sliderValue = new SimpleIntegerProperty(0);
         slider.setSnapToTicks(true);
         slider.setShowTickMarks(true);
         slider.setShowTickLabels(true);
         slider.setMajorTickUnit(0.5f);
         slider.setBlockIncrement(0.5f);
+        t.textProperty().bind(sliderValue.asString());
         slider.setLabelFormatter(new StringConverter<Double>() {
             @Override
             public String toString(Double n) {
-                if (n == 0) return "None";
-                if (n == 0.5) return "Important";
-                return "Full";
+                if (n == 0d) return "None";
+                if (n == 0.5d) return "Important";
+                if (n == 1d) return "Full";
+                return "Important";
             }
 
             @Override
             public Double fromString(String s) {
                 switch (s) {
-                    case "None":
+                    case "Novice":
                         return 0d;
-                    case "Important":
+                    case "Intermediate":
                         return 1d;
-                    case "Full":
+                    case "Advanced":
                         return 2d;
+                    case "Expert":
+                        return 3d;
+
                     default:
-                        return 1d;
+                        return 3d;
                 }
             }
         });
     }
-
     private void setSlider() {
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+            }
+        });
         slider.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val) {
-                if(new_val == (Number)0d){
+                if(new_val.doubleValue() == 0d){
                     setNoneAnnotationLevel();
                 }
-                if(new_val == (Number)1d){
+                if(new_val.doubleValue() == 0.5d){
                     setToImportantAnnotationLevel();
                 }
-                else{
+                if(new_val.doubleValue() == 1d){
                     setFullAnnotationLevel();
                 }
             }
