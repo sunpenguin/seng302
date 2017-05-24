@@ -50,7 +50,7 @@
                            </font>
                        </Text>
                        <Text layoutX="6.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
-                     <Button layoutX="10.0" layoutY="115.0" mnemonicParsing="false" onAction="#zoomOutButtonAction" text="Zoom Out" />
+                     <Button layoutX="10.0" layoutY="115.0" mnemonicParsing="false" onAction="#zoomOutButtonAction" text="Zoom Out" textFill="#fffdfd" />
                    </children>
                </AnchorPane>
             <AnchorPane layoutX="6.0" layoutY="643.0" prefHeight="42.0" prefWidth="96.0" />
@@ -113,8 +113,8 @@
                                        <TableView fx:id="tableView" prefHeight="209.0" prefWidth="453.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                            <columns>
                                                <TableColumn fx:id="boatPositionColumn" prefWidth="87.0" text="Position" />
-                                               <TableColumn fx:id="boatColorColumn" maxWidth="25.0" minWidth="-Infinity" prefWidth="25.0"/>
-                                               <TableColumn fx:id="boatNameColumn" minWidth="0.0" prefWidth="228.0" text="Name"/>
+                                               <TableColumn fx:id="boatColorColumn" maxWidth="25.0" minWidth="-Infinity" prefWidth="25.0" />
+                                               <TableColumn fx:id="boatNameColumn" minWidth="0.0" prefWidth="228.0" text="Name" />
                                                <TableColumn fx:id="boatSpeedColumn" maxWidth="173.0" prefWidth="112.0" text="Speed (knots)" />
                                            </columns>
                                        </TableView>
@@ -126,7 +126,7 @@
                </GridPane>
            </children>
        </AnchorPane>
-       <MenuBar prefHeight="30.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+       <MenuBar fx:id="menuBar" prefHeight="30.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
            <menus>
                <Menu fx:id="raceMenu" mnemonicParsing="false" text="Race">
                    <items>

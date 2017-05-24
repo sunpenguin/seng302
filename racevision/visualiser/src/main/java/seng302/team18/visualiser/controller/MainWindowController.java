@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
@@ -48,6 +49,8 @@ public class MainWindowController implements Observer {
     @FXML private LineChart<String, String> sparklinesChart;
     @FXML private ImageView imageViewMap;
     @FXML private Menu raceMenu;
+    @FXML private MenuBar menuBar;
+    @FXML private Menu annotations;
     @FXML private CheckMenuItem fullAnnotationMenuItem;
     @FXML private CheckMenuItem importantAnnotationMenuItem;
     @FXML private CheckMenuItem noAnnotationMenuItem;
@@ -70,6 +73,7 @@ public class MainWindowController implements Observer {
 
     @FXML
     public void initialize() {
+        setMenu();
         loadIcon();
         fpsOn = true;
         importantAnnotations = new HashMap<>();
@@ -79,6 +83,11 @@ public class MainWindowController implements Observer {
         group.setManaged(false);
     }
 
+    private void setMenu(){
+        menuBar.setCache(true);
+        menuBar.setCacheShape(true);
+        menuBar.setCacheHint(CacheHint.SPEED);
+    }
 
     @FXML
     private void zoomOutButtonAction() {
