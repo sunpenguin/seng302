@@ -15,6 +15,8 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 /**
  * Created by david on 5/2/17.
  */
@@ -23,7 +25,7 @@ public class WindDirectionInterpreterTest {
     private Race race;
     private MessageInterpreter interpreter;
     private Boat boat;
-    private double windDirection = 35.4d;
+    private double windDirection = 35.4;
 
     @Before
     public void setUp() {
@@ -64,7 +66,8 @@ public class WindDirectionInterpreterTest {
     public void courseTest() {
         Course expected = new Course();
         Course actual = race.getCourse();
-        Assert.assertEquals(windDirection, actual.getWindDirection(), 0.01);
+        double expectedWindDirection = abs((windDirection - 180) % 360);
+        Assert.assertEquals(expectedWindDirection, actual.getWindDirection(), 0.01);
         Assert.assertEquals(expected.getTimeZone(), actual.getTimeZone());
         Assert.assertEquals(expected.getCentralCoordinate(), actual.getCentralCoordinate());
         Assert.assertEquals(expected.getBoundaries().size(), actual.getBoundaries().size());
