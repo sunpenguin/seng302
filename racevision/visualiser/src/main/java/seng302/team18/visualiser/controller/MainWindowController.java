@@ -2,6 +2,7 @@ package seng302.team18.visualiser.controller;
 
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -87,9 +88,10 @@ public class MainWindowController implements Observer {
     }
 
 
-/**
+    /**
      * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
-     */    private void loadIcon(){
+     */
+    private void loadIcon() {
         ImageView icon = new ImageView("/images/boat-310164_640.png");
         icon.setFitHeight(18);
         icon.setFitWidth(18);
@@ -230,6 +232,7 @@ public class MainWindowController implements Observer {
                 }
             }
         });
+
         boatColorColumn.setCellFactory(column -> new TableCell<Boat, String>() {
             private final Map<Boat, Color> colors = boatColors;
 
@@ -246,12 +249,34 @@ public class MainWindowController implements Observer {
                 }
             }
         });
-        boatPositionColumn.setSortable(false);
-        boatNameColumn.setSortable(false);
-        boatSpeedColumn.setSortable(false);
-        boatColorColumn.setSortable(false);
-        tableView.getColumns().setAll(boatPositionColumn, boatColorColumn, boatNameColumn, boatSpeedColumn);
 
+        Collection<TableColumn<Boat, ?>> columns = new ArrayList<>();
+        columns.add(boatPositionColumn);
+        columns.add(boatColorColumn);
+        columns.add(boatNameColumn);
+        columns.add(boatSpeedColumn);
+
+        for (TableColumn<Boat, ?> column : columns) {
+            column.setResizable(false);
+            column.setSortable(false);
+        }
+
+        tableView.getColumns().setAll(columns);
+
+        // Resets the columns to the original order whenever the user tries to change them
+        tableView.getColumns().addListener(new ListChangeListener<TableColumn<Boat, ?>>() {
+            public boolean suspended;
+
+            @Override
+            public void onChanged(Change change) {
+                change.next();
+                if (change.wasReplaced() && !suspended) {
+                    this.suspended = true;
+                    tableView.getColumns().setAll(columns);
+                    this.suspended = false;
+                }
+            }
+        });
     }
 
     /**
@@ -324,7 +349,6 @@ public class MainWindowController implements Observer {
 
 
     /**
-     *
      * @param o
      * @param arg
      */
@@ -348,6 +372,7 @@ public class MainWindowController implements Observer {
 
     /**
      * Extracts the central course coordinate from the course
+     *
      * @param course The course for which the midpoint is calculated
      */
     private void setCourseCenter(Course course) {
