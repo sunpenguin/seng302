@@ -18,7 +18,7 @@
     <Course>
         <CompoundMark CompoundMarkID="11" Name="Start/Finish Line">
             <Mark SeqID="1" Name="PRO" TargetLat="32.298577" TargetLng="-64.854304" SourceID="131" />
-            <Mark SeqID="2" Name="PIN" TargetLat="32.29658" TargetLng="-64.85900" SourceID="132" />
+            <Mark SeqID="2" Name="PIN" TargetLat="32.295" TargetLng="-64.85600" SourceID="132" />
         </CompoundMark>
 
         <CompoundMark CompoundMarkID="12" Name="Mark">
