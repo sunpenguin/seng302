@@ -41,7 +41,7 @@ public class PreRaceController {
      */
     public void setUp(Race race) {
         // ZonedDateTime startTime, List<Boat> boats
-        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"));
+        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getStartTime().getZone());
         raceNameText.setText(race.getRaceName());
         displayTimeZone(race.getStartTime());
         startTimeLabel.setText(race.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
