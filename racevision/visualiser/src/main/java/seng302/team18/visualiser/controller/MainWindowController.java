@@ -387,7 +387,7 @@ public class MainWindowController implements Observer {
 
         setUpTable(raceRenderer.boatColors());
 
-        setToImportantAnnotationLevel();
+        setNoneAnnotationLevel();
 
         setUpSparklinesCategory(raceRenderer.boatColors());
     }
