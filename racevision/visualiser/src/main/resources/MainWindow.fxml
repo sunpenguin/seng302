@@ -64,13 +64,12 @@
                    </columnConstraints>
                    <rowConstraints>
                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="161.0" vgrow="SOMETIMES" />
-                       <RowConstraints maxHeight="475.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-                       <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="240.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="475.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                       <RowConstraints maxHeight="236.0" minHeight="-Infinity" prefHeight="218.0" vgrow="SOMETIMES" />
                        <RowConstraints maxHeight="475.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="215.0" vgrow="SOMETIMES" />
                    </rowConstraints>
                    <children>
-                       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
                            <children>
                                <Rectangle arcHeight="5.0" arcWidth="5.0" height="50.0" layoutX="140.0" layoutY="40.0" stroke="BLACK" strokeType="INSIDE" width="179.0" />
@@ -84,11 +83,6 @@
                                        <Font size="24.0" />
                                    </font>
                                </Label>
-                        <Text layoutX="182.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Annotations" wrappingWidth="123.46484375">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Text>
                            </children>
                        </AnchorPane>
                        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
@@ -127,17 +121,18 @@
                                </AnchorPane>
                            </children>
                        </GridPane>
-                  <Button fx:id="setAnnotations" mnemonicParsing="false" onAction="#openAnnotationsWindow" prefHeight="27.0" prefWidth="118.0" text="Set Annotations" textFill="#fffefe" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-                  <Button fx:id="toggleFps" mnemonicParsing="false" onAction="#toggleFPS" text="Toggle Fps" textFill="#fcf8f8" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets right="10.0" />
-                     </GridPane.margin>
-                  </Button>
-                  <Slider fx:id="slider" blockIncrement="50.0" majorTickUnit="50.0" max="1.0" minorTickCount="0" prefHeight="16.0" prefWidth="215.0" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="125.0" right="100.0" />
-                     </GridPane.margin>
-                  </Slider>
+                  <AnchorPane prefHeight="66.0" prefWidth="458.0" GridPane.rowIndex="1">
+                     <children>
+                        <Button fx:id="setAnnotations" layoutX="20.0" mnemonicParsing="false" onAction="#openAnnotationsWindow" prefHeight="27.0" prefWidth="140.0" text="Set Annotations" textFill="#fffefe" />
+                        <Button fx:id="toggleFps" layoutX="20.0" layoutY="33.0" mnemonicParsing="false" onAction="#toggleFPS" prefHeight="27.0" prefWidth="140.0" text="Toggle Fps" textFill="#fcf8f8" />
+                        <Slider fx:id="slider" blockIncrement="50.0" layoutX="223.0" layoutY="25.0" majorTickUnit="50.0" max="1.0" minorTickCount="0" prefHeight="16.0" prefWidth="215.0" />
+                        <Text layoutX="277.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Annotations" wrappingWidth="123.46484375">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
                    </children>
                </GridPane>
            </children>
