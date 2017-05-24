@@ -56,14 +56,9 @@ public class MainWindowController implements Observer {
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
-    @FXML private Menu raceMenu;
-    @FXML private MenuBar menuBar;
     @FXML private Button setAnnotations;
     @FXML private Button toggle;
     @FXML private Slider slider;
-    @FXML private CheckMenuItem fullAnnotationMenuItem;
-    @FXML private CheckMenuItem importantAnnotationMenuItem;
-    @FXML private CheckMenuItem noAnnotationMenuItem;
     @FXML private WebView map;
 
     private boolean fpsOn;
@@ -93,12 +88,6 @@ public class MainWindowController implements Observer {
         group.setManaged(false);
     }
 
-    private void setMenu(){
-        menuBar.setCache(true);
-        menuBar.setCacheShape(true);
-        menuBar.setCacheHint(CacheHint.SPEED);
-    }
-
     @FXML
     private void zoomOutButtonAction() {
         pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
@@ -118,7 +107,6 @@ public class MainWindowController implements Observer {
         ImageView icon = new ImageView("/images/boat-310164_640.png");
         icon.setFitHeight(18);
         icon.setFitWidth(18);
-        raceMenu.setGraphic(icon);
     }
 
     /**
