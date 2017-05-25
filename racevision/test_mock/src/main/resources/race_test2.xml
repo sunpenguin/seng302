@@ -52,12 +52,12 @@
     </CompoundMarkSequence>
 
     <CourseLimit>
-        <Limit SeqID="1" Lon="-64.84620" Lat="32.31409"/>
-        <Limit SeqID="2" Lon="-64.82414" Lat="32.30082"/>
-        <Limit SeqID="3" Lon="-64.82929" Lat="32.28565"/>
+        <Limit SeqID="1" Lon="-64.84599" Lat="32.31056"/>
+        <Limit SeqID="2" Lon="-64.82783" Lat="32.30125"/>
+        <Limit SeqID="3" Lon="-64.83796" Lat="32.28718"/>
         <Limit SeqID="4" Lon="-64.85023" Lat="32.28108"/>
-        <Limit SeqID="5" Lon="-64.86843" Lat="32.28609"/>
-        <Limit SeqID="6" Lon="-64.86182" Lat="32.30851"/>
+        <Limit SeqID="5" Lon="-64.86268" Lat="32.29022"/>
+        <Limit SeqID="6" Lon="-64.85530" Lat="32.30510"/>
     </CourseLimit>
 
 </Race>
