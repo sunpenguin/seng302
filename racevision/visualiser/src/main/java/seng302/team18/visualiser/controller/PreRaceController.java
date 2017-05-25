@@ -3,7 +3,6 @@ package seng302.team18.visualiser.controller;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
@@ -11,9 +10,7 @@ import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.ZoneTimeClock;
-import seng302.team18.visualiser.util.Session;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -124,8 +121,7 @@ public class PreRaceController {
 
     private void openStream(String host, int port) {
         try {
-            Session.getInstance().setReceiver(new SocketMessageReceiver(host, port, new AC35MessageParserFactory()));
-            startConnection();
+            startConnection(new SocketMessageReceiver(host, port, new AC35MessageParserFactory()));
         } catch (Exception e) {
             errorText.setText(String.format("Could not establish connection to stream at: %s:%d", host, port));
         }
@@ -135,10 +131,11 @@ public class PreRaceController {
      * Creates a controller manager object and begins an instance of the program.
      * @throws Exception A connection error
      */
-    private  void startConnection() throws Exception {
+    private  void startConnection(SocketMessageReceiver receiver) throws Exception {
 
         Stage s = (Stage) errorText.getScene().getWindow();
         ControllerManager manager = new ControllerManager(s, "MainWindow.fxml", "PreRace.fxml");
+        manager.setReceiver(receiver);
         manager.start();
     }
 

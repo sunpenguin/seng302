@@ -10,7 +10,6 @@ import seng302.team18.messageparsing.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.messageinterpreting.RaceClockInterpreter;
-import seng302.team18.visualiser.util.Session;
 
 import java.io.IOException;
 import java.util.*;
@@ -72,7 +71,6 @@ public class ControllerManager {
      * @throws Exception
      */
     public void start() throws Exception {
-        receiver = Session.getInstance().getReceiver();
         race = new Race();
         initialiseInterpreter();
         interpretMessages();
@@ -190,5 +188,14 @@ public class ControllerManager {
             }
         }
         return portAndHost;
+    }
+
+
+    /**
+     * Sets the socket to receive from
+     * @param socketMessageReceiver socket to receive from
+     */
+    public void setReceiver(SocketMessageReceiver socketMessageReceiver) {
+        receiver = socketMessageReceiver;
     }
 }
