@@ -29,6 +29,7 @@ public class DisplayBoat {
     private Color wakeColor = Color.CADETBLUE;
     private double wakeScaleFactor = 1.0d / 32.0d; // the wake is at normal size when the boat is moving 32 speed
     private double minWakeSize = 0.1;
+    private double maxWakeSize = 2;
 
     private Text annotation;
     private String name;
@@ -90,6 +91,7 @@ public class DisplayBoat {
         // Speed
         this.speed = speed;
         double scale = (speed != 0) ? speed * wakeScaleFactor : minWakeSize;
+
         tfmWakeSpeed.setX(scale);
         tfmWakeSpeed.setY(scale);
 
@@ -173,6 +175,7 @@ public class DisplayBoat {
     public void setSpeed(double speed) {
         this.speed = speed;
         double scale = (speed != 0) ? speed * wakeScaleFactor : minWakeSize;
+        scale = (scale > maxWakeSize) ? maxWakeSize : scale;
         tfmWakeSpeed.setX(scale);
         tfmWakeSpeed.setY(scale);
 

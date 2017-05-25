@@ -11,8 +11,8 @@
         <Yacht SourceID="122" Entry="Stbd" />
         <Yacht SourceID="123" Entry="Stbd" />
         <Yacht SourceID="124" Entry="Port" />
-        <Yacht SourceID="125" Entry="Stbd" />
-        <Yacht SourceID="126" Entry="Port" />
+        <!--<Yacht SourceID="125" Entry="Stbd" />-->
+        <!--<Yacht SourceID="126" Entry="Port" />-->
     </Participants>
 
     <Course>
