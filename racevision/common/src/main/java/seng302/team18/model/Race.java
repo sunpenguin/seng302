@@ -227,8 +227,14 @@ public class Race {
         for (Boat currentBoat : getStartingList()) {
             int currentBoatPlace = currentBoat.placeProperty().intValue();
             int boatPlace = boat.placeProperty().intValue();
-            if ((currentBoat.getId() != boat.getId()) && (currentBoatPlace == boatPlace)) {
-                currentBoat.setPlace(currentBoatPlace + 1);
+            int currentBoatLeg = currentBoat.getLegNumber();
+            int boatLeg = boat.getLegNumber();
+            if (!(currentBoat.getId().equals(boat.getId())) && (currentBoatPlace == boatPlace)) {
+                if (currentBoatLeg >= boatLeg) {
+                    currentBoat.setPlace(currentBoatPlace - 1);
+                } else {
+                    currentBoat.setPlace(currentBoatPlace + 1);
+                }
             }
         }
 
