@@ -1,7 +1,6 @@
 package seng302.team18.messageparsing;
 
-import seng302.team18.message.MessageBody;
-import seng302.team18.message.MessageHead;
+import seng302.team18.message.*;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

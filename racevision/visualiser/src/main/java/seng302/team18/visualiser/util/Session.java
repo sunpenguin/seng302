@@ -7,10 +7,6 @@ import seng302.team18.messageparsing.SocketMessageReceiver;
  */
 public class Session {
 
-    private Boolean boatNameImportant;
-    private Boolean boatSpeedImportant;
-    private Boolean estimatedTimeImportant;
-    private Boolean timeSinceLastMarkImportant;
     private SocketMessageReceiver receiver;
 
     /**
@@ -32,38 +28,6 @@ public class Session {
      */
     public static Session getInstance() {
         return instance;
-    }
-
-    public Boolean getBoatNameImportant() {
-        return boatNameImportant;
-    }
-
-    public void setBoatNameImportant(Boolean boatNameImportant) {
-        this.boatNameImportant = boatNameImportant;
-    }
-
-    public Boolean getBoatSpeedImportant() {
-        return boatSpeedImportant;
-    }
-
-    public void setBoatSpeedImportant(Boolean boatSpeedImportant) {
-        this.boatSpeedImportant = boatSpeedImportant;
-    }
-
-    public Boolean getEstimatedTimeImportant() {
-        return estimatedTimeImportant;
-    }
-
-    public void setEstimatedTimeImportant(Boolean estimatedTimeImportant) {
-        this.estimatedTimeImportant = estimatedTimeImportant;
-    }
-
-    public Boolean getTimeSinceLastMarkImportant() {
-        return timeSinceLastMarkImportant;
-    }
-
-    public void setTimeSinceLastMarkImportant(Boolean timeSinceLastMarkImportant) {
-        this.timeSinceLastMarkImportant = timeSinceLastMarkImportant;
     }
 
     public SocketMessageReceiver getReceiver() {

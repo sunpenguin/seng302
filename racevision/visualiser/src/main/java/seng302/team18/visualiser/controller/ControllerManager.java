@@ -1,10 +1,8 @@
 package seng302.team18.visualiser.controller;
 
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.MessageBody;
@@ -42,7 +40,7 @@ public class ControllerManager {
 
         private int code;
 
-        private ViewType(int code) {
+        ViewType(int code) {
             this.code = code;
         }
 
@@ -75,7 +73,6 @@ public class ControllerManager {
      */
     public void start() throws Exception {
         receiver = Session.getInstance().getReceiver();
-//        receiver = getPort();
         race = new Race();
         initialiseInterpreter();
         interpretMessages();
@@ -92,6 +89,7 @@ public class ControllerManager {
                 MessageBody messageBody;
                 try {
                     messageBody = receiver.nextMessage();
+//                    Thread.sleep(10); // Uncomment and set it when using csse streams
                 } catch (Exception e) {
                     return; // ignore if anything goes wrong
                 }
@@ -111,6 +109,7 @@ public class ControllerManager {
      */
     private void initialiseInterpreter() {
         interpreter = new CompositeMessageInterpreter();
+
         interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
@@ -134,7 +133,6 @@ public class ControllerManager {
      */
     public void showMainView() throws IOException {
         if (currentView.differentView(ViewType.MAIN)) {
-            currentView = ViewType.MAIN;
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(mainControllerPath));
             Parent root = loader.load(); // throws IOException
             mainController = loader.getController();
@@ -143,13 +141,11 @@ public class ControllerManager {
             primaryStage.setResizable(true);
             primaryStage.setMinHeight(700);
             primaryStage.setMinWidth(1000);
-            primaryStage.setOnCloseRequest(event -> System.exit(0));
             primaryStage.setScene(scene);
             primaryStage.show();
-
             mainController.setUp(race);
-
             interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(mainController.getRaceClock()));
+            currentView = ViewType.MAIN;
         }
     }
 
@@ -159,7 +155,6 @@ public class ControllerManager {
      */
     public void showPreRace() throws IOException {
         if (currentView.differentView(ViewType.PRE_RACE)) {
-            currentView = ViewType.PRE_RACE;
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(preRacePath));
             Parent root = loader.load(); // throws IOException
             preRaceController = loader.getController();
@@ -167,12 +162,10 @@ public class ControllerManager {
             Scene scene = new Scene(root, 777, 578);
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
-            primaryStage.setOnCloseRequest(event -> System.exit(0));
             primaryStage.show();
 
-            interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new ZoneClockInterpreter(preRaceController.getClock(), race.getStartTime().getZone()));
-
             preRaceController.setUp(race);
+            currentView = ViewType.PRE_RACE;
         }
     }
 

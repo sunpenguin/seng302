@@ -1,7 +1,6 @@
 package seng302.team18.message;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Enum for the different types of race status for the AC35 streaming protocol and their associated codes.
@@ -11,6 +10,7 @@ public enum RaceStatus {
     ABANDONED(6), POSTPONED(7), TERMINATED(8), RACE_START_NOT_SET(9), PRESTART(10);
 
     private int code;
+    private final static Map<Integer, RaceStatus> CODE_MAP = Collections.unmodifiableMap(initializeMapping());
 
     RaceStatus(int code) {
         this.code = code;
@@ -23,8 +23,8 @@ public enum RaceStatus {
      */
     public static List<Integer> preRaceCodes() {
         List<Integer> codes = new ArrayList<>();
-        codes.add(WARNING.getCode());
-        codes.add(PRESTART.getCode());
+        codes.add(WARNING.code());
+        codes.add(PRESTART.code());
         return codes;
     }
 
@@ -33,7 +33,21 @@ public enum RaceStatus {
      *
      * @return the code of the race status type.
      */
-    public int getCode() {
+    public int code() {
         return this.code;
+    }
+
+
+    public static RaceStatus ofCode(int code) {
+        return CODE_MAP.get(code);
+    }
+
+
+    private static Map<Integer, RaceStatus> initializeMapping() {
+        Map<Integer, RaceStatus> statusMap = new HashMap<>();
+        for (RaceStatus status : RaceStatus.values()) {
+            statusMap.put(status.code(), status);
+        }
+        return statusMap;
     }
 }

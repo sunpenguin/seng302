@@ -2,9 +2,7 @@ package seng302.team18.visualiser.display;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -13,42 +11,29 @@ import java.time.format.DateTimeFormatter;
  */
 public class ZoneTimeClock extends AnimationTimer {
 
-    private Label timeLabel;
-    private ZonedDateTime time;
-    private DateTimeFormatter formatter;
-    private ZoneId raceZone;
+    private Label timerLabel;
+    private ZonedDateTime zonedDateTime;
+    private long previousTime = 0;
+    private final DateTimeFormatter formatter;
 
-    /**
-     * Construct a new ZoneTimeClock.
-     * @param timeLabel JavaFX Label to display the time on.
-     * @param formatter formatter for time when displaying on label.
-     */
-    public ZoneTimeClock(Label timeLabel, DateTimeFormatter formatter, ZoneId raceZone) {
-        this.timeLabel = timeLabel;
-        this.formatter = formatter;
-        this.raceZone = raceZone;
-        timeLabel.setStyle("-fx-font-size: 2em;");
-        timeLabel.setText("");
+    public ZoneTimeClock(Label timerLabel, DateTimeFormatter timeFormatter, ZonedDateTime currentTime) {
+        this.timerLabel = timerLabel;
+        this.formatter = timeFormatter;
+        zonedDateTime = currentTime;
     }
 
-
-    /**
-     * Sets the time of the clock in seconds.
-     * @param time current time.
-     */
-    public void setTime(ZonedDateTime time) { // seconds please
-        this.time = time;
-    }
-
-
-    /**
-     * Updates the label to match the time set in setTime.
-     * @param now unused.
-     */
     @Override
-    public void handle(long now) {
-        ZonedDateTime displayTime = (time != null) ? time : ZonedDateTime.now(raceZone);
-        timeLabel.setText(displayTime.format(formatter));
+    public void handle(long currentTime) {
+        if (previousTime == 0) {
+            previousTime = currentTime;
+            return;
+        }
+
+        double nanoSecondsElapsed = (currentTime - previousTime);// * timeScaleFactor;
+        previousTime = currentTime;
+
+        zonedDateTime = zonedDateTime.plusNanos((long) nanoSecondsElapsed);
+        timerLabel.setText(zonedDateTime.format(formatter));
     }
 
 

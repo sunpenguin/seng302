@@ -4,6 +4,7 @@ import com.google.common.io.ByteStreams;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
+import seng302.team18.message.RaceStatus;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class AC35RaceStatusParser implements MessageBodyParser {
      * @return A message holding information about the race status.
      */
     @Override
-    public MessageBody parse(byte[] bytes) { // more final declarations than actual code LOL
+    public MessageBody parse(byte[] bytes) {
         final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
         final int CURRENT_TIME_INDEX = 1;
         final int CURRENT_TIME_LENGTH = 6;
