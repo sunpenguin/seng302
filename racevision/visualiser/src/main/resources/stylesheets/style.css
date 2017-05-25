@@ -109,7 +109,7 @@
 
 
 .table-row-cell{
-    -fx-background-color: -fx-table-cell-border-color, slategrey;
+    -fx-background-color: -fx-table-cell-border-color, slategray;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em; /* 0 */
 }

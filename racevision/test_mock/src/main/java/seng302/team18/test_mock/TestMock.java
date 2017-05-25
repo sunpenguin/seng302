@@ -20,12 +20,9 @@ public class TestMock {
     private Course course;
     private Race race;
 
-//    private String regattaXML = "/AC35regatta.xml";
-//    private String boatsXML = "/AC35boats.xml";
-//    private String raceXML = "/AC35race.xml";
-    private String regattaXML = "/regatta_test1.xml";
-    private String boatsXML = "/boats_test2.xml";
-    private String raceXML = "/race_test2.xml";
+    private final String regattaXML = "/regatta_test1.xml";
+    private final String boatsXML = "/boats_test2.xml";
+    private final String raceXML = "/race_test2.xml";
 
     private AC35XMLRegattaMessage regattaMessage;
     private AC35XMLBoatMessage boatMessage;
@@ -117,8 +114,8 @@ public class TestMock {
             race.setStatus((byte) 3);
             race.updateBoats((timeCurr - timeLast));
 
-            race.getStartingList().get(2).setSpeed(race.getStartingList().get(2).getSpeed() + 0.1);
-            race.getStartingList().get(3).setSpeed(race.getStartingList().get(3).getSpeed() + 0.05);
+            accelerateBoat(race, race.getStartingList().get(2), 0.1);
+            accelerateBoat(race, race.getStartingList().get(3), 0.05);
 
             // Send mark rounding messages for all mark roundings that occured
             for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
@@ -175,9 +172,12 @@ public class TestMock {
         int raceID = raceMessage.getRaceID();
 
         race = new Race(startingList, course, raceID);
+    }
 
-//        RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
-//        raceMessageGenerator.getMessage();
+    private void accelerateBoat(Race race, Boat boat, double acceleration) {
+        if (!race.getFinishedList().contains(boat)) {
+            boat.setSpeed(boat.getSpeed() + acceleration);
+        }
     }
 
     public String getRegattaXML() {
