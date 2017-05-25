@@ -62,10 +62,10 @@ public class Race {
      * Sets the speed of the boats at the start line
      */
     private void setInitialSpeed() {
-        int speed = 40;
+        int speed = 200;
         for (Boat b : startingList) {
             b.setSpeed(speed); //kph
-            speed -= 3;
+            speed -= 50;
         }
     }
 
@@ -219,9 +219,18 @@ public class Race {
     public void setNextLeg(Boat boat, Leg nextLeg) {
         Leg currentLeg = course.getLeg(boat.getLegNumber());
         currentLeg.addToBoatsCompleted(boat);
-        boat.setPlace(currentLeg.getBoatsCompleted().indexOf(boat) + 1);
+        int newPlace = currentLeg.getBoatsCompleted().indexOf(boat) + 1;
+        boat.setPlace(newPlace);
         boat.setDestination(nextLeg.getDestination().getMarks().get(0).getCoordinate());
         boat.setLegNumber(nextLeg.getLegNumber());
+
+        for (Boat currentBoat : getStartingList()) {
+            int currentBoatPlace = currentBoat.placeProperty().intValue();
+            int boatPlace = boat.placeProperty().intValue();
+            if ((currentBoat.getId() != boat.getId()) && (currentBoatPlace == boatPlace)) {
+                currentBoat.setPlace(currentBoatPlace + 1);
+            }
+        }
 
         // TODO when this is enabled it causes the visualiser to freeze, likely due to malformed packets
         markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getLeg(boat.getLegNumber()).getDeparture()));
