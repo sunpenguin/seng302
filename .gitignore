@@ -175,3 +175,9 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+/app.iml
+/.idea/misc.xml
+/racevision/racevision.iml
+/racevision/visualiser/visualiser.iml
+/racevision/test_mock/test_mock.iml
+/racevision/common/common.iml
