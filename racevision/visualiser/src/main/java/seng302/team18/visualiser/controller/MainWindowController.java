@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
@@ -54,6 +53,7 @@ public class MainWindowController implements Observer {
     @FXML private TableColumn<Boat, String> boatColorColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
+    @FXML private Label speedLabel;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
     @FXML private Button setAnnotations;
@@ -70,7 +70,7 @@ public class MainWindowController implements Observer {
     private CourseRenderer courseRenderer;
     private BackgroundRenderer backgroundRenderer;
     private RaceClock raceClock;
-    private WindDirection windDirection;
+    private WindDisplay windDisplay;
     private PixelMapper pixelMapper;
     private Map<AnnotationType, Boolean> importantAnnotations;
 
@@ -343,8 +343,8 @@ public class MainWindowController implements Observer {
      */
     private void startWindDirection() {
         arrow.setScaleX(0.4);
-        windDirection = new WindDirection(race, arrow, race.getCourse().getWindDirection());
-        windDirection.start();
+        windDisplay = new WindDisplay(race, arrow, speedLabel);
+        windDisplay.start();
     }
 
 

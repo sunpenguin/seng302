@@ -1,22 +1,29 @@
 package seng302.team18.visualiser.display;
 
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.shape.Polygon;
+import javafx.scene.text.TextAlignment;
 import seng302.team18.model.Race;
 
 /**
  * The class that manages the wind direction
  */
-public class WindDirection extends AnimationTimer {
+public class WindDisplay extends AnimationTimer {
 
     private Race race;
     private Polygon arrow;
+    private Label speedLabel;
     private double direction;
+    private double speed;
 
-    public WindDirection(Race race, Polygon arrow, double direction) {
+    public WindDisplay(Race race, Polygon arrow, Label speedLabel) {
         this.race = race;
         this.arrow = arrow;
-        this.direction = direction;
+        this.speedLabel = speedLabel;
+        this.direction = race.getCourse().getWindDirection();
+        this.speed = race.getCourse().getWindSpeed();
     }
 
     @Override
@@ -25,6 +32,8 @@ public class WindDirection extends AnimationTimer {
             return;
         }
         double newWindDirection = race.getCourse().getWindDirection();
+        double newWindSpeed = race.getCourse().getWindSpeed();
+        speedLabel.setText(Double.toString(newWindSpeed) + " knots");
         updateWindDirection(newWindDirection);
     }
 

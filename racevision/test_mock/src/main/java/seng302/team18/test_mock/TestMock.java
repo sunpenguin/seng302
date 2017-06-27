@@ -150,6 +150,7 @@ public class TestMock {
 
         List<BoundaryMark> boundaryMarks = raceMessage.getBoundaryMarks();
         double windDirection = 0;
+        double windSpeed = 0;
 
         List<MarkRounding> markRoundings = raceMessage.getMarkRoundings();
 
@@ -163,7 +164,7 @@ public class TestMock {
 
         Coordinate central = new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong());
 
-        course = new Course(compoundMarks, boundaryMarks, windDirection, zoneId, markRoundings);
+        course = new Course(compoundMarks, boundaryMarks, windDirection, windSpeed,  zoneId, markRoundings);
         course.setCentralCoordinate(central);
     }
 
