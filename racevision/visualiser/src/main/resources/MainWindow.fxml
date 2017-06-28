@@ -22,7 +22,7 @@
                <Group fx:id="group" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
                <AnchorPane layoutX="2.0" layoutY="4.0" prefHeight="143.0" prefWidth="104.0">
                    <children>
-                       <Polygon fx:id="arrow" layoutX="50.0" layoutY="63.0" scaleX="0.3" scaleY="0.6" stroke="BLACK" strokeType="INSIDE">
+                       <Polygon fx:id="arrow" layoutX="51.0" layoutY="70.0" scaleX="0.3" scaleY="0.75" stroke="BLACK" strokeType="INSIDE">
                            <points>
                                <Double fx:value="-50.0" />
                                <Double fx:value="40.0" />
@@ -45,9 +45,9 @@
                                <Font size="18.0" />
                            </font>
                        </Text>
-                       <Text layoutX="6.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
-                     <Button layoutX="8.0" layoutY="144.0" mnemonicParsing="false" onAction="#zoomOutButtonAction" text="Zoom Out" textFill="#fcfcfc" />
-                  <Label fx:id="speedLabel" alignment="CENTER" layoutX="-2.0" layoutY="115.0" prefHeight="15.0" prefWidth="104.0" text="speedLabel" textAlignment="CENTER" />
+                       <Text layoutX="4.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
+                     <Button layoutX="9.0" layoutY="155.0" mnemonicParsing="false" onAction="#zoomOutButtonAction" text="Zoom Out" textFill="#fcfcfc" />
+                  <Label fx:id="speedLabel" alignment="CENTER" layoutX="-1.0" layoutY="129.0" prefHeight="15.0" prefWidth="104.0" text="speedLabel" textAlignment="CENTER" />
                    </children>
                </AnchorPane>
             <AnchorPane layoutX="6.0" layoutY="643.0" prefHeight="42.0" prefWidth="96.0" />

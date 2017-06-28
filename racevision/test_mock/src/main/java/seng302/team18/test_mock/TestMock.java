@@ -116,6 +116,7 @@ public class TestMock {
 
             accelerateBoat(race, race.getStartingList().get(2), 0.1);
             accelerateBoat(race, race.getStartingList().get(3), 0.05);
+            changeWindSpeed(race, 5);
 
             // Send mark rounding messages for all mark roundings that occured
             for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
@@ -179,6 +180,10 @@ public class TestMock {
         if (!race.getFinishedList().contains(boat)) {
             boat.setSpeed(boat.getSpeed() + acceleration);
         }
+    }
+
+    private void changeWindSpeed(Race race, double speedChange){
+        race.getCourse().setWindSpeed(race.getCourse().getWindSpeed() + speedChange);
     }
 
     public String getRegattaXML() {

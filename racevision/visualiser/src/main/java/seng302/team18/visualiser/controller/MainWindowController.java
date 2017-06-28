@@ -342,7 +342,7 @@ public class MainWindowController implements Observer {
      * retrieves the wind direction, scales the size of the arrow and then draws it on the Group
      */
     private void startWindDirection() {
-        arrow.setScaleX(0.4);
+//        arrow.setScaleX(0.4);
         windDisplay = new WindDisplay(race, arrow, speedLabel);
         windDisplay.start();
     }

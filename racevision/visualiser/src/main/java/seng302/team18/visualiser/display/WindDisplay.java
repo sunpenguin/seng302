@@ -1,10 +1,8 @@
 package seng302.team18.visualiser.display;
 
 import javafx.animation.AnimationTimer;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Polygon;
-import javafx.scene.text.TextAlignment;
 import seng302.team18.model.Race;
 
 /**
@@ -17,6 +15,7 @@ public class WindDisplay extends AnimationTimer {
     private Label speedLabel;
     private double direction;
     private double speed;
+    private double scaleY = 20;
 
     public WindDisplay(Race race, Polygon arrow, Label speedLabel) {
         this.race = race;
@@ -33,11 +32,17 @@ public class WindDisplay extends AnimationTimer {
         }
         double newWindDirection = race.getCourse().getWindDirection();
         double newWindSpeed = race.getCourse().getWindSpeed();
-        speedLabel.setText(Double.toString(newWindSpeed) + " knots");
-        updateWindDirection(newWindDirection);
+        speedLabel.setText(String.format("%.4f", newWindSpeed)+ " knots");
+        updateWindDisplay(newWindDirection, newWindSpeed);
     }
 
-    private void updateWindDirection(double newWindDirection) {
+    private void updateWindDisplay(double newWindDirection, double newWindSpeed) {
+        // Min is 0.3, Max is 1.0
+        if (newWindSpeed / scaleY > 0.75) {
+            arrow.setScaleY(0.75);
+        } else {
+            arrow.setScaleY(newWindSpeed / scaleY);
+        }
         arrow.setRotate(newWindDirection);
     }
 }
