@@ -37,10 +37,9 @@ public class WindDisplay extends AnimationTimer {
     }
 
     private void updateWindDisplay(double newWindDirection, double newWindSpeed) {
-        // Min is 0.3, Max is 1.0
-        if (newWindSpeed / scaleY > 0.75) {
-            arrow.setScaleY(0.75);
-        } else {
+        if (newWindSpeed / scaleY <= 0.3){
+            arrow.setScaleY(0.3);
+        } else if (newWindSpeed / scaleY <= 0.75) {
             arrow.setScaleY(newWindSpeed / scaleY);
         }
         arrow.setRotate(newWindDirection);
