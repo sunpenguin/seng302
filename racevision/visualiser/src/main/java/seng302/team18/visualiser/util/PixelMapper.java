@@ -25,7 +25,6 @@ public class PixelMapper {
     private Coordinate viewPortCenter;
     private final IntegerProperty zoomLevel = new SimpleIntegerProperty(0);
     private List<Coordinate> bounds; // 2 coordinates: NW bound, SE bound
-    private WebEngine webEngine;
     private XYPair nwBound = new XYPair(0, 0); // Pixel coordinates for the NW bound of the map on screen
     private  XYPair seBound = new XYPair(0, 0); // Pixel coordinates for the SE bound of the map on screen
     private int previousZoomLevel = 0;
@@ -35,10 +34,10 @@ public class PixelMapper {
 
     public static final int ZOOM_LEVEL_4X = 1;
 
-    public PixelMapper(Course course, Pane pane, WebEngine webEngine) {
+    public PixelMapper(Course course, Pane pane) {
         this.course = course;
         this.pane = pane;
-        this.webEngine = webEngine;
+
         GPSCalculations gpsCalculations = new GPSCalculations();
         bounds = gpsCalculations.findMinMaxPoints(course);
         viewPortCenter = course.getCentralCoordinate();
@@ -78,26 +77,26 @@ public class PixelMapper {
      *
      * @param coord The coordinate getting converted to pixel coordinates
      */
-    private void updateMapsValues(Coordinate coord) {
-        try {
-            worldCoordinatesCartesian = getPixelsFromGoogle(coord);
-            viewCenterCartesian = getPixelsFromGoogle(viewPortCenter);
-            nwBound = getPixelsFromGoogle(bounds.get(0));
-            seBound = getPixelsFromGoogle(bounds.get(1));
-
-            if (previousViewCenter!= viewPortCenter || zoomLevel.intValue() != previousZoomLevel) {
-                webEngine.executeScript("map.setCenter({lat: " + viewPortCenter.getLatitude() +
-                        ", lng: " + viewPortCenter.getLongitude() + "});");
-                if(zoomLevel.intValue() != previousZoomLevel){
-                    webEngine.executeScript("toggleZoomed();");
-                }
-                previousViewCenter = viewPortCenter;
-                previousZoomLevel = zoomLevel.intValue();
-            }
-        } catch (Exception e) {
-            // The maps have not loaded yet
-        }
-    }
+//    private void updateMapsValues(Coordinate coord) {
+//        try {
+//            worldCoordinatesCartesian = getPixelsFromGoogle(coord);
+//            viewCenterCartesian = getPixelsFromGoogle(viewPortCenter);
+//            nwBound = getPixelsFromGoogle(bounds.get(0));
+//            seBound = getPixelsFromGoogle(bounds.get(1));
+//
+//            if (previousViewCenter!= viewPortCenter || zoomLevel.intValue() != previousZoomLevel) {
+//                webEngine.executeScript("map.setCenter({lat: " + viewPortCenter.getLatitude() +
+//                        ", lng: " + viewPortCenter.getLongitude() + "});");
+//                if(zoomLevel.intValue() != previousZoomLevel){
+//                    webEngine.executeScript("toggleZoomed();");
+//                }
+//                previousViewCenter = viewPortCenter;
+//                previousZoomLevel = zoomLevel.intValue();
+//            }
+//        } catch (Exception e) {
+//            // The maps have not loaded yet
+//        }
+//    }
 
     /**
      * Maps a coordinate to a pixel value relative to the current resolution and zoom of the race view pane
@@ -107,8 +106,6 @@ public class PixelMapper {
      * @return XYPair containing the x and y pixel values
      */
     public XYPair coordToPixel(Coordinate coord) {
-
-        updateMapsValues(coord);
 
         double courseWidth = calcCourseWidth();
         double courseHeight = calcCourseHeight();
@@ -144,13 +141,13 @@ public class PixelMapper {
      * @return an XYPair containing the x and y pixel coordinates
      * @throws Exception
      */
-    private XYPair getPixelsFromGoogle(Coordinate coord) throws Exception {
-        double x = ((double) webEngine.executeScript("convertCoordX(" + coord.getLatitude() + ","
-                + coord.getLongitude() + ");"));
-        double y = ((double) webEngine.executeScript("convertCoordY(" + coord.getLatitude() + ","
-                + coord.getLongitude() + ");"));
-        return new XYPair(x, y);
-    }
+//    private XYPair getPixelsFromGoogle(Coordinate coord) throws Exception {
+//        double x = ((double) webEngine.executeScript("convertCoordX(" + coord.getLatitude() + ","
+//                + coord.getLongitude() + ");"));
+//        double y = ((double) webEngine.executeScript("convertCoordY(" + coord.getLatitude() + ","
+//                + coord.getLongitude() + ");"));
+//        return new XYPair(x, y);
+//    }
 
     /**
      * Calculates the width of the course

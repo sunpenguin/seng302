@@ -9,16 +9,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -78,6 +81,7 @@ public class MainWindowController implements Observer {
 
     @FXML
     public void initialize() {
+        installKeyHandler();
         setSliderListener();
         sliderSetup();
         fpsOn = true;
@@ -107,6 +111,18 @@ public class MainWindowController implements Observer {
         ImageView icon = new ImageView("/images/boat-310164_640.png");
         icon.setFitHeight(18);
         icon.setFitWidth(18);
+    }
+
+    private void installKeyHandler(){
+        final EventHandler<KeyEvent> keyEventHandler =
+                new EventHandler<KeyEvent>(){
+                    public void handle(final KeyEvent keyEvent){
+                        if (keyEvent.getCode() != null){
+                            System.out.println(keyEvent.getCode());
+                        }
+                    }
+                };
+        raceViewPane.setOnKeyPressed(keyEventHandler);
     }
 
     /**
@@ -358,8 +374,7 @@ public class MainWindowController implements Observer {
         this.race = race;
         setCourseCenter(race.getCourse());
 
-        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, map.getEngine());
-        backgroundRenderer = new BackgroundRenderer(pixelMapper, race, map.getEngine());
+        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
@@ -367,7 +382,7 @@ public class MainWindowController implements Observer {
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
 
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), backgroundRenderer);
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel));
         startWindDirection();
 
         for (Boat boat : race.getStartingList()) {
@@ -378,12 +393,10 @@ public class MainWindowController implements Observer {
 
         raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
         raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> redrawFeatures());
-        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
-        pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
+//        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
+//        pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
 
         // These listeners fire whenever the northern or southern bounds of the map change.
-        backgroundRenderer.northProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
-        backgroundRenderer.southProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
 
         setUpTable(raceRenderer.boatColors());
 
@@ -397,7 +410,6 @@ public class MainWindowController implements Observer {
      * (For example, when zooming in, the course features are required to change)
      */
     public void redrawFeatures() {
-        backgroundRenderer.renderBackground();
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
         raceRenderer.reDrawTrails();
