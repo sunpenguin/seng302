@@ -2,6 +2,7 @@ package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
@@ -24,12 +25,27 @@ import java.util.stream.Collectors;
 public class DisplayBoat {
     private Polyline boat;
     private Color boatColor;
+    private final double BOAT_HEIGHT = 10;
+    private final double BOAT_WIDTH = 10;
+    private final Double[] BOAT_SHAPE = new Double[]{
+            0.0, BOAT_HEIGHT / -2,
+            0.0, BOAT_HEIGHT / 2,
+            BOAT_WIDTH / -2, BOAT_HEIGHT / 2,
+            0.0, BOAT_HEIGHT / -2,
+            BOAT_WIDTH / 2, BOAT_HEIGHT / 2,
+            0.0, BOAT_HEIGHT / 2
+    };
+    private final Rotate rotation = new Rotate(0, 0, 0);
+    private final Scale boatZoom = new Scale(1, 1, 0, 0);
 
     private Polygon wake;
     private Color wakeColor = Color.CADETBLUE;
     private double wakeScaleFactor = 1.0d / 32.0d; // the wake is at normal size when the boat is moving 32 speed
     private double minWakeSize = 0.1;
     private double maxWakeSize = 2;
+    private final double WAKE_OFFSET = 0;
+    private final double WAKE_WIDTH = 10;
+    private final double WAKE_HEIGHT = 20;
 
     private Text annotation;
     private String name;
@@ -39,34 +55,18 @@ public class DisplayBoat {
     private Coordinate location;
     private int decimalPlaces = 1; // for speed annotation
     private Map<AnnotationType, Boolean> visibleAnnotations;
-
     private final int ANNOTATION_OFFSET_X = 10;
-
-    private final double BOAT_HEIGHT = 10;
-    private final double BOAT_WIDTH = 10;
-    private final double WAKE_OFFSET = 0;
-    private final double WAKE_WIDTH = 10;
-    private final double WAKE_HEIGHT = 20;
-
-    private final Double[] BOAT_SHAPE = new Double[]{
-            0.0, BOAT_HEIGHT / -2,
-            0.0, BOAT_HEIGHT / 2,
-            BOAT_WIDTH / -2, BOAT_HEIGHT / 2,
-            0.0, BOAT_HEIGHT / -2,
-            BOAT_WIDTH / 2, BOAT_HEIGHT / 2,
-            0.0, BOAT_HEIGHT / 2
-    };
-
     private final Double[] WAKE_SHAPE = new Double[]{
             0.0, WAKE_OFFSET / 2,
             WAKE_WIDTH / -2, WAKE_OFFSET / 2 + WAKE_HEIGHT,
             WAKE_WIDTH / 2, WAKE_OFFSET / 2 + WAKE_HEIGHT
     };
+    private final Scale wakeSpeed = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
+    private final Scale wakeZoom = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
 
-    private final Rotate tfmRotation = new Rotate(0, 0, 0);
-    private final Scale tfmWakeSpeed = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
-    private final Scale tfmWakeZoom = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
-    private final Scale tfmBoatZoom = new Scale(1, 1, 0, 0);
+    private boolean isControlled;
+    private Circle highlight;
+
 
     private final PixelMapper pixelMapper;
 
@@ -85,18 +85,19 @@ public class DisplayBoat {
         this.boatColor = boatColor;
         this.estimatedTime = estimatedTime;
         // default values
+        isControlled = false;
         wakeColor = Color.CADETBLUE;
-        wakeScaleFactor = 1.0d / 16.0d; // the wake is at normal size when the boat is moving 32 speed
+        wakeScaleFactor = 1.0d / 16.0d; // the wake is at normal size when the boat is moving 1 / wakeScaleFactor speed
 
         // Speed
         this.speed = speed;
         double scale = (speed != 0) ? speed * wakeScaleFactor : minWakeSize;
 
-        tfmWakeSpeed.setX(scale);
-        tfmWakeSpeed.setY(scale);
+        wakeSpeed.setX(scale);
+        wakeSpeed.setY(scale);
 
         // Heading
-        tfmRotation.setAngle(heading);
+        rotation.setAngle(heading);
 
         boat = new Polyline();
         boat.getPoints().addAll(BOAT_SHAPE);
@@ -107,12 +108,12 @@ public class DisplayBoat {
                 pixelMapper.setViewPortCenter(location);
             }
         });
-        boat.getTransforms().addAll(tfmRotation, tfmBoatZoom);
+        boat.getTransforms().addAll(rotation, boatZoom);
 
         wake = new Polygon();
         wake.getPoints().addAll(WAKE_SHAPE);
         wake.setFill(wakeColor);
-        wake.getTransforms().addAll(tfmWakeSpeed, tfmRotation, tfmWakeZoom);
+        wake.getTransforms().addAll(wakeSpeed, rotation, wakeZoom);
 
         setUpAnnotations();
     }
@@ -176,8 +177,8 @@ public class DisplayBoat {
         this.speed = speed;
         double scale = (speed != 0) ? speed * wakeScaleFactor : minWakeSize;
         scale = (scale > maxWakeSize) ? maxWakeSize : scale;
-        tfmWakeSpeed.setX(scale);
-        tfmWakeSpeed.setY(scale);
+        wakeSpeed.setX(scale);
+        wakeSpeed.setY(scale);
 
         updateAnnotationText();
     }
@@ -189,7 +190,7 @@ public class DisplayBoat {
      * @param heading the new heading of the boat
      */
     public void setHeading(double heading) {
-        tfmRotation.setAngle(heading);
+        rotation.setAngle(heading);
     }
 
     /**
@@ -198,10 +199,10 @@ public class DisplayBoat {
      * @param scaleFactor factor by which to scale them
      */
     public void setScale(double scaleFactor) {
-        tfmBoatZoom.setX(scaleFactor);
-        tfmBoatZoom.setY(scaleFactor);
-        tfmWakeZoom.setX(scaleFactor);
-        tfmWakeZoom.setY(scaleFactor);
+        boatZoom.setX(scaleFactor);
+        boatZoom.setY(scaleFactor);
+        wakeZoom.setX(scaleFactor);
+        wakeZoom.setY(scaleFactor);
     }
 
     public void setEstimatedTime(Long estimatedTime) {
@@ -220,7 +221,7 @@ public class DisplayBoat {
         updateAnnotationText();
     }
 
-    public Boolean getAnnotationVisible(AnnotationType type) {
+    public Boolean isAnnotationVisible(AnnotationType type) {
         return visibleAnnotations.get(type);
     }
 
@@ -238,5 +239,18 @@ public class DisplayBoat {
 
     public void setTimeSinceLastMark(Long timeSinceLastMark) {
         this.timeSinceLastMark = timeSinceLastMark;
+    }
+
+    public boolean isControlled() {
+        return isControlled;
+    }
+
+    public void setControlled(boolean controlled) {
+        isControlled = controlled;
+        if (isControlled) {
+            //
+        } else {
+            //
+        }
     }
 }

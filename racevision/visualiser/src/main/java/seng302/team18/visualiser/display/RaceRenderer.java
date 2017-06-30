@@ -67,6 +67,7 @@ public class RaceRenderer {
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
                 displayBoat.setScale(pixelMapper.getZoomFactor());
+                displayBoat.setControlled(boat.isControlled());
             }
         }
     }
