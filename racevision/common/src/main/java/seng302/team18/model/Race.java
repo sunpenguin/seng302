@@ -64,10 +64,10 @@ public class Race {
      * Sets the speed of the boats at the start line
      */
     private void setInitialSpeed() {
-        double speed = 200;
+        double speed = 100;
         for (Boat boat : startingList) {
             boat.setSpeed(speed); // knots
-            speed -= 25;
+            speed -= 10;
         }
     }
 

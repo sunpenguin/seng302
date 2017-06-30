@@ -1,5 +1,7 @@
 package seng302.team18.visualiser.display;
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * Manages the rendering of a boat and its associated effects (wake and annotations)
  */
-public class DisplayBoat {
+public class DisplayBoat implements IBoat {
     private Polyline boat;
     private Color boatColor;
     private final double BOAT_HEIGHT = 10;
@@ -41,12 +43,19 @@ public class DisplayBoat {
 
     private Polygon wake;
     private Color wakeColor = Color.CADETBLUE;
-    private double wakeScaleFactor = 1.0d / 32.0d; // the wake is at normal size when the boat is moving 32 speed
+    private double wakeScaleFactor = 1.0d / 16.0d; // the wake is at normal size when the boat is moving 1 / wakeScaleFactor speed
     private double minWakeSize = 0.1;
     private double maxWakeSize = 2;
     private final double WAKE_OFFSET = 0;
     private final double WAKE_WIDTH = 10;
     private final double WAKE_HEIGHT = 20;
+    private final Double[] WAKE_SHAPE = new Double[]{
+            0.0, WAKE_OFFSET / 2,
+            WAKE_WIDTH / -2, WAKE_OFFSET / 2 + WAKE_HEIGHT,
+            WAKE_WIDTH / 2, WAKE_OFFSET / 2 + WAKE_HEIGHT
+    };
+    private final Scale wakeSpeed = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
+    private final Scale wakeZoom = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
 
     private Text annotation;
     private String name;
@@ -57,16 +66,10 @@ public class DisplayBoat {
     private int decimalPlaces = 1; // for speed annotation
     private Map<AnnotationType, Boolean> visibleAnnotations;
     private final int ANNOTATION_OFFSET_X = 10;
-    private final Double[] WAKE_SHAPE = new Double[]{
-            0.0, WAKE_OFFSET / 2,
-            WAKE_WIDTH / -2, WAKE_OFFSET / 2 + WAKE_HEIGHT,
-            WAKE_WIDTH / 2, WAKE_OFFSET / 2 + WAKE_HEIGHT
-    };
-    private final Scale wakeSpeed = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
-    private final Scale wakeZoom = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
 
-    private boolean isControlled;
-    private Circle highlight;
+
+    private boolean isControlled = false;
+//    private Circle highlight;
 
 
     private final PixelMapper pixelMapper;
@@ -75,31 +78,22 @@ public class DisplayBoat {
      * Creates a new instance of DisplayBoat
      *
      * @param name          the name of the boat
-     * @param heading       the boat's heading
-     * @param speed         the boat's speed over ground
      * @param boatColor     the color to display the boat in
-     * @param estimatedTime the estimated time until the boat reaches the next mark
      */
-    public DisplayBoat(PixelMapper pixelMapper, String name, Double heading, Double speed, Color boatColor, Long estimatedTime) {
+    public DisplayBoat(PixelMapper pixelMapper, String name, Color boatColor) {
         this.pixelMapper = pixelMapper;
         this.name = name;
         this.boatColor = boatColor;
-        this.estimatedTime = estimatedTime;
         // default values
-        isControlled = false;
-        wakeColor = Color.CADETBLUE;
         wakeScaleFactor = 1.0d / 16.0d; // the wake is at normal size when the boat is moving 1 / wakeScaleFactor speed
 
         // Speed
-        this.speed = speed;
         double scale = (speed != 0) ? speed * wakeScaleFactor : minWakeSize;
 
         wakeSpeed.setX(scale);
         wakeSpeed.setY(scale);
 
         // Heading
-        rotation.setAngle(heading);
-
         boat = new Polyline();
         boat.getPoints().addAll(BOAT_SHAPE);
         boat.setFill(boatColor);
@@ -117,6 +111,7 @@ public class DisplayBoat {
         wake.getTransforms().addAll(wakeSpeed, rotation, wakeZoom);
 
         setUpAnnotations();
+        setDisplayOrder();
     }
 
 
@@ -154,12 +149,13 @@ public class DisplayBoat {
         annotation.setLayoutY(boat.getLayoutY());
     }
 
+
     /**
      * Update the position of a boat's image and it's wake.
      *
      * @param coordinate new position of the boat
      */
-    public void moveBoat(Coordinate coordinate) {
+    public void setCoordinate(Coordinate coordinate) {
         location = coordinate;
         XYPair pixels = pixelMapper.coordToPixel(coordinate);
         boat.setLayoutX(pixels.getX());
@@ -168,6 +164,7 @@ public class DisplayBoat {
         wake.setLayoutY(pixels.getY());
         updateAnnotationText();
     }
+
 
     /**
      * Set the speed of the DisplayBoat. This will update the boats wake and annotations
@@ -186,15 +183,6 @@ public class DisplayBoat {
 
 
     /**
-     * Rotate the boat and it's wake according to it's heading.
-     *
-     * @param heading the new heading of the boat
-     */
-    public void setHeading(double heading) {
-        rotation.setAngle(heading);
-    }
-
-    /**
      * Scales boat and wake shapes
      *
      * @param scaleFactor factor by which to scale them
@@ -206,9 +194,11 @@ public class DisplayBoat {
         wakeZoom.setY(scaleFactor);
     }
 
+
     public void setEstimatedTime(Long estimatedTime) {
         this.estimatedTime = estimatedTime;
     }
+
 
     public void addToGroup(Group group) {
         group.getChildren().add(boat);
@@ -222,30 +212,39 @@ public class DisplayBoat {
         updateAnnotationText();
     }
 
+
     public Boolean isAnnotationVisible(AnnotationType type) {
         return visibleAnnotations.get(type);
     }
 
+
     /**
      * Forces wake to render at the back at boat at the front
      */
-    public void setDisplayOrder() {
+    private void setDisplayOrder() {
         wake.toBack();
         boat.toFront();
     }
+
 
     public Color getBoatColor() {
         return boatColor;
     }
 
+
+    //    @Override
     public void setTimeSinceLastMark(Long timeSinceLastMark) {
         this.timeSinceLastMark = timeSinceLastMark;
     }
 
+
+    @Override
     public boolean isControlled() {
         return isControlled;
     }
 
+
+    @Override
     public void setControlled(boolean controlled) {
         isControlled = controlled;
         if (isControlled) {
@@ -255,20 +254,144 @@ public class DisplayBoat {
         }
     }
 
+    @Override
     public int getStatus() {
         return 0;
     }
 
 
-    public void setStatus(int status) {}
+    @Override
+    public void setStatus(int status) {
+    }
 
 
-    public double getKnotsSpeed() {
+    @Override
+    public DoubleProperty speedProperty() {
+        return null;
+    }
+
+    @Override
+    public int getLegNumber() {
+        return 0;
+    }
+
+    @Override
+    public IntegerProperty legNumberProperty() {
+        return null;
+    }
+
+    @Override
+    public void setLegNumber(int legNumber) {
+
+    }
+
+    @Override
+    public Coordinate getCoordinate() {
+        return null;
+    }
+
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public double getHeading() {
+        return rotation.getAngle();
+    }
+
+    /**
+     * Rotate the boat and it's wake according to it's heading.
+     *
+     * @param heading the new heading of the boat
+     */
+    public void setHeading(double heading) {
+        rotation.setAngle(heading);
+    }
+
+
+    @Override
+    public String getShortName() {
+        return null;
+    }
+
+
+    @Override
+    public double getSpeed() {
         return 0;
     }
 
 
-    public void setKnotsSpeed(double knotsSpeed) {
+    @Override
+    public Coordinate getDestination() {
+        return null;
+    }
+
+
+    @Override
+    public void setDestination(Coordinate destination) {
 
     }
+
+
+    @Override
+    public int getPlace() {
+        return 0;
+    }
+
+
+    @Override
+    public void setPlace(int place) {
+
+    }
+
+
+    @Override
+    public IntegerProperty placeProperty() {
+        return null;
+    }
+
+
+    @Override
+    public Integer getId() {
+        return null;
+    }
+
+
+    @Override
+    public long getTimeTilNextMark() {
+        return 0;
+    }
+
+
+    @Override
+    public void setTimeTilNextMark(long timeTilNextMark) {
+
+    }
+
+
+    @Override
+    public Long getTimeSinceLastMark() {
+        return timeSinceLastMark;
+    }
+
+
+    @Override
+    public void setTimeSinceLastMark(long timeSinceLastMark) {
+
+    }
+
+
+    @Override
+    public Long getTimeAtLastMark() {
+        return null;
+    }
+
+
+    @Override
+    public void setTimeAtLastMark(Long timeAtLastMark) {
+
+    }
+
 }
