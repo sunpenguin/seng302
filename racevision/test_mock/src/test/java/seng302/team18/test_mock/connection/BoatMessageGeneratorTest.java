@@ -77,17 +77,17 @@ public class BoatMessageGeneratorTest {
             double expectedHeading = generator.getBoat().getHeading();
             double expectedSpeed = generator.getBoat().getSpeed();
 
-            int actualVersionNum = ByteCheck.byteToIntConverter(generatedBytes,
+            int actualVersionNum = ByteCheck.byteToInt(generatedBytes,
                     VERSIONNUM_I, VERSIONNUM_L);
-            int actualSourceID = ByteCheck.byteToIntConverter(generatedBytes,
+            int actualSourceID = ByteCheck.byteToInt(generatedBytes,
                     SOURCE_ID_I, SOURCE_ID_L);
-            double actualLat = ByteCheck.byteToIntConverter(generatedBytes,
+            double actualLat = ByteCheck.byteToInt(generatedBytes,
                     LATITUDE_I, LATITUDE_L) * BYTE_COORDINATE_TO_DOUBLE;
-            double actualLong = ByteCheck.byteToIntConverter(generatedBytes,
+            double actualLong = ByteCheck.byteToInt(generatedBytes,
                     LONGITUDE_I, LONGITUDE_L) * BYTE_COORDINATE_TO_DOUBLE;
-            double actualHeading = ByteCheck.byteToIntConverter(generatedBytes,
+            double actualHeading = ByteCheck.byteToInt(generatedBytes,
                     HEADING_I, HEADING_L) * BYTE_HEADING_TO_DOUBLE;
-            double actualSpeed = ByteCheck.byteToIntConverter(generatedBytes,
+            double actualSpeed = ByteCheck.byteToInt(generatedBytes,
                     SOG_I, SOG_L) * MMPS_TO_KMPH;
 
             assertEquals(expectedVersionNum, actualVersionNum);

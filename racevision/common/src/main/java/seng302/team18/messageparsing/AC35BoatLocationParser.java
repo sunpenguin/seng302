@@ -5,6 +5,7 @@ import seng302.team18.message.AC35BoatLocationMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.util.ByteCheck;
 import seng302.team18.model.Coordinate;
+import seng302.team18.util.SpeedConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +38,6 @@ public class AC35BoatLocationParser implements MessageBodyParser {
      */
     @Override
     public MessageBody parse(byte[] bytes) { // more final declarations than actual code LOL
-        final double MMPS_TO_KMPH = 36d / 10000d;
         final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
         final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
         final int SOURCE_ID_INDEX = 7;
@@ -51,11 +51,12 @@ public class AC35BoatLocationParser implements MessageBodyParser {
         final int SPEED_INDEX = 38;
         final int SPEED_LENGTH = 2;
 
-        int sourceID = ByteCheck.byteToIntConverter(bytes, SOURCE_ID_INDEX, SOURCE_ID_LENGTH);
-        double lat = ByteCheck.byteToIntConverter(bytes, LAT_INDEX, LAT_LENGTH) * BYTE_COORDINATE_TO_DOUBLE;
-        double longitude = ByteCheck.byteToIntConverter(bytes, LONG_INDEX, LONG_LENGTH) * BYTE_COORDINATE_TO_DOUBLE;
-        double heading = ByteCheck.byteToIntConverter(bytes, HEADING_INDEX, HEADING_LENGTH) * BYTE_HEADING_TO_DOUBLE;
-        double speed = ByteCheck.byteToIntConverter(bytes, SPEED_INDEX, SPEED_LENGTH) * MMPS_TO_KMPH; // mm/s -> km/h
+        int sourceID = ByteCheck.byteToInt(bytes, SOURCE_ID_INDEX, SOURCE_ID_LENGTH);
+        double lat = ByteCheck.byteToInt(bytes, LAT_INDEX, LAT_LENGTH) * BYTE_COORDINATE_TO_DOUBLE;
+        double longitude = ByteCheck.byteToInt(bytes, LONG_INDEX, LONG_LENGTH) * BYTE_COORDINATE_TO_DOUBLE;
+        double heading = ByteCheck.byteToInt(bytes, HEADING_INDEX, HEADING_LENGTH) * BYTE_HEADING_TO_DOUBLE;
+        double speed = ByteCheck.byteToShort(bytes, SPEED_INDEX, SPEED_LENGTH);
+        speed = new SpeedConverter().mmsToKnots(speed);
 
         return new AC35BoatLocationMessage(sourceID, new Coordinate(lat, longitude), heading, speed);
     }

@@ -3,6 +3,7 @@ package seng302.team18.test_mock.connection;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.model.Boat;
 import seng302.team18.util.ByteCheck;
+import seng302.team18.util.SpeedConverter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,7 +16,6 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
     private Boat boat;
     final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
     final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
-    final int MMPS_TO_KMPH = 36 / 10000;
     final double KMPH_TO_MMPS = 277.778;
 
     /**
@@ -54,7 +54,7 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
         byte[] roll = ByteBuffer.allocate(2).array();
         byte[] speedBytes = ByteBuffer.allocate(2).array();
         byte[] cog = ByteBuffer.allocate(2).array();
-        Double speedOverGround = boat.getSpeed() * KMPH_TO_MMPS;
+        Double speedOverGround = new SpeedConverter().knotsToMms(boat.getSpeed());
         short speedOverGroundShort = speedOverGround.shortValue();
         byte[] sog = ByteCheck.shortToByteArray(speedOverGroundShort);
         byte[] windInfo = ByteBuffer.allocate(10).array();

@@ -71,15 +71,15 @@ public class RaceMessageGeneratorTest {
             int expectedNumBoats = testRace.getStartingList().size();
             int expectedRaceType = 2;
 
-            int actualMsgVersion = ByteCheck.byteToIntConverter(generatedBytes, VERSION_P, VERSION_L);
-            long actualCurrentTime = ByteCheck.byteToLongConverter(generatedBytes, CURRENT_TIME_P, CURRENT_TIME_L);
-            int actualRaceID = ByteCheck.byteToIntConverter(generatedBytes, RACE_ID_P, RACE_ID_L);
-            int actualRaceStatus = ByteCheck.byteToIntConverter(generatedBytes, RACE_STATUS_P, RACE_STATUS_L);
-            long actualStartTime = ByteCheck.byteToLongConverter(generatedBytes, EXP_START_P, EXP_START_L);
-            int actualWindDirection = ByteCheck.byteToIntConverter(generatedBytes, WIND_DIR_P, WIND_DIR_L);
-            int actualWindSpeed = ByteCheck.byteToIntConverter(generatedBytes, WIND_SPEED_P, WIND_SPEED_L);
-            int actualNumBoats = ByteCheck.byteToIntConverter(generatedBytes, NUM_BOATS_P, NUM_BOATS_L);
-            int actualRaceType = ByteCheck.byteToIntConverter(generatedBytes, RACE_TYPE_P, RACE_TYPE_L);
+            int actualMsgVersion = ByteCheck.byteToInt(generatedBytes, VERSION_P, VERSION_L);
+            long actualCurrentTime = ByteCheck.byteToLong(generatedBytes, CURRENT_TIME_P, CURRENT_TIME_L);
+            int actualRaceID = ByteCheck.byteToInt(generatedBytes, RACE_ID_P, RACE_ID_L);
+            int actualRaceStatus = ByteCheck.byteToInt(generatedBytes, RACE_STATUS_P, RACE_STATUS_L);
+            long actualStartTime = ByteCheck.byteToLong(generatedBytes, EXP_START_P, EXP_START_L);
+            int actualWindDirection = ByteCheck.byteToInt(generatedBytes, WIND_DIR_P, WIND_DIR_L);
+            int actualWindSpeed = ByteCheck.byteToInt(generatedBytes, WIND_SPEED_P, WIND_SPEED_L);
+            int actualNumBoats = ByteCheck.byteToInt(generatedBytes, NUM_BOATS_P, NUM_BOATS_L);
+            int actualRaceType = ByteCheck.byteToInt(generatedBytes, RACE_TYPE_P, RACE_TYPE_L);
 
             assertEquals(expectedMsgVersion, actualMsgVersion);
             assertEquals(expectedCurrentTime, actualCurrentTime, 10);
@@ -103,19 +103,19 @@ public class RaceMessageGeneratorTest {
                 long expectedTimeMark = 11111111111L;
                 long expectedTimeFinish = 6666666666L;
 
-                int actualBoatID = ByteCheck.byteToIntConverter(generatedBytes,
+                int actualBoatID = ByteCheck.byteToInt(generatedBytes,
                         SOURCE_ID_P + (LOOP_OFFSET * loopCount), SOURCE_ID_L);
-                int actualBoatStatus = ByteCheck.byteToIntConverter(generatedBytes,
+                int actualBoatStatus = ByteCheck.byteToInt(generatedBytes,
                         BOAT_STATUS_P+ (LOOP_OFFSET * loopCount), BOAT_STATUS_L);
-                int actualLegNum = ByteCheck.byteToIntConverter(generatedBytes,
+                int actualLegNum = ByteCheck.byteToInt(generatedBytes,
                         LEG_NUM_P+ (LOOP_OFFSET * loopCount), LEG_NUM_L);
-                int actualPenAwarded = ByteCheck.byteToIntConverter(generatedBytes,
+                int actualPenAwarded = ByteCheck.byteToInt(generatedBytes,
                         NUM_PEN_AWARDED_P + (LOOP_OFFSET * loopCount), NUM_PEN_AWARDED_L);
-                int actualPenServed = ByteCheck.byteToIntConverter(generatedBytes,
+                int actualPenServed = ByteCheck.byteToInt(generatedBytes,
                         NUM_PEN_SERVED_P + (LOOP_OFFSET * loopCount), NUM_PEN_SERVED_L);
-                long actualTimeMark = ByteCheck.byteToLongConverter(generatedBytes,
+                long actualTimeMark = ByteCheck.byteToLong(generatedBytes,
                         EST_TIME_NEXT_MARK_P + (LOOP_OFFSET * loopCount), EST_TIME_NEXT_MARK_L);
-                long actualTimeFinish = ByteCheck.byteToLongConverter(generatedBytes,
+                long actualTimeFinish = ByteCheck.byteToLong(generatedBytes,
                         EST_TIME_FINISH_P + (LOOP_OFFSET * loopCount), EST_TIME_FINISH_L);
 
                 assertEquals(expectedBoatID, actualBoatID);

@@ -114,8 +114,8 @@ public class TestMock {
             race.setStatus((byte) 3);
             race.updateBoats((timeCurr - timeLast));
 
-            accelerateBoat(race, race.getStartingList().get(2), 0.1);
-            accelerateBoat(race, race.getStartingList().get(3), 0.05);
+//            accelerateBoat(race, race.getStartingList().get(2), 0.1);
+//            accelerateBoat(race, race.getStartingList().get(3), 0.05);
 
             // Send mark rounding messages for all mark roundings that occured
             for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
@@ -174,6 +174,13 @@ public class TestMock {
         race = new Race(startingList, course, raceID);
     }
 
+    /**
+     * Adds acceleration to the current speed of the boat if the boat is not finished
+     *
+     * @param race the boat is participating
+     * @param boat
+     * @param acceleration amount to increase speed by in knots.
+     */
     private void accelerateBoat(Race race, Boat boat, double acceleration) {
         if (!race.getFinishedList().contains(boat)) {
             boat.setSpeed(boat.getSpeed() + acceleration);

@@ -34,7 +34,7 @@ public class CRCGeneratorTest {
         // get the CRC value
         CRCGenerator crcGenerator = new CRCGenerator();
         byte[] calculatedCRC = crcGenerator.generateCRC(check);
-        int crc = ByteCheck.byteToIntConverter(calculatedCRC, 0, 4);
+        int crc = ByteCheck.byteToInt(calculatedCRC, 0, 4);
         String actualCRC = Integer.toHexString(crc);
 
         // generate the expected CRC value

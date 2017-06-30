@@ -29,7 +29,7 @@ public class RegistrationParser implements MessageBodyParser {
         final int SOURCE_ID_INDEX = 0;
         final int SOURCE_ID_LENGTH = 4;
 
-        int sourceID = ByteCheck.byteToIntConverter(bytes, SOURCE_ID_INDEX, SOURCE_ID_LENGTH);
+        int sourceID = ByteCheck.byteToInt(bytes, SOURCE_ID_INDEX, SOURCE_ID_LENGTH);
 
         return new RegistrationMessage(sourceID);
     }

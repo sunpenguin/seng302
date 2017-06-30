@@ -1,6 +1,7 @@
 package seng302.team18.model;
 
 import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.SpeedConverter;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -63,10 +64,10 @@ public class Race {
      * Sets the speed of the boats at the start line
      */
     private void setInitialSpeed() {
-        int speed = 200;
-        for (Boat b : startingList) {
-            b.setSpeed(speed); //kph
-            speed -= 50;
+        double speed = 200;
+        for (Boat boat : startingList) {
+            boat.setSpeed(speed); // knots
+            speed -= 25;
         }
     }
 
@@ -253,9 +254,9 @@ public class Race {
      * @param time that has passed
      */
     private void updatePosition(Boat boat, double time) {
-        double speed = boat.getSpeed();
-        double mpsSpeed = speed * 0.27778;//convert to metres/second
-        double secondsTime = time / 1000;
+        double speed = boat.getSpeed(); // knots
+        double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
+        double secondsTime = time / 1000.0d;
         double distanceTravelled = mpsSpeed * secondsTime;
         GPSCalculations gps = new GPSCalculations();
         // set next position based on current coordinate, distance travelled, and heading.

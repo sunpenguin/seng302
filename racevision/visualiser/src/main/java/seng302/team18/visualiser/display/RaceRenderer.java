@@ -62,7 +62,7 @@ public class RaceRenderer {
             if (boatCoordinates != null) {
                 displayBoat.setDisplayOrder();
                 displayBoat.moveBoat(boatCoordinates);
-                displayBoat.setSpeed(boat.getKnotsSpeed());
+                displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());

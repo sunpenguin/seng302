@@ -100,10 +100,10 @@ public class ByteCheck {
     }
 
     public static byte[] getCurrentTime6Bytes() {
-        return convertLongTo6ByteArray(System.currentTimeMillis());
+        return longTo6ByteArray(System.currentTimeMillis());
     }
 
-    public static byte[] convertLongTo6ByteArray(long value) {
+    public static byte[] longTo6ByteArray(long value) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
         buffer.putLong(value);
         byte[] valueBytes = new byte[6];
@@ -128,7 +128,37 @@ public class ByteCheck {
      * @param length How long the split will be
      * @return The value that is calculated from the function.
      */
-    public static int byteToIntConverter(byte[] bytes, int index, int length) {
+    public static int byteToShort(byte[] bytes, int index, int length) {
+        int finalValue;
+        byte[] b = new byte[2];
+
+        if (length < 2) {
+            int tempLen = 2 - length;
+            for (int i = 0; i < length; i++) {
+                b[i] = bytes[index + i];
+            }
+            for (int i = 0; i < tempLen; i++) {
+                b[length + i] = 0;
+            }
+            // May run into trouble with unsigned things and need to work with them
+            finalValue = ByteBuffer.wrap(b, 0, 2).order(ByteOrder.LITTLE_ENDIAN).getShort();
+        } else {
+            finalValue = ByteBuffer.wrap(bytes, index, length).order(ByteOrder.LITTLE_ENDIAN).getShort();
+        }
+        return finalValue;
+    }
+
+
+    /**
+     * The method which converts the byte array (little endian) to integer.
+     * Corrects if there are less than 4 bytes.
+     *
+     * @param bytes  The whole byte array in little endian
+     * @param index  The index where the split begins
+     * @param length How long the split will be
+     * @return The value that is calculated from the function.
+     */
+    public static int byteToInt(byte[] bytes, int index, int length) {
         int finalValue;
         byte[] b = new byte[4];
 
@@ -157,7 +187,7 @@ public class ByteCheck {
      * @param length How long the split will be
      * @return The value that is calculated from the function.
      */
-    public static long byteToLongConverter(byte[] bytes, int index, int length) {
+    public static long byteToLong(byte[] bytes, int index, int length) {
         long finalValue;
         byte[] b = new byte[8];
 
@@ -184,7 +214,7 @@ public class ByteCheck {
      * @param length length of the byte array
      * @return the byte array in little endian format
      */
-    public static byte[] convertToLittleEndian(byte[] bytes, int length) {
+    public static byte[] littleEndian(byte[] bytes, int length) {
         ByteBuffer buffer = ByteBuffer.allocate(length);
         buffer.put(bytes);
         buffer.order(ByteOrder.LITTLE_ENDIAN);

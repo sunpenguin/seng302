@@ -3,9 +3,6 @@ package seng302.team18.test_mock.connection;
 import seng302.team18.util.ByteCheck;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.zip.CRC32;
-import java.util.zip.Checksum;
 
 public class CRCGenerator {
 
@@ -40,7 +37,7 @@ public class CRCGenerator {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(value);
         byte[] crcValue = outputStream.toByteArray();
-        return ByteCheck.convertToLittleEndian(crcValue, 4);
+        return ByteCheck.littleEndian(crcValue, 4);
     }
 
 //    /*

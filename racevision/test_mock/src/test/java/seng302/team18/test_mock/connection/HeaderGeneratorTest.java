@@ -49,12 +49,12 @@ public class HeaderGeneratorTest {
         int expectedSourceID = 1568366138; // Get real value
         int expectedMsgLen = 10;
 
-        int actualSync1 = ByteCheck.byteToIntConverter(headerBytes, SYNC_1_POS, SYNC_1_LEN);
-        int actualSync2 = ByteCheck.byteToIntConverter(headerBytes, SYNC_2_POS, SYNC_2_LEN);
-        int actualMsgType = ByteCheck.byteToIntConverter(headerBytes, MSG_TYPE_POS, MSG_TYPE_LEN);
-        long actualTime = ByteCheck.byteToLongConverter(headerBytes, TIME_POS, TIME_LEN);
-        int actualSourceID = ByteCheck.byteToIntConverter(headerBytes, SOURCE_ID_POS, SOURCE_ID_LEN);
-        int actualMsgLen = ByteCheck.byteToIntConverter(headerBytes, MSG_LEN_POS, MSG_LEN_LEN);
+        int actualSync1 = ByteCheck.byteToInt(headerBytes, SYNC_1_POS, SYNC_1_LEN);
+        int actualSync2 = ByteCheck.byteToInt(headerBytes, SYNC_2_POS, SYNC_2_LEN);
+        int actualMsgType = ByteCheck.byteToInt(headerBytes, MSG_TYPE_POS, MSG_TYPE_LEN);
+        long actualTime = ByteCheck.byteToLong(headerBytes, TIME_POS, TIME_LEN);
+        int actualSourceID = ByteCheck.byteToInt(headerBytes, SOURCE_ID_POS, SOURCE_ID_LEN);
+        int actualMsgLen = ByteCheck.byteToInt(headerBytes, MSG_LEN_POS, MSG_LEN_LEN);
 
         assertEquals(expectedSync1, actualSync1);
         assertEquals(expectedSync2, actualSync2);

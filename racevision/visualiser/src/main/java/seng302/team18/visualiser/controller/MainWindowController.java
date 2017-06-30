@@ -261,7 +261,7 @@ public class MainWindowController implements Observer {
      */
     private void setUpTable(Map<String, Color> boatColors) {
         Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
-                boat.placeProperty(), boat.knotsSpeedProperty()
+                boat.placeProperty(), boat.speedProperty()
         };
         ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
         observableList.addAll(race.getStartingList());
@@ -279,7 +279,7 @@ public class MainWindowController implements Observer {
         tableView.setItems(sortedList);
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("knotsSpeed"));
+        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
         boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
             @Override
             public void updateItem(Double speed, boolean empty) {
@@ -287,7 +287,7 @@ public class MainWindowController implements Observer {
                 if (empty) {
                     setText(null);
                 } else {
-                    setText(String.format("%.2f", speed));
+                    setText(String.format("%.1f", speed));
                 }
             }
         });

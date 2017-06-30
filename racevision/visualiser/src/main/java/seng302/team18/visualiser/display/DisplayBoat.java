@@ -9,6 +9,7 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import seng302.team18.model.Coordinate;
+import seng302.team18.model.IBoat;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -252,5 +253,22 @@ public class DisplayBoat {
         } else {
             //
         }
+    }
+
+    public int getStatus() {
+        return 0;
+    }
+
+
+    public void setStatus(int status) {}
+
+
+    public double getKnotsSpeed() {
+        return 0;
+    }
+
+
+    public void setKnotsSpeed(double knotsSpeed) {
+
     }
 }
