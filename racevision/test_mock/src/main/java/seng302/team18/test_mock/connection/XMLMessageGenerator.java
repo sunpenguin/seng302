@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 /**
  * Generates a XML Message as
- * Note: Doesn't extend Scheduled. However, works similary.
+ * Note: Doesn't extend Scheduled. However, works similarly.
  */
 public class XMLMessageGenerator extends MessageGenerator {
 
