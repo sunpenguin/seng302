@@ -1,9 +1,19 @@
 package seng302.team18.util;
 
+import seng302.team18.model.Polar;
+
+import java.util.List;
+
 /**
  * Class to apply polar calculations to boats
  */
 public class PolarCalculator {
+
+    private List<Polar> polars;
+
+    public PolarCalculator(List<Polar> polars) {
+        this.polars = polars;
+    }
 
     /**
      * Gets true wind angle for boat.

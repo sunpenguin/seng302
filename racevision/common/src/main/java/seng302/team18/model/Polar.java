@@ -1,5 +1,6 @@
 package seng302.team18.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
