@@ -97,6 +97,7 @@ public class PreRaceController {
      */
     @FXML
     public void openMockStream() {
+        System.out.println(123);
         openStream("127.0.0.1", 5005);
     }
 
@@ -137,6 +138,7 @@ public class PreRaceController {
         ControllerManager manager = new ControllerManager(s, "MainWindow.fxml", "PreRace.fxml");
         manager.setReceiver(receiver);
         manager.start();
+        System.out.println(1);
     }
 
     public ZoneTimeClock getClock() {

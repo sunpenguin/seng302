@@ -49,8 +49,7 @@ public class AC35XMLBoatParser implements MessageBodyParser {
         Node boatsNode = boatsElement.getElementsByTagName(BOATS).item(0);
         List<Boat> boats = parseBoats(boatsNode);
 
-        AC35XMLBoatMessage message = new AC35XMLBoatMessage(boats);
-        return message;
+        return new AC35XMLBoatMessage(boats);
     }
 
 

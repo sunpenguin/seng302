@@ -23,6 +23,7 @@ public class Race {
     private int id;
     private byte status;
     private String raceName;
+    private Integer playerId;
 
 
     public Race() {
@@ -119,13 +120,13 @@ public class Race {
      * @param startingList ArrayList holding all entered boats
      */
     public void setStartingList(List<Boat> startingList) {
+        this.startingList.clear();
         if (participantIds.size() == 0) {
-            this.startingList.clear();
             this.startingList.addAll(startingList);
         } else {
-            this.startingList.clear();
             for (Boat boat : startingList) {
                 if (participantIds.contains(boat.getId())) {
+                    boat.setControlled(playerId != null && playerId.equals(boat.getId()));
                     this.startingList.add(boat);
                 }
             }
@@ -279,6 +280,10 @@ public class Race {
         this.startTime = startTime;
     }
 
+    /**
+     * Sets participants and removes non participants for current list of boats.
+     * @param participantIds ids of all participants
+     */
     public void setParticipantIds(List<Integer> participantIds) {
         this.participantIds = participantIds;
         List<Boat> newList = startingList.stream()
@@ -326,5 +331,13 @@ public class Race {
 
     public void setRaceName(String raceName) {
         this.raceName = raceName;
+    }
+
+    public int getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
     }
 }

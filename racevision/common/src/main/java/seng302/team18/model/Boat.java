@@ -26,6 +26,7 @@ public class Boat implements GeographicLocation {
     private Long timeSinceLastMark;
     private Long timeAtLastMark;
     private int status;
+    private boolean isControlled;
 
     /**
      * A constructor for the Boat class
@@ -44,6 +45,7 @@ public class Boat implements GeographicLocation {
         timeTilNextMark = 0L;
         timeSinceLastMark = 0L;
         timeAtLastMark = 0L;
+        isControlled = false;
     }
 
     /**
@@ -221,5 +223,13 @@ public class Boat implements GeographicLocation {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public boolean isControlled() {
+        return isControlled;
+    }
+
+    public void setControlled(boolean controlled) {
+        isControlled = controlled;
     }
 }

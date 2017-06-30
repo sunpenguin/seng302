@@ -55,6 +55,7 @@ public class SocketMessageReceiver {
         inStream.read(bodyBytes);
         inStream.read(checkBytes);
         if (detector.isValid(checkBytes, bodyBytes, headerBytes) && bodyParser != null) {
+            System.out.println(AC35MessageType.from(head.getType()));
             return bodyParser.parse(bodyBytes);
         }
 
