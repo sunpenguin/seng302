@@ -1,6 +1,5 @@
 package seng302.team18.test_mock.ac35_xml_encoding;
 
-import javafx.fxml.FXML;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -124,7 +123,7 @@ public class RaceXmlEncoderTest {
     @Before
     public void setUp() throws Exception {
         setUpRaceMessage();
-        domSource = raceXmlEncoder.getDOMSource(raceMessage);
+        domSource = raceXmlEncoder.getDomSource(raceMessage);
         Document doc = (Document) domSource.getNode();
         doc.getDocumentElement().normalize();
         root = (Element) doc.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_RACE_ID.toString()).item(0);

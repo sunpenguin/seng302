@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * MessageBody that contains the race information from the XML file sent by the AC35 streaming protocol.
  */
-public class AC35XMLRaceMessage implements MessageBody {
+public class AC35XMLRaceMessage implements MessageBody, XmlMessage {
 
     private String startTime;
     private List<Integer> participantIDs;
