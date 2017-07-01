@@ -3,16 +3,29 @@ package seng302.team18.test_mock.ac35_xml_encoding;
 import javafx.fxml.FXML;
 import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import seng302.team18.message.AC35RaceXMLComponents;
 import seng302.team18.message.AC35XMLRaceMessage;
+import seng302.team18.messageparsing.AC35XMLRaceParser;
 import seng302.team18.model.*;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.dom.DOMSource;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by afj19 on 29/06/17.
@@ -20,9 +33,10 @@ import java.util.List;
 public class RaceXmlEncoderTest {
 
     private RaceXmlEncoder raceXmlEncoder;
-    private String raceXML;
     private DOMSource domSource;
     private AC35XMLRaceMessage raceMessage;
+    private Element root;
+    private List<CompoundMark> encodedCompoundMarks;
 
     private void setUpRaceMessage() {
          String startTime;
@@ -33,7 +47,7 @@ public class RaceXmlEncoderTest {
          int raceID;
 
         final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss-Z");
-        startTime = LocalDateTime.now().format(DATE_TIME_FORMATTER);
+        startTime = ZonedDateTime.now().format(DATE_TIME_FORMATTER);
 
         participantIDs = new ArrayList<>();
 
@@ -110,31 +124,93 @@ public class RaceXmlEncoderTest {
     @Before
     public void setUp() throws Exception {
         setUpRaceMessage();
-        domSource = raceXmlEncoder.getXml(raceMessage);
+        domSource = raceXmlEncoder.getDOMSource(raceMessage);
+        Document doc = (Document) domSource.getNode();
+        doc.getDocumentElement().normalize();
+        root = (Element) doc.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_RACE_ID.toString()).item(0);
     }
 
     @Test
-    public void RaceXmlEncoderTest() throws TransformerException, ParserConfigurationException{
-        raceXML = raceXmlEncoder.encode(raceMessage);
+    public void encodeParticipantsTest() {
+        List<Integer> encodedPArticipants = new ArrayList<>();
+
+        Node ids = root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_PARTICIPANTS.toString()).item(0);
+        Element participants = (Element) ids;
+        NodeList participantsNodeList = participants.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_YACHT.toString());
+
+        for (int i = 0; i < participantsNodeList.getLength(); i ++) {
+            Node participant = participantsNodeList.item(i);
+            Element participantElement = (Element) participant;
+            encodedPArticipants.add(Integer.parseInt(participantElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_SOURCE_ID.toString())));
+        }
+
+        int firstParticipant = raceMessage.getParticipantIDs().get(0);
+        int firstEncodedParticipant = encodedPArticipants.get(0);
+
+        assertEquals(firstEncodedParticipant,firstParticipant);
     }
 
     @Test
-    public void encodeParticipantTest() {
+    public void encodeCourseTest() {
+        encodedCompoundMarks = new ArrayList<>();
 
+        Node course = root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_COURSE.toString()).item(0);
+        Element courseElement = (Element) course;
+        NodeList compoundMarkNodes = courseElement.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_COMPOUND_MARK.toString());
+
+        for (int i = 0; i < compoundMarkNodes.getLength(); i ++) {
+            Node compoundMarkNode = compoundMarkNodes.item(i);
+            Element compoundMark = (Element) compoundMarkNode;
+
+            List<Mark> encodedMarks = new ArrayList<>();
+            NodeList markNodes = compoundMark.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_MARK.toString());
+
+            for (int j = 0; j < markNodes.getLength(); j ++) {
+                Node markNode = markNodes.item(j);
+                Element mark = (Element) markNode;
+                int markId = Integer.parseInt(mark.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_SOURCE_ID.toString()));
+                double markLat = Double.parseDouble(mark.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_TARGET_LATITUDE.toString()));
+                double markLng = Double.parseDouble(mark.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_TARGET_LONGITUDE.toString()));
+                encodedMarks.add(new Mark(markId, new Coordinate(markLat, markLng)));
+            }
+
+            String compoundMarkName = compoundMark.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_NAME.toString());
+            int compoundMarkID = Integer.parseInt(compoundMark.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_COMPOUND_MARK_ID.toString()));
+            encodedCompoundMarks.add(new CompoundMark(compoundMarkName, encodedMarks, compoundMarkID));
+        }
+
+        CompoundMark firstCompoundMark = raceMessage.getCompoundMarks().get(0);
+        CompoundMark firstEncocdedCompoundMark = encodedCompoundMarks.get(0);
+        assertEquals(firstCompoundMark, firstEncocdedCompoundMark);
     }
 
     @Test
-    public void encodeCourseTest() {}
+    public void encodeCompoundMarkSequenceTest() {
+        List<MarkRounding> encodedMarkRoundings = new ArrayList<>();
+
+        Node markRounding = root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_COMPOUND_MARK_SEQUENCE.toString()).item(0);
+        Element markRoundingElement = (Element) markRounding;
+        NodeList markRoundings = markRoundingElement.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_CORNER.toString());
+
+        for (int i = 0; i < markRoundings.getLength(); i ++) {
+            Node markRoundingNode = markRoundings.item(i);
+            Element markRoundingE = (Element) markRoundingNode;
+            int seqID = Integer.parseInt(markRoundingE.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_SEQUENCE_ID.toString()));
+            int compoundMarkNum = Integer.parseInt(markRoundingE.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_COMPOUND_MARK_ID.toString()));
+            encodedMarkRoundings.add(new MarkRounding(seqID, encodedCompoundMarks.get(compoundMarkNum)));
+        }
+
+        MarkRounding firstMarkRounding = raceMessage.getMarkRoundings().get(0);
+        MarkRounding firstEncodedMarkRounding = encodedMarkRoundings.get(0);
+        assertEquals(firstMarkRounding, firstEncodedMarkRounding);
+    }
 
     @Test
-    public void encodeCompoundMarkTest() {}
+    public void encodeCourseLimitsTest() {
+        List<BoundaryMark> encodedBoundaryMarks = new ArrayList<>();
 
-    @Test
-    public void encodeMarksTest() {}
-
-    @Test
-    public void encodeCompoundMarkSequenceTest() {}
-
-    @Test
-    public  void encodeCourseLimitsTest() {}
+        Node boundaryNode = root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_COURSE_BOUNDARIES.toString()).item(0);
+        Element boundaryElement = (Element) boundaryNode;
+        NodeList boun;
+    }
 }

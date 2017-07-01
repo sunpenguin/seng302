@@ -29,13 +29,13 @@ public class RaceXmlEncoder {
         Transformer transformer = transformerFactory.newTransformer();
 
         StringWriter writer = new StringWriter();
-        transformer.transform(getXml(raceMessage), new StreamResult(writer));
+        transformer.transform(getDOMSource(raceMessage), new StreamResult(writer));
         String output = writer.getBuffer().toString();
 
         return output;
     }
 
-    public DOMSource getXml(AC35XMLRaceMessage raceMessage) throws ParserConfigurationException{
+    public DOMSource getDOMSource(AC35XMLRaceMessage raceMessage) throws ParserConfigurationException{
 //        final String ROOT_ELEMENT = "Race";
 //        final String ELEMENT_RACE_ID = "RaceID";
 //        final String ELEMENT_RACE_TYPE = "RaceType";
