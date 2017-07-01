@@ -66,7 +66,7 @@ public class WindDirectionInterpreterTest {
     public void courseTest() {
         Course expected = new Course();
         Course actual = race.getCourse();
-        double expectedWindDirection = abs((windDirection - 180) % 360);
+        double expectedWindDirection = (windDirection + 180) % 360;
         Assert.assertEquals(expectedWindDirection, actual.getWindDirection(), 0.01);
         Assert.assertEquals(expected.getTimeZone(), actual.getTimeZone());
         Assert.assertEquals(expected.getCentralCoordinate(), actual.getCentralCoordinate());

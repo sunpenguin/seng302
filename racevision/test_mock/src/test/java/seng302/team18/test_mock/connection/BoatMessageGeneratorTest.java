@@ -5,6 +5,7 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.test_mock.TestMock;
 import seng302.team18.util.ByteCheck;
+import seng302.team18.util.SpeedConverter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ public class BoatMessageGeneratorTest {
 
     final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
     final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
-    final double MMPS_TO_KMPH = 36d / 10000d;
 
     private final int VERSIONNUM_I = 0;
     private final int VERSIONNUM_L = 1;
@@ -87,8 +87,8 @@ public class BoatMessageGeneratorTest {
                     LONGITUDE_I, LONGITUDE_L) * BYTE_COORDINATE_TO_DOUBLE;
             double actualHeading = ByteCheck.byteToInt(generatedBytes,
                     HEADING_I, HEADING_L) * BYTE_HEADING_TO_DOUBLE;
-            double actualSpeed = ByteCheck.byteToInt(generatedBytes,
-                    SOG_I, SOG_L) * MMPS_TO_KMPH;
+            double actualSpeed = new SpeedConverter().mmsToKnots(ByteCheck.byteToInt(generatedBytes,
+                    SOG_I, SOG_L));
 
             assertEquals(expectedVersionNum, actualVersionNum);
             assertEquals(expectedSourceID, actualSourceID);

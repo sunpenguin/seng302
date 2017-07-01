@@ -99,9 +99,25 @@ public class ByteCheck {
         return result;
     }
 
+
+    /**
+     * Convert a int to a byte array of length Short.BYTES. Endianness is little endian
+     *
+     * @param value to convert
+     * @return unsigned short byte array
+     */
+    public static byte[] intToUShort(int value) {
+        ByteBuffer buffer = ByteBuffer.allocate(Short.BYTES);
+        buffer.order(ByteOrder.LITTLE_ENDIAN);
+        return buffer.putChar((char) value).array();
+    }
+
+
     public static byte[] getCurrentTime6Bytes() {
         return longTo6ByteArray(System.currentTimeMillis());
     }
+
+
 
     public static byte[] longTo6ByteArray(long value) {
         ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);

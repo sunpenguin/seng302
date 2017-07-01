@@ -73,18 +73,6 @@ public class Race {
 
 
     /**
-     * Convert a value given in knots to meters per second.
-     *
-     * @param knots speed in knots.
-     * @return speed in meters per second.
-     */
-    // TODO: Put this somewhere more reasonable
-    public double knotsToMetersPerSecond(double knots) {
-        return ((knots * 1.852) / 3.6);
-    }
-
-
-    /**
      * Called in Race constructor.
      * Set up the course CompoundMarks for each boat in the race as well as set the
      * current(starting CompoundMark) and next CompoundMark.

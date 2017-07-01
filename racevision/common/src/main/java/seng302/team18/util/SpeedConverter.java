@@ -24,7 +24,7 @@ public class SpeedConverter {
      * @param speed in knots
      * @return speed in millimeters per second
      */
-    public double knotsToMms(double speed) {
+    public Double knotsToMms(double speed) {
         final double KNOTS_TO_MMS_MULTIPLIER = 0.514444 * 1000;
         return speed * KNOTS_TO_MMS_MULTIPLIER;
     }
