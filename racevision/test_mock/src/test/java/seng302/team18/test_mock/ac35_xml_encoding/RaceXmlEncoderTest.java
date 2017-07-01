@@ -1,6 +1,5 @@
 package seng302.team18.test_mock.ac35_xml_encoding;
 
-import javafx.fxml.FXML;
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.message.AC35XMLRaceMessage;
@@ -110,7 +109,7 @@ public class RaceXmlEncoderTest {
     @Before
     public void setUp() throws Exception {
         setUpRaceMessage();
-        domSource = raceXmlEncoder.getXml(raceMessage);
+        domSource = raceXmlEncoder.getDomSource(raceMessage);
     }
 
     @Test
