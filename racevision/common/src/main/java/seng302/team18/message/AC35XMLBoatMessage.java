@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * MessageBody that contains the boat information from the XML file sent by the AC35 streaming protocol.
  */
-public class AC35XMLBoatMessage implements MessageBody {
+public class AC35XMLBoatMessage implements MessageBody, XmlMessage {
 
     private List<Boat> boats;
 
