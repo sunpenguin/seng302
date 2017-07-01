@@ -115,10 +115,12 @@ public class Race {
         } else {
             for (Boat boat : startingList) {
                 if (participantIds.contains(boat.getId())) {
-                    boat.setControlled(playerId != null && playerId.equals(boat.getId()));
                     this.startingList.add(boat);
                 }
             }
+        }
+        for (Boat boat : this.startingList) {
+            boat.setControlled(playerId != null && playerId.equals(boat.getId()));
         }
     }
 
