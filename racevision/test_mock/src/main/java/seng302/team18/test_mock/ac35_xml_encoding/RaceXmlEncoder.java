@@ -9,10 +9,11 @@ import seng302.team18.model.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
- * Created by afj19 on 29/06/17.
+ * RaceXmlEncoder class.
  */
 public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
 
@@ -37,7 +38,7 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
 
         // Creation time
         Element creationTime = doc.createElement(AC35RaceXMLComponents.ELEMENT_CREATION_TIME_DATE.toString());
-        final String time = LocalDateTime.now().format(DATE_TIME_FORMATTER);
+        final String time = ZonedDateTime.now().format(DATE_TIME_FORMATTER);
         creationTime.appendChild(doc.createTextNode(time));
         root.appendChild(creationTime);
 
