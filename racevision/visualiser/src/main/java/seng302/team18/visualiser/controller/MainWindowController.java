@@ -68,7 +68,6 @@ public class MainWindowController implements Observer {
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
-    private BackgroundRenderer backgroundRenderer;
     private RaceClock raceClock;
     private WindDirection windDirection;
     private PixelMapper pixelMapper;
@@ -358,8 +357,7 @@ public class MainWindowController implements Observer {
         this.race = race;
         setCourseCenter(race.getCourse());
 
-        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, map.getEngine());
-        backgroundRenderer = new BackgroundRenderer(pixelMapper, race, map.getEngine());
+        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
@@ -367,7 +365,7 @@ public class MainWindowController implements Observer {
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
 
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), backgroundRenderer);
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel));
         startWindDirection();
 
         for (Boat boat : race.getStartingList()) {
@@ -382,8 +380,6 @@ public class MainWindowController implements Observer {
         pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
 
         // These listeners fire whenever the northern or southern bounds of the map change.
-        backgroundRenderer.northProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
-        backgroundRenderer.southProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
 
         setUpTable(raceRenderer.boatColors());
 
@@ -397,7 +393,6 @@ public class MainWindowController implements Observer {
      * (For example, when zooming in, the course features are required to change)
      */
     public void redrawFeatures() {
-        backgroundRenderer.renderBackground();
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
         raceRenderer.reDrawTrails();
