@@ -5,7 +5,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import seng302.team18.model.Coordinate;
-import seng302.team18.visualiser.util.PixelMapper;
 
 /**
  * Created by dhl25 on 30/06/17.
@@ -17,13 +16,10 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
     /**
      * Creates a new instance of DisplayBoat
      *
-     * @param pixelMapper
-     * @param name          the name of the boat
-     * @param boatColor     the color to display the boat in
      * @param boat          the display boat being decorated
      */
-    public DisplayBoatDecorator(PixelMapper pixelMapper, String name, Color boatColor, DisplayBoat boat) {
-        super(pixelMapper, name, boatColor);
+    public DisplayBoatDecorator(DisplayBoat boat) {
+        super();
         this.boat = boat;
     }
 
@@ -41,44 +37,37 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
     }
 
 
-    @Override
     public void setScale(double scaleFactor) {
         boat.setScale(scaleFactor);
     }
 
 
-    @Override
     public void setEstimatedTime(Long estimatedTime) {
         boat.setEstimatedTime(estimatedTime);
     }
 
 
-    @Override
     public void addToGroup(Group group) {
         boat.addToGroup(group);
 
     }
 
 
-    @Override
     public void setAnnotationVisible(AnnotationType type, Boolean isVisible) {
         boat.setAnnotationVisible(type, isVisible);
     }
 
 
-    @Override
     public Boolean isAnnotationVisible(AnnotationType type) {
         return boat.isAnnotationVisible(type);
     }
 
 
-    @Override
-    public Color getBoatColor() {
-        return boat.getBoatColor();
+    public Color getColor() {
+        return boat.getColor();
     }
 
 
-    @Override
     public void setTimeSinceLastMark(Long timeSinceLastMark) {
         boat.setTimeSinceLastMark(timeSinceLastMark);
     }

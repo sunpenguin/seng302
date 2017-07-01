@@ -114,13 +114,16 @@ public class Boat implements GeographicLocation, IBoat {
         return boatLegNumber.get();
     }
 
+
     public IntegerProperty legNumberProperty() {
         return boatLegNumber;
     }
 
+
     public void setLegNumber(int boatLegNumber) {
         this.boatLegNumber.set(boatLegNumber);
     }
+
 
     public Coordinate getCoordinate() {
         return coordinate;
@@ -214,13 +217,16 @@ public class Boat implements GeographicLocation, IBoat {
         return status;
     }
 
+
     public void setStatus(int status) {
         this.status = status;
     }
 
+
     public boolean isControlled() {
         return isControlled;
     }
+
 
     public void setControlled(boolean controlled) {
         isControlled = controlled;

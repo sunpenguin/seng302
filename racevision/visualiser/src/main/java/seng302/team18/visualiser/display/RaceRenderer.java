@@ -50,9 +50,11 @@ public class RaceRenderer {
 
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             if (displayBoat == null) {
-                displayBoat = new DisplayBoat(
-                        pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++)
-                );
+                displayBoat = new DisplayWake(pixelMapper,
+                        new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++)));
+                if (boat.isControlled()) {
+                    displayBoat = new BoatHighlight(pixelMapper, displayBoat);
+                }
                 displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
@@ -65,7 +67,6 @@ public class RaceRenderer {
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
                 displayBoat.setScale(pixelMapper.getZoomFactor());
-                displayBoat.setControlled(boat.isControlled());
             }
         }
     }
@@ -96,7 +97,7 @@ public class RaceRenderer {
         if (trail == null) {
             final int MAX_TRAIL_LENGTH = 100;
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
-            trail = new DisplayTrail(boat.getShortName(), displayBoat.getBoatColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
+            trail = new DisplayTrail(boat.getShortName(), displayBoat.getColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
             trailMap.put(boat.getShortName(), trail);
             trail.addToGroup(group);
         }
@@ -136,7 +137,7 @@ public class RaceRenderer {
     public Map<String, Color> boatColors() {
         Map<String, Color> boatColors = new HashMap<>();
         for (Map.Entry<String, DisplayBoat> entry : displayBoats.entrySet()) {
-            boatColors.put(entry.getKey(), entry.getValue().getBoatColor());
+            boatColors.put(entry.getKey(), entry.getValue().getColor());
         }
         return boatColors;
     }
