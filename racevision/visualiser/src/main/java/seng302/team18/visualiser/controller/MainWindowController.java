@@ -11,18 +11,15 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -56,10 +53,7 @@ public class MainWindowController implements Observer {
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
-    @FXML private Button setAnnotations;
-    @FXML private Button toggle;
     @FXML private Slider slider;
-    @FXML private WebView map;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -72,8 +66,6 @@ public class MainWindowController implements Observer {
     private WindDirection windDirection;
     private PixelMapper pixelMapper;
     private Map<AnnotationType, Boolean> importantAnnotations;
-
-    private Stage stage;
 
     @FXML
     public void initialize() {
@@ -91,21 +83,6 @@ public class MainWindowController implements Observer {
     private void zoomOutButtonAction() {
         pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
         pixelMapper.setZoomLevel(0);
-    }
-
-
-    @FXML void closeAppAction(){
-        stage.close();
-    }
-
-
-    /**
-     * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
-     */
-    private void loadIcon() {
-        ImageView icon = new ImageView("/images/boat-310164_640.png");
-        icon.setFitHeight(18);
-        icon.setFitWidth(18);
     }
 
     /**
@@ -446,13 +423,5 @@ public class MainWindowController implements Observer {
         GPSCalculations gpsCalculations = new GPSCalculations();
         List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(race.getCourse());
         race.getCourse().setCentralCoordinate(gpsCalculations.midPoint(extremes.get(0), extremes.get(1)));
-    }
-
-    public Stage getStage() {
-        return stage;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
 }

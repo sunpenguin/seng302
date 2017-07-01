@@ -19,21 +19,19 @@ import java.util.List;
 public class PixelMapper {
 
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
     private final Course course;
     private final Pane pane;
     private Coordinate viewPortCenter;
     private final IntegerProperty zoomLevel = new SimpleIntegerProperty(0);
     private List<Coordinate> bounds; // 2 coordinates: NW bound, SE bound
-    private XYPair nwBound = new XYPair(0, 0); // Pixel coordinates for the NW bound of the map on screen
-    private  XYPair seBound = new XYPair(0, 0); // Pixel coordinates for the SE bound of the map on screen
-    private int previousZoomLevel = 0;
-    private XYPair worldCoordinatesCartesian = new XYPair(0, 0);
-    private XYPair viewCenterCartesian = new XYPair(0, 0);
-    private Coordinate previousViewCenter = new Coordinate(0, 0);
 
     private GPSCalculations gpsCalculations;
 
     public static final int ZOOM_LEVEL_4X = 1;
+    private final int NW_BOUND_INDEX = 0; // Used in bounds
+    private final int SE_BOUND_INDEX = 1; // Used in bounds
+    private final double MAP_SCALE_CORRECTION = 0.95;
 
     public PixelMapper(Course course, Pane pane) {
         this.course = course;
@@ -81,8 +79,6 @@ public class PixelMapper {
      */
     public XYPair coordToPixel(Coordinate coord) {
         bounds = gpsCalculations.findMinMaxPoints(course);
-        nwBound = new XYPair(bounds.get(0).getLatitude(), bounds.get(0).getLongitude());
-        seBound = new XYPair(bounds.get(1).getLatitude(), bounds.get(1).getLongitude());
 
         double courseWidth = calcCourseWidth();
         double courseHeight = calcCourseHeight();
@@ -99,7 +95,7 @@ public class PixelMapper {
         } else {
             mappingScale = paneHeight / courseHeight;
         }
-        mappingScale *= Math.pow(2, zoomLevel.intValue());
+        mappingScale *= MAP_SCALE_CORRECTION * Math.pow(2, zoomLevel.intValue());
 
         XYPair worldCoordinates = coordinateToPlane(coord);
         XYPair viewCenter = coordinateToPlane(viewPortCenter);
@@ -110,10 +106,6 @@ public class PixelMapper {
         double x = dX * mappingScale + paneWidth / 2;
         double y = dY * mappingScale + paneHeight / 2;
 
-//        if (x < 0 || y < 0) {
-//            System.out.println(coord.toString() + " " + x + " " + y);
-//        }
-
         return new XYPair(x, y);
     }
 
@@ -123,9 +115,8 @@ public class PixelMapper {
      * @return the width of the course using Web Mercator cartesian coordinates
      */
     private double calcCourseWidth() {
-//        return Math.abs(nwBound.getX() - seBound.getX());
-        Coordinate west = new Coordinate(course.getCentralCoordinate().getLatitude(), nwBound.getY());
-        Coordinate east = new Coordinate(course.getCentralCoordinate().getLatitude(), seBound.getY());
+        Coordinate west = new Coordinate(course.getCentralCoordinate().getLongitude(), bounds.get(NW_BOUND_INDEX).getLongitude());
+        Coordinate east = new Coordinate(course.getCentralCoordinate().getLongitude(), bounds.get(SE_BOUND_INDEX).getLongitude());
 
         double dWest = gpsCalculations.distance(west, course.getCentralCoordinate());
         double dEast = gpsCalculations.distance(course.getCentralCoordinate(), east);
@@ -140,9 +131,8 @@ public class PixelMapper {
      * @return the width of the course using Web Mercator cartesian coordinates
      */
     private double calcCourseHeight() {
-//        return Math.abs(nwBound.getY() - nwBound.getY());
-        Coordinate north = new Coordinate(nwBound.getX(), course.getCentralCoordinate().getLongitude());
-        Coordinate south = new Coordinate(seBound.getX(), course.getCentralCoordinate().getLongitude());
+        Coordinate north = new Coordinate(bounds.get(NW_BOUND_INDEX).getLatitude(), course.getCentralCoordinate().getLatitude());
+        Coordinate south = new Coordinate(bounds.get(SE_BOUND_INDEX).getLatitude(), course.getCentralCoordinate().getLatitude());
 
         double dNorth = gpsCalculations.distance(north, course.getCentralCoordinate());
         double dSouth = gpsCalculations.distance(south, course.getCentralCoordinate());
@@ -158,8 +148,7 @@ public class PixelMapper {
      * @return longitude in Web Mercator scale
      */
     private double webMercatorLongitude(double longitude) {
-        double x = 128 * (longitude + Math.PI) / Math.PI;
-        return x;
+        return 128 * (longitude + Math.PI) / Math.PI;
     }
 
     /**
@@ -169,8 +158,7 @@ public class PixelMapper {
      * @return latitude in Web Mercator scale
      */
     private double webMercatorLatitude(double latitude) {
-        double y = 128 * (Math.PI - Math.log(Math.tan((Math.PI / 4) + (latitude / 2)))) / Math.PI;
-        return y;
+        return 128 * (Math.PI - Math.log(Math.tan((Math.PI / 4) + (latitude / 2)))) / Math.PI;
     }
 
     /**
@@ -182,16 +170,6 @@ public class PixelMapper {
      */
     private XYPair coordinateToPlane(Coordinate point) {
         return new XYPair(webMercatorLongitude(point.getLongitude()), webMercatorLatitude(point.getLatitude()));
-    }
-
-    /**
-     *
-     * Set the bounds of the map view.
-     * @param bounds List of 2 coordinates where index 0 is the north west bound and
-     *               index 1 is the south east bound
-     */
-    public void setBounds(List<Coordinate> bounds) {
-        this.bounds = bounds;
     }
 
     public IntegerProperty zoomLevelProperty() {
