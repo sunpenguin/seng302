@@ -11,7 +11,7 @@ import sun.print.BackgroundLookupListener;
 
 
 /**
- * Created by dhl25 on 16/03/17.
+ * Created by David-chan on 16/03/17.
  */
 public class RaceLoop extends AnimationTimer {
     private long previousTime = 0;

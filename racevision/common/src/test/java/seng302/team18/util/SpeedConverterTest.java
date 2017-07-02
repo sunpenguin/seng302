@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Created by dhl25 on 1/07/17.
+ * Created by David-chan on 1/07/17.
  */
 public class SpeedConverterTest {
 

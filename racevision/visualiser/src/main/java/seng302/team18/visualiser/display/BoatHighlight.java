@@ -9,7 +9,7 @@ import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
 /**
- * Created by dhl25 on 1/07/17.
+ * Created by David-chan on 1/07/17.
  */
 public class BoatHighlight extends DisplayBoatDecorator {
 

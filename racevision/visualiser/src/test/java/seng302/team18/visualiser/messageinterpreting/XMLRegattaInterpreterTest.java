@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dhl25 on 3/05/17.
+ * Created by David-chan on 3/05/17.
  */
 public class XMLRegattaInterpreterTest {
 
