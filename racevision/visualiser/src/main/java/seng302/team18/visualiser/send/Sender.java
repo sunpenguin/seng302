@@ -26,17 +26,9 @@ public class Sender {
     }
 
 
-    public void send(MessageHead head) {
-        // convert head to byte[]
-        // send head
-
-        // convert body to byte[]
-        // send body
-
-        // convert crc to byte[]
-        // send crc
-
-//        outStream.write();
+    public void send(MessageBody body) throws IOException {
+        MessageComposer composer = factory.getComposer(body.getType());
+        outStream.write(composer.compose(body));
     }
 
 }
