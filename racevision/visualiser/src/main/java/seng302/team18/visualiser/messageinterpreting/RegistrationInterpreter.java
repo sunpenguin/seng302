@@ -13,7 +13,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
 
 /**
- * Created by dhl25 on 30/06/17.
+ * Created by David-chan on 30/06/17.
  */
 public class RegistrationInterpreter extends MessageInterpreter {
 

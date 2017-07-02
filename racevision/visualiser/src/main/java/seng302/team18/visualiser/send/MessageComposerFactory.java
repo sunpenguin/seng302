@@ -3,7 +3,7 @@ package seng302.team18.visualiser.send;
 import seng302.team18.message.MessageBody;
 
 /**
- * Created by dhl25 on 2/07/17.
+ * Created by David-chan on 2/07/17.
  */
 public interface MessageComposerFactory {
 

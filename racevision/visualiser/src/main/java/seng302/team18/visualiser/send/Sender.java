@@ -11,7 +11,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 /**
- * Created by dhl25 on 2/07/17.
+ * Created by David-chan on 2/07/17.
  */
 public class Sender {
 
