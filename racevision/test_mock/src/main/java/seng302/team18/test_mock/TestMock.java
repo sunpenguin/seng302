@@ -5,7 +5,12 @@ import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.AC35XMLRegattaMessage;
 import seng302.team18.messageparsing.*;
 import seng302.team18.model.*;
+import seng302.team18.test_mock.ac35_xml_encoding.BoatsXmlEncoder;
+import seng302.team18.test_mock.ac35_xml_encoding.RaceXmlEncoder;
 import seng302.team18.test_mock.connection.*;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +26,14 @@ public class TestMock {
     private Race race;
 
     private final String regattaXML = "/regatta_test1.xml";
-    private final String boatsXML = "/boats_test2.xml";
-    private final String raceXML = "/race_test2.xml";
+//    private final String boatsXML = "/boats_test2.xml";
+//    private final String raceXML = "/race_test2.xml";
+    private String boatXML;
+    private String raceXML;
 
     private AC35XMLRegattaMessage regattaMessage;
+    private AC35XMLBoatMessage initialBoatMessage;
+    private AC35XMLRaceMessage initialRaceMessage;
     private AC35XMLBoatMessage boatMessage;
     private AC35XMLRaceMessage raceMessage;
 
@@ -36,7 +45,7 @@ public class TestMock {
     private List<ScheduledMessageGenerator> scheduledMessages = new ArrayList<>();
 
     //TODO give real port
-    private Server server = new Server(SERVER_PORT, regattaXML, boatsXML, raceXML);
+    private Server server;
 
     /**
      * Generate the classes necessary to visualise a mock race.
@@ -55,14 +64,14 @@ public class TestMock {
         regattaMessage = regattaParser.parse(this.getClass().getResourceAsStream(regattaXML));
 
         AC35XMLBoatParser boatsParser = new AC35XMLBoatParser();
-        boatMessage = boatsParser.parse(this.getClass().getResourceAsStream(boatsXML));
+        boatMessage = boatsParser.parse(this.getClass().getResourceAsStream(boatXML));
 
         AC35XMLRaceParser raceParser = new AC35XMLRaceParser();
         raceMessage = raceParser.parse(this.getClass().getResourceAsStream(raceXML));
     }
     
-    public void run() {
-
+    public void run() throws TransformerException, ParserConfigurationException{
+        setUpFiles();
         readFiles();
         generateClasses();
 
@@ -72,6 +81,28 @@ public class TestMock {
         runSimulation();
 
         server.closeServer();
+    }
+
+    /**
+     * Generate race.xml and boat.xml files from the default initial AC35 XML message.
+     */
+    private void setUpFiles() throws TransformerException, ParserConfigurationException{
+        // race.xml
+        RaceXmlEncoder raceEncoder = new RaceXmlEncoder();
+        String initialRaceXML = "/race_test2.xml";
+        AC35XMLRaceParser raceParser = new AC35XMLRaceParser();
+        initialRaceMessage = raceParser.parse(this.getClass().getResourceAsStream(initialRaceXML));
+        raceXML = raceEncoder.encode(initialRaceMessage);
+
+        // boat.xml
+        BoatsXmlEncoder boatEncoder = new BoatsXmlEncoder();
+        String initialBoatXML = "/boats_test2.xml";
+        AC35XMLBoatParser boatParser = new AC35XMLBoatParser();
+        initialBoatMessage = boatParser.parse(this.getClass().getResourceAsStream(initialBoatXML));
+        boatXML = boatEncoder.encode(initialBoatMessage);
+
+        // create a new server
+        server = new Server(SERVER_PORT, regattaXML, boatXML, raceXML);
     }
 
     /**
@@ -185,7 +216,7 @@ public class TestMock {
     }
 
     public String getBoatsXML() {
-        return boatsXML;
+        return boatXML;
     }
 
     public String getRaceXML() {
