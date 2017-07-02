@@ -11,14 +11,14 @@ public class Server {
 
     private final ClientList clientList = new ClientList();
     private final ConnectionListener connectionListener = new ConnectionListener();
-    private final int PORT;
+    private final int port;
     private ServerSocket serverSocket;
     private XMLMessageGenerator regattaXMLMessageGenerator;
     private XMLMessageGenerator boatsXMLMessageGenerator;
     private XMLMessageGenerator raceXMLMessageGenerator;
 
     public Server(int port, String regattaXML, String boatsXML, String raceXML) {
-        this.PORT = port;
+        this.port = port;
         regattaXMLMessageGenerator = new XMLMessageGenerator((byte)5, regattaXML);
         boatsXMLMessageGenerator = new XMLMessageGenerator((byte)7, boatsXML);
         raceXMLMessageGenerator = new XMLMessageGenerator((byte)6, raceXML);
@@ -46,7 +46,6 @@ public class Server {
      * @throws IOException if an I/O exception occurs
      */
     private void sendXmls(ClientConnection client) throws IOException {
-
         client.sendMessage(regattaXMLMessageGenerator.getMessage());
         client.sendMessage(raceXMLMessageGenerator.getMessage());
         client.sendMessage(boatsXMLMessageGenerator.getMessage());
@@ -79,15 +78,15 @@ public class Server {
      */
     public void openServer() {
         try {
-            serverSocket = new ServerSocket(PORT);
+            serverSocket = new ServerSocket(port);
 
         } catch (IOException e) {
-            System.err.println("Could not listen on port " + PORT);
+            System.err.println("Could not listen on port " + port);
             System.err.println("Exiting program");
             System.exit(-1);
         }
 
-        System.out.println("Stream opened successfully on port: " + PORT);
+        System.out.println("Stream opened successfully on port: " + port);
 
         acceptClientConnection();
 

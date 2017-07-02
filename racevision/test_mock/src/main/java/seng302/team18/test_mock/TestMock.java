@@ -186,16 +186,4 @@ public class TestMock {
             boat.setSpeed(boat.getSpeed() + acceleration);
         }
     }
-
-    public String getRegattaXML() {
-        return regattaXML;
-    }
-
-    public String getBoatsXML() {
-        return boatsXML;
-    }
-
-    public String getRaceXML() {
-        return raceXML;
-    }
 }

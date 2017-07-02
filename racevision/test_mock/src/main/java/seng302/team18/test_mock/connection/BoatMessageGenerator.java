@@ -16,7 +16,6 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
     private Boat boat;
     final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
     final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
-    final double KMPH_TO_MMPS = 277.778;
 
     /**
      * Constructs a new instance of BoatMessageGenerator.
@@ -32,7 +31,6 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
     @Override
     public byte[] getPayload() throws IOException {
 
-        final int LENGTH = 56;
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
         byte versionNum = 0x1;

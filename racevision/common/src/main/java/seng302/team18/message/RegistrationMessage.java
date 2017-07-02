@@ -18,7 +18,7 @@ public class RegistrationMessage implements MessageBody {
 
     @Override
     public int getType() {
-        return 6;
+        return 56;
     }
 
 
