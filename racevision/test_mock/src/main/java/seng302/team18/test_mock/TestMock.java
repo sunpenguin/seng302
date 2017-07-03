@@ -117,7 +117,7 @@ public class TestMock {
 //            accelerateBoat(race, race.getStartingList().get(2), 0.1);
 //            accelerateBoat(race, race.getStartingList().get(3), 0.05);
 
-            // Send mark rounding messages for all mark roundings that occured
+            // Send mark rounding messages for all mark roundings that occurred
             for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
                 server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
             }

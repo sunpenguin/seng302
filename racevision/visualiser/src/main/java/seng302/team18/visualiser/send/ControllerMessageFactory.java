@@ -29,6 +29,7 @@ public class ControllerMessageFactory implements MessageComposerFactory {
      */
     private Map<Integer, MessageComposer> initialiseMap() {
         Map<Integer, MessageComposer> composerMap = new HashMap<>();
+        composerMap.put(AC35MessageType.BOAT_ACTION.getCode(), new BoatActionMessageComposer());
 
         return Collections.unmodifiableMap(composerMap);
     }
