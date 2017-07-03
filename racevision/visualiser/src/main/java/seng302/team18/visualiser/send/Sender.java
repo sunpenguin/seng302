@@ -30,5 +30,4 @@ public class Sender {
         MessageComposer composer = factory.getComposer(body.getType());
         outStream.write(composer.compose(body));
     }
-
 }

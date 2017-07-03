@@ -19,6 +19,9 @@ public class BoatActionMessage implements MessageBody{
         return 100;
     }
 
+    public BoatActionMessage() {
+    }
+
     public BoatActionMessage(boolean autopilot, boolean sailsIn, boolean sailsOut, boolean tackGybe, boolean upwind, boolean downwind) {
         this.autopilot = autopilot;
         this.sailsIn = sailsIn;

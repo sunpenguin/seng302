@@ -13,14 +13,12 @@ import java.util.Map;
  */
 public class ControllerMessageFactory implements MessageComposerFactory {
 
-
     private final Map<Integer, MessageComposer> composerMap = initialiseMap();
 
     @Override
     public MessageComposer getComposer(int id) {
         return composerMap.get(id);
     }
-
 
     /**
      * Tells the parser generator which type corresponds to which message parser
@@ -33,5 +31,4 @@ public class ControllerMessageFactory implements MessageComposerFactory {
 
         return Collections.unmodifiableMap(composerMap);
     }
-
 }

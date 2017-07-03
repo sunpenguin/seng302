@@ -34,6 +34,8 @@ import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.send.BoatActionMessage;
+import seng302.team18.visualiser.send.BoatActionMessageComposer;
+import seng302.team18.visualiser.send.ControllerMessageFactory;
 import seng302.team18.visualiser.send.Sender;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
@@ -81,7 +83,7 @@ public class MainWindowController implements Observer {
     private Map<AnnotationType, Boolean> importantAnnotations;
 
     private Stage stage;
-
+    private BoatActionMessageComposer boatActionMessageComposer = new BoatActionMessageComposer();
     private Sender sender;
 
     @FXML
@@ -108,7 +110,6 @@ public class MainWindowController implements Observer {
         stage.close();
     }
 
-
     /**
      * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
      */
@@ -119,11 +120,14 @@ public class MainWindowController implements Observer {
     }
 
     private void installKeyHandler(){
+        BoatActionMessage message = new BoatActionMessage();
         final EventHandler<KeyEvent> keyEventHandler =
                 new EventHandler<KeyEvent>(){
                     public void handle(final KeyEvent keyEvent){
                         if (keyEvent.getCode() != null){
-                            System.out.println(keyEvent.getCode());
+                                System.out.println(message.isUpwind());
+                                System.out.println(message.isTackGybe());
+
                         }
                     }
                 };
