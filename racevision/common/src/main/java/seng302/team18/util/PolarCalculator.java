@@ -51,7 +51,26 @@ public class PolarCalculator {
      * @return polar with closest windSpeed to given windSpeed
      */
     public Polar getPolarForWindSpeed(double windSpeed) {
-        return polars.get(1);
+        //Set initial
+        Polar closestPolar = polars.get(0);
+        double closestDistance = Math.abs(windSpeed - closestPolar.getWindSpeed());
+
+        for(Polar currentPolar : polars){
+
+            double currentDistance = Math.abs(windSpeed - currentPolar.getWindSpeed());
+
+            if(closestDistance > currentDistance){
+
+                closestPolar = currentPolar;
+                closestDistance = currentDistance;
+
+            }else if(closestDistance == currentDistance && currentPolar.getWindSpeed() < closestPolar.getWindSpeed()){
+                closestPolar = currentPolar;
+                closestDistance = currentDistance;
+            }
+        }
+
+        return closestPolar;
     }
 
 }

@@ -299,6 +299,7 @@ public class PolarCalculatorTest {
 
     }
 
+    @Test
     public void getPolarForWindSpeedTestAboveMax(){
         //Windspeed greater than highest wind speed
         double windspeed1 = 33;
@@ -309,6 +310,7 @@ public class PolarCalculatorTest {
 
     }
 
+    @Test
     public void getPolarForWindSpeedTestRoundingUp(){
         //Windspeeds lower than closest polar
         double windspeed2 = 20;
@@ -321,6 +323,7 @@ public class PolarCalculatorTest {
         assertEquals(polar3, returned3);
     }
 
+    @Test
     public void getPolarForWindSpeedTestEqual(){
         //Windspeeds Equal polar windSpeeds
         double windspeed1 = 12;
@@ -336,6 +339,7 @@ public class PolarCalculatorTest {
         assertEquals(polar3, returned3);
     }
 
+    @Test
     public void getPolarForWindSpeedTestRoundingDown(){
         //Windspeeds higher than closest polar
         double windspeed1 = 14;
@@ -348,6 +352,7 @@ public class PolarCalculatorTest {
         assertEquals(polar2, returned2);
     }
 
+    @Test
     public void getPolarForWindSpeedTestBelowMin(){
         //Windspeed lower than lowest wind speed
         double windspeed1 = 10;
@@ -358,10 +363,11 @@ public class PolarCalculatorTest {
 
     }
 
+    @Test
     public void getPolarForWindSpeedTestCenter(){
         //Windspeeds centered between polars
         double windspeed1 = 18.5;
-        double windspeed2 = 18.5;
+        double windspeed2 = 27.5;
 
         Polar returned1 = calculator.getPolarForWindSpeed(windspeed1);
         Polar returned2 = calculator.getPolarForWindSpeed(windspeed2);
