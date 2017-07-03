@@ -1,7 +1,5 @@
 package seng302.team18.visualiser.util;
 
-import seng302.team18.model.Boat;
-
 /**
  * Class to hold a data of a boats position as it statrs a leg
  */

@@ -25,8 +25,8 @@ public class RaceRendererTest {
 //        // Create expected
 //
 //        // Create boat for race
-//        ArrayList<Boat> boats = new ArrayList<>();
-//        boats.add(new Boat("a", "b", 0));
+//        ArrayList<Yacht> boats = new ArrayList<>();
+//        boats.add(new Yacht("a", "b", 0));
 //
 //        // Create CompoundMark needed for Course
 //        Mark testMark0 = new Mark("testMark0", new Coordinate(0, 0));

@@ -1,7 +1,7 @@
 package seng302.team18.test_mock.connection;
 
 import seng302.team18.message.AC35MessageType;
-import seng302.team18.model.Boat;
+import seng302.team18.model.Yacht;
 import seng302.team18.model.Race;
 import seng302.team18.util.ByteCheck;
 
@@ -64,17 +64,17 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
         outputSteam.write(numBoatsByte);
         outputSteam.write(raceTypeByte);
 
-        for (Boat boat : race.getStartingList()) {
-            byte[] sourceIDBytes = ByteCheck.intToByteArray(boat.getId());
+        for (Yacht yacht : race.getStartingList()) {
+            byte[] sourceIDBytes = ByteCheck.intToByteArray(yacht.getId());
             byte statusByte;
-            if (race.getFinishedList().contains(boat)) {
+            if (race.getFinishedList().contains(yacht)) {
                 statusByte = 0x3;
             } else {
                 statusByte = 0x2;
             }
-            byte legNumberByte = (byte) boat.getLegNumber(); // TODO: Update leg numbers so that 0 is prestart, 1 is first leg and so on
-            byte numPenaltiesAwardedByte = 7; // TODO: Add this field to boat
-            byte numPenaltiesServedByte = 4; // TODO: Add this field to boat
+            byte legNumberByte = (byte) yacht.getLegNumber(); // TODO: Update leg numbers so that 0 is prestart, 1 is first leg and so on
+            byte numPenaltiesAwardedByte = 7; // TODO: Add this field to yacht
+            byte numPenaltiesServedByte = 4; // TODO: Add this field to yacht
             byte[] estTimeAtNextMark = ByteCheck.convertLongTo6ByteArray(11111111111L); // TODO: calculate this value
             byte[] estTimeAtFinish = ByteCheck.convertLongTo6ByteArray(6666666666L); // TODO: calculate this value
 

@@ -25,4 +25,13 @@ public enum BoatType {
     public String getTypeName() {
         return typeName;
     }
+
+    public static BoatType fromString(String typeName) {
+        for (BoatType boatType: BoatType.values()) {
+            if (typeName.equals(boatType.getTypeName())) {
+                return boatType;
+            }
+        }
+        return _UNKNOWN;
+    }
 }

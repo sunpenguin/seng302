@@ -1,7 +1,7 @@
 package seng302.team18.test_mock.connection;
 
 import org.junit.Test;
-import seng302.team18.model.Boat;
+import seng302.team18.model.Yacht;
 import seng302.team18.model.Race;
 import seng302.team18.test_mock.TestMock;
 import seng302.team18.util.ByteCheck;
@@ -94,10 +94,10 @@ public class RaceMessageGeneratorTest {
             int loopCount = 0;
             final int LOOP_OFFSET = 20; // move 20 bytes forward for each boat being read.
 
-            for (Boat boat : testRace.getStartingList()) {
-                int expectedBoatID = boat.getId();
+            for (Yacht yacht : testRace.getStartingList()) {
+                int expectedBoatID = yacht.getId();
                 int expectedBoatStatus = 2;
-                int expectedLegNum = boat.getLegNumber();
+                int expectedLegNum = yacht.getLegNumber();
                 int expectedPenAwarded = 7;
                 int expectedPenServed = 4;
                 long expectedTimeMark = 11111111111L;

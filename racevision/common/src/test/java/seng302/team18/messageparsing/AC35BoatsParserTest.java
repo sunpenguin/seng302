@@ -51,17 +51,17 @@ public class AC35BoatsParserTest {
      */
     @Test
     public void boatShortNameTest() {
-        String boat1 = boatsMessage.getBoats().get(0).getShortName();
+        String boat1 = boatsMessage.getBoats().get(0).getNameShort();
         assertEquals("TEAM New Zealand", boat1);
-        String boat2 = boatsMessage.getBoats().get(1).getShortName();
+        String boat2 = boatsMessage.getBoats().get(1).getNameShort();
         assertEquals("TEAM USA", boat2);
-        String boat3 = boatsMessage.getBoats().get(2).getShortName();
+        String boat3 = boatsMessage.getBoats().get(2).getNameShort();
         assertEquals("TEAM SWISE", boat3);
-        String boat4 = boatsMessage.getBoats().get(3).getShortName();
+        String boat4 = boatsMessage.getBoats().get(3).getNameShort();
         assertEquals("TEAM France", boat4);
-        String boat5 = boatsMessage.getBoats().get(4).getShortName();
+        String boat5 = boatsMessage.getBoats().get(4).getNameShort();
         assertEquals("TEAM Britain", boat5);
-        String boat6 = boatsMessage.getBoats().get(5).getShortName();
+        String boat6 = boatsMessage.getBoats().get(5).getNameShort();
         assertEquals("TEAM Japan", boat6);
     }
 

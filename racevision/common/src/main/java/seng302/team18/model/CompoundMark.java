@@ -16,7 +16,7 @@ public class CompoundMark implements GeographicLocation {
     private String name;
     private Integer id;
     private List<Mark> marks;
-    private List<Boat> passed;
+    private List<Yacht> passed;
 
     public CompoundMark(String name, Collection<Mark> marks, int id) {
         this.name = name;

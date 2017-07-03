@@ -2,7 +2,7 @@ package seng302.team18.visualiser.messageinterpreting;
 
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Boat;
+import seng302.team18.model.Yacht;
 import seng302.team18.model.Race;
 
 import java.time.Instant;
@@ -46,10 +46,10 @@ public class RaceTimeInterpreter extends MessageInterpreter {
      * @param boats to be updated.
      * @param time elapsed since passing last mark.
      */
-    private void updateBoatMarkTimes(Iterable<Boat> boats, long time) {
-        for (Boat boat : boats) {
-            if (!boat.getTimeAtLastMark().equals(0L)) {
-                boat.setTimeSinceLastMark((time - boat.getTimeAtLastMark()) / 1000);
+    private void updateBoatMarkTimes(Iterable<Yacht> boats, long time) {
+        for (Yacht yacht : boats) {
+            if (!yacht.getTimeAtLastMark().equals(0L)) {
+                yacht.setTimeSinceLastMark((time - yacht.getTimeAtLastMark()) / 1000);
             }
         }
     }

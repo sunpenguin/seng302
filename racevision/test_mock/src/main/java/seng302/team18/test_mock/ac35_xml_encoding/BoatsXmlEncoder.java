@@ -5,7 +5,7 @@ import org.w3c.dom.Element;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.Ac35XmlBoatComponents;
 import seng302.team18.model.Boat;
-import seng302.team18.model.Mark;
+import seng302.team18.model.Yacht;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
@@ -100,7 +100,7 @@ public class BoatsXmlEncoder extends XmlEncoder<AC35XMLBoatMessage> {
     private Element encodeBoats(Document doc, List<Boat> boats) {
         Element element = doc.createElement(Ac35XmlBoatComponents.ELEMENT_BOATS.toString());
 
-        for (Boat boat: boats) {
+        for (Boat boat : boats) {
 //            encodeBoat()
         }
 

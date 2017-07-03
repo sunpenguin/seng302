@@ -21,14 +21,14 @@ public class XMLRegattaInterpreterTest {
 
     private Race race;
     private MessageInterpreter interpreter;
-    private List<Boat> boats;
+    private List<Boat> yachts;
     private String utcOffset = "+1";
 
     @Before
     public void setUp() {
-        Boat boat = new Boat("test", "t", 0);
-        boats = new ArrayList<>();
-        boats.add(boat);
+        Yacht yacht = new Yacht("test", "t", 0);
+        yachts = new ArrayList<>();
+        yachts.add(yacht);
         race = new Race();
         interpreter = new XMLRegattaInterpreter(race);
 
@@ -37,11 +37,11 @@ public class XMLRegattaInterpreterTest {
     }
 
     /**
-     * test to see if nothing in boats have changed
+     * test to see if nothing in yachts have changed
      */
     @Test
     public void boatsTest() {
-        MessageBody message = new AC35XMLBoatMessage(boats);
+        MessageBody message = new AC35XMLBoatMessage(yachts);
         interpreter.interpret(message);
 
         Assert.assertEquals(0, race.getStartingList().size());
@@ -52,7 +52,7 @@ public class XMLRegattaInterpreterTest {
      */
     @Test
     public void courseTest() {
-        MessageBody message = new AC35XMLBoatMessage(boats);
+        MessageBody message = new AC35XMLBoatMessage(yachts);
         interpreter.interpret(message);
 
         Course expected = new Course();
@@ -76,7 +76,7 @@ public class XMLRegattaInterpreterTest {
      */
     @Test
     public void raceTest() {
-        MessageBody message = new AC35XMLBoatMessage(boats);
+        MessageBody message = new AC35XMLBoatMessage(yachts);
         interpreter.interpret(message);
 
         Assert.assertEquals(0, race.getStatus());

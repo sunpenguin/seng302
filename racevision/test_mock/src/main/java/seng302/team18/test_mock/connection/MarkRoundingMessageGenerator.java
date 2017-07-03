@@ -52,10 +52,10 @@ public class MarkRoundingMessageGenerator extends MessageGenerator {
         // Race id
         outputSteam.write(ByteCheck.intToByteArray(raceId));
 
-        // Boat(source) id
-        outputSteam.write(ByteCheck.intToByteArray(markRoundingEvent.getBoat().getId()));
+        // Yacht(source) id
+        outputSteam.write(ByteCheck.intToByteArray(markRoundingEvent.getYacht().getId()));
 
-        // Boat status - defaulting to 0 for 'unknown'
+        // Yacht status - defaulting to 0 for 'unknown'
         outputSteam.write(0x00);
 
         // Rounding side - defaulting to 0 for 'unknown'

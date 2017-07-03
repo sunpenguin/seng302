@@ -1,224 +1,76 @@
 package seng302.team18.model;
 
-
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-
 /**
- * A class which stores information about a boat.
+ * Holds information about "boats", as conveyed in the AC35 protocol. Note that boats here means all boats (potentially
+ * including marks, umpires and more), rather than just racing yachts.
  */
-
-public class Boat implements GeographicLocation {
-    private BoatInfo boatInfo;
-    private DoubleProperty speed;
-    private DoubleProperty knotsSpeed;
-    //Set to -1 initially to prevent null pointer problems
-    private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
-    private double heading;
-    private Coordinate coordinate;
-    private Coordinate destination;
-    private IntegerProperty place;
-    private Long timeTilNextMark;
-    private Long timeSinceLastMark;
-    private Long timeAtLastMark;
-    private int status;
-
-    /**
-     * A constructor for the Boat class
+public abstract class Boat {
+    /* Fields for potential later inclusion:
      *
-     * @param boatName  The name of the boat
-     * @param shortName The name of the team the boat belongs to
-     * @param id        The id of the boat
+     *  Double gpsX;
+     *  Double gpsY;
+     *  Double gpsZ;
+     *
+     *  Double flagX;
+     *  Double flagY;
+     *  Double flagZ;
+     *
+     *  BoatShape shape;
      */
-    public Boat(String boatName, String shortName, int id) {
-        boatInfo = new BoatInfo(id, boatName, shortName);
-        speed = new SimpleDoubleProperty();
-        knotsSpeed = new SimpleDoubleProperty();
-        place = new SimpleIntegerProperty();
-        timeTilNextMark = 0L;
-        timeSinceLastMark = 0L;
-        timeAtLastMark = 0L;
+
+    private String nameShort = "";
+    private String nameStowe = "";
+    private String name = "";
+    private String hullNumber = "";
+    private final Integer id;
+
+    protected Boat(Integer id, String boatName, String shortName) {
+        this.id = id;
+        this.name = boatName;
+        this.nameShort = shortName;
     }
 
-    /**
-     * A getter for the name of the boat
-     *
-     * @return The boatName
-     */
+    protected Boat(Integer id) {
+        this.id = id;
+    }
+
+    public String getNameShort() {
+        return nameShort;
+    }
+
+    public void setNameShort(String nameShort) {
+        this.nameShort = nameShort;
+    }
+
+    public String getNameStowe() {
+        return nameStowe;
+    }
+
+    public void setNameStowe(String nameStowe) {
+        this.nameStowe = nameStowe;
+    }
+
     public String getName() {
-        return boatInfo.getName();
+        return name;
     }
 
-
-    /**
-     * A getter for the heading of the boat
-     *
-     * @return The heading of the boat
-     */
-    public double getHeading() {
-        return heading;
+    public void setName(String name) {
+        this.name = name;
     }
 
-
-    /**
-     * A setter for the heading of the boat
-     *
-     * @param heading The value the boat heading will be set to
-     */
-    public void setHeading(double heading) {
-        this.heading = heading;
+    public String getHullNumber() {
+        return hullNumber;
     }
 
-
-    /**
-     * A getter for the team name that the boat belongs to
-     *
-     * @return The shortName
-     */
-    public String getShortName() {
-        return boatInfo.getNameShort();
+    public void setHullNumber(String hullNumber) {
+        this.hullNumber = hullNumber;
     }
-
-    public BoatInfo getBoatInfo() {
-        return boatInfo;
-    }
-
-    /**
-     * A getter for the speed of the boat
-     *
-     * @return The speed of the boat
-     */
-    public double getSpeed() {
-        return speed.get();
-    }
-
-    /**
-     * A setter for the speed of the boat
-     *
-     * @param speed the speed of the boat
-     */
-    public void setSpeed(double speed) {
-        this.speed.setValue(speed);
-    }
-
-    public int getLegNumber() {
-        return boatLegNumber.get();
-    }
-
-    public IntegerProperty boatLegNumberProperty() {
-        return boatLegNumber;
-    }
-
-    public void setLegNumber(int boatLegNumber) {
-        this.boatLegNumber.set(boatLegNumber);
-    }
-
-    public Coordinate getCoordinate() {
-        return coordinate;
-    }
-
-
-    public void setCoordinate(Coordinate coordinate) {
-        this.coordinate = coordinate;
-    }
-
-
-    public Coordinate getDestination() {
-        return destination;
-    }
-
-
-    public void setDestination(Coordinate destination) {
-        this.destination = destination;
-    }
-
-
-    public int getPlace() {
-        return place.get();
-    }
-
-
-    public void setPlace(int place) {
-        this.place.set(place);
-    }
-
-
-    public IntegerProperty placeProperty() {
-        return place;
-    }
-
 
     public Integer getId() {
-        return boatInfo.getId();
+        return id;
     }
 
-    public DoubleProperty knotsSpeedProperty() {
-        return knotsSpeed;
-    }
-
-    public long getTimeTilNextMark() {
-        return timeTilNextMark;
-    }
-
-
-    public void setTimeTilNextMark(long timeTilNextMark) {
-        this.timeTilNextMark = timeTilNextMark;
-    }
-
-
-    public Long getTimeSinceLastMark() {
-        return timeSinceLastMark;
-    }
-
-
-    public void setTimeSinceLastMark(long timeSinceLastMark) {
-        this.timeSinceLastMark = timeSinceLastMark;
-    }
-
-
-    public Long getTimeAtLastMark() {
-        return timeAtLastMark;
-    }
-
-
-    public void setTimeAtLastMark(Long timeAtLastMark) {
-        this.timeAtLastMark = timeAtLastMark;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Boat{" +
-                "boatName=" + boatInfo.getName() +
-                ", shortName='" + boatInfo.getNameShort() + '\'' +
-                ", speed=" + speed +
-                ", leg=" + boatLegNumber +
-                ", id=" + boatInfo.getId() +
-                ", heading=" + heading +
-                ", coordinate=" + coordinate +
-                ", destination=" + destination +
-                ", place=" + place +
-                ", timeTilNextMark=" + timeTilNextMark +
-                ", timeSinceLastMark=" + timeSinceLastMark +
-                ", timeAtLastMark=" + timeAtLastMark +
-                '}';
-    }
-
-    public double getKnotsSpeed() {
-        return knotsSpeed.get();
-    }
-
-    public void setKnotsSpeed(double knotsSpeed) {
-        this.knotsSpeed.set(knotsSpeed);
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
+    public abstract BoatType getType();
 }
+
+

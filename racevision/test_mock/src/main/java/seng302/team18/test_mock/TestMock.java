@@ -14,6 +14,8 @@ import javax.xml.transform.TransformerException;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import static java.lang.Thread.sleep;
 
 
@@ -121,7 +123,7 @@ public class TestMock {
      * Initialise the generators for scheduled messages
      */
     private void initialiseScheduledMessages() {
-        for(Boat b : race.getStartingList()){
+        for(Yacht b : race.getStartingList()){
             scheduledMessages.add(new BoatMessageGenerator(b));
         }
         scheduledMessages.add(new RaceMessageGenerator(race));
@@ -199,15 +201,18 @@ public class TestMock {
     }
 
     private void generateRace() {
-        List<Boat> startingList = boatMessage.getBoats();
+        List<Yacht> startingList = boatMessage.getBoats().stream()
+                .filter(boat -> boat instanceof Yacht)
+                .map(boat -> (Yacht) boat)
+                .collect(Collectors.toList());
         int raceID = raceMessage.getRaceID();
 
         race = new Race(startingList, course, raceID);
     }
 
-    private void accelerateBoat(Race race, Boat boat, double acceleration) {
-        if (!race.getFinishedList().contains(boat)) {
-            boat.setSpeed(boat.getSpeed() + acceleration);
+    private void accelerateBoat(Race race, Yacht yacht, double acceleration) {
+        if (!race.getFinishedList().contains(yacht)) {
+            yacht.setSpeed(yacht.getSpeed() + acceleration);
         }
     }
 

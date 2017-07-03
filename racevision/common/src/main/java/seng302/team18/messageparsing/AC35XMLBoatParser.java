@@ -7,8 +7,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.Ac35XmlBoatComponents;
-import seng302.team18.model.Boat;
-import seng302.team18.model.BoatType;
+import seng302.team18.model.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -72,20 +71,29 @@ public class AC35XMLBoatParser implements MessageBodyParser {
      * @return A list of participating boats.
      */
     private List<Boat> parseBoats(Node boatsNode) {
-
         List<Boat> boats = new ArrayList<>();
+
         if (boatsNode.getNodeType() == Node.ELEMENT_NODE) {
             Element boatSequenceElement = (Element) boatsNode;
             NodeList boatSequenceNodeList = boatSequenceElement.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOAT.toString());
+
             for (int i = 0; i < boatSequenceNodeList.getLength(); i++) {
                 Node boatNode = boatSequenceNodeList.item(i);
+
                 if (boatNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element boatElement = (Element) boatNode;
-                    if (boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_TYPE.toString()).equals(BoatType.YACHT.toString())) {
-                        String boatName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_BOAT.toString());
-                        String boatShortName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_SHORT.toString());
-                        int boatID = Integer.parseInt(boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_SOURCE_ID.toString()));
-                        boats.add(new Boat(boatName, boatShortName, boatID));
+
+                    BoatType type = BoatType.fromString(boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_TYPE.toString()));
+                    String boatName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_BOAT.toString());
+                    String boatShortName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_SHORT.toString());
+                    int boatID = Integer.parseInt(boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_SOURCE_ID.toString()));
+
+                    switch (type) {
+                        case YACHT:
+                            boats.add(new Yacht(boatName, boatShortName, boatID));
+                            break;
+                        case MARK:
+                        default:
                     }
                 }
             }

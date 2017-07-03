@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
@@ -47,11 +46,11 @@ public class MainWindowController implements Observer {
     @FXML private Group group;
     @FXML private Label timerLabel;
     @FXML private Label fpsLabel;
-    @FXML private TableView<Boat> tableView;
-    @FXML private TableColumn<Boat, Integer> boatPositionColumn;
-    @FXML private TableColumn<Boat, String> boatNameColumn;
-    @FXML private TableColumn<Boat, Double> boatSpeedColumn;
-    @FXML private TableColumn<Boat, String> boatColorColumn;
+    @FXML private TableView<Yacht> tableView;
+    @FXML private TableColumn<Yacht, Integer> boatPositionColumn;
+    @FXML private TableColumn<Yacht, String> boatNameColumn;
+    @FXML private TableColumn<Yacht, Double> boatSpeedColumn;
+    @FXML private TableColumn<Yacht, String> boatColorColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
@@ -260,14 +259,14 @@ public class MainWindowController implements Observer {
      * Sets the cell values for the race table, these are place, boat name and boat speed.
      */
     private void setUpTable(Map<String, Color> boatColors) {
-        Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
+        Callback<Yacht, Observable[]> callback = (Yacht boat) -> new Observable[]{
                 boat.placeProperty(), boat.knotsSpeedProperty()
         };
-        ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
+        ObservableList<Yacht> observableList = FXCollections.observableArrayList(callback);
         observableList.addAll(race.getStartingList());
 
-        SortedList<Boat> sortedList = new SortedList<>(observableList,
-                (Boat boat1, Boat boat2) -> {
+        SortedList<Yacht> sortedList = new SortedList<>(observableList,
+                (Yacht boat1, Yacht boat2) -> {
                     if (boat1.getPlace() < boat2.getPlace()) {
                         return -1;
                     } else if (boat1.getPlace() > boat2.getPlace()) {
@@ -280,7 +279,7 @@ public class MainWindowController implements Observer {
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("knotsSpeed"));
-        boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
+        boatSpeedColumn.setCellFactory(col -> new TableCell<Yacht, Double>() {
             @Override
             public void updateItem(Double speed, boolean empty) {
                 super.updateItem(speed, empty);
@@ -292,16 +291,16 @@ public class MainWindowController implements Observer {
             }
         });
 
-        boatColorColumn.setCellFactory(column -> new TableCell<Boat, String>() {
+        boatColorColumn.setCellFactory(column -> new TableCell<Yacht, String>() {
             private final Map<String, Color> colors = boatColors;
 
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem("", empty);
 
-                Boat boat = (Boat) getTableRow().getItem();
-                if (boat != null) {
-                    Color color = colors.get(boat.getShortName());
+                Yacht yacht = (Yacht) getTableRow().getItem();
+                if (yacht != null) {
+                    Color color = colors.get(yacht.getNameShort());
                     if (color != null) {
                         setStyle(String.format("-fx-background-color: #%02x%02x%02x", (int) (color.getRed() * 255), (int) (color.getGreen() * 255), (int) (color.getBlue() * 255)));
                     }
@@ -309,13 +308,13 @@ public class MainWindowController implements Observer {
             }
         });
 
-        Collection<TableColumn<Boat, ?>> columns = new ArrayList<>();
+        Collection<TableColumn<Yacht, ?>> columns = new ArrayList<>();
         columns.add(boatPositionColumn);
         columns.add(boatColorColumn);
         columns.add(boatNameColumn);
         columns.add(boatSpeedColumn);
 
-        for (TableColumn<Boat, ?> column : columns) {
+        for (TableColumn<Yacht, ?> column : columns) {
             column.setResizable(false);
             column.setSortable(false);
         }
@@ -323,7 +322,7 @@ public class MainWindowController implements Observer {
         tableView.getColumns().setAll(columns);
 
         // Resets the columns to the original order whenever the user tries to change them
-        tableView.getColumns().addListener(new ListChangeListener<TableColumn<Boat, ?>>() {
+        tableView.getColumns().addListener(new ListChangeListener<TableColumn<Yacht, ?>>() {
             public boolean suspended;
 
             @Override
@@ -370,8 +369,8 @@ public class MainWindowController implements Observer {
         raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), backgroundRenderer);
         startWindDirection();
 
-        for (Boat boat : race.getStartingList()) {
-            boat.setPlace(race.getStartingList().size());
+        for (Yacht yacht : race.getStartingList()) {
+            yacht.setPlace(race.getStartingList().size());
         }
 
         raceLoop.start();

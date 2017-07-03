@@ -2,7 +2,7 @@ package seng302.team18.visualiser.messageinterpreting;
 
 import seng302.team18.message.AC35BoatLocationMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Boat;
+import seng302.team18.model.Yacht;
 import seng302.team18.model.Race;
 
 import java.util.Iterator;
@@ -35,18 +35,18 @@ public class BoatLocationInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof AC35BoatLocationMessage) {
             AC35BoatLocationMessage locationMessage = (AC35BoatLocationMessage) message;
-            List<Boat> boats = race.getStartingList();
-            if (boats.size() > 0) {
-                Iterator<Boat> boatIterator = boats.iterator();
-                Boat boat = boatIterator.next();
-                while (!boat.getId().equals(locationMessage.getSourceId()) && boatIterator.hasNext()) {
-                    boat = boatIterator.next();
+            List<Yacht> yachts = race.getStartingList();
+            if (yachts.size() > 0) {
+                Iterator<Yacht> boatIterator = yachts.iterator();
+                Yacht yacht = boatIterator.next();
+                while (!yacht.getId().equals(locationMessage.getSourceId()) && boatIterator.hasNext()) {
+                    yacht = boatIterator.next();
                 }
-                if (boat.getId().equals(locationMessage.getSourceId())) {
-                    boat.setSpeed(locationMessage.getSpeed());
-                    boat.setKnotsSpeed(locationMessage.getSpeed() * 0.539957);
-                    boat.setHeading(locationMessage.getHeading());
-                    boat.setCoordinate(locationMessage.getCoordinate());
+                if (yacht.getId().equals(locationMessage.getSourceId())) {
+                    yacht.setSpeed(locationMessage.getSpeed());
+                    yacht.setKnotsSpeed(locationMessage.getSpeed() * 0.539957);
+                    yacht.setHeading(locationMessage.getHeading());
+                    yacht.setCoordinate(locationMessage.getCoordinate());
                 }
             }
         }

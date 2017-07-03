@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Boat;
+import seng302.team18.model.Yacht;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 
@@ -24,16 +24,16 @@ public class WindDirectionInterpreterTest {
 
     private Race race;
     private MessageInterpreter interpreter;
-    private Boat boat;
+    private Yacht yacht;
     private double windDirection = 35.4;
 
     @Before
     public void setUp() {
-        boat = new Boat("test", "t", 0);
-        List<Boat> boats = new ArrayList<>();
-        boats.add(boat);
+        yacht = new Yacht("test", "t", 0);
+        List<Yacht> yachts = new ArrayList<>();
+        yachts.add(yacht);
         race = new Race();
-        race.setStartingList(boats);
+        race.setStartingList(yachts);
         interpreter = new WindDirectionInterpreter(race);
         MessageBody message = new AC35RaceStatusMessage(0, 0, 0, windDirection, new ArrayList<>());
         interpreter.interpret(message);
@@ -44,14 +44,14 @@ public class WindDirectionInterpreterTest {
      */
     @Test
     public void boatsTest() {
-        Boat expected = new Boat("test", "t", 0);
+        Yacht expected = new Yacht("test", "t", 0);
         Assert.assertEquals(1, race.getStartingList().size());
-        Boat actual = race.getStartingList().get(0);
+        Yacht actual = race.getStartingList().get(0);
         Assert.assertEquals(expected.getId(), actual.getId());
         Assert.assertEquals(expected.getTimeAtLastMark(), actual.getTimeAtLastMark());
         Assert.assertEquals(expected.getTimeSinceLastMark(), actual.getTimeSinceLastMark());
         Assert.assertEquals(expected.getName(), actual.getName());
-        Assert.assertEquals(expected.getShortName(), actual.getShortName());
+        Assert.assertEquals(expected.getNameShort(), actual.getNameShort());
         Assert.assertEquals(expected.getCoordinate(), actual.getCoordinate());
         Assert.assertEquals(expected.getHeading(), actual.getHeading(), 0.1);
         Assert.assertEquals(expected.getPlace(), actual.getPlace());

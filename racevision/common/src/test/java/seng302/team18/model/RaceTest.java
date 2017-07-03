@@ -18,8 +18,8 @@ public class RaceTest {
 //        InputStream file = new BufferedInputStream(new BufferedInputStream(getClass().getResourceAsStream("/course.xml")));
 //        Course course = XMLCourseParser.parseCourse(file);
 ////        CompoundMark start = course.getCompoundMarks().get(0);
-////        Boat boat1 = new Boat("Emirates", "NZL", 45);
-////        ArrayList<Boat> boats = new ArrayList<>();
+////        Yacht boat1 = new Yacht("Emirates", "NZL", 45);
+////        ArrayList<Yacht> boats = new ArrayList<>();
 ////        boats.add(boat1);
 ////        Race race = new Race(boats, course);
 ////        race.updateBoats(time);
@@ -41,8 +41,8 @@ public class RaceTest {
 //    public void setCourseForBoatsTest() throws IOException, SAXException, ParserConfigurationException {
 //        InputStream file = new BufferedInputStream(new BufferedInputStream(getClass().getResourceAsStream("/course.xml")));
 //        Course course = XMLCourseParser.parseCourse(file);
-//        Boat boat1 = new Boat("Emirates", "NZL", 45);
-//        ArrayList<Boat> boats = new ArrayList<>();
+//        Yacht boat1 = new Yacht("Emirates", "NZL", 45);
+//        ArrayList<Yacht> boats = new ArrayList<>();
 //        boats.add(boat1);
 ////        Race testRace = new Race(boats, course);
 ////        CompoundMark expectedMark = course.getCompoundMarks().get(1);

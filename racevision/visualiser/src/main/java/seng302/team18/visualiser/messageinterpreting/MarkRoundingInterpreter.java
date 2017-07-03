@@ -2,7 +2,7 @@ package seng302.team18.visualiser.messageinterpreting;
 
 import seng302.team18.message.AC35MarkRoundingMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Boat;
+import seng302.team18.model.Yacht;
 import seng302.team18.model.Race;
 
 import java.util.List;
@@ -34,10 +34,10 @@ public class MarkRoundingInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof AC35MarkRoundingMessage) {
             AC35MarkRoundingMessage roundingMessage = (AC35MarkRoundingMessage) message;
-            List<Boat> boats = race.getStartingList();
-            for (Boat boat : boats) {
-                if (boat.getId().equals(roundingMessage.getBoatId())) {
-                    boat.setTimeAtLastMark(roundingMessage.getTime());
+            List<Yacht> yachts = race.getStartingList();
+            for (Yacht yacht : yachts) {
+                if (yacht.getId().equals(roundingMessage.getBoatId())) {
+                    yacht.setTimeAtLastMark(roundingMessage.getTime());
                 }
             }
         }

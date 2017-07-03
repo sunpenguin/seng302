@@ -12,7 +12,7 @@ public class Leg {
     private CompoundMark departure;
     private double heading;
     private int legNumber;
-    private List<Boat> boatsCompleted;
+    private List<Yacht> boatsCompleted;
 
     /**
      * A constructor for the Leg
@@ -44,12 +44,12 @@ public class Leg {
         return legNumber;
     }
 
-    public List<Boat> getBoatsCompleted() {
+    public List<Yacht> getBoatsCompleted() {
         return boatsCompleted;
     }
 
-    public void addToBoatsCompleted(Boat boat) {
-        boatsCompleted.add(boat);
+    public void addToBoatsCompleted(Yacht yacht) {
+        boatsCompleted.add(yacht);
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.model.Boat;
+import seng302.team18.model.Yacht;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -31,20 +32,20 @@ public class AC35XMLBoatParserTest {
 
     @Test
     public void parse() throws Exception {
-        List<Boat> expected = new ArrayList<>();
-        expected.add(new Boat("Oracle Team USA", "USA", 101));
-        expected.add(new Boat("Emirates Team New Zealand", "NZL", 103));
-        expected.add(new Boat("Artemis Racing", "SWE", 102));
+        List<Yacht> expected = new ArrayList<>();
+        expected.add(new Yacht("Oracle Team USA", "USA", 101));
+        expected.add(new Yacht("Emirates Team New Zealand", "NZL", 103));
+        expected.add(new Yacht("Artemis Racing", "SWE", 102));
 
         List<Boat> actual = message.getBoats();
 
         assertEquals("An incorrect number of boats were added to the message object.",expected.size(), actual.size());
 
         for (int i = 0; i < expected.size(); i++) {
-            Boat exp = expected.get(i);
-            Boat act = actual.get(i);
+            Yacht exp = expected.get(i);
+            Yacht act = (Yacht) actual.get(i);
             assertEquals(exp.getName(), act.getName());
-            assertEquals(exp.getShortName(), act.getShortName());
+            assertEquals(exp.getNameShort(), act.getNameShort());
             assertEquals(exp.getCoordinate(), act.getCoordinate());
             assertEquals(exp.getDestination(), act.getDestination());
             assertEquals(exp.getHeading(), act.getHeading(), 0.1);

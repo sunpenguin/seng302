@@ -1,7 +1,7 @@
 package seng302.team18.test_mock.connection;
 
 import org.junit.Test;
-import seng302.team18.model.Boat;
+import seng302.team18.model.Yacht;
 import seng302.team18.model.Race;
 import seng302.team18.test_mock.TestMock;
 import seng302.team18.util.ByteCheck;
@@ -65,17 +65,17 @@ public class BoatMessageGeneratorTest {
         Race testRace = testMock.testRun();
         byte[] generatedBytes;
         List<BoatMessageGenerator> messages = new ArrayList<>();
-        for (Boat boat: testRace.getStartingList()) {
-            messages.add(new BoatMessageGenerator(boat));
+        for (Yacht yacht : testRace.getStartingList()) {
+            messages.add(new BoatMessageGenerator(yacht));
         }
         for(BoatMessageGenerator generator: messages){
             generatedBytes = generator.getPayload();
             int expectedVersionNum = 1;
-            int expectedSourceID = generator.getBoat().getId();
-            double expectedLat = (generator.getBoat().getCoordinate().getLatitude());
-            double expectedLong = (generator.getBoat().getCoordinate().getLongitude());
-            double expectedHeading = generator.getBoat().getHeading();
-            double expectedSpeed = generator.getBoat().getSpeed();
+            int expectedSourceID = generator.getYacht().getId();
+            double expectedLat = (generator.getYacht().getCoordinate().getLatitude());
+            double expectedLong = (generator.getYacht().getCoordinate().getLongitude());
+            double expectedHeading = generator.getYacht().getHeading();
+            double expectedSpeed = generator.getYacht().getSpeed();
 
             int actualVersionNum = ByteCheck.byteToIntConverter(generatedBytes,
                     VERSIONNUM_I, VERSIONNUM_L);

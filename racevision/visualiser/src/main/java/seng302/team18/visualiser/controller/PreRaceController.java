@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.SocketMessageReceiver;
-import seng302.team18.model.Boat;
+import seng302.team18.model.Yacht;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.ZoneTimeClock;
 
@@ -21,7 +21,7 @@ import java.util.*;
 public class PreRaceController {
     @FXML private Label timeLabel;
     @FXML private Label startTimeLabel;
-    @FXML private ListView<Boat> listView;
+    @FXML private ListView<Yacht> listView;
     @FXML private Label timeZoneLabel;
     @FXML private Text raceNameText;
     @FXML private Text errorText;
@@ -59,18 +59,18 @@ public class PreRaceController {
 
     /**
      * Sets the list view of the participants in the race.
-     * @param boats The race participants
+     * @param yachts The race participants
      */
-    private void setUpLists(List<Boat> boats) {
-        listView.setItems(FXCollections.observableList(boats));
-        listView.setCellFactory(param -> new ListCell<Boat>() {
+    private void setUpLists(List<Yacht> yachts) {
+        listView.setItems(FXCollections.observableList(yachts));
+        listView.setCellFactory(param -> new ListCell<Yacht>() {
             @Override
-            protected void updateItem(Boat boat, boolean empty) {
-                super.updateItem(boat, empty);
-                if (empty || boat == null) {
+            protected void updateItem(Yacht yacht, boolean empty) {
+                super.updateItem(yacht, empty);
+                if (empty || yacht == null) {
                     setText(null);
                 } else {
-                    setText(boat.getName());
+                    setText(yacht.getName());
                 }
             }
         });

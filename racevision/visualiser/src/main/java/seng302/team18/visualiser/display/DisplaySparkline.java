@@ -39,7 +39,7 @@ public class DisplaySparkline extends AnimationTimer {
      * Called in constructor.
      * Creates a  XYChart.Series<String, String> for each boat.
      * Sets name of series to boat name and colour of series to the boat colour.
-     * @param boatColors HashMap in form <Boat, Color>
+     * @param boatColors HashMap in form <Yacht, Color>
      */
     private void setupSeries(Map<String, Color> boatColors) {
         sparklinesChart.applyCss();

@@ -1,7 +1,7 @@
 package seng302.team18.test_mock.connection;
 
 import seng302.team18.message.AC35MessageType;
-import seng302.team18.model.Boat;
+import seng302.team18.model.Yacht;
 import seng302.team18.util.ByteCheck;
 
 import java.io.ByteArrayOutputStream;
@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
  * Generator for boat messages (see #4.9 in the AC35 Streaming protocol spec.)
  */
 public class BoatMessageGenerator extends ScheduledMessageGenerator {
-    private Boat boat;
+    private Yacht yacht;
     final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
     final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
     final int MMPS_TO_KMPH = 36 / 10000;
@@ -21,11 +21,11 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
     /**
      * Constructs a new instance of BoatMessageGenerator.
      *
-     * @param boat a boat to generate messages for.
+     * @param yacht a boat to generate messages for.
      */
-    public BoatMessageGenerator(Boat boat) {
+    public BoatMessageGenerator(Yacht yacht) {
         super(5, AC35MessageType.BOAT_LOCATION.getCode());
-        this.boat = boat;
+        this.yacht = yacht;
 
     }
 
@@ -37,24 +37,24 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
 
         byte versionNum = 0x1;
         byte[] timeBytes = ByteCheck.getCurrentTime6Bytes();
-        byte[] sourceID = ByteCheck.intToByteArray(boat.getId());
+        byte[] sourceID = ByteCheck.intToByteArray(yacht.getId());
         byte[] sequenceNum = ByteBuffer.allocate(4).array();
         byte[] deviceType = ByteBuffer.allocate(1).array();
-        Double latitude = (boat.getCoordinate().getLatitude() / BYTE_COORDINATE_TO_DOUBLE);
+        Double latitude = (yacht.getCoordinate().getLatitude() / BYTE_COORDINATE_TO_DOUBLE);
         int latInt = latitude.intValue();
-        Double longitude = (boat.getCoordinate().getLongitude() / BYTE_COORDINATE_TO_DOUBLE);
+        Double longitude = (yacht.getCoordinate().getLongitude() / BYTE_COORDINATE_TO_DOUBLE);
         int longInt = longitude.intValue();
         byte[] latitudeBytes = ByteCheck.intToByteArray(latInt);
         byte[] longitudeBytes = ByteCheck.intToByteArray(longInt);
         byte[] altitude = ByteBuffer.allocate(4).array();
-        Double heading = (boat.getHeading() / BYTE_HEADING_TO_DOUBLE);
+        Double heading = (yacht.getHeading() / BYTE_HEADING_TO_DOUBLE);
         short headingShort = heading.shortValue();
         byte[] headingBytes = ByteCheck.shortToByteArray(headingShort);
         byte[] pitch = ByteBuffer.allocate(2).array();
         byte[] roll = ByteBuffer.allocate(2).array();
         byte[] speedBytes = ByteBuffer.allocate(2).array();
         byte[] cog = ByteBuffer.allocate(2).array();
-        Double speedOverGround = boat.getSpeed() * KMPH_TO_MMPS;
+        Double speedOverGround = yacht.getSpeed() * KMPH_TO_MMPS;
         short speedOverGroundShort = speedOverGround.shortValue();
         byte[] sog = ByteCheck.shortToByteArray(speedOverGroundShort);
         byte[] windInfo = ByteBuffer.allocate(10).array();
@@ -84,8 +84,8 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
         return outStream.toByteArray();
     }
 
-    public Boat getBoat() {
-        return boat;
+    public Yacht getYacht() {
+        return yacht;
     }
 
 }

@@ -1,22 +1,22 @@
 package seng302.team18.model;
 
 /**
- * Represents a boat "rounding" (passing) a mark (or gate)
+ * Represents a yacht "rounding" (passing) a mark (or gate)
  */
 public class MarkRoundingEvent {
 
     private final long time;
-    private final Boat boat;
+    private final Yacht yacht;
     private final CompoundMark compoundMark;
 
     /**
-     * @param time         the time at which the boat rounded the mark
-     * @param boat         the boat
+     * @param time         the time at which the yacht rounded the mark
+     * @param yacht         the yacht
      * @param compoundMark the mark
      */
-    public MarkRoundingEvent(long time, Boat boat, CompoundMark compoundMark) {
+    public MarkRoundingEvent(long time, Yacht yacht, CompoundMark compoundMark) {
         this.time = time;
-        this.boat = boat;
+        this.yacht = yacht;
         this.compoundMark = compoundMark;
     }
 
@@ -24,8 +24,8 @@ public class MarkRoundingEvent {
         return time;
     }
 
-    public Boat getBoat() {
-        return boat;
+    public Yacht getYacht() {
+        return yacht;
     }
 
     public CompoundMark getCompoundMark() {

@@ -2,7 +2,7 @@ package seng302.team18.test_mock.connection;
 
 import org.junit.Test;
 import seng302.team18.message.AC35MessageType;
-import seng302.team18.model.Boat;
+import seng302.team18.model.Yacht;
 import seng302.team18.model.CompoundMark;
 import seng302.team18.model.MarkRoundingEvent;
 import seng302.team18.model.Race;
@@ -22,11 +22,11 @@ public class MarkRoundingMessageGeneratorTest {
     public void getPayload() throws Exception {
         final TestMock testMock = new TestMock();
         final Race race = testMock.testRun();
-        final Boat boat = race.getStartingList().get(0);
+        final Yacht yacht = race.getStartingList().get(0);
         final CompoundMark mark = race.getCourse().getCompoundMarks().get(0);
         final long time = System.currentTimeMillis();
 
-        MarkRoundingEvent event = new MarkRoundingEvent(time, boat, mark);
+        MarkRoundingEvent event = new MarkRoundingEvent(time, yacht, mark);
         MarkRoundingMessageGenerator messageGenerator = new MarkRoundingMessageGenerator(event, race.getId());
 
         message = messageGenerator.getMessage();
@@ -43,7 +43,7 @@ public class MarkRoundingMessageGeneratorTest {
         checkField("time", time, 6);
         checkField("ack num", 0, 2);
         checkField("race id", race.getId(), 4);
-        checkField("yacht id", boat.getId(), 4);
+        checkField("yacht id", yacht.getId(), 4);
         checkField("boat status", 0, 1);
         checkField("rounding side", 0, 1);
         checkField("mark type", (mark.getMarks().size() == 2) ? 0x02 : 0x01, 1);

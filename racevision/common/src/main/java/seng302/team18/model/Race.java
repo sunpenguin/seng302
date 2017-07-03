@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
  */
 public class Race {
 
-    private List<Boat> startingList;
+    private List<Yacht> startingList;
     private Course course;
-    private List<Boat> finishedList;
+    private List<Yacht> finishedList;
     private ZonedDateTime startTime;
     private ZonedDateTime currentTime;
     private List<Integer> participantIds;
@@ -44,12 +44,12 @@ public class Race {
      * @param startingList ArrayList holding all entered boats
      * @param course       Course object
      */
-    public Race(List<Boat> startingList, Course course, int raceId) {
+    public Race(List<Yacht> startingList, Course course, int raceId) {
         this.startingList = startingList;
         this.course = course;
         finishedList = new ArrayList<>();
         participantIds = startingList.stream()
-                .map(Boat::getId)
+                .map(Yacht::getId)
                 .collect(Collectors.toList());
         this.id = raceId;
         this.status = 0;
@@ -63,7 +63,7 @@ public class Race {
      */
     private void setInitialSpeed() {
         int speed = 200;
-        for (Boat b : startingList) {
+        for (Yacht b : startingList) {
             b.setSpeed(speed); //kph
             speed -= 50;
         }
@@ -90,16 +90,16 @@ public class Race {
     private void setCourseForBoats() {
         if (course.getLegs().size() > 0) {
             GPSCalculations gps = new GPSCalculations();
-            for (Boat boat : startingList) {
+            for (Yacht yacht : startingList) {
                 // Set Leg
-                boat.setLegNumber(course.getLegs().get(0).getLegNumber());
+                yacht.setLegNumber(course.getLegs().get(0).getLegNumber());
                 // Set Dest
-                boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCoordinate());
+                yacht.setDestination(course.getLeg(yacht.getLegNumber()).getDestination().getCoordinate());
                 // Set Coordinate
-                Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
-                boat.setCoordinate(midPoint);
+                Coordinate midPoint = course.getLeg(yacht.getLegNumber()).getDeparture().getCoordinate();
+                yacht.setCoordinate(midPoint);
                 // Set Heading
-                boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
+                yacht.setHeading(gps.getBearing(yacht.getCoordinate(), (yacht.getDestination())));
             }
         }
     }
@@ -109,7 +109,7 @@ public class Race {
      *
      * @return List holding all entered boats.
      */
-    public List<Boat> getStartingList() {
+    public List<Yacht> getStartingList() {
         return startingList;
     }
 
@@ -118,15 +118,15 @@ public class Race {
      *
      * @param startingList ArrayList holding all entered boats
      */
-    public void setStartingList(List<Boat> startingList) {
+    public void setStartingList(List<Yacht> startingList) {
         if (participantIds.size() == 0) {
             this.startingList.clear();
             this.startingList.addAll(startingList);
         } else {
             this.startingList.clear();
-            for (Boat boat : startingList) {
-                if (participantIds.contains(boat.getId())) {
-                    this.startingList.add(boat);
+            for (Yacht yacht : startingList) {
+                if (participantIds.contains(yacht.getId())) {
+                    this.startingList.add(yacht);
                 }
             }
         }
@@ -157,9 +157,9 @@ public class Race {
      * @param time
      */
     public void updateBoats(double time) { // time in seconds
-        for (Boat boat : startingList) {
-            if (!finishedList.contains(boat)) {
-                updateBoat(boat, time);
+        for (Yacht yacht : startingList) {
+            if (!finishedList.contains(yacht)) {
+                updateBoat(yacht, time);
             }
         }
     }
@@ -168,12 +168,12 @@ public class Race {
     /**
      * Updates a boats position then heading.
      *
-     * @param boat
+     * @param yacht
      * @param time
      */
-    private void updateBoat(Boat boat, double time) {
-        updatePosition(boat, time);
-        updateHeading(boat);
+    private void updateBoat(Yacht yacht, double time) {
+        updatePosition(yacht, time);
+        updateHeading(yacht);
     }
 
 
@@ -182,65 +182,65 @@ public class Race {
      * it heads in the direction of its next destination. Otherwise set the heading
      * to be in the direction of its current destination.
      *
-     * @param boat to be updated
+     * @param yacht to be updated
      */
-    private void updateHeading(Boat boat) {
-        // if boat gets within range of its next destination changes its destination and heading
-        if ((Math.abs(boat.getDestination().getLongitude() - boat.getCoordinate().getLongitude()) < 0.0001)
-                && (Math.abs(boat.getDestination().getLatitude() - boat.getCoordinate().getLatitude()) < 0.0001)) {
-            Leg nextLeg = course.getNextLeg(course.getLeg(boat.getLegNumber())); // find next leg
-            // if current leg is the last leg boat is now finished
-            if (nextLeg.equals(course.getLeg(boat.getLegNumber()))) {
-                finishedList.add(boat);
-                boat.setSpeed(0d);
-                boat.setLegNumber(boat.getLegNumber() + 1);
+    private void updateHeading(Yacht yacht) {
+        // if yacht gets within range of its next destination changes its destination and heading
+        if ((Math.abs(yacht.getDestination().getLongitude() - yacht.getCoordinate().getLongitude()) < 0.0001)
+                && (Math.abs(yacht.getDestination().getLatitude() - yacht.getCoordinate().getLatitude()) < 0.0001)) {
+            Leg nextLeg = course.getNextLeg(course.getLeg(yacht.getLegNumber())); // find next leg
+            // if current leg is the last leg yacht is now finished
+            if (nextLeg.equals(course.getLeg(yacht.getLegNumber()))) {
+                finishedList.add(yacht);
+                yacht.setSpeed(0d);
+                yacht.setLegNumber(yacht.getLegNumber() + 1);
                 return;
             }
-            if (course.getLeg(boat.getLegNumber()).getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
-                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinate())) { // and it hasn't gone around the gate
-                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinate()); // move around the gate
+            if (course.getLeg(yacht.getLegNumber()).getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
+                    !yacht.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinate())) { // and it hasn't gone around the gate
+                yacht.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinate()); // move around the gate
             } else { // the destination was a mark or is already gone around gate so move onto the next leg
-                setNextLeg(boat, nextLeg);
+                setNextLeg(yacht, nextLeg);
             }
         }
         GPSCalculations gps = new GPSCalculations();
-        boat.setHeading(gps.getBearing(boat.getCoordinate(), boat.getDestination()));
+        yacht.setHeading(gps.getBearing(yacht.getCoordinate(), yacht.getDestination()));
     }
 
 
     /**
-     * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
+     * Sets the next Leg of the yacht, updates the mark to show the yacht has passed it,
      * and sets the destination to the next marks coordinates.
      *
-     * @param boat
+     * @param yacht
      * @param nextLeg
      */
 
-    public void setNextLeg(Boat boat, Leg nextLeg) {
-        Leg currentLeg = course.getLeg(boat.getLegNumber());
-        currentLeg.addToBoatsCompleted(boat);
-        int newPlace = currentLeg.getBoatsCompleted().indexOf(boat) + 1;
-        boat.setPlace(newPlace);
-        boat.setDestination(nextLeg.getDestination().getMarks().get(0).getCoordinate());
-        boat.setLegNumber(nextLeg.getLegNumber());
+    public void setNextLeg(Yacht yacht, Leg nextLeg) {
+        Leg currentLeg = course.getLeg(yacht.getLegNumber());
+        currentLeg.addToBoatsCompleted(yacht);
+        int newPlace = currentLeg.getBoatsCompleted().indexOf(yacht) + 1;
+        yacht.setPlace(newPlace);
+        yacht.setDestination(nextLeg.getDestination().getMarks().get(0).getCoordinate());
+        yacht.setLegNumber(nextLeg.getLegNumber());
 
-        for (Boat currentBoat : getStartingList()) {
-            int currentBoatPlace = currentBoat.placeProperty().intValue();
-            int boatPlace = boat.placeProperty().intValue();
-            int currentBoatLeg = currentBoat.getLegNumber();
-            int boatLeg = boat.getLegNumber();
-            if (!(currentBoat.getId().equals(boat.getId())) && (currentBoatPlace == boatPlace)) {
+        for (Yacht currentYacht : getStartingList()) {
+            int currentBoatPlace = currentYacht.placeProperty().intValue();
+            int boatPlace = yacht.placeProperty().intValue();
+            int currentBoatLeg = currentYacht.getLegNumber();
+            int boatLeg = yacht.getLegNumber();
+            if (!(currentYacht.getId().equals(yacht.getId())) && (currentBoatPlace == boatPlace)) {
                 if (currentBoatLeg >= boatLeg) {
-                    currentBoat.setPlace(currentBoatPlace - 1);
+                    currentYacht.setPlace(currentBoatPlace - 1);
                 } else {
-                    currentBoat.setPlace(currentBoatPlace + 1);
+                    currentYacht.setPlace(currentBoatPlace + 1);
                 }
             }
         }
 
         // TODO when this is enabled it causes the visualiser to freeze, likely due to malformed packets
-        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getLeg(boat.getLegNumber()).getDeparture()));
-        //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
+        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), yacht, course.getLeg(yacht.getLegNumber()).getDeparture()));
+        //startingList.set(startingList.indexOf(yacht), yacht); // forces list to notify the tableview
     }
 
 
@@ -248,21 +248,21 @@ public class Race {
      * Updates the boats coordinates to move closer to the boats destination.
      * Amount moved is proportional to the time passed
      *
-     * @param boat to be moved
+     * @param yacht to be moved
      * @param time that has passed
      */
-    private void updatePosition(Boat boat, double time) {
-        double speed = boat.getSpeed();
+    private void updatePosition(Yacht yacht, double time) {
+        double speed = yacht.getSpeed();
         double mpsSpeed = speed * 0.27778;//convert to metres/second
         double secondsTime = time / 1000;
         double distanceTravelled = mpsSpeed * secondsTime;
         GPSCalculations gps = new GPSCalculations();
         // set next position based on current coordinate, distance travelled, and heading.
-        boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+        yacht.setCoordinate(gps.toCoordinate(yacht.getCoordinate(), yacht.getHeading(), distanceTravelled));
     }
 
 
-    public List<Boat> getFinishedList() {
+    public List<Yacht> getFinishedList() {
         return finishedList;
     }
 
@@ -281,7 +281,7 @@ public class Race {
 
     public void setParticipantIds(List<Integer> participantIds) {
         this.participantIds = participantIds;
-        List<Boat> newList = startingList.stream()
+        List<Yacht> newList = startingList.stream()
                 .filter(boat -> participantIds.contains(boat.getId()))
                 .collect(Collectors.toList());
         startingList.clear();
