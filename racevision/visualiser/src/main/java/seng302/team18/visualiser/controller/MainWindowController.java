@@ -29,9 +29,12 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import seng302.team18.message.MessageBody;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
+import seng302.team18.visualiser.send.BoatActionMessage;
+import seng302.team18.visualiser.send.Sender;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
@@ -78,6 +81,8 @@ public class MainWindowController implements Observer {
     private Map<AnnotationType, Boolean> importantAnnotations;
 
     private Stage stage;
+
+    private Sender sender;
 
     @FXML
     public void initialize() {
