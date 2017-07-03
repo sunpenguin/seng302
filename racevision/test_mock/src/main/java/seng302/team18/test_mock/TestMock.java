@@ -71,7 +71,7 @@ public class TestMock {
     }
     
     public void run() throws TransformerException, ParserConfigurationException{
-        setUpFiles();
+        setUpFiles(); // Also set up the server
         readFiles();
         generateClasses();
 
@@ -109,9 +109,10 @@ public class TestMock {
      * Used for testing to avoid having to
      * run test mock to test that messages
      * encode correctly.
-     * @return
+     * @return returns generated race
      */
-    public Race testRun() {
+    public Race testRun() throws TransformerException, ParserConfigurationException{
+        setUpFiles();
         readFiles();
         generateClasses();
         return race;
