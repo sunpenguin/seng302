@@ -18,6 +18,7 @@ public class PolarCalculatorTest {
     PolarCalculator calculator;
     Polar polar1;
     Polar polar2;
+    Polar polar3;
 
     @Before
     public void setUp(){
@@ -43,9 +44,22 @@ public class PolarCalculatorTest {
         polar2.addToMap(145,49);
         polar2.addToMap(175,30);
 
+        //Make polar 3
+        polar3 = new Polar(30,42,30,150,46);
+        polar3.addToMap(0,0);
+        polar3.addToMap(30,15);
+        polar3.addToMap(60,37);
+        polar3.addToMap(75,42);
+        polar3.addToMap(90,48);
+        polar3.addToMap(115,49);
+        polar3.addToMap(145,48);
+        polar3.addToMap(175,32);
+
+
         List<Polar> polarList = new ArrayList<>();
         polarList.add(polar1);
         polarList.add(polar2);
+        polarList.add(polar3);
 
         calculator = new PolarCalculator(polarList);
 
@@ -54,6 +68,9 @@ public class PolarCalculatorTest {
     @After
     public void tearDown(){
         calculator = null;
+        polar1 = null;
+        polar2 = null;
+        polar3 = null;
     }
 
     @Test
@@ -283,7 +300,52 @@ public class PolarCalculatorTest {
 
     @Test
     public void getPolarForWindSpeedTest(){
+        //Create Windspeeds to test with
+        //windspeeds Closest to polar1
+        double windspeed1 = 10;
+        double windspeed2 = 12;
+        double windspeed3 = 14;
+        //windspeed in middle of polar1 & polar2
+        double windspeed4 = 18.5;
+        //windspeeds closest to polar 2
+        double windspeed5 = 20;
+        double windspeed6 = 25;
+        double windspeed7 = 27;
+        //windspeed in middle of polar2 & polar3
+        double windspeed8 = 27.5;
+        //windspeeds closest to polar 3
+        double windspeed9 = 29;
+        double windspeed10 = 30;
+        double windspeed11 = 33;
 
+        Polar returned1 = calculator.getPolarForWindSpeed(windspeed1);
+        Polar returned2 = calculator.getPolarForWindSpeed(windspeed2);
+        Polar returned3 = calculator.getPolarForWindSpeed(windspeed3);
+        Polar returned4 = calculator.getPolarForWindSpeed(windspeed4);
+        Polar returned5 = calculator.getPolarForWindSpeed(windspeed5);
+        Polar returned6 = calculator.getPolarForWindSpeed(windspeed6);
+        Polar returned7 = calculator.getPolarForWindSpeed(windspeed7);
+        Polar returned8 = calculator.getPolarForWindSpeed(windspeed8);
+        Polar returned9 = calculator.getPolarForWindSpeed(windspeed9);
+        Polar returned10 = calculator.getPolarForWindSpeed(windspeed10);
+        Polar returned11 = calculator.getPolarForWindSpeed(windspeed11);
+
+        //Should equal polar1
+        assertEquals(polar1, returned1);
+        assertEquals(polar1, returned2);
+        assertEquals(polar1, returned3);
+        assertEquals(polar1, returned4);
+
+        //Should equal polar2
+        assertEquals(polar2, returned5);
+        assertEquals(polar2, returned6);
+        assertEquals(polar2, returned7);
+        assertEquals(polar2, returned8);
+
+        //Should equal polar3
+        assertEquals(polar3, returned9);
+        assertEquals(polar3, returned10);
+        assertEquals(polar3, returned11);
     }
 
 }

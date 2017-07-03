@@ -42,4 +42,16 @@ public class PolarCalculator {
         return trueWindAngle;
     }
 
+    /**
+     * From the polars list, a singular polar is selected.
+     * The polar with the closest windSpeed is selected.
+     * Note: If distance from two polars is the same, the lower speed polar is selected.
+     *
+     * @param windSpeed double, the speed of the wind.
+     * @return polar with closest windSpeed to given windSpeed
+     */
+    public Polar getPolarForWindSpeed(double windSpeed) {
+        return polars.get(1);
+    }
+
 }
