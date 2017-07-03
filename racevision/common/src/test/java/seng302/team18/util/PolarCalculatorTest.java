@@ -281,4 +281,9 @@ public class PolarCalculatorTest {
 
     }
 
+    @Test
+    public void getPolarForWindSpeedTest(){
+
+    }
+
 }
