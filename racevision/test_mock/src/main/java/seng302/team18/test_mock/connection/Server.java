@@ -25,54 +25,6 @@ public class Server {
         raceXMLMessageGenerator = new XMLMessageGenerator((byte)6, raceXML);
     }
 
-    /**
-     * Blocks while waiting for a client connection, setting up new connection when available.
-     * This includes sending the initial XML files and adding to the client list.
-     */
-    private void acceptClientConnection() {
-        try {
-            ClientConnection client = new ClientConnection(serverSocket.accept());
-            ConnectionListener listener = new ConnectionListener(client);
-            listener.run();
-            clientConnectionNum ++;
-            clientList.getClients().add(client);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Sends the the three XML files to the specified client.
-     * The three files are Race.xml, Regatta.xml and Boats.xml. Their order is not defined.
-     *
-     * @param client the client to send to
-     * @throws IOException if an I/O exception occurs
-     */
-    private void sendXmls(ClientConnection client) throws IOException {
-
-        client.sendMessage(regattaXMLMessageGenerator.getMessage());
-        client.sendMessage(raceXMLMessageGenerator.getMessage());
-        client.sendMessage(boatsXMLMessageGenerator.getMessage());
-    }
-
-    /**
-     * Closes any open client connections and closes the server
-     */
-    public void closeServer() {
-        for (ClientConnection client : clientList.getClients()) {
-            try {
-                client.close();
-            } catch (IOException e) {
-                System.err.println("Failed to close client connection to: " + client.getClient().getInetAddress().toString());
-            }
-        }
-
-        try {
-            serverSocket.close();
-        } catch (IOException e) {
-            System.err.println("Failed to close server socket");
-        }
-    }
 
     /**
      * Opens the server.
@@ -97,8 +49,82 @@ public class Server {
                 System.out.println("Sorry, 6 players have entered this round.");
             }
         }
-        //connectionListener.run(); TODO make connection listener work
     }
+
+    /**
+     * Blocks while waiting for a client connection, setting up new connection when available.
+     * Adding new client to the client list.
+     * Increment the number that represents number of connected clients.
+     */
+    private void acceptClientConnection() {
+        try {
+            ClientConnection client = new ClientConnection(serverSocket.accept());
+            ConnectionListener listener = new ConnectionListener(client);
+            listener.start();
+            clientConnectionNum ++;
+            clientList.getClients().add(client);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Thread that listens for incoming connections and sends xml files to a connected client.
+     */
+    private class ConnectionListener extends Thread {
+        private ClientConnection clientConnection;
+
+        public ConnectionListener(ClientConnection client) {
+            clientConnection = client;
+        }
+
+        @Override
+        public void run() {
+            try {
+                serverSocket.setSoTimeout(1000);
+                sendXmls(clientConnection);
+            } catch (SocketException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     * Sends the the three XML files to the specified client.
+     * The three files are Race.xml, Regatta.xml and Boats.xml. Their order is not defined.
+     *
+     * @param client the client to send to
+     * @throws IOException if an I/O exception occurs
+     */
+    private void sendXmls(ClientConnection client) throws IOException {
+        client.sendMessage(regattaXMLMessageGenerator.getMessage());
+        client.sendMessage(raceXMLMessageGenerator.getMessage());
+        client.sendMessage(boatsXMLMessageGenerator.getMessage());
+    }
+
+    /**
+     * Closes any open client connections and closes the server
+     */
+    public void closeServer() {
+        for (ClientConnection client : clientList.getClients()) {
+            try {
+                client.close();
+            } catch (IOException e) {
+                System.err.println("Failed to close client connection to: " + client.getClient().getInetAddress().toString());
+            }
+        }
+
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            System.err.println("Failed to close server socket");
+        }
+    }
+
 
     /**
      * Broadcasts a message to all connected clients
@@ -124,29 +150,5 @@ public class Server {
      */
     public void pruneConnections() {
         clientList.pruneConnections();
-    }
-
-
-    /**
-     * Thread that listens for incoming connections.
-     */
-    private class ConnectionListener extends Thread {
-        private ClientConnection clientConnection;
-
-        public ConnectionListener(ClientConnection client) {
-            clientConnection = client;
-        }
-
-        @Override
-        public void run() {
-            try {
-                serverSocket.setSoTimeout(1000);
-                sendXmls(clientConnection);
-            } catch (SocketException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }
