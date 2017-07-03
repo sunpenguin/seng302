@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.controller;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -88,7 +89,8 @@ public class MainWindowController implements Observer {
 
     @FXML
     public void initialize() {
-        installKeyHandler();
+        //installKeyHandler();
+
         setSliderListener();
         sliderSetup();
         fpsOn = true;
@@ -119,19 +121,28 @@ public class MainWindowController implements Observer {
         icon.setFitWidth(18);
     }
 
-    private void installKeyHandler(){
-        BoatActionMessage message = new BoatActionMessage();
-        final EventHandler<KeyEvent> keyEventHandler =
-                new EventHandler<KeyEvent>(){
-                    public void handle(final KeyEvent keyEvent){
-                        if (keyEvent.getCode() != null){
-                                System.out.println(message.isUpwind());
-                                System.out.println(message.isTackGybe());
-
+    private void installKeyHandler() {
+        try {
+            sender = new Sender("127.0.0.1", 4942, new ControllerMessageFactory());
+            BoatActionMessage message = new BoatActionMessage();
+            final EventHandler<KeyEvent> keyEventHandler =
+                    new EventHandler<KeyEvent>() {
+                        public void handle(final KeyEvent keyEvent) {
+                            if (keyEvent.getCode() != null) {
+                                System.out.println(message);
+                                try {
+                                    System.out.println(sender);
+                                    sender.send(message);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
-                    }
-                };
-        raceViewPane.setOnKeyPressed(keyEventHandler);
+                    };
+            raceViewPane.setOnKeyPressed(keyEventHandler);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     /**
