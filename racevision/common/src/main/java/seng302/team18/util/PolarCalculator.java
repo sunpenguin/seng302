@@ -73,4 +73,15 @@ public class PolarCalculator {
         return closestPolar;
     }
 
+    /**
+     * Calculates the speed at which the boat would travel.
+     *
+     * @param boatTWA   double, true wind angle of the boat
+     * @param windSpeed     double, speed of the wind
+     * @return  double, the speed of the boat
+     */
+    public double getSpeedForBoat(double boatTWA, double windSpeed){
+        return 0.0;
+    }
+
 }
