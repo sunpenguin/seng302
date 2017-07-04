@@ -1,6 +1,5 @@
 package seng302.team18.visualiser.controller;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -13,7 +12,6 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -21,12 +19,9 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -68,7 +63,6 @@ public class MainWindowController implements Observer {
     @FXML private Button setAnnotations;
     @FXML private Button toggle;
     @FXML private Slider slider;
-    @FXML private WebView map;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -77,7 +71,6 @@ public class MainWindowController implements Observer {
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
-    private BackgroundRenderer backgroundRenderer;
     private RaceClock raceClock;
     private WindDirection windDirection;
     private PixelMapper pixelMapper;
@@ -413,8 +406,8 @@ public class MainWindowController implements Observer {
 
         raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
         raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> redrawFeatures());
-//        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
-//        pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
+        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
+        pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
 
         // These listeners fire whenever the northern or southern bounds of the map change.
 
@@ -483,13 +476,5 @@ public class MainWindowController implements Observer {
         GPSCalculations gpsCalculations = new GPSCalculations();
         List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(race.getCourse());
         race.getCourse().setCentralCoordinate(gpsCalculations.midPoint(extremes.get(0), extremes.get(1)));
-    }
-
-    public Stage getStage() {
-        return stage;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
 }
