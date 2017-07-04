@@ -1,6 +1,7 @@
 package seng302.team18.visualiser.messageinterpreting;
 
 import javafx.application.Platform;
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RaceStatus;

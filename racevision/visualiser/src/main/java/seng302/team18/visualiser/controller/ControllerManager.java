@@ -4,6 +4,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import seng302.team18.interpreting.CompositeMessageInterpreter;
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.*;
