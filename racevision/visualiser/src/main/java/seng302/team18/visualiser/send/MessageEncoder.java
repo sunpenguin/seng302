@@ -17,7 +17,7 @@ public abstract class MessageEncoder {
     public byte[] compose(MessageBody message) throws IOException {
         byte[] head = generateHead(message, messageLength());
         byte[] body = generateBody(message);
-        byte[] checksum = generateChecksum(message);
+        byte[] checksum = generateChecksum(head, body);
 
         byte[] combined = new byte[head.length + body.length + checksum.length];
         System.arraycopy(head, 0, combined, 0, head.length);
@@ -61,7 +61,7 @@ public abstract class MessageEncoder {
 
     protected abstract byte[] generateBody(MessageBody message);
 
-    protected abstract byte[] generateChecksum(MessageBody message);
+    protected abstract byte[] generateChecksum(byte[] head, byte[] body) throws IOException;
 
     abstract protected short messageLength();
 }

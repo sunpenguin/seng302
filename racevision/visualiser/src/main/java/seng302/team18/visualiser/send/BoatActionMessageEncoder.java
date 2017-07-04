@@ -34,7 +34,7 @@ public class BoatActionMessageEncoder extends MessageEncoder {
     }
 
     @Override
-    protected byte[] generateChecksum(MessageBody message) {
+    protected byte[] generateChecksum(byte[] head, byte[] body) {
         return new byte[0];
     }
 

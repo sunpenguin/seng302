@@ -1,4 +1,4 @@
-package seng302.team18.test_mock.connection;
+package seng302.team18.util;
 
 import seng302.team18.util.ByteCheck;
 import java.io.ByteArrayOutputStream;
