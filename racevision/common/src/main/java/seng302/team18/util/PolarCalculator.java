@@ -9,12 +9,13 @@ import java.util.Map;
  * Class to apply polar calculations to boats
  */
 public class PolarCalculator {
-
     private List<Polar> polars;
+
 
     public PolarCalculator(List<Polar> polars) {
         this.polars = polars;
     }
+
 
     /**
      * Gets true wind angle for boat.
@@ -27,21 +28,27 @@ public class PolarCalculator {
         double theta = 180 - windHeading;
         double boatPlusTheta = heading + theta;
         double windPlusTheta = windHeading + theta; //will be 180
+
         if (boatPlusTheta > 360) {
             boatPlusTheta = boatPlusTheta - 360;
         }
+
         if (boatPlusTheta < 0) {
             boatPlusTheta = 360 + boatPlusTheta;
         }
+
         double trueWindAngle;
+
         if (boatPlusTheta > 180) {
             double angleFrom180 = boatPlusTheta - 180;
             trueWindAngle = 180 - angleFrom180;
         } else {
             trueWindAngle = boatPlusTheta;
         }
+
         return trueWindAngle;
     }
+
 
     /**
      * From the polars list, a singular polar is selected.
@@ -56,15 +63,14 @@ public class PolarCalculator {
         Polar closestPolar = polars.get(0);
         double closestDistance = Math.abs(windSpeed - closestPolar.getWindSpeed());
 
-        for(Polar currentPolar : polars){
+        for (Polar currentPolar : polars) {
 
             double currentDistance = Math.abs(windSpeed - currentPolar.getWindSpeed());
 
-            if(closestDistance > currentDistance){
+            if (closestDistance > currentDistance) {
                 closestPolar = currentPolar;
                 closestDistance = currentDistance;
-
-            }else if(closestDistance == currentDistance && currentPolar.getWindSpeed() < closestPolar.getWindSpeed()){
+            } else if (closestDistance == currentDistance && currentPolar.getWindSpeed() < closestPolar.getWindSpeed()) {
                 closestPolar = currentPolar;
                 closestDistance = currentDistance;
             }
@@ -73,6 +79,7 @@ public class PolarCalculator {
         return closestPolar;
     }
 
+
     /**
      * Calculates the speed at which the boat would travel.
      *
@@ -80,7 +87,7 @@ public class PolarCalculator {
      * @param windSpeed     double, speed of the wind
      * @return  double, the speed of the boat
      */
-    public double getSpeedForBoat(double boatTWA, double windSpeed){
+    public double getSpeedForBoat(double boatTWA, double windSpeed) {
         //Get polar to be used
         Polar polar = getPolarForWindSpeed(windSpeed);
         //Set initial
@@ -88,19 +95,17 @@ public class PolarCalculator {
         double bestDifference = Math.abs(boatTWA - bestAngle);
 
         for(Map.Entry<Double,Double> currentSet: polar.getMapSpeedAtAngles().entrySet()) {
-
             double currentDifference = Math.abs(boatTWA - currentSet.getKey());
 
-            if(currentDifference < bestDifference) {
+            if (currentDifference < bestDifference) {
                 bestAngle = currentSet.getKey();
                 bestDifference = currentDifference;
-
-            }else if(currentDifference == bestDifference && currentSet.getKey() < bestAngle){
+            } else if (currentDifference == bestDifference && currentSet.getKey() < bestAngle) {
                 bestAngle = currentSet.getKey();
                 bestDifference = currentDifference;
-
             }
         }
+
         return polar.getMapSpeedAtAngles().get(bestAngle);
     }
 
