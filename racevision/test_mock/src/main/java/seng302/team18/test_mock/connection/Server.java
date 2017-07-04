@@ -8,7 +8,6 @@ import java.net.SocketException;
  * Streaming server to connect test mock with clients.
  */
 public class Server {
-
     private final ClientList clientList = new ClientList();
     private final int PORT;
     private ServerSocket serverSocket;
@@ -51,6 +50,7 @@ public class Server {
         }
     }
 
+
     /**
      * Blocks while waiting for a client connection, setting up new connection when available.
      * Adding new client to the client list.
@@ -62,6 +62,7 @@ public class Server {
             ConnectionListener listener = new ConnectionListener(client);
             listener.start();
             clientConnectionNum ++;
+            System.out.println("Player " + clientConnectionNum + " joined!");
             clientList.getClients().add(client);
         } catch (IOException e) {
             e.printStackTrace();
@@ -82,7 +83,6 @@ public class Server {
         @Override
         public void run() {
             try {
-                serverSocket.setSoTimeout(1000);
                 sendXmls(clientConnection);
             } catch (SocketException e) {
                 e.printStackTrace();
@@ -105,6 +105,7 @@ public class Server {
         client.sendMessage(raceXMLMessageGenerator.getMessage());
         client.sendMessage(boatsXMLMessageGenerator.getMessage());
     }
+
 
     /**
      * Closes any open client connections and closes the server
@@ -140,6 +141,7 @@ public class Server {
             client.sendMessage(message);
         }
     }
+
 
     /**
      * Prunes dead connections from the list of clients, where a connection is condsidered dead after failing

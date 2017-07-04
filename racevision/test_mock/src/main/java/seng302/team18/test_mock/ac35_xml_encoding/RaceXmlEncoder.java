@@ -16,8 +16,6 @@ import java.util.List;
  * RaceXmlEncoder class.
  */
 public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
-
-
     /**
      * Method used for testing purpose.
      * @param raceMessage AC35XMLRaceMessage, raceMessage
