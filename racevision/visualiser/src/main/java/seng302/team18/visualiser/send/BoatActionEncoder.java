@@ -5,13 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by csl62 on 2/07/17.
+ * Encodes RequestMessages to byte arrays.
  */
-public class BoatActionMessageEncoder extends MessageEncoder {
+public class BoatActionEncoder extends MessageEncoder {
 
-    protected byte[] generateHead(MessageBody message) {
-        return new byte[0];
-    }
 
     @Override
     protected byte[] generateBody(MessageBody message) {
@@ -33,10 +30,12 @@ public class BoatActionMessageEncoder extends MessageEncoder {
         return body;
     }
 
+
     @Override
     protected byte[] generateChecksum(MessageBody message) {
-        return new byte[0];
+        return new byte[4];
     }
+
 
     @Override
     protected short messageLength() {

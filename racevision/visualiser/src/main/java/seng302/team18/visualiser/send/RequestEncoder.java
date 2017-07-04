@@ -5,11 +5,17 @@ import seng302.team18.message.RequestMessage;
 import seng302.team18.util.ByteCheck;
 
 /**
- * Created by David-chan on 2/07/17.
+ * Encodes RequestMessages to byte arrays.
  */
 public class RequestEncoder extends MessageEncoder {
 
     private byte[] body;
+
+    /**
+     * Constructor for the RequestEncoder.
+     */
+    public RequestEncoder() {}
+
 
     @Override
     protected byte[] generateBody(MessageBody message) {
@@ -21,10 +27,12 @@ public class RequestEncoder extends MessageEncoder {
         return null;
     }
 
+
     @Override
     protected byte[] generateChecksum(MessageBody message) {
-        return new byte[0];
+        return new byte[4];
     }
+
 
     @Override
     protected short messageLength() {
