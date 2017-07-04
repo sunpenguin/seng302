@@ -37,7 +37,7 @@ public class Sender {
      */
     public void send(MessageBody body) throws IOException {
         MessageEncoder composer = factory.getComposer(body.getType());
-        outStream.write(composer.compose(body));
+        outStream.write(composer.encode(body));
     }
 
 

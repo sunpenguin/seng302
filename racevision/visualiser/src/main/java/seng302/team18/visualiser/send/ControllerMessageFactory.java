@@ -7,16 +7,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by David-chan on 2/07/17.
+ * Message encoder factory for the Controller protocol.
  */
 public class ControllerMessageFactory implements MessageEncoderFactory {
 
+
     private final Map<Integer, MessageEncoder> composerMap = initialiseMap();
+
 
     @Override
     public MessageEncoder getComposer(int id) {
         return composerMap.get(id);
     }
+
 
     /**
      * Tells the parser generator which type corresponds to which message parser
@@ -25,7 +28,8 @@ public class ControllerMessageFactory implements MessageEncoderFactory {
      */
     private Map<Integer, MessageEncoder> initialiseMap() {
         Map<Integer, MessageEncoder> composerMap = new HashMap<>();
-        composerMap.put(AC35MessageType.BOAT_ACTION.getCode(), new BoatActionMessageEncoder());
+        composerMap.put(AC35MessageType.BOAT_ACTION.getCode(), new BoatActionEncoder());
+        composerMap.put(AC35MessageType.REQUEST.getCode(), new RequestEncoder());
 
         return Collections.unmodifiableMap(composerMap);
     }

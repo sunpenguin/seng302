@@ -8,13 +8,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Created by David-chan on 2/07/17.
+ * Abstract class for encoding MessageBodies into byte arrays
  */
 public abstract class MessageEncoder {
 
-
-    // TODO write javadoc
-    public byte[] compose(MessageBody message) throws IOException {
+    /**
+     * Encodes a MessageBody to a byte array.
+     *
+     * @param message to be encoded
+     * @return the encoded message
+     * @throws IOException
+     */
+    public byte[] encode(MessageBody message) throws IOException {
         byte[] head = generateHead(message, messageLength());
         byte[] body = generateBody(message);
         byte[] checksum = generateChecksum(head, body);
@@ -27,6 +32,15 @@ public abstract class MessageEncoder {
         return combined;
     }
 
+
+    /**
+     * Creates to the header of the message as a byte array.
+     *
+     * @param message to create header from
+     * @param lengthOfMessage length of the body of the message.
+     * @return message header.
+     * @throws IOException
+     */
     private byte[] generateHead(MessageBody message, short lengthOfMessage) throws IOException {
 
         if (message instanceof RequestMessage) {
@@ -59,9 +73,30 @@ public abstract class MessageEncoder {
         return null;
     }
 
+
+    /**
+     * Creates to the body of the message as a byte array
+     *
+     * @param message to create the body of the message from.
+     * @return the message as a byte array
+     */
     protected abstract byte[] generateBody(MessageBody message);
 
+
+    /**
+     * Creates a checksum for the given message
+     *
+     * @param head of message to create checksum for
+     * @param body of message to create checksum for
+     * @return the checksum as a byte array
+     */
     protected abstract byte[] generateChecksum(byte[] head, byte[] body) throws IOException;
 
+
+    /**
+     * Returns the message length.
+     *
+     * @return length of the message
+     */
     abstract protected short messageLength();
 }

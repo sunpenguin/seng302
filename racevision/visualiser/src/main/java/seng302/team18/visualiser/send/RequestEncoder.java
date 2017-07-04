@@ -10,9 +10,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Created by David-chan on 2/07/17.
+ * Encodes RequestMessages to byte arrays.
  */
 public class RequestEncoder extends MessageEncoder {
+
+
+    /**
+     * Constructor for the RequestEncoder.
+     */
+    public RequestEncoder() {}
 
 
     @Override
@@ -24,6 +30,7 @@ public class RequestEncoder extends MessageEncoder {
         return null;
     }
 
+
     @Override
     protected byte[] generateChecksum(byte[] head, byte[] body) throws IOException{
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
@@ -32,6 +39,7 @@ public class RequestEncoder extends MessageEncoder {
         byte[] crc = CRCGenerator.generateCRC(outStream.toByteArray());
         return crc;
     }
+
 
     @Override
     protected short messageLength() {
