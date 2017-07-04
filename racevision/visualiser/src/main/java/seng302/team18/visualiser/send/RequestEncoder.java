@@ -7,7 +7,7 @@ import seng302.team18.util.ByteCheck;
 /**
  * Created by David-chan on 2/07/17.
  */
-public class RequestComposer extends MessageComposer {
+public class RequestEncoder extends MessageEncoder {
 
     private byte[] body;
 

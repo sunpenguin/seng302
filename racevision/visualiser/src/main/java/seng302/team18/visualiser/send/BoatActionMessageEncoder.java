@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by csl62 on 2/07/17.
  */
-public class BoatActionMessageComposer extends MessageComposer{
+public class BoatActionMessageEncoder extends MessageEncoder {
 
     protected byte[] generateHead(MessageBody message) {
         return new byte[0];

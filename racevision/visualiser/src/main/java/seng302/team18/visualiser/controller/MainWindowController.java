@@ -13,7 +13,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -27,12 +26,11 @@ import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import seng302.team18.message.MessageBody;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.send.BoatActionMessage;
-import seng302.team18.visualiser.send.BoatActionMessageComposer;
+import seng302.team18.visualiser.send.BoatActionMessageEncoder;
 import seng302.team18.visualiser.send.ControllerMessageFactory;
 import seng302.team18.visualiser.send.Sender;
 import seng302.team18.visualiser.util.PixelMapper;
@@ -79,12 +77,12 @@ public class MainWindowController implements Observer {
     private Map<AnnotationType, Boolean> importantAnnotations;
 
     private Stage stage;
-    private BoatActionMessageComposer boatActionMessageComposer = new BoatActionMessageComposer();
+    private BoatActionMessageEncoder boatActionMessageComposer = new BoatActionMessageEncoder();
     private Sender sender;
 
     @FXML
     public void initialize() {
-        //installKeyHandler();
+        installKeyHandler();
 
         setSliderListener();
         sliderSetup();

@@ -1,33 +1,44 @@
 package seng302.team18.visualiser.send;
 
 import seng302.team18.message.MessageBody;
-import seng302.team18.message.MessageHead;
-import seng302.team18.messageparsing.MessageParserFactory;
-
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
 /**
- * Created by David-chan on 2/07/17.
+ * Sends MessageBodies over a tcp connection after encoding them
  */
 public class Sender {
 
-    private MessageComposerFactory factory;
+    private MessageEncoderFactory factory;
     private OutputStream outStream;
 
 
-    public Sender(String host, int portNumber, MessageComposerFactory factory) throws IOException {
+    /**
+     * Constructor for the Sender. Requires ip, port, and MessageEncoderFactory.
+     *
+     * @param host string representing the ip we want to send data to
+     * @param portNumber port number of the application we want to send to
+     * @param factory to convert messages to byte arrays.
+     * @throws IOException
+     */
+    public Sender(String host, int portNumber, MessageEncoderFactory factory) throws IOException {
         Socket socket = new Socket(host, portNumber);
         outStream = socket.getOutputStream();
         this.factory = factory;
     }
 
 
+    /**
+     * Sends a message after encoding it with the provided encoder.
+     *
+     * @param body of the message to be sent
+     * @throws IOException
+     */
     public void send(MessageBody body) throws IOException {
-        MessageComposer composer = factory.getComposer(body.getType());
+        MessageEncoder composer = factory.getComposer(body.getType());
         outStream.write(composer.compose(body));
     }
+
+
 }

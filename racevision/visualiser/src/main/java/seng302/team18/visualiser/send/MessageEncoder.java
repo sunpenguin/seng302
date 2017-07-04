@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by David-chan on 2/07/17.
  */
-public abstract class MessageComposer {
+public abstract class MessageEncoder {
 
 
     // TODO write javadoc
