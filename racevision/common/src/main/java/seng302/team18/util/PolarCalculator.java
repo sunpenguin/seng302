@@ -3,6 +3,7 @@ package seng302.team18.util;
 import seng302.team18.model.Polar;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class to apply polar calculations to boats
@@ -60,7 +61,6 @@ public class PolarCalculator {
             double currentDistance = Math.abs(windSpeed - currentPolar.getWindSpeed());
 
             if(closestDistance > currentDistance){
-
                 closestPolar = currentPolar;
                 closestDistance = currentDistance;
 
@@ -81,7 +81,27 @@ public class PolarCalculator {
      * @return  double, the speed of the boat
      */
     public double getSpeedForBoat(double boatTWA, double windSpeed){
-        return 0.0;
+        //Get polar to be used
+        Polar polar = getPolarForWindSpeed(windSpeed);
+        //Set initial
+        double bestAngle = polar.getUpWindAngle();
+        double bestDifference = Math.abs(boatTWA - bestAngle);
+
+        for(Map.Entry<Double,Double> currentSet: polar.getMapSpeedAtAngles().entrySet()) {
+
+            double currentDifference = Math.abs(boatTWA - currentSet.getKey());
+
+            if(currentDifference < bestDifference) {
+                bestAngle = currentSet.getKey();
+                bestDifference = currentDifference;
+
+            }else if(currentDifference == bestDifference && currentSet.getKey() < bestAngle){
+                bestAngle = currentSet.getKey();
+                bestDifference = currentDifference;
+
+            }
+        }
+        return polar.getMapSpeedAtAngles().get(bestAngle);
     }
 
 }
