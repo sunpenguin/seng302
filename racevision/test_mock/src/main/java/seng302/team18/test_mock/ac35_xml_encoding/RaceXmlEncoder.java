@@ -17,6 +17,13 @@ import java.util.List;
  */
 public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
 
+
+    /**
+     * Method used for testing purpose.
+     * @param raceMessage AC35XMLRaceMessage, raceMessage
+     * @return returns a DOMSource used when testing.
+     * @throws ParserConfigurationException a ParserConfigurationException
+     */
     public DOMSource getDomSource(AC35XMLRaceMessage raceMessage) throws ParserConfigurationException {
         final String DEFAULT_RACE_TYPE = "Match";
         final String DEFAULT_START_POSTPONE_STATE = "false";
@@ -63,6 +70,13 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
         return new DOMSource(doc);
     }
 
+
+    /**
+     * Create element that represents a list of participants's ids.
+     * @param doc Document, doc
+     * @param participantIds List<Integer>, participantIds
+     * @return element that represents a list of participants's ids
+     */
     private Element encodeParticipants(Document doc, List<Integer> participantIds) {
         Element participants = doc.createElement(AC35RaceXMLComponents.ELEMENT_PARTICIPANTS.toString());
 
@@ -73,6 +87,13 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
         return participants;
     }
 
+
+    /**
+     * Create element that represents a participant's ids.
+     * @param doc Document, doc
+     * @param id Integer, id
+     * @return element that represents a participant's ids
+     */
     private Element encodeParticipant(Document doc, Integer id) {
         final String DEFAULT_ATTRIBUTE_ENTRY = "Port";
 
@@ -84,6 +105,13 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
         return participant;
     }
 
+
+    /**
+     * Create element that represents course.
+     * @param doc Document, doc
+     * @param compoundMarks List<CompoundMark>, compoundMarks
+     * @return element that represents course
+     */
     private Element encodeCourse(Document doc, List<CompoundMark> compoundMarks) {
         Element course = doc.createElement(AC35RaceXMLComponents.ELEMENT_COURSE.toString());
 
@@ -94,6 +122,13 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
         return course;
     }
 
+
+    /**
+     * Create element that represents a compoundmark.
+     * @param doc Document, doc
+     * @param compoundMark CompoundMark, compoundMark
+     * @return element that represents a compoundmark
+     */
     private Element encodeCompoundMark(Document doc, CompoundMark compoundMark) {
         Element elementCompound = doc.createElement(AC35RaceXMLComponents.ELEMENT_COMPOUND_MARK.toString());
         elementCompound.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_COMPOUND_MARK_ID.toString(), compoundMark.getId().toString());
@@ -104,6 +139,13 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
         return elementCompound;
     }
 
+
+    /**
+     * Create element that represents a list of marks and attach the element to the corresponding compoundmark element.
+     * @param doc Document, doc
+     * @param compoundMark Element, compoundMark
+     * @param marks List<Mark>, marks
+     */
     private void encodeMarks(Document doc, Element compoundMark, List<Mark> marks) {
         boolean isGate = marks.size() > 1;
 
@@ -127,6 +169,13 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
         }
     }
 
+
+    /**
+     * Create element that represents a list of mark roundings.
+     * @param doc Document, doc
+     * @param markRoundings List<MarkRounding>, markRoundings
+     * @return element that represents list of mark roundings
+     */
     private Element encodeCompoundMarkSequence(Document doc, List<MarkRounding> markRoundings) {
         final String DEFAULT_ROUNDING = "SP";
         final Integer DEFAULT_ZONE_SIZE = 3;
@@ -145,6 +194,13 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
         return sequence;
     }
 
+
+    /**
+     * Create element that represents a list of boundary mark.
+     * @param doc Document, doc
+     * @param boundaryMarks List<BoundaryMark>, boundaryMarks
+     * @return element that represents a list of boundary mark
+     */
     private Element encodeCourseLimits(Document doc, List<BoundaryMark> boundaryMarks) {
         Element courseLimits = doc.createElement(AC35RaceXMLComponents.ELEMENT_COURSE_BOUNDARIES.toString());
 
