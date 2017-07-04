@@ -376,6 +376,7 @@ public class PolarCalculatorTest {
         assertEquals(polar2, returned2);
     }
 
+    @Test
     public void getSpeedForBoatTestMinAngle(){
         //Minimum TWA
         double boatTWA = 0;
@@ -385,10 +386,11 @@ public class PolarCalculatorTest {
         double returned1 = calculator.getSpeedForBoat(boatTWA, windSpeed1);
         double returned2 = calculator.getSpeedForBoat(boatTWA, windSpeed2);
 
-        assertEquals(0, returned1);
-        assertEquals(0, returned2);
+        assertEquals(0.0, returned1);
+        assertEquals(0.0, returned2);
     }
 
+    @Test
     public void getSpeedForBoatsMaxAngle(){
         //Max TWA
         double boatTWA = 175;
@@ -398,10 +400,11 @@ public class PolarCalculatorTest {
         double returned1 = calculator.getSpeedForBoat(boatTWA, windSpeed1);
         double returned2 = calculator.getSpeedForBoat(boatTWA, windSpeed2);
 
-        assertEquals(14, returned1);
-        assertEquals(32, returned2);
+        assertEquals(14.0, returned1);
+        assertEquals(32.0, returned2);
     }
 
+    @Test
     public void getSpeedForBoatsAboveMaxAngle(){
         //Above max TWA
         double boatTWA = 177;
@@ -411,10 +414,11 @@ public class PolarCalculatorTest {
         double returned1 = calculator.getSpeedForBoat(boatTWA, windSpeed1);
         double returned2 = calculator.getSpeedForBoat(boatTWA, windSpeed2);
 
-        assertEquals(30, returned1);
-        assertEquals(32, returned2);
+        assertEquals(30.0, returned1);
+        assertEquals(32.0, returned2);
     }
 
+    @Test
     public void getSpeedForBoatsRoundingUp(){
         //TWA should be rounded up to 90
         double boatTWA = 85;
@@ -424,10 +428,11 @@ public class PolarCalculatorTest {
         double returned1 = calculator.getSpeedForBoat(boatTWA, windSpeed1);
         double returned2 = calculator.getSpeedForBoat(boatTWA, windSpeed2);
 
-        assertEquals(23, returned1);
-        assertEquals(49, returned2);
+        assertEquals(23.0, returned1);
+        assertEquals(49.0, returned2);
     }
 
+    @Test
     public void getSpeedForBoatsRoundingDown(){
         //TWA should be rounded down to 75
         double boatTWA = 80;
@@ -437,10 +442,11 @@ public class PolarCalculatorTest {
         double returned1 = calculator.getSpeedForBoat(boatTWA, windSpeed1);
         double returned2 = calculator.getSpeedForBoat(boatTWA, windSpeed2);
 
-        assertEquals(44, returned1);
-        assertEquals(42, returned2);
+        assertEquals(44.0, returned1);
+        assertEquals(42.0, returned2);
     }
 
+    @Test
     public void getSpeedForBoatsBetweenPoints(){
         //TWA should be rounded down to 75
         double boatTWA = 82.5;
@@ -450,10 +456,11 @@ public class PolarCalculatorTest {
         double returned1 = calculator.getSpeedForBoat(boatTWA, windSpeed1);
         double returned2 = calculator.getSpeedForBoat(boatTWA, windSpeed2);
 
-        assertEquals(20, returned1);
-        assertEquals(42, returned2);
+        assertEquals(20.0, returned1);
+        assertEquals(42.0, returned2);
     }
 
+    @Test
     public void getSpeedForBoatsUpTWA(){
         //TWA should be rounded down to 75
         double boatTWA1 = 43;
@@ -465,9 +472,10 @@ public class PolarCalculatorTest {
         double returned2 = calculator.getSpeedForBoat(boatTWA2, windSpeed2);
 
         assertEquals(14.4, returned1);
-        assertEquals(30, returned2);
+        assertEquals(30.0, returned2);
     }
 
+    @Test
     public void getSpeedForBoatsDnTWA(){
         //TWA should be rounded down to 75
         double boatTWA1 = 151;
@@ -478,8 +486,8 @@ public class PolarCalculatorTest {
         double returned1 = calculator.getSpeedForBoat(boatTWA1, windSpeed1);
         double returned2 = calculator.getSpeedForBoat(boatTWA2, windSpeed2);
 
-        assertEquals(47, returned1);
-        assertEquals(46, returned2);
+        assertEquals(47.0, returned1);
+        assertEquals(46.0, returned2);
     }
 
 }
