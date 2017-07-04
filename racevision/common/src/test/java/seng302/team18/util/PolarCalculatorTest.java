@@ -16,13 +16,38 @@ import static junit.framework.TestCase.assertEquals;
  * Class to Test polar Calculator
  */
 public class PolarCalculatorTest {
+
+    //BoatHeadings
+    double BoatHeadingN = 0;
+    double BoatHeadingNE = 30;
+    double BoatHeadingE = 90;
+    double BoatHeadingSE = 135;
+    double BoatHeadingS = 180;
+    double BoatHeadingSW = 235;
+    double BoatHeadingW = 270;
+    double BoatHeadingNW = 300;
+    double BoatHeadingN2 = 360;
+
+    //WindDirections
+    double windDirectionN = 0;
+    double windDirectionNE = 45;
+    double windDirectionE = 90;
+    double windDirectionSE = 120;
+    double windDirectionS = 180;
+    double windDirectionSW = 220;
+    double windDirectionW = 270;
+    double windDirectionNW = 315;
+    double windDirectionN2 = 360;
+
     PolarCalculator calculator;
     Polar polar1;
     Polar polar2;
     Polar polar3;
 
+
     @Before
     public void setUp(){
+
         //Make polar 1
         polar1 = new Polar(12, 43, 14.4, 153,21.6);
         polar1.addToMap(0,	0);
@@ -66,6 +91,7 @@ public class PolarCalculatorTest {
 
     }
 
+
     @After
     public void tearDown(){
         calculator = null;
@@ -74,33 +100,11 @@ public class PolarCalculatorTest {
         polar3 = null;
     }
 
+
     @Test
-    public void getTrueWindAngleTest(){
-
-        //BoatHeadings
-        double BoatHeadingN = 0;
-        double BoatHeadingNE = 30;
-        double BoatHeadingE = 90;
-        double BoatHeadingSE = 135;
-        double BoatHeadingS = 180;
-        double BoatHeadingSW = 235;
-        double BoatHeadingW = 270;
-        double BoatHeadingNW = 300;
-        double BoatHeadingN2 = 360;
-
-        //WindDirections
-        double windDirectionN = 0;
-        double windDirectionNE = 45;
-        double windDirectionE = 90;
-        double windDirectionSE = 120;
-        double windDirectionS = 180;
-        double windDirectionSW = 220;
-        double windDirectionW = 270;
-        double windDirectionNW = 315;
-        double windDirectionN2 = 360;
-
+    public void getTrueWindAngleTestNorthWind() {
         //GetAnswers For Wind Direction North
-        double WNBN = calculator.getTrueWindAngle(windDirectionN, BoatHeadingN);
+        double WNBN = calculator.getTrueWindAngle(windDirectionN, BoatHeadingN); //WNBN = Wind North Boat North
         double WNBNE = calculator.getTrueWindAngle(windDirectionN, BoatHeadingNE);
         double WNBE = calculator.getTrueWindAngle(windDirectionN, BoatHeadingE);
         double WNBSE = calculator.getTrueWindAngle(windDirectionN, BoatHeadingSE);
@@ -120,9 +124,13 @@ public class PolarCalculatorTest {
         assertEquals(90, WNBW, 0);
         assertEquals(120, WNBNW, 0);
         assertEquals(180, WNBN2, 0);
+    }
 
+
+    @Test
+    public void getTrueWindAngleTestNorthEastWind() {
         //GetAnswers For Wind Direction North East
-        double WNEBN = calculator.getTrueWindAngle(windDirectionNE, BoatHeadingN);
+        double WNEBN = calculator.getTrueWindAngle(windDirectionNE, BoatHeadingN); //WNEBN = Wind North East Boat North
         double WNEBNE = calculator.getTrueWindAngle(windDirectionNE, BoatHeadingNE);
         double WNEBE = calculator.getTrueWindAngle(windDirectionNE, BoatHeadingE);
         double WNEBSE = calculator.getTrueWindAngle(windDirectionNE, BoatHeadingSE);
@@ -142,9 +150,13 @@ public class PolarCalculatorTest {
         assertEquals(45, WNEBW, 0);
         assertEquals(75, WNEBNW, 0);
         assertEquals(135, WNEBN2, 0);
+    }
 
+
+    @Test
+    public void getTrueWindAngleTestEastWind() {
         //GetAnswers For Wind Direction East
-        double WEBN = calculator.getTrueWindAngle(windDirectionE, BoatHeadingN);
+        double WEBN = calculator.getTrueWindAngle(windDirectionE, BoatHeadingN); //WEBN = Wind East Boat North
         double WEBNE = calculator.getTrueWindAngle(windDirectionE, BoatHeadingNE);
         double WEBE = calculator.getTrueWindAngle(windDirectionE, BoatHeadingE);
         double WEBSE = calculator.getTrueWindAngle(windDirectionE, BoatHeadingSE);
@@ -164,9 +176,13 @@ public class PolarCalculatorTest {
         assertEquals(0, WEBW, 0);
         assertEquals(30, WEBNW, 0);
         assertEquals(90, WEBN2, 0);
+    }
 
+
+    @Test
+    public void getTrueWindAngleTestSouthEastWind() {
         //GetAnswers For Wind Direction South East
-        double WSEBN = calculator.getTrueWindAngle(windDirectionSE, BoatHeadingN);
+        double WSEBN = calculator.getTrueWindAngle(windDirectionSE, BoatHeadingN); //WSEBN = Wind South East Boat North
         double WSEBNE = calculator.getTrueWindAngle(windDirectionSE, BoatHeadingNE);
         double WSEBE = calculator.getTrueWindAngle(windDirectionSE, BoatHeadingE);
         double WSEBSE = calculator.getTrueWindAngle(windDirectionSE, BoatHeadingSE);
@@ -186,9 +202,13 @@ public class PolarCalculatorTest {
         assertEquals(30, WSEBW, 0);
         assertEquals(0, WSEBNW, 0);
         assertEquals(60, WSEBN2, 0);
+    }
 
+
+    @Test
+    public void getTrueWindAngleTestSouthWind() {
         //GetAnswers For Wind Direction South
-        double WSBN = calculator.getTrueWindAngle(windDirectionS, BoatHeadingN);
+        double WSBN = calculator.getTrueWindAngle(windDirectionS, BoatHeadingN); //WSBN = Wind South Boat North
         double WSBNE = calculator.getTrueWindAngle(windDirectionS, BoatHeadingNE);
         double WSBE = calculator.getTrueWindAngle(windDirectionS, BoatHeadingE);
         double WSBSE = calculator.getTrueWindAngle(windDirectionS, BoatHeadingSE);
@@ -208,9 +228,13 @@ public class PolarCalculatorTest {
         assertEquals(90, WSBW, 0);
         assertEquals(60, WSBNW, 0);
         assertEquals(0, WSBN2, 0);
+    }
 
+
+    @Test
+    public void getTrueWindAngleTestSouthWestWind() {
         //GetAnswers For Wind Direction South West
-        double WSWBN = calculator.getTrueWindAngle(windDirectionSW, BoatHeadingN);
+        double WSWBN = calculator.getTrueWindAngle(windDirectionSW, BoatHeadingN); //WSWBN = Wind South West Boat North
         double WSWBNE = calculator.getTrueWindAngle(windDirectionSW, BoatHeadingNE);
         double WSWBE = calculator.getTrueWindAngle(windDirectionSW, BoatHeadingE);
         double WSWBSE = calculator.getTrueWindAngle(windDirectionSW, BoatHeadingSE);
@@ -231,8 +255,13 @@ public class PolarCalculatorTest {
         assertEquals(100, WSWBNW, 0);
         assertEquals(40, WSWBN2, 0);
 
+    }
+
+
+    @Test
+    public void getTrueWindAngleTestWestWind() {
         //GetAnswers For Wind Direction West
-        double WWBN = calculator.getTrueWindAngle(windDirectionW, BoatHeadingN);
+        double WWBN = calculator.getTrueWindAngle(windDirectionW, BoatHeadingN); //WWBN = Wind West Boat North
         double WWBNE = calculator.getTrueWindAngle(windDirectionW, BoatHeadingNE);
         double WWBE = calculator.getTrueWindAngle(windDirectionW, BoatHeadingE);
         double WWBSE = calculator.getTrueWindAngle(windDirectionW, BoatHeadingSE);
@@ -252,9 +281,13 @@ public class PolarCalculatorTest {
         assertEquals(180, WWBW, 0);
         assertEquals(150, WWBNW, 0);
         assertEquals(90, WWBN2, 0);
+    }
 
+
+    @Test
+    public void getTrueWindAngleTestNorthWestWind() {
         //GetAnswers For Wind Direction North West
-        double WNWBN = calculator.getTrueWindAngle(windDirectionNW, BoatHeadingN);
+        double WNWBN = calculator.getTrueWindAngle(windDirectionNW, BoatHeadingN); //WNWBN = Wind North West Boat North
         double WNWBNE = calculator.getTrueWindAngle(windDirectionNW, BoatHeadingNE);
         double WNWBE = calculator.getTrueWindAngle(windDirectionNW, BoatHeadingE);
         double WNWBSE = calculator.getTrueWindAngle(windDirectionNW, BoatHeadingSE);
@@ -274,9 +307,13 @@ public class PolarCalculatorTest {
         assertEquals(135, WNWBW, 0);
         assertEquals(165, WNWBNW, 0);
         assertEquals(135, WNWBN2, 0);
+    }
 
+
+    @Test
+    public void getTrueWindAngleTestNorthWind2(){
         //GetAnswers For Wind Direction North2
-        double WN2BN = calculator.getTrueWindAngle(windDirectionN2, BoatHeadingN);
+        double WN2BN = calculator.getTrueWindAngle(windDirectionN2, BoatHeadingN); //WN2BN = Wind North2 Boat North
         double WN2BNE = calculator.getTrueWindAngle(windDirectionN2, BoatHeadingNE);
         double WN2BE = calculator.getTrueWindAngle(windDirectionN2, BoatHeadingE);
         double WN2BSE = calculator.getTrueWindAngle(windDirectionN2, BoatHeadingSE);
@@ -296,8 +333,8 @@ public class PolarCalculatorTest {
         assertEquals(90, WN2BW, 0);
         assertEquals(120, WN2BNW, 0);
         assertEquals(180, WN2BN2, 0);
-
     }
+
 
     @Test
     public void getPolarForWindSpeedTestAboveMax(){
@@ -309,6 +346,7 @@ public class PolarCalculatorTest {
         assertEquals(polar3, returned1);
 
     }
+
 
     @Test
     public void getPolarForWindSpeedTestRoundingUp(){
@@ -322,6 +360,7 @@ public class PolarCalculatorTest {
         assertEquals(polar2, returned2);
         assertEquals(polar3, returned3);
     }
+
 
     @Test
     public void getPolarForWindSpeedTestEqual(){
@@ -339,6 +378,7 @@ public class PolarCalculatorTest {
         assertEquals(polar3, returned3);
     }
 
+
     @Test
     public void getPolarForWindSpeedTestRoundingDown(){
         //Windspeeds higher than closest polar
@@ -352,6 +392,7 @@ public class PolarCalculatorTest {
         assertEquals(polar2, returned2);
     }
 
+
     @Test
     public void getPolarForWindSpeedTestBelowMin(){
         //Windspeed lower than lowest wind speed
@@ -362,6 +403,7 @@ public class PolarCalculatorTest {
         assertEquals(polar1, returned1);
 
     }
+
 
     @Test
     public void getPolarForWindSpeedTestCenter(){
@@ -375,6 +417,7 @@ public class PolarCalculatorTest {
         assertEquals(polar1, returned1);
         assertEquals(polar2, returned2);
     }
+
 
     @Test
     public void getSpeedForBoatTestMinAngle(){
@@ -390,6 +433,7 @@ public class PolarCalculatorTest {
         assertEquals(0.0, returned2);
     }
 
+
     @Test
     public void getSpeedForBoatsMaxAngle(){
         //Max TWA
@@ -403,6 +447,7 @@ public class PolarCalculatorTest {
         assertEquals(14.0, returned1);
         assertEquals(32.0, returned2);
     }
+
 
     @Test
     public void getSpeedForBoatsAboveMaxAngle(){
@@ -418,6 +463,7 @@ public class PolarCalculatorTest {
         assertEquals(32.0, returned2);
     }
 
+
     @Test
     public void getSpeedForBoatsRoundingUp(){
         //TWA should be rounded up to 90
@@ -431,6 +477,7 @@ public class PolarCalculatorTest {
         assertEquals(23.0, returned1);
         assertEquals(49.0, returned2);
     }
+
 
     @Test
     public void getSpeedForBoatsRoundingDown(){
@@ -446,6 +493,7 @@ public class PolarCalculatorTest {
         assertEquals(42.0, returned2);
     }
 
+
     @Test
     public void getSpeedForBoatsBetweenPoints(){
         //TWA should be rounded down to 75
@@ -459,6 +507,7 @@ public class PolarCalculatorTest {
         assertEquals(20.0, returned1);
         assertEquals(42.0, returned2);
     }
+
 
     @Test
     public void getSpeedForBoatsUpTWA(){
@@ -474,6 +523,7 @@ public class PolarCalculatorTest {
         assertEquals(14.4, returned1);
         assertEquals(30.0, returned2);
     }
+
 
     @Test
     public void getSpeedForBoatsDnTWA(){
