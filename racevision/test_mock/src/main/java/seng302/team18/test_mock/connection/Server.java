@@ -31,7 +31,7 @@ public class Server {
     private void acceptClientConnection() {
         try {
             ClientConnection client = new ClientConnection(serverSocket.accept());
-//            sendXmls(client);
+            sendXmls(client);
             clientList.getClients().add(client);
         } catch (IOException e) {
             e.printStackTrace();

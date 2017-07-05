@@ -3,7 +3,9 @@ package seng302.team18.test_mock.connection;
 import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
+import seng302.team18.test_mock.RaceCourseGenerator;
 import seng302.team18.test_mock.TestMock;
+import seng302.team18.test_mock.TestXMLFiles;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
@@ -61,8 +63,12 @@ public class BoatMessageGeneratorTest {
 
     @Test
     public void boatMessageGeneratorTest() throws IOException {
-        TestMock testMock = new TestMock();
-        Race testRace = testMock.testRun();
+        final String regattaXML = TestXMLFiles.REGATTA_XML_1.toString();
+        final String raceXML = TestXMLFiles.RACE_XML_2.toString();
+        final String boatsXML = TestXMLFiles.BOATS_XML_2.toString();
+        final RaceCourseGenerator raceCourseGenerator = new RaceCourseGenerator();
+        raceCourseGenerator.readFiles(regattaXML, boatsXML, raceXML);
+        final Race testRace = raceCourseGenerator.generateRace(raceCourseGenerator.generateCourse());
         byte[] generatedBytes;
         List<BoatMessageGenerator> messages = new ArrayList<>();
         for (Boat boat: testRace.getStartingList()) {

@@ -7,7 +7,7 @@ import seng302.team18.messageparsing.*;
 import java.io.IOException;
 
 /**
- * Created by jth102 on 4/07/17.
+ * Class for reading and interpreting messages sent by Human controlled players
  */
 public class PlayerControllerReader implements Runnable {
 
@@ -19,6 +19,10 @@ public class PlayerControllerReader implements Runnable {
         this.interpreter = interpreter;
     }
 
+
+    /**
+     * Listen for and interpret incoming packets from human controlled players.
+     */
     @Override
     public void run() {
         while (true) {

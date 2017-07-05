@@ -4,7 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
+import seng302.team18.test_mock.RaceCourseGenerator;
 import seng302.team18.test_mock.TestMock;
+import seng302.team18.test_mock.TestXMLFiles;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
@@ -57,10 +59,14 @@ public class RaceMessageGeneratorTest {
 
     @Before
     public void setUp() throws IOException {
-        TestMock testMock = new TestMock();
-        testRace = testMock.testRun();
-        RaceMessageGenerator generator = new RaceMessageGenerator(testRace);
-        generatedBytes = generator.getPayload();
+        final String regattaXML = TestXMLFiles.REGATTA_XML_1.toString();
+        final String raceXML = TestXMLFiles.RACE_XML_2.toString();
+        final String boatsXML = TestXMLFiles.BOATS_XML_2.toString();
+        final RaceCourseGenerator raceCourseGenerator = new RaceCourseGenerator();
+        raceCourseGenerator.readFiles(regattaXML, boatsXML, raceXML);
+        testRace = raceCourseGenerator.generateRace(raceCourseGenerator.generateCourse());
+        RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(testRace);
+        generatedBytes = raceMessageGenerator.getPayload();
         currentTime = System.currentTimeMillis();
     }
 

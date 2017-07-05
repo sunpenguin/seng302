@@ -19,9 +19,9 @@ public class MockDataStream {
      * Set up the PlayerControllerReader in its own thread for listening to player actions.
      */
     private static void runMock() {
-        final String regattaXML = "/regatta_test1.xml";
-        final String boatsXML = "/boats_test2.xml";
-        final String raceXML = "/race_test2.xml";
+        final String regattaXML = TestXMLFiles.REGATTA_XML_1.toString();
+        final String boatsXML = TestXMLFiles.BOATS_XML_2.toString();
+        final String raceXML = TestXMLFiles.RACE_XML_2.toString();
 
         RaceCourseGenerator generator = new RaceCourseGenerator();
         generator.readFiles(regattaXML, boatsXML, raceXML);

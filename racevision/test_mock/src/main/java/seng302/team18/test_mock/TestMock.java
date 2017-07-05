@@ -21,6 +21,7 @@ public class TestMock {
     private String raceXML;
     private Race race;
     private final static int SERVER_PORT = 5005;
+    private Server server;
 
 
     public TestMock(String regattaXML, String boatsXML, String raceXML, Race race) {
@@ -28,15 +29,13 @@ public class TestMock {
         this.boatsXML = boatsXML;
         this.raceXML = raceXML;
         this.race = race;
+        this.server = new Server(SERVER_PORT, regattaXML, boatsXML, raceXML);
     }
 
     /**
      * The messages to be sent on a schedule during race simulation
      */
     private List<ScheduledMessageGenerator> scheduledMessages = new ArrayList<>();
-
-    //TODO give real port
-    private Server server = new Server(SERVER_PORT, regattaXML, boatsXML, raceXML);
 
     
     public void run() {
@@ -48,15 +47,6 @@ public class TestMock {
         server.closeServer();
     }
 
-    /**
-     * Used for testing to avoid having to
-     * run test mock to test that messages
-     * encode correctly.
-     * @return
-     */
-    public Race testRun() {
-        return race;
-    }
 
     /**
      * Initialise the generators for scheduled messages
