@@ -66,6 +66,7 @@ public class MainWindowController implements Observer {
 
     private boolean fpsOn;
     private boolean onImportant;
+    private boolean sailIn = false;
 
     private Race race;
     private RaceLoop raceLoop;
@@ -100,7 +101,6 @@ public class MainWindowController implements Observer {
         pixelMapper.setZoomLevel(0);
     }
 
-
     @FXML void closeAppAction(){
         stage.close();
     }
@@ -115,27 +115,29 @@ public class MainWindowController implements Observer {
     }
 
     private void installKeyHandler() {
-        try {
-            sender = new Sender("127.0.0.1", 4942, new ControllerMessageFactory());
-            BoatActionMessage message = new BoatActionMessage();
             final EventHandler<KeyEvent> keyEventHandler =
                     new EventHandler<KeyEvent>() {
                         public void handle(final KeyEvent keyEvent) {
                             if (keyEvent.getCode() != null) {
-                                System.out.println(message);
-                                try {
-                                    System.out.println(sender);
-                                    sender.send(message);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                BoatActionMessage message;
+                                switch (keyEvent.getCode()){
+                                    case SPACE:
+                                        message = new BoatActionMessage(true, sailIn, !sailIn, true, false, false);
+                                    case ENTER:
+                                        message = new BoatActionMessage(false, sailIn, !sailIn, true, false, false);
+                                    case UP:
+                                        message = new BoatActionMessage(false, sailIn, !sailIn, false, true, false);
+                                    case DOWN:
+                                        message = new BoatActionMessage(false, sailIn, !sailIn, false, false, true);
+                                    case SHIFT:
+                                        message = new BoatActionMessage(false, sailIn, !sailIn, false, false, false);
+                                        sailIn = !sailIn;
+                                }
                                 }
                             }
-                        }
+
                     };
             raceViewPane.setOnKeyPressed(keyEventHandler);
-        } catch (IOException e){
-            e.printStackTrace();
-        }
     }
 
     /**

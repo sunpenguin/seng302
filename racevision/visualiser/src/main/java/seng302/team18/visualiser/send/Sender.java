@@ -13,7 +13,6 @@ public class Sender {
     private MessageEncoderFactory factory;
     private OutputStream outStream;
 
-
     /**
      * Constructor for the Sender. Requires ip, port, and MessageEncoderFactory.
      *
@@ -28,7 +27,6 @@ public class Sender {
         this.factory = factory;
     }
 
-
     /**
      * Sends a message after encoding it with the provided encoder.
      *
@@ -39,6 +37,4 @@ public class Sender {
         MessageEncoder composer = factory.getComposer(body.getType());
         outStream.write(composer.encode(body));
     }
-
-
 }
