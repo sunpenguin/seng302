@@ -1,6 +1,9 @@
 package seng302.team18.test_mock.connection;
 
+import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.AC35XMLRaceMessage;
+import seng302.team18.message.AC35XMLRegattaMessage;
+import seng302.team18.model.Boat;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -11,21 +14,35 @@ import java.net.SocketException;
  */
 public class Server {
     private final ClientList clientList = new ClientList();
-    private final int PORT;
+    private final ConnectionListener listener = new ConnectionListener();
+    private static final int MAX_CLIENT_CONNECTION = 6;
+
     private ServerSocket serverSocket;
+    private final int PORT;
+
+    private final AC35XMLRaceMessage raceMessage;
+    private final AC35XMLBoatMessage boatMessage;
+    private final AC35XMLRegattaMessage regattaMessage;
+
     private XMLMessageGenerator regattaXMLMessageGenerator;
     private XMLMessageGenerator boatsXMLMessageGenerator;
     private XMLMessageGenerator raceXMLMessageGenerator;
-    private final int MAX_CLIENT_CONNECTION = 6;
-    private int clientConnectionNum = 0;
 
-    private final AC35XMLRaceMessage raceMessage;
+    private final ParticipantManager participantManager;
 
-    public Server(int port, AC35XMLRaceMessage raceMessage) {
+
+    public Server(int port, ParticipantManager manager, AC35XMLRaceMessage raceMessage, AC35XMLBoatMessage boatMessage,
+                  AC35XMLRegattaMessage regattaMessage) {
         this.PORT = port;
+        this.participantManager = manager;
+
         this.raceMessage = raceMessage;
+        this.boatMessage = boatMessage;
+        this.regattaMessage = regattaMessage;
 
         raceXMLMessageGenerator = new XmlMessageGeneratorRace(raceMessage);
+        boatsXMLMessageGenerator = new XmlMessageGeneratorBoats(boatMessage);
+        regattaXMLMessageGenerator = new XmlMessageGeneratorRegatta(regattaMessage);
     }
 
 
@@ -44,14 +61,9 @@ public class Server {
 
         System.out.println("Stream opened successfully on port: " + PORT);
 
-        boolean acceptClient = true;
-        while (acceptClient) {
-            acceptClientConnection();
-            if(clientConnectionNum >= MAX_CLIENT_CONNECTION) {
-                acceptClient = false;
-                System.out.println("Sorry, 6 players have entered this round.");
-            }
-        }
+        acceptClientConnection();
+
+        listener.start();
     }
 
 
@@ -63,53 +75,41 @@ public class Server {
     private void acceptClientConnection() {
         try {
             ClientConnection client = new ClientConnection(serverSocket.accept());
-            ConnectionListener listener = new ConnectionListener(client);
-            listener.start();
-            clientConnectionNum ++;
-            System.out.println("Player " + clientConnectionNum + " joined!");
             clientList.getClients().add(client);
+            System.out.println("Player " + clientList.getClients().size() + " joined!");
+
+            client.sendMessage(regattaXMLMessageGenerator.getMessage());
+            addParticipant();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-    /**
-     * Thread that listens for incoming connections and sends xml files to a connected client.
-     */
-    private class ConnectionListener extends Thread {
-        private ClientConnection clientConnection;
-
-        public ConnectionListener(ClientConnection client) {
-            clientConnection = client;
-        }
-
-        @Override
-        public void run() {
-            try {
-                sendXmls(clientConnection);
-            } catch (SocketException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    public void stopAcceptingConnections() {
+        listener.stopListening();
     }
 
+    private final Boat[] boats = {
+            new Boat("Emirates Team New Zealand", "TEAM New Zealand", 121),
+            new Boat("Oracle Team USA", "TEAM USA", 122),
+            new Boat("Artemis Racing", "TEAM SWE", 123),
+            new Boat("Groupama Team France", "TEAM France", 124),
+            new Boat("Land Rover BAR", "TEAM Britain", 125),
+            new Boat("Softbank Team Japan", "TEAM Japan", 126)
+    };
 
-    /**
-     * Sends the the three XML files to the specified client.
-     * The three files are Race.xml, Regatta.xml and Boats.xml. Their order is not defined.
-     *
-     * @param client the client to send to
-     * @throws IOException if an I/O exception occurs
-     */
-    private void sendXmls(ClientConnection client) throws IOException {
-        client.sendMessage(regattaXMLMessageGenerator.getMessage());
-        client.sendMessage(raceXMLMessageGenerator.getMessage());
-        client.sendMessage(boatsXMLMessageGenerator.getMessage());
+    private void addParticipant() {
+        int number = clientList.getClients().size();
+        Boat boat = boats[number];
+
+        raceMessage.getParticipantIDs().add(boat.getId());
+        boatMessage.getBoats().add(boat);
+        participantManager.addBoat(boat);
+
+        broadcast(raceXMLMessageGenerator.getMessage());
+        broadcast(boatsXMLMessageGenerator.getMessage());
     }
-
 
     /**
      * Closes any open client connections and closes the server
@@ -130,7 +130,6 @@ public class Server {
         }
     }
 
-
     /**
      * Broadcasts a message to all connected clients
      *
@@ -138,14 +137,13 @@ public class Server {
      * @see ClientConnection#sendMessage(byte[])
      */
     public void broadcast(byte[] message) {
-        if(message.length == 1){//Scheduled messages should return {0} if there is an error when constructing them
+        if (message.length == 1) {//Scheduled messages should return {0} if there is an error when constructing them
             return;
         }
         for (ClientConnection client : clientList.getClients()) {
             client.sendMessage(message);
         }
     }
-
 
     /**
      * Prunes dead connections from the list of clients, where a connection is condsidered dead after failing
@@ -156,5 +154,34 @@ public class Server {
      */
     public void pruneConnections() {
         clientList.pruneConnections();
+    }
+
+
+    /**
+     * Thread that listens for incoming connections.
+     */
+    private class ConnectionListener extends Thread {
+        private boolean listening = true;
+
+        @Override
+        public void run() {
+            try {
+                serverSocket.setSoTimeout(1000);
+            } catch (SocketException e) {
+                e.printStackTrace();
+            }
+
+            while (listening) {
+                if (clientList.getClients().size() < MAX_CLIENT_CONNECTION) {
+                    acceptClientConnection();
+                } else {
+                    stopListening();
+                }
+            }
+        }
+
+        public void stopListening() {
+            listening = false;
+        }
     }
 }
