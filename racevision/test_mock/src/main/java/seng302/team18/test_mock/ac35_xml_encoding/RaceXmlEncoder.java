@@ -17,9 +17,9 @@ import java.util.List;
  */
 public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
     /**
-     * Method used for testing purpose.
+     * Method used for generating a DOMSource from a AC35XMLRaceMessage.
      * @param raceMessage AC35XMLRaceMessage, raceMessage
-     * @return returns a DOMSource used when testing.
+     * @return returns a DOMSource.
      * @throws ParserConfigurationException a ParserConfigurationException
      */
     public DOMSource getDomSource(AC35XMLRaceMessage raceMessage) throws ParserConfigurationException {

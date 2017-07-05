@@ -112,7 +112,7 @@ public class XMLRaceInterpreterTest {
         ZonedDateTime expectedCurrent = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
         Assert.assertEquals(expectedCurrent, race.getCurrentTime());
         Assert.assertEquals(expectedStart, race.getStartTime());
-        Assert.assertEquals(0, race.getStatus());
+        Assert.assertEquals(RaceStatus.NOT_ACTIVE, race.getStatus());
         Assert.assertEquals(0, race.getId());
     }
 
