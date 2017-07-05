@@ -94,13 +94,13 @@ public class AC35PolarPattern extends PolarPattern {
         polarAt30.addToMap(145,48);
         polarAt30.addToMap(175,32);
 
-        polarMap.put(polarAt4.getUpWindSpeed(), polarAt4);
-        polarMap.put(polarAt8.getUpWindSpeed(), polarAt8);
-        polarMap.put(polarAt12.getUpWindSpeed(), polarAt12);
-        polarMap.put(polarAt16.getUpWindSpeed(), polarAt16);
-        polarMap.put(polarAt20.getUpWindSpeed(), polarAt20);
-        polarMap.put(polarAt25.getUpWindSpeed(), polarAt25);
-        polarMap.put(polarAt30.getUpWindSpeed(), polarAt30);
+        polarMap.put(polarAt4.getWindSpeed(), polarAt4);
+        polarMap.put(polarAt8.getWindSpeed(), polarAt8);
+        polarMap.put(polarAt12.getWindSpeed(), polarAt12);
+        polarMap.put(polarAt16.getWindSpeed(), polarAt16);
+        polarMap.put(polarAt20.getWindSpeed(), polarAt20);
+        polarMap.put(polarAt25.getWindSpeed(), polarAt25);
+        polarMap.put(polarAt30.getWindSpeed(), polarAt30);
 
         return polarMap;
     }

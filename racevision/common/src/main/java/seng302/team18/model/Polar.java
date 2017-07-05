@@ -67,4 +67,38 @@ public class Polar {
     public double getDownWindSpeed() {
         return downWindSpeed;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Polar polar = (Polar) o;
+
+        if (Double.compare(polar.windSpeed, windSpeed) != 0) return false;
+        if (Double.compare(polar.upWindAngle, upWindAngle) != 0) return false;
+        if (Double.compare(polar.upWindSpeed, upWindSpeed) != 0) return false;
+        if (Double.compare(polar.downWindAngle, downWindAngle) != 0) return false;
+        if (Double.compare(polar.downWindSpeed, downWindSpeed) != 0) return false;
+        return mapSpeedAtAngles.equals(polar.mapSpeedAtAngles);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(windSpeed);
+        result = (int) (temp ^ (temp >>> 32));
+        result = 31 * result + mapSpeedAtAngles.hashCode();
+        temp = Double.doubleToLongBits(upWindAngle);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(upWindSpeed);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(downWindAngle);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(downWindSpeed);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }

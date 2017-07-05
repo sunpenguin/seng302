@@ -35,7 +35,7 @@ public abstract class PolarPattern {
      */
     public Polar getPolarForWindSpeed(double windSpeed) {
         //Set initial
-        Polar closestPolar = windSpeedToPolarMap.get(0);
+        Polar closestPolar = windSpeedToPolarMap.values().iterator().next();
         double closestDistance = Math.abs(windSpeed - closestPolar.getWindSpeed());
 
         for (Polar currentPolar : windSpeedToPolarMap.values()) {
