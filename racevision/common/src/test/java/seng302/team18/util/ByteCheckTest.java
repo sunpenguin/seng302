@@ -1,7 +1,6 @@
 package seng302.team18.util;
 
 import static org.junit.Assert.*;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -131,23 +130,23 @@ public class ByteCheckTest {
     public void shortToByteTest1() {
         short expectedShort1 = 4;
         byte[] bytes1 = ByteCheck.shortToByteArray(expectedShort1);
-        int acutualShort1 = ByteCheck.byteToInt(bytes1, 0, 2);
-        assertEquals(expectedShort1, acutualShort1);
+        int actualShort1 = ByteCheck.byteToInt(bytes1, 0, 2);
+        assertEquals(expectedShort1, actualShort1);
     }
 
     @Test
     public void shortToByteTest2() {
         short expectedShort2 = 16000;
         byte[] bytes2 = ByteCheck.shortToByteArray(expectedShort2);
-        int acutualShort2 = ByteCheck.byteToInt(bytes2, 0, 2);
-        assertEquals(expectedShort2, acutualShort2);
+        int actualShort2 = ByteCheck.byteToInt(bytes2, 0, 2);
+        assertEquals(expectedShort2, actualShort2);
     }
 
     @Test
     public void shortToByteTest3() {
         short expectedShort3 = 6587;
         byte[] bytes3 = ByteCheck.shortToByteArray(expectedShort3);
-        int acutualShort3 = ByteCheck.byteToInt(bytes3, 0, 2);
-        assertEquals(expectedShort3, acutualShort3);
+        int actualShort3 = ByteCheck.byteToInt(bytes3, 0, 2);
+        assertEquals(expectedShort3, actualShort3);
     }
 }

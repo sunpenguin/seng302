@@ -31,6 +31,7 @@ public class ControllerManager {
     private MessageInterpreter interpreter;
     private Race race;
 
+
     /**
      * Private enum for keeping track of the current view.
      */
@@ -52,8 +53,10 @@ public class ControllerManager {
         }
     }
 
+
     /**
      * Constructor for ControllerManager
+     *
      * @param primaryStage for showing views
      * @param mainControllerPath path to the MainController.fxml
      * @param preRacePath path to PreRace.fxml
@@ -68,6 +71,7 @@ public class ControllerManager {
     /**
      * Initialises the receiver, race and interpreter. Loops through messages received via the receiver and interprets
      * them.
+     *
      * @throws Exception
      */
     public void start() throws Exception {
@@ -103,7 +107,7 @@ public class ControllerManager {
 
 
     /**
-     * Set up and initialise interpreter variables, adding interpreters of each relevant type to the glabal interpreter.
+     * Set up and initialise interpreter variables, adding interpreters of each relevant type to the global interpreter.
      */
     private void initialiseInterpreter() {
         interpreter = new CompositeMessageInterpreter();
@@ -125,9 +129,9 @@ public class ControllerManager {
     }
 
 
-
     /**
      * Sets up the main GUI window, controlled by the main window controller.
+     *
      * @throws IOException IO Exception thrown when loading FXML loader
      */
     public void showMainView() throws IOException {
@@ -148,8 +152,10 @@ public class ControllerManager {
         }
     }
 
+
     /**
      * Display the window with information about a race which hasn't started yet.
+     *
      * @throws IOException IO Exception thrown when loading FXML loader
      */
     public void showPreRace() throws IOException {
@@ -166,29 +172,6 @@ public class ControllerManager {
             preRaceController.setUp(race);
             currentView = ViewType.PRE_RACE;
         }
-    }
-
-    /**
-     * A companion method for getSocket.
-     * Asks the user for the custom port and address.
-     * @return A port and host combination
-     */
-    private List<String> getCustomConnection() { // Leaving here for test purposes, but can be deleted.
-        List<String> portAndHost = new ArrayList<>();
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter a port number: ");
-        while (portAndHost.isEmpty()) {
-            if (scanner.hasNext()) {
-               portAndHost.add(scanner.next());
-            }
-        }
-        System.out.println("Please enter a host name: ");
-        while (portAndHost.size() == 1) {
-            if (scanner.hasNext()) {
-                portAndHost.add(scanner.next());
-            }
-        }
-        return portAndHost;
     }
 
 

@@ -82,7 +82,7 @@ public class MainWindowController implements Observer {
 
     @FXML
     public void initialize() {
-        installKeyHandler();
+//        installKeyHandler();
 
         setSliderListener();
         sliderSetup();
