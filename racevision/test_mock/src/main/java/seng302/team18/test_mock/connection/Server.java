@@ -8,6 +8,7 @@ import seng302.team18.model.Boat;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 /**
  * Streaming server to connect test mock with clients.
@@ -81,7 +82,9 @@ public class Server {
             client.sendMessage(regattaXMLMessageGenerator.getMessage());
             addParticipant();
 
-        } catch (IOException e) {
+        } catch (SocketTimeoutException e) {
+            // The time out expired, no big deal
+        } catch(IOException e) {
             e.printStackTrace();
         }
     }
@@ -166,7 +169,7 @@ public class Server {
         @Override
         public void run() {
             try {
-                serverSocket.setSoTimeout(1000);
+                serverSocket.setSoTimeout(500);
             } catch (SocketException e) {
                 e.printStackTrace();
             }
