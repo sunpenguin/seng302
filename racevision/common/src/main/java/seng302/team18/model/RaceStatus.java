@@ -1,4 +1,4 @@
-package seng302.team18.message;
+package seng302.team18.model;
 
 import java.util.*;
 

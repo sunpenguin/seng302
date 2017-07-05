@@ -3,37 +3,31 @@ package seng302.team18.test_mock;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.AC35XMLRegattaMessage;
-import seng302.team18.messageparsing.*;
+import seng302.team18.messageparsing.AC35XMLBoatParser;
+import seng302.team18.messageparsing.AC35XMLRaceParser;
+import seng302.team18.messageparsing.AC35XMLRegattaParser;
 import seng302.team18.model.*;
-import seng302.team18.test_mock.ac35_xml_encoding.BoatsXmlEncoder;
-import seng302.team18.test_mock.ac35_xml_encoding.RaceXmlEncoder;
 import seng302.team18.test_mock.connection.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
 import static java.lang.Thread.sleep;
 
 
 /**
  * Class to handle a mock race
  */
-public class TestMock {
+public class TestMock implements ParticipantManager {
 
     private Course course;
     private Race race;
 
-    private final String regattaXML = "/regatta_test1.xml";
-    private final String boatsXML = "/boats_test2.xml";
-    private final String raceXML = "/race_test2.xml";
-//    private String boatXML;
-//    private String raceXML;
-
     private AC35XMLRegattaMessage regattaMessage;
-    private AC35XMLBoatMessage initialBoatMessage;
-    private AC35XMLRaceMessage initialRaceMessage;
     private AC35XMLBoatMessage boatMessage;
     private AC35XMLRaceMessage raceMessage;
 
@@ -44,56 +38,38 @@ public class TestMock {
      */
     private List<ScheduledMessageGenerator> scheduledMessages = new ArrayList<>();
 
-    //TODO give real port
-    private Server server = new Server(SERVER_PORT, regattaXML, boatsXML, raceXML);
+    private Server server;
 
-    public void run() throws TransformerException, ParserConfigurationException{
-//        setUpFiles(); // Also set up the server
-        readFiles();
+    public void run() throws TransformerException, ParserConfigurationException {
+        setUpFiles();
         generateClasses();
 
+        server = new Server(SERVER_PORT, this, raceMessage, boatMessage, regattaMessage);
+
         server.openServer();
-        initialiseScheduledMessages();
         runSimulation();
         server.closeServer();
     }
 
 
-//    /**
-//     * Generate race.xml and boat.xml files from the default initial AC35 XML message.
-//     */
-//    private void setUpFiles() throws TransformerException, ParserConfigurationException{
-//        // race.xml
-//        RaceXmlEncoder raceEncoder = new RaceXmlEncoder();
-//        String initialRaceXML = "/race_test2.xml";
-//        AC35XMLRaceParser raceParser = new AC35XMLRaceParser();
-//        initialRaceMessage = raceParser.parse(this.getClass().getResourceAsStream(initialRaceXML));
-//        raceXML = String.valueOf(raceEncoder.encode(initialRaceMessage));
-//
-//        // boat.xml
-//        BoatsXmlEncoder boatEncoder = new BoatsXmlEncoder();
-//        String initialBoatXML = "/boats_test2.xml";
-//        AC35XMLBoatParser boatParser = new AC35XMLBoatParser();
-//        initialBoatMessage = boatParser.parse(this.getClass().getResourceAsStream(initialBoatXML));
-//        boatXML = String.valueOf(boatEncoder.encode(initialBoatMessage));
-//
-//        // create a new server
-//        server = new Server(SERVER_PORT, regattaXML, boatXML, raceXML);
-//    }
-
-
     /**
-     * Read each test xml file and generate AC35 XML messages so classes can be made
+     * Generate race.xml and boat.xml files from the default initial AC35 XML message.
      */
-    private void readFiles() {
-        AC35XMLRegattaParser regattaParser = new AC35XMLRegattaParser();
-        regattaMessage = regattaParser.parse(this.getClass().getResourceAsStream(regattaXML));
-
-        AC35XMLBoatParser boatsParser = new AC35XMLBoatParser();
-        boatMessage = boatsParser.parse(this.getClass().getResourceAsStream(boatsXML));
-
+    private void setUpFiles() throws TransformerException, ParserConfigurationException {
+        // race.xml
+        String initialRaceXML = "/race_test2.xml";
         AC35XMLRaceParser raceParser = new AC35XMLRaceParser();
-        raceMessage = raceParser.parse(this.getClass().getResourceAsStream(raceXML));
+        raceMessage = raceParser.parse(this.getClass().getResourceAsStream(initialRaceXML));
+
+        // boat.xml
+        String initialBoatXML = "/boats_test2.xml";
+        AC35XMLBoatParser boatParser = new AC35XMLBoatParser();
+        boatMessage = boatParser.parse(this.getClass().getResourceAsStream(initialBoatXML));
+
+        // regatta.xml
+        String initialRegattaXML = "/regatta_test1.xml";
+        AC35XMLRegattaParser regattaParser = new AC35XMLRegattaParser();
+        regattaMessage = regattaParser.parse(this.getClass().getResourceAsStream(initialRegattaXML));
     }
 
 
@@ -137,16 +113,9 @@ public class TestMock {
         race = new Race(startingList, course, raceID);
     }
 
-
-    /**
-     * Initialise the generators for scheduled messages
-     */
-    private void initialiseScheduledMessages() {
-        for(Boat b : race.getStartingList()){
-            scheduledMessages.add(new BoatMessageGenerator(b));
-        }
-        scheduledMessages.add(new RaceMessageGenerator(race));
-        scheduledMessages.add(new HeartBeatMessageGenerator());
+    @Override
+    public void addBoat(Boat boat) {
+        race.addParticipant(boat);
     }
 
 
@@ -155,23 +124,47 @@ public class TestMock {
      */
     private void runSimulation() {
         final int LOOP_FREQUENCY = 60;
+        final int TIME_START = -5;
+        final int TIME_WARNING = -3;
+        final int TIME_PREP = -2;
 
         long timeCurr = System.currentTimeMillis();
         long timeLast;
+
+        scheduledMessages.add(new RaceMessageGenerator(race));
+        scheduledMessages.add(new HeartBeatMessageGenerator());
+
+        // Set race time
+        race.setStartTime(ZonedDateTime.now().minusMinutes(TIME_START));
+        race.setStatus(RaceStatus.PRESTART);
+
         do {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
-            // Update simulation
-            race.setStatus((byte) 3);
-            race.updateBoats((timeCurr - timeLast));
+            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusMinutes(TIME_WARNING))) {
+                race.setStatus(RaceStatus.WARNING);
 
-            accelerateBoat(race, race.getStartingList().get(2), 0.1);
-            accelerateBoat(race, race.getStartingList().get(3), 0.05);
+            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().plusMinutes(TIME_PREP)))) {
 
-            // Send mark rounding messages for all mark roundings that occured
-            for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
-                server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
+                race.setStatus(RaceStatus.PREPARATORY);
+                server.stopAcceptingConnections();
+
+                for (Boat b : race.getStartingList()) {
+                    scheduledMessages.add(new BoatMessageGenerator(b));
+                }
+
+            } else {
+                race.updateBoats((timeCurr - timeLast));
+
+                // Send mark rounding messages for all mark roundings that occured
+                for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
+                    server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
+                }
+
+                if ((race.getStatus() == RaceStatus.PREPARATORY) && ZonedDateTime.now().isAfter(race.getStartTime())) {
+                    race.setStatus(RaceStatus.STARTED);
+                }
             }
 
             // Send messages if needed
@@ -202,34 +195,12 @@ public class TestMock {
      * Used for testing to avoid having to
      * run test mock to test that messages
      * encode correctly.
+     *
      * @return returns generated race
      */
-    public Race testRun() throws TransformerException, ParserConfigurationException{
-//        setUpFiles();
-        readFiles();
+    public Race testRun() throws TransformerException, ParserConfigurationException {
+        setUpFiles();
         generateClasses();
         return race;
-    }
-
-
-    private void accelerateBoat(Race race, Boat boat, double acceleration) {
-        if (!race.getFinishedList().contains(boat)) {
-            boat.setSpeed(boat.getSpeed() + acceleration);
-        }
-    }
-
-
-    public String getRegattaXML() {
-        return regattaXML;
-    }
-
-
-    public String getBoatsXML() {
-        return boatsXML;
-    }
-
-
-    public String getRaceXML() {
-        return raceXML;
     }
 }

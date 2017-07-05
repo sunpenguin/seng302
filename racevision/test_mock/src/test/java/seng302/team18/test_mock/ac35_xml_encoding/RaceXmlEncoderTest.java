@@ -175,8 +175,8 @@ public class RaceXmlEncoderTest {
                 Node markNode = markNodes.item(j);
                 Element mark = (Element) markNode;
                 int markId = Integer.parseInt(mark.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_SOURCE_ID.toString()));
-                double markLat = Double.parseDouble(mark.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_LATITUDE.toString()));
-                double markLng = Double.parseDouble(mark.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_LONGITUDE.toString()));
+                double markLat = Double.parseDouble(mark.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_TARGET_LATITUDE.toString()));
+                double markLng = Double.parseDouble(mark.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_TARGET_LONGITUDE.toString()));
                 encodedMarks.add(new Mark(markId, new Coordinate(markLat, markLng)));
             }
 

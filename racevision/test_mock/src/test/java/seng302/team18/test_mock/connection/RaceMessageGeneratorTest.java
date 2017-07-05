@@ -66,7 +66,7 @@ public class RaceMessageGeneratorTest {
             int expectedMsgVersion = 2;
             long expectedCurrentTime = System.currentTimeMillis();
             int expectedRaceID = testRace.getId();
-            int expectedRaceStatus = testRace.getStatus();
+            int expectedRaceStatus = testRace.getStatus().code();
             long expectedStartTime = System.currentTimeMillis();
             int expectedWindDirection = 0x4000;
             int expectedWindSpeed = 5000;

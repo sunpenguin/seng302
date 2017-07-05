@@ -38,7 +38,7 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
 
         byte[] raceIDBytes = ByteCheck.intToByteArray(race.getId());
 
-        byte raceStatusByte = race.getStatus();
+        byte raceStatusByte = (byte) race.getStatus().code();
 
         long expectedStartTime = startTime;
 
