@@ -116,6 +116,7 @@ public class TestMock {
 
             accelerateBoat(race, race.getStartingList().get(2), 0.1);
             accelerateBoat(race, race.getStartingList().get(3), 0.05);
+            changeWindSpeed(5);
 
             // Send mark rounding messages for all mark roundings that occured
             for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
@@ -150,6 +151,7 @@ public class TestMock {
 
         List<BoundaryMark> boundaryMarks = raceMessage.getBoundaryMarks();
         double windDirection = 0;
+        double windSpeed = 0;
 
         List<MarkRounding> markRoundings = raceMessage.getMarkRoundings();
 
@@ -163,7 +165,7 @@ public class TestMock {
 
         Coordinate central = new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong());
 
-        course = new Course(compoundMarks, boundaryMarks, windDirection, zoneId, markRoundings);
+        course = new Course(compoundMarks, boundaryMarks, windDirection, windSpeed,  zoneId, markRoundings);
         course.setCentralCoordinate(central);
     }
 
@@ -178,6 +180,10 @@ public class TestMock {
         if (!race.getFinishedList().contains(boat)) {
             boat.setSpeed(boat.getSpeed() + acceleration);
         }
+    }
+
+    private void changeWindSpeed(double speedChange){
+        race.getCourse().setWindSpeed(race.getCourse().getWindSpeed() + speedChange);
     }
 
     public String getRegattaXML() {

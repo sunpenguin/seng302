@@ -26,6 +26,7 @@ public class WindDirectionInterpreterTest {
     private MessageInterpreter interpreter;
     private Boat boat;
     private double windDirection = 35.4;
+    private double windSpeed = 10;
 
     @Before
     public void setUp() {
@@ -35,7 +36,7 @@ public class WindDirectionInterpreterTest {
         race = new Race();
         race.setStartingList(boats);
         interpreter = new WindDirectionInterpreter(race);
-        MessageBody message = new AC35RaceStatusMessage(0, 0, 0, windDirection, new ArrayList<>());
+        MessageBody message = new AC35RaceStatusMessage(0, 0, 0, windDirection, windSpeed, new ArrayList<>());
         interpreter.interpret(message);
     }
 
@@ -66,7 +67,7 @@ public class WindDirectionInterpreterTest {
     public void courseTest() {
         Course expected = new Course();
         Course actual = race.getCourse();
-        double expectedWindDirection = abs((windDirection - 180) % 360);
+        double expectedWindDirection = windDirection;
         Assert.assertEquals(expectedWindDirection, actual.getWindDirection(), 0.01);
         Assert.assertEquals(expected.getTimeZone(), actual.getTimeZone());
         Assert.assertEquals(expected.getCentralCoordinate(), actual.getCentralCoordinate());

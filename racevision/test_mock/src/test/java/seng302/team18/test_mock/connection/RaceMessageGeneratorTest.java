@@ -107,7 +107,7 @@ public class RaceMessageGeneratorTest {
 
     @Test
     public void windDirectionTest() {
-        int expectedWindDirection = 0x4000;
+        int expectedWindDirection = 0x0000;
         int actualWindDirection = ByteCheck.byteToIntConverter(generatedBytes, WIND_DIR_P, WIND_DIR_L);
         assertEquals(expectedWindDirection, actualWindDirection);
     }
@@ -115,7 +115,7 @@ public class RaceMessageGeneratorTest {
 
     @Test
     public void windSpeedTest() {
-        int expectedWindSpeed = 5000;
+        int expectedWindSpeed = 0;
         int actualWindSpeed = ByteCheck.byteToIntConverter(generatedBytes, WIND_SPEED_P, WIND_SPEED_L);
         assertEquals(expectedWindSpeed, actualWindSpeed);
     }
