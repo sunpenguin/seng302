@@ -1,3 +1,4 @@
+
 package seng302.team18.model;
 
 import junit.framework.TestCase;
@@ -10,7 +11,7 @@ import static org.junit.Assert.assertEquals;
  * A test class for the boat class
  */
 public class BoatTest {
-    
+
     Boat testBoat;
 
     //BoatHeadings
@@ -27,6 +28,7 @@ public class BoatTest {
     //WindDirections
     double windDirectionN = 0;
     double windDirectionNE = 45;
+
     double windDirectionE = 90;
     double windDirectionSE = 120;
     double windDirectionS = 180;
@@ -34,7 +36,7 @@ public class BoatTest {
     double windDirectionW = 270;
     double windDirectionNW = 315;
     double windDirectionN2 = 360;
-    
+
     @Before
     public void setUp(){
         testBoat = new Boat("Enterprise", "Starfleet", 10);
@@ -52,13 +54,20 @@ public class BoatTest {
         double WNBN = testBoat.getTrueWindAngle(windDirectionN); //WNBN = Wind North Boat North
         testBoat.setHeading(BoatHeadingNE);
         double WNBNE = testBoat.getTrueWindAngle(windDirectionN);
-        double WNBE = testBoat.getTrueWindAngle(windDirectionN, BoatHeadingE);
-        double WNBSE = testBoat.getTrueWindAngle(windDirectionN, BoatHeadingSE);
-        double WNBS = testBoat.getTrueWindAngle(windDirectionN, BoatHeadingS);
-        double WNBSW = testBoat.getTrueWindAngle(windDirectionN, BoatHeadingSW);
-        double WNBW = testBoat.getTrueWindAngle(windDirectionN, BoatHeadingW);
-        double WNBNW = testBoat.getTrueWindAngle(windDirectionN, BoatHeadingNW);
-        double WNBN2 = testBoat.getTrueWindAngle(windDirectionN, BoatHeadingN2);
+        testBoat.setHeading(BoatHeadingE);
+        double WNBE = testBoat.getTrueWindAngle(windDirectionN);
+        testBoat.setHeading(BoatHeadingSE);
+        double WNBSE = testBoat.getTrueWindAngle(windDirectionN);
+        testBoat.setHeading(BoatHeadingS);
+        double WNBS = testBoat.getTrueWindAngle(windDirectionN);
+        testBoat.setHeading(BoatHeadingSW);
+        double WNBSW = testBoat.getTrueWindAngle(windDirectionN);
+        testBoat.setHeading(BoatHeadingW);
+        double WNBW = testBoat.getTrueWindAngle(windDirectionN);
+        testBoat.setHeading(BoatHeadingNW);
+        double WNBNW = testBoat.getTrueWindAngle(windDirectionN);
+        testBoat.setHeading(BoatHeadingN2);
+        double WNBN2 = testBoat.getTrueWindAngle(windDirectionN);
 
         //Test Answers for wind direction North
         TestCase.assertEquals(180, WNBN, 0);
@@ -80,13 +89,20 @@ public class BoatTest {
         double WNEBN = testBoat.getTrueWindAngle(windDirectionNE); //WNEBN = Wind North East Boat North
         testBoat.setHeading(BoatHeadingNE);
         double WNEBNE = testBoat.getTrueWindAngle(windDirectionNE);
-        double WNEBE = testBoat.getTrueWindAngle(windDirectionNE, BoatHeadingE);
-        double WNEBSE = testBoat.getTrueWindAngle(windDirectionNE, BoatHeadingSE);
-        double WNEBS = testBoat.getTrueWindAngle(windDirectionNE, BoatHeadingS);
-        double WNEBSW = testBoat.getTrueWindAngle(windDirectionNE, BoatHeadingSW);
-        double WNEBW = testBoat.getTrueWindAngle(windDirectionNE, BoatHeadingW);
-        double WNEBNW = testBoat.getTrueWindAngle(windDirectionNE, BoatHeadingNW);
-        double WNEBN2 = testBoat.getTrueWindAngle(windDirectionNE, BoatHeadingN2);
+        testBoat.setHeading(BoatHeadingE);
+        double WNEBE = testBoat.getTrueWindAngle(windDirectionNE);
+        testBoat.setHeading(BoatHeadingSE);
+        double WNEBSE = testBoat.getTrueWindAngle(windDirectionNE);
+        testBoat.setHeading(BoatHeadingS);
+        double WNEBS = testBoat.getTrueWindAngle(windDirectionNE);
+        testBoat.setHeading(BoatHeadingSW);
+        double WNEBSW = testBoat.getTrueWindAngle(windDirectionNE);
+        testBoat.setHeading(BoatHeadingW);
+        double WNEBW = testBoat.getTrueWindAngle(windDirectionNE);
+        testBoat.setHeading(BoatHeadingNW);
+        double WNEBNW = testBoat.getTrueWindAngle(windDirectionNE);
+        testBoat.setHeading(BoatHeadingN2);
+        double WNEBN2 = testBoat.getTrueWindAngle(windDirectionNE);
 
         //Test Answers for wind direction North East
         TestCase.assertEquals(135, WNEBN, 0);
@@ -108,13 +124,20 @@ public class BoatTest {
         double WEBN = testBoat.getTrueWindAngle(windDirectionE); //WEBN = Wind East Boat North
         testBoat.setHeading(BoatHeadingNE);
         double WEBNE = testBoat.getTrueWindAngle(windDirectionE);
-        double WEBE = testBoat.getTrueWindAngle(windDirectionE, BoatHeadingE);
-        double WEBSE = testBoat.getTrueWindAngle(windDirectionE, BoatHeadingSE);
-        double WEBS = testBoat.getTrueWindAngle(windDirectionE, BoatHeadingS);
-        double WEBSW = testBoat.getTrueWindAngle(windDirectionE, BoatHeadingSW);
-        double WEBW = testBoat.getTrueWindAngle(windDirectionE, BoatHeadingW);
-        double WEBNW = testBoat.getTrueWindAngle(windDirectionE, BoatHeadingNW);
-        double WEBN2 = testBoat.getTrueWindAngle(windDirectionE, BoatHeadingN2);
+        testBoat.setHeading(BoatHeadingE);
+        double WEBE = testBoat.getTrueWindAngle(windDirectionE);
+        testBoat.setHeading(BoatHeadingSE);
+        double WEBSE = testBoat.getTrueWindAngle(windDirectionE);
+        testBoat.setHeading(BoatHeadingS);
+        double WEBS = testBoat.getTrueWindAngle(windDirectionE);
+        testBoat.setHeading(BoatHeadingSW);
+        double WEBSW = testBoat.getTrueWindAngle(windDirectionE);
+        testBoat.setHeading(BoatHeadingW);
+        double WEBW = testBoat.getTrueWindAngle(windDirectionE);
+        testBoat.setHeading(BoatHeadingNW);
+        double WEBNW = testBoat.getTrueWindAngle(windDirectionE);
+        testBoat.setHeading(BoatHeadingN2);
+        double WEBN2 = testBoat.getTrueWindAngle(windDirectionE);
 
         //Test Answers for wind direction East
         TestCase.assertEquals(90, WEBN, 0);
@@ -136,13 +159,20 @@ public class BoatTest {
         double WSEBN = testBoat.getTrueWindAngle(windDirectionSE); //WSEBN = Wind South East Boat North
         testBoat.setHeading(BoatHeadingNE);
         double WSEBNE = testBoat.getTrueWindAngle(windDirectionSE);
-        double WSEBE = testBoat.getTrueWindAngle(windDirectionSE, BoatHeadingE);
-        double WSEBSE = testBoat.getTrueWindAngle(windDirectionSE, BoatHeadingSE);
-        double WSEBS = testBoat.getTrueWindAngle(windDirectionSE, BoatHeadingS);
-        double WSEBSW = testBoat.getTrueWindAngle(windDirectionSE, BoatHeadingSW);
-        double WSEBW = testBoat.getTrueWindAngle(windDirectionSE, BoatHeadingW);
-        double WSEBNW = testBoat.getTrueWindAngle(windDirectionSE, BoatHeadingNW);
-        double WSEBN2 = testBoat.getTrueWindAngle(windDirectionSE, BoatHeadingN2);
+        testBoat.setHeading(BoatHeadingE);
+        double WSEBE = testBoat.getTrueWindAngle(windDirectionSE);
+        testBoat.setHeading(BoatHeadingSE);
+        double WSEBSE = testBoat.getTrueWindAngle(windDirectionSE);
+        testBoat.setHeading(BoatHeadingS);
+        double WSEBS = testBoat.getTrueWindAngle(windDirectionSE);
+        testBoat.setHeading(BoatHeadingSW);
+        double WSEBSW = testBoat.getTrueWindAngle(windDirectionSE);
+        testBoat.setHeading(BoatHeadingW);
+        double WSEBW = testBoat.getTrueWindAngle(windDirectionSE);
+        testBoat.setHeading(BoatHeadingNW);
+        double WSEBNW = testBoat.getTrueWindAngle(windDirectionSE);
+        testBoat.setHeading(BoatHeadingN2);
+        double WSEBN2 = testBoat.getTrueWindAngle(windDirectionSE);
 
         //Test Answers for wind direction South East
         TestCase.assertEquals(60, WSEBN, 0);
@@ -164,13 +194,20 @@ public class BoatTest {
         double WSBN = testBoat.getTrueWindAngle(windDirectionS); //WSBN = Wind South Boat North
         testBoat.setHeading(BoatHeadingNE);
         double WSBNE = testBoat.getTrueWindAngle(windDirectionS);
-        double WSBE = testBoat.getTrueWindAngle(windDirectionS, BoatHeadingE);
-        double WSBSE = testBoat.getTrueWindAngle(windDirectionS, BoatHeadingSE);
-        double WSBS = testBoat.getTrueWindAngle(windDirectionS, BoatHeadingS);
-        double WSBSW = testBoat.getTrueWindAngle(windDirectionS, BoatHeadingSW);
-        double WSBW = testBoat.getTrueWindAngle(windDirectionS, BoatHeadingW);
-        double WSBNW = testBoat.getTrueWindAngle(windDirectionS, BoatHeadingNW);
-        double WSBN2 = testBoat.getTrueWindAngle(windDirectionS, BoatHeadingN2);
+        testBoat.setHeading(BoatHeadingE);
+        double WSBE = testBoat.getTrueWindAngle(windDirectionS);
+        testBoat.setHeading(BoatHeadingSE);
+        double WSBSE = testBoat.getTrueWindAngle(windDirectionS);
+        testBoat.setHeading(BoatHeadingS);
+        double WSBS = testBoat.getTrueWindAngle(windDirectionS);
+        testBoat.setHeading(BoatHeadingSW);
+        double WSBSW = testBoat.getTrueWindAngle(windDirectionS);
+        testBoat.setHeading(BoatHeadingW);
+        double WSBW = testBoat.getTrueWindAngle(windDirectionS);
+        testBoat.setHeading(BoatHeadingNW);
+        double WSBNW = testBoat.getTrueWindAngle(windDirectionS);
+        testBoat.setHeading(BoatHeadingN2);
+        double WSBN2 = testBoat.getTrueWindAngle(windDirectionS);
 
         //Test Answers for wind direction South
         TestCase.assertEquals(0, WSBN, 0);
@@ -192,13 +229,20 @@ public class BoatTest {
         double WSWBN = testBoat.getTrueWindAngle(windDirectionSW); //WSWBN = Wind South West Boat North
         testBoat.setHeading(BoatHeadingNE);
         double WSWBNE = testBoat.getTrueWindAngle(windDirectionSW);
-        double WSWBE = testBoat.getTrueWindAngle(windDirectionSW, BoatHeadingE);
-        double WSWBSE = testBoat.getTrueWindAngle(windDirectionSW, BoatHeadingSE);
-        double WSWBS = testBoat.getTrueWindAngle(windDirectionSW, BoatHeadingS);
-        double WSWBSW = testBoat.getTrueWindAngle(windDirectionSW, BoatHeadingSW);
-        double WSWBW = testBoat.getTrueWindAngle(windDirectionSW, BoatHeadingW);
-        double WSWBNW = testBoat.getTrueWindAngle(windDirectionSW, BoatHeadingNW);
-        double WSWBN2 = testBoat.getTrueWindAngle(windDirectionSW, BoatHeadingN2);
+        testBoat.setHeading(BoatHeadingE);
+        double WSWBE = testBoat.getTrueWindAngle(windDirectionSW);
+        testBoat.setHeading(BoatHeadingSE);
+        double WSWBSE = testBoat.getTrueWindAngle(windDirectionSW);
+        testBoat.setHeading(BoatHeadingS);
+        double WSWBS = testBoat.getTrueWindAngle(windDirectionSW);
+        testBoat.setHeading(BoatHeadingSW);
+        double WSWBSW = testBoat.getTrueWindAngle(windDirectionSW);
+        testBoat.setHeading(BoatHeadingW);
+        double WSWBW = testBoat.getTrueWindAngle(windDirectionSW);
+        testBoat.setHeading(BoatHeadingNW);
+        double WSWBNW = testBoat.getTrueWindAngle(windDirectionSW);
+        testBoat.setHeading(BoatHeadingN2);
+        double WSWBN2 = testBoat.getTrueWindAngle(windDirectionSW);
 
         //Test Answers for wind direction South West
         TestCase.assertEquals(40, WSWBN, 0);
@@ -221,13 +265,20 @@ public class BoatTest {
         double WWBN = testBoat.getTrueWindAngle(windDirectionW); //WWBN = Wind West Boat North
         testBoat.setHeading(BoatHeadingNE);
         double WWBNE = testBoat.getTrueWindAngle(windDirectionW);
-        double WWBE = testBoat.getTrueWindAngle(windDirectionW, BoatHeadingE);
-        double WWBSE = testBoat.getTrueWindAngle(windDirectionW, BoatHeadingSE);
-        double WWBS = testBoat.getTrueWindAngle(windDirectionW, BoatHeadingS);
-        double WWBSW = testBoat.getTrueWindAngle(windDirectionW, BoatHeadingSW);
-        double WWBW = testBoat.getTrueWindAngle(windDirectionW, BoatHeadingW);
-        double WWBNW = testBoat.getTrueWindAngle(windDirectionW, BoatHeadingNW);
-        double WWBN2 = testBoat.getTrueWindAngle(windDirectionW, BoatHeadingN2);
+        testBoat.setHeading(BoatHeadingE);
+        double WWBE = testBoat.getTrueWindAngle(windDirectionW);
+        testBoat.setHeading(BoatHeadingSE);
+        double WWBSE = testBoat.getTrueWindAngle(windDirectionW);
+        testBoat.setHeading(BoatHeadingS);
+        double WWBS = testBoat.getTrueWindAngle(windDirectionW);
+        testBoat.setHeading(BoatHeadingSW);
+        double WWBSW = testBoat.getTrueWindAngle(windDirectionW);
+        testBoat.setHeading(BoatHeadingW);
+        double WWBW = testBoat.getTrueWindAngle(windDirectionW);
+        testBoat.setHeading(BoatHeadingNW);
+        double WWBNW = testBoat.getTrueWindAngle(windDirectionW);
+        testBoat.setHeading(BoatHeadingN2);
+        double WWBN2 = testBoat.getTrueWindAngle(windDirectionW);
 
         //Test Answers for wind direction West
         TestCase.assertEquals(90, WWBN, 0);
@@ -249,13 +300,20 @@ public class BoatTest {
         double WNWBN = testBoat.getTrueWindAngle(windDirectionNW); //WNWBN = Wind North West Boat North
         testBoat.setHeading(BoatHeadingNE);
         double WNWBNE = testBoat.getTrueWindAngle(windDirectionNW);
-        double WNWBE = testBoat.getTrueWindAngle(windDirectionNW, BoatHeadingE);
-        double WNWBSE = testBoat.getTrueWindAngle(windDirectionNW, BoatHeadingSE);
-        double WNWBS = testBoat.getTrueWindAngle(windDirectionNW, BoatHeadingS);
-        double WNWBSW = testBoat.getTrueWindAngle(windDirectionNW, BoatHeadingSW);
-        double WNWBW = testBoat.getTrueWindAngle(windDirectionNW, BoatHeadingW);
-        double WNWBNW = testBoat.getTrueWindAngle(windDirectionNW, BoatHeadingNW);
-        double WNWBN2 = testBoat.getTrueWindAngle(windDirectionNW, BoatHeadingN2);
+        testBoat.setHeading(BoatHeadingE);
+        double WNWBE = testBoat.getTrueWindAngle(windDirectionNW);
+        testBoat.setHeading(BoatHeadingSE);
+        double WNWBSE = testBoat.getTrueWindAngle(windDirectionNW);
+        testBoat.setHeading(BoatHeadingS);
+        double WNWBS = testBoat.getTrueWindAngle(windDirectionNW);
+        testBoat.setHeading(BoatHeadingSW);
+        double WNWBSW = testBoat.getTrueWindAngle(windDirectionNW);
+        testBoat.setHeading(BoatHeadingW);
+        double WNWBW = testBoat.getTrueWindAngle(windDirectionNW);
+        testBoat.setHeading(BoatHeadingNW);
+        double WNWBNW = testBoat.getTrueWindAngle(windDirectionNW);
+        testBoat.setHeading(BoatHeadingN2);
+        double WNWBN2 = testBoat.getTrueWindAngle(windDirectionNW);
 
         //Test Answers for wind direction North West
         TestCase.assertEquals(135, WNWBN, 0);
@@ -276,14 +334,21 @@ public class BoatTest {
         testBoat.setHeading(BoatHeadingN);
         double WN2BN = testBoat.getTrueWindAngle(windDirectionN2); //WN2BN = Wind North2 Boat North
         testBoat.setHeading(BoatHeadingNE);
-        double WN2BNE = testBoat.getTrueWindAngle(windDirectionN2, BoatHeadingNE);
-        double WN2BE = testBoat.getTrueWindAngle(windDirectionN2, BoatHeadingE);
-        double WN2BSE = testBoat.getTrueWindAngle(windDirectionN2, BoatHeadingSE);
-        double WN2BS = testBoat.getTrueWindAngle(windDirectionN2, BoatHeadingS);
-        double WN2BSW = testBoat.getTrueWindAngle(windDirectionN2, BoatHeadingSW);
-        double WN2BW = testBoat.getTrueWindAngle(windDirectionN2, BoatHeadingW);
-        double WN2BNW = testBoat.getTrueWindAngle(windDirectionN2, BoatHeadingNW);
-        double WN2BN2 = testBoat.getTrueWindAngle(windDirectionN2, BoatHeadingN2);
+        double WN2BNE = testBoat.getTrueWindAngle(windDirectionN2);
+        testBoat.setHeading(BoatHeadingE);
+        double WN2BE = testBoat.getTrueWindAngle(windDirectionN2);
+        testBoat.setHeading(BoatHeadingSE);
+        double WN2BSE = testBoat.getTrueWindAngle(windDirectionN2);
+        testBoat.setHeading(BoatHeadingS);
+        double WN2BS = testBoat.getTrueWindAngle(windDirectionN2);
+        testBoat.setHeading(BoatHeadingSW);
+        double WN2BSW = testBoat.getTrueWindAngle(windDirectionN2);
+        testBoat.setHeading(BoatHeadingW);
+        double WN2BW = testBoat.getTrueWindAngle(windDirectionN2);
+        testBoat.setHeading(BoatHeadingNW);
+        double WN2BNW = testBoat.getTrueWindAngle(windDirectionN2);
+        testBoat.setHeading(BoatHeadingN2);
+        double WN2BN2 = testBoat.getTrueWindAngle(windDirectionN2);
 
         //Test Answers for wind direction North2
         TestCase.assertEquals(180, WN2BN, 0);
