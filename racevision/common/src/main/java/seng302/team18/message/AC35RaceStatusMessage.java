@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * MessageBody that contains information about a race's status.
- * More specifically, current time of the race, race status, start time, wind direction and boat statuses.
+ * More specifically, current time of the race, race status, start time, wind direction, wind speed and boat statuses.
  */
 public class AC35RaceStatusMessage implements MessageBody {
 
@@ -12,6 +12,7 @@ public class AC35RaceStatusMessage implements MessageBody {
     private int raceStatus;
     private long startTime;
     private double windDirection;
+    private double windSpeed;
     private List<AC35BoatStatusMessage> boatStatus;
 
 
@@ -22,14 +23,16 @@ public class AC35RaceStatusMessage implements MessageBody {
      * @param raceStatus    of the race in Epoch milliseconds.
      * @param startTime     of the race.
      * @param windDirection of the race.
+     * @param windSpeed     of the race.
      * @param boatStatus    a list of the AC35BoatStatusMessages.
      */
     public AC35RaceStatusMessage(long currentTime, int raceStatus, long startTime,
-                                 double windDirection, List<AC35BoatStatusMessage> boatStatus) {
+                                 double windDirection, double windSpeed, List<AC35BoatStatusMessage> boatStatus) {
         this.currentTime = currentTime;
         this.raceStatus = raceStatus;
         this.startTime = startTime;
         this.windDirection = windDirection;
+        this.windSpeed = windSpeed;
         this.boatStatus = boatStatus;
     }
 
@@ -63,6 +66,15 @@ public class AC35RaceStatusMessage implements MessageBody {
      */
     public double getWindDirection() {
         return windDirection;
+    }
+
+    /**
+     * Getter for the wind speed of the race
+     *
+     * @return the current wind speed
+     */
+    public double getWindSpeed() {
+        return windSpeed;
     }
 
     /**

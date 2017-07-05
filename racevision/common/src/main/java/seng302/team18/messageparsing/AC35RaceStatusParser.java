@@ -48,6 +48,8 @@ public class AC35RaceStatusParser implements MessageBodyParser {
         final int START_TIME_LENGTH = 6;
         final int WIND_DIRECTION_INDEX = 18;
         final int WIND_DIRECTION_LENGTH = 2;
+        final int WIND_SPEED_INDEX = 20;
+        final int WIND_SPEED_LENGTH = 2;
         final int BOAT_SOURCEID_INDEX =  24;
         final int BOAT_SOURCEID_LENGTH = 4;
         final int BOAT_STATUS_INDEX = 28;
@@ -62,6 +64,7 @@ public class AC35RaceStatusParser implements MessageBodyParser {
         int raceStatus = ByteCheck.byteToIntConverter(bytes, RACE_STATUS_INDEX, RACE_STATUS_LENGTH);
         long startTime = ByteCheck.byteToLongConverter(bytes, START_TIME_INDEX, START_TIME_LENGTH);
         double windDirection = ByteCheck.byteToIntConverter(bytes, WIND_DIRECTION_INDEX, WIND_DIRECTION_LENGTH) * BYTE_HEADING_TO_DOUBLE;
+        double windSpeed = ByteCheck.byteToIntConverter(bytes, WIND_SPEED_INDEX, WIND_SPEED_LENGTH);
         int i = 0;
         while (BOAT_SOURCEID_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i) < bytes.length) {
             int boatID = ByteCheck.byteToIntConverter(bytes, BOAT_SOURCEID_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), BOAT_SOURCEID_LENGTH);
@@ -72,6 +75,6 @@ public class AC35RaceStatusParser implements MessageBodyParser {
             boatStates.add(boatStatusMessage);
             i += 1;
         }
-        return new AC35RaceStatusMessage(currentTime, raceStatus, startTime, windDirection, boatStates);
+        return new AC35RaceStatusMessage(currentTime, raceStatus, startTime, windDirection, windSpeed, boatStates);
     }
 }

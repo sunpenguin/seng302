@@ -83,7 +83,7 @@ public class CourseTest {
         markRoundings.add(new MarkRounding(1, centreC));
         markRoundings.add(new MarkRounding(2, finishLine));
 
-        course = new Course(compoundMarks, boundaries, 0, ZoneId.of( "UTC-03:00"), markRoundings);
+        course = new Course(compoundMarks, boundaries, 0, 0, ZoneId.of( "UTC-03:00"), markRoundings);
 
     }
 

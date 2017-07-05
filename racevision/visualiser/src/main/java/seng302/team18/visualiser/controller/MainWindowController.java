@@ -11,18 +11,15 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
@@ -54,12 +51,10 @@ public class MainWindowController implements Observer {
     @FXML private TableColumn<Boat, String> boatColorColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
+    @FXML private Label speedLabel;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
-    @FXML private Button setAnnotations;
-    @FXML private Button toggle;
     @FXML private Slider slider;
-    @FXML private WebView map;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -68,13 +63,10 @@ public class MainWindowController implements Observer {
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
-    private BackgroundRenderer backgroundRenderer;
     private RaceClock raceClock;
-    private WindDirection windDirection;
+    private WindDisplay windDisplay;
     private PixelMapper pixelMapper;
     private Map<AnnotationType, Boolean> importantAnnotations;
-
-    private Stage stage;
 
     @FXML
     public void initialize() {
@@ -92,21 +84,6 @@ public class MainWindowController implements Observer {
     private void zoomOutButtonAction() {
         pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
         pixelMapper.setZoomLevel(0);
-    }
-
-
-    @FXML void closeAppAction(){
-        stage.close();
-    }
-
-
-    /**
-     * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
-     */
-    private void loadIcon() {
-        ImageView icon = new ImageView("/images/boat-310164_640.png");
-        icon.setFitHeight(18);
-        icon.setFitWidth(18);
     }
 
     /**
@@ -342,9 +319,9 @@ public class MainWindowController implements Observer {
      * retrieves the wind direction, scales the size of the arrow and then draws it on the Group
      */
     private void startWindDirection() {
-        arrow.setScaleX(0.4);
-        windDirection = new WindDirection(race, arrow, race.getCourse().getWindDirection());
-        windDirection.start();
+//        arrow.setScaleX(0.4);
+        windDisplay = new WindDisplay(race, arrow, speedLabel);
+        windDisplay.start();
     }
 
 
@@ -358,8 +335,7 @@ public class MainWindowController implements Observer {
         this.race = race;
         setCourseCenter(race.getCourse());
 
-        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane, map.getEngine());
-        backgroundRenderer = new BackgroundRenderer(pixelMapper, race, map.getEngine());
+        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
@@ -367,7 +343,7 @@ public class MainWindowController implements Observer {
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
 
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), backgroundRenderer);
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel));
         startWindDirection();
 
         for (Boat boat : race.getStartingList()) {
@@ -382,8 +358,6 @@ public class MainWindowController implements Observer {
         pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
 
         // These listeners fire whenever the northern or southern bounds of the map change.
-        backgroundRenderer.northProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
-        backgroundRenderer.southProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
 
         setUpTable(raceRenderer.boatColors());
 
@@ -397,7 +371,6 @@ public class MainWindowController implements Observer {
      * (For example, when zooming in, the course features are required to change)
      */
     public void redrawFeatures() {
-        backgroundRenderer.renderBackground();
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
         raceRenderer.reDrawTrails();
@@ -451,13 +424,5 @@ public class MainWindowController implements Observer {
         GPSCalculations gpsCalculations = new GPSCalculations();
         List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(race.getCourse());
         race.getCourse().setCentralCoordinate(gpsCalculations.midPoint(extremes.get(0), extremes.get(1)));
-    }
-
-    public Stage getStage() {
-        return stage;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
 }
