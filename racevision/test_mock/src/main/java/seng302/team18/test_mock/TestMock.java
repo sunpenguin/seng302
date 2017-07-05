@@ -114,8 +114,6 @@ public class TestMock {
             race.setStatus((byte) 3);
             race.updateBoats((timeCurr - timeLast));
 
-            accelerateBoat(race, race.getStartingList().get(2), 0.1);
-            accelerateBoat(race, race.getStartingList().get(3), 0.05);
             changeWindSpeed(5);
 
             // Send mark rounding messages for all mark roundings that occured
@@ -174,12 +172,6 @@ public class TestMock {
         int raceID = raceMessage.getRaceID();
 
         race = new Race(startingList, course, raceID);
-    }
-
-    private void accelerateBoat(Race race, Boat boat, double acceleration) {
-        if (!race.getFinishedList().contains(boat)) {
-            boat.setSpeed(boat.getSpeed() + acceleration);
-        }
     }
 
     private void changeWindSpeed(double speedChange){

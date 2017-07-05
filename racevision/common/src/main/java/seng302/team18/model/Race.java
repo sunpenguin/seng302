@@ -54,19 +54,6 @@ public class Race {
         this.id = raceId;
         this.status = 0;
         setCourseForBoats();
-        setInitialSpeed();
-    }
-
-
-    /**
-     * Sets the speed of the boats at the start line
-     */
-    private void setInitialSpeed() {
-        int speed = 200;
-        for (Boat b : startingList) {
-            b.setSpeed(speed); //kph
-            speed -= 50;
-        }
     }
 
 
@@ -100,6 +87,8 @@ public class Race {
                 boat.setCoordinate(midPoint);
                 // Set Heading
                 boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
+                double tws = boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection());
+                boat.setSpeed(tws);
             }
         }
     }
@@ -205,6 +194,8 @@ public class Race {
         }
         GPSCalculations gps = new GPSCalculations();
         boat.setHeading(gps.getBearing(boat.getCoordinate(), boat.getDestination()));
+        double tws = boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection());
+        boat.setSpeed(tws);
     }
 
 
