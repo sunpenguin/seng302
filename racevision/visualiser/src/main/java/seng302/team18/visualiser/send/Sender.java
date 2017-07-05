@@ -33,8 +33,12 @@ public class Sender {
      * @param body of the message to be sent
      * @throws IOException
      */
-    public void send(MessageBody body) throws IOException {
-        MessageEncoder composer = factory.getComposer(body.getType());
-        outStream.write(composer.encode(body));
+    public void send(MessageBody body) {
+        try {
+            MessageEncoder composer = factory.getComposer(body.getType());
+            outStream.write(composer.encode(body));
+        } catch (Exception e) {
+            //
+        }
     }
 }

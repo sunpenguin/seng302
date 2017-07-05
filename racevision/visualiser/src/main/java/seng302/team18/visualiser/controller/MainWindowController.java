@@ -42,7 +42,6 @@ import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * The controller class for the Main Window.
  * The main window consists of the right hand pane with various displays and the race on the left.
@@ -83,8 +82,11 @@ public class MainWindowController implements Observer {
 
     @FXML
     public void initialize() {
-//        installKeyHandler();
-
+        try {
+            installKeyHandler();
+        } catch (IOException e){
+            //
+        }
         setSliderListener();
         sliderSetup();
         fpsOn = true;
@@ -114,31 +116,43 @@ public class MainWindowController implements Observer {
         icon.setFitWidth(18);
     }
 
-    private void installKeyHandler() {
-            final EventHandler<KeyEvent> keyEventHandler =
-                    new EventHandler<KeyEvent>() {
-                        public void handle(final KeyEvent keyEvent) {
-                            if (keyEvent.getCode() != null) {
-                                BoatActionMessage message;
-                                switch (keyEvent.getCode()){
-                                    case SPACE:
-                                        message = new BoatActionMessage(true, sailIn, !sailIn, true, false, false);
-                                    case ENTER:
-                                        message = new BoatActionMessage(false, sailIn, !sailIn, true, false, false);
-                                    case UP:
-                                        message = new BoatActionMessage(false, sailIn, !sailIn, false, true, false);
-                                    case DOWN:
-                                        message = new BoatActionMessage(false, sailIn, !sailIn, false, false, true);
-                                    case SHIFT:
-                                        message = new BoatActionMessage(false, sailIn, !sailIn, false, false, false);
-                                        sailIn = !sailIn;
-                                }
-                                }
-                            }
 
-                    };
-            raceViewPane.setOnKeyPressed(keyEventHandler);
+    private void installKeyHandler() throws IOException {
+        sender = new Sender("127.0.0.1", 4942, new ControllerMessageFactory());
+        final EventHandler<KeyEvent> keyEventHandler =
+            new EventHandler<KeyEvent>() {
+                public void handle(final KeyEvent keyEvent) {
+                    if (keyEvent.getCode() != null) {
+                        BoatActionMessage message = null;
+                        switch (keyEvent.getCode()){
+                            case SPACE:
+                                message = new BoatActionMessage(true, sailIn, !sailIn, false,
+                                        false, false);
+                                break;
+                            case ENTER:
+                                message = new BoatActionMessage(false, sailIn, !sailIn, true,
+                                        false, false);
+                                break;
+                            case UP:
+                                message = new BoatActionMessage(false, sailIn, !sailIn, false,
+                                        true, false);
+                                break;
+                            case DOWN:
+                                message = new BoatActionMessage(false, sailIn, !sailIn, false,
+                                        false, true);
+                                break;
+                            case SHIFT:
+                                sailIn = !sailIn;
+                                message = new BoatActionMessage(false, sailIn, !sailIn, false,
+                                        false, false);
+                        }
+                        sender.send(message);
+                    }
+                }
+            };
+        raceViewPane.setOnKeyPressed(keyEventHandler);
     }
+
 
     /**
      * initialises the sparkline graph.
