@@ -32,6 +32,7 @@ public class TestMock {
         this.server = new Server(SERVER_PORT, regattaXML, boatsXML, raceXML);
     }
 
+
     /**
      * The messages to be sent on a schedule during race simulation
      */
