@@ -8,6 +8,7 @@ import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceStatus;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -87,6 +88,6 @@ public class RaceTimeInterpreterTest {
         ZonedDateTime expected = ZonedDateTime.ofInstant(Instant.EPOCH, race.getCourse().getTimeZone()).plusSeconds(2);
         Assert.assertEquals(expected, race.getStartTime());
         Assert.assertEquals(0, race.getId());
-        Assert.assertEquals(0, race.getStatus());
+        Assert.assertEquals(RaceStatus.NOT_ACTIVE, race.getStatus());
     }
 }
