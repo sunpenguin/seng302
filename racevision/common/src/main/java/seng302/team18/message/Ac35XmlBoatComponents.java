@@ -41,14 +41,11 @@ public enum Ac35XmlBoatComponents {
     ATTRIBUTE_X("X"),
     ATTRIBUTE_Y("Y"),
     ATTRIBUTE_Z("Z"),
-    ATTRIBUTE_BOAT_TYPE("Type"),
     ATTRIBUTE_SOURCE_ID("SourceID"),
     ATTRIBUTE_HULL_NUMBER("HullNumber"),
     ATTRIBUTE_NAME_STOWE("StoweName"),
     ATTRIBUTE_NAME_SHORT("ShortName"),
-    ATTRIBUTE_NAME_BOAT("BoatName"),
-
-    VALUE_YACHT("Yacht");
+    ATTRIBUTE_NAME_BOAT("BoatName");
 
 
     private final String value;

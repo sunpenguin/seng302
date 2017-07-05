@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 public abstract class XmlEncoder<T extends XmlMessage> {
 
     // TODO should be moved elsewhere?
-    protected final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss-Z");
+    protected final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
 
     /**
      * Encodes a XML message to a string

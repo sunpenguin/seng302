@@ -8,6 +8,7 @@ import org.xml.sax.SAXException;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.Ac35XmlBoatComponents;
 import seng302.team18.model.Boat;
+import seng302.team18.model.BoatType;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -80,7 +81,7 @@ public class AC35XMLBoatParser implements MessageBodyParser {
                 Node boatNode = boatSequenceNodeList.item(i);
                 if (boatNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element boatElement = (Element) boatNode;
-                    if (boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_BOAT_TYPE.toString()).equals(Ac35XmlBoatComponents.VALUE_YACHT.toString())) {
+                    if (boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_TYPE.toString()).equals(BoatType.YACHT.toString())) {
                         String boatName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_BOAT.toString());
                         String boatShortName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_SHORT.toString());
                         int boatID = Integer.parseInt(boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_SOURCE_ID.toString()));
