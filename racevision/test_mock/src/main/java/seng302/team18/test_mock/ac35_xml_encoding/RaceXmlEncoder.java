@@ -158,8 +158,8 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
             elementMark.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_NAME.toString(), mark.getName());
 
             Coordinate coordinate = mark.getCoordinate();
-            elementMark.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_LATITUDE.toString(), coordinate.getLatitude().toString());
-            elementMark.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_LONGITUDE.toString(), coordinate.getLongitude().toString());
+            elementMark.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_TARGET_LATITUDE.toString(), coordinate.getLatitude().toString());
+            elementMark.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_TARGET_LONGITUDE.toString(), coordinate.getLongitude().toString());
 
             elementMark.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_SOURCE_ID.toString(), mark.getId().toString());
 
