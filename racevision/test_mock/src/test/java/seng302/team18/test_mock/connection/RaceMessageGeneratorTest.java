@@ -6,12 +6,14 @@ import seng302.team18.model.Race;
 import seng302.team18.test_mock.TestMock;
 import seng302.team18.util.ByteCheck;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by jth102 on 25/04/17.
+ * Test for RaceMessageGenerator.
  */
 public class RaceMessageGeneratorTest {
     private final int VERSION_L = 1;
@@ -49,7 +51,7 @@ public class RaceMessageGeneratorTest {
 
 
     @Test
-    public void raceStatusMessageTest() {
+    public void raceStatusMessageTest() throws TransformerException, ParserConfigurationException {
         TestMock testMock = new TestMock();
         Race testRace = testMock.testRun();
         byte[] generatedBytes;
