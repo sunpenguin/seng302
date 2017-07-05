@@ -1,53 +1,28 @@
-package seng302.team18.util;
+package seng302.team18.model;
 
-import seng302.team18.model.Polar;
-
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class to apply polar calculations to boats
+ * Created by sbe67 on 5/07/17.
  */
-public class PolarCalculator {
-    private List<Polar> polars;
+public abstract class PolarPattern {
+
+    private Map<Double, Polar> windSpeedToPolarMap;
 
 
-    public PolarCalculator(List<Polar> polars) {
-        this.polars = polars;
+    public PolarPattern() {
+        windSpeedToPolarMap = createMap();
     }
 
 
     /**
-     * Gets true wind angle for boat.
+     * Adds a new polar to the maps of polars.
+     * Note: Polars are mapped by their windSpeed
      *
-     * @param windHeading Heading of the wind
-     * @param heading     Heading of the boat
-     * @return True wind angle for the boat.
+     * @param polarToAdd Polar, polar to be added to the map of polars
      */
-    public double getTrueWindAngle(double windHeading, double heading) {
-        double theta = 180 - windHeading;
-        double boatPlusTheta = heading + theta;
-        double windPlusTheta = windHeading + theta; //will be 180
-
-        if (boatPlusTheta > 360) {
-            boatPlusTheta = boatPlusTheta - 360;
-        }
-
-        if (boatPlusTheta < 0) {
-            boatPlusTheta = 360 + boatPlusTheta;
-        }
-
-        double trueWindAngle;
-
-        if (boatPlusTheta > 180) {
-            double angleFrom180 = boatPlusTheta - 180;
-            trueWindAngle = 180 - angleFrom180;
-        } else {
-            trueWindAngle = boatPlusTheta;
-        }
-
-        return trueWindAngle;
-    }
+    abstract protected Map<Double, Polar> createMap();
 
 
     /**
@@ -60,10 +35,10 @@ public class PolarCalculator {
      */
     public Polar getPolarForWindSpeed(double windSpeed) {
         //Set initial
-        Polar closestPolar = polars.get(0);
+        Polar closestPolar = windSpeedToPolarMap.get(0);
         double closestDistance = Math.abs(windSpeed - closestPolar.getWindSpeed());
 
-        for (Polar currentPolar : polars) {
+        for (Polar currentPolar : windSpeedToPolarMap.values()) {
 
             double currentDistance = Math.abs(windSpeed - currentPolar.getWindSpeed());
 
@@ -108,5 +83,4 @@ public class PolarCalculator {
 
         return polar.getMapSpeedAtAngles().get(bestAngle);
     }
-
 }
