@@ -26,10 +26,10 @@ public class TestMock {
     private Race race;
 
     private final String regattaXML = "/regatta_test1.xml";
-    private final String boatsXML = "/boats_test2.xml";
-    private final String raceXML = "/race_test2.xml";
-//    private String boatXML;
-//    private String raceXML;
+//    private final String boatsXML = "/boats_test2.xml";
+//    private final String raceXML = "/race_test2.xml";
+    private String boatXML;
+    private String raceXML;
 
     private AC35XMLRegattaMessage regattaMessage;
     private AC35XMLBoatMessage initialBoatMessage;
@@ -45,10 +45,10 @@ public class TestMock {
     private List<ScheduledMessageGenerator> scheduledMessages = new ArrayList<>();
 
     //TODO give real port
-    private Server server = new Server(SERVER_PORT, regattaXML, boatsXML, raceXML);
+    private Server server;
 
     public void run() throws TransformerException, ParserConfigurationException{
-//        setUpFiles(); // Also set up the server
+        setUpFiles(); // Also set up the server
         readFiles();
         generateClasses();
 
@@ -59,27 +59,27 @@ public class TestMock {
     }
 
 
-//    /**
-//     * Generate race.xml and boat.xml files from the default initial AC35 XML message.
-//     */
-//    private void setUpFiles() throws TransformerException, ParserConfigurationException{
-//        // race.xml
-//        RaceXmlEncoder raceEncoder = new RaceXmlEncoder();
-//        String initialRaceXML = "/race_test2.xml";
-//        AC35XMLRaceParser raceParser = new AC35XMLRaceParser();
-//        initialRaceMessage = raceParser.parse(this.getClass().getResourceAsStream(initialRaceXML));
-//        raceXML = String.valueOf(raceEncoder.encode(initialRaceMessage));
-//
-//        // boat.xml
-//        BoatsXmlEncoder boatEncoder = new BoatsXmlEncoder();
-//        String initialBoatXML = "/boats_test2.xml";
-//        AC35XMLBoatParser boatParser = new AC35XMLBoatParser();
-//        initialBoatMessage = boatParser.parse(this.getClass().getResourceAsStream(initialBoatXML));
-//        boatXML = String.valueOf(boatEncoder.encode(initialBoatMessage));
-//
-//        // create a new server
-//        server = new Server(SERVER_PORT, regattaXML, boatXML, raceXML);
-//    }
+    /**
+     * Generate race.xml and boat.xml files from the default initial AC35 XML message.
+     */
+    private void setUpFiles() throws TransformerException, ParserConfigurationException{
+        // race.xml
+        RaceXmlEncoder raceEncoder = new RaceXmlEncoder();
+        String initialRaceXML = "/race_test2.xml";
+        AC35XMLRaceParser raceParser = new AC35XMLRaceParser();
+        initialRaceMessage = raceParser.parse(this.getClass().getResourceAsStream(initialRaceXML));
+        raceXML = raceEncoder.encode(initialRaceMessage);
+
+        // boat.xml
+        BoatsXmlEncoder boatEncoder = new BoatsXmlEncoder();
+        String initialBoatXML = "/boats_test2.xml";
+        AC35XMLBoatParser boatParser = new AC35XMLBoatParser();
+        initialBoatMessage = boatParser.parse(this.getClass().getResourceAsStream(initialBoatXML));
+        boatXML = boatEncoder.encode(initialBoatMessage);
+
+        // create a new server
+        server = new Server(SERVER_PORT, initialRaceMessage);
+    }
 
 
     /**
@@ -90,10 +90,11 @@ public class TestMock {
         regattaMessage = regattaParser.parse(this.getClass().getResourceAsStream(regattaXML));
 
         AC35XMLBoatParser boatsParser = new AC35XMLBoatParser();
-        boatMessage = boatsParser.parse(this.getClass().getResourceAsStream(boatsXML));
+        boatMessage = boatsParser.parse(boatXML.getBytes());
 
         AC35XMLRaceParser raceParser = new AC35XMLRaceParser();
-        raceMessage = raceParser.parse(this.getClass().getResourceAsStream(raceXML));
+        System.out.println(raceXML);
+        raceMessage = raceParser.parse(raceXML.getBytes());
     }
 
 
@@ -225,7 +226,7 @@ public class TestMock {
 
 
     public String getBoatsXML() {
-        return boatsXML;
+        return boatXML;
     }
 
 

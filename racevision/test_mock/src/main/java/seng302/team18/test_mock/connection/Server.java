@@ -1,5 +1,7 @@
 package seng302.team18.test_mock.connection;
 
+import seng302.team18.message.AC35XMLRaceMessage;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketException;
@@ -17,11 +19,13 @@ public class Server {
     private final int MAX_CLIENT_CONNECTION = 6;
     private int clientConnectionNum = 0;
 
-    public Server(int port, String regattaXML, String boatsXML, String raceXML) {
+    private final AC35XMLRaceMessage raceMessage;
+
+    public Server(int port, AC35XMLRaceMessage raceMessage) {
         this.PORT = port;
-        regattaXMLMessageGenerator = new XMLMessageGenerator((byte)5, regattaXML);
-        boatsXMLMessageGenerator = new XMLMessageGenerator((byte)7, boatsXML);
-        raceXMLMessageGenerator = new XMLMessageGenerator((byte)6, raceXML);
+        this.raceMessage = raceMessage;
+
+        raceXMLMessageGenerator = new XmlMessageGeneratorRace(raceMessage);
     }
 
 
