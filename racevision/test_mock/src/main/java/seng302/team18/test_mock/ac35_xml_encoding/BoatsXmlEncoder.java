@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.Ac35XmlBoatComponents;
 import seng302.team18.model.Boat;
+import seng302.team18.model.BoatType;
 import seng302.team18.model.Mark;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -101,9 +102,41 @@ public class BoatsXmlEncoder extends XmlEncoder<AC35XMLBoatMessage> {
         Element element = doc.createElement(Ac35XmlBoatComponents.ELEMENT_BOATS.toString());
 
         for (Boat boat: boats) {
-//            encodeBoat()
+            element.appendChild(encodeBoat(doc, boat));
         }
 
+        return element;
+    }
+
+    private Element encodeBoat(Document doc, Boat boat) {
+        final Double DEFAULT_GPS_X = 0.001;
+        final Double DEFAULT_GPS_Y = 0.625;
+        final Double DEFAULT_GPS_Z = 1.738;
+        final Double DEFAULT_FLAG_X = 0.000;
+        final Double DEFAULT_FLAG_Y = 4.233;
+        final Double DEFAULT_FLAG_Z = 21.496;
+        final String DEFAULT_HULL_NUMBER = "AC4500";
+        final String DEFAULT_STOWE_NAME = "ABC";
+
+        Element element = doc.createElement(Ac35XmlBoatComponents.ELEMENT_BOAT.toString());
+        element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_SOURCE_ID.toString(), boat.getId().toString());
+        element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_TYPE.toString(), BoatType.YACHT.toString());
+        element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_HULL_NUMBER.toString(), DEFAULT_HULL_NUMBER);
+        element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_STOWE.toString(), DEFAULT_STOWE_NAME);
+        element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_SHORT.toString(), boat.getShortName());
+        element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_BOAT.toString(), boat.getName());
+
+        Element gpsPosition = doc.createElement(Ac35XmlBoatComponents.ELEMENT_GPS_POSITION.toString());
+        gpsPosition.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_Z.toString(), DEFAULT_GPS_Z.toString());
+        gpsPosition.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_Y.toString(), DEFAULT_GPS_Y.toString());
+        gpsPosition.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_X.toString(), DEFAULT_GPS_X.toString());
+        element.appendChild(gpsPosition);
+
+        Element flagPosition = doc.createElement(Ac35XmlBoatComponents.ELEMENT_FLAG_POSITION.toString());
+        flagPosition.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_Z.toString(), DEFAULT_FLAG_Z.toString());
+        flagPosition.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_Y.toString(), DEFAULT_FLAG_Y.toString());
+        flagPosition.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_X.toString(), DEFAULT_FLAG_X.toString());
+        element.appendChild(flagPosition);
 
         return element;
     }
