@@ -116,6 +116,12 @@ public class TestMock implements ParticipantManager {
     @Override
     public void addBoat(Boat boat) {
         race.addParticipant(boat);
+
+        System.out.print("Boats: ");
+        for (Boat b : race.getStartingList()) {
+            System.out.print(b.getName() + " " + b.getId() + ", ");
+        }
+        System.out.println();
     }
 
 
@@ -141,6 +147,8 @@ public class TestMock implements ParticipantManager {
         do {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
+
+            System.out.println(race.getStartTime().toString());
 
             if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusMinutes(TIME_WARNING))) {
                 race.setStatus(RaceStatus.WARNING);
