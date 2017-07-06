@@ -21,29 +21,13 @@ public class Server {
     private ServerSocket serverSocket;
     private final int PORT;
 
-    private final AC35XMLRaceMessage raceMessage;
-    private final AC35XMLBoatMessage boatMessage;
-    private final AC35XMLRegattaMessage regattaMessage;
-
-    private XMLMessageGenerator regattaXMLMessageGenerator;
-    private XMLMessageGenerator boatsXMLMessageGenerator;
-    private XMLMessageGenerator raceXMLMessageGenerator;
-
     private final ParticipantManager participantManager;
 
 
-    public Server(int port, ParticipantManager manager, AC35XMLRaceMessage raceMessage, AC35XMLBoatMessage boatMessage,
-                  AC35XMLRegattaMessage regattaMessage) {
+    public Server(int port, ParticipantManager manager) {
         this.PORT = port;
         this.participantManager = manager;
 
-        this.raceMessage = raceMessage;
-        this.boatMessage = boatMessage;
-        this.regattaMessage = regattaMessage;
-
-        raceXMLMessageGenerator = new XmlMessageGeneratorRace(raceMessage);
-        boatsXMLMessageGenerator = new XmlMessageGeneratorBoats(boatMessage);
-        regattaXMLMessageGenerator = new XmlMessageGeneratorRegatta(regattaMessage);
     }
 
 
@@ -79,7 +63,6 @@ public class Server {
             clientList.getClients().add(client);
             System.out.println("Player " + clientList.getClients().size() + " joined!");
 
-            client.sendMessage(regattaXMLMessageGenerator.getMessage());
             addParticipant();
 
         } catch (SocketTimeoutException e) {
@@ -106,12 +89,7 @@ public class Server {
         int number = clientList.getClients().size();
         Boat boat = boats[number];
 
-        raceMessage.getParticipantIDs().add(boat.getId());
-        boatMessage.getBoats().add(boat);
         participantManager.addBoat(boat);
-
-        broadcast(raceXMLMessageGenerator.getMessage());
-        broadcast(boatsXMLMessageGenerator.getMessage());
     }
 
     /**
@@ -178,7 +156,7 @@ public class Server {
                 if (clientList.getClients().size() < MAX_CLIENT_CONNECTION) {
                     acceptClientConnection();
                 } else {
-                    stopListening();
+                    listening = false;
                 }
             }
         }

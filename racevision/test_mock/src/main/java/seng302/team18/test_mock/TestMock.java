@@ -24,15 +24,10 @@ import static java.lang.Thread.sleep;
  */
 public class TestMock implements ParticipantManager {
 
-    private Course course;
     private String regattaXML;
     private String boatsXML;
     private String raceXML;
     private Race race;
-
-    private AC35XMLRegattaMessage regattaMessage;
-    private AC35XMLBoatMessage boatMessage;
-    private AC35XMLRaceMessage raceMessage;
 
     private final static int SERVER_PORT = 5005;
     private Server server;
@@ -43,7 +38,7 @@ public class TestMock implements ParticipantManager {
         this.boatsXML = boatsXML;
         this.raceXML = raceXML;
         this.race = race;
-        this.server = new Server(SERVER_PORT, regattaXML, boatsXML, raceXML);
+//        this.server = new Server(SERVER_PORT, regattaXML, boatsXML, raceXML);
     }
 
 
@@ -53,33 +48,12 @@ public class TestMock implements ParticipantManager {
     private List<ScheduledMessageGenerator> scheduledMessages = new ArrayList<>();
 
 
-    /**
-     * Read each test xml file and fill the containers so classes can be made
-     */
-    private void readFiles() {
-        AC35XMLRegattaParser regattaParser = new AC35XMLRegattaParser();
-        regattaMessage = regattaParser.parse(this.getClass().getResourceAsStream(regattaXML));
-
-        AC35XMLBoatParser boatsParser = new AC35XMLBoatParser();
-        boatMessage = boatsParser.parse(this.getClass().getResourceAsStream(boatsXML));
-
-        AC35XMLRaceParser raceParser = new AC35XMLRaceParser();
-        raceMessage = raceParser.parse(this.getClass().getResourceAsStream(raceXML));
-    }
-
-
     public void run() {
-
-        readFiles();
-        generateClasses();
-
         server.openServer();
-
-        initialiseScheduledMessages();
         runSimulation();
-
         server.closeServer();
     }
+
 
     @Override
     public void addBoat(Boat boat) {
@@ -90,18 +64,6 @@ public class TestMock implements ParticipantManager {
             System.out.print(b.getName() + " " + b.getId() + ", ");
         }
         System.out.println();
-    }
-
-
-    /**
-     * Initialise the generators for scheduled messages
-     */
-    private void initialiseScheduledMessages() {
-        for(Boat b : race.getStartingList()){
-            scheduledMessages.add(new BoatMessageGenerator(b));
-        }
-        scheduledMessages.add(new RaceMessageGenerator(race));
-        scheduledMessages.add(new HeartBeatMessageGenerator());
     }
 
 
