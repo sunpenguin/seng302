@@ -17,6 +17,16 @@ public class SocketMessageReceiver {
     private MessageParserFactory parserFactory;
 
 
+    public SocketMessageReceiver(Socket socket, MessageParserFactory parserFactory) throws IOException {
+        this.parserFactory = parserFactory;
+        this.socket = socket;
+        inStream = socket.getInputStream();
+        if (!inStream.markSupported()) {
+            inStream = new BufferedInputStream(inStream);
+        }
+    }
+
+
     public SocketMessageReceiver(String host, int portNumber, MessageParserFactory parserFactory) throws IOException {
         this.parserFactory = parserFactory;
         socket = new Socket(host, portNumber);

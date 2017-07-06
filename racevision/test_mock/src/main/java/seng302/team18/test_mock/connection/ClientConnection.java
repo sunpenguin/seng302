@@ -38,7 +38,7 @@ public class ClientConnection {
         }
     }
 
-    public Socket getClient() {
+    public Socket getSocket() {
         return client;
     }
 

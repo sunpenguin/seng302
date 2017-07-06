@@ -13,8 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static java.lang.Thread.sleep;
 
@@ -22,16 +21,24 @@ import static java.lang.Thread.sleep;
 /**
  * Class to handle a mock race
  */
-public class TestMock implements ParticipantManager {
+public class TestMock implements Observer {
 
     private Race race;
     private final static int SERVER_PORT = 5005;
     private Server server;
+    private List<Boat> boats = Arrays.asList(new Boat("Emirates Team New Zealand", "TEAM New Zealand", 121),
+            new Boat("Oracle Team USA", "TEAM USA", 122),
+            new Boat("Artemis Racing", "TEAM SWE", 123),
+            new Boat("Groupama Team France", "TEAM France", 124),
+            new Boat("Land Rover BAR", "TEAM Britain", 125),
+            new Boat("Softbank Team Japan", "TEAM Japan", 126));
+
 
 
     public TestMock(Race race) {
         this.race = race;
-        this.server = new Server(SERVER_PORT, this);
+        this.server = new Server(SERVER_PORT);
+        server.addObserver(this);
     }
 
 
@@ -49,14 +56,12 @@ public class TestMock implements ParticipantManager {
 
 
     @Override
-    public void addBoat(Boat boat) {
-        race.addParticipant(boat);
-
-        System.out.print("Boats: ");
-        for (Boat b : race.getStartingList()) {
-            System.out.print(b.getName() + " " + b.getId() + ", ");
+    public void update(Observable o, Object arg) {
+        if (arg instanceof ClientConnection) {
+            ClientConnection client = (ClientConnection) arg;
+            client.sendMessage(new byte[10]); // TODO send the real message
+            race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
         }
-        System.out.println();
     }
 
 

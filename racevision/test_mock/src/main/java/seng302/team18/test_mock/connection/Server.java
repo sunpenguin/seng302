@@ -1,33 +1,26 @@
 package seng302.team18.test_mock.connection;
 
-import seng302.team18.message.AC35XMLBoatMessage;
-import seng302.team18.message.AC35XMLRaceMessage;
-import seng302.team18.message.AC35XMLRegattaMessage;
-import seng302.team18.model.Boat;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.Observable;
 
 /**
  * Streaming server to connect test mock with clients.
  */
-public class Server {
+public class Server extends Observable {
     private final ClientList clientList = new ClientList();
-    private final ConnectionListener listener = new ConnectionListener();
+    private final ServerConnectionListener listener = new ServerConnectionListener();
     private static final int MAX_CLIENT_CONNECTION = 6;
 
     private ServerSocket serverSocket;
     private final int PORT;
 
-    private final ParticipantManager participantManager;
 
 
-    public Server(int port, ParticipantManager manager) {
+    public Server(int port) {
         this.PORT = port;
-        this.participantManager = manager;
-
     }
 
 
@@ -63,7 +56,8 @@ public class Server {
             clientList.getClients().add(client);
             System.out.println("Player " + clientList.getClients().size() + " joined!");
 
-            addParticipant();
+            setChanged();
+            notifyObservers(client);
 
         } catch (SocketTimeoutException e) {
             // The time out expired, no big deal
@@ -76,22 +70,6 @@ public class Server {
         listener.stopListening();
     }
 
-    // TODO should the server have this responsibility?
-    private final Boat[] boats = {
-            new Boat("Emirates Team New Zealand", "TEAM New Zealand", 121),
-            new Boat("Oracle Team USA", "TEAM USA", 122),
-            new Boat("Artemis Racing", "TEAM SWE", 123),
-            new Boat("Groupama Team France", "TEAM France", 124),
-            new Boat("Land Rover BAR", "TEAM Britain", 125),
-            new Boat("Softbank Team Japan", "TEAM Japan", 126)
-    };
-
-    private void addParticipant() {
-        int number = clientList.getClients().size() - 1;
-        Boat boat = boats[number];
-
-        participantManager.addBoat(boat);
-    }
 
     /**
      * Closes any open client connections and closes the server
@@ -101,7 +79,7 @@ public class Server {
             try {
                 client.close();
             } catch (IOException e) {
-                System.err.println("Failed to close client connection to: " + client.getClient().getInetAddress().toString());
+                System.err.println("Failed to close client connection to: " + client.getSocket().getInetAddress().toString());
             }
         }
 
@@ -142,7 +120,7 @@ public class Server {
     /**
      * Thread that listens for incoming connections.
      */
-    private class ConnectionListener extends Thread {
+    private class ServerConnectionListener extends Thread {
         private boolean listening = true;
 
         @Override
