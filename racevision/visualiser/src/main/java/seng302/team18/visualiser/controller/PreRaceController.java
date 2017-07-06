@@ -2,7 +2,10 @@ package seng302.team18.visualiser.controller;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
@@ -13,7 +16,7 @@ import seng302.team18.visualiser.display.ZoneTimeClock;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
 
 /**
  * Controller for the pre race view
@@ -39,7 +42,7 @@ public class PreRaceController {
      * @param race The race to be set up in the pre-race.
      */
     public void setUp(Race race) {
-        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getStartTime());
+        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
         raceNameText.setText(race.getRaceName());
         displayTimeZone(race.getStartTime());
         startTimeLabel.setText(race.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
