@@ -33,17 +33,14 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
         byte messageVersionNumberBytes = 0x2;
 
         byte[] currentTimeBytes = ByteCheck.getCurrentTime6Bytes();
-        System.out.print("current time: "); for (byte b: currentTimeBytes) System.out.print(String.format("0x%02X ", b)); System.out.println();
 
         byte[] raceIDBytes = ByteCheck.intToByteArray(race.getId());
 
         byte raceStatusByte = (byte) race.getStatus().code();
 
-        long expectedStartTime = race.getStartTime().toEpochSecond();
-        System.out.print("start time: "); System.out.println(expectedStartTime);
+        long expectedStartTime = race.getStartTime().toInstant().toEpochMilli();
 
         byte[] expectedStartTimeBytes = ByteCheck.convertLongTo6ByteArray(expectedStartTime); // TODO: Use a reasonable starting time
-        System.out.print("start time: "); for (byte b: expectedStartTimeBytes) System.out.print(String.format("0x%02X ", b)); System.out.println();
 
         byte[] raceWindDirectionBytes = ByteCheck.shortToByteArray((short) 0x4000);
                 // Currently set to east TODO: make this a field of race or boat?

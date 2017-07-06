@@ -1,17 +1,11 @@
 package seng302.team18.test_mock;
 
-import seng302.team18.message.AC35XMLBoatMessage;
-import seng302.team18.message.AC35XMLRaceMessage;
-import seng302.team18.message.AC35XMLRegattaMessage;
-import seng302.team18.messageparsing.AC35XMLBoatParser;
-import seng302.team18.messageparsing.AC35XMLRaceParser;
-import seng302.team18.messageparsing.AC35XMLRegattaParser;
-import seng302.team18.model.*;
+import seng302.team18.model.Boat;
+import seng302.team18.model.MarkRoundingEvent;
+import seng302.team18.model.Race;
+import seng302.team18.model.RaceStatus;
 import seng302.team18.test_mock.connection.*;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -87,8 +81,6 @@ public class TestMock implements Observer {
         do {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
-
-            System.out.println(race.getStartTime().toString());
 
             if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusMinutes(TIME_WARNING))) {
                 race.setStatus(RaceStatus.WARNING);
