@@ -5,14 +5,11 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import seng302.team18.message.AC35XMLRegattaMessage;
+import seng302.team18.message.AC35XmlRegattaComponents;
+
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.StringWriter;
 
 import static org.junit.Assert.assertEquals;
 
@@ -46,43 +43,40 @@ public class RegattaXmlEncoderTest {
         Document doc = (Document) domSource.getNode();
         doc.getDocumentElement().normalize();
 
-        final String REGATTA_TAG = "RegattaConfig";
+//        final String REGATTA_TAG = "RegattaConfig";
 
-        root = (Element) doc.getElementsByTagName(REGATTA_TAG).item(0);
+        root = (Element) doc.getElementsByTagName(AC35XmlRegattaComponents.ROOT_REGATTA.toString()).item(0);
     }
 
     @Test
     public void encodeIdTest() {
-        final String REGATTA_ID = "RegattaID";
-
-        int encodedId = Integer.parseInt(root.getElementsByTagName(REGATTA_ID).item(0).getTextContent());
+        System.out.println(root.getChildNodes());
+        int encodedId = Integer.parseInt(root.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_ID.toString())
+                .item(0).getTextContent());
         int id = regattaMessage.getId();
         assertEquals(id, encodedId);
     }
 
     @Test
     public void encodeNameTest() {
-        final String REGATTA_NAME = "RegattaName";
-
-        String encodedName = root.getElementsByTagName(REGATTA_NAME).item(0).getTextContent();
+        String encodedName = root.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_NAME.toString())
+                .item(0).getTextContent();
         String name = regattaMessage.getName();
         assertEquals(name, encodedName);
     }
 
     @Test
     public void encodeCenterLatTest() {
-        final String CENTER_LAT = "CentralLatitude";
-
-        double encodedLat = Double.parseDouble(root.getElementsByTagName(CENTER_LAT).item(0).getTextContent());
+        double encodedLat = Double.parseDouble(root.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_CENTER_LAT.toString())
+                .item(0).getTextContent());
         double lat = regattaMessage.getCentralLat();
         assertEquals(lat, encodedLat);
     }
 
     @Test
     public void encodeCenterLongTest() {
-        final String CENTER_LONG = "CentralLongitude";
-
-        double encodedLon = Double.parseDouble(root.getElementsByTagName(CENTER_LONG).item(0).getTextContent());
+        double encodedLon = Double.parseDouble(root.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_CENTER_LONG.toString())
+                .item(0).getTextContent());
         double lon = regattaMessage.getCentralLong();
         assertEquals(lon, encodedLon);
     }
@@ -90,9 +84,8 @@ public class RegattaXmlEncoderTest {
 
     @Test
     public void encodeUtcOffsetTest() {
-        final String UTC_OFFSET = "UtcOffset";
-
-        String encodedOffset = root.getElementsByTagName(UTC_OFFSET).item(0).getTextContent();
+        String encodedOffset = root.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_OFFSET.toString())
+                .item(0).getTextContent();
         String offset = regattaMessage.getUtcOffset();
         assertEquals(offset, encodedOffset);
     }
