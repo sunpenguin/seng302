@@ -46,7 +46,7 @@ public class ClientConnection {
         client.close();
     }
 
-    public int getnFailures() {
+    public int getNFailures() {
         return nFailures;
     }
 }

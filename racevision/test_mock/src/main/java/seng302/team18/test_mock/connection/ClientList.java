@@ -24,7 +24,7 @@ class ClientList {
     public synchronized void pruneConnections() {
         ListIterator<ClientConnection> iter = clients.listIterator();
         while (iter.hasNext()) {
-            if (iter.next().getnFailures() > ClientConnection.MAX_FAILURES) {
+            if (iter.next().getNFailures() > ClientConnection.MAX_FAILURES) {
                 iter.remove();
             }
         }

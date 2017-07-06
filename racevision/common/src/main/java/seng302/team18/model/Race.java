@@ -21,7 +21,7 @@ public class Race {
     private ZonedDateTime currentTime;
     private List<Integer> participantIds;
     private int id;
-    private byte status;
+    private RaceStatus status;
     private String raceName;
 
 
@@ -31,7 +31,7 @@ public class Race {
         course = new Course();
         finishedList = new ArrayList<>();
         id = 0;
-        status = 0;
+        status = RaceStatus.NOT_ACTIVE;
         currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         raceName = "";
@@ -52,7 +52,7 @@ public class Race {
                 .map(Boat::getId)
                 .collect(Collectors.toList());
         this.id = raceId;
-        this.status = 0;
+        this.status = RaceStatus.NOT_ACTIVE;
         setCourseForBoats();
         setInitialSpeed();
     }
@@ -89,19 +89,30 @@ public class Race {
      */
     private void setCourseForBoats() {
         if (course.getLegs().size() > 0) {
-            GPSCalculations gps = new GPSCalculations();
             for (Boat boat : startingList) {
-                // Set Leg
-                boat.setLegNumber(course.getLegs().get(0).getLegNumber());
-                // Set Dest
-                boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCoordinate());
-                // Set Coordinate
-                Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
-                boat.setCoordinate(midPoint);
-                // Set Heading
-                boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
+                setCourseforBoat(boat);
             }
         }
+    }
+
+    private void setCourseforBoat(Boat boat) {
+        // Set Leg
+        boat.setLegNumber(course.getLegs().get(0).getLegNumber());
+        // Set Dest
+        boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCoordinate());
+        // Set Coordinate
+        Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
+        boat.setCoordinate(midPoint);
+        // Set Heading
+        GPSCalculations gps = new GPSCalculations();
+        boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
+    }
+
+    public void addParticipant(Boat boat) {
+        // check that it is alright to add a boat at this point
+        setCourseforBoat(boat);
+        startingList.add(boat);
+        participantIds.add(boat.getId());
     }
 
     /**
@@ -304,11 +315,11 @@ public class Race {
         this.id = id;
     }
 
-    public byte getStatus() {
+    public RaceStatus getStatus() {
         return status;
     }
 
-    public void setStatus(byte status) {
+    public void setStatus(RaceStatus status) {
         this.status = status;
     }
 

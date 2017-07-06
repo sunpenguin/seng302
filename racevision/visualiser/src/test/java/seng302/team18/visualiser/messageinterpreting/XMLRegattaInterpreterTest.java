@@ -80,7 +80,7 @@ public class XMLRegattaInterpreterTest {
         MessageBody message = new AC35XMLBoatMessage(boats);
         interpreter.interpret(message);
 
-        Assert.assertEquals(0, race.getStatus());
+        Assert.assertEquals(RaceStatus.NOT_ACTIVE, race.getStatus());
         Assert.assertEquals(0, race.getId());
         ZonedDateTime expected = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
         Assert.assertEquals(expected, race.getCurrentTime());

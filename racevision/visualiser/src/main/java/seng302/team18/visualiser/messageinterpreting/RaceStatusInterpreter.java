@@ -4,7 +4,7 @@ import javafx.application.Platform;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.message.RaceStatus;
+import seng302.team18.model.RaceStatus;
 import seng302.team18.visualiser.controller.ControllerManager;
 
 import java.io.IOException;

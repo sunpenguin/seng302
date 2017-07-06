@@ -8,6 +8,8 @@ import seng302.team18.test_mock.TestMock;
 import seng302.team18.test_mock.TestXMLFiles;
 import seng302.team18.util.ByteCheck;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by csl62 on 25/04/17.
+ * Test for BoatMessageGenerator.
  */
 public class BoatMessageGeneratorTest {
 

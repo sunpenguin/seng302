@@ -6,7 +6,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import seng302.team18.message.AC35XMLBoatMessage;
+import seng302.team18.message.Ac35XmlBoatComponents;
 import seng302.team18.model.Boat;
+import seng302.team18.model.BoatType;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,8 +33,6 @@ public class AC35XMLBoatParser implements MessageBodyParser {
      */
     @Override
     public AC35XMLBoatMessage parse(InputStream stream) {
-        final String BOATS_ELEMENT = "BoatConfig";
-        final String BOATS = "Boats";
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
@@ -44,13 +44,12 @@ public class AC35XMLBoatParser implements MessageBodyParser {
             return null;
         }
         doc.getDocumentElement().normalize();
-        Element boatsElement = (Element) doc.getElementsByTagName(BOATS_ELEMENT).item(0);
+        Element boatsElement = (Element) doc.getElementsByTagName(Ac35XmlBoatComponents.ROOT_BOATS.toString()).item(0);
 
-        Node boatsNode = boatsElement.getElementsByTagName(BOATS).item(0);
+        Node boatsNode = boatsElement.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOATS.toString()).item(0);
         List<Boat> boats = parseBoats(boatsNode);
 
-        AC35XMLBoatMessage message = new AC35XMLBoatMessage(boats);
-        return message;
+        return new AC35XMLBoatMessage(boats);
     }
 
 
@@ -70,28 +69,22 @@ public class AC35XMLBoatParser implements MessageBodyParser {
      * Used in the parse method to parse boats from a boat element in the boat xml file.
      *
      * @param boatsNode the noe of the boats element
-     * @return A list of particpating boats.
+     * @return A list of participating boats.
      */
-    public List<Boat> parseBoats(Node boatsNode) {
-        final String BOAT_ELEMENT = "Boat";
-        final String BOAT_NAME = "BoatName";
-        final String BOAT_SHORT_NAME = "ShortName";
-        final String BOAT_ID = "SourceID";
-        final String BOAT_TYPE = "Type";
-        final String YACHT = "Yacht";
+    private List<Boat> parseBoats(Node boatsNode) {
 
         List<Boat> boats = new ArrayList<>();
         if (boatsNode.getNodeType() == Node.ELEMENT_NODE) {
             Element boatSequenceElement = (Element) boatsNode;
-            NodeList boatSequenceNodeList = boatSequenceElement.getElementsByTagName(BOAT_ELEMENT);
+            NodeList boatSequenceNodeList = boatSequenceElement.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOAT.toString());
             for (int i = 0; i < boatSequenceNodeList.getLength(); i++) {
                 Node boatNode = boatSequenceNodeList.item(i);
                 if (boatNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element boatElement = (Element) boatNode;
-                    if (boatElement.getAttribute(BOAT_TYPE).equals(YACHT)) {
-                        String boatName = boatElement.getAttribute(BOAT_NAME);
-                        String boatShortName = boatElement.getAttribute(BOAT_SHORT_NAME);
-                        int boatID = Integer.parseInt(boatElement.getAttribute(BOAT_ID));
+                    if (boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_TYPE.toString()).equals(BoatType.YACHT.toString())) {
+                        String boatName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_BOAT.toString());
+                        String boatShortName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_SHORT.toString());
+                        int boatID = Integer.parseInt(boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_SOURCE_ID.toString()));
                         boats.add(new Boat(boatName, boatShortName, boatID));
                     }
                 }

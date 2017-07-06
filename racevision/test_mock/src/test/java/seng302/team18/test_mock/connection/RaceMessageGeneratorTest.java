@@ -9,13 +9,15 @@ import seng302.team18.test_mock.TestMock;
 import seng302.team18.test_mock.TestXMLFiles;
 import seng302.team18.util.ByteCheck;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by jth102 on 25/04/17.
+ * Test for RaceMessageGenerator.
  */
 public class RaceMessageGeneratorTest {
     private final int LOOP_OFFSET = 20; // move 20 bytes forward for each boat being read.

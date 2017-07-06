@@ -5,15 +5,13 @@ package seng302.team18.model;
  */
 public class Mark implements GeographicLocation {
 
-    private String name;
+    private BoatInfo info;
     private Coordinate coordinates;
-    private Integer id;
-    private Coordinate targetCoordinates;
 
     public Mark(int id, Coordinate coordinates) {
-        this.id = id;
+        info = new BoatInfo();
+        info.setId(id);
         this.coordinates = coordinates;
-        targetCoordinates = coordinates;
     }
 
 
@@ -43,7 +41,7 @@ public class Mark implements GeographicLocation {
      * @return the name of the mark
      */
     public String getName() {
-        return name;
+        return info.getName();
     }
 
 
@@ -53,11 +51,15 @@ public class Mark implements GeographicLocation {
      * @param markName The name that the mark will  be set to
      */
     public void setName(String markName) {
-        this.name = markName;
+        info.setName(markName);
     }
 
     public Integer getId() {
-        return id;
+        return info.getId();
+    }
+
+    public BoatInfo getInfo() {
+        return info;
     }
 }
 

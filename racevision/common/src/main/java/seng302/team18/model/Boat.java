@@ -11,13 +11,11 @@ import javafx.beans.property.SimpleIntegerProperty;
  */
 
 public class Boat implements GeographicLocation {
-    private String boatName;
-    private String shortName;
+    private BoatInfo boatInfo;
     private DoubleProperty speed;
     private DoubleProperty knotsSpeed;
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
-    private Integer id;
     private double heading;
     private Coordinate coordinate;
     private Coordinate destination;
@@ -35,9 +33,7 @@ public class Boat implements GeographicLocation {
      * @param id        The id of the boat
      */
     public Boat(String boatName, String shortName, int id) {
-        this.boatName = boatName;
-        this.shortName = shortName;
-        this.id = id;
+        boatInfo = new BoatInfo(id, boatName, shortName);
         speed = new SimpleDoubleProperty();
         knotsSpeed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty();
@@ -52,7 +48,7 @@ public class Boat implements GeographicLocation {
      * @return The boatName
      */
     public String getName() {
-        return boatName;
+        return boatInfo.getName();
     }
 
 
@@ -82,9 +78,12 @@ public class Boat implements GeographicLocation {
      * @return The shortName
      */
     public String getShortName() {
-        return shortName;
+        return boatInfo.getNameShort();
     }
 
+    public BoatInfo getBoatInfo() {
+        return boatInfo;
+    }
 
     /**
      * A getter for the speed of the boat
@@ -152,7 +151,7 @@ public class Boat implements GeographicLocation {
 
 
     public Integer getId() {
-        return id;
+        return boatInfo.getId();
     }
 
     public DoubleProperty knotsSpeedProperty() {
@@ -192,11 +191,11 @@ public class Boat implements GeographicLocation {
     @Override
     public String toString() {
         return "Boat{" +
-                "boatName=" + boatName +
-                ", shortName='" + shortName + '\'' +
+                "boatName=" + boatInfo.getName() +
+                ", shortName='" + boatInfo.getNameShort() + '\'' +
                 ", speed=" + speed +
                 ", leg=" + boatLegNumber +
-                ", id=" + id +
+                ", id=" + boatInfo.getId() +
                 ", heading=" + heading +
                 ", coordinate=" + coordinate +
                 ", destination=" + destination +
