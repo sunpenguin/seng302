@@ -28,7 +28,7 @@ public class MockDataStream {
         Course course = generator.generateCourse();
         Race race = generator.generateRace(course);
 
-        TestMock testMock = new TestMock(regattaXML, boatsXML, raceXML, race);
+        TestMock testMock = new TestMock(race);
         testMock.run();
 
 //      No players connected yet, but this is the general idea for each player

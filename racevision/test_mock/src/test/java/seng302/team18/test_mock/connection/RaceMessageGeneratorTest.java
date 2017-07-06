@@ -99,7 +99,7 @@ public class RaceMessageGeneratorTest {
 
     @Test
     public void raceStatusTest() {
-        int expectedRaceStatus = testRace.getStatus();
+        int expectedRaceStatus = testRace.getStatus().code();
         int actualRaceStatus = ByteCheck.byteToIntConverter(generatedBytes, RACE_STATUS_P, RACE_STATUS_L);
         assertEquals(expectedRaceStatus, actualRaceStatus);
     }

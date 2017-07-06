@@ -2,6 +2,7 @@ package seng302.team18.test_mock.connection;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 
 /**
@@ -11,7 +12,7 @@ import java.net.Socket;
  */
 public class ClientConnection {
     public final static int MAX_FAILURES = 5;
-    private DataOutputStream out;
+    private OutputStream out;
     private Socket client;
     private int nFailures;
 

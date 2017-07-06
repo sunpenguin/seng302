@@ -76,6 +76,7 @@ public class Server {
         listener.stopListening();
     }
 
+    // TODO should the server have this responsibility?
     private final Boat[] boats = {
             new Boat("Emirates Team New Zealand", "TEAM New Zealand", 121),
             new Boat("Oracle Team USA", "TEAM USA", 122),
@@ -86,7 +87,7 @@ public class Server {
     };
 
     private void addParticipant() {
-        int number = clientList.getClients().size();
+        int number = clientList.getClients().size() - 1;
         Boat boat = boats[number];
 
         participantManager.addBoat(boat);
@@ -147,7 +148,7 @@ public class Server {
         @Override
         public void run() {
             try {
-                serverSocket.setSoTimeout(500);
+                serverSocket.setSoTimeout(500); // TODO ask Anton about
             } catch (SocketException e) {
                 e.printStackTrace();
             }

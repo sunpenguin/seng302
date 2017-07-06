@@ -24,21 +24,14 @@ import static java.lang.Thread.sleep;
  */
 public class TestMock implements ParticipantManager {
 
-    private String regattaXML;
-    private String boatsXML;
-    private String raceXML;
     private Race race;
-
     private final static int SERVER_PORT = 5005;
     private Server server;
 
 
-    public TestMock(String regattaXML, String boatsXML, String raceXML, Race race) {
-        this.regattaXML = regattaXML;
-        this.boatsXML = boatsXML;
-        this.raceXML = raceXML;
+    public TestMock(Race race) {
         this.race = race;
-//        this.server = new Server(SERVER_PORT, regattaXML, boatsXML, raceXML);
+        this.server = new Server(SERVER_PORT, this);
     }
 
 
