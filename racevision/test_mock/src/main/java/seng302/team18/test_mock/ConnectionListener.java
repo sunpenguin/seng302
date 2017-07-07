@@ -92,7 +92,7 @@ public class ConnectionListener implements Observer {
      * @throws IOException
      */
     private void sendMessage(ClientConnection player, int sourceID) throws IOException {
-        player.sendMessage(new ResponseMessageGenerator(sourceID).getMessage());
+        player.sendMessage(new AcceptanceMessageGenerator(sourceID).getMessage());
     }
 
 
