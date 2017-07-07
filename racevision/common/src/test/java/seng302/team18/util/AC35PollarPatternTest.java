@@ -8,6 +8,7 @@ import seng302.team18.model.Polar;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import static junit.framework.TestCase.assertEquals;
 
 /**
@@ -366,6 +367,7 @@ public class AC35PollarPatternTest {
     }
 
 
+    @Test
     public void getClosestPointsAboveMax(){
         //Test for when the twa is about the highest value in polar
         double baotTWA1 = 177;
@@ -391,6 +393,8 @@ public class AC35PollarPatternTest {
         assertEquals(true, returned2.contains(returned2Pair2));
     }
 
+
+    @Test
     public void getClosestPointsEqualToValue(){
         //Test for when the twa is equal to a point on  a polar
         double boatTWA1 = 90;
@@ -407,11 +411,12 @@ public class AC35PollarPatternTest {
         XYPair returned1Pair1 = new XYPair(30, 90);
         XYPair returned1Pair2 = new XYPair(25, 90);
 
-
         assertEquals(true, returned1.contains(returned1Pair1));
         assertEquals(true, returned1.contains(returned1Pair2));
     }
 
+
+    @Test
     public void getClosestPointsCloserToWrongValues(){
         //Test for when the twa is between points
         //However it is closer to two values on one side
@@ -434,6 +439,8 @@ public class AC35PollarPatternTest {
         assertEquals(true, returned1.contains(returned1Pair3));
     }
 
+
+    @Test
     public void getClosestPointsBetweenValues(){
         //Test for when the TWA is between points
         double boatTWA1 = 100;
