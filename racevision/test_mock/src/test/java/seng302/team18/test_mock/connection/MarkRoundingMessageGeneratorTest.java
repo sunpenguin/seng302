@@ -18,7 +18,7 @@ public class MarkRoundingMessageGeneratorTest {
     private int index = 0;
 
     @Test
-    public void getPayload() throws Exception {
+    public void getPayloadTest() throws Exception {
         final String regattaXML = TestXMLFiles.REGATTA_XML_1.toString();
         final String raceXML = TestXMLFiles.RACE_XML_2.toString();
         final String boatsXML = TestXMLFiles.BOATS_XML_2.toString();
