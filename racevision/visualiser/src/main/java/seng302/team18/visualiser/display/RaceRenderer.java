@@ -45,22 +45,28 @@ public class RaceRenderer {
      * Draws displayBoats in the Race on the Group as well as the visible annotations
      */
     public void renderBoats() {
+        DisplayBoat sail;
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
-
+            sail = new DisplaySail(new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats))
+                    , pixelMapper);
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
+            System.out.println(displayBoat);
             if (displayBoat == null) {
+
                 displayBoat = new DisplayWake(pixelMapper,
                         new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++)));
                 if (boat.isControlled()) {
                     displayBoat = new BoatHighlight(pixelMapper, displayBoat);
                 }
+                sail.addToGroup(group);
                 displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
 
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
+                sail.setCoordinate(boatCoordinates);
                 displayBoat.setCoordinate(boatCoordinates);
                 displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());

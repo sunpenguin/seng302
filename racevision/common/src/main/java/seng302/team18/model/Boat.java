@@ -26,6 +26,7 @@ public class Boat implements GeographicLocation, IBoat {
     private Long timeAtLastMark;
     private int status;
     private boolean isControlled;
+    private boolean sailOut;
 
     /**
      * A constructor for the Boat class
@@ -44,6 +45,7 @@ public class Boat implements GeographicLocation, IBoat {
         timeSinceLastMark = 0L;
         timeAtLastMark = 0L;
         isControlled = false;
+        sailOut = false;
     }
 
     /**

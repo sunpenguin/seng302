@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Created by David-chan on 30/06/17.
+ * A class that displays the boat on the GUI
  */
 public class DisplayBoat implements IBoat {
 
@@ -40,6 +40,8 @@ public class DisplayBoat implements IBoat {
     private Long timeAtLastMark;
     private int status;
     private boolean isControlled;
+    private boolean sailOut;
+
 
     private PixelMapper pixelMapper;
     private Polyline boat;

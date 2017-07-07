@@ -9,7 +9,11 @@ import java.util.List;
  */
 public class BoatActionEncoder extends MessageEncoder {
 
-
+    /**
+     * Generates the body of the BoatActionMessage to be delivered
+     * @param message to create the body of the message from.
+     * @return The body of the message
+     */
     @Override
     protected byte[] generateBody(MessageBody message) {
         byte[] body = null;
@@ -30,11 +34,21 @@ public class BoatActionEncoder extends MessageEncoder {
         return body;
     }
 
+    /**
+     * Generates the checksum of the message to be delivered
+     * @param head of message to create checksum for
+     * @param body of message to create checksum for
+     * @return The checksum of the message
+     */
     protected byte[] generateChecksum(byte[] head, byte[] body) {
         return new byte[0];
     }
 
 
+    /**
+     * returns the length of the message
+     * @return The length of the message
+     */
     @Override
     protected short messageLength() {
         return 0;
