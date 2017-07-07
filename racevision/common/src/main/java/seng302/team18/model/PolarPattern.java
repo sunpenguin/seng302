@@ -115,15 +115,100 @@ public abstract class PolarPattern {
      * @return List<Polar>, a list of polar, either of length 1 or 2
      */
     public List<Polar> getTwoClosestPolars(double windSpeed) {
-        //Set initials
+        List<Polar> closestPolars = new ArrayList<>();
+
+        if(windSpeedIsAboveMaxPolar(windSpeed)){
+            Polar polarAtHighestWindSpeed = windSpeedToPolarMap.values().iterator().next();
+
+            for(Polar polar : windSpeedToPolarMap.values()){
+                if(polar.getWindSpeed() > polarAtHighestWindSpeed.getWindSpeed()){
+                    polarAtHighestWindSpeed = polar;
+                }
+            }
+            closestPolars.add(polarAtHighestWindSpeed);
+
+            return closestPolars;
+        }
+
+        Polar equalWindSpeedPolar = windSpeedEqualPolarWindSpeed(windSpeed);
+
+        if(equalWindSpeedPolar != null){
+            closestPolars.add(equalWindSpeedPolar);
+
+            return closestPolars;
+        }
+
+        //if windspeed is =< max windspeed && windspeed is not equal to a windspeed of a polar
         Polar closestPolar = windSpeedToPolarMap.values().iterator().next();
         double closestDistance = Math.abs(windSpeed - closestPolar.getWindSpeed());
         Polar secondClosestPolar = windSpeedToPolarMap.values().iterator().next();
         double secondClosestDistance = Math.abs(windSpeed - secondClosestPolar.getWindSpeed());
-        List<Polar> closestPolars = new ArrayList<>();
+
+        for (Polar currentPolar : windSpeedToPolarMap.values()) {
+
+            double currentDistance = Math.abs(windSpeed - currentPolar.getWindSpeed());
+
+            if (closestDistance > currentDistance) {
+                secondClosestPolar = closestPolar;
+                secondClosestDistance = closestDistance;
+                closestPolar = currentPolar;
+                closestDistance = currentDistance;
+            } else if (closestDistance == currentDistance && currentPolar.getWindSpeed() < closestPolar.getWindSpeed()) {
+                secondClosestPolar = closestPolar;
+                secondClosestDistance = closestDistance;
+                closestPolar = currentPolar;
+                closestDistance = currentDistance;
+            } else if (currentDistance < secondClosestDistance) {
+                secondClosestPolar = currentPolar;
+                secondClosestDistance = currentDistance;
+            } else if (secondClosestDistance == currentDistance && closestPolar.getWindSpeed() < secondClosestPolar.getWindSpeed()) {
+                secondClosestPolar = currentPolar;
+                secondClosestDistance = currentDistance;
+            }
+        }
+
         closestPolars.add(closestPolar);
         closestPolars.add(secondClosestPolar);
 
         return closestPolars;
+    }
+
+
+    /**
+     * Check is given windSpeed is above the windSpeed of the polar with the max windSpeed
+     * Used in getTwoClosestPolars()
+     *
+     * @param windSpeed double, speed of the wind
+     * @return boolean, true if the given windspeed is above the windSpeed of the polar with the max windSpeed
+     */
+    private boolean windSpeedIsAboveMaxPolar(double windSpeed){
+        boolean aboveMaxGiven = true;
+
+        for(Polar polar : windSpeedToPolarMap.values()){
+            if(polar.getWindSpeed() > windSpeed){
+                aboveMaxGiven = false;
+            }
+        }
+        return aboveMaxGiven;
+    }
+
+
+    /**
+     * Checks if given windSpeed is equal to the windSpeed of a Polar
+     * Used om getTwoClosestPolars()
+     *
+     * @param windSpeed double, the speed of the wind
+     * @return Polar, null or polar with windSpeed equal to given windSpeed
+     */
+    private Polar windSpeedEqualPolarWindSpeed(double windSpeed){
+        Polar equalWindSpeedPolar = null;
+
+        for(Polar polar : windSpeedToPolarMap.values()){
+            if(polar.getWindSpeed() == windSpeed){
+                equalWindSpeedPolar = polar;
+            }
+        }
+
+        return equalWindSpeedPolar;
     }
 }

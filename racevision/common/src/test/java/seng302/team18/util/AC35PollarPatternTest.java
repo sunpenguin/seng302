@@ -304,6 +304,7 @@ public class AC35PollarPatternTest {
     }
 
 
+    @Test
     public void getTwoClosestPolarsWindSpeedAboveMax(){
         //Test when windspeed is greater then the max windSpeed
         double windSpeed1 = 31;
@@ -320,6 +321,7 @@ public class AC35PollarPatternTest {
     }
 
 
+    @Test
     public void getTwoClosestPolarsWindSpeedEqualToValue(){
         //Test when windSpeed is equal to polar windspeeds
         double windSpeed1 = 0;
@@ -340,6 +342,7 @@ public class AC35PollarPatternTest {
     }
 
 
+    @Test
     public void getTwoClosestPolarsWindSpeedIsBetweenPolars(){
         //Test when WindSpeed is between the windspeed of 2 polars
         double windSpeed1 = 2;
