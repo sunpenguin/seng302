@@ -34,7 +34,7 @@ public class ConnectionListener implements Observer {
      *
      * @param race The race
      * @param participantIds List of participant IDs
-     * @param timeout Time at which the ConnectionListener will stop listening for requests
+     * @param timeout Time at which the ConnectionListener will stop listening for requests (Epoch milli)
      * @param factory Factory to convert bytes to a RequestMessage.
      */
     public ConnectionListener(Race race, List<Integer> participantIds, long timeout, MessageParserFactory factory) {
