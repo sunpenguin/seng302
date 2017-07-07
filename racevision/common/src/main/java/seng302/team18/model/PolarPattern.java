@@ -1,6 +1,8 @@
 package seng302.team18.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,16 +13,34 @@ public abstract class PolarPattern {
     private Map<Double, Polar> windSpeedToPolarMap;
 
 
+    /**
+     * Calls createMap()
+     * Also adds a polar at 0 wind speed if not already added in createMap
+     */
     public PolarPattern() {
         windSpeedToPolarMap = createMap();
+
+        Polar polarAt0 = new Polar(0,45,0,155,0);
+        polarAt0.addToMap(0,0);
+        polarAt0.addToMap(15,0);
+        polarAt0.addToMap(30,0);
+        polarAt0.addToMap(60,0);
+        polarAt0.addToMap(75,0);
+        polarAt0.addToMap(90,0);
+        polarAt0.addToMap(115,0);
+        polarAt0.addToMap(140,0);
+        polarAt0.addToMap(170,0);
+        polarAt0.addToMap(165,0);
+        polarAt0.addToMap(180,0);
+
+        windSpeedToPolarMap.putIfAbsent(polarAt0.getWindSpeed(), polarAt0);
     }
 
 
     /**
-     * Adds a new polar to the maps of polars.
-     * Note: Polars are mapped by their windSpeed
-     *
-     * @param polarToAdd Polar, polar to be added to the map of polars
+     * Creates the map of polars with wind speeds.
+     * Called in constructor.
+     * Gets overridden by subclasses
      */
     abstract protected Map<Double, Polar> createMap();
 
@@ -82,5 +102,28 @@ public abstract class PolarPattern {
         }
 
         return polar.getMapSpeedAtAngles().get(bestAngle);
+    }
+
+    /**
+     * Method to find the two polars with the closest windSpeeds to given wind speed.
+     * Note: May return a list on length 1.
+     * Cases in which a list of length 1 is returned:
+     * 1. The windspeed given in greater than the windspeed of the polar with the highest wind speed
+     * 2. The windspeed is equal to the windspeed of a polar
+     *
+     * @param windSpeed double, the speed of the wind
+     * @return List<Polar>, a list of polar, either of length 1 or 2
+     */
+    public List<Polar> getTwoClosestPolars(double windSpeed) {
+        //Set initials
+        Polar closestPolar = windSpeedToPolarMap.values().iterator().next();
+        double closestDistance = Math.abs(windSpeed - closestPolar.getWindSpeed());
+        Polar secondClosestPolar = windSpeedToPolarMap.values().iterator().next();
+        double secondClosestDistance = Math.abs(windSpeed - secondClosestPolar.getWindSpeed());
+        List<Polar> closestPolars = new ArrayList<>();
+        closestPolars.add(closestPolar);
+        closestPolars.add(secondClosestPolar);
+
+        return closestPolars;
     }
 }
