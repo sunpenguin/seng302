@@ -46,7 +46,7 @@ public class AC35MessageParserFactory implements MessageParserFactory {
         parserMap.put(AC35MessageType.XML_MESSAGE, new AC35XMLMessageParser(new AC35XMLParserFactory()));
         parserMap.put(AC35MessageType.RACE_STATUS, new AC35RaceStatusParser());
         parserMap.put(AC35MessageType.MARK_ROUNDING, new AC35MarkRoundingParser());
-        //parserMap.put(AC35MessageType.REGISTRATION, new RegistrationParser());
+        //parserMap.put(AC35MessageType.REGISTRATION, new AcceptanceParser());
 
         return parserMap;
     }

@@ -29,7 +29,7 @@ import javafx.util.StringConverter;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
-import seng302.team18.visualiser.send.BoatActionMessage;
+import seng302.team18.message.BoatActionMessage;
 import seng302.team18.visualiser.send.BoatActionEncoder;
 import seng302.team18.visualiser.send.ControllerMessageFactory;
 import seng302.team18.visualiser.send.Sender;

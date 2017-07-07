@@ -1,6 +1,7 @@
 package seng302.team18.test_mock;
 
 import seng302.team18.message.MessageBody;
+import seng302.team18.message.RequestMessage;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Race;
@@ -67,13 +68,13 @@ public class ConnectionListener implements Observer {
                         while (message == null && System.currentTimeMillis() < timeout) {
                             message = receiver.nextMessage();
                         }
-//                        if (message instanceof RequestMessage) {
-//                            RequestMessage request = (RequestMessage) message;
-//                            if (request.isParticipanting()) {
-//                                addPlayer(receiver, sourceID);
-//                                sendMessage(client, sourceID);
-//                            }
-//                        }
+                        if (message instanceof RequestMessage) {
+                            RequestMessage request = (RequestMessage) message;
+                            if (request.isParticipating()) {
+                                addPlayer(receiver, sourceID);
+                                sendMessage(client, sourceID);
+                            }
+                        }
                     } catch (IOException e) {
                         // no message
                     }
