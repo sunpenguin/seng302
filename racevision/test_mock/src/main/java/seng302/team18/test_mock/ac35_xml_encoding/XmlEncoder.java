@@ -23,9 +23,10 @@ public abstract class XmlEncoder<T extends XmlMessage> {
 
     /**
      * Encodes a XML message to a string
+     *
      * @param xmlMessage the message to encode
      * @return the message as a XML encoded string
-     * @throws TransformerException if the XML encoding fails
+     * @throws TransformerException         if the XML encoding fails
      * @throws ParserConfigurationException if the XML encoding cannot be undertaken
      */
     public String encode(T xmlMessage) throws TransformerException, ParserConfigurationException {
