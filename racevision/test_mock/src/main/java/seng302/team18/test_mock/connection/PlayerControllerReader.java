@@ -29,8 +29,7 @@ public class PlayerControllerReader implements Runnable {
             try {
                 MessageBody message = receiver.nextMessage();
                 interpreter.interpret(message);
-            } catch (IOException e) {
-            }
+            } catch (IOException e) {}
         }
     }
 }

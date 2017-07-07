@@ -25,7 +25,7 @@ public class RequestEncoder extends MessageEncoder {
     protected byte[] generateBody(MessageBody message) {
         if (message instanceof RequestMessage) {
             RequestMessage requestMessage = (RequestMessage) message;
-            return ByteCheck.intToByteArray(requestMessage.getRequestType());
+            return ByteCheck.intToByteArray(requestMessage.isParticipating() ? 1 : 0);
         }
         return null;
     }

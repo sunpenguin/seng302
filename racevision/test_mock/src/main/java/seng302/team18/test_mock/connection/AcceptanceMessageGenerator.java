@@ -23,6 +23,7 @@ public class AcceptanceMessageGenerator extends MessageGenerator {
         this.sourceID = sourceID;
     }
 
+
     @Override
     protected byte[] getPayload() throws IOException {
         return ByteCheck.intToByteArray(sourceID);
