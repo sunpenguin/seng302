@@ -6,7 +6,6 @@ import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.Ac35XmlBoatComponents;
 import seng302.team18.model.Boat;
 import seng302.team18.model.BoatType;
-import seng302.team18.model.Mark;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
@@ -14,10 +13,17 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
- * Created by afj19 on 1/07/17.
+ * Encodes a AC35XMLBoatMessage into a XML-formatted string
  */
 public class BoatsXmlEncoder extends XmlEncoder<AC35XMLBoatMessage> {
 
+    /**
+     * Build a model of the XML structure from a AC35XMLBoatMessage
+     *
+     * @param boatMessage the message to build the XML structure from
+     * @return the XML-structured message
+     * @throws ParserConfigurationException if the XML structure cannot be created
+     */
     public DOMSource getDomSource(AC35XMLBoatMessage boatMessage) throws ParserConfigurationException {
         final Integer DEFAULT_VERSION = 12;
 
@@ -46,10 +52,9 @@ public class BoatsXmlEncoder extends XmlEncoder<AC35XMLBoatMessage> {
         // Boats
         root.appendChild(encodeBoats(doc, boatMessage.getBoats()));
 
-
-
         return new DOMSource(doc);
     }
+
 
     private Element encodeSettings(Document doc) {
         final String DEFAULT_RACE_BOAT_TYPE = "AC45";
@@ -94,19 +99,22 @@ public class BoatsXmlEncoder extends XmlEncoder<AC35XMLBoatMessage> {
         return settings;
     }
 
+
     private Element encodeBoatShapes(Document doc) {
         return doc.createElement(Ac35XmlBoatComponents.ELEMENT_BOAT_SHAPES.toString());
     }
 
+
     private Element encodeBoats(Document doc, List<Boat> boats) {
         Element element = doc.createElement(Ac35XmlBoatComponents.ELEMENT_BOATS.toString());
 
-        for (Boat boat: boats) {
+        for (Boat boat : boats) {
             element.appendChild(encodeBoat(doc, boat));
         }
 
         return element;
     }
+
 
     private Element encodeBoat(Document doc, Boat boat) {
         final Double DEFAULT_GPS_X = 0.001;
