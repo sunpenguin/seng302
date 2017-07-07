@@ -20,7 +20,7 @@ public class MarkRoundingMessageGeneratorTest {
     @Test
     public void getPayload() throws Exception {
         final RaceCourseGenerator generator = new RaceCourseGenerator();
-        generator.generateXmlMessage();
+        generator.generateXmlMessages();
         final Race race = generator.generateRace(generator.generateCourse());
         final Boat boat = race.getStartingList().get(0);
         final CompoundMark mark = race.getCourse().getCompoundMarks().get(0);
