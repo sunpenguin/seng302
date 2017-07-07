@@ -57,16 +57,16 @@ public class AC35RaceStatusParser implements MessageBodyParser {
         final int SINGLE_BOAT_STATUS_LENGTH = 20;
 
         List<AC35BoatStatusMessage> boatStates = new ArrayList<>();
-        long currentTime = ByteCheck.byteToLongConverter(bytes, CURRENT_TIME_INDEX, CURRENT_TIME_LENGTH);
-        int raceStatus = ByteCheck.byteToIntConverter(bytes, RACE_STATUS_INDEX, RACE_STATUS_LENGTH);
-        long startTime = ByteCheck.byteToLongConverter(bytes, START_TIME_INDEX, START_TIME_LENGTH);
-        double windDirection = ByteCheck.byteToIntConverter(bytes, WIND_DIRECTION_INDEX, WIND_DIRECTION_LENGTH) * BYTE_HEADING_TO_DOUBLE;
+        long currentTime = ByteCheck.byteToLong(bytes, CURRENT_TIME_INDEX, CURRENT_TIME_LENGTH);
+        int raceStatus = ByteCheck.byteToInt(bytes, RACE_STATUS_INDEX, RACE_STATUS_LENGTH);
+        long startTime = ByteCheck.byteToLong(bytes, START_TIME_INDEX, START_TIME_LENGTH);
+        double windDirection = ByteCheck.byteToInt(bytes, WIND_DIRECTION_INDEX, WIND_DIRECTION_LENGTH) * BYTE_HEADING_TO_DOUBLE;
         int i = 0;
         while (BOAT_SOURCEID_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i) < bytes.length) {
-            int boatID = ByteCheck.byteToIntConverter(bytes, BOAT_SOURCEID_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), BOAT_SOURCEID_LENGTH);
-            int boatStatus = ByteCheck.byteToIntConverter(bytes, BOAT_STATUS_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), BOAT_STATUS_LENGTH);
-            int leg = ByteCheck.byteToIntConverter(bytes, 29 + (SINGLE_BOAT_STATUS_LENGTH * i), 1);
-            long estimatedTime = ByteCheck.byteToLongConverter(bytes, ESTIMATED_TIME_AT_NEXT_MARK_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), ESTIMATED_TIME_AT_NEXT_MARK_LENGTH);
+            int boatID = ByteCheck.byteToInt(bytes, BOAT_SOURCEID_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), BOAT_SOURCEID_LENGTH);
+            int boatStatus = ByteCheck.byteToInt(bytes, BOAT_STATUS_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), BOAT_STATUS_LENGTH);
+            int leg = ByteCheck.byteToInt(bytes, 29 + (SINGLE_BOAT_STATUS_LENGTH * i), 1);
+            long estimatedTime = ByteCheck.byteToLong(bytes, ESTIMATED_TIME_AT_NEXT_MARK_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), ESTIMATED_TIME_AT_NEXT_MARK_LENGTH);
             AC35BoatStatusMessage boatStatusMessage = new AC35BoatStatusMessage(boatID, leg, boatStatus, estimatedTime);
             boatStates.add(boatStatusMessage);
             i += 1;

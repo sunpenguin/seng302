@@ -26,15 +26,15 @@ public class AC35BoatLocationParserTest {
     public void parse() throws Exception {
         int expectedID = 105;
         double expectedHead = 128.551025390625;
-        double expectedSpeed = 31.5;
+        double expectedSpeed = 17.0;
 
         int actualID = message.getSourceId();
         double actualHead = message.getHeading();
         double actualSpeed = message.getSpeed();
 
         assertEquals("The ID was not read correctly by the boat location parser.", expectedID, actualID);
-        assertEquals("The heading was not read correctly by the boat location parser.", expectedHead, actualHead, 0.001);
-        assertEquals("The speed was not read correctly by the boat location parser.", expectedSpeed, actualSpeed, 0.001);
+        assertEquals("The heading was not read correctly by the boat location parser.", expectedHead, actualHead, 0.01);
+        assertEquals("The speed was not read correctly by the boat location parser.", expectedSpeed, actualSpeed, 0.01);
     }
 
 }

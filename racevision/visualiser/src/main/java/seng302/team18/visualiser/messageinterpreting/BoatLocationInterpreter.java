@@ -5,6 +5,7 @@ import seng302.team18.message.AC35BoatLocationMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
+import seng302.team18.util.SpeedConverter;
 
 import java.util.Iterator;
 import java.util.List;
@@ -45,7 +46,6 @@ public class BoatLocationInterpreter extends MessageInterpreter {
                 }
                 if (boat.getId().equals(locationMessage.getSourceId())) {
                     boat.setSpeed(locationMessage.getSpeed());
-                    boat.setKnotsSpeed(locationMessage.getSpeed() * 0.539957);
                     boat.setHeading(locationMessage.getHeading());
                     boat.setCoordinate(locationMessage.getCoordinate());
                 }

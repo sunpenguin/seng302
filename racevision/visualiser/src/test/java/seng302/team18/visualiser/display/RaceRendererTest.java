@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 
 
 /**
- * Created by dhl25 on 17/03/17.
+ * Created by David-chan on 17/03/17.
  */
 public class RaceRendererTest {
 
