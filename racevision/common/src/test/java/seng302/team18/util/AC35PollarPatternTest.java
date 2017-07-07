@@ -5,6 +5,7 @@ import org.junit.Test;
 import seng302.team18.model.AC35PolarPattern;
 import seng302.team18.model.Polar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
@@ -23,7 +24,6 @@ public class AC35PollarPatternTest {
     Polar polar5; //windspeed = 20
     Polar polar6; //windspeed = 25
     Polar polar7; //windspeed = 30
-
 
 
     @Before
@@ -363,5 +363,97 @@ public class AC35PollarPatternTest {
         assertEquals(true, returned2.contains(polar4));
         assertEquals(true, returned3.contains(polar6));
         assertEquals(true, returned3.contains(polar7));
+    }
+
+
+    public void getClosestPointsAboveMax(){
+        //Test for when the twa is about the highest value in polar
+        double baotTWA1 = 177;
+
+        List<Polar> polarList1 = new ArrayList<>();
+        polarList1.add(polar1);
+        List<Polar> polarList2 = new ArrayList<>();
+        polarList2.add(polar3);
+        polarList2.add(polar4);
+
+        List<XYPair> returned1 = ac35PolarPattern.getClosestPoints(baotTWA1, polarList1);
+        List<XYPair> returned2 = ac35PolarPattern.getClosestPoints(baotTWA1, polarList2);
+
+        assertEquals(1, returned1.size());
+        assertEquals(2, returned2.size());
+
+        XYPair returned1Pair1 = new XYPair(4, 175);
+        XYPair returned2Pair1 = new XYPair(12, 175);
+        XYPair returned2Pair2 = new XYPair(16, 175);
+
+        assertEquals(true, returned1.contains(returned1Pair1));
+        assertEquals(true, returned2.contains(returned2Pair1));
+        assertEquals(true, returned2.contains(returned2Pair2));
+    }
+
+    public void getClosestPointsEqualToValue(){
+        //Test for when the twa is equal to a point on  a polar
+        double boatTWA1 = 90;
+
+        List<Polar> polarList1 = new ArrayList<>();
+        polarList1.add(polar7);
+        polarList1.add(polar6);
+
+
+        List<XYPair> returned1 = ac35PolarPattern.getClosestPoints(boatTWA1, polarList1);
+
+        assertEquals(2, returned1.size());
+
+        XYPair returned1Pair1 = new XYPair(30, 90);
+        XYPair returned1Pair2 = new XYPair(25, 90);
+
+
+        assertEquals(true, returned1.contains(returned1Pair1));
+        assertEquals(true, returned1.contains(returned1Pair2));
+    }
+
+    public void getClosestPointsCloserToWrongValues(){
+        //Test for when the twa is between points
+        //However it is closer to two values on one side
+        double boatTWA1 = 43;
+
+        List<Polar> polarList1 = new ArrayList<>();
+        polarList1.add(polar3);
+        polarList1.add(polar4);
+
+        List<XYPair> returned1 = ac35PolarPattern.getClosestPoints(boatTWA1, polarList1);
+
+        assertEquals(3, returned1.size());
+
+        XYPair returned1Pair1 = new XYPair(12, 43);
+        XYPair returned1Pair2 = new XYPair(16, 42);
+        XYPair returned1Pair3 = new XYPair(16, 60);
+
+        assertEquals(true, returned1.contains(returned1Pair1));
+        assertEquals(true, returned1.contains(returned1Pair2));
+        assertEquals(true, returned1.contains(returned1Pair3));
+    }
+
+    public void getClosestPointsBetweenValues(){
+        //Test for when the TWA is between points
+        double boatTWA1 = 100;
+
+        List<Polar> polarList1 = new ArrayList<>();
+        polarList1.add(polar7);
+        polarList1.add(polar6);
+
+        List<XYPair> returned1 = ac35PolarPattern.getClosestPoints(boatTWA1, polarList1);
+
+        assertEquals(4, returned1.size());
+
+        XYPair returned1Pair1 = new XYPair(30, 90);
+        XYPair returned1Pair2 = new XYPair(25, 90);
+        XYPair returned1Pair3 = new XYPair(30, 115);
+        XYPair returned1Pair4 = new XYPair(25, 115);
+
+        assertEquals(true, returned1.contains(returned1Pair1));
+        assertEquals(true, returned1.contains(returned1Pair2));
+        assertEquals(true, returned1.contains(returned1Pair3));
+        assertEquals(true, returned1.contains(returned1Pair4));
     }
 }

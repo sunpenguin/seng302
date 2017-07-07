@@ -1,5 +1,7 @@
 package seng302.team18.model;
 
+import seng302.team18.util.XYPair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,8 +106,10 @@ public abstract class PolarPattern {
         return polar.getMapSpeedAtAngles().get(bestAngle);
     }
 
+
     /**
      * Method to find the two polars with the closest windSpeeds to given wind speed.
+     * On polar will be less than the windspeed, one will be greater.
      * Note: May return a list on length 1.
      * Cases in which a list of length 1 is returned:
      * 1. The windspeed given in greater than the windspeed of the polar with the highest wind speed
@@ -171,6 +175,25 @@ public abstract class PolarPattern {
         closestPolars.add(secondClosestPolar);
 
         return closestPolars;
+    }
+
+
+    /**
+     * Method to find the point with the closest angle to a given TWA
+     * For each of the two polars, the two closest point on that polar are returned.
+     * One point will be greater than the given TWA and one will be less than.
+     * A polar will only return a singular point of the TWA is equal to an angle on the given polar
+     * A polar will return a singular point if the TWA is above the max value in the polar
+     * A polar will  return a singular point in the TWA is below the min value in the polar
+     *
+     * @param boatTWA double, the direction of the wind
+     * @param closestPolars List<Polar>, list containing 1 or 2 polars
+     * @return List<XYPair>, for each item: X = Windspeed of polar, Y = Angle
+     */
+    public List<XYPair> getClosestPoints(double boatTWA, List<Polar> closestPolars){
+        List<XYPair> closestPoints = new ArrayList<>();
+
+        return closestPoints;
     }
 
 
