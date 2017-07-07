@@ -18,12 +18,9 @@ public class MarkRoundingMessageGeneratorTest {
     private int index = 0;
 
     @Test
-    public void getPayloadTest() throws Exception {
-        final String regattaXML = TestXMLFiles.REGATTA_XML_1.toString();
-        final String raceXML = TestXMLFiles.RACE_XML_2.toString();
-        final String boatsXML = TestXMLFiles.BOATS_XML_2.toString();
+    public void getPayload() throws Exception {
         final RaceCourseGenerator generator = new RaceCourseGenerator();
-        generator.readFiles(regattaXML, boatsXML, raceXML);
+        generator.generateXmlMessage();
         final Race race = generator.generateRace(generator.generateCourse());
         final Boat boat = race.getStartingList().get(0);
         final CompoundMark mark = race.getCourse().getCompoundMarks().get(0);
