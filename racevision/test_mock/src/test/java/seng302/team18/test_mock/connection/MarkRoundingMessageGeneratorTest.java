@@ -55,13 +55,13 @@ public class MarkRoundingMessageGeneratorTest {
 
     private void checkField(String assertion, int expected, int length) {
         System.out.println();
-        assertEquals(assertion, expected, ByteCheck.byteToIntConverter(message, index, length));
+        assertEquals(assertion, expected, ByteCheck.byteToInt(message, index, length));
         index += length;
     }
 
     private void checkField(String assertion, long expected, int length) {
         System.out.println();
-        assertEquals(assertion, expected, ByteCheck.byteToLongConverter(message, index, length));
+        assertEquals(assertion, expected, ByteCheck.byteToLong(message, index, length));
         index += length;
     }
 }

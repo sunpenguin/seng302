@@ -29,7 +29,7 @@ public class WindDirectionInterpreter extends MessageInterpreter {
             AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
             double newDirection = statusMessage.getWindDirection();
             // Wind blows in oposite direction to given angle, so flip arrow by 180 for accuracy/ Mod 360 to keep positive integers.
-            race.getCourse().setWindDirection(abs((newDirection - 180) % 360));
+            race.getCourse().setWindDirection((newDirection + 180) % 360);
         }
     }
 }

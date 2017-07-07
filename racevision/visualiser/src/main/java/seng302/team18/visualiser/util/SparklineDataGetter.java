@@ -30,7 +30,7 @@ public class SparklineDataGetter {
      */
     public void listenToBoat() {
         for (Boat boat : race.getStartingList()) {
-            boat.boatLegNumberProperty().addListener((observableValue, oldleg, newleg) -> {
+            boat.legNumberProperty().addListener((observableValue, oldleg, newleg) -> {
                 addData(boat);
             });
         }

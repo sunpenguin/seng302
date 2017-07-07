@@ -9,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -17,6 +18,8 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -26,6 +29,10 @@ import javafx.util.StringConverter;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
+import seng302.team18.message.BoatActionMessage;
+import seng302.team18.visualiser.send.BoatActionEncoder;
+import seng302.team18.visualiser.send.ControllerMessageFactory;
+import seng302.team18.visualiser.send.Sender;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
@@ -34,7 +41,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * The controller class for the Main Window.
@@ -53,10 +59,13 @@ public class MainWindowController implements Observer {
     @FXML private Polygon arrow;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
+    @FXML private Button setAnnotations;
+    @FXML private Button toggle;
     @FXML private Slider slider;
 
     private boolean fpsOn;
     private boolean onImportant;
+    private boolean sailIn = false;
 
     private Race race;
     private RaceLoop raceLoop;
@@ -67,8 +76,17 @@ public class MainWindowController implements Observer {
     private PixelMapper pixelMapper;
     private Map<AnnotationType, Boolean> importantAnnotations;
 
+    private Stage stage;
+    private BoatActionEncoder boatActionMessageComposer = new BoatActionEncoder();
+    private Sender sender;
+
     @FXML
     public void initialize() {
+        try {
+            installKeyHandler();
+        } catch (IOException e){
+            //
+        }
         setSliderListener();
         sliderSetup();
         fpsOn = true;
@@ -84,6 +102,57 @@ public class MainWindowController implements Observer {
         pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
         pixelMapper.setZoomLevel(0);
     }
+
+    @FXML void closeAppAction(){
+        stage.close();
+    }
+
+    /**
+     * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
+     */
+    private void loadIcon() {
+        ImageView icon = new ImageView("/images/boat-310164_640.png");
+        icon.setFitHeight(18);
+        icon.setFitWidth(18);
+    }
+
+
+    private void installKeyHandler() throws IOException {
+        sender = new Sender("127.0.0.1", 4942, new ControllerMessageFactory());
+        final EventHandler<KeyEvent> keyEventHandler =
+            new EventHandler<KeyEvent>() {
+                public void handle(final KeyEvent keyEvent) {
+                    if (keyEvent.getCode() != null) {
+                        BoatActionMessage message = null;
+                        switch (keyEvent.getCode()){
+                            case SPACE:
+                                message = new BoatActionMessage(true, sailIn, !sailIn, false,
+                                        false, false);
+                                break;
+                            case ENTER:
+                                message = new BoatActionMessage(false, sailIn, !sailIn, true,
+                                        false, false);
+                                break;
+                            case UP:
+                                message = new BoatActionMessage(false, sailIn, !sailIn, false,
+                                        true, false);
+                                break;
+                            case DOWN:
+                                message = new BoatActionMessage(false, sailIn, !sailIn, false,
+                                        false, true);
+                                break;
+                            case SHIFT:
+                                sailIn = !sailIn;
+                                message = new BoatActionMessage(false, sailIn, !sailIn, false,
+                                        false, false);
+                        }
+                        sender.send(message);
+                    }
+                }
+            };
+        raceViewPane.setOnKeyPressed(keyEventHandler);
+    }
+
 
     /**
      * initialises the sparkline graph.
@@ -237,7 +306,7 @@ public class MainWindowController implements Observer {
      */
     private void setUpTable(Map<String, Color> boatColors) {
         Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
-                boat.placeProperty(), boat.knotsSpeedProperty()
+                boat.placeProperty(), boat.speedProperty()
         };
         ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
         observableList.addAll(race.getStartingList());
@@ -255,7 +324,7 @@ public class MainWindowController implements Observer {
         tableView.setItems(sortedList);
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("knotsSpeed"));
+        boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
         boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
             @Override
             public void updateItem(Double speed, boolean empty) {
@@ -263,7 +332,7 @@ public class MainWindowController implements Observer {
                 if (empty) {
                     setText(null);
                 } else {
-                    setText(String.format("%.2f", speed));
+                    setText(String.format("%.1f", speed));
                 }
             }
         });

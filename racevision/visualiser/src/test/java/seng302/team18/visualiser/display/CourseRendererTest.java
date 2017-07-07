@@ -1,7 +1,7 @@
 package seng302.team18.visualiser.display;
 
 /**
- * Created by dhl25 on 30/03/17.
+ * Created by David-chan on 30/03/17.
  */
 public class CourseRendererTest {
 

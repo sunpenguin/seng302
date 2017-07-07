@@ -1,6 +1,7 @@
 package seng302.team18.test_mock;
 
 import seng302.team18.message.MessageBody;
+import seng302.team18.message.RequestMessage;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Race;
@@ -33,7 +34,7 @@ public class ConnectionListener implements Observer {
      *
      * @param race The race
      * @param participantIds List of participant IDs
-     * @param timeout Time at which the ConnectionListener will stop listening for requests
+     * @param timeout Time at which the ConnectionListener will stop listening for requests (Epoch milli)
      * @param factory Factory to convert bytes to a RequestMessage.
      */
     public ConnectionListener(Race race, List<Integer> participantIds, long timeout, MessageParserFactory factory) {
@@ -67,13 +68,13 @@ public class ConnectionListener implements Observer {
                         while (message == null && System.currentTimeMillis() < timeout) {
                             message = receiver.nextMessage();
                         }
-//                        if (message instanceof RequestMessage) {
-//                            RequestMessage request = (RequestMessage) message;
-//                            if (request.isParticipanting()) {
-//                                addPlayer(receiver, sourceID);
-//                                sendMessage(client, sourceID);
-//                            }
-//                        }
+                        if (message instanceof RequestMessage) {
+                            RequestMessage request = (RequestMessage) message;
+                            if (request.isParticipating()) {
+                                addPlayer(receiver, sourceID);
+                                sendMessage(client, sourceID);
+                            }
+                        }
                     } catch (IOException e) {
                         // no message
                     }
@@ -91,7 +92,7 @@ public class ConnectionListener implements Observer {
      * @throws IOException
      */
     private void sendMessage(ClientConnection player, int sourceID) throws IOException {
-        player.sendMessage(new ResponseMessageGenerator(sourceID).getMessage());
+        player.sendMessage(new AcceptanceMessageGenerator(sourceID).getMessage());
     }
 
 

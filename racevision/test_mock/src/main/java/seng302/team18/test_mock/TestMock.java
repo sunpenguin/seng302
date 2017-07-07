@@ -18,7 +18,6 @@ import static java.lang.Thread.sleep;
 public class TestMock implements Observer {
 
     private Race race;
-    private final static int SERVER_PORT = 5005;
     private Server server;
     private List<Boat> boats = Arrays.asList(new Boat("Emirates Team New Zealand", "TEAM New Zealand", 121),
             new Boat("Oracle Team USA", "TEAM USA", 122),
@@ -29,9 +28,9 @@ public class TestMock implements Observer {
 
 
 
-    public TestMock(Race race) {
+    public TestMock(Race race, Server server) {
         this.race = race;
-        this.server = new Server(SERVER_PORT);
+        this.server = server;
         server.addObserver(this);
     }
 
@@ -42,18 +41,12 @@ public class TestMock implements Observer {
     private List<ScheduledMessageGenerator> scheduledMessages = new ArrayList<>();
 
 
-    public void run() {
-        server.openServer();
-        runSimulation();
-        server.closeServer();
-    }
-
 
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) {
             ClientConnection client = (ClientConnection) arg;
-            client.sendMessage(new byte[10]); // TODO send the real message
+            client.sendMessage(new byte[10]); // TODO send the xml message
             race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
         }
     }
@@ -62,7 +55,7 @@ public class TestMock implements Observer {
     /**
      * Simulate the race will sending the scheduled messages
      */
-    private void runSimulation() {
+    public void runSimulation() {
         final int LOOP_FREQUENCY = 60;
         final int TIME_START = -5;
         final int TIME_WARNING = -3;

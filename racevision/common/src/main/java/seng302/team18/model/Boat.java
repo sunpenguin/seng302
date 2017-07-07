@@ -10,12 +10,12 @@ import javafx.beans.property.SimpleIntegerProperty;
  * A class which stores information about a boat.
  */
 
-public class Boat implements GeographicLocation {
+public class Boat implements GeographicLocation, IBoat {
     private BoatInfo boatInfo;
     private DoubleProperty speed;
-    private DoubleProperty knotsSpeed;
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
+    private Integer id;
     private double heading;
     private Coordinate coordinate;
     private Coordinate destination;
@@ -24,6 +24,7 @@ public class Boat implements GeographicLocation {
     private Long timeSinceLastMark;
     private Long timeAtLastMark;
     private int status;
+    private boolean isControlled;
 
     /**
      * A constructor for the Boat class
@@ -35,11 +36,11 @@ public class Boat implements GeographicLocation {
     public Boat(String boatName, String shortName, int id) {
         boatInfo = new BoatInfo(id, boatName, shortName);
         speed = new SimpleDoubleProperty();
-        knotsSpeed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty();
         timeTilNextMark = 0L;
         timeSinceLastMark = 0L;
         timeAtLastMark = 0L;
+        isControlled = false;
     }
 
     /**
@@ -103,17 +104,26 @@ public class Boat implements GeographicLocation {
         this.speed.setValue(speed);
     }
 
+
+    public DoubleProperty speedProperty() {
+        return speed;
+    }
+
+
     public int getLegNumber() {
         return boatLegNumber.get();
     }
 
-    public IntegerProperty boatLegNumberProperty() {
+
+    public IntegerProperty legNumberProperty() {
         return boatLegNumber;
     }
+
 
     public void setLegNumber(int boatLegNumber) {
         this.boatLegNumber.set(boatLegNumber);
     }
+
 
     public Coordinate getCoordinate() {
         return coordinate;
@@ -154,9 +164,6 @@ public class Boat implements GeographicLocation {
         return boatInfo.getId();
     }
 
-    public DoubleProperty knotsSpeedProperty() {
-        return knotsSpeed;
-    }
 
     public long getTimeTilNextMark() {
         return timeTilNextMark;
@@ -206,19 +213,22 @@ public class Boat implements GeographicLocation {
                 '}';
     }
 
-    public double getKnotsSpeed() {
-        return knotsSpeed.get();
-    }
-
-    public void setKnotsSpeed(double knotsSpeed) {
-        this.knotsSpeed.set(knotsSpeed);
-    }
-
     public int getStatus() {
         return status;
     }
 
+
     public void setStatus(int status) {
         this.status = status;
+    }
+
+
+    public boolean isControlled() {
+        return isControlled;
+    }
+
+
+    public void setControlled(boolean controlled) {
+        isControlled = controlled;
     }
 }

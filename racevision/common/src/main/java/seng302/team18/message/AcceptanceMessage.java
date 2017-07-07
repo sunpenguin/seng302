@@ -5,11 +5,15 @@ package seng302.team18.message;
  */
 public class AcceptanceMessage implements MessageBody {
 
-    private int id;
+    private int sourceId;
 
 
+    /**
+     * Constructor for RegistrationMessage
+     * @param sourceId the allocated sourceId for the players boat.
+     */
     public AcceptanceMessage(int sourceId) {
-        this.id = sourceId;
+        this.sourceId = sourceId;
     }
 
 
@@ -19,9 +23,12 @@ public class AcceptanceMessage implements MessageBody {
     }
 
 
-    public int getId() {
-        return id;
+    /**
+     * Getter for the sourceId.
+     * @return the sourceId
+     */
+    public int getSourceId() {
+        return sourceId;
     }
-
 
 }
