@@ -26,7 +26,7 @@ public class RegattaXmlEncoderTest {
      * Create a new AC35 regatta message and pass it to the encoder.
      */
     @Before
-    public void setUp() throws ParserConfigurationException, TransformerException{
+    public void setUp() throws ParserConfigurationException, TransformerException {
         double centralLat = -36.8279;
         double centralLong = 174.812;
         String utcOffset = "12";
