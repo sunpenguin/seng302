@@ -66,7 +66,7 @@ public class BoatMessageGeneratorTest {
     @Test
     public void boatMessageGeneratorTest() throws IOException {
         final RaceCourseGenerator raceCourseGenerator = new RaceCourseGenerator();
-        raceCourseGenerator.generateXmlMessage();
+        raceCourseGenerator.generateXmlMessages();
         final Race testRace = raceCourseGenerator.generateRace(raceCourseGenerator.generateCourse());
         byte[] generatedBytes;
         List<BoatMessageGenerator> messages = new ArrayList<>();
