@@ -23,13 +23,10 @@ public class MockDataStream {
      */
     private static void runMock() {
         final int SERVER_PORT = 5005;
-        final String regattaXML = TestXMLFiles.REGATTA_XML_1.toString();
-        final String boatsXML = TestXMLFiles.BOATS_XML_2.toString();
-        final String raceXML = TestXMLFiles.RACE_XML_2.toString();
         final long ABOUT_THREE_MINUTES = 59 * 3 * 1000;
 
         RaceCourseGenerator generator = new RaceCourseGenerator();
-        generator.readFiles(regattaXML, boatsXML, raceXML);
+        generator.generateXmlMessages();
         Course course = generator.generateCourse();
         Race race = generator.generateRace(course);
 
