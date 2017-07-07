@@ -34,7 +34,7 @@ public class ConnectionListener implements Observer {
      *
      * @param race The race
      * @param participantIds List of participant IDs
-     * @param timeout Time at which the ConnectionListener will stop listening for requests
+     * @param timeout Time at which the ConnectionListener will stop listening for requests (Epoch milli)
      * @param factory Factory to convert bytes to a RequestMessage.
      */
     public ConnectionListener(Race race, List<Integer> participantIds, long timeout, MessageParserFactory factory) {
@@ -92,7 +92,7 @@ public class ConnectionListener implements Observer {
      * @throws IOException
      */
     private void sendMessage(ClientConnection player, int sourceID) throws IOException {
-        player.sendMessage(new ResponseMessageGenerator(sourceID).getMessage());
+        player.sendMessage(new AcceptanceMessageGenerator(sourceID).getMessage());
     }
 
 

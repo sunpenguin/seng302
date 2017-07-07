@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * Class to generate response messages to clients connecting to the server, informing them of their boat's ID.
  */
-public class ResponseMessageGenerator extends MessageGenerator {
+public class AcceptanceMessageGenerator extends MessageGenerator {
 
     private int sourceID;
 
@@ -18,10 +18,11 @@ public class ResponseMessageGenerator extends MessageGenerator {
      *
      * @param sourceID int, ID of the boat
      */
-    public ResponseMessageGenerator(int sourceID) {
+    public AcceptanceMessageGenerator(int sourceID) {
         super(AC35MessageType.ACCEPTANCE.getCode());
         this.sourceID = sourceID;
     }
+
 
     @Override
     protected byte[] getPayload() throws IOException {
