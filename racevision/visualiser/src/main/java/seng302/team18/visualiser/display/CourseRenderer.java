@@ -183,7 +183,7 @@ public class CourseRenderer {
 
 
     /**
-     * Reset the lne between the endpoints of a gate
+     * Reset the line between the endpoints of a gate
      *
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */

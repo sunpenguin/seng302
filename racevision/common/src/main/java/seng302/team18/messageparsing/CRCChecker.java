@@ -29,7 +29,7 @@ public class CRCChecker implements MessageErrorDetector {
         CRC32 actualCRC = new CRC32();
         actualCRC.update(headerBytes);
         actualCRC.update(messageBytes);
-        long expectedCRCValue = Integer.toUnsignedLong(ByteCheck.byteToIntConverter(checkSum, 0, 4));
+        long expectedCRCValue = Integer.toUnsignedLong(ByteCheck.byteToInt(checkSum, 0, 4));
         return expectedCRCValue == actualCRC.getValue();
     }
 }

@@ -7,6 +7,7 @@ import seng302.team18.test_mock.RaceCourseGenerator;
 import seng302.team18.test_mock.TestMock;
 import seng302.team18.test_mock.TestXMLFiles;
 import seng302.team18.util.ByteCheck;
+import seng302.team18.util.SpeedConverter;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -23,7 +24,6 @@ public class BoatMessageGeneratorTest {
 
     final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
     final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
-    final double MMPS_TO_KMPH = 36d / 10000d;
 
     private final int VERSIONNUM_I = 0;
     private final int VERSIONNUM_L = 1;
@@ -85,18 +85,18 @@ public class BoatMessageGeneratorTest {
             double expectedHeading = generator.getBoat().getHeading();
             double expectedSpeed = generator.getBoat().getSpeed();
 
-            int actualVersionNum = ByteCheck.byteToIntConverter(generatedBytes,
+            int actualVersionNum = ByteCheck.byteToInt(generatedBytes,
                     VERSIONNUM_I, VERSIONNUM_L);
-            int actualSourceID = ByteCheck.byteToIntConverter(generatedBytes,
+            int actualSourceID = ByteCheck.byteToInt(generatedBytes,
                     SOURCE_ID_I, SOURCE_ID_L);
-            double actualLat = ByteCheck.byteToIntConverter(generatedBytes,
+            double actualLat = ByteCheck.byteToInt(generatedBytes,
                     LATITUDE_I, LATITUDE_L) * BYTE_COORDINATE_TO_DOUBLE;
-            double actualLong = ByteCheck.byteToIntConverter(generatedBytes,
+            double actualLong = ByteCheck.byteToInt(generatedBytes,
                     LONGITUDE_I, LONGITUDE_L) * BYTE_COORDINATE_TO_DOUBLE;
-            double actualHeading = ByteCheck.byteToIntConverter(generatedBytes,
+            double actualHeading = ByteCheck.byteToInt(generatedBytes,
                     HEADING_I, HEADING_L) * BYTE_HEADING_TO_DOUBLE;
-            double actualSpeed = ByteCheck.byteToIntConverter(generatedBytes,
-                    SOG_I, SOG_L) * MMPS_TO_KMPH;
+            double actualSpeed = new SpeedConverter().mmsToKnots(ByteCheck.byteToInt(generatedBytes,
+                    SOG_I, SOG_L));
 
             assertEquals(expectedVersionNum, actualVersionNum);
             assertEquals(expectedSourceID, actualSourceID);

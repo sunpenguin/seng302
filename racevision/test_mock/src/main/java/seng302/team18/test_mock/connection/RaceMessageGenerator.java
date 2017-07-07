@@ -40,7 +40,7 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
 
         long expectedStartTime = race.getStartTime().toInstant().toEpochMilli();
 
-        byte[] expectedStartTimeBytes = ByteCheck.convertLongTo6ByteArray(expectedStartTime); // TODO: Use a reasonable starting time
+        byte[] expectedStartTimeBytes = ByteCheck.longTo6ByteArray(expectedStartTime); // TODO: Use a reasonable starting time
 
         byte[] raceWindDirectionBytes = ByteCheck.shortToByteArray((short) 0x4000);
                 // Currently set to east TODO: make this a field of race or boat?
@@ -73,8 +73,8 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
             byte legNumberByte = (byte) boat.getLegNumber(); // TODO: Update leg numbers so that 0 is prestart, 1 is first leg and so on
             byte numPenaltiesAwardedByte = 7; // TODO: Add this field to boat
             byte numPenaltiesServedByte = 4; // TODO: Add this field to boat
-            byte[] estTimeAtNextMark = ByteCheck.convertLongTo6ByteArray(11111111111L); // TODO: calculate this value
-            byte[] estTimeAtFinish = ByteCheck.convertLongTo6ByteArray(6666666666L); // TODO: calculate this value
+            byte[] estTimeAtNextMark = ByteCheck.longTo6ByteArray(11111111111L); // TODO: calculate this value
+            byte[] estTimeAtFinish = ByteCheck.longTo6ByteArray(6666666666L); // TODO: calculate this value
 
             outputSteam.write(sourceIDBytes);
             outputSteam.write(statusByte);
