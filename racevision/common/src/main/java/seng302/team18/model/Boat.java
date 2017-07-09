@@ -196,6 +196,13 @@ public class Boat implements GeographicLocation, IBoat {
         this.timeAtLastMark = timeAtLastMark;
     }
 
+    public boolean isSailOut() {
+        return sailOut;
+    }
+
+    public void setSailOut(boolean sailOut) {
+        this.sailOut = sailOut;
+    }
 
     @Override
     public String toString() {

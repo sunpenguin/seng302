@@ -40,8 +40,7 @@ public class DisplayBoat implements IBoat {
     private Long timeAtLastMark;
     private int status;
     private boolean isControlled;
-    private boolean sailOut;
-
+    private Coordinate boatCenter;
 
     private PixelMapper pixelMapper;
     private Polyline boat;
@@ -83,7 +82,6 @@ public class DisplayBoat implements IBoat {
             }
         });
         boat.getTransforms().addAll(rotation, boatZoom);
-
         setUpAnnotations();
         boat.toFront();
     }
@@ -176,6 +174,9 @@ public class DisplayBoat implements IBoat {
         annotation.setLayoutY(boat.getLayoutY());
     }
 
+    public Double[] getBOAT_SHAPE() {
+        return BOAT_SHAPE;
+    }
 
     public Color getColor() {
         return boatColor;
