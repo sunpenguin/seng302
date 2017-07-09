@@ -92,11 +92,7 @@ public class RaceController implements Observer {
 
     @FXML
     public void initialize() {
-        try {
-            installKeyHandler();
-        } catch (IOException e){
-            //
-        }
+        installKeyHandler();
         stage = (Stage) raceViewPane.getScene().getWindow();
         setSliderListener();
         sliderSetup();
@@ -114,7 +110,7 @@ public class RaceController implements Observer {
         pixelMapper.setZoomLevel(0);
     }
 
-    @FXML void closeAppAction() {
+    @FXML private void closeAppAction() {
         stage.close();
     }
 
@@ -128,37 +124,31 @@ public class RaceController implements Observer {
     }
 
 
-    private void installKeyHandler() throws IOException {
-//        sender = new Sender("127.0.0.1", 4942, new ControllerMessageFactory());
+    private void installKeyHandler() {
         final EventHandler<KeyEvent> keyEventHandler =
-                keyEvent -> {
-                    if (keyEvent.getCode() != null) {
-                        BoatActionMessage message = null;
-                        switch (keyEvent.getCode()){
-                            case SPACE:
-                                message = new BoatActionMessage(true, sailIn, !sailIn, false,
-                                        false, false);
-                                break;
-                            case ENTER:
-                                message = new BoatActionMessage(false, sailIn, !sailIn, true,
-                                        false, false);
-                                break;
-                            case PAGE_UP:
-                                message = new BoatActionMessage(false, sailIn, !sailIn, false,
-                                        true, false);
-                                break;
-                            case PAGE_DOWN:
-                                message = new BoatActionMessage(false, sailIn, !sailIn, false,
-                                        false, true);
-                                break;
-                            case SHIFT:
-                                sailIn = !sailIn;
-                                message = new BoatActionMessage(false, sailIn, !sailIn, false,
-                                        false, false);
-                        }
-                        sender.send(message);
+            keyEvent -> {
+                if (keyEvent.getCode() != null) {
+                    BoatActionMessage message = null;
+                    switch (keyEvent.getCode()){
+                        case SPACE:
+                            message = new BoatActionMessage(true, sailIn, !sailIn, false, false, false);
+                            break;
+                        case ENTER:
+                            message = new BoatActionMessage(false, sailIn, !sailIn, true, false, false);
+                            break;
+                        case PAGE_UP:
+                            message = new BoatActionMessage(false, sailIn, !sailIn, false, true, false);
+                            break;
+                        case PAGE_DOWN:
+                            message = new BoatActionMessage(false, sailIn, !sailIn, false, false, true);
+                            break;
+                        case SHIFT:
+                            sailIn = !sailIn;
+                            message = new BoatActionMessage(false, sailIn, !sailIn, false, false, false);
                     }
-                };
+                    sender.send(message);
+                }
+            };
         raceViewPane.setOnKeyPressed(keyEventHandler);
     }
 
@@ -474,6 +464,7 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceTimeInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindDirectionInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindSpeedInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new EstimatedTimeInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishersListInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new BoatStatusInterpreter(race));

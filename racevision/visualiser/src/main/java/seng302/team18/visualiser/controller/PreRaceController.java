@@ -61,8 +61,8 @@ public class PreRaceController {
         setUpLists(race.getStartingList());
         preRaceClock.start();
 
-        sender.send(new RequestMessage(true));
         interpretMessages(initialiseInterpreter());
+        sender.send(new RequestMessage(true));
     }
 
 

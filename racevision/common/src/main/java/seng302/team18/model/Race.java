@@ -162,7 +162,8 @@ public class Race {
     public void updateBoats(double time) { // time in seconds
         for (Boat boat : startingList) {
             if (!finishedList.contains(boat)) {
-                updateBoat(boat, time);
+//                updateBoat(boat, time);
+                updatePosition(boat, time);
             }
         }
     }

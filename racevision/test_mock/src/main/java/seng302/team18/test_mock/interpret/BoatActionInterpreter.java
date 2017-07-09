@@ -3,6 +3,7 @@ package seng302.team18.test_mock.interpret;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.MessageBody;
+import seng302.team18.model.Boat;
 import seng302.team18.model.IBoat;
 import seng302.team18.model.Race;
 
@@ -16,7 +17,7 @@ public class BoatActionInterpreter extends MessageInterpreter {
 
     private Race race;
     private int id;
-    private List<IBoat> boats;
+    private List<Boat> boats;
 
     /**
      * Constructor for BoatActionInterpreter.
@@ -38,7 +39,7 @@ public class BoatActionInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof BoatActionMessage) {
             BoatActionMessage actionMessage = (BoatActionMessage) message;
-            for (IBoat boat : boats) {
+            for (Boat boat : boats) {
                 applyActions(boat, actionMessage);
             }
         }
@@ -51,18 +52,20 @@ public class BoatActionInterpreter extends MessageInterpreter {
      * @param boat to be manipulated.
      * @param actions to be applied.
      */
-    private void applyActions(IBoat boat, BoatActionMessage actions) {
+    private void applyActions(Boat boat, BoatActionMessage actions) {
         final double headingChange = 3d;
 
         if (actions.isDownwind()) {
             double windDirection = race.getCourse().getWindDirection();
             boat.setHeading(headTowardsWind(boat.getHeading(), windDirection, headingChange));
+            boat.setSpeed(boat.getBoatTWS(race.getCourse().getWindSpeed(), boat.getTrueWindAngle(windDirection)));
         }
 
         if (actions.isUpwind()) {
             double windDirection = race.getCourse().getWindDirection();
-            windDirection = (windDirection + 180) % 360;
+            windDirection = (windDirection + 180) % 360; // flipping wind direction
             boat.setHeading(headTowardsWind(boat.getHeading(), windDirection, headingChange));
+            boat.setSpeed(boat.getBoatTWS(race.getCourse().getWindSpeed(), boat.getTrueWindAngle(race.getCourse().getWindDirection())));
         }
     }
 

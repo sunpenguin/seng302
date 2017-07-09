@@ -64,7 +64,7 @@ public class RaceCourseGenerator {
 
         Coordinate central = new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong());
 
-        course = new Course(compoundMarks, boundaryMarks, windDirection, zoneId, markRoundings);
+        course = new Course(compoundMarks, boundaryMarks, windDirection, 10, zoneId, markRoundings);
         course.setCentralCoordinate(central);
 
         return course;

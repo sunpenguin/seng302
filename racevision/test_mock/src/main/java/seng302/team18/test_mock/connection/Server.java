@@ -1,10 +1,10 @@
 package seng302.team18.test_mock.connection;
 
+import javax.net.ServerSocketFactory;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 
 /**
@@ -18,6 +18,7 @@ public class Server extends Observable {
     private ServerSocket serverSocket;
     private final int PORT;
 
+//    private List<InetAddress> addressList = new ArrayList<>();
 
 
     public Server(int port) {
@@ -31,7 +32,7 @@ public class Server extends Observable {
      */
     public void openServer() {
         try {
-            serverSocket = new ServerSocket(PORT);
+            serverSocket = ServerSocketFactory.getDefault().createServerSocket(PORT);
         } catch (IOException e) {
             System.err.println("Could not listen on port " + PORT);
             System.err.println("Exiting program");
@@ -40,6 +41,13 @@ public class Server extends Observable {
         System.out.println("Stream opened successfully on port: " + PORT);
 
         acceptClientConnection();
+//        try {
+//            serverSocket.setSoTimeout(1000);
+//        } catch (SocketException e) {
+//            e.printStackTrace();
+//        }
+//        while (true)
+//            acceptClientConnection();
         listener.start();
     }
 
@@ -51,12 +59,12 @@ public class Server extends Observable {
      */
     private synchronized void acceptClientConnection() {
         try {
-//            Socket socket = serverSocket.accept();
-//            ClientConnection client = new ClientConnection(socket);
             ClientConnection client = new ClientConnection(serverSocket.accept());
+//            if (addressList.contains(client.getSocket().getInetAddress())) {
+//                return;
+//            }
+//            addressList.add(client.getSocket().getInetAddress());
             clientList.getClients().add(client);
-//            System.out.println(Thread.currentThread().getId());
-//            System.out.println(Thread.currentThread().getName());
             System.out.println("Player " + clientList.getClients().size() + " joined!");
             setChanged();
             notifyObservers(client);
@@ -130,7 +138,7 @@ public class Server extends Observable {
         public void run() {
 //            System.out.println("ServerConnectionListener::run " + Thread.currentThread().getName());
             try {
-                serverSocket.setSoTimeout(500); // TODO ask Anton about
+                serverSocket.setSoTimeout(500);
             } catch (SocketException e) {
                 e.printStackTrace();
             }
