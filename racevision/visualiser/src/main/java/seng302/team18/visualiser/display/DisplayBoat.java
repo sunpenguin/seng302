@@ -39,6 +39,7 @@ public class DisplayBoat implements IBoat {
     private Long timeSinceLastMark = 0L;
     private Long timeAtLastMark;
     private int status;
+    private boolean sailOut;
     private boolean isControlled;
     private Coordinate boatCenter;
 
@@ -55,9 +56,9 @@ public class DisplayBoat implements IBoat {
             BOAT_WIDTH / 2, BOAT_HEIGHT / 2,
             0.0, BOAT_HEIGHT / 2
     };
+
     private final Rotate rotation = new Rotate(0, 0, 0);
     private final Scale boatZoom = new Scale(1, 1, 0, 0);
-
 
     private Text annotation;
     private Long estimatedTime = 0L;
@@ -71,7 +72,6 @@ public class DisplayBoat implements IBoat {
         this.pixelMapper = pixelMapper;
         this.shortName = name;
         this.boatColor = boatColor;
-
         boat = new Polyline();
         boat.getPoints().addAll(BOAT_SHAPE);
         boat.setFill(boatColor);
@@ -310,5 +310,13 @@ public class DisplayBoat implements IBoat {
 
     public void setControlled(boolean controlled) {
         isControlled = controlled;
+    }
+
+    public boolean isSailOut() {
+        return sailOut;
+    }
+
+    public void setSailOut(boolean sailOut) {
+        this.sailOut = sailOut;
     }
 }

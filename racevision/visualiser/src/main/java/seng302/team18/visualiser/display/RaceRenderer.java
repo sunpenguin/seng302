@@ -50,7 +50,6 @@ public class RaceRenderer {
             Boat boat = race.getStartingList().get(i);
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             if (displayBoat == null) {
-
                 displayBoat = new DisplayWake(pixelMapper,
                         new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++)));
                 if (boat.isControlled()) {
@@ -63,7 +62,7 @@ public class RaceRenderer {
                 displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
-
+            boat.setSailOut(true);
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
                 displayBoat.setCoordinate(boatCoordinates);
