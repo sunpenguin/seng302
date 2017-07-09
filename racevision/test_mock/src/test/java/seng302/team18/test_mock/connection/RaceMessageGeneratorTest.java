@@ -5,13 +5,11 @@ import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.test_mock.RaceCourseGenerator;
-import seng302.team18.test_mock.TestXMLFiles;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Test for RaceMessageGenerator.
@@ -109,17 +107,17 @@ public class RaceMessageGeneratorTest {
 
     @Test
     public void windDirectionTest() {
-        int expectedWindDirection = 0x4000;
+        double expectedWindDirection = testRace.getCourse().getWindDirection();
         int actualWindDirection = ByteCheck.byteToInt(generatedBytes, WIND_DIR_P, WIND_DIR_L);
-        assertEquals(expectedWindDirection, actualWindDirection);
+        assertEquals(expectedWindDirection, actualWindDirection, 1e-6);
     }
 
 
     @Test
     public void windSpeedTest() {
-        int expectedWindSpeed = 5000;
-        int actualWindSpeed = ByteCheck.byteToInt(generatedBytes, WIND_SPEED_P, WIND_SPEED_L);
-        assertEquals(expectedWindSpeed, actualWindSpeed);
+        double expectedWindSpeed = testRace.getCourse().getWindSpeed();//5000;
+        double actualWindSpeed = ByteCheck.byteToInt(generatedBytes, WIND_SPEED_P, WIND_SPEED_L);
+        assertEquals(expectedWindSpeed, actualWindSpeed, 1e-6);
     }
 
 
