@@ -16,7 +16,7 @@ public class ControllerMessageFactory implements MessageEncoderFactory {
 
 
     @Override
-    public MessageEncoder getComposer(int id) {
+    public MessageEncoder getEncoder(int id) {
         return composerMap.get(id);
     }
 

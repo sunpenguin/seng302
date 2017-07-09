@@ -11,10 +11,10 @@ import java.io.IOException;
  */
 public class PlayerControllerReader implements Runnable {
 
-    private SocketMessageReceiver receiver;
+    private Receiver receiver;
     private MessageInterpreter interpreter;
 
-    public PlayerControllerReader(SocketMessageReceiver receiver, MessageInterpreter interpreter) {
+    public PlayerControllerReader(Receiver receiver, MessageInterpreter interpreter) {
         this.receiver = receiver;
         this.interpreter = interpreter;
     }

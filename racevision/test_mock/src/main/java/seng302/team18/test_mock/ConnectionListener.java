@@ -3,7 +3,7 @@ package seng302.team18.test_mock;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
 import seng302.team18.messageparsing.MessageParserFactory;
-import seng302.team18.messageparsing.SocketMessageReceiver;
+import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
 import seng302.team18.test_mock.connection.*;
 import seng302.team18.test_mock.interpret.BoatActionInterpreter;
@@ -59,7 +59,7 @@ public class ConnectionListener implements Observer {
         if (arg instanceof ClientConnection) {
             ClientConnection client = (ClientConnection) arg;
             try {
-                SocketMessageReceiver receiver = new SocketMessageReceiver(client.getSocket(), factory);
+                Receiver receiver = new Receiver(client.getSocket(), factory);
                 int sourceID = ids.get(players.size() - 1);
 
                 executor.submit(() -> {
@@ -103,7 +103,7 @@ public class ConnectionListener implements Observer {
      * @param receiver the socket the player sends commands from.
      * @param sourceID the assigned id of the player's boat.
      */
-    private void addPlayer(SocketMessageReceiver receiver, int sourceID) {
+    private void addPlayer(Receiver receiver, int sourceID) {
         PlayerControllerReader player = new PlayerControllerReader(receiver, new BoatActionInterpreter(race, sourceID));
         players.add(player);
         executor.submit(player);

@@ -5,12 +5,9 @@ import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.test_mock.RaceCourseGenerator;
-import seng302.team18.test_mock.TestMock;
 import seng302.team18.test_mock.TestXMLFiles;
 import seng302.team18.util.ByteCheck;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
@@ -99,7 +96,7 @@ public class RaceMessageGeneratorTest {
 
     @Test
     public void raceStatusTest() {
-        int expectedRaceStatus = testRace.getStatus().code();
+        int expectedRaceStatus = testRace.getStatus().getCode();
         int actualRaceStatus = ByteCheck.byteToInt(generatedBytes, RACE_STATUS_P, RACE_STATUS_L);
         assertEquals(expectedRaceStatus, actualRaceStatus);
     }

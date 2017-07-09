@@ -11,13 +11,13 @@ import java.net.Socket;
  * Sets up a client socket to read from the AC35 messageparsing stream.
  */
 
-public class SocketMessageReceiver {
+public class Receiver {
     private Socket socket;
     private InputStream inStream;
     private MessageParserFactory parserFactory;
 
 
-    public SocketMessageReceiver(Socket socket, MessageParserFactory parserFactory) throws IOException {
+    public Receiver(Socket socket, MessageParserFactory parserFactory) throws IOException {
         this.parserFactory = parserFactory;
         this.socket = socket;
         inStream = socket.getInputStream();
@@ -27,7 +27,7 @@ public class SocketMessageReceiver {
     }
 
 
-    public SocketMessageReceiver(String host, int portNumber, MessageParserFactory parserFactory) throws IOException {
+    public Receiver(String host, int portNumber, MessageParserFactory parserFactory) throws IOException {
         this.parserFactory = parserFactory;
         socket = new Socket(host, portNumber);
         inStream = socket.getInputStream();

@@ -29,14 +29,17 @@ public class Server extends Observable {
      * Blocks waiting for the first client connection, then opens a second thread to listen for subsequent connections
      */
     public void openServer() {
+        System.out.println(1);
         try {
+            System.out.println(2);
             serverSocket = new ServerSocket(PORT);
+            System.out.println(3);
         } catch (IOException e) {
+            System.out.println(4);
             System.err.println("Could not listen on port " + PORT);
             System.err.println("Exiting program");
             System.exit(-1);
         }
-
         System.out.println("Stream opened successfully on port: " + PORT);
 
         acceptClientConnection();

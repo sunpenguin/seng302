@@ -6,9 +6,9 @@ package seng302.team18.message;
 public interface MessageHead {
 
     /**
-     * Gets the code of the message type.
+     * Gets the getCode of the message type.
      *
-     * @return the code of the message type.
+     * @return the getCode of the message type.
      */
     int getType();
 

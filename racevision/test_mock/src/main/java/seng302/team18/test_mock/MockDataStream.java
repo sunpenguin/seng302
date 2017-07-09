@@ -1,15 +1,11 @@
 package seng302.team18.test_mock;
 
 import seng302.team18.messageparsing.AC35MessageParserFactory;
-import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
-import seng302.team18.test_mock.connection.PlayerControllerReader;
 import seng302.team18.test_mock.connection.Server;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Class to set up the mock stream
@@ -35,6 +31,8 @@ public class MockDataStream {
 
         Server server = new Server(SERVER_PORT);
         server.openServer();
+
+        System.out.println(1337);
 
         ConnectionListener connectionListener = new ConnectionListener(race, new ArrayList<>(), System.currentTimeMillis() + ABOUT_THREE_MINUTES, new AC35MessageParserFactory());
         server.addObserver(connectionListener);

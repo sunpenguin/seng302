@@ -327,7 +327,7 @@ public class Race {
         return events;
     }
 
-    public String getRaceName() {
+    public String getName() {
         return raceName;
     }
 

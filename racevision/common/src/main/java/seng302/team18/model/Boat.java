@@ -36,7 +36,7 @@ public class Boat implements GeographicLocation, IBoat {
     public Boat(String boatName, String shortName, int id) {
         boatInfo = new BoatInfo(id, boatName, shortName);
         speed = new SimpleDoubleProperty();
-        place = new SimpleIntegerProperty();
+        place = new SimpleIntegerProperty(1);
         timeTilNextMark = 0L;
         timeSinceLastMark = 0L;
         timeAtLastMark = 0L;

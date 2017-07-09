@@ -35,7 +35,7 @@ public class Sender {
      */
     public void send(MessageBody body) {
         try {
-            MessageEncoder composer = factory.getComposer(body.getType());
+            MessageEncoder composer = factory.getEncoder(body.getType());
             outStream.write(composer.encode(body));
         } catch (Exception e) {
             //
