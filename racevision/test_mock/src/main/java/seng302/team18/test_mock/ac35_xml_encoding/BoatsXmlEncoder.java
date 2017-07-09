@@ -4,7 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.Ac35XmlBoatComponents;
-import seng302.team18.model.Boat;
+import seng302.team18.model.AbstractBoat;
 import seng302.team18.model.BoatType;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -105,10 +105,10 @@ public class BoatsXmlEncoder extends XmlEncoder<AC35XMLBoatMessage> {
     }
 
 
-    private Element encodeBoats(Document doc, List<Boat> boats) {
+    private Element encodeBoats(Document doc, List<AbstractBoat> boats) {
         Element element = doc.createElement(Ac35XmlBoatComponents.ELEMENT_BOATS.toString());
 
-        for (Boat boat : boats) {
+        for (AbstractBoat boat : boats) {
             element.appendChild(encodeBoat(doc, boat));
         }
 
@@ -116,7 +116,7 @@ public class BoatsXmlEncoder extends XmlEncoder<AC35XMLBoatMessage> {
     }
 
 
-    private Element encodeBoat(Document doc, Boat boat) {
+    private Element encodeBoat(Document doc, AbstractBoat boat) {
         final Double DEFAULT_GPS_X = 0.001;
         final Double DEFAULT_GPS_Y = 0.625;
         final Double DEFAULT_GPS_Z = 1.738;

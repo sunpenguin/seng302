@@ -1,6 +1,7 @@
 package seng302.team18.test_mock.model;
 
 import seng302.team18.message.AC35XMLBoatMessage;
+import seng302.team18.model.AbstractBoat;
 import seng302.team18.model.Boat;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
  * Class to generate a new boat.xml model for AC35 XML BoatMessage.
  */
 public class BoatsModel {
-    private List<Boat> boats = new ArrayList<>();
+    private List<AbstractBoat> boats = new ArrayList<>();
     private AC35XMLBoatMessage boatMessage;
 
 

@@ -26,7 +26,7 @@ public class XMLBoatInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof AC35XMLBoatMessage) {
             AC35XMLBoatMessage boatMessage = (AC35XMLBoatMessage) message;
-            race.setStartingList(boatMessage.getBoats());
+            race.setStartingList(boatMessage.getYachts());
         }
     }
 }

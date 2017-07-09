@@ -22,7 +22,7 @@ public class XMLRegattaInterpreterTest {
 
     private Race race;
     private MessageInterpreter interpreter;
-    private List<Boat> boats;
+    private List<AbstractBoat> boats;
     private String utcOffset = "+1";
 
     @Before

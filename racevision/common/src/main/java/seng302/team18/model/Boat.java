@@ -10,9 +10,8 @@ import javafx.beans.property.SimpleIntegerProperty;
  * A class which stores information about a boat.
  */
 
-public class Boat implements GeographicLocation, IBoat {
+public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
     private PolarPattern boatPolar = new AC35PolarPattern();
-    private BoatInfo boatInfo;
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
@@ -35,7 +34,7 @@ public class Boat implements GeographicLocation, IBoat {
      * @param id        The id of the boat
      */
     public Boat(String boatName, String shortName, int id) {
-        boatInfo = new BoatInfo(id, boatName, shortName);
+        super(id, boatName, shortName);
         speed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty(1);
         timeTilNextMark = 0L;
@@ -44,13 +43,10 @@ public class Boat implements GeographicLocation, IBoat {
         isControlled = false;
     }
 
-    /**
-     * A getter for the name of the boat
-     *
-     * @return The boatName
-     */
-    public String getName() {
-        return boatInfo.getName();
+
+    @Override
+    public BoatType getType() {
+        return BoatType.YACHT;
     }
 
 
@@ -71,20 +67,6 @@ public class Boat implements GeographicLocation, IBoat {
      */
     public void setHeading(double heading) {
         this.heading = heading;
-    }
-
-
-    /**
-     * A getter for the team name that the boat belongs to
-     *
-     * @return The shortName
-     */
-    public String getShortName() {
-        return boatInfo.getNameShort();
-    }
-
-    public BoatInfo getBoatInfo() {
-        return boatInfo;
     }
 
     /**
@@ -161,11 +143,6 @@ public class Boat implements GeographicLocation, IBoat {
     }
 
 
-    public Integer getId() {
-        return boatInfo.getId();
-    }
-
-
     public long getTimeTilNextMark() {
         return timeTilNextMark;
     }
@@ -199,11 +176,11 @@ public class Boat implements GeographicLocation, IBoat {
     @Override
     public String toString() {
         return "Boat{" +
-                "boatName=" + boatInfo.getName() +
-                ", shortName='" + boatInfo.getNameShort() + '\'' +
+                "boatName=" + getName() +
+                ", shortName='" + getShortName() + '\'' +
                 ", speed=" + speed +
                 ", leg=" + boatLegNumber +
-                ", id=" + boatInfo.getId() +
+                ", id=" + getId() +
                 ", heading=" + heading +
                 ", coordinate=" + coordinate +
                 ", destination=" + destination +

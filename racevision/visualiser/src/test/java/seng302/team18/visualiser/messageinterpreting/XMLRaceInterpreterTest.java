@@ -23,7 +23,7 @@ public class XMLRaceInterpreterTest {
 
     private Race race;
     private MessageInterpreter interpreter;
-    private List<Boat> boats;
+    private List<AbstractBoat> boats;
     private List<CompoundMark> compoundMarks;
     private List<BoundaryMark> boundaryMarks;
     private final String time = "2017-05-02T22:45:55.692+12:00";

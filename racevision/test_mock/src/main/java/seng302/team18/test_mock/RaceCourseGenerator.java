@@ -3,9 +3,6 @@ package seng302.team18.test_mock;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.AC35XMLRegattaMessage;
-import seng302.team18.messageparsing.AC35XMLBoatParser;
-import seng302.team18.messageparsing.AC35XMLRaceParser;
-import seng302.team18.messageparsing.AC35XMLRegattaParser;
 import seng302.team18.model.*;
 import seng302.team18.test_mock.model.BoatsModel;
 import seng302.team18.test_mock.model.RaceModel;
@@ -81,7 +78,7 @@ public class RaceCourseGenerator {
      * @return Race, the race
      */
     public Race generateRace(Course course) {
-        List<Boat> startingList = boatMessage.getBoats();
+        List<Boat> startingList = boatMessage.getYachts();
         int raceID = raceMessage.getRaceID();
         Race race = new Race(startingList, course, raceID);
 

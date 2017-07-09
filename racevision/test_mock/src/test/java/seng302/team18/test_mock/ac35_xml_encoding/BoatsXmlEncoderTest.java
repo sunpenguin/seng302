@@ -7,6 +7,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.Ac35XmlBoatComponents;
+import seng302.team18.model.AbstractBoat;
 import seng302.team18.model.Boat;
 import seng302.team18.model.BoatType;
 
@@ -31,7 +32,7 @@ public class BoatsXmlEncoderTest {
 
 
     private void setUpMessage() {
-        List<Boat> boats = Arrays.asList(
+        List<AbstractBoat> boats = Arrays.asList(
                 new Boat("Zeroth Boat", "B0", 110),
                 new Boat("First Boat", "B1", 111),
                 new Boat("Second Boat", "B2", 112),
