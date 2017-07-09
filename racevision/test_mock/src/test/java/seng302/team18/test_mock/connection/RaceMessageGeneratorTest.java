@@ -58,11 +58,8 @@ public class RaceMessageGeneratorTest {
 
     @Before
     public void setUp() throws IOException {
-        final String regattaXML = TestXMLFiles.REGATTA_XML_1.toString();
-        final String raceXML = TestXMLFiles.RACE_XML_2.toString();
-        final String boatsXML = TestXMLFiles.BOATS_XML_2.toString();
         final RaceCourseGenerator raceCourseGenerator = new RaceCourseGenerator();
-        raceCourseGenerator.readFiles(regattaXML, boatsXML, raceXML);
+        raceCourseGenerator.generateXmlMessages();
         testRace = raceCourseGenerator.generateRace(raceCourseGenerator.generateCourse());
         RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(testRace);
         generatedBytes = raceMessageGenerator.getPayload();

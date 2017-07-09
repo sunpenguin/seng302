@@ -7,6 +7,9 @@ import seng302.team18.messageparsing.AC35XMLBoatParser;
 import seng302.team18.messageparsing.AC35XMLRaceParser;
 import seng302.team18.messageparsing.AC35XMLRegattaParser;
 import seng302.team18.model.*;
+import seng302.team18.test_mock.model.BoatsModel;
+import seng302.team18.test_mock.model.RaceModel;
+import seng302.team18.test_mock.model.RegattaModel;
 
 import java.time.ZoneId;
 import java.util.List;
@@ -21,31 +24,25 @@ public class RaceCourseGenerator {
     private AC35XMLRaceMessage raceMessage;
 
     /**
-     * Read each test xml file and fill the containers so classes can be made
+     * Generate xml messages.
      *
-     * Pre condition: Strings must represent real, existing file paths
-     * Post condition: files will be read so that classes can be generated
-     *
-     * @param regattaXML file path
-     * @param boatsXML file path
-     * @param raceXML file path
      */
-    public void readFiles(String regattaXML, String boatsXML, String raceXML) {
-        AC35XMLRegattaParser regattaParser = new AC35XMLRegattaParser();
-        regattaMessage = regattaParser.parse(this.getClass().getResourceAsStream(regattaXML));
+    public void generateXmlMessages() {
+        RegattaModel regattaModel = new RegattaModel();
+        regattaMessage = regattaModel.getRegattaMessage();
 
-        AC35XMLBoatParser boatsParser = new AC35XMLBoatParser();
-        boatMessage = boatsParser.parse(this.getClass().getResourceAsStream(boatsXML));
+        BoatsModel boatsModel = new BoatsModel();
+        boatMessage = boatsModel.getBoatMessage();
 
-        AC35XMLRaceParser raceParser = new AC35XMLRaceParser();
-        raceMessage = raceParser.parse(this.getClass().getResourceAsStream(raceXML));
+        RaceModel raceModel = new RaceModel();
+        raceMessage = raceModel.getRaceMessage();
     }
 
 
     /**
      * Generate a course
      *
-     * Pre condition: readFiles has been called.
+     * Pre condition: generateXmlMessages has been called.
      * Post condition: Returns a course which is represented by the file read in readFile.
      *
      * @return Course, the course
