@@ -35,7 +35,7 @@ public class RaceTimeInterpreterTest {
         race = new Race();
         race.setStartingList(boats);
         raceTimeInterpreter = new RaceTimeInterpreter(race);
-        message = new AC35RaceStatusMessage(13000, 0, 2000, 0, new ArrayList<>());
+        message = new AC35RaceStatusMessage(13000, 0, 2000, 0, 0,new ArrayList<>());
         raceTimeInterpreter.interpret(message);
     }
 

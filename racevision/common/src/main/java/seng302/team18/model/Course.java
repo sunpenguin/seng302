@@ -14,14 +14,17 @@ public class Course {
     private List<CompoundMark> compoundMarks;
     private List<Leg> legs;
     private double windDirection;
+    private double windSpeed;
     private List<BoundaryMark> boundaries;
     private Coordinate centralCoordinate;
     private ZoneId timeZone;
     private List<MarkRounding> markRoundings;
 
-    public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, ZoneId timeZone, List<MarkRounding> markRoundings) {
+    public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, double windSpeed,
+                  ZoneId timeZone, List<MarkRounding> markRoundings) {
         this.compoundMarks = new ArrayList<>(marks);
         this.windDirection = windDirection;
+        this.windSpeed = windSpeed;
         this.boundaries = new ArrayList<>(boundaries);
         this.timeZone = timeZone;
         this.markRoundings = markRoundings;
@@ -35,6 +38,7 @@ public class Course {
         markRoundings = new ArrayList<>();
         timeZone = ZoneId.systemDefault();
         windDirection = 0d;
+        windSpeed = 0d;
         centralCoordinate = new Coordinate(0d, 0d);
     }
 
@@ -71,6 +75,13 @@ public class Course {
         this.windDirection = windDirection;
     }
 
+    public double getWindSpeed() {
+        return windSpeed;
+    }
+
+    public void setWindSpeed(double windSpeed) {
+        this.windSpeed = windSpeed;
+    }
 
     public List<Mark> getMarks() {
         List<Mark> marks = new ArrayList<>();

@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  */
 
 public class Boat implements GeographicLocation, IBoat {
+    private PolarPattern boatPolar = new AC35PolarPattern();
     private BoatInfo boatInfo;
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
@@ -230,5 +231,48 @@ public class Boat implements GeographicLocation, IBoat {
 
     public void setControlled(boolean controlled) {
         isControlled = controlled;
+    }
+
+    /**
+     * Uses boats polar pattern to calculate boats TWS
+     *
+     * @param windSpeed double, the speed of the wind
+     * @param windHeading double, the direction of the wind
+     * @return double, the tws of the boat
+     */
+    public double getBoatTWS(double windSpeed, double windHeading) {
+        double twa = getTrueWindAngle(windHeading);
+        return boatPolar.getSpeedForBoat(twa, windSpeed);
+    }
+
+    /**
+     * Gets true wind angle for boat.
+     *
+     * @param windHeading double, Heading of the wind
+     * @return double, True wind angle for the boat.
+     */
+    public double getTrueWindAngle(double windHeading) {
+        double theta = 180 - windHeading;
+        double boatPlusTheta = heading + theta;
+        double windPlusTheta = windHeading + theta; //will be 180
+
+        if (boatPlusTheta > 360) {
+            boatPlusTheta = boatPlusTheta - 360;
+        }
+
+        if (boatPlusTheta < 0) {
+            boatPlusTheta = 360 + boatPlusTheta;
+        }
+
+        double trueWindAngle;
+
+        if (boatPlusTheta > 180) {
+            double angleFrom180 = boatPlusTheta - 180;
+            trueWindAngle = 180 - angleFrom180;
+        } else {
+            trueWindAngle = boatPlusTheta;
+        }
+
+        return trueWindAngle;
     }
 }

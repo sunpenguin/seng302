@@ -65,6 +65,7 @@ public class RaceController implements Observer {
     @FXML private TableColumn<Boat, String> boatColorColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
+    @FXML private Label speedLabel;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
     @FXML private Button setAnnotations;
@@ -82,7 +83,7 @@ public class RaceController implements Observer {
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
     private RaceClock raceClock;
-    private WindDirection windDirection;
+    private WindDisplay windDisplay;
     private PixelMapper pixelMapper;
     private Map<AnnotationType, Boolean> importantAnnotations;
 
@@ -396,9 +397,9 @@ public class RaceController implements Observer {
      * retrieves the wind direction, scales the size of the arrow and then draws it on the Group
      */
     private void startWindDirection() {
-        arrow.setScaleX(0.4);
-        windDirection = new WindDirection(race, arrow, race.getCourse().getWindDirection());
-        windDirection.start();
+//        arrow.setScaleX(0.4);
+        windDisplay = new WindDisplay(race, arrow, speedLabel);
+        windDisplay.start();
     }
 
 

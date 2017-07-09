@@ -88,7 +88,6 @@ public class TestMock implements Observer {
 
             } else {
                 race.updateBoats((timeCurr - timeLast));
-
                 // Send mark rounding messages for all mark roundings that occured
                 for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
                     server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
@@ -116,7 +115,6 @@ public class TestMock implements Observer {
             }
 
         } while (!race.isFinished());
-
 
         // Sends final message
         ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
