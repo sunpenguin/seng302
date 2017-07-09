@@ -18,7 +18,7 @@ public class Race {
     private List<Boat> startingList;
     private Course course;
     private List<Boat> finishedList;
-    private ZonedDateTime startTime;
+    private ZonedDateTime startTime = ZonedDateTime.now();
     private ZonedDateTime currentTime;
     private List<Integer> participantIds;
     private int id;
@@ -271,7 +271,7 @@ public class Race {
 
 
     public boolean isFinished() {
-        return startingList.size() == finishedList.size();
+        return startingList.size() == finishedList.size() && startingList.size() != 0;
     }
 
     public ZonedDateTime getStartTime() {

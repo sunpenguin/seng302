@@ -2,6 +2,7 @@ package seng302.team18.test_mock.connection;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Observable;
@@ -29,13 +30,9 @@ public class Server extends Observable {
      * Blocks waiting for the first client connection, then opens a second thread to listen for subsequent connections
      */
     public void openServer() {
-        System.out.println(1);
         try {
-            System.out.println(2);
             serverSocket = new ServerSocket(PORT);
-            System.out.println(3);
         } catch (IOException e) {
-            System.out.println(4);
             System.err.println("Could not listen on port " + PORT);
             System.err.println("Exiting program");
             System.exit(-1);
@@ -43,7 +40,6 @@ public class Server extends Observable {
         System.out.println("Stream opened successfully on port: " + PORT);
 
         acceptClientConnection();
-
         listener.start();
     }
 
@@ -53,12 +49,15 @@ public class Server extends Observable {
      * Adding new client to the client list.
      * Increment the number that represents number of connected clients.
      */
-    private void acceptClientConnection() {
+    private synchronized void acceptClientConnection() {
         try {
+//            Socket socket = serverSocket.accept();
+//            ClientConnection client = new ClientConnection(socket);
             ClientConnection client = new ClientConnection(serverSocket.accept());
             clientList.getClients().add(client);
+//            System.out.println(Thread.currentThread().getId());
+//            System.out.println(Thread.currentThread().getName());
             System.out.println("Player " + clientList.getClients().size() + " joined!");
-
             setChanged();
             notifyObservers(client);
 
@@ -129,6 +128,7 @@ public class Server extends Observable {
 
         @Override
         public void run() {
+//            System.out.println("ServerConnectionListener::run " + Thread.currentThread().getName());
             try {
                 serverSocket.setSoTimeout(500); // TODO ask Anton about
             } catch (SocketException e) {

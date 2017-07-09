@@ -81,12 +81,9 @@ public class RaceCourseGenerator {
      * @return Race, the race
      */
     public Race generateRace(Course course) {
-        Race race;
-
         List<Boat> startingList = boatMessage.getBoats();
         int raceID = raceMessage.getRaceID();
-
-        race = new Race(startingList, course, raceID);
+        Race race = new Race(startingList, course, raceID);
 
         return race;
     }

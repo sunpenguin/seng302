@@ -55,7 +55,7 @@ public abstract class MessageEncoder {
             sourceID[0] = 11;
             sourceID[1] = 22;
             sourceID[2] = 33;
-            sourceID[4] = 99;
+            sourceID[3] = 99;
 
             byte[] messageLen = ByteCheck.shortToByteArray(lengthOfMessage);
 

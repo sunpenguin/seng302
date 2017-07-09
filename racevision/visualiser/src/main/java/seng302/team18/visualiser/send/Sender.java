@@ -37,8 +37,9 @@ public class Sender {
         try {
             MessageEncoder composer = factory.getEncoder(body.getType());
             outStream.write(composer.encode(body));
+            outStream.flush();
         } catch (Exception e) {
-            //
+            e.printStackTrace();
         }
     }
 }

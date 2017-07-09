@@ -31,7 +31,6 @@ public class TestMock implements Observer {
     public TestMock(Race race, Server server) {
         this.race = race;
         this.server = server;
-        server.addObserver(this);
     }
 
 
@@ -118,8 +117,6 @@ public class TestMock implements Observer {
 
         } while (!race.isFinished());
 
-        System.out.println(race.getStartingList());
-        System.out.println(race.getFinishedList());
 
         // Sends final message
         ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
