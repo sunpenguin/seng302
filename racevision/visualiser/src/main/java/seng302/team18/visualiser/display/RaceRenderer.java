@@ -49,6 +49,7 @@ public class RaceRenderer {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
+            boat.setSailOut(false);
             if (displayBoat == null) {
                 displayBoat = new DisplayWake(pixelMapper,
                         new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++)));

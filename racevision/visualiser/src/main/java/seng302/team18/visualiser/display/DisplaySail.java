@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
+import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
@@ -15,7 +16,7 @@ public class DisplaySail extends DisplayBoatDecorator {
 
     private Polyline sail;
     private PixelMapper pixelMapper;
-    private Coordinate start;
+    private Boat boat;
     private final Rotate rotation = new Rotate(0, 0, 0);
     private final Scale zoom = new Scale(1, 1, 0, 0);
     private final double SAIL_LENGTH = 15;
@@ -57,14 +58,17 @@ public class DisplaySail extends DisplayBoatDecorator {
     }
 
     public void setHeading(double heading) {
-        if (isSailOut()){
+
             rotation.setAngle(heading + 270);
-        }
-        else{
-            rotation.setAngle(heading);
-        }
+
         super.setHeading(heading);
     }
 
+    public Boat getBoat() {
+        return boat;
+    }
 
+    public void setBoat(Boat boat) {
+        this.boat = boat;
+    }
 }

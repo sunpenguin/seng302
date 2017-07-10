@@ -10,6 +10,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
+import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.IBoat;
 import seng302.team18.util.XYPair;
@@ -42,6 +43,7 @@ public class DisplayBoat implements IBoat {
     private boolean sailOut;
     private boolean isControlled;
     private Coordinate boatCenter;
+    private Boat boatObject;
 
     private PixelMapper pixelMapper;
     private Polyline boat;
@@ -318,5 +320,13 @@ public class DisplayBoat implements IBoat {
 
     public void setSailOut(boolean sailOut) {
         this.sailOut = sailOut;
+    }
+
+    public Boat getBoatObject() {
+        return boatObject;
+    }
+
+    public void setBoatObject(Boat boatObject) {
+        this.boatObject = boatObject;
     }
 }
