@@ -85,7 +85,6 @@ public class DisplayBoat implements IBoat {
         });
         boat.getTransforms().addAll(rotation, boatZoom);
         setUpAnnotations();
-        boat.toFront();
     }
 
 

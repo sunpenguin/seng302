@@ -35,7 +35,8 @@ public class DisplaySail extends DisplayBoatDecorator {
         this.pixelMapper = mapper;
         sail = new Polyline();
         sail.getPoints().addAll(SAIL_OUT);
-        sail.getTransforms().addAll(rotation);
+        sail.getTransforms().addAll(rotation, zoom);
+        sail.toFront();
     }
 
     public void setCoordinate(Coordinate coordinate) {

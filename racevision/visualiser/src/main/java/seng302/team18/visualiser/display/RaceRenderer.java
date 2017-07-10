@@ -49,7 +49,7 @@ public class RaceRenderer {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
-            boat.setSailOut(false);
+            boat.setSailOut(true);
             if (displayBoat == null) {
                 displayBoat = new DisplayWake(pixelMapper,
                         new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++)));
@@ -71,7 +71,7 @@ public class RaceRenderer {
                 displayBoat.setHeading(boat.getHeading());
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
-//                displayBoat.setScale(pixelMapper.getZoomFactor());
+                displayBoat.setScale(pixelMapper.getZoomFactor());
             }
         }
     }
