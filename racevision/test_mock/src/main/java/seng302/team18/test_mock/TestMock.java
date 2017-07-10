@@ -17,8 +17,9 @@ import static java.lang.Thread.sleep;
  */
 public class TestMock implements Observer {
 
-    private Race race;
-    private Server server;
+    private final Race race;
+    private final Server server;
+    private final XmlMessageBuilder xmlMessageBuilder;
     private List<Boat> boats = Arrays.asList(new Boat("Emirates Team New Zealand", "TEAM New Zealand", 121),
             new Boat("Oracle Team USA", "TEAM USA", 122),
             new Boat("Artemis Racing", "TEAM SWE", 123),
@@ -45,9 +46,19 @@ public class TestMock implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) {
             ClientConnection client = (ClientConnection) arg;
-            client.sendMessage(new byte[10]); // TODO send the xml message
             race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
+            sendXmlMessages(client);
         }
+    }
+
+    private void sendXmlMessages(ClientConnection newPlayer) {
+        MessageGenerator generatorXmlRegatta = new XmlMessageGeneratorRegatta();
+        MessageGenerator generatorXmlRace = new XmlMessageGeneratorRace();
+        MessageGenerator generatorXmlBoats = new XmlMessageGeneratorBoats();
+
+        newPlayer.sendMessage(generatorXmlRegatta.getMessage());
+        server.broadcast(generatorXmlRace.getMessage());
+        server.broadcast(generatorXmlBoats.getMessage());
     }
 
 

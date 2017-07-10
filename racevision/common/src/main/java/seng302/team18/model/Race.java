@@ -6,7 +6,9 @@ import seng302.team18.util.SpeedConverter;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -25,6 +27,7 @@ public class Race {
     private RaceStatus status;
     private String raceName;
     private Integer playerId;
+    private RaceType raceType;
 
 
     public Race() {
@@ -37,6 +40,7 @@ public class Race {
         currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         raceName = "";
+        raceType = RaceType.MATCH;
     }
 
 
@@ -46,7 +50,7 @@ public class Race {
      * @param startingList ArrayList holding all entered boats
      * @param course       Course object
      */
-    public Race(List<Boat> startingList, Course course, int raceId) {
+    public Race(List<Boat> startingList, Course course, int raceId, RaceType raceType) {
         this.startingList = startingList;
         this.course = course;
         finishedList = new ArrayList<>();
@@ -55,6 +59,7 @@ public class Race {
                 .collect(Collectors.toList());
         this.id = raceId;
         this.status = RaceStatus.NOT_ACTIVE;
+        this.raceType = raceType;
         setCourseForBoats();
         setInitialSpeed();
     }
@@ -342,5 +347,34 @@ public class Race {
 
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
+    }
+
+    public RaceType getRaceType() {
+        return raceType;
+    }
+
+    public enum RaceType {
+        MATCH("Match"),
+        FLEET("Fleet");
+
+        private final String value;
+
+        private final static Map<String, RaceType> MAPPING = initializeMapping();
+
+        RaceType(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public static RaceType fromValue(String value) {
+            return MAPPING.get(value);
+        }
+
+        private static Map<String, RaceType> initializeMapping() {
+            return Arrays.stream(values()).collect(Collectors.toMap(RaceType::getValue, rt -> rt));
+        }
     }
 }
