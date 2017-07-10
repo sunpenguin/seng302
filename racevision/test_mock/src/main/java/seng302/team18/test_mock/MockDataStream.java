@@ -22,10 +22,10 @@ public class MockDataStream {
         final int SERVER_PORT = 5005;
         final long TIME_OUT = 5 * 3 * 1000;
 
-        RaceCourseGenerator generator = new RaceCourseGenerator();
-        generator.generateXmlMessages();
-        Course course = generator.generateCourse();
-        Race race = new Race(new ArrayList<>(), course, 1337);
+//        RaceCourseGenerator generator = new RaceCourseGenerator();
+//        generator.generateXmlMessages();
+//        Course course = generator.generateCourse();
+//        Race race = new Race(new ArrayList<>(), course, 1337);
 //        Race race = generator.generateRace(course);
 
         Server server = new Server(SERVER_PORT);

@@ -8,6 +8,7 @@ public enum  AC35XmlRegattaComponents {
 
     ELEMENT_REGATTA_ID("RegattaID"),
     ELEMENT_REGATTA_NAME("RegattaName"),
+    ELEMENT_COURSE_NAME("CourseName"),
     ELEMENT_REGATTA_CENTER_LAT("CentralLatitude"),
     ELEMENT_REGATTA_CENTER_LONG("CENTER_LONG"),
     ELEMENT_REGATTA_OFFSET("UtcOffset");

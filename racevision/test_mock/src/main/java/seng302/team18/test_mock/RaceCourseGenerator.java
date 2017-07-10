@@ -4,9 +4,7 @@ import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.AC35XMLRegattaMessage;
 import seng302.team18.model.*;
-import seng302.team18.test_mock.model.BoatsModel;
 import seng302.team18.test_mock.model.RaceModel;
-import seng302.team18.test_mock.model.RegattaModel;
 
 import java.time.ZoneId;
 import java.util.List;

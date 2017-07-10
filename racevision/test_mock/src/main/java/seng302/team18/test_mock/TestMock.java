@@ -5,6 +5,7 @@ import seng302.team18.model.MarkRoundingEvent;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceStatus;
 import seng302.team18.test_mock.connection.*;
+import seng302.team18.test_mock.model.XmlMessageBuilder;
 
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -29,9 +30,10 @@ public class TestMock implements Observer {
 
 
 
-    public TestMock(Race race, Server server) {
+    public TestMock(Race race, Server server, XmlMessageBuilder messageBuilder) {
         this.race = race;
         this.server = server;
+        this.xmlMessageBuilder = messageBuilder;
     }
 
 
@@ -52,9 +54,9 @@ public class TestMock implements Observer {
     }
 
     private void sendXmlMessages(ClientConnection newPlayer) {
-        MessageGenerator generatorXmlRegatta = new XmlMessageGeneratorRegatta();
-        MessageGenerator generatorXmlRace = new XmlMessageGeneratorRace();
-        MessageGenerator generatorXmlBoats = new XmlMessageGeneratorBoats();
+        MessageGenerator generatorXmlRegatta = new XmlMessageGeneratorRegatta(xmlMessageBuilder.buildRegattaMessage(race));
+        MessageGenerator generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
+        MessageGenerator generatorXmlBoats = new XmlMessageGeneratorBoats(xmlMessageBuilder.buildBoatsXmlMessage(race));
 
         newPlayer.sendMessage(generatorXmlRegatta.getMessage());
         server.broadcast(generatorXmlRace.getMessage());

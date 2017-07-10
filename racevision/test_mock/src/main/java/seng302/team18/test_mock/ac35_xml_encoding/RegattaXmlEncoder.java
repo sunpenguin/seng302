@@ -34,8 +34,13 @@ public class RegattaXmlEncoder extends XmlEncoder<AC35XMLRegattaMessage> {
 
         // REGATTA_NAME
         Element regattaName = doc.createElement(AC35XmlRegattaComponents.ELEMENT_REGATTA_NAME.toString());
-        regattaName.appendChild(doc.createTextNode(regattaMessage.getName()));
+        regattaName.appendChild(doc.createTextNode(regattaMessage.getRegattaName()));
         root.appendChild(regattaName);
+
+        // REGATTA_NAME
+        Element courseName = doc.createElement(AC35XmlRegattaComponents.ELEMENT_COURSE_NAME.toString());
+        courseName.appendChild(doc.createTextNode(regattaMessage.getCourseName()));
+        root.appendChild(courseName);
 
         // CENTER_LAT
         Element centerLat = doc.createElement(AC35XmlRegattaComponents.ELEMENT_REGATTA_CENTER_LAT.toString());

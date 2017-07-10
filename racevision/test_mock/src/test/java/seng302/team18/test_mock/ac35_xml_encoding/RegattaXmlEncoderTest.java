@@ -62,7 +62,7 @@ public class RegattaXmlEncoderTest {
     public void encodeNameTest() {
         String encodedName = root.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_NAME.toString())
                 .item(0).getTextContent();
-        String name = regattaMessage.getName();
+        String name = regattaMessage.getRegattaName();
         assertEquals(name, encodedName);
     }
 

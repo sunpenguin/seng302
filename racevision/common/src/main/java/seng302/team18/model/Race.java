@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
  */
 public class Race {
 
+    private Regatta regatta = new Regatta();
     private List<Boat> startingList;
     private Course course;
     private List<Boat> finishedList;
@@ -25,7 +26,6 @@ public class Race {
     private List<Integer> participantIds;
     private int id;
     private RaceStatus status;
-    private String raceName;
     private Integer playerId;
     private RaceType raceType;
 
@@ -39,7 +39,7 @@ public class Race {
         status = RaceStatus.NOT_ACTIVE;
         currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
-        raceName = "";
+        setRaceName("");
         raceType = RaceType.MATCH;
     }
 
@@ -290,6 +290,7 @@ public class Race {
 
     /**
      * Sets participants and removes non participants for current list of boats.
+     *
      * @param participantIds ids of all participants
      */
     public void setParticipantIds(List<Integer> participantIds) {
@@ -334,11 +335,11 @@ public class Race {
     }
 
     public String getName() {
-        return raceName;
+        return regatta.getRegattaName();
     }
 
-    public void setRaceName(String raceName) {
-        this.raceName = raceName;
+    public void setRaceName(String name) {
+        regatta.setRegattaName(name);
     }
 
     public int getPlayerId() {
@@ -351,6 +352,18 @@ public class Race {
 
     public RaceType getRaceType() {
         return raceType;
+    }
+
+    public Regatta getRegatta() {
+        return regatta;
+    }
+
+    public void setRegatta(Regatta regatta) {
+        this.regatta = regatta;
+    }
+
+    public void setRaceType(RaceType raceType) {
+        this.raceType = raceType;
     }
 
     public enum RaceType {

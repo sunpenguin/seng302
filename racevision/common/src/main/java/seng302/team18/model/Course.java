@@ -19,6 +19,7 @@ public class Course {
     private Coordinate centralCoordinate;
     private ZoneId timeZone;
     private List<MarkRounding> markRoundings;
+    private String name = "";
 
     public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, double windSpeed,
                   ZoneId timeZone, List<MarkRounding> markRoundings) {
@@ -154,6 +155,10 @@ public class Course {
             }
         }
         return foundLeg;
+    }
+
+    public String getName() {
+        return name;
     }
 }
 
