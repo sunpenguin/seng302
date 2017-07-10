@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Test for RaceXmlEncoder class.
@@ -35,7 +36,7 @@ public class RaceXmlEncoderTest {
      */
     private void setUpRaceMessage() {
         String startTime;
-        List<Integer> participantIDs;
+        Map<Integer, AC35XMLRaceMessage.EntryDirection> participants;
         List<CompoundMark> compoundMarks;
         List<MarkRounding> markRoundings;
         List<BoundaryMark> boundaryMarks;
@@ -44,10 +45,10 @@ public class RaceXmlEncoderTest {
         final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss-Z");
         startTime = ZonedDateTime.now().format(DATE_TIME_FORMATTER);
 
-        participantIDs = new ArrayList<>();
+        participants = new HashMap<>();
 
         for (Integer i = 107; i < 109; i++) {
-            participantIDs.add(i);
+            participants.put(i, AC35XMLRaceMessage.EntryDirection.PORT);
         }
 
         Mark mark1 = new Mark(1, new Coordinate(22, 21));
@@ -82,10 +83,10 @@ public class RaceXmlEncoderTest {
         compoundMarks.add(compoundMark3);
         compoundMarks.add(compoundMark4);
 
-        MarkRounding markRounding1 = new MarkRounding(1, compoundMark1);
-        MarkRounding markRounding2 = new MarkRounding(2, compoundMark2);
-        MarkRounding markRounding3 = new MarkRounding(3, compoundMark3);
-        MarkRounding markRounding4 = new MarkRounding(4, compoundMark4);
+        MarkRounding markRounding1 = new MarkRounding(1, compoundMark1, MarkRounding.Direction.SP, 3);
+        MarkRounding markRounding2 = new MarkRounding(2, compoundMark2, MarkRounding.Direction.SP, 3);
+        MarkRounding markRounding3 = new MarkRounding(3, compoundMark3, MarkRounding.Direction.SP, 3);
+        MarkRounding markRounding4 = new MarkRounding(4, compoundMark4, MarkRounding.Direction.SP, 3);
 
         markRoundings = new ArrayList<>();
         markRoundings.add(markRounding1);
@@ -111,13 +112,14 @@ public class RaceXmlEncoderTest {
         raceMessage.setBoundaryMarks(boundaryMarks);
         raceMessage.setCompoundMarks(compoundMarks);
         raceMessage.setMarkRoundings(markRoundings);
-        raceMessage.setParticipantIDs(participantIDs);
+        raceMessage.setParticipants(participants);
         raceMessage.setStartTime(startTime);
     }
 
 
     /**
      * Get DOMSource from the RaceXmlEncoder in order to use it to run tests below.
+     *
      * @throws Exception parseConfigurationException
      */
     @Before
@@ -147,9 +149,10 @@ public class RaceXmlEncoderTest {
             encodedParticipants.add(Integer.parseInt(participantElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_SOURCE_ID.toString())));
         }
 
-        int firstParticipant = raceMessage.getParticipantIDs().get(0);
-        int firstEncodedParticipant = encodedParticipants.get(0);
-        assertEquals(firstEncodedParticipant, firstParticipant);
+//        int firstParticipant = raceMessage.getParticipantIDs().get(0);
+//        int firstEncodedParticipant = encodedParticipants.get(0);
+//        assertEquals(firstEncodedParticipant, firstParticipant);
+        fail();
     }
 
 
@@ -208,7 +211,7 @@ public class RaceXmlEncoderTest {
             Element markRoundingE = (Element) markRoundingNode;
             int seqID = Integer.parseInt(markRoundingE.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_SEQUENCE_ID.toString()));
             int compoundMarkNum = Integer.parseInt(markRoundingE.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_COMPOUND_MARK_ID.toString()));
-            encodedMarkRoundings.add(new MarkRounding(seqID, encodedCompoundMarks.get(compoundMarkNum)));
+            encodedMarkRoundings.add(new MarkRounding(seqID, encodedCompoundMarks.get(compoundMarkNum), MarkRounding.Direction.SP, 3));
         }
 
         MarkRounding firstMarkRounding = raceMessage.getMarkRoundings().get(0);

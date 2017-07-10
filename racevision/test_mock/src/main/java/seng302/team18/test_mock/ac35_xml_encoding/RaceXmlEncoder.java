@@ -4,11 +4,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import seng302.team18.message.AC35RaceXMLComponents;
 import seng302.team18.message.AC35XMLRaceMessage;
+import seng302.team18.message.XmlMessage;
 import seng302.team18.model.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -44,7 +46,7 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
 
         // Creation time
         Element creationTime = doc.createElement(AC35RaceXMLComponents.ELEMENT_CREATION_TIME_DATE.toString());
-        final String time = ZonedDateTime.now().format(DATE_TIME_FORMATTER);
+        final String time = ZonedDateTime.now().format(XmlMessage.DATE_TIME_FORMATTER);
         creationTime.appendChild(doc.createTextNode(time));
         root.appendChild(creationTime);
 
@@ -55,7 +57,7 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
         root.appendChild(startTime);
 
         // Participants
-        root.appendChild(encodeParticipants(doc, raceMessage.getParticipantIDs()));
+        root.appendChild(encodeParticipants(doc, new ArrayList<>(raceMessage.getParticipants().keySet())));
 
         // Course
         root.appendChild(encodeCourse(doc, raceMessage.getCompoundMarks()));

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.test_mock.RaceCourseGenerator;
+import seng302.team18.test_mock.model.*;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
@@ -56,9 +56,11 @@ public class RaceMessageGeneratorTest {
 
     @Before
     public void setUp() throws IOException {
-        final RaceCourseGenerator raceCourseGenerator = new RaceCourseGenerator();
-        raceCourseGenerator.generateXmlMessages();
-        testRace = raceCourseGenerator.generateRace(raceCourseGenerator.generateCourse());
+        BaseRaceBuilder raceBuilder = new RaceBuilder1();
+        BaseRegattaBuilder regattaBuilder = new RegattaBuilder1();
+        BaseCourseBuilder courseBuilder = new CourseBuilder1();
+
+        testRace = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
         RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(testRace);
         generatedBytes = raceMessageGenerator.getPayload();
         currentTime = System.currentTimeMillis();

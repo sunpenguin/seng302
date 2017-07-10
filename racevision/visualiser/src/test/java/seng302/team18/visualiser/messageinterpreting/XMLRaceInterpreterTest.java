@@ -12,9 +12,7 @@ import seng302.team18.model.*;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by david on 5/2/17.
@@ -51,7 +49,13 @@ public class XMLRaceInterpreterTest {
         message.setStartTime(time);
         message.setBoundaryMarks(boundaryMarks);
         message.setCompoundMarks(compoundMarks);
-        message.setParticipantIDs(new ArrayList<>(Arrays.asList(1, 2, 3)));
+
+        Map<Integer, AC35XMLRaceMessage.EntryDirection> ids = new HashMap<>();
+        for (Integer i : Arrays.asList(1, 2, 3)) {
+            ids.put(i, AC35XMLRaceMessage.EntryDirection.PORT);
+        }
+
+        message.setParticipants(ids);
         message.setMarkRoundings(new ArrayList<>());
 
         interpreter.interpret(message);

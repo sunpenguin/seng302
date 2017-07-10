@@ -2,10 +2,11 @@ package seng302.team18.test_mock.connection;
 
 import org.junit.Test;
 import seng302.team18.message.AC35MessageType;
-import seng302.team18.model.*;
-import seng302.team18.test_mock.RaceCourseGenerator;
-import seng302.team18.test_mock.TestMock;
-import seng302.team18.test_mock.TestXMLFiles;
+import seng302.team18.model.Boat;
+import seng302.team18.model.CompoundMark;
+import seng302.team18.model.MarkRoundingEvent;
+import seng302.team18.model.Race;
+import seng302.team18.test_mock.model.*;
 import seng302.team18.util.ByteCheck;
 
 import static org.junit.Assert.assertEquals;
@@ -19,9 +20,11 @@ public class MarkRoundingMessageGeneratorTest {
 
     @Test
     public void getPayload() throws Exception {
-        final RaceCourseGenerator generator = new RaceCourseGenerator();
-        generator.generateXmlMessages();
-        final Race race = generator.generateRace(generator.generateCourse());
+        BaseRaceBuilder raceBuilder = new RaceBuilder1();
+        BaseRegattaBuilder regattaBuilder = new RegattaBuilder1();
+        BaseCourseBuilder courseBuilder = new CourseBuilder1();
+
+        final Race race = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
         final Boat boat = race.getStartingList().get(0);
         final CompoundMark mark = race.getCourse().getCompoundMarks().get(0);
         final long time = System.currentTimeMillis();

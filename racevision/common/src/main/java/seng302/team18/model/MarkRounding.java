@@ -36,7 +36,7 @@ public class MarkRounding {
         return zoneSize;
     }
 
-    enum Direction {
+    public enum Direction {
         PORT("Port"),
         STARBOARD("Stbd"),
         SP("SP"),

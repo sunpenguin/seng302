@@ -31,9 +31,10 @@ public class RegattaXmlEncoderTest {
         double centralLong = 174.812;
         String utcOffset = "12";
         int id = 3;
-        String name = "New Zealand Test";
+        String regattaName = "New Zealand Test";
+        String courseName = "North Cape";
 
-        regattaMessage = new AC35XMLRegattaMessage(id, name, centralLat, centralLong, utcOffset);
+        regattaMessage = new AC35XMLRegattaMessage(id, regattaName, courseName, centralLat, centralLong, utcOffset);
 
         DOMSource domSource = regattaEncoder.getDomSource(regattaMessage);
         Document doc = (Document) domSource.getNode();

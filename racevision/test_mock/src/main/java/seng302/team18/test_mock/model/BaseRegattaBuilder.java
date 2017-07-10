@@ -5,7 +5,7 @@ import seng302.team18.model.Regatta;
 /**
  * Created by afj19 on 10/07/17.
  */
-public abstract class RegattaBuilder {
+public abstract class BaseRegattaBuilder {
 
     public Regatta buildRegatta() {
         Regatta regatta = new Regatta();
