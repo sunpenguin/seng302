@@ -25,22 +25,6 @@ public class StartupController {
 
 
     /**
-     * Called when the live connection button is selected, sets up a connection with the live AC35 feed
-     */
-    @FXML
-    private void openLiveStream() {
-        openStream("livedata.americascup.com", 4940);
-    }
-
-    /**
-     * Called when the test connection button is selected, sets up a connection with the UC test feed
-     */
-    @FXML
-    private void openTestStream() {
-        openStream("livedata.americascup.com", 4941);
-    }
-
-    /**
      * Called when the mock connection button is selected, sets up a connection with the mock feed
      */
     @FXML
