@@ -44,7 +44,7 @@ public class Boat implements GeographicLocation, IBoat {
         timeTilNextMark = 0L;
         timeSinceLastMark = 0L;
         timeAtLastMark = 0L;
-        isControlled = false;
+        isControlled = true;
         sailOut = false;
     }
 

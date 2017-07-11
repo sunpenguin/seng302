@@ -57,8 +57,7 @@ public class RaceRenderer {
                     displayBoat = new BoatHighlight(pixelMapper, displayBoat);
                 }
                 if (boat.isSailOut()){
-                    displayBoat = new DisplaySail(new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats))
-                            , pixelMapper);
+                    displayBoat = new DisplaySail(displayBoat, pixelMapper);
                 }
                 displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);

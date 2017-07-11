@@ -30,5 +30,4 @@ public class RegistrationInterpreter extends MessageInterpreter {
             race.setPlayerId(sourceId);
         }
     }
-
 }
