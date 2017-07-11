@@ -102,8 +102,12 @@ public class PreRaceController {
             while(true) {
                 MessageBody messageBody = null;
                 try {
+//                    System.out.println(1336);
                     messageBody = receiver.nextMessage();
-                } catch (Exception e) {}
+//                    System.out.println(1337);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 interpreter.interpret(messageBody);
             }
         });
@@ -122,12 +126,12 @@ public class PreRaceController {
     private MessageInterpreter initialiseInterpreter() {
         MessageInterpreter interpreter = new CompositeMessageInterpreter();
 
-        interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
-        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
-        interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
-        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
-        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
+//        interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
+//        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
+//        interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
+//        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
+//        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
+//        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
 
         return interpreter;
     }
