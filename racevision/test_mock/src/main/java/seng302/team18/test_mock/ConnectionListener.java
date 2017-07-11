@@ -10,10 +10,7 @@ import seng302.team18.test_mock.connection.*;
 import seng302.team18.test_mock.interpret.BoatActionInterpreter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -43,7 +40,7 @@ public class ConnectionListener implements Observer {
         this.factory = factory;
         players = new ArrayList<>();
         executor = Executors.newCachedThreadPool();
-        timeout = 1000000L;
+        timeout = Long.MAX_VALUE;
     }
 
 
@@ -64,20 +61,20 @@ public class ConnectionListener implements Observer {
             Receiver receiver = new Receiver(client.getSocket(), factory);
             int sourceID = ids.get(players.size());
             executor.submit(() -> {
-                try {
-                    MessageBody message = null;
-                    while (message == null && System.currentTimeMillis() < timeout) {
+                MessageBody message = null;
+                while (message == null && System.currentTimeMillis() < timeout) {
+                    try {
                         message = receiver.nextMessage();
+                    } catch (IOException e) {
+//                        e.printStackTrace();
                     }
-                    if (message instanceof RequestMessage) {
-                        RequestMessage request = (RequestMessage) message;
-                        if (request.isParticipating()) {
-                            addPlayer(receiver, sourceID);
-                            sendMessage(client, sourceID);
-                        }
+                }
+                if (message instanceof RequestMessage) {
+                    RequestMessage request = (RequestMessage) message;
+                    if (request.isParticipating()) {
+                        addPlayer(receiver, sourceID);
+                        sendMessage(client, sourceID);
                     }
-                } catch (IOException e) {
-                    // no message
                 }
             });
         } catch (Exception e) {
@@ -91,10 +88,10 @@ public class ConnectionListener implements Observer {
      *
      * @param player the socket to send player messages to.
      * @param sourceID the assigned id of the player's boat.
-     * @throws IOException
      */
-    private void sendMessage(ClientConnection player, int sourceID) throws IOException {
-        player.sendMessage(new AcceptanceMessageGenerator(sourceID).getMessage());
+    private void sendMessage(ClientConnection player, int sourceID) {
+        byte[] message = new AcceptanceMessageGenerator(sourceID).getMessage();
+        player.sendMessage(message);
     }
 
 

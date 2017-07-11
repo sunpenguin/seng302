@@ -3,7 +3,9 @@ package seng302.team18.test_mock.connection;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.net.Socket;
+import java.util.Arrays;
 
 /**
  * Holds a connection to a client.
@@ -30,7 +32,7 @@ public class ClientConnection {
     public void sendMessage(byte[] message) {
         try {
             out.write(message);
-            out.flush(); // TODO is this helpful?
+            out.flush();
             nFailures = 0;
         } catch (IOException e) {
             System.err.println("Unable to send message to client: " + client.getInetAddress().toString());

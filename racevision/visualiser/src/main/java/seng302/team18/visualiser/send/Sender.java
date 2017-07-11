@@ -13,6 +13,20 @@ public class Sender {
     private MessageEncoderFactory factory;
     private OutputStream outStream;
 
+
+    /**
+     * Constructor for the Sender. Requires ip, port, and MessageEncoderFactory.
+     *
+     * @param socket socket to send messages over
+     * @param factory to convert messages to byte arrays.
+     * @throws IOException
+     */
+    public Sender(Socket socket, MessageEncoderFactory factory) throws IOException {
+        outStream = socket.getOutputStream();
+        this.factory = factory;
+    }
+
+
     /**
      * Constructor for the Sender. Requires ip, port, and MessageEncoderFactory.
      *
