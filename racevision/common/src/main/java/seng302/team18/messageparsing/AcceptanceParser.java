@@ -14,6 +14,8 @@ import java.io.InputStream;
 public class AcceptanceParser implements MessageBodyParser {
 
 
+    public AcceptanceParser() {}
+
     @Override
     public MessageBody parse(InputStream stream) {
         try {
@@ -28,7 +30,6 @@ public class AcceptanceParser implements MessageBodyParser {
     public MessageBody parse(byte[] bytes) {
         final int SOURCE_ID_INDEX = 0;
         final int SOURCE_ID_LENGTH = 4;
-
         int sourceID = ByteCheck.byteToInt(bytes, SOURCE_ID_INDEX, SOURCE_ID_LENGTH);
 
         return new AcceptanceMessage(sourceID);

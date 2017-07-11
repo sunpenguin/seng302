@@ -60,15 +60,10 @@ public class Server extends Observable {
     private synchronized void acceptClientConnection() {
         try {
             ClientConnection client = new ClientConnection(serverSocket.accept());
-//            if (addressList.contains(client.getSocket().getInetAddress())) {
-//                return;
-//            }
-//            addressList.add(client.getSocket().getInetAddress());
             clientList.getClients().add(client);
             System.out.println("Player " + clientList.getClients().size() + " joined!");
             setChanged();
             notifyObservers(client);
-
         } catch (SocketTimeoutException e) {
             // The time out expired, no big deal
         } catch(IOException e) {

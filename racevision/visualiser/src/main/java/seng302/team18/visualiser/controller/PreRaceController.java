@@ -102,12 +102,14 @@ public class PreRaceController {
         executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
             while(true) {
-                MessageBody messageBody;
+                MessageBody messageBody = null;
                 try {
                     messageBody = receiver.nextMessage();
-//                    Thread.sleep(10); // Uncomment and set it when using csse streams
+                    Thread.sleep(100); // Uncomment and set it when using csse streams
                 } catch (Exception e) {
-                    return; // ignore if anything goes wrong
+//                    return; // ignore if anything goes wrong
+                    e.printStackTrace();
+
                 }
                 interpreter.interpret(messageBody);
             }

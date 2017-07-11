@@ -45,7 +45,7 @@ public class TestMock implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) {
             ClientConnection client = (ClientConnection) arg;
-            client.sendMessage(new byte[10]); // TODO send the xml message
+//            client.sendMessage(new byte[10]); // TODO send the xml message
             race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
         }
     }
