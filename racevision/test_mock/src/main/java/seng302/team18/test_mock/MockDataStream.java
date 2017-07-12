@@ -37,7 +37,7 @@ public class MockDataStream {
         server.openServer();
         listener.setTimeout(System.currentTimeMillis() + TIME_OUT);
         testMock.runSimulation();
-        server.closeServer();
+        server.close();
     }
 
 

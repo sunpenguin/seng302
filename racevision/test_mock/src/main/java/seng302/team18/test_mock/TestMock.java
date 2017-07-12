@@ -48,6 +48,10 @@ public class TestMock implements Observer {
 //            client.sendMessage(new byte[10]); // TODO send the xml message
             race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
         }
+//        else if (arg instanceof Integer) {
+//            Integer id = (Integer) arg;
+//            race.getStartingList().removeIf(boat -> boat.getId().equals(id));
+//        }
     }
 
 
@@ -104,8 +108,6 @@ public class TestMock implements Observer {
                     server.broadcast(sendable.getMessage());
                 }
             }
-
-            server.pruneConnections();
 
             // Sleep
             try {

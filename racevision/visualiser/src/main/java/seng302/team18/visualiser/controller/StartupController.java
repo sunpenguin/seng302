@@ -13,6 +13,7 @@ import seng302.team18.model.Race;
 import seng302.team18.visualiser.send.ControllerMessageFactory;
 import seng302.team18.visualiser.send.Sender;
 
+import javax.net.SocketFactory;
 import java.net.Socket;
 
 /**
@@ -54,7 +55,7 @@ public class StartupController {
 
     private void openStream(String host, int port) {
         try {
-            Socket socket = new Socket(host, port);
+            Socket socket = SocketFactory.getDefault().createSocket(host, port);
             startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
         } catch (Exception e) {
             errorText.setText(String.format("Could not establish connection to stream at: %s:%d", host, port));

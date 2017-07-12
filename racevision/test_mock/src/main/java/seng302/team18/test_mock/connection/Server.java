@@ -3,28 +3,22 @@ package seng302.team18.test_mock.connection;
 import javax.net.ServerSocketFactory;
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
+import java.util.*;
 
 /**
  * Streaming server to connect test mock with clients.
  */
 public class Server extends Observable {
-    private final ClientList clientList = new ClientList();
+    private final List<ClientConnection> clients = new ArrayList<>();
     private final ServerConnectionListener listener = new ServerConnectionListener();
-    private static final int MAX_CLIENT_CONNECTION = 6;
+    private final int MAX_CLIENT_CONNECTION = 6;
 
     private ServerSocket serverSocket;
     private final int PORT;
 
-//    private List<InetAddress> addressList = new ArrayList<>();
-
-
     public Server(int port) {
         this.PORT = port;
     }
-
 
     /**
      * Opens the server.
@@ -41,13 +35,6 @@ public class Server extends Observable {
         System.out.println("Stream opened successfully on port: " + PORT);
 
         acceptClientConnection();
-//        try {
-//            serverSocket.setSoTimeout(1000);
-//        } catch (SocketException e) {
-//            e.printStackTrace();
-//        }
-//        while (true)
-//            acceptClientConnection();
         listener.start();
     }
 
@@ -60,8 +47,8 @@ public class Server extends Observable {
     private synchronized void acceptClientConnection() {
         try {
             ClientConnection client = new ClientConnection(serverSocket.accept());
-            clientList.getClients().add(client);
-            System.out.println("Player " + clientList.getClients().size() + " joined!");
+            clients.add(client);
+            System.out.println("Player " + clients.size() + " joined!");
             setChanged();
             notifyObservers(client);
         } catch (SocketTimeoutException e) {
@@ -78,23 +65,25 @@ public class Server extends Observable {
 
 
     /**
-     * Closes any open client connections and closes the server
+     * Waits until all clients disconnects and then closes the server.
+     * (Blocking)
      */
-    public void closeServer() {
-        for (ClientConnection client : clientList.getClients()) {
-            try {
-                client.close();
-            } catch (IOException e) {
-                System.err.println("Failed to close client connection to: " + client.getSocket().getInetAddress().toString());
+    public void close() {
+        while (!clients.isEmpty()) {
+            for (int i = 0; i < clients.size(); i++) {
+                if (clients.get(i).isClosed()) {
+                    clients.remove(i);
+                }
             }
         }
 
         try {
             serverSocket.close();
         } catch (IOException e) {
-            System.err.println("Failed to close server socket");
+            e.printStackTrace();
         }
     }
+
 
     /**
      * Broadcasts a message to all connected clients
@@ -103,23 +92,17 @@ public class Server extends Observable {
      * @see ClientConnection#sendMessage(byte[])
      */
     public void broadcast(byte[] message) {
-        if (message.length == 1) {//Scheduled messages should return {0} if there is an error when constructing them
-            return;
+        if (message.length == 1) { //Scheduled messages should return {0} if there is an error when constructing them
+            return; // TODO move this out side of server
         }
-        for (ClientConnection client : clientList.getClients()) {
-            client.sendMessage(message);
+        for (int i = 0; i < clients.size(); i++) {
+            ClientConnection client = clients.get(i);
+            if (!client.sendMessage(message)) {
+                clients.remove(i);
+//                setChanged();
+//                notifyObservers(client.getId());
+            }
         }
-    }
-
-    /**
-     * Prunes dead connections from the list of clients, where a connection is condsidered dead after failing
-     * to respond a number of times
-     *
-     * @see ClientList#pruneConnections()
-     * @see ClientConnection#MAX_FAILURES
-     */
-    public void pruneConnections() {
-        clientList.pruneConnections();
     }
 
 
@@ -131,7 +114,6 @@ public class Server extends Observable {
 
         @Override
         public void run() {
-//            System.out.println("ServerConnectionListener::run " + Thread.currentThread().getName());
             try {
                 serverSocket.setSoTimeout(500);
             } catch (SocketException e) {
@@ -139,7 +121,7 @@ public class Server extends Observable {
             }
 
             while (listening) {
-                if (clientList.getClients().size() < MAX_CLIENT_CONNECTION) {
+                if (clients.size() < MAX_CLIENT_CONNECTION) {
                     acceptClientConnection();
                 } else {
                     listening = false;

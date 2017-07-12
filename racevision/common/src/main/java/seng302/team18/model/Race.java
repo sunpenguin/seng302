@@ -80,12 +80,12 @@ public class Race {
     private void setCourseForBoats() {
         if (course.getLegs().size() > 0) {
             for (Boat boat : startingList) {
-                setCourseforBoat(boat);
+                setCourseForBoat(boat);
             }
         }
     }
 
-    private void setCourseforBoat(Boat boat) {
+    private void setCourseForBoat(Boat boat) {
         // Set Leg
         boat.setLegNumber(course.getLegs().get(0).getLegNumber());
         // Set Dest
@@ -100,7 +100,7 @@ public class Race {
 
     public void addParticipant(Boat boat) {
         // check that it is alright to add a boat at this point
-        setCourseforBoat(boat);
+        setCourseForBoat(boat);
         startingList.add(boat);
         participantIds.add(boat.getId());
     }
@@ -332,7 +332,7 @@ public class Race {
         return raceName;
     }
 
-    public void setRaceName(String raceName) {
+    public void setName(String raceName) {
         this.raceName = raceName;
     }
 
