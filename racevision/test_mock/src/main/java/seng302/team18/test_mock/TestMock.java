@@ -149,7 +149,7 @@ public class TestMock {
         List<CompoundMark> compoundMarks = raceMessage.getCompoundMarks();
 
         List<BoundaryMark> boundaryMarks = raceMessage.getBoundaryMarks();
-        double windDirection = 0;
+        double windDirection = 180;
 
         List<MarkRounding> markRoundings = raceMessage.getMarkRoundings();
 

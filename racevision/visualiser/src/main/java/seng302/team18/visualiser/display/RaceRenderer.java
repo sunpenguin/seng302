@@ -52,23 +52,23 @@ public class RaceRenderer {
                     displayBoat = new BoatHighlight(pixelMapper, displayBoat);
                 } else {
                     displayBoat = new DisplaySail(pixelMapper, displayBoat);
-                    ((DisplaySail)displayBoat).setRotation(-race.getCourse().getWindDirection());
                 }
                 displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
+                System.out.println(race.getCourse().getWindDirection());
                 displayBoat.setCoordinate(boatCoordinates);
                 displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
                 displayBoat.setScale(pixelMapper.getZoomFactor());
-                }
+                ((DisplaySail)displayBoat).setWindDirection(360-race.getCourse().getWindDirection());
+            }
             }
         }
-
 
 
 
