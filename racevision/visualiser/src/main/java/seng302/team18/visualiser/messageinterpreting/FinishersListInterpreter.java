@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.messageinterpreting;
 
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
@@ -7,7 +8,6 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * The FinishersListInterpreter that adds a boat to the finishers list when it has finished the race.

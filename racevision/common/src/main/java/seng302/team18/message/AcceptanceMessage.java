@@ -1,24 +1,25 @@
 package seng302.team18.message;
 
 /**
- * MessageBody that contains the source id.
+ * MessageBody that contains the source id allocated to a boat / player controller
  */
-public class RegistrationMessage implements MessageBody {
+public class AcceptanceMessage implements MessageBody {
 
     private int sourceId;
+
 
     /**
      * Constructor for RegistrationMessage
      * @param sourceId the allocated sourceId for the players boat.
      */
-    public RegistrationMessage(int sourceId) {
+    public AcceptanceMessage(int sourceId) {
         this.sourceId = sourceId;
     }
 
 
     @Override
     public int getType() {
-        return 56;
+        return AC35MessageType.ACCEPTANCE.getCode();
     }
 
 
@@ -29,4 +30,5 @@ public class RegistrationMessage implements MessageBody {
     public int getSourceId() {
         return sourceId;
     }
+
 }

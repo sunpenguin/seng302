@@ -3,7 +3,7 @@ package seng302.team18.message;
 /**
  * MessageBody that contains the regatta information from the XML file sent by the AC35 streaming protocol.
  */
-public class AC35XMLRegattaMessage implements MessageBody {
+public class AC35XMLRegattaMessage implements XmlMessage {
     private double centralLat;
     private double centralLong;
     private String utcOffset;

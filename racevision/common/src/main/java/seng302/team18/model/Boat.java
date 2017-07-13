@@ -10,9 +10,8 @@ import javafx.beans.property.SimpleIntegerProperty;
  * A class which stores information about a boat.
  */
 
-public class Boat implements GeographicLocation, IBoat {
-    private String boatName;
-    private String shortName;
+public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
+    private PolarPattern boatPolar = new AC35PolarPattern();
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
@@ -36,11 +35,9 @@ public class Boat implements GeographicLocation, IBoat {
      * @param id        The id of the boat
      */
     public Boat(String boatName, String shortName, int id) {
-        this.boatName = boatName;
-        this.shortName = shortName;
-        this.id = id;
+        super(id, boatName, shortName);
         speed = new SimpleDoubleProperty();
-        place = new SimpleIntegerProperty();
+        place = new SimpleIntegerProperty(1);
         timeTilNextMark = 0L;
         timeSinceLastMark = 0L;
         timeAtLastMark = 0L;
@@ -48,13 +45,10 @@ public class Boat implements GeographicLocation, IBoat {
         sailOut = false;
     }
 
-    /**
-     * A getter for the name of the boat
-     *
-     * @return The boatName
-     */
-    public String getName() {
-        return boatName;
+
+    @Override
+    public BoatType getType() {
+        return BoatType.YACHT;
     }
 
 
@@ -76,17 +70,6 @@ public class Boat implements GeographicLocation, IBoat {
     public void setHeading(double heading) {
         this.heading = heading;
     }
-
-
-    /**
-     * A getter for the team name that the boat belongs to
-     *
-     * @return The shortName
-     */
-    public String getShortName() {
-        return shortName;
-    }
-
 
     /**
      * A getter for the speed of the boat
@@ -162,11 +145,6 @@ public class Boat implements GeographicLocation, IBoat {
     }
 
 
-    public Integer getId() {
-        return id;
-    }
-
-
     public long getTimeTilNextMark() {
         return timeTilNextMark;
     }
@@ -207,11 +185,11 @@ public class Boat implements GeographicLocation, IBoat {
     @Override
     public String toString() {
         return "Boat{" +
-                "boatName=" + boatName +
-                ", shortName='" + shortName + '\'' +
+                "boatName=" + getName() +
+                ", shortName='" + getShortName() + '\'' +
                 ", speed=" + speed +
                 ", leg=" + boatLegNumber +
-                ", id=" + id +
+                ", id=" + getId() +
                 ", heading=" + heading +
                 ", coordinate=" + coordinate +
                 ", destination=" + destination +
@@ -239,5 +217,48 @@ public class Boat implements GeographicLocation, IBoat {
 
     public void setControlled(boolean controlled) {
         isControlled = controlled;
+    }
+
+    /**
+     * Uses boats polar pattern to calculate boats TWS
+     *
+     * @param windSpeed double, the speed of the wind
+     * @param windHeading double, the direction of the wind
+     * @return double, the tws of the boat
+     */
+    public double getBoatTWS(double windSpeed, double windHeading) {
+        double twa = getTrueWindAngle(windHeading);
+        return boatPolar.getSpeedForBoat(twa, windSpeed);
+    }
+
+    /**
+     * Gets true wind angle for boat.
+     *
+     * @param windHeading double, Heading of the wind
+     * @return double, True wind angle for the boat.
+     */
+    public double getTrueWindAngle(double windHeading) {
+        double theta = 180 - windHeading;
+        double boatPlusTheta = heading + theta;
+        double windPlusTheta = windHeading + theta; //will be 180
+
+        if (boatPlusTheta > 360) {
+            boatPlusTheta = boatPlusTheta - 360;
+        }
+
+        if (boatPlusTheta < 0) {
+            boatPlusTheta = 360 + boatPlusTheta;
+        }
+
+        double trueWindAngle;
+
+        if (boatPlusTheta > 180) {
+            double angleFrom180 = boatPlusTheta - 180;
+            trueWindAngle = 180 - angleFrom180;
+        } else {
+            trueWindAngle = boatPlusTheta;
+        }
+
+        return trueWindAngle;
     }
 }

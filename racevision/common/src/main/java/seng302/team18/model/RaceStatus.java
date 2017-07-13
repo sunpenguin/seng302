@@ -1,4 +1,4 @@
-package seng302.team18.message;
+package seng302.team18.model;
 
 import java.util.*;
 
@@ -21,19 +21,20 @@ public enum RaceStatus {
      *
      * @return a list of codes used in the pre-race.
      */
-    public static List<Integer> preRaceCodes() {
-        List<Integer> codes = new ArrayList<>();
-        codes.add(WARNING.code());
-        codes.add(PRESTART.code());
+    public static List<Integer> nonPreRaceCodes() {
+        List<Integer> codes = Arrays.asList(
+                NOT_ACTIVE.getCode(), PREPARATORY.getCode(), STARTED.getCode(), FINISHED.getCode(), RETIRED.getCode(),
+                ABANDONED.getCode(), POSTPONED.getCode(), TERMINATED.getCode(), RACE_START_NOT_SET.getCode()
+        );
         return codes;
     }
 
     /**
-     * Getter for the code of the race status type.
+     * Getter for the getCode of the race status type.
      *
-     * @return the code of the race status type.
+     * @return the getCode of the race status type.
      */
-    public int code() {
+    public int getCode() {
         return this.code;
     }
 
@@ -46,7 +47,7 @@ public enum RaceStatus {
     private static Map<Integer, RaceStatus> initializeMapping() {
         Map<Integer, RaceStatus> statusMap = new HashMap<>();
         for (RaceStatus status : RaceStatus.values()) {
-            statusMap.put(status.code(), status);
+            statusMap.put(status.getCode(), status);
         }
         return statusMap;
     }

@@ -1,9 +1,10 @@
 package seng302.team18.test_mock.connection;
 
+import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.test_mock.TestMock;
+import seng302.team18.test_mock.RaceCourseGenerator;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
@@ -11,9 +12,11 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by jth102 on 25/04/17.
+ * Test for RaceMessageGenerator.
  */
 public class RaceMessageGeneratorTest {
+    private final int LOOP_OFFSET = 20; // move 20 bytes forward for each boat being read.
+
     private final int VERSION_L = 1;
     private final int VERSION_P = 0;
     private final int CURRENT_TIME_L = 6;
@@ -47,90 +50,161 @@ public class RaceMessageGeneratorTest {
     private final int EST_TIME_FINISH_L = 6;
     private final int EST_TIME_FINISH_P = 38;
 
+    private byte[] generatedBytes;
+    private Race testRace;
+    private long currentTime;
+
+    @Before
+    public void setUp() throws IOException {
+        final RaceCourseGenerator raceCourseGenerator = new RaceCourseGenerator();
+        raceCourseGenerator.generateXmlMessages();
+        testRace = raceCourseGenerator.generateRace(raceCourseGenerator.generateCourse());
+        RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(testRace);
+        generatedBytes = raceMessageGenerator.getPayload();
+        currentTime = System.currentTimeMillis();
+    }
+
 
     @Test
-    public void raceStatusMessageTest() {
-        TestMock testMock = new TestMock();
-        Race testRace = testMock.testRun();
-        byte[] generatedBytes;
+    public void messageVersionTest() {
+        int expectedMsgVersion = 2;
+        int actualMsgVersion = ByteCheck.byteToInt(generatedBytes, VERSION_P, VERSION_L);
+        assertEquals(expectedMsgVersion, actualMsgVersion);
+    }
 
-        RaceMessageGenerator generator = new RaceMessageGenerator(testRace);
-        try {
-            generatedBytes = generator.getPayload();
 
-            // NOTE: If tests are failing here, it may be because things that are hard coded and not received from testRace
-            // may be able to be received from testRace now. Eg windDirection will be a part of the race in the future.
+    @Test
+    public void currentTimeTest() {
+        long expectedCurrentTime = currentTime;
+        long actualCurrentTime = ByteCheck.byteToLong(generatedBytes, CURRENT_TIME_P, CURRENT_TIME_L);
+        assertEquals(expectedCurrentTime, actualCurrentTime, 10);
+    }
 
-            int expectedMsgVersion = 2;
-            long expectedCurrentTime = System.currentTimeMillis();
-            int expectedRaceID = testRace.getId();
-            int expectedRaceStatus = testRace.getStatus();
-            long expectedStartTime = System.currentTimeMillis();
-            int expectedWindDirection = 0x4000;
-            int expectedWindSpeed = 5000;
-            int expectedNumBoats = testRace.getStartingList().size();
-            int expectedRaceType = 2;
 
-            int actualMsgVersion = ByteCheck.byteToInt(generatedBytes, VERSION_P, VERSION_L);
-            long actualCurrentTime = ByteCheck.byteToLong(generatedBytes, CURRENT_TIME_P, CURRENT_TIME_L);
-            int actualRaceID = ByteCheck.byteToInt(generatedBytes, RACE_ID_P, RACE_ID_L);
-            int actualRaceStatus = ByteCheck.byteToInt(generatedBytes, RACE_STATUS_P, RACE_STATUS_L);
-            long actualStartTime = ByteCheck.byteToLong(generatedBytes, EXP_START_P, EXP_START_L);
-            int actualWindDirection = ByteCheck.byteToInt(generatedBytes, WIND_DIR_P, WIND_DIR_L);
-            int actualWindSpeed = ByteCheck.byteToInt(generatedBytes, WIND_SPEED_P, WIND_SPEED_L);
-            int actualNumBoats = ByteCheck.byteToInt(generatedBytes, NUM_BOATS_P, NUM_BOATS_L);
-            int actualRaceType = ByteCheck.byteToInt(generatedBytes, RACE_TYPE_P, RACE_TYPE_L);
+    @Test
+    public void raceIdTest() {
+        int expectedRaceID = testRace.getId();
+        int actualRaceID = ByteCheck.byteToInt(generatedBytes, RACE_ID_P, RACE_ID_L);
+        assertEquals(expectedRaceID, actualRaceID);
+    }
 
-            assertEquals(expectedMsgVersion, actualMsgVersion);
-            assertEquals(expectedCurrentTime, actualCurrentTime, 10);
-            assertEquals(expectedRaceID, actualRaceID);
-            assertEquals(expectedRaceStatus, actualRaceStatus);
-            assertEquals(expectedStartTime, actualStartTime, 10);
-            assertEquals(expectedWindDirection, actualWindDirection);
-            assertEquals(expectedWindSpeed, actualWindSpeed);
-            assertEquals(expectedNumBoats, actualNumBoats);
-            assertEquals(expectedRaceType, actualRaceType);
 
-            int loopCount = 0;
-            final int LOOP_OFFSET = 20; // move 20 bytes forward for each boat being read.
+    @Test
+    public void raceStatusTest() {
+        int expectedRaceStatus = testRace.getStatus().getCode();
+        int actualRaceStatus = ByteCheck.byteToInt(generatedBytes, RACE_STATUS_P, RACE_STATUS_L);
+        assertEquals(expectedRaceStatus, actualRaceStatus);
+    }
 
-            for (Boat boat : testRace.getStartingList()) {
-                int expectedBoatID = boat.getId();
-                int expectedBoatStatus = 2;
-                int expectedLegNum = boat.getLegNumber();
-                int expectedPenAwarded = 7;
-                int expectedPenServed = 4;
-                long expectedTimeMark = 11111111111L;
-                long expectedTimeFinish = 6666666666L;
 
-                int actualBoatID = ByteCheck.byteToInt(generatedBytes,
-                        SOURCE_ID_P + (LOOP_OFFSET * loopCount), SOURCE_ID_L);
-                int actualBoatStatus = ByteCheck.byteToInt(generatedBytes,
-                        BOAT_STATUS_P+ (LOOP_OFFSET * loopCount), BOAT_STATUS_L);
-                int actualLegNum = ByteCheck.byteToInt(generatedBytes,
-                        LEG_NUM_P+ (LOOP_OFFSET * loopCount), LEG_NUM_L);
-                int actualPenAwarded = ByteCheck.byteToInt(generatedBytes,
-                        NUM_PEN_AWARDED_P + (LOOP_OFFSET * loopCount), NUM_PEN_AWARDED_L);
-                int actualPenServed = ByteCheck.byteToInt(generatedBytes,
-                        NUM_PEN_SERVED_P + (LOOP_OFFSET * loopCount), NUM_PEN_SERVED_L);
-                long actualTimeMark = ByteCheck.byteToLong(generatedBytes,
-                        EST_TIME_NEXT_MARK_P + (LOOP_OFFSET * loopCount), EST_TIME_NEXT_MARK_L);
-                long actualTimeFinish = ByteCheck.byteToLong(generatedBytes,
-                        EST_TIME_FINISH_P + (LOOP_OFFSET * loopCount), EST_TIME_FINISH_L);
+    @Test
+    public void startTimeTest() {
+        long expectedStartTime = currentTime;
+        long actualStartTime = ByteCheck.byteToLong(generatedBytes, EXP_START_P, EXP_START_L);
+        assertEquals(expectedStartTime, actualStartTime, 10);
+    }
 
-                assertEquals(expectedBoatID, actualBoatID);
-                assertEquals(expectedBoatStatus, actualBoatStatus);
-                assertEquals(expectedLegNum, actualLegNum);
-                assertEquals(expectedPenAwarded, actualPenAwarded);
-                assertEquals(expectedPenServed, actualPenServed);
-                assertEquals(expectedTimeMark, actualTimeMark);
-                assertEquals(expectedTimeFinish, actualTimeFinish);
 
-                loopCount++;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    @Test
+    public void windDirectionTest() {
+        double expectedWindDirection = testRace.getCourse().getWindDirection();
+        int actualWindDirection = ByteCheck.byteToInt(generatedBytes, WIND_DIR_P, WIND_DIR_L);
+        assertEquals(expectedWindDirection, actualWindDirection, 1e-6);
+    }
+
+
+    @Test
+    public void windSpeedTest() {
+        double expectedWindSpeed = testRace.getCourse().getWindSpeed();//5000;
+        double actualWindSpeed = ByteCheck.byteToInt(generatedBytes, WIND_SPEED_P, WIND_SPEED_L);
+        assertEquals(expectedWindSpeed, actualWindSpeed, 1e-6);
+    }
+
+
+    @Test
+    public void raceTypeTest() {
+        int expectedRaceType = 2;
+        int actualRaceType = ByteCheck.byteToInt(generatedBytes, RACE_TYPE_P, RACE_TYPE_L);
+        assertEquals(expectedRaceType, actualRaceType);
+    }
+
+
+    @Test
+    public void numberOfBoatsTest() {
+        int expectedNumBoats = testRace.getStartingList().size();
+        int actualNumBoats = ByteCheck.byteToInt(generatedBytes, NUM_BOATS_P, NUM_BOATS_L);
+        assertEquals(expectedNumBoats, actualNumBoats);
+    }
+
+
+    @Test
+    public void boatIdTest() {
+        for (int i = 0; i < testRace.getStartingList().size(); i++) {
+            Boat boat = testRace.getStartingList().get(i);
+            int expectedBoatId = boat.getId();
+            int actualBoatID = ByteCheck.byteToInt(generatedBytes, SOURCE_ID_P + (LOOP_OFFSET * i), SOURCE_ID_L);
+            assertEquals(expectedBoatId, actualBoatID);
         }
     }
 
+
+    @Test
+    public void boatStatusTest() {
+        int expectedBoatStatus = 2;
+        for (int i = 0; i < testRace.getStartingList().size(); i++) {
+            int actualBoatStatus = ByteCheck.byteToInt(generatedBytes, BOAT_STATUS_P + (LOOP_OFFSET * i), BOAT_STATUS_L);
+            assertEquals(expectedBoatStatus, actualBoatStatus);
+        }
+    }
+
+
+    @Test
+    public void boatLegNumberTest() {
+        for (int i = 0; i < testRace.getStartingList().size(); i++) {
+            Boat boat = testRace.getStartingList().get(i);
+            int expectedLegNum = boat.getLegNumber();
+            int actualLegNum = ByteCheck.byteToInt(generatedBytes, LEG_NUM_P + (LOOP_OFFSET * i), LEG_NUM_L);
+            assertEquals(expectedLegNum, actualLegNum);
+        }
+    }
+
+
+    @Test
+    public void boatPenaltiesAwardedTest() {
+        int expectedPenAwarded = 7;
+        for (int i = 0; i < testRace.getStartingList().size(); i++) {
+            int actualPenAwarded = ByteCheck.byteToInt(generatedBytes, NUM_PEN_AWARDED_P + (LOOP_OFFSET * i), NUM_PEN_AWARDED_L);
+            assertEquals(expectedPenAwarded, actualPenAwarded);
+        }
+    }
+
+
+    @Test
+    public void boatPenaltiesServedTest() {
+        int expectedPenServed = 4;
+        for (int i = 0; i < testRace.getStartingList().size(); i++) {
+            int actualPenServed = ByteCheck.byteToInt(generatedBytes, NUM_PEN_SERVED_P + (LOOP_OFFSET * i), NUM_PEN_SERVED_L);
+            assertEquals(expectedPenServed, actualPenServed);
+        }
+    }
+
+
+    @Test
+    public void boatTimeMarkTest() {
+        long expectedTimeMark = 11111111111L;
+        for (int i = 0; i < testRace.getStartingList().size(); i++) {
+            long actualTimeMark = ByteCheck.byteToLong(generatedBytes, EST_TIME_NEXT_MARK_P + (LOOP_OFFSET * i), EST_TIME_NEXT_MARK_L);
+            assertEquals(expectedTimeMark, actualTimeMark);
+        }
+    }
+
+
+    @Test
+    public void boatTimeFinishTest() {
+        long expectedTimeFinish = 6666666666L;
+        for (int i = 0; i < testRace.getStartingList().size(); i++) {
+            long actualTimeFinish = ByteCheck.byteToLong(generatedBytes, EST_TIME_FINISH_P + (LOOP_OFFSET * i), EST_TIME_FINISH_L);
+            assertEquals(expectedTimeFinish, actualTimeFinish);
+        }
+    }
 }

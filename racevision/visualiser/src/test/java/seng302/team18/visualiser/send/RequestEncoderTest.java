@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
  */
 public class RequestEncoderTest {
 
-    private RequestMessage requestMessage = new RequestMessage(1);
+    private RequestMessage requestMessage = new RequestMessage(true);
     private MessageEncoder encoder = new RequestEncoder();
 
     @Test

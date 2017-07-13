@@ -26,10 +26,16 @@ import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import seng302.team18.interpreting.CompositeMessageInterpreter;
+import seng302.team18.interpreting.MessageInterpreter;
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.MessageBody;
+import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
-import seng302.team18.visualiser.send.BoatActionMessage;
+import seng302.team18.message.BoatActionMessage;
+import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.send.BoatActionEncoder;
 import seng302.team18.visualiser.send.ControllerMessageFactory;
 import seng302.team18.visualiser.send.Sender;
@@ -41,12 +47,14 @@ import java.io.IOException;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * The controller class for the Main Window.
  * The main window consists of the right hand pane with various displays and the race on the left.
  */
-public class MainWindowController implements Observer {
+public class RaceController implements Observer {
     @FXML private Group group;
     @FXML private Label timerLabel;
     @FXML private Label fpsLabel;
@@ -57,11 +65,14 @@ public class MainWindowController implements Observer {
     @FXML private TableColumn<Boat, String> boatColorColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
+    @FXML private Label speedLabel;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
     @FXML private Button setAnnotations;
     @FXML private Button toggle;
     @FXML private Slider slider;
+
+    private Stage stage;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -72,21 +83,17 @@ public class MainWindowController implements Observer {
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
     private RaceClock raceClock;
-    private WindDirection windDirection;
+    private WindDisplay windDisplay;
     private PixelMapper pixelMapper;
     private Map<AnnotationType, Boolean> importantAnnotations;
 
-    private Stage stage;
-    private BoatActionEncoder boatActionMessageComposer = new BoatActionEncoder();
     private Sender sender;
+    private Receiver receiver;
 
     @FXML
     public void initialize() {
-        try {
-            installKeyHandler();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        installKeyHandler();
+        stage = (Stage) raceViewPane.getScene().getWindow();
         setSliderListener();
         sliderSetup();
         fpsOn = true;
@@ -103,7 +110,7 @@ public class MainWindowController implements Observer {
         pixelMapper.setZoomLevel(0);
     }
 
-    @FXML void closeAppAction(){
+    @FXML private void closeAppAction() {
         stage.close();
     }
 
@@ -117,37 +124,29 @@ public class MainWindowController implements Observer {
     }
 
 
-    private void installKeyHandler() throws IOException {
-        sender = new Sender("127.0.0.1", 5005, new ControllerMessageFactory());
+    private void installKeyHandler() {
         final EventHandler<KeyEvent> keyEventHandler =
-            new EventHandler<KeyEvent>() {
-                public void handle(final KeyEvent keyEvent) {
-                    if (keyEvent.getCode() != null) {
-                        BoatActionMessage message = null;
-                        switch (keyEvent.getCode()){
-                            case SPACE:
-                                message = new BoatActionMessage(true, sailIn, !sailIn, false,
-                                        false, false);
-                                break;
-                            case ENTER:
-                                message = new BoatActionMessage(false, sailIn, !sailIn, true,
-                                        false, false);
-                                break;
-                            case UP:
-                                message = new BoatActionMessage(false, sailIn, !sailIn, false,
-                                        true, false);
-                                break;
-                            case DOWN:
-                                message = new BoatActionMessage(false, sailIn, !sailIn, false,
-                                        false, true);
-                                break;
-                            case SHIFT:
-                                sailIn = !sailIn;
-                                message = new BoatActionMessage(false, sailIn, !sailIn, false,
-                                        false, false);
-                        }
-                        sender.send(message);
+            keyEvent -> {
+                if (keyEvent.getCode() != null) {
+                    BoatActionMessage message = null;
+                    switch (keyEvent.getCode()){
+                        case SPACE:
+                            message = new BoatActionMessage(true, sailIn, !sailIn, false, false, false);
+                            break;
+                        case ENTER:
+                            message = new BoatActionMessage(false, sailIn, !sailIn, true, false, false);
+                            break;
+                        case PAGE_UP:
+                            message = new BoatActionMessage(false, sailIn, !sailIn, false, true, false);
+                            break;
+                        case PAGE_DOWN:
+                            message = new BoatActionMessage(false, sailIn, !sailIn, false, false, true);
+                            break;
+                        case SHIFT:
+                            sailIn = !sailIn;
+                            message = new BoatActionMessage(false, sailIn, !sailIn, false, false, false);
                     }
+                    sender.send(message);
                 }
             };
         raceViewPane.setOnKeyPressed(keyEventHandler);
@@ -157,7 +156,7 @@ public class MainWindowController implements Observer {
     /**
      * initialises the sparkline graph.
      */
-    private void setUpSparklinesCategory(Map<String, Color> boatColors) {
+    private void setUpSparklines(Map<String, Color> boatColors) {
         List<String> list = new ArrayList<>();
         for (int i = race.getStartingList().size(); i > 0; i--) {
             list.add(String.valueOf(i));
@@ -383,13 +382,14 @@ public class MainWindowController implements Observer {
         });
     }
 
+
     /**
      * retrieves the wind direction, scales the size of the arrow and then draws it on the Group
      */
     private void startWindDirection() {
-        arrow.setScaleX(0.4);
-        windDirection = new WindDirection(race, arrow, race.getCourse().getWindDirection());
-        windDirection.start();
+//        arrow.setScaleX(0.4);
+        windDisplay = new WindDisplay(race, arrow, speedLabel);
+        windDisplay.start();
     }
 
 
@@ -399,9 +399,11 @@ public class MainWindowController implements Observer {
      *
      * @param race The race which is going to be displayed.
      */
-    public void setUp(Race race) {
+    public void setUp(Race race, Receiver receiver, Sender sender) {
+        this.receiver = receiver;
+        this.sender = sender;
         this.race = race;
-        setCourseCenter(race.getCourse());
+//        setCourseCenter(race.getCourse());
 
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
@@ -412,12 +414,6 @@ public class MainWindowController implements Observer {
         raceClock.start();
 
         raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel));
-        startWindDirection();
-
-        for (Boat boat : race.getStartingList()) {
-            boat.setPlace(race.getStartingList().size());
-        }
-
         raceLoop.start();
 
         raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
@@ -425,14 +421,62 @@ public class MainWindowController implements Observer {
         pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
         pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
 
-        // These listeners fire whenever the northern or southern bounds of the map change.
-
+        startWindDirection();
         setUpTable(raceRenderer.boatColors());
-
         setNoneAnnotationLevel();
-
-        setUpSparklinesCategory(raceRenderer.boatColors());
+        setUpSparklines(raceRenderer.boatColors());
+        interpretMessages(initialiseInterpreter());
     }
+
+
+    /**
+     * starts interpreting messages from the socket.
+     */
+    private void interpretMessages(MessageInterpreter interpreter) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(() -> {
+            while(true) {
+                MessageBody messageBody;
+                try {
+                    messageBody = receiver.nextMessage();
+                } catch (IOException e) {
+                    return;
+                }
+                interpreter.interpret(messageBody);
+            }
+        });
+
+        stage.setOnCloseRequest((event) -> {
+            executor.shutdownNow();
+            while (!receiver.close()) {}
+        });
+    }
+
+
+    /**
+     * Set up and initialise interpreter variables, adding interpreters of each relevant type to the global interpreter.
+     */
+    private MessageInterpreter initialiseInterpreter() {
+        MessageInterpreter interpreter = new CompositeMessageInterpreter();
+
+        interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
+        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
+        interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceTimeInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindDirectionInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindSpeedInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new EstimatedTimeInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishersListInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new BoatStatusInterpreter(race));
+        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLocationInterpreter(race));
+        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
+        interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
+        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(raceClock));
+
+        return interpreter;
+    }
+
 
     /**
      * To call when course features need redrawing.
@@ -442,10 +486,6 @@ public class MainWindowController implements Observer {
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
         raceRenderer.reDrawTrails();
-    }
-
-    public RaceClock getRaceClock() {
-        return raceClock;
     }
 
 

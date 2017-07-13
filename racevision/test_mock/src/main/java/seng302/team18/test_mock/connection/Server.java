@@ -1,67 +1,91 @@
 package seng302.team18.test_mock.connection;
 
+import javax.net.ServerSocketFactory;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.SocketException;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
 
 /**
  * Streaming server to connect test mock with clients.
  */
-public class Server {
-
+public class Server extends Observable {
     private final ClientList clientList = new ClientList();
-    private final ConnectionListener connectionListener = new ConnectionListener();
-    private final int port;
-    private ServerSocket serverSocket;
-    private XMLMessageGenerator regattaXMLMessageGenerator;
-    private XMLMessageGenerator boatsXMLMessageGenerator;
-    private XMLMessageGenerator raceXMLMessageGenerator;
+    private final ServerConnectionListener listener = new ServerConnectionListener();
+    private static final int MAX_CLIENT_CONNECTION = 6;
 
-    public Server(int port, String regattaXML, String boatsXML, String raceXML) {
-        this.port = port;
-        regattaXMLMessageGenerator = new XMLMessageGenerator((byte)5, regattaXML);
-        boatsXMLMessageGenerator = new XMLMessageGenerator((byte)7, boatsXML);
-        raceXMLMessageGenerator = new XMLMessageGenerator((byte)6, raceXML);
+    private ServerSocket serverSocket;
+    private final int PORT;
+
+//    private List<InetAddress> addressList = new ArrayList<>();
+
+
+    public Server(int port) {
+        this.PORT = port;
     }
+
+
+    /**
+     * Opens the server.
+     * Blocks waiting for the first client connection, then opens a second thread to listen for subsequent connections
+     */
+    public void openServer() {
+        try {
+            serverSocket = ServerSocketFactory.getDefault().createServerSocket(PORT);
+        } catch (IOException e) {
+            System.err.println("Could not listen on port " + PORT);
+            System.err.println("Exiting program");
+            System.exit(-1);
+        }
+        System.out.println("Stream opened successfully on port: " + PORT);
+
+        acceptClientConnection();
+//        try {
+//            serverSocket.setSoTimeout(1000);
+//        } catch (SocketException e) {
+//            e.printStackTrace();
+//        }
+//        while (true)
+//            acceptClientConnection();
+        listener.start();
+    }
+
 
     /**
      * Blocks while waiting for a client connection, setting up new connection when available.
-     * This includes sending the initial XML files and adding to the client list.
+     * Adding new client to the client list.
+     * Increment the number that represents number of connected clients.
      */
-    private void acceptClientConnection() {
+    private synchronized void acceptClientConnection() {
         try {
             ClientConnection client = new ClientConnection(serverSocket.accept());
-            sendXmls(client);
             clientList.getClients().add(client);
-        } catch (IOException e) {
+            System.out.println("Player " + clientList.getClients().size() + " joined!");
+            setChanged();
+            notifyObservers(client);
+        } catch (SocketTimeoutException e) {
+            // The time out expired, no big deal
+        } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * Sends the the three XML files to the specified client.
-     * The three files are Race.xml, Regatta.xml and Boats.xml. Their order is not defined.
-     *
-     * @param client the client to send to
-     * @throws IOException if an I/O exception occurs
-     */
-    private void sendXmls(ClientConnection client) throws IOException {
-        client.sendMessage(regattaXMLMessageGenerator.getMessage());
-        client.sendMessage(raceXMLMessageGenerator.getMessage());
-        client.sendMessage(boatsXMLMessageGenerator.getMessage());
+
+    public void stopAcceptingConnections() {
+        listener.stopListening();
     }
+
 
     /**
      * Closes any open client connections and closes the server
      */
     public void closeServer() {
-        connectionListener.stopListening();
-
         for (ClientConnection client : clientList.getClients()) {
             try {
                 client.close();
             } catch (IOException e) {
-                System.err.println("Failed to close client connection to: " + client.getClient().getInetAddress().toString());
+                System.err.println("Failed to close client connection to: " + client.getSocket().getInetAddress().toString());
             }
         }
 
@@ -73,34 +97,13 @@ public class Server {
     }
 
     /**
-     * Opens the server.
-     * Blocks waiting for the first client connection, then opens a second thread to listen for subsequent connections
-     */
-    public void openServer() {
-        try {
-            serverSocket = new ServerSocket(port);
-
-        } catch (IOException e) {
-            System.err.println("Could not listen on port " + port);
-            System.err.println("Exiting program");
-            System.exit(-1);
-        }
-
-        System.out.println("Stream opened successfully on port: " + port);
-
-        acceptClientConnection();
-
-        //connectionListener.run(); TODO make connection listener work
-    }
-
-    /**
      * Broadcasts a message to all connected clients
      *
      * @param message the message to broadcast
      * @see ClientConnection#sendMessage(byte[])
      */
     public void broadcast(byte[] message) {
-        if(message.length == 1){//Scheduled messages should return {0} if there is an error when constructing them
+        if (message.length == 1) {//Scheduled messages should return {0} if there is an error when constructing them
             return;
         }
         for (ClientConnection client : clientList.getClients()) {
@@ -123,19 +126,24 @@ public class Server {
     /**
      * Thread that listens for incoming connections.
      */
-    private class ConnectionListener extends Thread {
+    private class ServerConnectionListener extends Thread {
         private boolean listening = true;
 
         @Override
         public void run() {
+//            System.out.println("ServerConnectionListener::run " + Thread.currentThread().getName());
             try {
-                serverSocket.setSoTimeout(1000);
+                serverSocket.setSoTimeout(500);
             } catch (SocketException e) {
                 e.printStackTrace();
             }
 
             while (listening) {
-                acceptClientConnection();
+                if (clientList.getClients().size() < MAX_CLIENT_CONNECTION) {
+                    acceptClientConnection();
+                } else {
+                    listening = false;
+                }
             }
         }
 

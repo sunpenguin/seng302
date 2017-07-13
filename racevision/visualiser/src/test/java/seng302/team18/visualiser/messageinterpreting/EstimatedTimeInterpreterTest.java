@@ -3,6 +3,7 @@ package seng302.team18.visualiser.messageinterpreting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
@@ -38,7 +39,7 @@ public class EstimatedTimeInterpreterTest {
         boatStates.add(new AC35BoatStatusMessage(420, 2, 2, 0));
         boatStates.add(new AC35BoatStatusMessage(100, 2, 2, 10000000));
         boatStates.add(new AC35BoatStatusMessage(69, 2, 2, -9999998L));
-        message = new AC35RaceStatusMessage(1l, 1, 1l, 1, boatStates);
+        message = new AC35RaceStatusMessage(1l, 1, 1l, 1, 0, boatStates);
         interpreter = new EstimatedTimeInterpreter(race);
     }
 

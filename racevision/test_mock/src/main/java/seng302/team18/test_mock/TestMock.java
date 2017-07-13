@@ -1,125 +1,101 @@
 package seng302.team18.test_mock;
 
-import seng302.team18.message.AC35XMLBoatMessage;
-import seng302.team18.message.AC35XMLRaceMessage;
-import seng302.team18.message.AC35XMLRegattaMessage;
-import seng302.team18.messageparsing.*;
-import seng302.team18.model.*;
+import seng302.team18.model.Boat;
+import seng302.team18.model.MarkRoundingEvent;
+import seng302.team18.model.Race;
+import seng302.team18.model.RaceStatus;
 import seng302.team18.test_mock.connection.*;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.time.ZonedDateTime;
+import java.util.*;
+
 import static java.lang.Thread.sleep;
 
 
 /**
  * Class to handle a mock race
  */
-public class TestMock {
+public class TestMock implements Observer {
 
-    private Course course;
     private Race race;
+    private Server server;
+    private List<Boat> boats = Arrays.asList(new Boat("Emirates Team New Zealand", "TEAM New Zealand", 121),
+            new Boat("Oracle Team USA", "TEAM USA", 122),
+            new Boat("Artemis Racing", "TEAM SWE", 123),
+            new Boat("Groupama Team France", "TEAM France", 124),
+            new Boat("Land Rover BAR", "TEAM Britain", 125),
+            new Boat("Softbank Team Japan", "TEAM Japan", 126));
 
-    private final String regattaXML = "/regatta_test1.xml";
-    private final String boatsXML = "/boats_test2.xml";
-    private final String raceXML = "/race_test2.xml";
 
-    private AC35XMLRegattaMessage regattaMessage;
-    private AC35XMLBoatMessage boatMessage;
-    private AC35XMLRaceMessage raceMessage;
 
-    private final static int SERVER_PORT = 5005;
+    public TestMock(Race race, Server server) {
+        this.race = race;
+        this.server = server;
+    }
+
 
     /**
      * The messages to be sent on a schedule during race simulation
      */
     private List<ScheduledMessageGenerator> scheduledMessages = new ArrayList<>();
 
-    //TODO give real port
-    private Server server = new Server(SERVER_PORT, regattaXML, boatsXML, raceXML);
 
-    /**
-     * Generate the classes necessary to visualise a mock race.
-     * These are: Regatta, Race, Course
-     */
-    private void generateClasses() {
-        generateCourse();
-        generateRace();
-    }
 
-    /**
-     * Read each test xml file and fill the containers so classes can be made
-     */
-    private void readFiles() {
-        AC35XMLRegattaParser regattaParser = new AC35XMLRegattaParser();
-        regattaMessage = regattaParser.parse(this.getClass().getResourceAsStream(regattaXML));
-
-        AC35XMLBoatParser boatsParser = new AC35XMLBoatParser();
-        boatMessage = boatsParser.parse(this.getClass().getResourceAsStream(boatsXML));
-
-        AC35XMLRaceParser raceParser = new AC35XMLRaceParser();
-        raceMessage = raceParser.parse(this.getClass().getResourceAsStream(raceXML));
-    }
-    
-    public void run() {
-
-        readFiles();
-        generateClasses();
-
-        server.openServer();
-
-        initialiseScheduledMessages();
-        runSimulation();
-
-        server.closeServer();
-    }
-
-    /**
-     * Used for testing to avoid having to
-     * run test mock to test that messages
-     * encode correctly.
-     * @return
-     */
-    public Race testRun() {
-        readFiles();
-        generateClasses();
-        return race;
-    }
-
-    /**
-     * Initialise the generators for scheduled messages
-     */
-    private void initialiseScheduledMessages() {
-        for(Boat b : race.getStartingList()){
-            scheduledMessages.add(new BoatMessageGenerator(b));
+    @Override
+    public void update(Observable o, Object arg) {
+        if (arg instanceof ClientConnection) {
+            ClientConnection client = (ClientConnection) arg;
+//            client.sendMessage(new byte[10]); // TODO send the xml message
+            race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
         }
-        scheduledMessages.add(new RaceMessageGenerator(race));
-        scheduledMessages.add(new HeartBeatMessageGenerator());
     }
 
 
     /**
      * Simulate the race will sending the scheduled messages
      */
-    private void runSimulation() {
+    public void runSimulation() {
         final int LOOP_FREQUENCY = 60;
+        final int TIME_START = -5;
+        final int TIME_WARNING = -3;
+        final int TIME_PREP = -2;
 
         long timeCurr = System.currentTimeMillis();
         long timeLast;
+
+        scheduledMessages.add(new RaceMessageGenerator(race));
+        scheduledMessages.add(new HeartBeatMessageGenerator());
+
+        // Set race time
+        race.setStartTime(ZonedDateTime.now().minusMinutes(TIME_START));
+        race.setStatus(RaceStatus.PRESTART);
+
         do {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
-            // Update simulation
-            race.setStatus((byte) 3);
-            race.updateBoats((timeCurr - timeLast));
+            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusMinutes(TIME_WARNING))) {
+                race.setStatus(RaceStatus.WARNING);
 
-//            accelerateBoat(race, race.getStartingList().get(2), 0.1);
-//            accelerateBoat(race, race.getStartingList().get(3), 0.05);
+            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().plusMinutes(TIME_PREP)))) {
 
-            // Send mark rounding messages for all mark roundings that occurred
-            for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
-                server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
+                race.setStatus(RaceStatus.PREPARATORY);
+                server.stopAcceptingConnections();
+
+                for (Boat b : race.getStartingList()) {
+                    scheduledMessages.add(new BoatMessageGenerator(b));
+                }
+
+            } else {
+                race.updateBoats((timeCurr - timeLast));
+                // Send mark rounding messages for all mark roundings that occured
+                for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
+                    server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
+                }
+
+                if ((race.getStatus() == RaceStatus.PREPARATORY) && ZonedDateTime.now().isAfter(race.getStartTime())) {
+                    race.setStatus(RaceStatus.STARTED);
+                }
             }
 
             // Send messages if needed
@@ -143,47 +119,5 @@ public class TestMock {
         // Sends final message
         ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
         server.broadcast(raceMessageGenerator.getMessage());
-    }
-
-    private void generateCourse() {
-        List<CompoundMark> compoundMarks = raceMessage.getCompoundMarks();
-
-        List<BoundaryMark> boundaryMarks = raceMessage.getBoundaryMarks();
-        double windDirection = 0;
-
-        List<MarkRounding> markRoundings = raceMessage.getMarkRoundings();
-
-        ZoneId zoneId;
-        String utcOffset = regattaMessage.getUtcOffset();
-        if (utcOffset.startsWith("+") || utcOffset.startsWith("-")) {
-            zoneId = ZoneId.of("UTC" + utcOffset);
-        } else {
-            zoneId = ZoneId.of("UTC+" + utcOffset);
-        }
-
-        Coordinate central = new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong());
-
-        course = new Course(compoundMarks, boundaryMarks, windDirection, zoneId, markRoundings);
-        course.setCentralCoordinate(central);
-    }
-
-    private void generateRace() {
-        List<Boat> startingList = boatMessage.getBoats();
-        int raceID = raceMessage.getRaceID();
-
-        race = new Race(startingList, course, raceID);
-    }
-
-    /**
-     * Adds acceleration to the current speed of the boat if the boat is not finished
-     *
-     * @param race the boat is participating
-     * @param boat
-     * @param acceleration amount to increase speed by in knots.
-     */
-    private void accelerateBoat(Race race, Boat boat, double acceleration) {
-        if (!race.getFinishedList().contains(boat)) {
-            boat.setSpeed(boat.getSpeed() + acceleration);
-        }
     }
 }

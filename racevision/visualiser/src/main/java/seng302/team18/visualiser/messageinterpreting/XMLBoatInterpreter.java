@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.messageinterpreting;
 
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Race;
@@ -25,7 +26,7 @@ public class XMLBoatInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof AC35XMLBoatMessage) {
             AC35XMLBoatMessage boatMessage = (AC35XMLBoatMessage) message;
-            race.setStartingList(boatMessage.getBoats());
+            race.setStartingList(boatMessage.getYachts());
         }
     }
 }

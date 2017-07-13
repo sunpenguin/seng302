@@ -16,7 +16,6 @@ public abstract class ScheduledMessageGenerator extends MessageGenerator {
     public ScheduledMessageGenerator(int frequency, int type) {
         super(type);
         this.frequency = frequency;
-
     }
 
     /**

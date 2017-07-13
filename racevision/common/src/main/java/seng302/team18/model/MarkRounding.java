@@ -16,7 +16,7 @@ public class MarkRounding {
         return compoundMark;
     }
 
-    public int getSequenceNumber() {
+    public Integer getSequenceNumber() {
         return sequenceNumber;
     }
 }

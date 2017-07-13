@@ -13,7 +13,7 @@ public interface MessageEncoderFactory {
      * @param id of the message to be composed
      * @return Composer to convert message to bytes
      */
-    MessageEncoder getComposer(int id);
+    MessageEncoder getEncoder(int id);
 
 
 }

@@ -1,6 +1,7 @@
 package seng302.team18.visualiser.send;
 
 import org.junit.Test;
+import seng302.team18.message.BoatActionMessage;
 
 import static org.junit.Assert.assertEquals;
 
