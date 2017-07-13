@@ -84,8 +84,8 @@ public class MainWindowController implements Observer {
     public void initialize() {
         try {
             installKeyHandler();
-        } catch (IOException e){
-            //
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         setSliderListener();
         sliderSetup();
@@ -118,7 +118,7 @@ public class MainWindowController implements Observer {
 
 
     private void installKeyHandler() throws IOException {
-        sender = new Sender("127.0.0.1", 4942, new ControllerMessageFactory());
+        sender = new Sender("127.0.0.1", 5005, new ControllerMessageFactory());
         final EventHandler<KeyEvent> keyEventHandler =
             new EventHandler<KeyEvent>() {
                 public void handle(final KeyEvent keyEvent) {

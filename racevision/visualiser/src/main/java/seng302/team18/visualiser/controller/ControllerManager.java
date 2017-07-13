@@ -6,13 +6,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.MessageBody;
-import seng302.team18.messageparsing.*;
-import seng302.team18.visualiser.messageinterpreting.*;
+import seng302.team18.messageparsing.SocketMessageReceiver;
 import seng302.team18.model.Race;
-import seng302.team18.visualiser.messageinterpreting.RaceClockInterpreter;
+import seng302.team18.visualiser.messageinterpreting.*;
 
 import java.io.IOException;
-import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -72,7 +70,7 @@ public class ControllerManager {
      * Initialises the receiver, race and interpreter. Loops through messages received via the receiver and interprets
      * them.
      *
-     * @throws Exception
+     * @throws Exception Exception,
      */
     public void start() throws Exception {
         race = new Race();
@@ -125,6 +123,7 @@ public class ControllerManager {
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
         //interpreter.add(AC35MessageType.REGISTRATION.getCode(), new RegistrationInterpreter(race));
 
+        interpreter.add(AC35MessageType.BOAT_ACTION.getCode(), new BoatActionInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
     }
 
