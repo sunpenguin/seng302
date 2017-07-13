@@ -58,19 +58,18 @@ public class RaceRenderer {
             }
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
-                System.out.println(race.getCourse().getWindDirection());
                 displayBoat.setCoordinate(boatCoordinates);
                 displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
                 displayBoat.setScale(pixelMapper.getZoomFactor());
-                boat.setSailOut(true);
+                boat.setSailOut(false);
                 if (boat.isSailOut()) {
-                    ((DisplaySail) displayBoat).setWindDirection(320 - race.getCourse().getWindDirection());
+                    ((DisplaySail) displayBoat).setWindDirection(200 + race.getCourse().getWindDirection());
 
                 }else{
-                    ((DisplaySail) displayBoat).setWindDirection(360 - race.getCourse().getWindDirection());
+                    ((DisplaySail) displayBoat).setWindDirection(180 + race.getCourse().getWindDirection());
                 }
             }
             }
