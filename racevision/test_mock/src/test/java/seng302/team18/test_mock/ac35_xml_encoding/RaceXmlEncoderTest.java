@@ -8,18 +8,21 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import seng302.team18.message.AC35RaceXMLComponents;
 import seng302.team18.message.AC35XMLRaceMessage;
+import seng302.team18.message.XmlMessage;
 import seng302.team18.model.*;
 
 import javax.xml.transform.dom.DOMSource;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test for RaceXmlEncoder class.
@@ -30,6 +33,8 @@ public class RaceXmlEncoderTest {
     private AC35XMLRaceMessage raceMessage;
     private Element root;
     private Map<Integer, CompoundMark> encodedCompoundMarks = new HashMap<>();
+    private LocalTime beforeEncoding;
+    private LocalTime afterEncoding;
 
     /**
      * Set up a AC35 standard race message.
@@ -114,6 +119,7 @@ public class RaceXmlEncoderTest {
         raceMessage.setMarkRoundings(markRoundings);
         raceMessage.setParticipants(participants);
         raceMessage.setStartTime(startTime);
+        raceMessage.setRaceType(Race.RaceType.MATCH);
     }
 
 
@@ -125,10 +131,37 @@ public class RaceXmlEncoderTest {
     @Before
     public void setUp() throws Exception {
         setUpRaceMessage();
+        beforeEncoding = LocalTime.now().truncatedTo(ChronoUnit.SECONDS);
         DOMSource domSource = raceXmlEncoder.getDomSource(raceMessage);
+        afterEncoding = LocalTime.now().truncatedTo(ChronoUnit.SECONDS);
         Document doc = (Document) domSource.getNode();
         doc.getDocumentElement().normalize();
         root = (Element) doc.getElementsByTagName(AC35RaceXMLComponents.ROOT_RACE.toString()).item(0);
+    }
+
+
+    @Test
+    public void encodeRaceId() throws Exception {
+        Element raceIdElement = (Element) root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_RACE_ID.toString()).item(0);
+        int encodedId = Integer.parseInt(raceIdElement.getTextContent());
+        assertEquals("Race id has not been encoded correctly", raceMessage.getRaceID(), encodedId);
+    }
+
+
+    @Test
+    public void encodeRaceType() throws Exception {
+        Element raceTypeElement = (Element) root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_RACE_TYPE.toString()).item(0);
+        assertEquals("Race type has not been encoded correctly", raceMessage.getRaceType(), Race.RaceType.fromValue(raceTypeElement.getTextContent()));
+    }
+
+
+    @Test
+    public void encodeModifiedTimeTest() throws Exception {
+        final Element elementModified = (Element) root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_CREATION_TIME_DATE.toString()).item(0);
+        final LocalTime modifiedTime = LocalTime.parse(elementModified.getTextContent(), XmlMessage.DATE_TIME_FORMATTER);
+        boolean isAfterBefore = modifiedTime.equals(beforeEncoding) || modifiedTime.isAfter(beforeEncoding);
+        boolean isBeforeAfter = modifiedTime.equals(afterEncoding) || modifiedTime.isBefore(afterEncoding);
+        assertTrue("xml creation time has not been correctly encoded", isAfterBefore && isBeforeAfter);
     }
 
 
@@ -137,7 +170,7 @@ public class RaceXmlEncoderTest {
      */
     @Test
     public void encodeParticipantsTest() {
-        List<Integer> encodedParticipants = new ArrayList<>();
+        Map<Integer, AC35XMLRaceMessage.EntryDirection> encodedParticipants = new HashMap<>();
 
         Node ids = root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_PARTICIPANTS.toString()).item(0);
         Element participants = (Element) ids;
@@ -146,13 +179,16 @@ public class RaceXmlEncoderTest {
         for (int i = 0; i < participantsNodeList.getLength(); i++) {
             Node participant = participantsNodeList.item(i);
             Element participantElement = (Element) participant;
-            encodedParticipants.add(Integer.parseInt(participantElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_SOURCE_ID.toString())));
+            int sourceId = Integer.parseInt(participantElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_SOURCE_ID.toString()));
+            AC35XMLRaceMessage.EntryDirection entry = AC35XMLRaceMessage.EntryDirection.fromValue(participantElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_ENTRY.toString()));
+            encodedParticipants.put(sourceId, entry);
         }
 
-//        int firstParticipant = raceMessage.getParticipantIDs().get(0);
-//        int firstEncodedParticipant = encodedParticipants.get(0);
-//        assertEquals(firstEncodedParticipant, firstParticipant);
-        fail();
+        assertEquals("Incorrect number of participants were encoded", raceMessage.getParticipants().size(), encodedParticipants.size());
+
+        for (Integer expectedId : raceMessage.getParticipants().keySet()) {
+            assertEquals("Incorrect entry direction encoded for participant " + expectedId, raceMessage.getParticipants().get(expectedId), encodedParticipants.get(expectedId));
+        }
     }
 
 
