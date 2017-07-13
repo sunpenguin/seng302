@@ -147,6 +147,7 @@ public class MainWindowController implements Observer {
                                         false, false);
                         }
                         sender.send(message);
+                        System.out.println(message.getClass().getSimpleName());
                     }
                 }
             };
