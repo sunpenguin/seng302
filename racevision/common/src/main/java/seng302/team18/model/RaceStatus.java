@@ -6,8 +6,17 @@ import java.util.*;
  * Enum for the different types of race status for the AC35 streaming protocol and their associated codes.
  */
 public enum RaceStatus {
-    NOT_ACTIVE(0), WARNING(1), PREPARATORY(2), STARTED(3), FINISHED(4), RETIRED(5),
-    ABANDONED(6), POSTPONED(7), TERMINATED(8), RACE_START_NOT_SET(9), PRESTART(10);
+    NOT_ACTIVE(0),
+    WARNING(1),
+    PREPARATORY(2),
+    STARTED(3),
+    FINISHED(4),
+    RETIRED(5),
+    ABANDONED(6),
+    POSTPONED(7),
+    TERMINATED(8),
+    RACE_START_NOT_SET(9),
+    PRESTART(10);
 
     private int code;
     private final static Map<Integer, RaceStatus> CODE_MAP = Collections.unmodifiableMap(initializeMapping());

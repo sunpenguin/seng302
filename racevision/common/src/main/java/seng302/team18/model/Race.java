@@ -378,7 +378,8 @@ public class Race {
             this.value = value;
         }
 
-        public String getValue() {
+        @Override
+        public String toString() {
             return value;
         }
 
@@ -387,7 +388,7 @@ public class Race {
         }
 
         private static Map<String, RaceType> initializeMapping() {
-            return Arrays.stream(values()).collect(Collectors.toMap(RaceType::getValue, rt -> rt));
+            return Arrays.stream(values()).collect(Collectors.toMap(RaceType::toString, rt -> rt));
         }
     }
 }

@@ -156,7 +156,8 @@ public class AC35XMLRaceMessage implements XmlMessage {
             this.value = value;
         }
 
-        public String getValue() {
+        @Override
+        public String toString() {
             return value;
         }
 
@@ -165,7 +166,7 @@ public class AC35XMLRaceMessage implements XmlMessage {
         }
 
         private static Map<String, EntryDirection> initializeMapping() {
-            return Arrays.stream(values()).collect(Collectors.toMap(EntryDirection::getValue, rt -> rt));
+            return Arrays.stream(values()).collect(Collectors.toMap(EntryDirection::toString, rt -> rt));
         }
     }
 }
