@@ -389,7 +389,7 @@ public class MainWindowController implements Observer {
      */
     private void startWindDirection() {
         arrow.setScaleX(0.4);
-        windDirection = new WindDirection(race, arrow, race.getCourse().getWindDirection());
+        windDirection = new WindDirection(race, arrow, 180);
         windDirection.start();
     }
 

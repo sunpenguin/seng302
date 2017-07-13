@@ -36,6 +36,7 @@ public class DisplayBoat implements IBoat {
     private Coordinate location;
     private Coordinate destination;
     private IntegerProperty place;
+    private double windDirection;
     private Long timeTilNextMark;
     private Long timeSinceLastMark = 0L;
     private Long timeAtLastMark;
@@ -174,6 +175,8 @@ public class DisplayBoat implements IBoat {
         annotation.setLayoutX(boat.getLayoutX() + ANNOTATION_OFFSET_X);
         annotation.setLayoutY(boat.getLayoutY());
     }
+
+
 
     public Double[] getBOAT_SHAPE() {
         return BOAT_SHAPE;
