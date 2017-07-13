@@ -1,9 +1,10 @@
 package seng302.team18.visualiser.messageinterpreting;
 
+import seng302.team18.interpreting.MessageInterpreter;
+import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.visualiser.send.BoatActionMessage;
 
 import java.util.List;
 
