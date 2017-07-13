@@ -65,7 +65,13 @@ public class RaceRenderer {
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
                 displayBoat.setScale(pixelMapper.getZoomFactor());
-                ((DisplaySail)displayBoat).setWindDirection(360-race.getCourse().getWindDirection());
+                boat.setSailOut(true);
+                if (boat.isSailOut()) {
+                    ((DisplaySail) displayBoat).setWindDirection(320 - race.getCourse().getWindDirection());
+
+                }else{
+                    ((DisplaySail) displayBoat).setWindDirection(360 - race.getCourse().getWindDirection());
+                }
             }
             }
         }
