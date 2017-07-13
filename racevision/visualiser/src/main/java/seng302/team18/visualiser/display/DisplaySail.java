@@ -6,6 +6,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
+import seng302.team18.model.Course;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -15,6 +16,7 @@ import seng302.team18.visualiser.util.PixelMapper;
 public class DisplaySail extends DisplayBoatDecorator {
 
     private Polyline sail;
+    private double windDirection;
     private PixelMapper pixelMapper;
     private final Rotate rotation = new Rotate(0, 0, 0);
     private final Scale zoom = new Scale(1, 1, 0, 0);
@@ -29,7 +31,7 @@ public class DisplaySail extends DisplayBoatDecorator {
      *
      * @param boat the display boat being decorated
      */
-    public DisplaySail(DisplayBoat boat, PixelMapper mapper) {
+    public DisplaySail(PixelMapper mapper, DisplayBoat boat) {
         super(boat);
         this.pixelMapper = mapper;
         sail = new Polyline();
@@ -58,8 +60,24 @@ public class DisplaySail extends DisplayBoatDecorator {
     }
 
     public void setHeading(double heading) {
-
-        rotation.setAngle(heading + 270);
+        rotation.setAngle(360 - windDirection);
         super.setHeading(heading);
+    }
+
+    public double getWindDirection() {
+        return windDirection;
+    }
+
+    public void setWindDirection(double windDirection) {
+        this.windDirection = windDirection;
+        rotation.setAngle(windDirection);
+    }
+
+    public void setRotation(double rotation){
+        this.rotation.setAngle(rotation);
+    }
+
+    public Rotate getRotation() {
+        return rotation;
     }
 }
