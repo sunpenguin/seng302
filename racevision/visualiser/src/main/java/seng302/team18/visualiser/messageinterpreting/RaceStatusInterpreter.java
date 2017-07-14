@@ -33,7 +33,9 @@ public class RaceStatusInterpreter extends MessageInterpreter {
             List<Integer> raceCodes = RaceStatus.nonPreRaceCodes();
             AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
             int statusCode = statusMessage.getRaceStatus();
+//            System.out.println("Race Status Message");
             if (raceCodes.contains(statusCode)) {
+//                System.out.println("We need to swap views");
                 Platform.runLater(() -> {
                     try {
                         controller.showRace();
