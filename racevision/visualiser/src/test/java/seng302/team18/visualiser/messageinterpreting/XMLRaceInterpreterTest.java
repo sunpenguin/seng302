@@ -12,6 +12,7 @@ import seng302.team18.model.*;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -24,7 +25,7 @@ public class XMLRaceInterpreterTest {
     private List<AbstractBoat> boats;
     private List<CompoundMark> compoundMarks;
     private List<BoundaryMark> boundaryMarks;
-    private final String time = "2017-05-02T22:45:55.692+12:00";
+    private final String time = "2017-05-02T22:45:55+1200";
 
     @Before
     public void setUp() {
@@ -113,7 +114,8 @@ public class XMLRaceInterpreterTest {
         MessageBody message = new AC35XMLBoatMessage(boats);
         interpreter.interpret(message);
 
-        ZonedDateTime expectedStart = ZonedDateTime.parse(time);
+        final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+        ZonedDateTime expectedStart = ZonedDateTime.parse(time, DATE_TIME_FORMATTER);
         ZonedDateTime expectedCurrent = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
         Assert.assertEquals(expectedCurrent, race.getCurrentTime());
         Assert.assertEquals(expectedStart, race.getStartTime());
