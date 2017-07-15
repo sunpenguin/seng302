@@ -29,12 +29,12 @@ public enum BoatType {
         this.typeName = typeName;
     }
 
-    public String getTypeName() {
+    public String toString() {
         return typeName;
     }
 
     private static Map<String, BoatType> initializeMapping() {
-        return Arrays.stream(values()).collect(Collectors.toMap(BoatType::getTypeName, bt -> bt));
+        return Arrays.stream(values()).collect(Collectors.toMap(BoatType::toString, bt -> bt));
     }
 
     public static BoatType ofTypeName(String typeName) {

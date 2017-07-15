@@ -48,7 +48,7 @@ public abstract class AbstractBoat {
     }
 
 
-    public void setName(String name) {
+    public void setBoatName(String name) {
         this.name = name;
     }
 

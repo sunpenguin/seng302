@@ -6,7 +6,9 @@ import seng302.team18.util.SpeedConverter;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
  */
 public class Race {
 
+    private Regatta regatta = new Regatta();
     private List<Boat> startingList;
     private Course course;
     private List<Boat> finishedList;
@@ -23,8 +26,8 @@ public class Race {
     private List<Integer> participantIds;
     private int id;
     private RaceStatus status;
-    private String raceName;
     private Integer playerId;
+    private RaceType raceType;
 
 
     public Race() {
@@ -34,9 +37,10 @@ public class Race {
         finishedList = new ArrayList<>();
         id = 0;
         status = RaceStatus.NOT_ACTIVE;
-        currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
-        startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
-        raceName = "";
+        currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()); //.now(course.getTimeZone())
+        startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()); //.now(course.getTimeZone()).plusSeconds(300)
+        setRaceName("");
+        raceType = RaceType.MATCH;
     }
 
 
@@ -46,7 +50,7 @@ public class Race {
      * @param startingList ArrayList holding all entered boats
      * @param course       Course object
      */
-    public Race(List<Boat> startingList, Course course, int raceId) {
+    public Race(List<Boat> startingList, Course course, int raceId, RaceType raceType) {
         this.startingList = startingList;
         this.course = course;
         finishedList = new ArrayList<>();
@@ -55,6 +59,7 @@ public class Race {
                 .collect(Collectors.toList());
         this.id = raceId;
         this.status = RaceStatus.NOT_ACTIVE;
+        this.raceType = raceType;
         setCourseForBoats();
         setInitialSpeed();
     }
@@ -285,6 +290,7 @@ public class Race {
 
     /**
      * Sets participants and removes non participants for current list of boats.
+     *
      * @param participantIds ids of all participants
      */
     public void setParticipantIds(List<Integer> participantIds) {
@@ -329,11 +335,11 @@ public class Race {
     }
 
     public String getName() {
-        return raceName;
+        return regatta.getRegattaName();
     }
 
-    public void setRaceName(String raceName) {
-        this.raceName = raceName;
+    public void setRaceName(String name) {
+        regatta.setRegattaName(name);
     }
 
     public int getPlayerId() {
@@ -342,5 +348,47 @@ public class Race {
 
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
+    }
+
+    public RaceType getRaceType() {
+        return raceType;
+    }
+
+    public Regatta getRegatta() {
+        return regatta;
+    }
+
+    public void setRegatta(Regatta regatta) {
+        this.regatta = regatta;
+    }
+
+    public void setRaceType(RaceType raceType) {
+        this.raceType = raceType;
+    }
+
+    public enum RaceType {
+        MATCH("Match"),
+        FLEET("Fleet");
+
+        private final String value;
+
+        private final static Map<String, RaceType> MAPPING = initializeMapping();
+
+        RaceType(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+
+        public static RaceType fromValue(String value) {
+            return MAPPING.get(value);
+        }
+
+        private static Map<String, RaceType> initializeMapping() {
+            return Arrays.stream(values()).collect(Collectors.toMap(RaceType::toString, rt -> rt));
+        }
     }
 }

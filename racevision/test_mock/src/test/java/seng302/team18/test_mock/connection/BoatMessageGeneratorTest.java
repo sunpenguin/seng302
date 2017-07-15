@@ -3,14 +3,10 @@ package seng302.team18.test_mock.connection;
 import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.test_mock.RaceCourseGenerator;
-import seng302.team18.test_mock.TestMock;
-import seng302.team18.test_mock.TestXMLFiles;
+import seng302.team18.test_mock.model.*;
 import seng302.team18.util.ByteCheck;
 import seng302.team18.util.SpeedConverter;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,15 +61,17 @@ public class BoatMessageGeneratorTest {
 
     @Test
     public void boatMessageGeneratorTest() throws IOException {
-        final RaceCourseGenerator raceCourseGenerator = new RaceCourseGenerator();
-        raceCourseGenerator.generateXmlMessages();
-        final Race testRace = raceCourseGenerator.generateRace(raceCourseGenerator.generateCourse());
+        BaseRaceBuilder raceBuilder = new RaceBuilder1();
+        BaseRegattaBuilder regattaBuilder = new RegattaBuilder1();
+        BaseCourseBuilder courseBuilder = new CourseBuilder1();
+
+        final Race testRace = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
         byte[] generatedBytes;
         List<BoatMessageGenerator> messages = new ArrayList<>();
-        for (Boat boat: testRace.getStartingList()) {
+        for (Boat boat : testRace.getStartingList()) {
             messages.add(new BoatMessageGenerator(boat));
         }
-        for(BoatMessageGenerator generator: messages){
+        for (BoatMessageGenerator generator : messages) {
             generatedBytes = generator.getPayload();
             int expectedVersionNum = 1;
             int expectedSourceID = generator.getBoat().getId();

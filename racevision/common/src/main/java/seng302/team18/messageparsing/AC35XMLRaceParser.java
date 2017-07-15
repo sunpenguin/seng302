@@ -16,7 +16,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A parser which reads information from an XML stream and creates messages representing information about the race.
@@ -53,7 +56,7 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         String startTimeString = parseRaceTime(startTimeNode);
 
         Node participantsNode = raceElement.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_PARTICIPANTS.toString()).item(0); // participants
-        List<Integer> participantIDs = parseParticipantIDs(participantsNode);
+        Map<Integer, AC35XMLRaceMessage.EntryDirection> participants = parseParticipants(participantsNode);
 
         Node courseNode = raceElement.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_COURSE.toString()).item(0); // compound marks
         Map<Integer, CompoundMark> compoundMarks = parseCompoundMarks(courseNode);
@@ -69,7 +72,7 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         message.setStartTime(startTimeString);
         message.setBoundaryMarks(boundaries);
         message.setCompoundMarks(new ArrayList<>(compoundMarks.values()));
-        message.setParticipantIDs(participantIDs);
+        message.setParticipants(participants);
         message.setMarkRoundings(markRoundings);
         return message;
     }
@@ -116,17 +119,23 @@ public class AC35XMLRaceParser implements MessageBodyParser {
      * @param participantsNode The element from the XML with information about the participants.
      * @return A list of integers (boat IDs)
      */
-    private List<Integer> parseParticipantIDs(Node participantsNode) {
+    private Map<Integer, AC35XMLRaceMessage.EntryDirection> parseParticipants(Node participantsNode) {
 
-        List<Integer> participantIDs = new ArrayList<>();
+        Map<Integer, AC35XMLRaceMessage.EntryDirection> participantIDs = new HashMap<>();
+
         if (participantsNode.getNodeType() == Node.ELEMENT_NODE) {
             Element participantsElement = (Element) participantsNode;
             NodeList participantNodeList = participantsElement.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_YACHT.toString());
+
             for (int i = 0; i < participantNodeList.getLength(); i++) {
                 Node participantNode = participantNodeList.item(i);
+
                 if (participantNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element participantElement = (Element) participantNode;
-                    participantIDs.add(Integer.parseInt(participantElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_SOURCE_ID.toString())));
+
+                    int id = Integer.parseInt(participantElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_SOURCE_ID.toString()));
+                    AC35XMLRaceMessage.EntryDirection direction = AC35XMLRaceMessage.EntryDirection.fromValue(participantElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_ENTRY.toString()));
+                    participantIDs.put(id, direction);
                 }
             }
         }
@@ -180,17 +189,22 @@ public class AC35XMLRaceParser implements MessageBodyParser {
     private List<MarkRounding> parseMarkRoundings(Node markSequenceNode, Map<Integer, CompoundMark> compoundMarks) {
 
         List<MarkRounding> markRoundings = new ArrayList<>();
+
         if (markSequenceNode.getNodeType() == Node.ELEMENT_NODE) {
             Element markSequenceElement = (Element) markSequenceNode;
             NodeList markSequenceNodeList = markSequenceElement.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_CORNER.toString());
+
             for (int i = 0; i < markSequenceNodeList.getLength(); i++) {
                 Node markNode = markSequenceNodeList.item(i);
+
                 if (markNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element markElement = (Element) markNode;
+
                     int seqNum = Integer.parseInt(markElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_SEQUENCE_ID.toString()));
                     int compoundMarkNum = Integer.parseInt(markElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_COMPOUND_MARK_ID.toString()));
-                    String rounding = markElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_ROUNDING.toString());
-                    markRoundings.add(new MarkRounding(seqNum, compoundMarks.get(compoundMarkNum)));
+                    MarkRounding.Direction direction = MarkRounding.Direction.fromValue(markElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_ROUNDING.toString()));
+                    int zoneSize = Integer.parseInt(markElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_ZONE_SIZE.toString()));
+                    markRoundings.add(new MarkRounding(seqNum, compoundMarks.get(compoundMarkNum), direction, zoneSize));
                 }
             }
         }
