@@ -67,6 +67,14 @@ public class BoatActionInterpreter extends MessageInterpreter {
             boat.setHeading(headTowardsWind(boat.getHeading(), windDirection, headingChange));
             boat.setSpeed(boat.getBoatTWS(race.getCourse().getWindSpeed(), boat.getTrueWindAngle(race.getCourse().getWindDirection())));
         }
+
+        if (actions.isSailsIn()) {
+            boat.setSailOut(false);
+        }
+
+        if (actions.isSailsOut()) {
+            boat.setSailOut(true);
+        }
     }
 
 

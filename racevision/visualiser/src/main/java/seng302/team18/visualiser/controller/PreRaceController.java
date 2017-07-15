@@ -102,14 +102,10 @@ public class PreRaceController {
             while(true) {
                 MessageBody messageBody = null;
                 try {
-//                    System.out.println("Prepare to receive message");
                     messageBody = receiver.nextMessage();
-//                    System.out.println("Get the message");
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-//                System.out.println("Message Type = " + messageBody.getType());
                 interpreter.interpret(messageBody);
             }
         });

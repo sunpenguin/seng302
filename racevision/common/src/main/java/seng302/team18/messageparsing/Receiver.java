@@ -49,8 +49,6 @@ public class Receiver {
     public MessageBody nextMessage() throws IOException {
         MessageHeadParser headParser = parserFactory.makeHeadParser();
         if (inStream.available() <= headParser.headerSize()) {
-//            System.out.println("instream " + inStream.available());
-//            System.out.println("headParser " + headParser.headerSize());
             return null;
         }
         inStream.mark(headParser.headerSize() + 1);

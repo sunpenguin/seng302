@@ -64,8 +64,6 @@ public class RaceController implements Observer {
     @FXML private Label speedLabel;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
-    @FXML private Button setAnnotations;
-    @FXML private Button toggle;
     @FXML private Slider slider;
 
     private boolean fpsOn;
@@ -468,7 +466,8 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
         interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(raceClock));
-        interpreter.add(AC35MessageType.BOAT_ACTION.getCode(), new BoatActionInterpreter(race));
+
+        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
 
         return interpreter;
     }
