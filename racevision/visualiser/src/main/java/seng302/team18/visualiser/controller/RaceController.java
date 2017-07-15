@@ -120,23 +120,25 @@ public class RaceController implements Observer {
         final EventHandler<KeyEvent> keyEventHandler =
             keyEvent -> {
                 if (keyEvent.getCode() != null) {
-                    BoatActionMessage message = null;
+                    System.out.println("hello world");
+                    BoatActionMessage message = new BoatActionMessage();
                     switch (keyEvent.getCode()){
                         case SPACE:
-                            message = new BoatActionMessage(true, sailIn, !sailIn, false, false, false);
+                            message.setAutopilot(true);
                             break;
                         case ENTER:
-                            message = new BoatActionMessage(false, sailIn, !sailIn, true, false, false);
+                            message.setTackGybe(true);
                             break;
                         case PAGE_UP:
-                            message = new BoatActionMessage(false, sailIn, !sailIn, false, true, false);
+                            message.setUpwind(true);
                             break;
                         case PAGE_DOWN:
-                            message = new BoatActionMessage(false, sailIn, !sailIn, false, false, true);
+                            message.setDownwind(true);
                             break;
                         case SHIFT:
                             sailIn = !sailIn;
-                            message = new BoatActionMessage(false, sailIn, !sailIn, false, false, false);
+                            message.setSailsIn(sailIn);
+                            break;
                     }
                     sender.send(message);
                 }

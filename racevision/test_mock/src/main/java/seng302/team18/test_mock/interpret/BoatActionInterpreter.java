@@ -37,7 +37,7 @@ public class BoatActionInterpreter extends MessageInterpreter {
 
     @Override
     public void interpret(MessageBody message) {
-        if (message instanceof BoatActionMessage) {
+        if (message != null && message instanceof BoatActionMessage) {
             BoatActionMessage actionMessage = (BoatActionMessage) message;
             for (Boat boat : boats) {
                 applyActions(boat, actionMessage);
