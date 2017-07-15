@@ -13,7 +13,6 @@ import javafx.stage.Stage;
 import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
-import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
@@ -21,13 +20,9 @@ import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.send.Sender;
-
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Controller for the pre race view
@@ -40,10 +35,10 @@ public class PreRaceController {
     @FXML private Text raceNameText;
 
     private ZoneTimeClock preRaceClock;
-    private Receiver receiver;
+    private Interpreter interpreter;
     private Sender sender;
     private Race race;
-    private ExecutorService executor;
+
 
     /**
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
@@ -51,7 +46,7 @@ public class PreRaceController {
      * @param race The race to be set up in the pre-race.
      */
     public void setUp(Race race, Receiver receiver, Sender sender) {
-        this.receiver = receiver;
+//        this.interpreter = receiver;
         this.sender = sender;
         this.race = race;
         preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
@@ -62,8 +57,15 @@ public class PreRaceController {
         listView.setItems(FXCollections.observableList(race.getStartingList()));
         preRaceClock.start();
 
-        interpretMessages(initialiseInterpreter());
+        Stage stage = (Stage) listView.getScene().getWindow();
+        this.interpreter = new Interpreter(receiver);
+        interpreter.setInterpreter(initialiseInterpreter());
+        interpreter.start();
         sender.send(new RequestMessage(true));
+        stage.setOnCloseRequest((event) -> {
+            interpreter.shutdownNow();
+            while (!receiver.close()) {}
+        });
     }
 
 
@@ -95,30 +97,6 @@ public class PreRaceController {
 
 
     /**
-     * starts interpreting messages from the socket.
-     */
-    private void interpretMessages(MessageInterpreter interpreter) {
-        executor = Executors.newSingleThreadExecutor();
-        executor.submit(() -> {
-            while(true) {
-                MessageBody messageBody = null;
-                try {
-                    messageBody = receiver.nextMessage();
-                } catch (Exception e) {
-                    //e.printStackTrace();
-                }
-                interpreter.interpret(messageBody);
-            }
-        });
-        Stage stage = (Stage) listView.getScene().getWindow();
-        stage.setOnCloseRequest((event) -> {
-            executor.shutdownNow();
-            while (!receiver.close()) {}
-        });
-    }
-
-
-    /**
      * Set up and initialise interpreter variables, adding interpreters of each relevant type to the global interpreter.
      */
     private MessageInterpreter initialiseInterpreter() {
@@ -141,11 +119,10 @@ public class PreRaceController {
      * @throws IOException
      */
     public void showRace() throws IOException {
-        executor.shutdownNow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
         Parent root = loader.load(); // throws IOException
         RaceController controller = loader.getController();
-        Stage stage = (Stage) listView.getScene().getWindow();
+        Stage stage = (Stage) raceNameText.getScene().getWindow();
         stage.setTitle("RaceVision");
         Scene scene = new Scene(root, 1280, 720);
         stage.setResizable(true);
@@ -153,7 +130,7 @@ public class PreRaceController {
         stage.setMinWidth(1000);
         stage.setScene(scene);
         stage.show();
-        controller.setUp(race, receiver, sender);
+        controller.setUp(race, interpreter, sender);
     }
 
 

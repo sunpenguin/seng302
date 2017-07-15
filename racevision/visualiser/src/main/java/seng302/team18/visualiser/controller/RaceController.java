@@ -399,8 +399,8 @@ public class RaceController implements Observer {
      *
      * @param race The race which is going to be displayed.
      */
-    public void setUp(Race race, Receiver receiver, Sender sender) {
-        this.receiver = receiver;
+    public void setUp(Race race, Interpreter interpreter, Sender sender) {
+//        this.receiver = receiver;
         this.sender = sender;
         this.race = race;
 //        setCourseCenter(race.getCourse());
@@ -425,33 +425,12 @@ public class RaceController implements Observer {
         setUpTable(raceRenderer.boatColors());
         setNoneAnnotationLevel();
         setUpSparklines(raceRenderer.boatColors());
-        interpretMessages(initialiseInterpreter());
+
+        Stage stage = (Stage) tableView.getScene().getWindow();
+//        Interpreter interpreter = new Interpreter(receiver, stage);
+        interpreter.setInterpreter(initialiseInterpreter());
     }
 
-
-    /**
-     * starts interpreting messages from the socket.
-     */
-    private void interpretMessages(MessageInterpreter interpreter) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(() -> {
-            while(true) {
-                MessageBody messageBody;
-                try {
-                    messageBody = receiver.nextMessage();
-                } catch (IOException e) {
-                    return;
-                }
-                interpreter.interpret(messageBody);
-            }
-        });
-
-        Stage stage = (Stage) raceViewPane.getScene().getWindow();
-        stage.setOnCloseRequest((event) -> {
-            executor.shutdownNow();
-            while (!receiver.close()) {}
-        });
-    }
 
 
     /**
