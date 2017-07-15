@@ -72,8 +72,6 @@ public class RaceController implements Observer {
     @FXML private Button toggle;
     @FXML private Slider slider;
 
-    private Stage stage;
-
     private boolean fpsOn;
     private boolean onImportant;
     private boolean sailIn = false;
@@ -93,7 +91,6 @@ public class RaceController implements Observer {
     @FXML
     public void initialize() {
         installKeyHandler();
-        stage = (Stage) raceViewPane.getScene().getWindow();
         setSliderListener();
         sliderSetup();
         fpsOn = true;
@@ -111,6 +108,7 @@ public class RaceController implements Observer {
     }
 
     @FXML private void closeAppAction() {
+        Stage stage = (Stage) raceViewPane.getScene().getWindow();
         stage.close();
     }
 
@@ -446,6 +444,7 @@ public class RaceController implements Observer {
             }
         });
 
+        Stage stage = (Stage) raceViewPane.getScene().getWindow();
         stage.setOnCloseRequest((event) -> {
             executor.shutdownNow();
             while (!receiver.close()) {}

@@ -30,8 +30,8 @@ public class RaceStatusInterpreter extends MessageInterpreter {
     @Override
     public void interpret(MessageBody message) {
         if (message instanceof AC35RaceStatusMessage) {
-            List<Integer> raceCodes = RaceStatus.nonPreRaceCodes();
             AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
+            List<Integer> raceCodes = RaceStatus.nonPreRaceCodes();
             int statusCode = statusMessage.getRaceStatus();
             if (raceCodes.contains(statusCode)) {
                 Platform.runLater(() -> {
