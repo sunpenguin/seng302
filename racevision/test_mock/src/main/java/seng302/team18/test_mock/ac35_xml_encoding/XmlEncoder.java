@@ -11,15 +11,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Abstract base class for encoding a XmlMessage type class into a XML-formatted string
  */
 public abstract class XmlEncoder<T extends XmlMessage> {
-
-    // TODO should be moved elsewhere?
-    protected final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
 
     /**
      * Encodes a XML message to a string

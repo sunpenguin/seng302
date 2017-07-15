@@ -183,3 +183,5 @@ local.properties
 /.idea/misc.xml
 /.idea/modules.xml
 .idea/inspectionProfiles/
+/.idea/codeStyleSettings.xml
+
