@@ -18,27 +18,28 @@ public class BoatActionEncoder extends MessageEncoder {
             BoatActionMessage boatAction = (BoatActionMessage) message;
             body = new byte[1];
             body[0] = 0;
-            List<Boolean> boatActions = Arrays.asList(boatAction.isAutopilot(), boatAction.isSailsIn(),
-                    boatAction.isSailsOut(), boatAction.isTackGybe(), boatAction.isUpwind(), boatAction.isDownwind());
-            for (int i = 0; i < boatActions.size(); i++) {
-                if (boatActions.get(i)) {
-                    body[0] |= (1 << i);
-                }
+            if (boatAction.isAutopilot()) {
+                body[0] = 1;
+            } else if (boatAction.isTackGybe()) {
+                body[0] = 4;
+            } else if (boatAction.isUpwind()) {
+                body[0] = 5;
+            } else if (boatAction.isDownwind()) {
+                body[0] = 6;
+            } else if (boatAction.isSailsIn()) {
+                body[0] = 2;
+            } else if (!boatAction.isSailsIn()) {
+                body[0] = 3;
             }
-
         }
 
         return body;
     }
 
-    protected byte[] generateChecksum(byte[] head, byte[] body) {
-        return new byte[0];
-    }
-
 
     @Override
     protected short messageLength() {
-        return 0;
+        return 1;
     }
 
 

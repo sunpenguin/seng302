@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class BoatActionMessageTest {
 
-    private BoatActionMessage testBoatActionMessage = new BoatActionMessage(true, true, true,
+    private BoatActionMessage testBoatActionMessage = new BoatActionMessage(true, true,
             true, true, true);
 
     @Test

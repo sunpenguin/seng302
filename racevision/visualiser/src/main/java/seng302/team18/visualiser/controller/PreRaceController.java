@@ -27,6 +27,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controller for the pre race view
@@ -102,14 +103,10 @@ public class PreRaceController {
             while(true) {
                 MessageBody messageBody = null;
                 try {
-//                    System.out.println("Prepare to receive message");
                     messageBody = receiver.nextMessage();
-//                    System.out.println("Get the message");
-
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
-//                System.out.println("Message Type = " + messageBody.getType());
                 interpreter.interpret(messageBody);
             }
         });

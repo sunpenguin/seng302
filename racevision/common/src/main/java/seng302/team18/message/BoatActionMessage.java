@@ -9,7 +9,6 @@ public class BoatActionMessage implements MessageBody{
 
     private boolean autopilot = false;
     private boolean sailsIn = false;
-    private boolean sailsOut = false;
     private boolean tackGybe = false;
     private boolean upwind = false;
     private boolean downwind = false;
@@ -22,8 +21,7 @@ public class BoatActionMessage implements MessageBody{
     /**
      * No args constructor for the BoatActionMessage sets all values to false.
      */
-    public BoatActionMessage() {
-    }
+    public BoatActionMessage() {}
 
 
     /**
@@ -31,15 +29,13 @@ public class BoatActionMessage implements MessageBody{
      *
      * @param autopilot the autopilot property
      * @param sailsIn the sailsIn property
-     * @param sailsOut the sailsOut property
      * @param tackGybe the tackGybe property
      * @param upwind the upwind property
      * @param downwind the downwind property
      */
-    public BoatActionMessage(boolean autopilot, boolean sailsIn, boolean sailsOut, boolean tackGybe, boolean upwind, boolean downwind) {
+    public BoatActionMessage(boolean autopilot, boolean sailsIn, boolean tackGybe, boolean upwind, boolean downwind) {
         this.autopilot = autopilot;
         this.sailsIn = sailsIn;
-        this.sailsOut = sailsOut;
         this.tackGybe = tackGybe;
         this.upwind = upwind;
         this.downwind = downwind;
@@ -63,16 +59,6 @@ public class BoatActionMessage implements MessageBody{
 
     public void setSailsIn(boolean sailsIn) {
         this.sailsIn = sailsIn;
-    }
-
-
-    public boolean isSailsOut() {
-        return sailsOut;
-    }
-
-
-    public void setSailsOut(boolean sailsOut) {
-        this.sailsOut = sailsOut;
     }
 
 

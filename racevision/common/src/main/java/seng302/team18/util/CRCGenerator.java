@@ -1,6 +1,5 @@
 package seng302.team18.util;
 
-import seng302.team18.util.ByteCheck;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -32,24 +31,10 @@ public class CRCGenerator {
 
         // flip bits
         crc = ~crc;
-//        System.out.println(crc);
         byte[] value = ByteCheck.intToByteArray(crc);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(value);
         byte[] crcValue = outputStream.toByteArray();
         return ByteCheck.littleEndian(crcValue, 4);
     }
-
-//    /*
-//    Return a byte array of size 4 given a long.
-//     */
-//    public static byte[] toByteArray(long value)
-//    {
-//        byte[] ret = new byte[4];
-//        ret[3] = (byte) ((value >> (0*8) & 0xFF));
-//        ret[2] = (byte) ((value >> (1*8) & 0xFF));
-//        ret[1] = (byte) ((value >> ((2)*8) & 0xFF));
-//        ret[0] = (byte) ((value >> ((3)*8) & 0xFF));
-//        return ret;
-//    }
 }
