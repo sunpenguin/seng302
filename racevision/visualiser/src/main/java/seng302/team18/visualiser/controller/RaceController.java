@@ -403,7 +403,6 @@ public class RaceController implements Observer {
         this.receiver = receiver;
         this.sender = sender;
         this.race = race;
-//        setCourseCenter(race.getCourse());
 
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
@@ -436,11 +435,11 @@ public class RaceController implements Observer {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
             while(true) {
-                MessageBody messageBody;
+                MessageBody messageBody = null;
                 try {
                     messageBody = receiver.nextMessage();
-                } catch (IOException e) {
-                    return;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 interpreter.interpret(messageBody);
             }
@@ -512,26 +511,5 @@ public class RaceController implements Observer {
                 setToImportantAnnotationLevel();
             }
         }
-    }
-
-    /**
-     * Extracts the central course coordinate from the course
-     *
-     * @param course The course for which the midpoint is calculated
-     */
-    private void setCourseCenter(Course course) {
-        List<Coordinate> points = new ArrayList<>();
-        for (BoundaryMark boundaryMark : course.getBoundaries()) {
-            points.add(boundaryMark.getCoordinate());
-        }
-        for (CompoundMark compoundMark : course.getCompoundMarks()) {
-            for (Mark mark : compoundMark.getMarks()) {
-                points.add(mark.getCoordinate());
-            }
-        }
-
-        GPSCalculations gpsCalculations = new GPSCalculations();
-        List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(race.getCourse());
-        race.getCourse().setCentralCoordinate(gpsCalculations.midPoint(extremes.get(0), extremes.get(1)));
     }
 }

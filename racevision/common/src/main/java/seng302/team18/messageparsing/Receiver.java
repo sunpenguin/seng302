@@ -67,16 +67,8 @@ public class Receiver {
         inStream.read(bodyBytes);
         inStream.read(checkBytes);
         if (detector.isValid(checkBytes, bodyBytes, headerBytes) && bodyParser != null) {
-//            System.out.println(4);
-//            System.out.println(AC35MessageType.from(head.getType()));
-//            System.out.println();
             return bodyParser.parse(bodyBytes);
         }
-//        System.out.println(3);
-//        System.out.println(AC35MessageType.from(head.getType()));
-//        System.out.println(bodyParser != null);
-//        System.out.println(detector.isValid(checkBytes, bodyBytes, headerBytes));
-//        System.out.println();
         return null;
     }
 
