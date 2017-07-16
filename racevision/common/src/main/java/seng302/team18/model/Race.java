@@ -99,6 +99,7 @@ public class Race {
         Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
         boat.setCoordinate(midPoint);
         // Set Heading
+        GPSCalculations gps = new GPSCalculations();
         boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
         double tws = boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection());
         boat.setSpeed(tws);
