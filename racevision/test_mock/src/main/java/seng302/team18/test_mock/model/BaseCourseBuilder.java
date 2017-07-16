@@ -19,7 +19,8 @@ public abstract class BaseCourseBuilder {
 
         GPSCalculations gpsCalculations = new GPSCalculations();
         List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(course);
-        course.setCentralCoordinate(gpsCalculations.midPoint(extremes.get(0), extremes.get(1)));
+        Coordinate center = gpsCalculations.midPoint(extremes.get(0), extremes.get(1));
+        course.setCentralCoordinate(center);
 
         return course;
     }

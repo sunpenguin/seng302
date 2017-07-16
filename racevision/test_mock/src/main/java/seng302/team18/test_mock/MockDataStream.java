@@ -27,10 +27,9 @@ public class MockDataStream {
      */
     private static void runMock() {
         final int SERVER_PORT = 5005;
-        final long TIME_OUT = 5 * 3 * 1000;
+        final long TIME_OUT = 60 * 3 * 1000;
 
         Race race = RACE_BUILDER.buildRace(REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse());
-
         Server server = new Server(SERVER_PORT);
         ConnectionListener listener = new ConnectionListener(race, PARTICIPANTS_BUILDER.getIdPool(), new AC35MessageParserFactory());
         TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool());

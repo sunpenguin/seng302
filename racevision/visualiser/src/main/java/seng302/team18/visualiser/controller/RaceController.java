@@ -120,7 +120,6 @@ public class RaceController implements Observer {
         final EventHandler<KeyEvent> keyEventHandler =
             keyEvent -> {
                 if (keyEvent.getCode() != null) {
-                    System.out.println("hello world");
                     BoatActionMessage message = new BoatActionMessage();
                     switch (keyEvent.getCode()){
                         case SPACE:
@@ -393,11 +392,10 @@ public class RaceController implements Observer {
      *
      * @param race The race which is going to be displayed.
      */
-    public void setUp(Race race, Receiver receiver, Sender sender) {
-        this.receiver = receiver;
+    public void setUp(Race race, Interpreter interpreter, Sender sender) {
+//        this.receiver = receiver;
         this.sender = sender;
         this.race = race;
-//        setCourseCenter(race.getCourse());
 
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
@@ -419,33 +417,12 @@ public class RaceController implements Observer {
         setUpTable(raceRenderer.boatColors());
         setNoneAnnotationLevel();
         setUpSparklines(raceRenderer.boatColors());
-        interpretMessages(initialiseInterpreter());
+
+        Stage stage = (Stage) tableView.getScene().getWindow();
+//        Interpreter interpreter = new Interpreter(receiver, stage);
+        interpreter.setInterpreter(initialiseInterpreter());
     }
 
-
-    /**
-     * starts interpreting messages from the socket.
-     */
-    private void interpretMessages(MessageInterpreter interpreter) {
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(() -> {
-            while(true) {
-                MessageBody messageBody;
-                try {
-                    messageBody = receiver.nextMessage();
-                } catch (IOException e) {
-                    return;
-                }
-                interpreter.interpret(messageBody);
-            }
-        });
-
-        Stage stage = (Stage) raceViewPane.getScene().getWindow();
-        stage.setOnCloseRequest((event) -> {
-            executor.shutdownNow();
-            while (!receiver.close()) {}
-        });
-    }
 
 
     /**
@@ -508,26 +485,5 @@ public class RaceController implements Observer {
                 setToImportantAnnotationLevel();
             }
         }
-    }
-
-    /**
-     * Extracts the central course coordinate from the course
-     *
-     * @param course The course for which the midpoint is calculated
-     */
-    private void setCourseCenter(Course course) {
-        List<Coordinate> points = new ArrayList<>();
-        for (BoundaryMark boundaryMark : course.getBoundaries()) {
-            points.add(boundaryMark.getCoordinate());
-        }
-        for (CompoundMark compoundMark : course.getCompoundMarks()) {
-            for (Mark mark : compoundMark.getMarks()) {
-                points.add(mark.getCoordinate());
-            }
-        }
-
-        GPSCalculations gpsCalculations = new GPSCalculations();
-        List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(race.getCourse());
-        race.getCourse().setCentralCoordinate(gpsCalculations.midPoint(extremes.get(0), extremes.get(1)));
     }
 }
