@@ -3,8 +3,7 @@ package seng302.team18.visualiser.messageinterpreting;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Course;
-import seng302.team18.model.Race;
+import seng302.team18.model.*;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -42,4 +41,5 @@ public class XMLRaceInterpreter extends MessageInterpreter {
             course.setBoundaries(raceMessage.getBoundaryMarks());
         }
     }
+
 }

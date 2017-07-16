@@ -3,6 +3,7 @@ package seng302.team18.visualiser.messageinterpreting;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35XMLRegattaMessage;
 import seng302.team18.message.MessageBody;
+import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 
@@ -36,7 +37,7 @@ public class XMLRegattaInterpreter extends MessageInterpreter {
             } else {
                 course.setTimeZone(ZoneId.of("UTC+" + utcOffset));
             }
-            // course.setCentralCoordinate(new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong()));
+             course.setCentralCoordinate(new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong()));
         }
     }
 }

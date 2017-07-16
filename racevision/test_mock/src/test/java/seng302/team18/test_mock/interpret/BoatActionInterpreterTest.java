@@ -39,7 +39,7 @@ public class BoatActionInterpreterTest {
     @Test
     public void upWindTest() {
         double expected = 357d;
-        MessageBody upWind = new BoatActionMessage(false, false, false, false, true, false);
+        MessageBody upWind = new BoatActionMessage(false, false, false, true, false);
         interpreter.interpret(upWind);
         Assert.assertEquals(expected, player.getHeading(), 0.1);
         Assert.assertEquals(0, notPlayer.getHeading(), 0.1);
@@ -49,7 +49,7 @@ public class BoatActionInterpreterTest {
     @Test
     public void downWindTest() {
         double expected = 3d;
-        MessageBody downWind = new BoatActionMessage(false, false, false, false, false, true);
+        MessageBody downWind = new BoatActionMessage(false, false, false, false, true);
         interpreter.interpret(downWind);
         Assert.assertEquals(expected, player.getHeading(), 0.1);
         Assert.assertEquals(0, notPlayer.getHeading(), 0.1);
