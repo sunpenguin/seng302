@@ -22,6 +22,8 @@ public class RaceRenderer {
     private final List<Color> BOAT_COLOURS = new ArrayList<>(
             Arrays.asList(Color.VIOLET, Color.DARKVIOLET, Color.GREEN, Color.TOMATO, Color.YELLOWGREEN, Color.BROWN));
     private PixelMapper pixelMapper;
+    private final int DOWNWIND = 180;
+    private final int POWERED_UP = 200;
 
 
     /**
@@ -39,7 +41,8 @@ public class RaceRenderer {
     }
 
     /**
-     * Draws displayBoats in the Race on the Group as well as the visible annotations
+     * Draws displayBoats in the Race on the Group as well as the visible annotations including the BoatSails in both
+     * the luffing and powered up position
      */
     public void renderBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
@@ -66,15 +69,14 @@ public class RaceRenderer {
                 displayBoat.setScale(pixelMapper.getZoomFactor());
                 boat.setSailOut(false);
                 if (boat.isSailOut()) {
-                    ((DisplaySail) displayBoat).setWindDirection(200 + race.getCourse().getWindDirection());
+                    ((DisplaySail) displayBoat).setWindDirection(POWERED_UP + race.getCourse().getWindDirection());
 
                 }else{
-                    ((DisplaySail) displayBoat).setWindDirection(180 + race.getCourse().getWindDirection());
+                    ((DisplaySail) displayBoat).setWindDirection(DOWNWIND + race.getCourse().getWindDirection());
                 }
             }
             }
         }
-
 
 
     /**

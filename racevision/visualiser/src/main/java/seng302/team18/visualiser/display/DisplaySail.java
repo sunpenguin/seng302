@@ -11,7 +11,7 @@ import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
 /**
- * Created by cslaven on 6/07/17.
+ * A class to Display the sail on the GUI
  */
 public class DisplaySail extends DisplayBoatDecorator {
 
@@ -40,6 +40,10 @@ public class DisplaySail extends DisplayBoatDecorator {
         sail.toFront();
     }
 
+    /**
+     * A setter for the Coordinate that the DisplaySail is located at
+     * @param coordinate The coordinate the sail will be set to
+     */
     public void setCoordinate(Coordinate coordinate) {
         XYPair pixels = pixelMapper.coordToPixel(coordinate);
         sail.setLayoutX(pixels.getX());
@@ -47,36 +51,56 @@ public class DisplaySail extends DisplayBoatDecorator {
         super.setCoordinate(coordinate);
     }
 
+    /**
+     * Sets the scale factor of the DisplaySail
+     * @param scaleFactor The scale factor that will be set
+     */
     public void setScale(double scaleFactor) {
         zoom.setX(scaleFactor);
         zoom.setY(scaleFactor);
         super.setScale(scaleFactor);
     }
 
+    /**
+     * Adds he DisplaySail to the group so it can be displayed
+     * @param group The group the DisplaySail will be added to
+     */
     public void addToGroup(Group group){
         group.getChildren().add(sail);
         sail.toFront();
         super.addToGroup(group);
     }
 
+    /**
+     * Sets the current heading of the DisplaySail
+     * @param heading The heading the sail will be set to
+     */
     public void setHeading(double heading) {
-        rotation.setAngle(360 - windDirection);
         super.setHeading(heading);
     }
 
-    public double getWindDirection() {
-        return windDirection;
-    }
-
+    /**
+     * Sets the windDirection parameter and changes the rotation of the sail accordingly
+     * @param windDirection The direction the WindDirectio will be set to
+     */
     public void setWindDirection(double windDirection) {
         this.windDirection = windDirection;
         rotation.setAngle(windDirection);
     }
 
+    /**
+     * Sets the rotation of the sail
+     * @param rotation The value the rotation will be set to
+     */
     public void setRotation(double rotation){
         this.rotation.setAngle(rotation);
     }
 
+
+    /**
+     * Returns the current rotation of the sail
+     * @return
+     */
     public Rotate getRotation() {
         return rotation;
     }
