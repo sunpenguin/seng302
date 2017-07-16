@@ -66,7 +66,7 @@ public class RaceMessageGeneratorTest {
             int expectedRaceID = testRace.getId();
             int expectedRaceStatus = testRace.getStatus();
             long expectedStartTime = System.currentTimeMillis();
-            int expectedWindDirection = 0x3000;
+            int expectedWindDirection = 0x6000;
             int expectedWindSpeed = 5000;
             int expectedNumBoats = testRace.getStartingList().size();
             int expectedRaceType = 2;
