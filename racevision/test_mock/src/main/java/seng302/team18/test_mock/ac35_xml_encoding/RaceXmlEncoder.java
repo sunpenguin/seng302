@@ -10,8 +10,8 @@ import seng302.team18.model.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Encodes a AC35XMLRaceMessage into a XML-formatted string
@@ -26,9 +26,6 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
      * @throws ParserConfigurationException if the XML structure cannot be created
      */
     public DOMSource getDomSource(AC35XMLRaceMessage raceMessage) throws ParserConfigurationException {
-        final String DEFAULT_RACE_TYPE = "Match";
-        final String DEFAULT_START_POSTPONE_STATE = "false";
-
         //Root
         Document doc = createDocument();
         Element root = doc.createElement(AC35RaceXMLComponents.ROOT_RACE.toString());
@@ -41,7 +38,7 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
 
         // Race Type
         Element raceType = doc.createElement(AC35RaceXMLComponents.ELEMENT_RACE_TYPE.toString());
-        raceType.appendChild(doc.createTextNode(DEFAULT_RACE_TYPE));
+        raceType.appendChild(doc.createTextNode(raceMessage.getRaceType().toString()));
         root.appendChild(raceType);
 
         // Creation time
@@ -53,11 +50,11 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
         // Start time
         Element startTime = doc.createElement(AC35RaceXMLComponents.ELEMENT_START_DATE_TIME.toString());
         startTime.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_TIME.toString(), raceMessage.getStartTime());
-        startTime.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_POSTPONE.toString(), DEFAULT_START_POSTPONE_STATE);
+        startTime.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_POSTPONE.toString(), ((Boolean) raceMessage.isStartPostponed()).toString().toLowerCase());
         root.appendChild(startTime);
 
         // Participants
-        root.appendChild(encodeParticipants(doc, new ArrayList<>(raceMessage.getParticipants().keySet())));
+        root.appendChild(encodeParticipants(doc, raceMessage.getParticipants()));
 
         // Course
         root.appendChild(encodeCourse(doc, raceMessage.getCompoundMarks()));
@@ -72,24 +69,22 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
     }
 
 
-    private Element encodeParticipants(Document doc, List<Integer> participantIds) {
-        Element participants = doc.createElement(AC35RaceXMLComponents.ELEMENT_PARTICIPANTS.toString());
+    private Element encodeParticipants(Document doc, Map<Integer, AC35XMLRaceMessage.EntryDirection> participants) {
+        Element elementParticipants = doc.createElement(AC35RaceXMLComponents.ELEMENT_PARTICIPANTS.toString());
 
-        for (Integer participantId : participantIds) {
-            participants.appendChild(encodeParticipant(doc, participantId));
+        for (Map.Entry<Integer, AC35XMLRaceMessage.EntryDirection> participant : participants.entrySet()) {
+            elementParticipants.appendChild(encodeParticipant(doc, participant.getKey(), participant.getValue()));
         }
 
-        return participants;
+        return elementParticipants;
     }
 
 
-    private Element encodeParticipant(Document doc, Integer id) {
-        final String DEFAULT_ATTRIBUTE_ENTRY = "Port";
-
+    private Element encodeParticipant(Document doc, Integer id, AC35XMLRaceMessage.EntryDirection direction) {
         Element participant = doc.createElement(AC35RaceXMLComponents.ELEMENT_YACHT.toString());
 
         participant.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_SOURCE_ID.toString(), id.toString());
-        participant.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_ENTRY.toString(), DEFAULT_ATTRIBUTE_ENTRY);
+        participant.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_ENTRY.toString(), direction.toString());
 
         return participant;
     }
@@ -142,17 +137,14 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
 
 
     private Element encodeCompoundMarkSequence(Document doc, List<MarkRounding> markRoundings) {
-        final String DEFAULT_ROUNDING = "SP";
-        final Integer DEFAULT_ZONE_SIZE = 3;
-
         Element sequence = doc.createElement(AC35RaceXMLComponents.ELEMENT_COMPOUND_MARK_SEQUENCE.toString());
 
         for (MarkRounding rounding : markRoundings) {
             Element corner = doc.createElement(AC35RaceXMLComponents.ELEMENT_CORNER.toString());
             corner.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_SEQUENCE_ID.toString(), rounding.getSequenceNumber().toString());
             corner.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_COMPOUND_MARK_ID.toString(), rounding.getCompoundMark().getId().toString());
-            corner.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_ROUNDING.toString(), DEFAULT_ROUNDING);
-            corner.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_ZONE_SIZE.toString(), DEFAULT_ZONE_SIZE.toString());
+            corner.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_ROUNDING.toString(), rounding.getRoundingDirection().toString());
+            corner.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_ZONE_SIZE.toString(), ((Integer) rounding.getZoneSize()).toString());
             sequence.appendChild(corner);
         }
 
