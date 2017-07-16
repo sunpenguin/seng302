@@ -8,11 +8,24 @@ import java.util.Map;
  * Enum for the different types of messages for the AC35 streaming protocol and their associated codes.
  */
 public enum AC35MessageType {
-    YACHT_EVENT(29), BOAT_LOCATION(37), MARK_ROUNDING(38),
-    XML_MESSAGE(26), XML_REGATTA(5), XML_RACE(6), XML_BOATS(7),
-    HEARTBEAT(1), RACE_STATUS(12), DISPLAY_TEXT_MESSAGE(20), RACE_START_STATUS(27),
-    YACHT_ACTION_CODE(31), CHATTER_TEXT(36), COURSE_WIND(44), AVERAGE_WIND(47),
-    REQUEST(55), ACCEPTANCE(56), BOAT_ACTION(100);
+    HEARTBEAT(1),
+    XML_REGATTA(5),
+    XML_RACE(6),
+    XML_BOATS(7),
+    RACE_STATUS(12),
+    DISPLAY_TEXT_MESSAGE(20),
+    YACHT_EVENT(29),
+    XML_MESSAGE(26),
+    RACE_START_STATUS(27),
+    YACHT_ACTION_CODE(31),
+    CHATTER_TEXT(36),
+    BOAT_LOCATION(37),
+    MARK_ROUNDING(38),
+    COURSE_WIND(44),
+    AVERAGE_WIND(47),
+    REQUEST(55),
+    ACCEPTANCE(56),
+    BOAT_ACTION(100);
 
     private int code;
     private static final Map<Integer, AC35MessageType> CODE_MAP = Collections.unmodifiableMap(initializeMapping());

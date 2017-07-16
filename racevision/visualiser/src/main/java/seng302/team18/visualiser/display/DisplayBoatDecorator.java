@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import seng302.team18.model.Coordinate;
 
 /**
- * Created by David-chan on 30/06/17.
+ * A decorator pattern abstract class to add functionality to the DisplayBoat class
  */
 public abstract class DisplayBoatDecorator extends DisplayBoat {
 

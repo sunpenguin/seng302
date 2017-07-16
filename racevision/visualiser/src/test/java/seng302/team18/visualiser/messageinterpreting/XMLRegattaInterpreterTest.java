@@ -33,7 +33,7 @@ public class XMLRegattaInterpreterTest {
         race = new Race();
         interpreter = new XMLRegattaInterpreter(race);
 
-        MessageBody message = new AC35XMLRegattaMessage(12, "The Best Race",0, 0, utcOffset);
+        MessageBody message = new AC35XMLRegattaMessage(12, "The Best Race", "The Best Course", 0, 0, utcOffset);
         interpreter.interpret(message);
     }
 

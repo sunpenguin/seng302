@@ -4,7 +4,7 @@ import javafx.animation.AnimationTimer;
 
 
 /**
- * Created by David-chan on 16/03/17.
+ * An AnimationTimer to update the view of the race
  */
 public class RaceLoop extends AnimationTimer {
     private long previousTime = 0;

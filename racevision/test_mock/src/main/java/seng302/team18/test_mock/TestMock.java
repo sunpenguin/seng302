@@ -5,9 +5,13 @@ import seng302.team18.model.MarkRoundingEvent;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceStatus;
 import seng302.team18.test_mock.connection.*;
+import seng302.team18.test_mock.model.XmlMessageBuilder;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 import static java.lang.Thread.sleep;
 
@@ -17,21 +21,10 @@ import static java.lang.Thread.sleep;
  */
 public class TestMock implements Observer {
 
-    private Race race;
-    private Server server;
-    private List<Boat> boats = Arrays.asList(new Boat("Emirates Team New Zealand", "TEAM New Zealand", 121),
-            new Boat("Oracle Team USA", "TEAM USA", 122),
-            new Boat("Artemis Racing", "TEAM SWE", 123),
-            new Boat("Groupama Team France", "TEAM France", 124),
-            new Boat("Land Rover BAR", "TEAM Britain", 125),
-            new Boat("Softbank Team Japan", "TEAM Japan", 126));
-
-
-
-    public TestMock(Race race, Server server) {
-        this.race = race;
-        this.server = server;
-    }
+    private final Race race;
+    private final Server server;
+    private final XmlMessageBuilder xmlMessageBuilder;
+    private final List<Boat> boats;
 
 
     /**
@@ -40,18 +33,34 @@ public class TestMock implements Observer {
     private List<ScheduledMessageGenerator> scheduledMessages = new ArrayList<>();
 
 
+    public TestMock(Server server, XmlMessageBuilder messageBuilder, Race race, List<Boat> boats) {
+        this.server = server;
+        this.xmlMessageBuilder = messageBuilder;
+        this.race = race;
+        this.boats = boats;
+    }
 
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) {
             ClientConnection client = (ClientConnection) arg;
-//            client.sendMessage(new byte[10]); // TODO send the xml message
             race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
+            sendXmlMessages(client);
         }
 //        else if (arg instanceof Integer) {
 //            Integer id = (Integer) arg;
 //            race.getStartingList().removeIf(boat -> boat.getId().equals(id));
 //        }
+    }
+
+    private void sendXmlMessages(ClientConnection newPlayer) {
+        MessageGenerator generatorXmlRegatta = new XmlMessageGeneratorRegatta(xmlMessageBuilder.buildRegattaMessage(race));
+        MessageGenerator generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
+        MessageGenerator generatorXmlBoats = new XmlMessageGeneratorBoats(xmlMessageBuilder.buildBoatsXmlMessage(race));
+
+        newPlayer.sendMessage(generatorXmlRegatta.getMessage());
+        server.broadcast(generatorXmlRace.getMessage());
+        server.broadcast(generatorXmlBoats.getMessage());
     }
 
 

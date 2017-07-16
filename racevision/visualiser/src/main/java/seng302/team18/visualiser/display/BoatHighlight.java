@@ -9,7 +9,7 @@ import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
 /**
- * Created by David-chan on 1/07/17.
+ * A class to display a circular highlight around a specific boat
  */
 public class BoatHighlight extends DisplayBoatDecorator {
 

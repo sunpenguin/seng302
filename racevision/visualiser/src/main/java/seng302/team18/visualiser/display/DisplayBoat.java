@@ -10,6 +10,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
+import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.IBoat;
 import seng302.team18.util.XYPair;
@@ -22,7 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Created by David-chan on 30/06/17.
+ * A class that displays the boat on the GUI
  */
 public class DisplayBoat implements IBoat {
 
@@ -35,11 +36,15 @@ public class DisplayBoat implements IBoat {
     private Coordinate location;
     private Coordinate destination;
     private IntegerProperty place;
+    private double windDirection;
     private Long timeTilNextMark;
     private Long timeSinceLastMark = 0L;
     private Long timeAtLastMark;
     private int status;
+    private boolean sailOut;
     private boolean isControlled;
+    private Coordinate boatCenter;
+    private Boat boatObject;
 
     private PixelMapper pixelMapper;
     private Polyline boat;
@@ -54,9 +59,9 @@ public class DisplayBoat implements IBoat {
             BOAT_WIDTH / 2, BOAT_HEIGHT / 2,
             0.0, BOAT_HEIGHT / 2
     };
+
     private final Rotate rotation = new Rotate(0, 0, 0);
     private final Scale boatZoom = new Scale(1, 1, 0, 0);
-
 
     private Text annotation;
     private Long estimatedTime = 0L;
@@ -70,7 +75,6 @@ public class DisplayBoat implements IBoat {
         this.pixelMapper = pixelMapper;
         this.shortName = name;
         this.boatColor = boatColor;
-
         boat = new Polyline();
         boat.getPoints().addAll(BOAT_SHAPE);
         boat.setFill(boatColor);
@@ -81,9 +85,7 @@ public class DisplayBoat implements IBoat {
             }
         });
         boat.getTransforms().addAll(rotation, boatZoom);
-
         setUpAnnotations();
-        boat.toFront();
     }
 
 
@@ -174,6 +176,11 @@ public class DisplayBoat implements IBoat {
         annotation.setLayoutY(boat.getLayoutY());
     }
 
+
+
+    public Double[] getBOAT_SHAPE() {
+        return BOAT_SHAPE;
+    }
 
     public Color getColor() {
         return boatColor;
@@ -307,5 +314,21 @@ public class DisplayBoat implements IBoat {
 
     public void setControlled(boolean controlled) {
         isControlled = controlled;
+    }
+
+    public boolean isSailOut() {
+        return sailOut;
+    }
+
+    public void setSailOut(boolean sailOut) {
+        this.sailOut = sailOut;
+    }
+
+    public Boat getBoatObject() {
+        return boatObject;
+    }
+
+    public void setBoatObject(Boat boatObject) {
+        this.boatObject = boatObject;
     }
 }

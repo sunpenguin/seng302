@@ -6,7 +6,6 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.util.PixelMapper;
-
 import java.util.*;
 
 /**
@@ -25,7 +24,6 @@ public class RaceRenderer {
     private PixelMapper pixelMapper;
 
 
-
     /**
      * Constructor for RaceRenderer, takes a Race, Group  and AnchorPane as parameters.
      *
@@ -40,25 +38,24 @@ public class RaceRenderer {
         headingMap = new HashMap<>();
     }
 
-
     /**
      * Draws displayBoats in the Race on the Group as well as the visible annotations
      */
     public void renderBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
-
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             if (displayBoat == null) {
                 displayBoat = new DisplayWake(pixelMapper,
                         new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++)));
                 if (boat.isControlled()) {
                     displayBoat = new BoatHighlight(pixelMapper, displayBoat);
+                } else {
+                    displayBoat = new DisplaySail(pixelMapper, displayBoat);
                 }
                 displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
-
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
                 displayBoat.setCoordinate(boatCoordinates);
@@ -66,10 +63,18 @@ public class RaceRenderer {
                 displayBoat.setHeading(boat.getHeading());
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
-//                displayBoat.setScale(pixelMapper.getZoomFactor());
+                displayBoat.setScale(pixelMapper.getZoomFactor());
+                boat.setSailOut(false);
+                if (boat.isSailOut()) {
+                    ((DisplaySail) displayBoat).setWindDirection(200 + race.getCourse().getWindDirection());
+
+                }else{
+                    ((DisplaySail) displayBoat).setWindDirection(180 + race.getCourse().getWindDirection());
+                }
+            }
             }
         }
-    }
+
 
 
     /**

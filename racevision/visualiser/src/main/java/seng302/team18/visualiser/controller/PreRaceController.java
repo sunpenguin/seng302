@@ -103,11 +103,12 @@ public class PreRaceController {
                 MessageBody messageBody = null;
                 try {
                     messageBody = receiver.nextMessage();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 interpreter.interpret(messageBody);
             }
         });
-
         Stage stage = (Stage) listView.getScene().getWindow();
         stage.setOnCloseRequest((event) -> {
             executor.shutdownNow();
@@ -122,10 +123,10 @@ public class PreRaceController {
     private MessageInterpreter initialiseInterpreter() {
         MessageInterpreter interpreter = new CompositeMessageInterpreter();
 
+        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
-        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
 

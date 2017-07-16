@@ -29,15 +29,13 @@ import javafx.util.StringConverter;
 import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
-import seng302.team18.message.BoatActionMessage;
 import seng302.team18.visualiser.messageinterpreting.*;
-import seng302.team18.visualiser.send.BoatActionEncoder;
-import seng302.team18.visualiser.send.ControllerMessageFactory;
 import seng302.team18.visualiser.send.Sender;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
@@ -45,8 +43,6 @@ import seng302.team18.visualiser.util.SparklineDataPoint;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -68,11 +64,7 @@ public class RaceController implements Observer {
     @FXML private Label speedLabel;
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
-    @FXML private Button setAnnotations;
-    @FXML private Button toggle;
     @FXML private Slider slider;
-
-    private Stage stage;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -93,7 +85,6 @@ public class RaceController implements Observer {
     @FXML
     public void initialize() {
         installKeyHandler();
-        stage = (Stage) raceViewPane.getScene().getWindow();
         setSliderListener();
         sliderSetup();
         fpsOn = true;
@@ -111,6 +102,7 @@ public class RaceController implements Observer {
     }
 
     @FXML private void closeAppAction() {
+        Stage stage = (Stage) raceViewPane.getScene().getWindow();
         stage.close();
     }
 
@@ -446,6 +438,7 @@ public class RaceController implements Observer {
             }
         });
 
+        Stage stage = (Stage) raceViewPane.getScene().getWindow();
         stage.setOnCloseRequest((event) -> {
             executor.shutdownNow();
             while (!receiver.close()) {}
@@ -473,6 +466,8 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
         interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(raceClock));
+
+        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
 
         return interpreter;
     }
