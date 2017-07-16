@@ -81,7 +81,7 @@ public class DisplayWake extends DisplayBoatDecorator {
 
     public void addToGroup(Group group) {
         group.getChildren().add(wake);
-        wake.toFront();
+        wake.toBack();
         super.addToGroup(group);
     }
 

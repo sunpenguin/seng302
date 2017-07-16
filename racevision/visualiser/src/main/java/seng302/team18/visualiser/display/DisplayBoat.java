@@ -136,7 +136,7 @@ public class DisplayBoat implements IBoat {
         group.getChildren().add(boat);
         group.getChildren().add(annotation);
         annotation.toFront();
-        boat.toFront();
+        boat.toBack();
     }
 
 
