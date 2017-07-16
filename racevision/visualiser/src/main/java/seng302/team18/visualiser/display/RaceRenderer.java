@@ -68,9 +68,9 @@ public class RaceRenderer {
                 displayBoat.setScale(pixelMapper.getZoomFactor());
 
                 if (boat.isSailOut()) {
-                    ((DisplaySail) displayBoat).setWindDirection(200 + race.getCourse().getWindDirection());
-                } else{
                     ((DisplaySail) displayBoat).setWindDirection(180 + race.getCourse().getWindDirection());
+                } else{
+                    ((DisplaySail) displayBoat).setWindDirection(200 + race.getCourse().getWindDirection());
                 }
             }
         }

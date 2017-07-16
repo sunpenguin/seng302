@@ -85,9 +85,9 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
 
     private int setSpeed() {
         if (boat.isSailOut()) {
-            return new SpeedConverter().knotsToMms(boat.getSpeed()).intValue();
-        } else {
             return 0;
+        } else {
+            return new SpeedConverter().knotsToMms(boat.getSpeed()).intValue();
         }
     }
 

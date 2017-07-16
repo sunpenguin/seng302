@@ -262,6 +262,9 @@ public class Race {
      */
     private void updatePosition(Boat boat, double time) {
         double speed = boat.getSpeed(); // knots
+        if (boat.isSailOut()) {
+            speed = 0;
+        }
         double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
         double secondsTime = time / 1000.0d;
         double distanceTravelled = mpsSpeed * secondsTime;
