@@ -3,6 +3,7 @@ package seng302.team18.visualiser.messageinterpreting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.MessageBody;
@@ -11,9 +12,8 @@ import seng302.team18.model.*;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 /**
  * Created by david on 5/2/17.
@@ -22,10 +22,10 @@ public class XMLRaceInterpreterTest {
 
     private Race race;
     private MessageInterpreter interpreter;
-    private List<Boat> boats;
+    private List<AbstractBoat> boats;
     private List<CompoundMark> compoundMarks;
     private List<BoundaryMark> boundaryMarks;
-    private final String time = "2017-05-02T22:45:55.692+12:00";
+    private final String time = "2017-05-02T22:45:55+1200";
 
     @Before
     public void setUp() {
@@ -50,7 +50,13 @@ public class XMLRaceInterpreterTest {
         message.setStartTime(time);
         message.setBoundaryMarks(boundaryMarks);
         message.setCompoundMarks(compoundMarks);
-        message.setParticipantIDs(new ArrayList<>(Arrays.asList(1, 2, 3)));
+
+        Map<Integer, AC35XMLRaceMessage.EntryDirection> ids = new HashMap<>();
+        for (Integer i : Arrays.asList(1, 2, 3)) {
+            ids.put(i, AC35XMLRaceMessage.EntryDirection.PORT);
+        }
+
+        message.setParticipants(ids);
         message.setMarkRoundings(new ArrayList<>());
 
         interpreter.interpret(message);
@@ -108,11 +114,12 @@ public class XMLRaceInterpreterTest {
         MessageBody message = new AC35XMLBoatMessage(boats);
         interpreter.interpret(message);
 
-        ZonedDateTime expectedStart = ZonedDateTime.parse(time);
+        final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
+        ZonedDateTime expectedStart = ZonedDateTime.parse(time, DATE_TIME_FORMATTER);
         ZonedDateTime expectedCurrent = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
         Assert.assertEquals(expectedCurrent, race.getCurrentTime());
         Assert.assertEquals(expectedStart, race.getStartTime());
-        Assert.assertEquals(0, race.getStatus());
+        Assert.assertEquals(RaceStatus.NOT_ACTIVE, race.getStatus());
         Assert.assertEquals(0, race.getId());
     }
 

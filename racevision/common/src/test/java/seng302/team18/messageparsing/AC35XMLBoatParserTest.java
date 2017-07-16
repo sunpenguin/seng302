@@ -3,7 +3,9 @@ package seng302.team18.messageparsing;
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.message.AC35XMLBoatMessage;
+import seng302.team18.model.AbstractBoat;
 import seng302.team18.model.Boat;
+import seng302.team18.model.Mark;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,47 +13,70 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-/**
- * Created by jds112 on 25/04/17.
- */
+
 public class AC35XMLBoatParserTest {
 
     private AC35XMLBoatMessage message;
-    private AC35XMLBoatParser parser;
+    private List<AbstractBoat> expectedBoats;
 
     @Before
     public void setUp() throws Exception {
-        Path file = Paths.get("src/main/resources/boatsTest.xml");
-        byte[] boatXMLbytes = Files.readAllBytes(file);
-        parser = new AC35XMLBoatParser();
-        message = (AC35XMLBoatMessage) parser.parse(boatXMLbytes);
+        Path file = Paths.get("src/test/resources/boatsTest.xml");
+        byte[] bytes = Files.readAllBytes(file);
+        AC35XMLBoatParser parser = new AC35XMLBoatParser();
+        message = parser.parse(bytes);
+
+        setupBoats();
+    }
+
+    private void setupBoats() {
+        expectedBoats = new ArrayList<>();
+
+        expectedBoats.add(new Mark(122, "Constellation", "Constellation"));
+        expectedBoats.add(new Mark(123, "Mischief", "Mischief"));
+        expectedBoats.add(new Mark(124, "Atalanta", "Atalanta"));
+        expectedBoats.add(new Mark(126, "Defender", "Defender"));
+
+        expectedBoats.add(new Boat("Oracle Team USA", "USA", 101));
+        expectedBoats.add(new Boat("Emirates Team New Zealand", "NZL", 102));
+        expectedBoats.add(new Boat("Artemis Racing", "SWE", 103));
     }
 
     @Test
-    public void parse() throws Exception {
-        List<Boat> expected = new ArrayList<>();
-        expected.add(new Boat("Oracle Team USA", "USA", 101));
-        expected.add(new Boat("Emirates Team New Zealand", "NZL", 103));
-        expected.add(new Boat("Artemis Racing", "SWE", 102));
-
-        List<Boat> actual = message.getBoats();
-
-        assertEquals("An incorrect number of boats were added to the message object.",expected.size(), actual.size());
-
-        for (int i = 0; i < expected.size(); i++) {
-            Boat exp = expected.get(i);
-            Boat act = actual.get(i);
-            assertEquals(exp.getName(), act.getName());
-            assertEquals(exp.getShortName(), act.getShortName());
-            assertEquals(exp.getCoordinate(), act.getCoordinate());
-            assertEquals(exp.getDestination(), act.getDestination());
-            assertEquals(exp.getHeading(), act.getHeading(), 0.1);
-            assertEquals(exp.getLegNumber(), act.getLegNumber());
-            assertEquals(exp.getPlace(), act.getPlace());
-            assertEquals(exp.getSpeed(), act.getSpeed(), 0.1);
+    public void parseBoatType() throws Exception {
+        List<AbstractBoat> parsedBoats = message.getBoats();
+        for (int i = 0; i < parsedBoats.size(); i++) {
+            assertEquals("Boat type parsed incorrectly for boat " + i,
+                    expectedBoats.get(i).getType(), parsedBoats.get(i).getType());
         }
     }
 
+    @Test
+    public void parseBoatName() throws Exception {
+        List<AbstractBoat> parsedBoats = message.getBoats();
+        for (int i = 0; i < parsedBoats.size(); i++) {
+            assertEquals("Boat name parsed incorrectly for boat " + i,
+                    expectedBoats.get(i).getName(), parsedBoats.get(i).getName());
+        }
+    }
+
+    @Test
+    public void parseShortName() throws Exception {
+        List<AbstractBoat> parsedBoats = message.getBoats();
+        for (int i = 0; i < parsedBoats.size(); i++) {
+            assertEquals("Short name parsed incorrectly for boat " + i,
+                    expectedBoats.get(i).getShortName(), parsedBoats.get(i).getShortName());
+        }
+    }
+
+    @Test
+    public void parseSourceId() throws Exception {
+        List<AbstractBoat> parsedBoats = message.getBoats();
+        for (int i = 0; i < parsedBoats.size(); i++) {
+            assertEquals("Source ID parsed incorrectly for boat " + i,
+                    expectedBoats.get(i).getId(), parsedBoats.get(i).getId());
+        }
+    }
 }

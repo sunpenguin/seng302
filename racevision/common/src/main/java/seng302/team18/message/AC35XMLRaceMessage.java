@@ -3,20 +3,27 @@ package seng302.team18.message;
 import seng302.team18.model.BoundaryMark;
 import seng302.team18.model.CompoundMark;
 import seng302.team18.model.MarkRounding;
+import seng302.team18.model.Race;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * MessageBody that contains the race information from the XML file sent by the AC35 streaming protocol.
  */
-public class AC35XMLRaceMessage implements MessageBody {
+public class AC35XMLRaceMessage implements XmlMessage {
 
+    private int raceID;
+    private Race.RaceType raceType;
     private String startTime;
-    private List<Integer> participantIDs;
+    private boolean isStartPostponed;
+    private Map<Integer, EntryDirection> participants;
     private List<CompoundMark> compoundMarks;
     private List<MarkRounding> markRoundings;
     private List<BoundaryMark> boundaryMarks;
-    private int raceID;
 
     @Override
     public int getType() {
@@ -41,22 +48,12 @@ public class AC35XMLRaceMessage implements MessageBody {
         this.startTime = startTime;
     }
 
-    /**
-     * Getter for the list of participant IDs.
-     *
-     * @return the list of participant IDs.
-     */
-    public List<Integer> getParticipantIDs() {
-        return participantIDs;
+    public Map<Integer, EntryDirection> getParticipants() {
+        return Collections.unmodifiableMap(participants);
     }
 
-    /**
-     * Setter for the list of participant IDs.
-     *
-     * @param participantIDs the list of participant IDs.
-     */
-    public void setParticipantIDs(List<Integer> participantIDs) {
-        this.participantIDs = participantIDs;
+    public void setParticipants(Map<Integer, EntryDirection> participants) {
+        this.participants = participants;
     }
 
     /**
@@ -129,5 +126,47 @@ public class AC35XMLRaceMessage implements MessageBody {
      */
     public void setRaceID(int raceID) {
         this.raceID = raceID;
+    }
+
+    public Race.RaceType getRaceType() {
+        return raceType;
+    }
+
+    public void setRaceType(Race.RaceType raceType) {
+        this.raceType = raceType;
+    }
+
+    public boolean isStartPostponed() {
+        return isStartPostponed;
+    }
+
+    public void setStartPostponed(boolean startPostponed) {
+        isStartPostponed = startPostponed;
+    }
+
+    public enum EntryDirection {
+        PORT("Port"),
+        STARBOARD("Stbd");
+
+        private final String value;
+
+        private final static Map<String, EntryDirection> MAPPING = initializeMapping();
+
+        EntryDirection(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+
+        public static EntryDirection fromValue(String value) {
+            return MAPPING.get(value);
+        }
+
+        private static Map<String, EntryDirection> initializeMapping() {
+            return Arrays.stream(values()).collect(Collectors.toMap(EntryDirection::toString, rt -> rt));
+        }
     }
 }

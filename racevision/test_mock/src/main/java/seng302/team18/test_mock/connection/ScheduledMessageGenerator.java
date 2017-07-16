@@ -16,7 +16,6 @@ public abstract class ScheduledMessageGenerator extends MessageGenerator {
     public ScheduledMessageGenerator(int frequency, int type) {
         super(type);
         this.frequency = frequency;
-
     }
 
     /**
@@ -25,7 +24,7 @@ public abstract class ScheduledMessageGenerator extends MessageGenerator {
      * @param currTime the current time
      */
     public boolean isTimeToSend(long currTime) {
-        if ((currTime - lastSent) > (1000 / frequency)) {
+        if ((currTime - lastSent) > (1000d / frequency)) {
             lastSent = currTime;
             return true;
         }

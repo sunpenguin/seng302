@@ -3,11 +3,10 @@ package seng302.team18.visualiser.messageinterpreting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Boat;
-import seng302.team18.model.Course;
-import seng302.team18.model.Race;
+import seng302.team18.model.*;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -22,7 +21,7 @@ public class XMLBoatInterpreterTest {
 
     private Race race;
     private MessageInterpreter interpreter;
-    private List<Boat> boats;
+    private List<AbstractBoat> boats;
 
     @Before
     public void setUp() {
@@ -92,6 +91,6 @@ public class XMLBoatInterpreterTest {
         Assert.assertEquals(expectedTime, race.getCurrentTime());
         Assert.assertEquals(expectedTime, race.getStartTime());
         Assert.assertEquals(0, race.getId());
-        Assert.assertEquals(0, race.getStatus());
+        Assert.assertEquals(RaceStatus.NOT_ACTIVE, race.getStatus());
     }
 }

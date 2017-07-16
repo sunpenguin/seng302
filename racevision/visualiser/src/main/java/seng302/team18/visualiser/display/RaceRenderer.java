@@ -30,8 +30,8 @@ public class RaceRenderer {
      * Constructor for RaceRenderer, takes a Race, Group  and AnchorPane as parameters.
      *
      * @param pixelMapper for converting coordinates to pixel coordinates
-     * @param race the race containing the displayBoats to be drawn
-     * @param group the group to be drawn on
+     * @param race        the race containing the displayBoats to be drawn
+     * @param group       the group to be drawn on
      */
     public RaceRenderer(PixelMapper pixelMapper, Race race, Group group) {
         this.race = race;
@@ -95,7 +95,8 @@ public class RaceRenderer {
 
     /**
      * Update a single boats trail.
-     * @param boat the trail belongs to.
+     *
+     * @param boat        the trail belongs to.
      * @param pixelMapper used to map a coordinate to a point on the screen.
      */
     private void drawTrail(Boat boat, PixelMapper pixelMapper) {
@@ -138,7 +139,6 @@ public class RaceRenderer {
     }
 
     /**
-     *
      * @return a map from boat short names to colors.
      */
     public Map<String, Color> boatColors() {

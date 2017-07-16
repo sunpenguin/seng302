@@ -83,12 +83,12 @@ public class AC35XMLRaceParserTest {
 
         // List of expected mark roundings
         expectedMarkRounding = new ArrayList<>();
-        expectedMarkRounding.add(new MarkRounding(1, expectedCompoundMarks.get(0)));
-        expectedMarkRounding.add(new MarkRounding(2, expectedCompoundMarks.get(1)));
-        expectedMarkRounding.add(new MarkRounding(3, expectedCompoundMarks.get(2)));
-        expectedMarkRounding.add(new MarkRounding(4, expectedCompoundMarks.get(3)));
-        expectedMarkRounding.add(new MarkRounding(5, expectedCompoundMarks.get(4)));
-        expectedMarkRounding.add(new MarkRounding(6, expectedCompoundMarks.get(5)));
+        expectedMarkRounding.add(new MarkRounding(1, expectedCompoundMarks.get(0), MarkRounding.Direction.SP, 3));
+        expectedMarkRounding.add(new MarkRounding(2, expectedCompoundMarks.get(1), MarkRounding.Direction.SP, 3));
+        expectedMarkRounding.add(new MarkRounding(3, expectedCompoundMarks.get(2), MarkRounding.Direction.SP, 3));
+        expectedMarkRounding.add(new MarkRounding(4, expectedCompoundMarks.get(3), MarkRounding.Direction.SP, 3));
+        expectedMarkRounding.add(new MarkRounding(5, expectedCompoundMarks.get(4), MarkRounding.Direction.SP, 3));
+        expectedMarkRounding.add(new MarkRounding(6, expectedCompoundMarks.get(5), MarkRounding.Direction.SP, 3));
 
         // List of Boundary Marks
         expectedBoundaries = new ArrayList<>();
@@ -114,7 +114,7 @@ public class AC35XMLRaceParserTest {
     @Test
     public void parseAC35XMLRaceParticipantIDsTest() {
         List<Integer> expectedIDs = new ArrayList<>(Arrays.asList(101, 102, 103, 104, 105, 106));
-        List<Integer> actualIDs = raceMessageToTest.getParticipantIDs();
+        List<Integer> actualIDs = new ArrayList<>(raceMessageToTest.getParticipants().keySet());
         Assert.assertEquals(expectedIDs, actualIDs);
     }
 

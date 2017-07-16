@@ -4,6 +4,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 import seng302.team18.message.AC35XMLRegattaMessage;
+import seng302.team18.message.AC35XmlRegattaComponents;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -27,12 +28,6 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
      */
     @Override
     public AC35XMLRegattaMessage parse(InputStream stream) {
-        final String REGATTA_TAG = "RegattaConfig";
-        final String REGATTA_ID = "RegattaID";
-        final String REGATTA_NAME = "RegattaName";
-        final String CENTER_LAT = "CentralLatitude";
-        final String CENTER_LONG = "CentralLongitude";
-        final String UTC_OFFSET = "UtcOffset";
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
@@ -43,19 +38,23 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
         } catch (ParserConfigurationException | SAXException | IOException e) {
             return null;
         }
+
         doc.getDocumentElement().normalize();
-        Element regattaElement = (Element) doc.getElementsByTagName(REGATTA_TAG).item(0);
-        int regattaID = Integer.parseInt(regattaElement.getElementsByTagName(REGATTA_ID).item(0).getTextContent());
-        String regattaName = regattaElement.getElementsByTagName(REGATTA_NAME).item(0).getTextContent();
+
+        Element regattaElement = (Element) doc.getElementsByTagName(AC35XmlRegattaComponents.ROOT_REGATTA.toString()).item(0);
+
+        int regattaID = Integer.parseInt(regattaElement.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_ID.toString()).item(0).getTextContent());
+        String regattaName = regattaElement.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_NAME.toString()).item(0).getTextContent();
+        String courseName = regattaElement.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_COURSE_NAME.toString()).item(0).getTextContent();
 
         double centralLat =
-                Double.parseDouble(regattaElement.getElementsByTagName(CENTER_LAT).item(0).getTextContent());
+                Double.parseDouble(regattaElement.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_CENTER_LAT.toString()).item(0).getTextContent());
         double centralLong =
-                Double.parseDouble(regattaElement.getElementsByTagName(CENTER_LONG).item(0).getTextContent());
+                Double.parseDouble(regattaElement.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_CENTER_LONG.toString()).item(0).getTextContent());
 
-        String utcOffset = regattaElement.getElementsByTagName(UTC_OFFSET).item(0).getTextContent();
+        String utcOffset = regattaElement.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_OFFSET.toString()).item(0).getTextContent();
 
-        return new AC35XMLRegattaMessage(regattaID, regattaName, centralLat, centralLong, utcOffset);
+        return new AC35XMLRegattaMessage(regattaID, regattaName, courseName, centralLat, centralLong, utcOffset);
     }
 
     /**

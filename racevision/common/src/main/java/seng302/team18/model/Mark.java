@@ -3,17 +3,17 @@ package seng302.team18.model;
 /**
  * A class that represents a mark on the race course
  */
-public class Mark implements GeographicLocation {
+public class Mark extends AbstractBoat implements GeographicLocation {
 
-    private String name;
     private Coordinate coordinates;
-    private Integer id;
-    private Coordinate targetCoordinates;
+
+    public Mark(int id, String name, String shortName) {
+        super(id, name, shortName);
+    }
 
     public Mark(int id, Coordinate coordinates) {
-        this.id = id;
+        setId(id);
         this.coordinates = coordinates;
-        targetCoordinates = coordinates;
     }
 
 
@@ -37,27 +37,9 @@ public class Mark implements GeographicLocation {
     }
 
 
-    /**
-     * Getter for the mark name
-     *
-     * @return the name of the mark
-     */
-    public String getName() {
-        return name;
-    }
-
-
-    /**
-     * A setter for the name of the mark
-     *
-     * @param markName The name that the mark will  be set to
-     */
-    public void setName(String markName) {
-        this.name = markName;
-    }
-
-    public Integer getId() {
-        return id;
+    @Override
+    public BoatType getType() {
+        return BoatType.MARK;
     }
 }
 

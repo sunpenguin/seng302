@@ -27,7 +27,6 @@ public class AC35MessageHeadParserTest {
         message = (AC35MessageHead) parser.parse(headerBytes);
         int expectedType = 44;
         int actualType = message.getType();
-        System.out.println(actualType);
         assertEquals("The header message parser did not read the type as predicted.", expectedType, actualType);
     }
 

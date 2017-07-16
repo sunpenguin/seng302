@@ -46,4 +46,26 @@ public class XYPair {
     public void setY(double y) {
         this.y = y;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        XYPair xyPair = (XYPair) o;
+
+        if (Double.compare(xyPair.x, x) != 0) return false;
+        return Double.compare(xyPair.y, y) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        temp = Double.doubleToLongBits(x);
+        result = (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(y);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }

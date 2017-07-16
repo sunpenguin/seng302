@@ -1,75 +1,23 @@
 package seng302.team18.test_mock.connection;
 
+import javax.net.ServerSocketFactory;
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.SocketException;
+import java.net.*;
+import java.util.*;
 
 /**
  * Streaming server to connect test mock with clients.
  */
-public class Server {
+public class Server extends Observable {
+    private final List<ClientConnection> clients = new ArrayList<>();
+    private final ServerConnectionListener listener = new ServerConnectionListener();
+    private final int MAX_CLIENT_CONNECTION = 6;
 
-    private final ClientList clientList = new ClientList();
-    private final ConnectionListener connectionListener = new ConnectionListener();
-    private final int port;
     private ServerSocket serverSocket;
-    private XMLMessageGenerator regattaXMLMessageGenerator;
-    private XMLMessageGenerator boatsXMLMessageGenerator;
-    private XMLMessageGenerator raceXMLMessageGenerator;
+    private final int PORT;
 
-    public Server(int port, String regattaXML, String boatsXML, String raceXML) {
-        this.port = port;
-        regattaXMLMessageGenerator = new XMLMessageGenerator((byte)5, regattaXML);
-        boatsXMLMessageGenerator = new XMLMessageGenerator((byte)7, boatsXML);
-        raceXMLMessageGenerator = new XMLMessageGenerator((byte)6, raceXML);
-    }
-
-    /**
-     * Blocks while waiting for a client connection, setting up new connection when available.
-     * This includes sending the initial XML files and adding to the client list.
-     */
-    private void acceptClientConnection() {
-        try {
-            ClientConnection client = new ClientConnection(serverSocket.accept());
-            sendXmls(client);
-            clientList.getClients().add(client);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Sends the the three XML files to the specified client.
-     * The three files are Race.xml, Regatta.xml and Boats.xml. Their order is not defined.
-     *
-     * @param client the client to send to
-     * @throws IOException if an I/O exception occurs
-     */
-    private void sendXmls(ClientConnection client) throws IOException {
-        client.sendMessage(regattaXMLMessageGenerator.getMessage());
-        client.sendMessage(raceXMLMessageGenerator.getMessage());
-        client.sendMessage(boatsXMLMessageGenerator.getMessage());
-    }
-
-    /**
-     * Closes any open client connections and closes the server
-     */
-    public void closeServer() {
-        connectionListener.stopListening();
-
-        for (ClientConnection client : clientList.getClients()) {
-            try {
-                client.close();
-            } catch (IOException e) {
-                System.err.println("Failed to close client connection to: " + client.getClient().getInetAddress().toString());
-            }
-        }
-
-        try {
-            serverSocket.close();
-        } catch (IOException e) {
-            System.err.println("Failed to close server socket");
-        }
+    public Server(int port) {
+        this.PORT = port;
     }
 
     /**
@@ -78,20 +26,64 @@ public class Server {
      */
     public void openServer() {
         try {
-            serverSocket = new ServerSocket(port);
-
+            serverSocket = ServerSocketFactory.getDefault().createServerSocket(PORT);
         } catch (IOException e) {
-            System.err.println("Could not listen on port " + port);
+            System.err.println("Could not listen on port " + PORT);
             System.err.println("Exiting program");
             System.exit(-1);
         }
-
-        System.out.println("Stream opened successfully on port: " + port);
+        System.out.println("Stream opened successfully on port: " + PORT);
 
         acceptClientConnection();
-
-        //connectionListener.run(); TODO make connection listener work
+        listener.start();
     }
+
+
+    /**
+     * Blocks while waiting for a client connection, setting up new connection when available.
+     * Adding new client to the client list.
+     * Increment the number that represents number of connected clients.
+     */
+    private synchronized void acceptClientConnection() {
+        try {
+            ClientConnection client = new ClientConnection(serverSocket.accept());
+            clients.add(client);
+            System.out.println("Player " + clients.size() + " joined!");
+            setChanged();
+            notifyObservers(client);
+        } catch (SocketTimeoutException e) {
+            // The time out expired, no big deal
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void stopAcceptingConnections() {
+        listener.stopListening();
+    }
+
+
+    /**
+     * Waits until all clients disconnects and then closes the server.
+     * (Blocking)
+     */
+    public void close() {
+        while (!clients.isEmpty()) {
+            for (int i = 0; i < clients.size(); i++) {
+                if (clients.get(i).isClosed()) {
+                    clients.remove(i);
+                }
+            }
+        }
+
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Broadcasts a message to all connected clients
@@ -100,42 +92,40 @@ public class Server {
      * @see ClientConnection#sendMessage(byte[])
      */
     public void broadcast(byte[] message) {
-        if(message.length == 1){//Scheduled messages should return {0} if there is an error when constructing them
-            return;
+        if (message.length == 1) { //Scheduled messages should return {0} if there is an error when constructing them
+            return; // TODO move this out side of server
         }
-        for (ClientConnection client : clientList.getClients()) {
-            client.sendMessage(message);
+        for (int i = 0; i < clients.size(); i++) {
+            ClientConnection client = clients.get(i);
+            if (!client.sendMessage(message)) {
+                clients.remove(i);
+//                setChanged();
+//                notifyObservers(client.getId());
+            }
         }
-    }
-
-    /**
-     * Prunes dead connections from the list of clients, where a connection is condsidered dead after failing
-     * to respond a number of times
-     *
-     * @see ClientList#pruneConnections()
-     * @see ClientConnection#MAX_FAILURES
-     */
-    public void pruneConnections() {
-        clientList.pruneConnections();
     }
 
 
     /**
      * Thread that listens for incoming connections.
      */
-    private class ConnectionListener extends Thread {
+    private class ServerConnectionListener extends Thread {
         private boolean listening = true;
 
         @Override
         public void run() {
             try {
-                serverSocket.setSoTimeout(1000);
+                serverSocket.setSoTimeout(500);
             } catch (SocketException e) {
                 e.printStackTrace();
             }
 
             while (listening) {
-                acceptClientConnection();
+                if (clients.size() < MAX_CLIENT_CONNECTION) {
+                    acceptClientConnection();
+                } else {
+                    listening = false;
+                }
             }
         }
 

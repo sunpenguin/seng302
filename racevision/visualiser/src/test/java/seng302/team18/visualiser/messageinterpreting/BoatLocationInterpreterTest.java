@@ -39,7 +39,7 @@ public class BoatLocationInterpreterTest {
 
     @Test
     public void interpretBoatLocationTest1() {
-        message = new AC35BoatLocationMessage(420, new Coordinate(20, 20), 100, 10);
+        message = new AC35BoatLocationMessage(420, new Coordinate(20, 20), 100, 10, true);
         interpreter.interpret(message);
         Boat boatToCheck = race.getStartingList().get(0);
         Assert.assertEquals(10, boatToCheck.getSpeed(), delta);
@@ -50,7 +50,7 @@ public class BoatLocationInterpreterTest {
 
     @Test
     public void interpretBoatLocationTest2() {
-        message = new AC35BoatLocationMessage(100, new Coordinate(-20, -20), 365, 100);
+        message = new AC35BoatLocationMessage(100, new Coordinate(-20, -20), 365, 100, true);
         interpreter.interpret(message);
         Boat boatToCheck = race.getStartingList().get(1);
         Assert.assertEquals(100, boatToCheck.getSpeed(), delta);
@@ -61,7 +61,7 @@ public class BoatLocationInterpreterTest {
 
     @Test
     public void interpretBoatLocationTest3() {
-        message = new AC35BoatLocationMessage(69, new Coordinate(-1000, -1000), -10, -10);
+        message = new AC35BoatLocationMessage(69, new Coordinate(-1000, -1000), -10, -10, true);
         interpreter.interpret(message);
         Boat boatToCheck = race.getStartingList().get(2);
         Assert.assertEquals(-10, boatToCheck.getSpeed(), delta);

@@ -5,10 +5,10 @@ package seng302.team18.message;
  */
 public class RequestMessage implements MessageBody{
 
-    private int requestType;
+    private boolean isParticipating;
 
-    public RequestMessage(int requestType) {
-        this.requestType = requestType;
+    public RequestMessage(boolean isParticipating) {
+        this.isParticipating = isParticipating;
     }
 
     @Override
@@ -16,7 +16,7 @@ public class RequestMessage implements MessageBody{
         return AC35MessageType.REQUEST.getCode();
     }
 
-    public int getRequestType() {
-        return requestType;
+    public boolean isParticipating() {
+        return isParticipating;
     }
 }

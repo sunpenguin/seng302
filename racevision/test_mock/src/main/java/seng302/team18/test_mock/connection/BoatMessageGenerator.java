@@ -55,7 +55,9 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
         int speedOverGround = new SpeedConverter().knotsToMms(boat.getSpeed()).intValue();
         byte[] sog = ByteCheck.intToUShort(speedOverGround);
         byte[] windInfo = ByteBuffer.allocate(10).array();
-        byte[] drift = ByteBuffer.allocate(2).array();
+
+        // Drift is now defined as sail in / out
+        byte[] sails = setSails();
         byte[] set = ByteBuffer.allocate(2).array();
         byte[] rudderAng = ByteBuffer.allocate(2).array();
 
@@ -74,11 +76,24 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
         outStream.write(cog);
         outStream.write(sog);
         outStream.write(windInfo);
-        outStream.write(drift);
+        outStream.write(sails);
         outStream.write(set);
         outStream.write(rudderAng);
 
         return outStream.toByteArray();
+    }
+
+    /**
+     * Encodes the sail in / out feature
+     *
+     * @return the byte array for if the boat has sails in / out
+     */
+    private byte[] setSails() {
+        int sailOut = 0;
+        if (boat.isSailOut()) {
+            sailOut = 1;
+        }
+        return ByteCheck.intToUShort(sailOut);
     }
 
     public Boat getBoat() {

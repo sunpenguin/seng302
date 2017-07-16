@@ -25,10 +25,10 @@ public enum BoatStatus {
     }
 
     /**
-     * Returns the boat status associated with a code. If none exists then it returns null.
+     * Returns the boat status associated with a getCode. If none exists then it returns null.
      *
      * @param code representing the boat status.
-     * @return the boat status associated with a code.
+     * @return the boat status associated with a getCode.
      */
     // Code not used for anything right now. Can be removed if not needed.
     public BoatStatus from(int code) {
@@ -36,16 +36,16 @@ public enum BoatStatus {
     }
 
     /**
-     * Getter for the code of the boat status type.
+     * Getter for the getCode of the boat status type.
      *
-     * @return the code of the boat status type.
+     * @return the getCode of the boat status type.
      */
     public int code() {
         return code;
     }
 
     /**
-     * Creates a map between a code and its boat status type.
+     * Creates a map between a getCode and its boat status type.
      *
      * @return a map between all codes and boat status type.
      */

@@ -3,26 +3,28 @@ package seng302.team18.message;
 /**
  * MessageBody that contains the regatta information from the XML file sent by the AC35 streaming protocol.
  */
-public class AC35XMLRegattaMessage implements MessageBody {
+public class AC35XMLRegattaMessage implements XmlMessage {
     private double centralLat;
     private double centralLong;
     private String utcOffset;
     private int id;
-    private String name;
+    private String regattaName;
+    private String courseName;
 
     /**
      * Constructor for AC35XMLRegattaMessage.
      * Note: centralLat and centralLong may be incorrect from the XML.
      *
      * @param id          the regatta ID.
-     * @param name        the race name.
+     * @param regattaName        the race regattaName.
      * @param centralLat  the central latitude of the course.
      * @param centralLong the central longitude of the course.
      * @param utcOffset   the UTC offset of where the race is held.
      */
-    public AC35XMLRegattaMessage(int id, String name, double centralLat, double centralLong, String utcOffset) {
+    public AC35XMLRegattaMessage(int id, String regattaName, String courseName, double centralLat, double centralLong, String utcOffset) {
         this.id = id;
-        this.name = name;
+        this.regattaName = regattaName;
+        this.courseName = courseName;
         this.centralLat = centralLat;
         this.centralLong = centralLong;
         this.utcOffset = utcOffset;
@@ -71,11 +73,15 @@ public class AC35XMLRegattaMessage implements MessageBody {
     }
 
     /**
-     * Getter for the race name.
+     * Getter for the race regattaName.
      *
-     * @return the race name.
+     * @return the race regattaName.
      */
-    public String getName() {
-        return name;
+    public String getRegattaName() {
+        return regattaName;
+    }
+
+    public String getCourseName() {
+        return courseName;
     }
 }

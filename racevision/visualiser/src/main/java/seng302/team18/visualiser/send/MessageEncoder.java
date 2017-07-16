@@ -1,8 +1,8 @@
 package seng302.team18.visualiser.send;
 
 import seng302.team18.message.MessageBody;
-import seng302.team18.message.RequestMessage;
 import seng302.team18.util.ByteCheck;
+import seng302.team18.util.CRCGenerator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,8 +23,8 @@ public abstract class MessageEncoder {
         byte[] head = generateHead(message, messageLength());
         byte[] body = generateBody(message);
         byte[] checksum = generateChecksum(head, body);
-
         byte[] combined = new byte[head.length + body.length + checksum.length];
+
         System.arraycopy(head, 0, combined, 0, head.length);
         System.arraycopy(body, 0, combined, head.length, body.length);
         System.arraycopy(checksum, 0, combined, head.length + body.length, checksum.length);
@@ -43,34 +43,29 @@ public abstract class MessageEncoder {
      */
     private byte[] generateHead(MessageBody message, short lengthOfMessage) throws IOException {
 
-        if (message instanceof RequestMessage) {
-            RequestMessage requestMessage = (RequestMessage) message;
-            byte syncByte1 = 0x47;
-            byte syncByte2 = (byte) 0x83;
-            byte messageType = (byte) requestMessage.getType();
-            byte[] timestampBytes = ByteCheck.getCurrentTime6Bytes();
+        byte syncByte1 = 0x47;
+        byte syncByte2 = (byte) 0x83;
+        byte messageType = (byte) message.getType();
+        byte[] timestampBytes = ByteCheck.getCurrentTime6Bytes();
 
-            //TODO just like HeaderGenerate from test_mock, there needs to be a better way to generate source id
-            byte[] sourceID = new byte[4];
-            sourceID[0] = 11;
-            sourceID[1] = 22;
-            sourceID[2] = 33;
-            sourceID[4] = 99;
+        //TODO just like HeaderGenerate from test_mock, there needs to be a better way to generate source id
+        byte[] sourceID = new byte[4];
+        sourceID[0] = 11;
+        sourceID[1] = 22;
+        sourceID[2] = 33;
+        sourceID[3] = 99;
 
-            byte[] messageLen = ByteCheck.shortToByteArray(lengthOfMessage);
+        byte[] messageLen = ByteCheck.shortToByteArray(lengthOfMessage);
 
-            ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
-            outputSteam.write(syncByte1);
-            outputSteam.write(syncByte2);
-            outputSteam.write(messageType);
-            outputSteam.write(timestampBytes);
-            outputSteam.write(sourceID);
-            outputSteam.write(messageLen);
+        ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
+        outputSteam.write(syncByte1);
+        outputSteam.write(syncByte2);
+        outputSteam.write(messageType);
+        outputSteam.write(timestampBytes);
+        outputSteam.write(sourceID);
+        outputSteam.write(messageLen);
 
-            return outputSteam.toByteArray();
-        }
-
-        return null;
+        return outputSteam.toByteArray();
     }
 
 
@@ -90,7 +85,18 @@ public abstract class MessageEncoder {
      * @param body of message to create checksum for
      * @return the checksum as a byte array
      */
-    protected abstract byte[] generateChecksum(byte[] head, byte[] body) throws IOException;
+    protected byte[] generateChecksum(byte[] head, byte[] body) throws IOException {
+//        byte[] combined = new byte[head.length + body.length];
+//
+//        System.arraycopy(head, 0, combined, 0, head.length);
+//        System.arraycopy(body, 0, combined, head.length, body.length);
+//        return CRCGenerator.generateCRC(combined);
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        outputStream.write(head);
+        outputStream.write(body);
+        return CRCGenerator.generateCRC(outputStream.toByteArray());
+    }
 
 
     /**

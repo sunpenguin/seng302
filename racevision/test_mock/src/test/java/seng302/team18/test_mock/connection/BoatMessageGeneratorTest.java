@@ -3,7 +3,7 @@ package seng302.team18.test_mock.connection;
 import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.test_mock.TestMock;
+import seng302.team18.test_mock.model.*;
 import seng302.team18.util.ByteCheck;
 import seng302.team18.util.SpeedConverter;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by csl62 on 25/04/17.
+ * Test for BoatMessageGenerator.
  */
 public class BoatMessageGeneratorTest {
 
@@ -61,14 +61,17 @@ public class BoatMessageGeneratorTest {
 
     @Test
     public void boatMessageGeneratorTest() throws IOException {
-        TestMock testMock = new TestMock();
-        Race testRace = testMock.testRun();
+        BaseRaceBuilder raceBuilder = new RaceBuilder1();
+        BaseRegattaBuilder regattaBuilder = new RegattaBuilder1();
+        BaseCourseBuilder courseBuilder = new CourseBuilder1();
+
+        final Race testRace = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
         byte[] generatedBytes;
         List<BoatMessageGenerator> messages = new ArrayList<>();
-        for (Boat boat: testRace.getStartingList()) {
+        for (Boat boat : testRace.getStartingList()) {
             messages.add(new BoatMessageGenerator(boat));
         }
-        for(BoatMessageGenerator generator: messages){
+        for (BoatMessageGenerator generator : messages) {
             generatedBytes = generator.getPayload();
             int expectedVersionNum = 1;
             int expectedSourceID = generator.getBoat().getId();

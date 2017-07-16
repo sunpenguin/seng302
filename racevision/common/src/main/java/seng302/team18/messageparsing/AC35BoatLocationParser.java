@@ -50,6 +50,8 @@ public class AC35BoatLocationParser implements MessageBodyParser {
         final int HEADING_LENGTH = 2;
         final int SPEED_INDEX = 38;
         final int SPEED_LENGTH = 2;
+        final int SAIL_INDEX = 50;
+        final int SAIL_LENGTH = 2;
 
         int sourceID = ByteCheck.byteToInt(bytes, SOURCE_ID_INDEX, SOURCE_ID_LENGTH);
         double lat = ByteCheck.byteToInt(bytes, LAT_INDEX, LAT_LENGTH) * BYTE_COORDINATE_TO_DOUBLE;
@@ -57,8 +59,24 @@ public class AC35BoatLocationParser implements MessageBodyParser {
         double heading = ByteCheck.byteToInt(bytes, HEADING_INDEX, HEADING_LENGTH) * BYTE_HEADING_TO_DOUBLE;
         double speed = ByteCheck.byteToInt(bytes, SPEED_INDEX, SPEED_LENGTH);
         speed = new SpeedConverter().mmsToKnots(speed);
+        boolean sail = sails(bytes, SAIL_INDEX, SAIL_LENGTH);
 
-        return new AC35BoatLocationMessage(sourceID, new Coordinate(lat, longitude), heading, speed);
+        return new AC35BoatLocationMessage(sourceID, new Coordinate(lat, longitude), heading, speed, sail);
+    }
+
+    /**
+     * Converts the sail field (former drift field) into a boolean variable
+     *
+     * @param bytes A list of bytes represent information about the locations of participants in the race.
+     * @param sailIndex The index of where the sail field is.
+     * @param sailLength The length of the sail field.
+     * @return The boolean variable representing if the sail is in / out on a boat.
+     */
+    private boolean sails(byte[] bytes, int sailIndex, int sailLength) {
+        if (ByteCheck.byteToShort(bytes, sailIndex, sailLength) == 0) {
+            return false;
+        }
+        return true;
     }
 
 }

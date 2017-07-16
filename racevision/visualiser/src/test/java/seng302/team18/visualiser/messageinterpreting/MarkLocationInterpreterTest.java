@@ -3,6 +3,7 @@ package seng302.team18.visualiser.messageinterpreting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatLocationMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.*;
@@ -45,7 +46,7 @@ public class MarkLocationInterpreterTest {
 
     @Test
     public void interpretMarkRoundings1() {
-        message = new AC35BoatLocationMessage(1, new Coordinate(20, 20), 10, 10);
+        message = new AC35BoatLocationMessage(1, new Coordinate(20, 20), 10, 10, true);
         interpreter.interpret(message);
         AC35BoatLocationMessage lMessage = (AC35BoatLocationMessage) message;
         List<Mark> filteredMarks = race.getCourse().getMarks().stream()
@@ -60,7 +61,7 @@ public class MarkLocationInterpreterTest {
 
     @Test
     public void interpretMarkRoundings2() {
-        message = new AC35BoatLocationMessage(3, new Coordinate(-20, -20), 10, 10);
+        message = new AC35BoatLocationMessage(3, new Coordinate(-20, -20), 10, 10, true);
         interpreter.interpret(message);
         AC35BoatLocationMessage lMessage = (AC35BoatLocationMessage) message;
         List<Mark> filteredMarks = race.getCourse().getMarks().stream()
@@ -75,7 +76,7 @@ public class MarkLocationInterpreterTest {
 
     @Test
     public void interpretMarkRoundings3() {
-        message = new AC35BoatLocationMessage(5, new Coordinate(89, -100), 10, 10);
+        message = new AC35BoatLocationMessage(5, new Coordinate(89, -100), 10, 10, true);
         interpreter.interpret(message);
         AC35BoatLocationMessage lMessage = (AC35BoatLocationMessage) message;
         List<Mark> filteredMarks = race.getCourse().getMarks().stream()

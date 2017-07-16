@@ -3,6 +3,7 @@ package seng302.team18.visualiser.messageinterpreting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
@@ -43,7 +44,7 @@ public class FinishersListInterpreterTest {
         boatStates.add(new AC35BoatStatusMessage(420, 2, 3, 0));
         boatStates.add(new AC35BoatStatusMessage(100, 2, 2, 0));
         boatStates.add(new AC35BoatStatusMessage(69, 2, 3, 0));
-        message = new AC35RaceStatusMessage(1L, 1, 1L, 1, boatStates);
+        message = new AC35RaceStatusMessage(1L, 1, 1L, 1, 0, boatStates);
         interpreter.interpret(message);
         Assert.assertEquals(2, race.getFinishedList().size());
     }
@@ -59,7 +60,7 @@ public class FinishersListInterpreterTest {
         boatStates.add(new AC35BoatStatusMessage(420, 2, 2, 0));
         boatStates.add(new AC35BoatStatusMessage(100, 2, 2, 0));
         boatStates.add(new AC35BoatStatusMessage(69, 2, 2, 0));
-        message = new AC35RaceStatusMessage(1L, 1, 1L, 1, boatStates);
+        message = new AC35RaceStatusMessage(1L, 1, 1L, 1, 1, boatStates);
         interpreter.interpret(message);
         Assert.assertEquals(0, race.getFinishedList().size());
     }
@@ -75,7 +76,7 @@ public class FinishersListInterpreterTest {
         boatStates.add(new AC35BoatStatusMessage(420, 2, 2, 0));
         boatStates.add(new AC35BoatStatusMessage(100, 2, 2, 0));
         boatStates.add(new AC35BoatStatusMessage(69, 2, 3, 0));
-        message = new AC35RaceStatusMessage(1L, 1, 1L, 1, boatStates);
+        message = new AC35RaceStatusMessage(1L, 1, 1L, 1, 0, boatStates);
         interpreter.interpret(message);
         Assert.assertEquals(1, race.getFinishedList().size());
         Boat boatToCheck = race.getFinishedList().get(0);

@@ -1,13 +1,12 @@
 package seng302.team18.visualiser.messageinterpreting;
 
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * The EstimatedTimeInterpreter that sets the time till next mark field for the boat.
@@ -45,13 +44,6 @@ public class EstimatedTimeInterpreter extends MessageInterpreter {
                         .filter(boat -> boat.getId().equals(boatStatusMessage.getBoatId()))
                         .forEach(boat -> boat.setTimeTilNextMark(timeTilNextMark));
             }
-//            for (Boat boat : race.getStartingList()) {
-//                if (boatStatus.containsKey(boat.getId())) {
-//                    double timeTilNextMark = ((long) boatStatus.get(boat.getId())
-//                            .get(statusMessage.getEstimatedTimePosition()) - statusMessage.getCurrentTime()) / 1000d;
-//                    boat.setTimeTilNextMark((long) timeTilNextMark);
-//                }
-//            }
         }
     }
 }

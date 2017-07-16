@@ -2,7 +2,11 @@ package seng302.team18.test_mock.connection;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.net.Socket;
+import java.util.Arrays;
 
 /**
  * Holds a connection to a client.
@@ -10,43 +14,69 @@ import java.net.Socket;
  * @see seng302.team18.test_mock.connection
  */
 public class ClientConnection {
-    public final static int MAX_FAILURES = 5;
-    private DataOutputStream out;
+    private InputStream in;
+    private OutputStream out;
     private Socket client;
-    private int nFailures;
+    private Integer id;
+
 
     public ClientConnection(Socket socket) throws IOException {
         client = socket;
         out = new DataOutputStream(client.getOutputStream());
+        in = socket.getInputStream();
     }
+
 
     /**
      * Send a message to a client.
-     * On failure, increments the number of failed attempts, on success, resets.
+     * Returns false on failure to send the message. (Socket closed by remote)
      *
-     * @param message the message to send
+     * @param message the message to send.
+     * @return if the message was sent.
      */
-    public void sendMessage(byte[] message) {
+    public boolean sendMessage(byte[] message) {
         try {
             out.write(message);
-            out.flush(); // TODO is this helpful?
-            nFailures = 0;
+            out.flush();
+            return true;
         } catch (IOException e) {
-            System.err.println("Unable to send message to client: " + client.getInetAddress().toString());
-            ++nFailures;
+            return false;
         }
     }
 
-    public Socket getClient() {
+
+    public Socket getSocket() {
         return client;
     }
 
+
     public void close() throws IOException {
+        in.close();
         out.close();
         client.close();
     }
 
-    public int getnFailures() {
-        return nFailures;
+
+    public Integer getId() {
+        return id;
+    }
+
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+
+    /**
+     * Returns true if the Socket has been closed.
+     *
+     * @return true if Socket is closed, false otherwise.
+     */
+    public boolean isClosed() {
+        try {
+            return in.read() == -1;
+        } catch (IOException e) {
+            return true;
+        }
     }
 }

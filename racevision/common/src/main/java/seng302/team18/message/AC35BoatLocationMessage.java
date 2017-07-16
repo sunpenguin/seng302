@@ -10,6 +10,7 @@ public class AC35BoatLocationMessage implements MessageBody {
     private Coordinate coordinate;
     private Double heading;
     private Double speed;
+    private Boolean sailsOut;
 
     /**
      * Constructor for AC35BoatLocationMessage.
@@ -19,11 +20,12 @@ public class AC35BoatLocationMessage implements MessageBody {
      * @param heading    of the boat.
      * @param speed      of the boat in knots.
      */
-    public AC35BoatLocationMessage(int sourceId, Coordinate coordinate, double heading, double speed) {
+    public AC35BoatLocationMessage(int sourceId, Coordinate coordinate, double heading, double speed, boolean sailsOut) {
         this.sourceId = sourceId;
         this.coordinate = coordinate;
         this.heading = heading;
         this.speed = speed;
+        this.sailsOut = sailsOut;
     }
 
     @Override
@@ -65,5 +67,15 @@ public class AC35BoatLocationMessage implements MessageBody {
      */
     public Double getSpeed() {
         return speed;
+    }
+
+
+    /**
+     * Getter for sails out.
+     *
+     * @return if the boat has sails out.
+     */
+    public Boolean getSailsOut() {
+        return sailsOut;
     }
 }

@@ -23,7 +23,7 @@ public class AC35BoatsParserTest {
     @Test
     public void boatNumTest() {
         int expectedBoatNum = 6;
-        int actual = boatsMessage.getBoats().size();
+        int actual = boatsMessage.getYachts().size();
         assertEquals(expectedBoatNum, actual);
     }
 

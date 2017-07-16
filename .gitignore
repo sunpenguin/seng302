@@ -181,3 +181,7 @@ local.properties
 /racevision/racevision.iml
 /racevision/visualiser/visualiser.iml
 /.idea/misc.xml
+/.idea/modules.xml
+.idea/inspectionProfiles/
+/.idea/codeStyleSettings.xml
+

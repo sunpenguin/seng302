@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.send;
 
+import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.MessageBody;
 import java.util.Arrays;
 import java.util.List;
@@ -21,27 +22,22 @@ public class BoatActionEncoder extends MessageEncoder {
             BoatActionMessage boatAction = (BoatActionMessage) message;
             body = new byte[1];
             body[0] = 0;
-            List<Boolean> boatActions = Arrays.asList(boatAction.isAutopilot(), boatAction.isSailsIn(),
-                    boatAction.isSailsOut(), boatAction.isTackGybe(), boatAction.isUpwind(), boatAction.isDownwind());
-            for (int i = 0; i < boatActions.size(); i++) {
-                if (boatActions.get(i)) {
-                    body[0] |= (1 << i);
-                }
+            if (boatAction.isAutopilot()) {
+                body[0] = 1;
+            } else if (boatAction.isTackGybe()) {
+                body[0] = 4;
+            } else if (boatAction.isUpwind()) {
+                body[0] = 5;
+            } else if (boatAction.isDownwind()) {
+                body[0] = 6;
+            } else if (boatAction.isSailsIn()) {
+                body[0] = 2;
+            } else if (!boatAction.isSailsIn()) {
+                body[0] = 3;
             }
-
         }
 
         return body;
-    }
-
-    /**
-     * Generates the checksum of the message to be delivered
-     * @param head of message to create checksum for
-     * @param body of message to create checksum for
-     * @return The checksum of the message
-     */
-    protected byte[] generateChecksum(byte[] head, byte[] body) {
-        return new byte[0];
     }
 
 
@@ -51,7 +47,7 @@ public class BoatActionEncoder extends MessageEncoder {
      */
     @Override
     protected short messageLength() {
-        return 0;
+        return 1;
     }
 
 

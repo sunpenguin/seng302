@@ -23,8 +23,8 @@
 //        byte[] bytes2 = {71, -125, 37, 113, 80, 107, 28, 83, 1, -54, 0, 0, 0, 63, 0};
 //        boatLocationHeaderBytes = bytes2;
 //
-//        yachtEvent = AC35MessageType.YACHT_EVENT.code();
-//        boatLocation = AC35MessageType.BOAT_LOCATION.code();
+//        yachtEvent = AC35MessageType.YACHT_EVENT.getCode();
+//        boatLocation = AC35MessageType.BOAT_LOCATION.getCode();
 //    }
 //
 //    @Test
