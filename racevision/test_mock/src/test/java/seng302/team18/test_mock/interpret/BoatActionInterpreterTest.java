@@ -12,7 +12,7 @@ import seng302.team18.model.Race;
 import java.util.Arrays;
 
 /**
- * Created by dhl25 on 7/07/17.
+ * The tests for BoatActionInterpreter.
  */
 public class BoatActionInterpreterTest {
 
@@ -54,4 +54,21 @@ public class BoatActionInterpreterTest {
         Assert.assertEquals(expected, player.getHeading(), 0.1);
         Assert.assertEquals(0, notPlayer.getHeading(), 0.1);
     }
+
+
+    @Test
+    public void sailInTest() {
+        MessageBody sailIn = new BoatActionMessage(false, true, false, false, false);
+        interpreter.interpret(sailIn);
+        Assert.assertFalse(player.isSailOut());
+    }
+
+
+    @Test
+    public void sailOutTest() {
+        MessageBody sailOut = new BoatActionMessage(false, false, false, false, false);
+        interpreter.interpret(sailOut);
+        Assert.assertTrue(player.isSailOut());
+    }
+
 }
