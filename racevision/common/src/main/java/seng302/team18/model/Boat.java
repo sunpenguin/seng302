@@ -46,7 +46,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         timeSinceLastMark = 0L;
         timeAtLastMark = 0L;
         isControlled = true;
-        sailOut = false;
+        sailOut = true;
         autoPilot = false;
         tackGybe = false;
         upWind = false;

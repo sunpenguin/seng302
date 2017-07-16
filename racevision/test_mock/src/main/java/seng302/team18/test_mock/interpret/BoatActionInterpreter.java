@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by dhl25 on 6/07/17.
+ * The class used to interpret BoatActionMessage.
  */
 public class BoatActionInterpreter extends MessageInterpreter {
 
@@ -59,20 +59,14 @@ public class BoatActionInterpreter extends MessageInterpreter {
             double windDirection = race.getCourse().getWindDirection();
             boat.setHeading(headTowardsWind(boat.getHeading(), windDirection, headingChange));
             boat.setSpeed(boat.getBoatTWS(race.getCourse().getWindSpeed(), boat.getTrueWindAngle(windDirection)));
-        }
-
-        if (actions.isUpwind()) {
+        } else if (actions.isUpwind()) {
             double windDirection = race.getCourse().getWindDirection();
             windDirection = (windDirection + 180) % 360; // flipping wind direction
             boat.setHeading(headTowardsWind(boat.getHeading(), windDirection, headingChange));
             boat.setSpeed(boat.getBoatTWS(race.getCourse().getWindSpeed(), boat.getTrueWindAngle(race.getCourse().getWindDirection())));
-        }
-
-        if (actions.isSailsIn()) {
+        } else if (actions.isSailsIn()) {
             boat.setSailOut(false);
-        }
-
-        if (actions.isSailsOut()) {
+        } else if (!actions.isSailsIn()) {
             boat.setSailOut(true);
         }
     }
