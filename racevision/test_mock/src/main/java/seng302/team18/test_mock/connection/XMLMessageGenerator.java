@@ -1,8 +1,12 @@
 package seng302.team18.test_mock.connection;
 
 import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.XmlMessage;
+import seng302.team18.test_mock.ac35_xml_encoding.XmlEncoder;
 import seng302.team18.util.ByteCheck;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,26 +15,23 @@ import java.util.Scanner;
 
 /**
  * Generates a XML Message as
- * Note: Doesn't extend Scheduled. However, works similary.
+ * Note: Doesn't extend Scheduled. However, works similarly.
  */
-public class XMLMessageGenerator extends MessageGenerator {
+public abstract class XMLMessageGenerator<T extends XmlMessage> extends MessageGenerator {
 
     private short sequenceNum = 0; //increments each time new message sent
-    private final byte messageSubtype; //5,6 or 7 depending on boats race or reggata xml message
     private short ackNum; //Sequence number of message. This number will be reflected in an AcknowledgeMessage in the future.
     private final static byte versionNumber = 1; //Always 1
-    private final String pathToFile; //
+    private final T message;
 
     /**
      * Constructs a new instance of XMLMessageGenerator
      *
-     * @param messageSubtype the type of the XML message
-     * @param pathToFile the path to the XML file to be sent in the message
+     * @param message the message to be sent
      */
-    public XMLMessageGenerator(byte messageSubtype, String pathToFile) {
+    protected XMLMessageGenerator(T message) {
         super(AC35MessageType.XML_MESSAGE.getCode());
-        this.messageSubtype = messageSubtype;
-        this.pathToFile = pathToFile;
+        this.message = message;
         ackNum = 0;
     }
 
@@ -46,14 +47,20 @@ public class XMLMessageGenerator extends MessageGenerator {
         byte[] timeStamp = ByteCheck.getCurrentTime6Bytes();
         byte[] seqNoASBytes = ByteCheck.shortToByteArray(sequenceNum);
 
-        byte[] byteXML = getXMLAsBytes();
+        byte[] byteXML;
+        XmlEncoder<T> encoder = getEncoder();
+        try {
+            byteXML = encoder.encode(message).getBytes(StandardCharsets.UTF_8);
+        } catch (TransformerException | ParserConfigurationException e) {
+            throw new IOException(e);
+        }
         byte[] lengthOfXMLAsBytes = ByteCheck.shortToByteArray((short) byteXML.length);
 
 
         payloadStream.write(versionNumber);
         payloadStream.write(ackNumAsBytes);
         payloadStream.write(timeStamp);
-        payloadStream.write(messageSubtype);
+        payloadStream.write(message.getType());
         payloadStream.write(seqNoASBytes);
         payloadStream.write(lengthOfXMLAsBytes);
         payloadStream.write(byteXML);
@@ -61,10 +68,6 @@ public class XMLMessageGenerator extends MessageGenerator {
         return payloadStream.toByteArray();
     }
 
-    private byte[] getXMLAsBytes() throws IOException {
-        InputStream XML = this.getClass().getResourceAsStream(pathToFile);
-        String content = new Scanner(XML).useDelimiter("\\Z").next();
-        return content.getBytes(StandardCharsets.UTF_8);
-    }
+    protected abstract XmlEncoder<T> getEncoder();
 
 }

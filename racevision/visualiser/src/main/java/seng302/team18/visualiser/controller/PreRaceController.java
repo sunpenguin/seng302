@@ -2,18 +2,31 @@ package seng302.team18.visualiser.controller;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import seng302.team18.messageparsing.AC35MessageParserFactory;
-import seng302.team18.messageparsing.SocketMessageReceiver;
+import seng302.team18.interpreting.CompositeMessageInterpreter;
+import seng302.team18.interpreting.MessageInterpreter;
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.MessageBody;
+import seng302.team18.message.RequestMessage;
+import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.ZoneTimeClock;
+import seng302.team18.visualiser.messageinterpreting.*;
+import seng302.team18.visualiser.send.Sender;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Controller for the pre race view
@@ -24,27 +37,32 @@ public class PreRaceController {
     @FXML private ListView<Boat> listView;
     @FXML private Label timeZoneLabel;
     @FXML private Text raceNameText;
-    @FXML private Text errorText;
-    @FXML private TextField customPortField;
-    @FXML private TextField customHostField;
 
     private ZoneTimeClock preRaceClock;
-
-    @FXML
-    public void initialise() {}
+    private Receiver receiver;
+    private Sender sender;
+    private Race race;
+    private ExecutorService executor;
 
     /**
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
      * duration before the race starts.
      * @param race The race to be set up in the pre-race.
      */
-    public void setUp(Race race) {
-        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getStartTime());
-        raceNameText.setText(race.getRaceName());
+    public void setUp(Race race, Receiver receiver, Sender sender) {
+        this.receiver = receiver;
+        this.sender = sender;
+        this.race = race;
+        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
+        raceNameText.setText(race.getName());
         displayTimeZone(race.getStartTime());
         startTimeLabel.setText(race.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-        setUpLists(race.getStartingList());
+        setUpLists();
+        listView.setItems(FXCollections.observableList(race.getStartingList()));
         preRaceClock.start();
+
+        interpretMessages(initialiseInterpreter());
+        sender.send(new RequestMessage(true));
     }
 
 
@@ -59,10 +77,8 @@ public class PreRaceController {
 
     /**
      * Sets the list view of the participants in the race.
-     * @param boats The race participants
      */
-    private void setUpLists(List<Boat> boats) {
-        listView.setItems(FXCollections.observableList(boats));
+    private void setUpLists() {
         listView.setCellFactory(param -> new ListCell<Boat>() {
             @Override
             protected void updateItem(Boat boat, boolean empty) {
@@ -76,71 +92,74 @@ public class PreRaceController {
         });
     }
 
-    /**
-     * Called when the live connection button is selected, sets up a connection with the live AC35 feed
-     */
-    @FXML
-    public void openLiveStream() {
-        openStream("livedata.americascup.com", 4940);
-    }
 
     /**
-     * Called when the test connection button is selected, sets up a connection with the UC test feed
+     * starts interpreting messages from the socket.
      */
-    @FXML
-    public void openTestStream() {
-        openStream("livedata.americascup.com", 4941);
+    private void interpretMessages(MessageInterpreter interpreter) {
+        executor = Executors.newSingleThreadExecutor();
+        executor.submit(() -> {
+            while(true) {
+                MessageBody messageBody = null;
+                try {
+                    messageBody = receiver.nextMessage();
+                } catch (Exception e) {}
+                interpreter.interpret(messageBody);
+            }
+        });
+
+        Stage stage = (Stage) listView.getScene().getWindow();
+        stage.setOnCloseRequest((event) -> {
+            executor.shutdownNow();
+            while (!receiver.close()) {}
+        });
     }
+
 
     /**
-     * Called when the mock connection button is selected, sets up a connection with the mock feed
+     * Set up and initialise interpreter variables, adding interpreters of each relevant type to the global interpreter.
      */
-    @FXML
-    public void openMockStream() {
-        openStream("127.0.0.1", 5005);
+    private MessageInterpreter initialiseInterpreter() {
+        MessageInterpreter interpreter = new CompositeMessageInterpreter();
+
+        interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
+        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
+        interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
+        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
+        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
+
+        return interpreter;
     }
 
-    @FXML
-    public void openCustomStream() {
-        String host = customHostField.getText();
-        String portString = customPortField.getText();
-
-        if (host.isEmpty() || portString.isEmpty()) {
-            errorText.setText("Please enter a custom host and port");
-            return;
-        }
-
-        try {
-            int port = Integer.parseInt(portString);
-            openStream(host, port);
-        } catch (NumberFormatException e) {
-            errorText.setText("Please enter a valid port number");
-            return;
-        }
-    }
-
-    private void openStream(String host, int port) {
-        try {
-            startConnection(new SocketMessageReceiver(host, port, new AC35MessageParserFactory()));
-        } catch (Exception e) {
-            errorText.setText(String.format("Could not establish connection to stream at: %s:%d", host, port));
-        }
-    }
 
     /**
-     * Creates a controller manager object and begins an instance of the program.
-     * @throws Exception A connection error
+     * Switches from the pre-race screen to the race screen.
+     *
+     * @throws IOException
      */
-    private  void startConnection(SocketMessageReceiver receiver) throws Exception {
-
-        Stage s = (Stage) errorText.getScene().getWindow();
-        ControllerManager manager = new ControllerManager(s, "MainWindow.fxml", "PreRace.fxml");
-        manager.setReceiver(receiver);
-        manager.start();
+    public void showRace() throws IOException {
+        executor.shutdownNow();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
+        Parent root = loader.load(); // throws IOException
+        RaceController controller = loader.getController();
+        Stage stage = (Stage) listView.getScene().getWindow();
+        stage.setTitle("RaceVision");
+        Scene scene = new Scene(root, 1280, 720);
+        stage.setResizable(true);
+        stage.setMinHeight(700);
+        stage.setMinWidth(1000);
+        stage.setScene(scene);
+        stage.show();
+        controller.setUp(race, receiver, sender);
     }
 
-    public ZoneTimeClock getClock() {
-        return preRaceClock;
+
+    /**
+     * Updates the list of boats.
+     */
+    public void updateBoatList() {
+        listView.setItems(FXCollections.observableList(race.getStartingList()));
     }
 
 }

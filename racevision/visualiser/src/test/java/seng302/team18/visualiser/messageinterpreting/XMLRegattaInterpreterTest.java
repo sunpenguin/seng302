@@ -3,6 +3,7 @@ package seng302.team18.visualiser.messageinterpreting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.AC35XMLRegattaMessage;
 import seng302.team18.message.MessageBody;
@@ -15,13 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dhl25 on 3/05/17.
+ * Created by David-chan on 3/05/17.
  */
 public class XMLRegattaInterpreterTest {
 
     private Race race;
     private MessageInterpreter interpreter;
-    private List<Boat> boats;
+    private List<AbstractBoat> boats;
     private String utcOffset = "+1";
 
     @Before
@@ -79,7 +80,7 @@ public class XMLRegattaInterpreterTest {
         MessageBody message = new AC35XMLBoatMessage(boats);
         interpreter.interpret(message);
 
-        Assert.assertEquals(0, race.getStatus());
+        Assert.assertEquals(RaceStatus.NOT_ACTIVE, race.getStatus());
         Assert.assertEquals(0, race.getId());
         ZonedDateTime expected = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
         Assert.assertEquals(expected, race.getCurrentTime());

@@ -44,7 +44,7 @@ public class MarkRoundingMessageGenerator extends MessageGenerator {
         outputSteam.write(0xFF & VERSION_NUMBER);
 
         // Time
-        outputSteam.write(ByteCheck.convertLongTo6ByteArray(markRoundingEvent.getTime()));
+        outputSteam.write(ByteCheck.longTo6ByteArray(markRoundingEvent.getTime()));
 
         //Ack number
         outputSteam.write(ByteCheck.shortToByteArray(ACK_NUMBER));

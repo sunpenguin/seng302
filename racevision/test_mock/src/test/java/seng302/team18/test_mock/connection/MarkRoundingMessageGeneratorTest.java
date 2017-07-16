@@ -2,11 +2,10 @@ package seng302.team18.test_mock.connection;
 
 import org.junit.Test;
 import seng302.team18.message.AC35MessageType;
-import seng302.team18.model.Boat;
-import seng302.team18.model.CompoundMark;
-import seng302.team18.model.MarkRoundingEvent;
-import seng302.team18.model.Race;
+import seng302.team18.model.*;
+import seng302.team18.test_mock.RaceCourseGenerator;
 import seng302.team18.test_mock.TestMock;
+import seng302.team18.test_mock.TestXMLFiles;
 import seng302.team18.util.ByteCheck;
 
 import static org.junit.Assert.assertEquals;
@@ -20,8 +19,9 @@ public class MarkRoundingMessageGeneratorTest {
 
     @Test
     public void getPayload() throws Exception {
-        final TestMock testMock = new TestMock();
-        final Race race = testMock.testRun();
+        final RaceCourseGenerator generator = new RaceCourseGenerator();
+        generator.generateXmlMessages();
+        final Race race = generator.generateRace(generator.generateCourse());
         final Boat boat = race.getStartingList().get(0);
         final CompoundMark mark = race.getCourse().getCompoundMarks().get(0);
         final long time = System.currentTimeMillis();
@@ -55,13 +55,13 @@ public class MarkRoundingMessageGeneratorTest {
 
     private void checkField(String assertion, int expected, int length) {
         System.out.println();
-        assertEquals(assertion, expected, ByteCheck.byteToIntConverter(message, index, length));
+        assertEquals(assertion, expected, ByteCheck.byteToInt(message, index, length));
         index += length;
     }
 
     private void checkField(String assertion, long expected, int length) {
         System.out.println();
-        assertEquals(assertion, expected, ByteCheck.byteToLongConverter(message, index, length));
+        assertEquals(assertion, expected, ByteCheck.byteToLong(message, index, length));
         index += length;
     }
 }

@@ -1,5 +1,6 @@
-package seng302.team18.visualiser.messageinterpreting;
+package seng302.team18.interpreting;
 
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.MessageBody;
 
 import java.util.ArrayList;

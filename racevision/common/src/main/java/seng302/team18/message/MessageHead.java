@@ -1,14 +1,14 @@
 package seng302.team18.message;
 
 /**
- * Created by dhl25 on 10/04/17.
+ * Created by David-chan on 10/04/17.
  */
 public interface MessageHead {
 
     /**
-     * Gets the code of the message type.
+     * Gets the getCode of the message type.
      *
-     * @return the code of the message type.
+     * @return the getCode of the message type.
      */
     int getType();
 

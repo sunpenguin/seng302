@@ -3,6 +3,7 @@ package seng302.team18.visualiser.messageinterpreting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.MessageBody;
@@ -22,7 +23,7 @@ public class XMLRaceInterpreterTest {
 
     private Race race;
     private MessageInterpreter interpreter;
-    private List<Boat> boats;
+    private List<AbstractBoat> boats;
     private List<CompoundMark> compoundMarks;
     private List<BoundaryMark> boundaryMarks;
     private final String time = "2017-05-02T22:45:55.692+12:00";
@@ -112,7 +113,7 @@ public class XMLRaceInterpreterTest {
         ZonedDateTime expectedCurrent = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
         Assert.assertEquals(expectedCurrent, race.getCurrentTime());
         Assert.assertEquals(expectedStart, race.getStartTime());
-        Assert.assertEquals(0, race.getStatus());
+        Assert.assertEquals(RaceStatus.NOT_ACTIVE, race.getStatus());
         Assert.assertEquals(0, race.getId());
     }
 

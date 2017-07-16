@@ -13,10 +13,9 @@ public abstract class ScheduledMessageGenerator extends MessageGenerator {
      * @param frequency the frequency at which the message is to be sent (Hz)
      * @param type      the message type
      */
-    ScheduledMessageGenerator(int frequency, int type) {
+    public ScheduledMessageGenerator(int frequency, int type) {
         super(type);
         this.frequency = frequency;
-
     }
 
     /**

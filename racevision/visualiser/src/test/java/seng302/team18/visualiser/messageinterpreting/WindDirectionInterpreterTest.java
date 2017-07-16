@@ -3,11 +3,13 @@ package seng302.team18.visualiser.messageinterpreting;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceStatus;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -67,7 +69,7 @@ public class WindDirectionInterpreterTest {
     public void courseTest() {
         Course expected = new Course();
         Course actual = race.getCourse();
-        double expectedWindDirection = windDirection;
+        double expectedWindDirection = (windDirection + 180) % 360;
         Assert.assertEquals(expectedWindDirection, actual.getWindDirection(), 0.01);
         Assert.assertEquals(expected.getTimeZone(), actual.getTimeZone());
         Assert.assertEquals(expected.getCentralCoordinate(), actual.getCentralCoordinate());
@@ -88,7 +90,7 @@ public class WindDirectionInterpreterTest {
     public void raceTest() {
         ZonedDateTime expectedTime = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
         Assert.assertEquals(0, race.getId());
-        Assert.assertEquals(0, race.getStatus());
+        Assert.assertEquals(RaceStatus.NOT_ACTIVE, race.getStatus());
         Assert.assertEquals(expectedTime, race.getCurrentTime());
         Assert.assertEquals(expectedTime, race.getStartTime());
     }

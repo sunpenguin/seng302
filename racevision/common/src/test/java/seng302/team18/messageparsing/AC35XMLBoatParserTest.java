@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by jds112 on 25/04/17.
@@ -36,13 +36,13 @@ public class AC35XMLBoatParserTest {
         expected.add(new Boat("Emirates Team New Zealand", "NZL", 103));
         expected.add(new Boat("Artemis Racing", "SWE", 102));
 
-        List<Boat> actual = message.getBoats();
+        List<Boat> actual = message.getYachts();
 
-        assertEquals("An incorrect number of boats were added to the message object.",expected.size(), actual.size());
+        assertEquals("An incorrect number of boats were added to the message object.", expected.size(), actual.size());
 
         for (int i = 0; i < expected.size(); i++) {
             Boat exp = expected.get(i);
-            Boat act = actual.get(i);
+            Boat act = (Boat) actual.get(i);
             assertEquals(exp.getName(), act.getName());
             assertEquals(exp.getShortName(), act.getShortName());
             assertEquals(exp.getCoordinate(), act.getCoordinate());

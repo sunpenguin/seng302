@@ -10,12 +10,12 @@
 // * Created by jds112 on 9/04/17.
 // */
 //public class SocketMessageReceiverTest {
-//    private SocketMessageReceiver socketMessageReceiver;
+//    private Receiver socketMessageReceiver;
 //
 //    @Before
 //    public void setUp() {
 //        try {
-//            socketMessageReceiver = new SocketMessageReceiver("livedata.americascup.com", 4941, new AC35MessageParserFactory());
+//            socketMessageReceiver = new Receiver("livedata.americascup.com", 4941, new AC35MessageParserFactory());
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
