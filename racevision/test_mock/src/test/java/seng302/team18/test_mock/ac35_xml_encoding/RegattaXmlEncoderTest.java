@@ -22,9 +22,6 @@ public class RegattaXmlEncoderTest {
     private Element root;
 
 
-    /**
-     * Create a new AC35 regatta message and pass it to the encoder.
-     */
     @Before
     public void setUp() throws ParserConfigurationException, TransformerException {
         double centralLat = -36.8279;
@@ -44,9 +41,6 @@ public class RegattaXmlEncoderTest {
     }
 
 
-    /**
-     * Test on encoding id.
-     */
     @Test
     public void encodeIdTest() {
         int encodedId = Integer.parseInt(root.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_ID.toString())
@@ -56,9 +50,6 @@ public class RegattaXmlEncoderTest {
     }
 
 
-    /**
-     * Test on encoding name.
-     */
     @Test
     public void encodeNameTest() {
         String encodedName = root.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_NAME.toString())
@@ -68,9 +59,6 @@ public class RegattaXmlEncoderTest {
     }
 
 
-    /**
-     * Test on encoding center latitude.
-     */
     @Test
     public void encodeCenterLatTest() {
         double encodedLat = Double.parseDouble(root.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_CENTER_LAT.toString())
@@ -79,9 +67,7 @@ public class RegattaXmlEncoderTest {
         assertEquals(lat, encodedLat, 0.1);
     }
 
-    /**
-     * Test on encoding center longitude.
-     */
+
     @Test
     public void encodeCenterLongTest() {
         double encodedLon = Double.parseDouble(root.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_CENTER_LONG.toString())
@@ -91,9 +77,6 @@ public class RegattaXmlEncoderTest {
     }
 
 
-    /**
-     * Test on encoding UTC offset.
-     */
     @Test
     public void encodeUtcOffsetTest() {
         String encodedOffset = root.getElementsByTagName(AC35XmlRegattaComponents.ELEMENT_REGATTA_OFFSET.toString())
