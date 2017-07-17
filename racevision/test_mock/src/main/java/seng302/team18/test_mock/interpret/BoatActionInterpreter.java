@@ -57,15 +57,19 @@ public class BoatActionInterpreter extends MessageInterpreter {
 
         if (actions.isDownwind()) {
             double windDirection = race.getCourse().getWindDirection();
-            boat.setHeading(headTowardsWind(boat.getHeading(), windDirection, headingChange));
-            boat.setSpeed(boat.getBoatTWS(race.getCourse().getWindSpeed(), boat.getTrueWindAngle(windDirection)));
-        }
+            double windSpeed = race.getCourse().getWindSpeed();
+            double newHeading = headTowardsWind(boat.getHeading(), windDirection, headingChange);
 
-        if (actions.isUpwind()) {
+            boat.setHeading(newHeading);
+            boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
+        } else if (actions.isUpwind()) {
+            double windSpeed = race.getCourse().getWindSpeed();
             double windDirection = race.getCourse().getWindDirection();
-            windDirection = (windDirection + 180) % 360; // flipping wind direction
-            boat.setHeading(headTowardsWind(boat.getHeading(), windDirection, headingChange));
-            boat.setSpeed(boat.getBoatTWS(race.getCourse().getWindSpeed(), boat.getTrueWindAngle(race.getCourse().getWindDirection())));
+            double flippedWindDirection = (windDirection + 180) % 360; // flipping wind direction
+            double newHeading = headTowardsWind(boat.getHeading(), flippedWindDirection, headingChange);
+
+            boat.setHeading(newHeading);
+            boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
         }
 
         boat.setSailOut(!actions.isSailsIn());
@@ -87,6 +91,7 @@ public class BoatActionInterpreter extends MessageInterpreter {
         if (boatToWindClockwiseAngle < 0) {
             boatToWindClockwiseAngle += 360;
         }
+
         if (boatToWindClockwiseAngle < 180) {
             return boatHeading + headingChange;
         }
