@@ -466,7 +466,7 @@ public class AC35PollarPatternTest {
     }
 
 
-
+    @Test
     public void getValueForPolarPointEqualsTWA(){
         //Test for when one point is given equal to a point in polar
         double boatTWA1 = 115;
@@ -491,7 +491,7 @@ public class AC35PollarPatternTest {
     }
 
 
-
+    @Test
     public void getValueForPolarTWAAboveMax(){
         //Test for when one point is given above the max in the polar
         double boatTWA1 = 177;
@@ -511,6 +511,8 @@ public class AC35PollarPatternTest {
         assertEquals(expected2, returned2);
     }
 
+
+    @Test
     public void getValueForPolarTwoPointsGiven(){
         //Test for when TWA is between two points
         double boatTWA1 = 70;

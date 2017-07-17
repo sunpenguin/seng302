@@ -68,6 +68,26 @@ public class Polar {
         return downWindSpeed;
     }
 
+    public double getMinAngle() {
+        double currentMin = upWindAngle;
+        for (Double angle : mapSpeedAtAngles.keySet()) {
+            if (angle < currentMin) {
+                currentMin = angle;
+            }
+        }
+        return currentMin;
+    }
+
+    public double getMaxAngle() {
+        double currentMax = downWindAngle;
+        for (Double angle : mapSpeedAtAngles.keySet()) {
+            if (angle > currentMax) {
+                currentMax = angle;
+            }
+        }
+        return currentMax;
+    }
+
 
     @Override
     public boolean equals(Object o) {

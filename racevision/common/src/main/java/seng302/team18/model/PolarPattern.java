@@ -196,7 +196,7 @@ public abstract class PolarPattern {
 
         for (Polar polar : closestPolars) {
 
-            if (boatTWAIsAboveMax(boatTWA, polar)) {
+            if (boatTWA > polar.getMaxAngle()) {
                 double maxAngle = -1;
 
                 for (double angle : polar.getMapSpeedAtAngles().keySet()) {
@@ -211,7 +211,7 @@ public abstract class PolarPattern {
                 continue;
             }
 
-            if (boatTWAIsBelowMin(boatTWA, polar)) {
+            if (boatTWA < polar.getMinAngle()) {
                 double minAngle = 181;
 
                 for (double angle : polar.getMapSpeedAtAngles().keySet()) {
@@ -317,49 +317,6 @@ public abstract class PolarPattern {
 
 
     /**
-     * Checks if given TWA is greater than the max angle in a polar
-     * Used in getClosestPoints()
-     *
-     * @param boatTWA double, true wind angle of boat
-     * @param polar   Polar, polar to be checked
-     * @return boolean, true if given twa is greater than the max angle in a polar
-     */
-    private boolean boatTWAIsAboveMax(double boatTWA, Polar polar) {
-        boolean aboveMax = true;
-
-        for (double angle : polar.getMapSpeedAtAngles().keySet()) {
-            if (angle >= boatTWA) {
-                aboveMax = false;
-            }
-        }
-
-        return aboveMax;
-    }
-
-
-    /**
-     * Checks if given TWA is less than the min angle in a polar
-     * Used in getClosestPoints()
-     *
-     * @param boatTWA double, true wind angle of boat
-     * @param polar   Polar, polar to be checked
-     * @return boolean, true if given twa is less than the min angle in a polar
-     */
-    private boolean boatTWAIsBelowMin(double boatTWA, Polar polar) {
-        boolean belowMin = true;
-
-        for (double angle : polar.getMapSpeedAtAngles().keySet()) {
-            if (angle <= boatTWA) {
-                belowMin = false;
-            }
-        }
-
-        return belowMin;
-    }
-
-
-
-    /**
      * Calculates the boatSpeed of a point on a singular polar
      *
      * @param points List<XYPiar>, list of points on a polar length 1 or 2.
@@ -369,6 +326,47 @@ public abstract class PolarPattern {
      * @return double, the calculates windSpeed on a polar at the boats TWA
      */
     public double getValueForPolar(List<XYPair> points, double boatTWA){
-        return 0.0;
+        Polar polar = getPolarForWindSpeed(points.get(0).getX());
+        double speed = 0.0;
+        if (points.size() == 2) {
+            XYPair pointA = points.get(0);
+            XYPair pointB = points.get(1);
+
+            double distanceFromPointA = Math.abs(boatTWA - pointA.getY());
+            double distanceFromPointB = Math.abs(boatTWA - pointB.getY());
+            double totalDistance = distanceFromPointA + distanceFromPointB;
+
+            double weightPointA = distanceFromPointB / totalDistance;
+            double weightPointB = distanceFromPointA / totalDistance;
+
+            double pointAComponet = (polar.getMapSpeedAtAngles().get(pointA.getY()) * weightPointA);
+            double pointBComponet = (polar.getMapSpeedAtAngles().get(pointB.getY()) * weightPointB);
+
+            speed = pointAComponet + pointBComponet;
+
+        } else {
+            if (boatTWA > polar.getMaxAngle()) {
+                double max = polar.getMaxAngle();
+                double dropOffRate = (polar.getWindSpeed()/(180 - max)) / 2;
+                double speedAtMax = polar.getMapSpeedAtAngles().get(max);
+
+                speed =  speedAtMax - (dropOffRate * (boatTWA - max));
+
+            } else if (boatTWA < polar.getMinAngle()) {
+                double min = polar.getMinAngle();
+                double dropOffRate = (polar.getWindSpeed()/(min)) / 2;
+                double speedAtMin = polar.getMapSpeedAtAngles().get(min);
+
+                speed =  speedAtMin - (dropOffRate * (boatTWA - min));
+
+            } else { //boatTWA is equal to a value in the polar
+                for (Double angle : polar.getMapSpeedAtAngles().keySet()){
+                    if (angle == points.get(0).getY()) {
+                        speed = polar.getMapSpeedAtAngles().get(angle);
+                    }
+                }
+            }
+        }
+        return speed;
     }
 }
