@@ -57,7 +57,7 @@ public class RaceMessageGeneratorTest {
 
     @Before
     public void setUp() throws IOException {
-        BaseRaceBuilder raceBuilder = new RaceBuilder1();
+        AbstractRaceBuilder raceBuilder = new RaceBuilder1();
         BaseRegattaBuilder regattaBuilder = new RegattaBuilder1();
         AbstractCourseBuilder courseBuilder = new CourseBuilder1();
         ZonedDateTime now = ZonedDateTime.now();

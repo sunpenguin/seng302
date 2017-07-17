@@ -9,7 +9,7 @@ import seng302.team18.model.Regatta;
  * <p>
  * This class provides a skeleton for classes that build a race.
  */
-public abstract class BaseRaceBuilder {
+public abstract class AbstractRaceBuilder {
 
     /**
      * Builds a race, setting the regatta and course

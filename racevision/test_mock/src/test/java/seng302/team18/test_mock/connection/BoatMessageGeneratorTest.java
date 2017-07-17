@@ -61,7 +61,7 @@ public class BoatMessageGeneratorTest {
 
     @Test
     public void boatMessageGeneratorTest() throws IOException {
-        BaseRaceBuilder raceBuilder = new RaceBuilder1();
+        AbstractRaceBuilder raceBuilder = new RaceBuilder1();
         BaseRegattaBuilder regattaBuilder = new RegattaBuilder1();
         AbstractCourseBuilder courseBuilder = new CourseBuilder1();
 
