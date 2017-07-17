@@ -468,15 +468,16 @@ public class AC35PollarPatternTest {
 
 
     public void getValueForPolarPointEqualsTWA(){
-        //Test for when one point is given
+        //Test for when one point is given equal to a point in polar
         double boatTWA1 = 115;
         double boatTWA2 = 175;
+        double windSpeed = 12;
 
         List<XYPair> points1 = new ArrayList<>();
-        points1.add(new XYPair(12, 115));
+        points1.add(new XYPair(windSpeed, 115));
 
         List<XYPair> points2 = new ArrayList<>();
-        points2.add(new XYPair(12, 175));
+        points2.add(new XYPair(windSpeed, 175));
 
         double returned1  = ac35PolarPattern.getValueForPolar(points1, boatTWA1);
         double returned2  = ac35PolarPattern.getValueForPolar(points2, boatTWA2);
@@ -489,7 +490,49 @@ public class AC35PollarPatternTest {
 
     }
 
-    public void getValueForPolarTWAAboveMax(){
 
+
+    public void getValueForPolarTWAAboveMax(){
+        //Test for when one point is given above the max in the polar
+        double boatTWA1 = 177;
+        double boatTWA2 = 179;
+        double windSpeed = 20;
+
+        List<XYPair> points1 = new ArrayList<>();
+        points1.add(new XYPair(windSpeed, 175));
+
+        double returned1  = ac35PolarPattern.getValueForPolar(points1, boatTWA1);
+        double returned2  = ac35PolarPattern.getValueForPolar(points1, boatTWA2);
+
+        double expected1 = 20;
+        double expected2 = 16;
+
+        assertEquals(expected1, returned1);
+        assertEquals(expected2, returned2);
     }
+
+    public void getValueForPolarTwoPointsGiven(){
+        //Test for when TWA is between two points
+        double boatTWA1 = 70;
+        double boatTWA2 = 100;
+        double windSpeed = 25;
+
+        List<XYPair> points1 = new ArrayList<>();
+        points1.add(new XYPair(windSpeed, 60));
+        points1.add(new XYPair(windSpeed, 75));
+
+        List<XYPair> points2 = new ArrayList<>();
+        points2.add(new XYPair(windSpeed, 90));
+        points2.add(new XYPair(windSpeed, 115));
+
+        double returned1 = ac35PolarPattern.getValueForPolar(points1, boatTWA1);
+        double returned2 = ac35PolarPattern.getValueForPolar(points2, boatTWA2);
+
+        double expected1 = 42;
+        double expected2 = 49.4;
+
+        assertEquals(expected1, returned1, 0.5);
+        assertEquals(expected2, returned2, 0.5);
+    }
+
 }
