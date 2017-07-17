@@ -67,11 +67,8 @@ public class TestMock implements Observer {
     /**
      * Simulate the race will sending the scheduled messages
      */
-    public void runSimulation() {
+    public void runSimulation(int START_WAIT_TIME, int WARNING_WAIT_TIME, int PREP_WAIT_TIME) {
         final int LOOP_FREQUENCY = 60;
-        final int TIME_START = -5;
-        final int TIME_WARNING = -3;
-        final int TIME_PREP = -2;
 
         long timeCurr = System.currentTimeMillis();
         long timeLast;
@@ -80,17 +77,17 @@ public class TestMock implements Observer {
         scheduledMessages.add(new HeartBeatMessageGenerator());
 
         // Set race time
-        race.setStartTime(ZonedDateTime.now().minusMinutes(TIME_START));
+        race.setStartTime(ZonedDateTime.now().plusSeconds(START_WAIT_TIME));
         race.setStatus(RaceStatus.PRESTART);
 
         do {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
-            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusMinutes(TIME_WARNING))) {
+            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().minusSeconds(WARNING_WAIT_TIME))) {
                 race.setStatus(RaceStatus.WARNING);
 
-            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().plusMinutes(TIME_PREP)))) {
+            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().minusSeconds(PREP_WAIT_TIME)))) {
 
                 race.setStatus(RaceStatus.PREPARATORY);
                 server.stopAcceptingConnections();
