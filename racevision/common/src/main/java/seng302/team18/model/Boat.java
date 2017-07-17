@@ -260,17 +260,21 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
      */
     public double getBoatTWS(double windSpeed, double windHeading) {
         double twa = getTrueWindAngle(windHeading);
+        System.out.println(twa);
         return boatPolar.getSpeedForBoat(twa, windSpeed);
     }
 
     /**
      * Gets true wind angle for boat.
+     * NOTE: Expects wind heading as
      *
      * @param windHeading double, Heading of the wind
      * @return double, True wind angle for the boat.
      */
     public double getTrueWindAngle(double windHeading) {
-        double theta = 180 - windHeading;
+
+        double flippedWindDirection = (windHeading + 180) % 360; // flipping wind direction
+        double theta = 180 - flippedWindDirection;
         double boatPlusTheta = heading + theta;
         double windPlusTheta = windHeading + theta; //will be 180
 

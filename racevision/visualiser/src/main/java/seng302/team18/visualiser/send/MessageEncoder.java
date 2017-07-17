@@ -20,7 +20,7 @@ public abstract class MessageEncoder {
      * @throws IOException
      */
     public byte[] encode(MessageBody message) throws IOException {
-        byte[] head = generateHead(message, messageLength());
+        byte[] head = generateHead(message);
         byte[] body = generateBody(message);
         byte[] checksum = generateChecksum(head, body);
         byte[] combined = new byte[head.length + body.length + checksum.length];
@@ -37,11 +37,10 @@ public abstract class MessageEncoder {
      * Creates to the header of the message as a byte array.
      *
      * @param message to create header from
-     * @param lengthOfMessage length of the body of the message.
      * @return message header.
      * @throws IOException
      */
-    private byte[] generateHead(MessageBody message, short lengthOfMessage) throws IOException {
+    protected byte[] generateHead(MessageBody message) throws IOException {
 
         byte syncByte1 = 0x47;
         byte syncByte2 = (byte) 0x83;
@@ -55,7 +54,7 @@ public abstract class MessageEncoder {
         sourceID[2] = 33;
         sourceID[3] = 99;
 
-        byte[] messageLen = ByteCheck.shortToByteArray(lengthOfMessage);
+        byte[] messageLen = ByteCheck.shortToByteArray(messageLength());
 
         ByteArrayOutputStream outputSteam = new ByteArrayOutputStream();
         outputSteam.write(syncByte1);

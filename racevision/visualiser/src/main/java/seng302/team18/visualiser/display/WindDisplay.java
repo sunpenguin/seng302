@@ -32,7 +32,7 @@ public class WindDisplay extends AnimationTimer {
         }
         double newWindDirection = race.getCourse().getWindDirection();
         double newWindSpeed = race.getCourse().getWindSpeed();
-        speedLabel.setText(String.format("%.4f", newWindSpeed)+ " knots");
+        speedLabel.setText(String.format("%.2f", newWindSpeed)+ " knots");
         updateWindDisplay(newWindDirection, newWindSpeed);
     }
 
