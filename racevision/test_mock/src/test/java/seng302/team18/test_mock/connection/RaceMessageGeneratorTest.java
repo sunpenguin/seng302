@@ -59,7 +59,7 @@ public class RaceMessageGeneratorTest {
     public void setUp() throws IOException {
         BaseRaceBuilder raceBuilder = new RaceBuilder1();
         BaseRegattaBuilder regattaBuilder = new RegattaBuilder1();
-        BaseCourseBuilder courseBuilder = new CourseBuilder1();
+        AbstractCourseBuilder courseBuilder = new CourseBuilder1();
         ZonedDateTime now = ZonedDateTime.now();
         currentTime = now.toInstant().toEpochMilli();
         testRace = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse());

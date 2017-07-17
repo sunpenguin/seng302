@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Anton J on 11/07/2017.
  */
-public class CourseBuilder1 extends BaseCourseBuilder {
+public class CourseBuilder1 extends AbstractCourseBuilder {
 
     @Override
     protected List<CompoundMark> buildCompoundMarks() {
