@@ -7,7 +7,7 @@ import seng302.team18.model.Regatta;
  * <p>
  * This class provides a skeleton for classes that build a regatta.
  */
-public abstract class BaseRegattaBuilder {
+public abstract class AbstractRegattaBuilder {
 
     /**
      * Builds a regatta

@@ -13,7 +13,7 @@ public class MockDataStream {
     // Change concrete builders here to change the preset of race/regatta/course
     private static final AbstractRaceBuilder RACE_BUILDER = new RaceBuilder1();
     private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilder1();
-    private static final BaseRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
+    private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
     private static final AbstractParticipantsBuilder PARTICIPANTS_BUILDER = new ParticipantsBuilder1();
 
     // Change the XmlDefault implementations to change the default values for the XML messages
