@@ -1,9 +1,10 @@
-package seng302.team18.util;
+package seng302.team18.model;
 
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.AC35PolarPattern;
 import seng302.team18.model.Polar;
+import seng302.team18.util.XYPair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -462,5 +463,33 @@ public class AC35PollarPatternTest {
         assertEquals(true, returned1.contains(returned1Pair2));
         assertEquals(true, returned1.contains(returned1Pair3));
         assertEquals(true, returned1.contains(returned1Pair4));
+    }
+
+
+
+    public void getValueForPolarPointEqualsTWA(){
+        //Test for when one point is given
+        double boatTWA1 = 115;
+        double boatTWA2 = 175;
+
+        List<XYPair> points1 = new ArrayList<>();
+        points1.add(new XYPair(12, 115));
+
+        List<XYPair> points2 = new ArrayList<>();
+        points2.add(new XYPair(12, 175));
+
+        double returned1  = ac35PolarPattern.getValueForPolar(points1, boatTWA1);
+        double returned2  = ac35PolarPattern.getValueForPolar(points2, boatTWA2);
+
+        double expected1 = ac35PolarPattern.getPolarForWindSpeed(points1.get(0).getX()).getMapSpeedAtAngles().get(boatTWA1);
+        double expected2 = ac35PolarPattern.getPolarForWindSpeed(points2.get(0).getX()).getMapSpeedAtAngles().get(boatTWA2);
+
+        assertEquals(expected1, returned1);
+        assertEquals(expected2, returned2);
+
+    }
+
+    public void getValueForPolarTWAAboveMax(){
+
     }
 }

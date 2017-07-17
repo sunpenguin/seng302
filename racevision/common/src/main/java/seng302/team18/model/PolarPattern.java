@@ -336,6 +336,7 @@ public abstract class PolarPattern {
         return aboveMax;
     }
 
+
     /**
      * Checks if given TWA is less than the min angle in a polar
      * Used in getClosestPoints()
@@ -357,4 +358,17 @@ public abstract class PolarPattern {
     }
 
 
+
+    /**
+     * Calculates the boatSpeed of a point on a singular polar
+     *
+     * @param points List<XYPiar>, list of points on a polar length 1 or 2.
+     *               For point in list X = Polar windSpeed Y = angle.
+     *               Points must be from the same polar.
+     * @param boatTWA double, the true wind angle of the boat
+     * @return double, the calculates windSpeed on a polar at the boats TWA
+     */
+    public double getValueForPolar(List<XYPair> points, double boatTWA){
+        return 0.0;
+    }
 }
