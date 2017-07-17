@@ -116,6 +116,7 @@ public class CourseRenderer {
 
             marks.put(mark.getId(), rectangle);
             group.getChildren().addAll(rectangle);
+            rectangle.toBack();
         }
 
         rectangle.setWidth(scaledMarkSize);
@@ -166,6 +167,7 @@ public class CourseRenderer {
 
                 marks.put(mark.getId(), rectangle);
                 group.getChildren().addAll(rectangle);
+                rectangle.toBack();
             }
 
             rectangle.setWidth(scaledMarkSize);

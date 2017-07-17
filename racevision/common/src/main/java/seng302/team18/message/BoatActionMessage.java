@@ -28,7 +28,7 @@ public class BoatActionMessage implements MessageBody{
      * Constructor for the BoatActionMessage.
      *
      * @param autopilot the autopilot property
-     * @param sailsIn the sailsIn property
+     * @param sailsIn the sailsIn property (accelerating is true, luffing is false)
      * @param tackGybe the tackGybe property
      * @param upwind the upwind property
      * @param downwind the downwind property
@@ -44,6 +44,7 @@ public class BoatActionMessage implements MessageBody{
 
     /**
      * Getter for the autopilot field
+     *
      * @return The autopilot boolean
      */
     public boolean isAutopilot() {
@@ -52,6 +53,7 @@ public class BoatActionMessage implements MessageBody{
 
     /**
      * Setter for the sailsOut field
+     *
      * @param autopilot The value to set the sailsOut filed to
      */
     public void setAutopilot(boolean autopilot) {
@@ -60,6 +62,7 @@ public class BoatActionMessage implements MessageBody{
 
     /**
      * Getter for the sailsIn field
+     *
      * @return The sailsIn boolean
      */
     public boolean isSailsIn() {
@@ -68,6 +71,7 @@ public class BoatActionMessage implements MessageBody{
 
     /**
      * Setter for the sailsOut field
+     *
      * @param sailsIn The value to set the sailsOut filed to
      */
     public void setSailsIn(boolean sailsIn) {
@@ -81,6 +85,7 @@ public class BoatActionMessage implements MessageBody{
 
     /**
      * Setter for the sailsOut field
+     *
      * @param tackGybe The value to set the sailsOut filed to
      */
     public void setTackGybe(boolean tackGybe) {
@@ -89,6 +94,7 @@ public class BoatActionMessage implements MessageBody{
 
     /**
      * Getter for the upwind field
+     *
      * @return The upwind boolean
      */
     public boolean isUpwind() {
@@ -97,6 +103,7 @@ public class BoatActionMessage implements MessageBody{
 
     /**
      * Setter for the sailsOut field
+     *
      * @param upwind The value to set the sailsOut filed to
      */
     public void setUpwind(boolean upwind) {
@@ -105,6 +112,7 @@ public class BoatActionMessage implements MessageBody{
 
     /**
      * Getter for the downwind field
+     *
      * @return The downwind boolean
      */
     public boolean isDownwind() {
@@ -113,6 +121,7 @@ public class BoatActionMessage implements MessageBody{
 
     /**
      * Setter for the sailsOut field
+     *
      * @param downwind The value to set the sailsOut filed to
      */
     public void setDownwind(boolean downwind) {

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by dhl25 on 6/07/17.
+ * The class used to interpret BoatActionMessage.
  */
 public class BoatActionInterpreter extends MessageInterpreter {
 
@@ -70,6 +70,10 @@ public class BoatActionInterpreter extends MessageInterpreter {
 
             boat.setHeading(newHeading);
             boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
+        } else if (actions.isSailsIn()) {
+            boat.setSailOut(false);
+        } else if (!actions.isSailsIn()) {
+            boat.setSailOut(true);
         }
 
         boat.setSailOut(!actions.isSailsIn());
