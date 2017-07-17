@@ -83,6 +83,11 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
         return outStream.toByteArray();
     }
 
+    /**
+     * Sets the speed depending on if the sail is in or out.
+     *
+     * @return the altered speed depending on the sails.
+     */
     private int setSpeed() {
         if (boat.isSailOut()) {
             return 0;
