@@ -5,10 +5,19 @@ import seng302.team18.model.Race;
 import seng302.team18.model.Regatta;
 
 /**
- * Created by afj19 on 10/07/17.
+ * Base implementation class for race builders
+ * <p>
+ * This class provides a skeleton for classes that build a race.
  */
 public abstract class BaseRaceBuilder {
 
+    /**
+     * Builds a race, setting the regatta and course
+     *
+     * @param regatta the regatta the race belongs to
+     * @param course  the course the race follows
+     * @return the constructed race
+     */
     public Race buildRace(Regatta regatta, Course course) {
         Race race = new Race();
 
@@ -21,9 +30,21 @@ public abstract class BaseRaceBuilder {
         return race;
     }
 
+
+    /**
+     * @return the name to be used by the race
+     */
     protected abstract String getRaceName();
 
+
+    /**
+     * @return the ID to be used by the race
+     */
     protected abstract int getId();
 
+
+    /**
+     * @return the type of the race
+     */
     protected abstract Race.RaceType getRaceType();
 }
