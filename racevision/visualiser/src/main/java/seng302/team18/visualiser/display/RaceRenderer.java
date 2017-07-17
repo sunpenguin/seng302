@@ -132,6 +132,12 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Sets the annotition types that are visible.
+     *
+     * @param type , AnnotationType, the type of annotiation.
+     * @param isVisible , Boolean, if the type is visible.
+     */
     public void setVisibleAnnotations(AnnotationType type, Boolean isVisible) {
         for (DisplayBoat boat : displayBoats.values()) {
             boat.setAnnotationVisible(type, isVisible);
