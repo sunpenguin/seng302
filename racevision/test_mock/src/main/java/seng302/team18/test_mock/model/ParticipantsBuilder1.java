@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Anton J on 11/07/2017.
  */
-public class ParticipantsBuilder1 extends BaseParticipantsBuilder {
+public class ParticipantsBuilder1 extends AbstractParticipantsBuilder {
 
     @Override
     public List<Boat> buildParticipantPool() {
