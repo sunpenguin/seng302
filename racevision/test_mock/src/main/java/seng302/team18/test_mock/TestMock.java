@@ -65,7 +65,7 @@ public class TestMock implements Observer {
 
 
     /**
-     * Simulate the race will sending the scheduled messages
+     * Simulate the race while sending the scheduled messages
      */
     public void runSimulation(int START_WAIT_TIME, int WARNING_WAIT_TIME, int PREP_WAIT_TIME) {
         final int LOOP_FREQUENCY = 60;
@@ -87,7 +87,7 @@ public class TestMock implements Observer {
             if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().minusSeconds(WARNING_WAIT_TIME))) {
                 race.setStatus(RaceStatus.WARNING);
 
-            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().minusSeconds(PREP_WAIT_TIME)))) {
+            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(race.getStartTime().minusSeconds(PREP_WAIT_TIME))) {
 
                 race.setStatus(RaceStatus.PREPARATORY);
                 server.stopAcceptingConnections();
@@ -98,7 +98,7 @@ public class TestMock implements Observer {
 
             } else {
                 race.updateBoats((timeCurr - timeLast));
-                // Send mark rounding messages for all mark roundings that occured
+                // Send mark rounding messages for all mark roundings that occurred
                 for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
                     server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
                 }

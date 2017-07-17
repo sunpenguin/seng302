@@ -32,7 +32,7 @@ public class MockDataStream {
     /**
      * Load a properties file and read the desired configuration settings
      */
-    private static void config() throws IOException {
+    private static void config() throws IOException, InvalidPlayerNumberException {
         Properties prop = new Properties();
 
         InputStream input = MockDataStream.class.getResourceAsStream("/config.txt");
@@ -42,6 +42,10 @@ public class MockDataStream {
         WARNING_WAIT_TIME = Integer.parseInt(prop.getProperty("WARNING_WAIT_TIME"));
         PREP_WAIT_TIME = Integer.parseInt(prop.getProperty("PREP_WAIT_TIME"));
         MAX_PLAYERS = Integer.parseInt(prop.getProperty("MAX_PLAYERS"));
+
+        if (MAX_PLAYERS < 1 || MAX_PLAYERS > 6) {
+            throw new InvalidPlayerNumberException();
+        }
     }
 
 
@@ -58,7 +62,7 @@ public class MockDataStream {
             final long TIME_OUT = WARNING_WAIT_TIME - 5; // Number of seconds we will allow for more connections to be made to the server
 
             Race race = RACE_BUILDER.buildRace(REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse());
-            Server server = new Server(SERVER_PORT);
+            Server server = new Server(SERVER_PORT, MAX_PLAYERS);
             ConnectionListener listener = new ConnectionListener(race, PARTICIPANTS_BUILDER.getIdPool(), new AC35MessageParserFactory());
             TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool());
 
@@ -70,6 +74,9 @@ public class MockDataStream {
             server.close();
         } catch (IOException e) {
             System.out.println("Error occurred reading configuration file");
+        } catch (InvalidPlayerNumberException e) {
+            System.out.println("Invalid maximum number of players in configuration file.\n" +
+                               "Use a value between 1 and 6");
         }
     }
 
