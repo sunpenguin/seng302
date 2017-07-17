@@ -73,6 +73,7 @@ public class DisplayTrail {
 
     public void addToGroup(Group group) {
         group.getChildren().add(polyline);
+        polyline.toBack();
     }
 
 }
