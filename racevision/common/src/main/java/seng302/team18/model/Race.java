@@ -39,7 +39,6 @@ public class Race {
         status = RaceStatus.NOT_ACTIVE;
         currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()); //.now(course.getTimeZone())
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()); //.now(course.getTimeZone()).plusSeconds(300)
-        setRaceName("");
         raceType = RaceType.MATCH;
     }
 
@@ -336,14 +335,6 @@ public class Race {
         List<MarkRoundingEvent> events = markRoundingEvents;
         markRoundingEvents = new ArrayList<>();
         return events;
-    }
-
-    public String getName() {
-        return regatta.getRegattaName();
-    }
-
-    public void setRaceName(String name) {
-        regatta.setRegattaName(name);
     }
 
     public int getPlayerId() {

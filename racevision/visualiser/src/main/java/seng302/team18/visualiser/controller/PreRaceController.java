@@ -20,6 +20,7 @@ import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.send.Sender;
+
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -50,7 +51,7 @@ public class PreRaceController {
         this.sender = sender;
         this.race = race;
         preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
-        raceNameText.setText(race.getName());
+        raceNameText.setText(race.getRegatta().getRegattaName());
         displayTimeZone(race.getStartTime());
         startTimeLabel.setText(race.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         setUpLists();

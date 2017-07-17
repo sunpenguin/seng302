@@ -21,20 +21,13 @@ public abstract class AbstractRaceBuilder {
     public Race buildRace(Regatta regatta, Course course) {
         Race race = new Race();
 
-        race.setRaceType(getRaceType());
-        race.setId(getId());
-        race.setRaceName(getRaceName());
         race.setCourse(course);
         race.setRegatta(regatta);
+        race.setRaceType(getRaceType());
+        race.setId(getId());
 
         return race;
     }
-
-
-    /**
-     * @return the name to be used by the race
-     */
-    protected abstract String getRaceName();
 
 
     /**
