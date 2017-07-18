@@ -46,7 +46,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         timeSinceLastMark = 0L;
         timeAtLastMark = 0L;
         isControlled = true;
-        sailOut = true; // Starts with luffing
+        sailOut = false; // Starts with luffing
         autoPilot = false;
         tackGybe = false;
         upWind = false;
@@ -260,7 +260,6 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
      */
     public double getBoatTWS(double windSpeed, double windHeading) {
         double twa = getTrueWindAngle(windHeading);
-        System.out.println(twa);
         return boatPolar.getSpeedForBoat(twa, windSpeed);
     }
 
@@ -299,7 +298,15 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
     }
 
 
-    public void setOptimalAngle(double windSpeed) {
-        boatPolar.optimalAngle(coordinate, destination, windSpeed);
+    /**
+     * Sets heading so that VMG towards the destination is maximum and updates the speed.
+     *
+     * @param windSpeed  double, speed of the wind in knots
+     * @param windDirection double, direction of the wind (degrees)
+     */
+    public void setOptimalAngle(double windSpeed, double windDirection) {
+        double optimalAngle = boatPolar.optimalAngle(coordinate, destination, windSpeed);
+        setHeading(optimalAngle);
+        setSpeed(getBoatTWS(windSpeed, windDirection));
     }
 }

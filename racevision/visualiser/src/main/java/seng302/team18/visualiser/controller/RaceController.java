@@ -142,7 +142,7 @@ public class RaceController implements Observer {
                     sender.send(message);
                 }
             };
-        raceViewPane.setOnKeyPressed(keyEventHandler);
+        raceViewPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEventHandler);
     }
 
 
