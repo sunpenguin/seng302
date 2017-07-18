@@ -25,6 +25,7 @@ public class TestMock implements Observer {
     private final Server server;
     private final XmlMessageBuilder xmlMessageBuilder;
     private final List<Boat> boats;
+    private ZonedDateTime timeout;
 
 
     /**
@@ -78,11 +79,16 @@ public class TestMock implements Observer {
 
         // Set race time
         race.setStartTime(ZonedDateTime.now().plusSeconds(START_WAIT_TIME));
+        timeout = race.getStartTime().minusSeconds(WARNING_WAIT_TIME + 3);
         race.setStatus(RaceStatus.PRESTART);
 
         do {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
+
+            if (ZonedDateTime.now().isAfter(timeout)) {
+                server.stopAcceptingConnections();
+            }
 
             if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().minusSeconds(WARNING_WAIT_TIME))) {
                 race.setStatus(RaceStatus.WARNING);

@@ -8,6 +8,7 @@ import seng302.team18.test_mock.model.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.ZonedDateTime;
 import java.util.Properties;
 
 /**
@@ -59,7 +60,7 @@ public class MockDataStream {
             config();
 
             final int SERVER_PORT = 5005;
-            final long TIME_OUT = WARNING_WAIT_TIME - 5; // Number of seconds we will allow for more connections to be made to the server
+            final long TIME_OUT = START_WAIT_TIME - WARNING_WAIT_TIME - 3; // Number of seconds we will allow for more connections to be made to the server
 
             Race race = RACE_BUILDER.buildRace(REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse());
             Server server = new Server(SERVER_PORT, MAX_PLAYERS);
