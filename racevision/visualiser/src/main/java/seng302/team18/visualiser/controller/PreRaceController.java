@@ -40,6 +40,8 @@ public class PreRaceController {
     private Race race;
     private boolean hasChanged = false;
 
+    private ZoneTimeClock startRaceClock;
+
 
     /**
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
@@ -53,10 +55,14 @@ public class PreRaceController {
         preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
         raceNameText.setText(race.getName());
         displayTimeZone(race.getStartTime());
+
         startTimeLabel.setText(race.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+//        startRaceClock = new ZoneTimeClock(startTimeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getStartTime());
+
         setUpLists();
         listView.setItems(FXCollections.observableList(race.getStartingList()));
         preRaceClock.start();
+//        startRaceClock.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
         this.interpreter = new Interpreter(receiver);
@@ -109,6 +115,8 @@ public class PreRaceController {
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
+
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceStartTimeInterpreter(race));
 
         return interpreter;
     }
