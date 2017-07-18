@@ -293,4 +293,9 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
 
         return trueWindAngle;
     }
+
+
+    public void setOptimalAngle(double windSpeed) {
+        boatPolar.optimalAngle(coordinate, destination, windSpeed);
+    }
 }

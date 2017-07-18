@@ -1,5 +1,6 @@
 package seng302.team18.model;
 
+import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.XYPair;
 
 import java.util.ArrayList;
@@ -354,6 +355,32 @@ public abstract class PolarPattern {
         }
 
         return belowMin;
+    }
+
+
+    /**
+     * Find the optimal angle for a boat to sail to next mark.
+     * @param boat Coordinate
+     * @param mark Coordinate
+     * @param windSpeed double
+     * @return the optimal angle
+     */
+    public double optimalAngle(Coordinate boat, Coordinate mark, double windSpeed) {
+        double bestVMG = Double.NEGATIVE_INFINITY;
+        double bestAngle = 0;
+        double initialBearing = GPSCalculations.getBearing(boat, mark);
+
+        for (double bearing = initialBearing; bearing < initialBearing+90; bearing ++) {
+            double speed = getSpeedForBoat(bearing, windSpeed);
+            double vmg = Math.cos(bearing) * speed;
+
+            if (vmg > bestVMG) {
+                bestVMG = vmg;
+                bestAngle = bearing;
+            }
+        }
+
+        return bestAngle;
     }
 
 
