@@ -106,10 +106,11 @@ public class AC35XMLBoatParser implements MessageBodyParser {
             String boatName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_BOAT.toString());
             String boatShortName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_SHORT.toString());
             int boatId = Integer.parseInt(boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_SOURCE_ID.toString()));
+            double boatLength = Double.parseDouble(boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_BOAT_LENGTH.toString()));
 
             switch (BoatType.ofTypeName(boatType)) {
                 case YACHT:
-                    boat = new Boat(boatName, boatShortName, boatId);
+                    boat = new Boat(boatName, boatShortName, boatId, boatLength);
                     break;
                 case MARK:
                     boat = new Mark(boatId, boatName, boatShortName);

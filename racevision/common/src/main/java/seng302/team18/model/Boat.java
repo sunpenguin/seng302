@@ -16,6 +16,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
     private Integer id;
+    private double boatLength;
     private double heading;
     private Coordinate coordinate;
     private Coordinate destination;
@@ -38,8 +39,9 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
      * @param shortName The name of the team the boat belongs to
      * @param id        The id of the boat
      */
-    public Boat(String boatName, String shortName, int id) {
+    public Boat(String boatName, String shortName, int id, double boatLength) {
         super(id, boatName, shortName);
+        this.boatLength = boatLength;
         speed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty(1);
         timeTilNextMark = 0L;
