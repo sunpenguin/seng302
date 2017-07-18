@@ -185,135 +185,13 @@ public class AC35PollarPatternTest {
 
 
     @Test
-    public void getSpeedForBoatTestMinAngle(){
-        //Minimum TWA
-        double boatTWA = 0;
-        double windSpeed1 = 12;
-        double windSpeed2 = 25;
-
-        double returned1 = ac35PolarPattern.getSpeedForBoat(boatTWA, windSpeed1);
-        double returned2 = ac35PolarPattern.getSpeedForBoat(boatTWA, windSpeed2);
-
-        assertEquals(0.0, returned1);
-        assertEquals(0.0, returned2);
-    }
-
-
-    @Test
-    public void getSpeedForBoatsMaxAngle(){
-        //Max TWA
-        double boatTWA = 175;
-        double windSpeed1 = 12;
-        double windSpeed2 = 30;
-
-        double returned1 = ac35PolarPattern.getSpeedForBoat(boatTWA, windSpeed1);
-        double returned2 = ac35PolarPattern.getSpeedForBoat(boatTWA, windSpeed2);
-
-        assertEquals(14.0, returned1);
-        assertEquals(32.0, returned2);
-    }
-
-
-    @Test
-    public void getSpeedForBoatsAboveMaxAngle(){
-        //Above max TWA
-        double boatTWA = 177;
-        double windSpeed1 = 25;
-        double windSpeed2 = 30;
-
-        double returned1 = ac35PolarPattern.getSpeedForBoat(boatTWA, windSpeed1);
-        double returned2 = ac35PolarPattern.getSpeedForBoat(boatTWA, windSpeed2);
-
-        assertEquals(30.0, returned1);
-        assertEquals(32.0, returned2);
-    }
-
-
-    @Test
-    public void getSpeedForBoatsRoundingUp(){
-        //TWA should be rounded up to 90
-        double boatTWA = 85;
-        double windSpeed1 = 12;
-        double windSpeed2 = 25;
-
-        double returned1 = ac35PolarPattern.getSpeedForBoat(boatTWA, windSpeed1);
-        double returned2 = ac35PolarPattern.getSpeedForBoat(boatTWA, windSpeed2);
-
-        assertEquals(23.0, returned1);
-        assertEquals(49.0, returned2);
-    }
-
-
-    @Test
-    public void getSpeedForBoatsRoundingDown(){
-        //TWA should be rounded down to 75
-        double boatTWA = 80;
-        double windSpeed1 = 25;
-        double windSpeed2 = 30;
-
-        double returned1 = ac35PolarPattern.getSpeedForBoat(boatTWA, windSpeed1);
-        double returned2 = ac35PolarPattern.getSpeedForBoat(boatTWA, windSpeed2);
-
-        assertEquals(44.0, returned1);
-        assertEquals(42.0, returned2);
-    }
-
-
-    @Test
-    public void getSpeedForBoatsBetweenPoints(){
-        //TWA should be rounded down to 75
-        double boatTWA = 82.5;
-        double windSpeed1 = 12;
-        double windSpeed2 = 30;
-
-        double returned1 = ac35PolarPattern.getSpeedForBoat(boatTWA, windSpeed1);
-        double returned2 = ac35PolarPattern.getSpeedForBoat(boatTWA, windSpeed2);
-
-        assertEquals(20.0, returned1);
-        assertEquals(42.0, returned2);
-    }
-
-
-    @Test
-    public void getSpeedForBoatsUpTWA(){
-        //TWA should be rounded down to 75
-        double boatTWA1 = 43;
-        double boatTWA2 = 40;
-        double windSpeed1 = 12;
-        double windSpeed2 = 25;
-
-        double returned1 = ac35PolarPattern.getSpeedForBoat(boatTWA1, windSpeed1);
-        double returned2 = ac35PolarPattern.getSpeedForBoat(boatTWA2, windSpeed2);
-
-        assertEquals(14.4, returned1);
-        assertEquals(30.0, returned2);
-    }
-
-
-    @Test
-    public void getSpeedForBoatsDnTWA(){
-        //TWA should be rounded down to 75
-        double boatTWA1 = 151;
-        double boatTWA2 = 150;
-        double windSpeed1 = 25;
-        double windSpeed2 = 30;
-
-        double returned1 = ac35PolarPattern.getSpeedForBoat(boatTWA1, windSpeed1);
-        double returned2 = ac35PolarPattern.getSpeedForBoat(boatTWA2, windSpeed2);
-
-        assertEquals(47.0, returned1);
-        assertEquals(46.0, returned2);
-    }
-
-
-    @Test
     public void getTwoClosestPolarsWindSpeedAboveMax(){
         //Test when windspeed is greater then the max windSpeed
         double windSpeed1 = 31;
         double windSpeed2 = 90;
 
-        List<Polar> returned1 = ac35PolarPattern.getTwoClosestPolars(windSpeed1);
-        List<Polar> returned2 = ac35PolarPattern.getTwoClosestPolars(windSpeed2);
+        List<Polar> returned1 = ac35PolarPattern.getClosestPolars(windSpeed1);
+        List<Polar> returned2 = ac35PolarPattern.getClosestPolars(windSpeed2);
 
         assertEquals(1, returned1.size());
         assertEquals(1, returned2.size());
@@ -330,9 +208,9 @@ public class AC35PollarPatternTest {
         double windSpeed2 = 12;
         double windSpeed3 = 30;
 
-        List<Polar> returned1 = ac35PolarPattern.getTwoClosestPolars(windSpeed1);
-        List<Polar> returned2 = ac35PolarPattern.getTwoClosestPolars(windSpeed2);
-        List<Polar> returned3 = ac35PolarPattern.getTwoClosestPolars(windSpeed3);
+        List<Polar> returned1 = ac35PolarPattern.getClosestPolars(windSpeed1);
+        List<Polar> returned2 = ac35PolarPattern.getClosestPolars(windSpeed2);
+        List<Polar> returned3 = ac35PolarPattern.getClosestPolars(windSpeed3);
 
         assertEquals(1, returned1.size());
         assertEquals(1, returned2.size());
@@ -351,9 +229,9 @@ public class AC35PollarPatternTest {
         double windSpeed2 = 14;
         double windSpeed3 = 27;
 
-        List<Polar> returned1 = ac35PolarPattern.getTwoClosestPolars(windSpeed1);
-        List<Polar> returned2 = ac35PolarPattern.getTwoClosestPolars(windSpeed2);
-        List<Polar> returned3 = ac35PolarPattern.getTwoClosestPolars(windSpeed3);
+        List<Polar> returned1 = ac35PolarPattern.getClosestPolars(windSpeed1);
+        List<Polar> returned2 = ac35PolarPattern.getClosestPolars(windSpeed2);
+        List<Polar> returned3 = ac35PolarPattern.getClosestPolars(windSpeed3);
 
         assertEquals(2, returned1.size());
         assertEquals(2, returned2.size());
@@ -533,11 +411,12 @@ public class AC35PollarPatternTest {
         double expected1 = 42;
         double expected2 = 49.4;
 
-        assertEquals(expected1, returned1, 0.5);
-        assertEquals(expected2, returned2, 0.5);
+        assertEquals(expected1, returned1, 0.005);
+        assertEquals(expected2, returned2, 0.005);
     }
 
 
+    @Test
     public void getSpeedForBoatAboveMaxWindSpeed(){
         //Test for when windSpeed is above max windSpeed
         double boatTWA1 = 90;
@@ -551,11 +430,12 @@ public class AC35PollarPatternTest {
         double expected1 = 59.2;
         double expected2 = 93.5;
 
-        assertEquals(expected1 , returned1, 0.5);
-        assertEquals(expected2, returned2, 0.5);
+        assertEquals(expected1 , returned1, 0.005);
+        assertEquals(expected2, returned2, 0.005);
     }
 
 
+    @Test
     public void getSpeedForBoatBetweenWindSpeeds(){
         //Test for when windSpeed is between two polars
         double boatTWA1 = 80;
@@ -569,12 +449,13 @@ public class AC35PollarPatternTest {
         double expected1 = 40.866666667;
         double expected2 = 5;
 
-        assertEquals(expected1 , returned1, 0.5);
-        assertEquals(expected2, returned2, 0.5);
+        assertEquals(expected1 , returned1, 0.005);
+        assertEquals(expected2, returned2, 0.005);
 
     }
 
 
+    @Test
     public void getSpeedForBoatEqualToAWindSpeed(){
         //Test for when windSpeed is equal to the windSpeed of a polar
         double boatTWA1 = 60;
@@ -588,8 +469,8 @@ public class AC35PollarPatternTest {
         double expected1 = 29;
         double expected2 = 11;
 
-        assertEquals(expected1 , returned1, 0.5);
-        assertEquals(expected2, returned2, 0.5);
+        assertEquals(expected1 , returned1, 0.005);
+        assertEquals(expected2, returned2, 0.005);
 
     }
 
