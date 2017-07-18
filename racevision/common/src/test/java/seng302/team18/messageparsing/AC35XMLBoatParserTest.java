@@ -39,9 +39,9 @@ public class AC35XMLBoatParserTest {
         expectedBoats.add(new Mark(124, "Atalanta", "Atalanta"));
         expectedBoats.add(new Mark(126, "Defender", "Defender"));
 
-        expectedBoats.add(new Boat("Oracle Team USA", "USA", 101));
-        expectedBoats.add(new Boat("Emirates Team New Zealand", "NZL", 102));
-        expectedBoats.add(new Boat("Artemis Racing", "SWE", 103));
+        expectedBoats.add(new Boat("Oracle Team USA", "USA", 101, 14.019));
+        expectedBoats.add(new Boat("Emirates Team New Zealand", "NZL", 102, 14.019));
+        expectedBoats.add(new Boat("Artemis Racing", "SWE", 103, 14.019));
     }
 
     @Test
@@ -77,6 +77,16 @@ public class AC35XMLBoatParserTest {
         for (int i = 0; i < parsedBoats.size(); i++) {
             assertEquals("Source ID parsed incorrectly for boat " + i,
                     expectedBoats.get(i).getId(), parsedBoats.get(i).getId());
+        }
+    }
+
+    @Test
+    public void parseBoatLength() throws Exception {
+        List<AbstractBoat>  parsedBoats = message.getBoats();
+        for (int i = 0; i < parsedBoats.size(); i++) {
+            if (parsedBoats.get(i) instanceof Boat) {
+                assertEquals(((Boat) expectedBoats.get(i)).getBoatLength(), ((Boat) parsedBoats.get(i)).getBoatLength(), 0.1);
+            }
         }
     }
 }

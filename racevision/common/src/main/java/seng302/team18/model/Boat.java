@@ -253,6 +253,11 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
 
     public boolean isDownWind() {return downWind; }
 
+    public double getBoatLength() {
+        return boatLength;
+    }
+
+
     /**
      * Uses boats polar pattern to calculate boats TWS
      *

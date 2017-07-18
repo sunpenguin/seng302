@@ -38,7 +38,7 @@ public class BoatTest {
 
     @Before
     public void setUp(){
-        testBoat = new Boat("Enterprise", "Starfleet", 10);
+        testBoat = new Boat("Enterprise", "Starfleet", 10, 14.019);
     }
 
     @Test

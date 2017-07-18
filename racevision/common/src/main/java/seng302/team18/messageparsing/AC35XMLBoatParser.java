@@ -47,9 +47,10 @@ public class AC35XMLBoatParser implements MessageBodyParser {
         }
         doc.getDocumentElement().normalize();
         Element boatsElement = (Element) doc.getElementsByTagName(Ac35XmlBoatComponents.ROOT_BOATS.toString()).item(0);
+        Element boatDimensionsNode = (Element) doc.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOAT_DIMENSION.toString()).item(0);
 
         Node boatsNode = boatsElement.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOATS.toString()).item(0);
-        List<AbstractBoat> boats = parseBoats(boatsNode);
+        List<AbstractBoat> boats = parseBoats(boatsNode, boatDimensionsNode);
 
         return new AC35XMLBoatMessage(boats);
     }
@@ -73,7 +74,7 @@ public class AC35XMLBoatParser implements MessageBodyParser {
      * @param boatsNode the noe of the boats element
      * @return A list of participating boats.
      */
-    private List<AbstractBoat> parseBoats(Node boatsNode) {
+    private List<AbstractBoat> parseBoats(Node boatsNode, Element boatDimensionsNode) {
         List<AbstractBoat> boats = new ArrayList<>();
 
         if (boatsNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -82,7 +83,7 @@ public class AC35XMLBoatParser implements MessageBodyParser {
 
             for (int i = 0; i < boatSequenceNodeList.getLength(); i++) {
                 Node boatNode = boatSequenceNodeList.item(i);
-                parseBoat(boats, boatNode);
+                parseBoat(boats, boatNode, boatDimensionsNode);
             }
         }
         return boats;
@@ -96,7 +97,7 @@ public class AC35XMLBoatParser implements MessageBodyParser {
      * @param boats    the list to add to boat to
      * @param boatNode the node describing the boat
      */
-    private void parseBoat(List<AbstractBoat> boats, Node boatNode) {
+    private void parseBoat(List<AbstractBoat> boats, Node boatNode, Element boatDimensionsNode) {
         if (boatNode.getNodeType() == Node.ELEMENT_NODE) {
             Element boatElement = (Element) boatNode;
 
@@ -106,7 +107,7 @@ public class AC35XMLBoatParser implements MessageBodyParser {
             String boatName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_BOAT.toString());
             String boatShortName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_SHORT.toString());
             int boatId = Integer.parseInt(boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_SOURCE_ID.toString()));
-            double boatLength = Double.parseDouble(boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_BOAT_LENGTH.toString()));
+            double boatLength = Double.parseDouble(((Element) boatDimensionsNode).getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_BOAT_LENGTH.toString()));
 
             switch (BoatType.ofTypeName(boatType)) {
                 case YACHT:
