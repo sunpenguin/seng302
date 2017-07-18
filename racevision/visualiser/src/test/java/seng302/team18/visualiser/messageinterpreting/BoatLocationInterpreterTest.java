@@ -28,9 +28,9 @@ public class BoatLocationInterpreterTest {
     @Before
     public void setUp() {
         race = new Race();
-        Boat boat1 = new Boat("Big Boat", "BB", 420);
-        Boat boat2 = new Boat("Medium Boat", "MB", 100);
-        Boat boat3 = new Boat("Small Boat", "SB", 69);
+        Boat boat1 = new Boat("Big Boat", "BB", 420, 1);
+        Boat boat2 = new Boat("Medium Boat", "MB", 100, 1);
+        Boat boat3 = new Boat("Small Boat", "SB", 69, 1);
         startingList = new ArrayList<>(Arrays.asList(boat1, boat2, boat3));
         race.setParticipantIds(Arrays.asList(420, 100, 69));
         race.setStartingList(startingList);

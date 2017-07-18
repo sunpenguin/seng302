@@ -26,9 +26,9 @@ public class BoatActionInterpreterTest {
     public void setUp() {
         final int boatId = 101;
         race = new Race();
-        player = new Boat("name", "shortName", boatId);
+        player = new Boat("name", "shortName", boatId, 14.019);
         player.setHeading(0d);
-        notPlayer = new Boat("name", "shortName", boatId + 1);
+        notPlayer = new Boat("name", "shortName", boatId + 1, 14.019);
         notPlayer.setHeading(0d);
         race.setStartingList(Arrays.asList(player, notPlayer));
         race.getCourse().setWindDirection(270d);

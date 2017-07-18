@@ -28,7 +28,7 @@ public class RaceTimeInterpreterTest {
 
     @Before
     public void setUp() {
-        boat = new Boat("test", "t", 0);
+        boat = new Boat("test", "t", 0, 1);
         boat.setTimeAtLastMark(3000L);
         List<Boat> boats = new ArrayList<>();
         boats.add(boat);
@@ -44,7 +44,7 @@ public class RaceTimeInterpreterTest {
      */
     @Test
     public void boatsTest() {
-        Boat expected = new Boat("test", "t", 0);
+        Boat expected = new Boat("test", "t", 0, 1);
         expected.setTimeAtLastMark(3000L);
         expected.setTimeSinceLastMark(10L);
         Assert.assertEquals(1, race.getStartingList().size());

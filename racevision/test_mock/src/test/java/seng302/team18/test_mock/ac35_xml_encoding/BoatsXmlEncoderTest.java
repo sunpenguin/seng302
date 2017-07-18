@@ -54,11 +54,11 @@ public class BoatsXmlEncoderTest {
 
 
         List<AbstractBoat> boats = Arrays.asList(
-                new Boat("Zeroth Boat", "B0", 110),
-                new Boat("First Boat", "B1", 111),
-                new Boat("Second Boat", "B2", 112),
-                new Boat("Third Boat", "B3", 113),
-                new Boat("Fourth Boat", "B4", 114)
+                new Boat("Zeroth Boat", "B0", 110, 14.019),
+                new Boat("First Boat", "B1", 111, 14.019),
+                new Boat("Second Boat", "B2", 112, 14.019),
+                new Boat("Third Boat", "B3", 113, 14.019),
+                new Boat("Fourth Boat", "B4", 114, 14.019)
         );
 
         boats.forEach(boat -> {

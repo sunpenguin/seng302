@@ -32,7 +32,7 @@ public class WindDirectionInterpreterTest {
 
     @Before
     public void setUp() {
-        boat = new Boat("test", "t", 0);
+        boat = new Boat("test", "t", 0, 1);
         List<Boat> boats = new ArrayList<>();
         boats.add(boat);
         race = new Race();
@@ -47,7 +47,7 @@ public class WindDirectionInterpreterTest {
      */
     @Test
     public void boatsTest() {
-        Boat expected = new Boat("test", "t", 0);
+        Boat expected = new Boat("test", "t", 0, 1);
         Assert.assertEquals(1, race.getStartingList().size());
         Boat actual = race.getStartingList().get(0);
         Assert.assertEquals(expected.getId(), actual.getId());
