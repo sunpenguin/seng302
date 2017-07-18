@@ -6,45 +6,41 @@ import seng302.team18.message.BoatActionMessage;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by csl62 on 3/07/17.
+ * The test class for BoatActionMessage.
  */
 public class BoatActionMessageTest {
 
     private BoatActionMessage testBoatActionMessage = new BoatActionMessage(true, true,
-            true, true, true);
+            true, true, false);
 
     @Test
     public void messageTypeTest(){
-        assertEquals(testBoatActionMessage.getType(), 100);
+        assertEquals(100, testBoatActionMessage.getType());
     }
 
     @Test
     public void autoPilotTest(){
-        assertEquals(testBoatActionMessage.getType(), 100);
+        assertEquals(true, testBoatActionMessage.isAutopilot());
     }
 
     @Test
     public void sailsInTest(){
-        assertEquals(testBoatActionMessage.getType(), 100);
+        assertEquals(true, testBoatActionMessage.isSailsIn());
     }
 
-    @Test
-    public void sailsOutTest(){
-        assertEquals(testBoatActionMessage.getType(), 100);
-    }
 
     @Test
     public void tackGybeTest(){
-        assertEquals(testBoatActionMessage.getType(), 100);
+        assertEquals(true, testBoatActionMessage.isTackGybe());
     }
 
     @Test
     public void upwindTest(){
-        assertEquals(testBoatActionMessage.getType(), 100);
+        assertEquals(true, testBoatActionMessage.isUpwind());
     }
 
     @Test
     public void downwindTest(){
-        assertEquals(testBoatActionMessage.getType(), 100);
+        assertEquals(false, testBoatActionMessage.isDownwind());
     }
 }

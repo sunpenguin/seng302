@@ -4,6 +4,7 @@ import seng302.team18.message.AC35MessageType;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.util.ByteCheck;
+import seng302.team18.util.SpeedConverter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -45,7 +46,8 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
         byte[] raceWindDirectionBytes = ByteCheck.shortToByteArray((short) 0x0000);
                 // Currently set to east TODO: make this a field of race or boat?
 
-        byte[] raceWindSpeedBytes = ByteCheck.shortToByteArray((short) race.getCourse().getWindSpeed());
+        double windSpeed = race.getCourse().getWindSpeed();
+        byte[] raceWindSpeedBytes = ByteCheck.shortToByteArray(new SpeedConverter().knotsToMms(windSpeed).shortValue());
                 // Currently 18 km/h TODO: make this a field of race or boat?
 
         byte numBoatsByte = (byte) race.getStartingList().size();

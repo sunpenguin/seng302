@@ -38,6 +38,7 @@ public class PreRaceController {
     private Interpreter interpreter;
     private Sender sender;
     private Race race;
+    private boolean hasChanged = false;
 
 
     /**
@@ -119,6 +120,10 @@ public class PreRaceController {
      * @throws IOException
      */
     public void showRace() throws IOException {
+        if (hasChanged) {
+            return;
+        }
+        hasChanged = true;
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
         Parent root = loader.load(); // throws IOException
         RaceController controller = loader.getController();
