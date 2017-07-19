@@ -17,6 +17,7 @@ import seng302.team18.message.RequestMessage;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
+import seng302.team18.visualiser.display.RaceStartTime;
 import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.send.Sender;
@@ -40,8 +41,6 @@ public class PreRaceController {
     private Race race;
     private boolean hasChanged = false;
 
-    private ZoneTimeClock startRaceClock;
-
 
     /**
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
@@ -56,13 +55,12 @@ public class PreRaceController {
         raceNameText.setText(race.getName());
         displayTimeZone(race.getStartTime());
 
-        startTimeLabel.setText(race.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-//        startRaceClock = new ZoneTimeClock(startTimeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getStartTime());
+        RaceStartTime raceStartTime = new RaceStartTime(startTimeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race);
 
         setUpLists();
         listView.setItems(FXCollections.observableList(race.getStartingList()));
         preRaceClock.start();
-//        startRaceClock.start();
+        raceStartTime.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
         this.interpreter = new Interpreter(receiver);

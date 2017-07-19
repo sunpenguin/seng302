@@ -38,7 +38,7 @@ public class Race {
         id = 0;
         status = RaceStatus.NOT_ACTIVE;
         currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()).now(course.getTimeZone());
-        startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());//.now(course.getTimeZone()).plusSeconds(300);
+        startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         setRaceName("");
         raceType = RaceType.MATCH;
     }

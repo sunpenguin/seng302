@@ -10,14 +10,14 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 
 /**
- * Created by spe76 on 18/07/17.
+ * The interpreter class for setting the pre-race start time.
  */
 public class PreRaceStartTimeInterpreter extends MessageInterpreter {
 
     private Race race;
 
     /**
-     * PLEASE WRITE ME
+     * Constructor for PreRaceStartTimeInterpreter.
      *
      * @param race to be updated.
      */
@@ -29,8 +29,9 @@ public class PreRaceStartTimeInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof AC35RaceStatusMessage) {
             AC35RaceStatusMessage statusMessage = (AC35RaceStatusMessage) message;
-//            startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()).now(course.getTimeZone()).plusSeconds(300);
-            race.setStartTime(ZonedDateTime.ofInstant(Instant.ofEpochMilli(statusMessage.getStartTime()), race.getCourse().getTimeZone()));
+            Instant instant = Instant.ofEpochMilli(statusMessage.getStartTime());
+            ZonedDateTime startTime = ZonedDateTime.ofInstant(instant, race.getCourse().getTimeZone());
+            race.setStartTime(startTime);
         }
     }
 }
