@@ -6,7 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Anton J on 11/07/2017.
+ * Builds a preset participant pool.
+ * <p>
+ * Concrete implementation of AbstractParticipantsBuilder.
+ *
+ * @see seng302.team18.test_mock.model.AbstractParticipantsBuilder
  */
 public class ParticipantsBuilder1 extends AbstractParticipantsBuilder {
 
