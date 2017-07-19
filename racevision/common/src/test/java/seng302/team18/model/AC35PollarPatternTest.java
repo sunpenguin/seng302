@@ -1,9 +1,10 @@
-package seng302.team18.util;
+package seng302.team18.model;
 
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.AC35PolarPattern;
 import seng302.team18.model.Polar;
+import seng302.team18.util.XYPair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -463,4 +464,133 @@ public class AC35PollarPatternTest {
         assertEquals(true, returned1.contains(returned1Pair3));
         assertEquals(true, returned1.contains(returned1Pair4));
     }
+
+
+    @Test
+    public void getValueForPolarPointEqualsTWA(){
+        //Test for when one point is given equal to a point in polar
+        double boatTWA1 = 115;
+        double boatTWA2 = 175;
+        double windSpeed = 12;
+
+        List<XYPair> points1 = new ArrayList<>();
+        points1.add(new XYPair(windSpeed, 115));
+
+        List<XYPair> points2 = new ArrayList<>();
+        points2.add(new XYPair(windSpeed, 175));
+
+        double returned1  = ac35PolarPattern.getValueForPolar(points1, boatTWA1);
+        double returned2  = ac35PolarPattern.getValueForPolar(points2, boatTWA2);
+
+        double expected1 = ac35PolarPattern.getPolarForWindSpeed(points1.get(0).getX()).getMapSpeedAtAngles().get(boatTWA1);
+        double expected2 = ac35PolarPattern.getPolarForWindSpeed(points2.get(0).getX()).getMapSpeedAtAngles().get(boatTWA2);
+
+        assertEquals(expected1, returned1);
+        assertEquals(expected2, returned2);
+
+    }
+
+
+    @Test
+    public void getValueForPolarTWAAboveMax(){
+        //Test for when one point is given above the max in the polar
+        double boatTWA1 = 177;
+        double boatTWA2 = 179;
+        double windSpeed = 20;
+
+        List<XYPair> points1 = new ArrayList<>();
+        points1.add(new XYPair(windSpeed, 175));
+
+        double returned1  = ac35PolarPattern.getValueForPolar(points1, boatTWA1);
+        double returned2  = ac35PolarPattern.getValueForPolar(points1, boatTWA2);
+
+        double expected1 = 20;
+        double expected2 = 16;
+
+        assertEquals(expected1, returned1);
+        assertEquals(expected2, returned2);
+    }
+
+
+    @Test
+    public void getValueForPolarTwoPointsGiven(){
+        //Test for when TWA is between two points
+        double boatTWA1 = 70;
+        double boatTWA2 = 100;
+        double windSpeed = 25;
+
+        List<XYPair> points1 = new ArrayList<>();
+        points1.add(new XYPair(windSpeed, 60));
+        points1.add(new XYPair(windSpeed, 75));
+
+        List<XYPair> points2 = new ArrayList<>();
+        points2.add(new XYPair(windSpeed, 90));
+        points2.add(new XYPair(windSpeed, 115));
+
+        double returned1 = ac35PolarPattern.getValueForPolar(points1, boatTWA1);
+        double returned2 = ac35PolarPattern.getValueForPolar(points2, boatTWA2);
+
+        double expected1 = 42;
+        double expected2 = 49.4;
+
+        assertEquals(expected1, returned1, 0.5);
+        assertEquals(expected2, returned2, 0.5);
+    }
+
+
+    public void getSpeedForBoatAboveMaxWindSpeed(){
+        //Test for when windSpeed is above max windSpeed
+        double boatTWA1 = 90;
+        double boatTWA2 = 45;
+        double windSpeed1 = 37;
+        double windSpeed2 = 90;
+
+        double returned1 = ac35PolarPattern.getSpeedForBoat(boatTWA1, windSpeed1);
+        double returned2 = ac35PolarPattern.getSpeedForBoat(boatTWA2, windSpeed2);
+
+        double expected1 = 59.2;
+        double expected2 = 93.5;
+
+        assertEquals(expected1 , returned1, 0.5);
+        assertEquals(expected2, returned2, 0.5);
+    }
+
+
+    public void getSpeedForBoatBetweenWindSpeeds(){
+        //Test for when windSpeed is between two polars
+        double boatTWA1 = 80;
+        double boatTWA2 = 115;
+        double windSpeed1 = 22;
+        double windSpeed2 = 2;
+
+        double returned1 = ac35PolarPattern.getSpeedForBoat(boatTWA1, windSpeed1);
+        double returned2 = ac35PolarPattern.getSpeedForBoat(boatTWA2, windSpeed2);
+
+        double expected1 = 40.866666667;
+        double expected2 = 5;
+
+        assertEquals(expected1 , returned1, 0.5);
+        assertEquals(expected2, returned2, 0.5);
+
+    }
+
+
+    public void getSpeedForBoatEqualToAWindSpeed(){
+        //Test for when windSpeed is equal to the windSpeed of a polar
+        double boatTWA1 = 60;
+        double boatTWA2 = 80;
+        double windSpeed1 = 20;
+        double windSpeed2 = 8;
+
+        double returned1 = ac35PolarPattern.getSpeedForBoat(boatTWA1, windSpeed1);
+        double returned2 = ac35PolarPattern.getSpeedForBoat(boatTWA2, windSpeed2);
+
+        double expected1 = 29;
+        double expected2 = 11;
+
+        assertEquals(expected1 , returned1, 0.5);
+        assertEquals(expected2, returned2, 0.5);
+
+    }
+
 }
