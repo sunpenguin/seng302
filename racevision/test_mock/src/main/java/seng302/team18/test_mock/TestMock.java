@@ -68,7 +68,7 @@ public class TestMock implements Observer {
     /**
      * Simulate the race while sending the scheduled messages
      */
-    public void runSimulation(int START_WAIT_TIME, int WARNING_WAIT_TIME, int PREP_WAIT_TIME) {
+    public void runSimulation(int START_WAIT_TIME, int WARNING_WAIT_TIME, int PREP_WAIT_TIME, int CUTOFF_DIFFERENCE) {
         final int LOOP_FREQUENCY = 60;
 
         long timeCurr = System.currentTimeMillis();
@@ -78,22 +78,26 @@ public class TestMock implements Observer {
         scheduledMessages.add(new HeartBeatMessageGenerator());
 
         // Set race time
-        race.setStartTime(ZonedDateTime.now().plusSeconds(START_WAIT_TIME));
-        timeout = race.getStartTime().minusSeconds(WARNING_WAIT_TIME + 3);
+        ZonedDateTime initalTime = ZonedDateTime.now();
+        ZonedDateTime warningTime = initalTime.plusSeconds(WARNING_WAIT_TIME);
+        ZonedDateTime prepTime = warningTime.plusSeconds(PREP_WAIT_TIME);
+        ZonedDateTime connnectionCutOff = warningTime.minusSeconds(CUTOFF_DIFFERENCE);
+        race.setStartTime(prepTime.plusSeconds(START_WAIT_TIME));
+
         race.setStatus(RaceStatus.PRESTART);
 
         do {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
-            if (ZonedDateTime.now().isAfter(timeout)) {
+            if (ZonedDateTime.now().isAfter(connnectionCutOff)) {
                 server.stopAcceptingConnections();
             }
 
-            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().minusSeconds(WARNING_WAIT_TIME))) {
+            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(warningTime)) {
                 race.setStatus(RaceStatus.WARNING);
 
-            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(race.getStartTime().minusSeconds(PREP_WAIT_TIME))) {
+            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(prepTime)) {
 
                 race.setStatus(RaceStatus.PREPARATORY);
                 server.stopAcceptingConnections();
