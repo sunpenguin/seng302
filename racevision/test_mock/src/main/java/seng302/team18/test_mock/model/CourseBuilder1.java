@@ -10,7 +10,11 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by Anton J on 11/07/2017.
+ * Builds a preset course.
+ * <p>
+ * Concrete implementation of AbstractCourseBuilder.
+ *
+ * @see seng302.team18.test_mock.model.AbstractCourseBuilder
  */
 public class CourseBuilder1 extends AbstractCourseBuilder {
 
@@ -93,6 +97,7 @@ public class CourseBuilder1 extends AbstractCourseBuilder {
         return compoundMarks;
     }
 
+
     @Override
     protected List<BoundaryMark> getBoundaryMarks() {
         List<BoundaryMark> boundaryMarks = new ArrayList<>();
@@ -107,20 +112,24 @@ public class CourseBuilder1 extends AbstractCourseBuilder {
         return boundaryMarks;
     }
 
+
     @Override
     protected double getWindDirection() {
         return 0;
     }
+
 
     @Override
     protected double getWindSpeed() {
         return 10;
     }
 
+
     @Override
     protected ZoneId getTimeZone() {
         return ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-3));
     }
+
 
     @Override
     protected List<MarkRounding> getMarkRoundings() {
