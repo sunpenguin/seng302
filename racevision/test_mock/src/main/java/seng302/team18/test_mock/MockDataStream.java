@@ -5,10 +5,8 @@ import seng302.team18.model.Race;
 import seng302.team18.test_mock.connection.Server;
 import seng302.team18.test_mock.model.*;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.ZonedDateTime;
 import java.util.Properties;
 
 /**
@@ -33,10 +31,10 @@ public class MockDataStream {
     /**
      * Load a properties file and read the desired configuration settings
      */
-    private static void config() throws IOException, InvalidPlayerNumberException {
+    public static void readConfig(String path) throws IOException, InvalidPlayerNumberException {
         Properties prop = new Properties();
 
-        InputStream input = MockDataStream.class.getResourceAsStream("/config.txt");
+        InputStream input = MockDataStream.class.getResourceAsStream(path);
         prop.load(input);
 
         START_WAIT_TIME = Integer.parseInt(prop.getProperty("START_WAIT_TIME"));
@@ -57,7 +55,7 @@ public class MockDataStream {
      */
     private static void runMock() {
         try {
-            config();
+            readConfig("/config.txt");
 
             final int SERVER_PORT = 5005;
             final long TIME_OUT = START_WAIT_TIME - WARNING_WAIT_TIME - 3; // Number of seconds we will allow for more connections to be made to the server
@@ -84,5 +82,22 @@ public class MockDataStream {
 
     public static void main(String[] args) {
         runMock();
+    }
+
+
+    public static int getStartWaitTime() {
+        return START_WAIT_TIME;
+    }
+
+    public static int getWarningWaitTime() {
+        return WARNING_WAIT_TIME;
+    }
+
+    public static int getPrepWaitTime() {
+        return PREP_WAIT_TIME;
+    }
+
+    public static int getMaxPlayers() {
+        return MAX_PLAYERS;
     }
 }
