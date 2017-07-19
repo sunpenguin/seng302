@@ -1,4 +1,4 @@
-package seng302.team18.test_mock.model;
+package seng302.team18.test_mock.ac35_xml_encoding;
 
 /**
  * Defaults for when building a Boats.xml message from model classes

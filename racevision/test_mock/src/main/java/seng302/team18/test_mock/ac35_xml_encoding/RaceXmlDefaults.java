@@ -1,4 +1,4 @@
-package seng302.team18.test_mock.model;
+package seng302.team18.test_mock.ac35_xml_encoding;
 
 import seng302.team18.message.AC35XMLRaceMessage;
 

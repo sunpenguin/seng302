@@ -2,6 +2,9 @@ package seng302.team18.test_mock;
 
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.model.Race;
+import seng302.team18.test_mock.ac35_xml_encoding.BoatXmlDefaults;
+import seng302.team18.test_mock.ac35_xml_encoding.RaceXmlDefaults;
+import seng302.team18.test_mock.ac35_xml_encoding.XmlMessageBuilder;
 import seng302.team18.test_mock.connection.Server;
 import seng302.team18.test_mock.model.*;
 

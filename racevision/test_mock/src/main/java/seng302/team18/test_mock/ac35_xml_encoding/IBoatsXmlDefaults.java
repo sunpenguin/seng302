@@ -1,4 +1,4 @@
-package seng302.team18.test_mock.model;
+package seng302.team18.test_mock.ac35_xml_encoding;
 
 /**
  * This interface provides a skeleton for classes that supply the default values used when building a Boats.xml message
