@@ -384,8 +384,12 @@ public abstract class PolarPattern {
         double initialBearing = GPSCalculations.getBearing(boat, mark);
 
         for (double bearing = initialBearing; bearing < initialBearing+90; bearing ++) {
+            if (bearing > 359) {
+                bearing -= 360;
+                initialBearing -= 360;
+            }
             double speed = getSpeedForBoat(bearing, windSpeed);
-            double vmg = Math.cos(bearing) * speed;
+            double vmg = Math.cos(Math.abs(bearing - initialBearing)) * speed;
 
             if (vmg > bestVMG) {
                 bestVMG = vmg;
