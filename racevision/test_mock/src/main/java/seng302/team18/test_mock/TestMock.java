@@ -47,10 +47,6 @@ public class TestMock implements Observer {
             race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
             sendXmlMessages(client);
         }
-//        else if (arg instanceof Integer) {
-//            Integer id = (Integer) arg;
-//            race.getStartingList().removeIf(boat -> boat.getId().equals(id));
-//        }
     }
 
     private void sendXmlMessages(ClientConnection newPlayer) {
@@ -69,9 +65,9 @@ public class TestMock implements Observer {
      */
     public void runSimulation() {
         final int LOOP_FREQUENCY = 60;
-        final int TIME_START = -5;
-        final int TIME_WARNING = -3;
-        final int TIME_PREP = -2;
+        final int TIME_START = 1;
+        final int TIME_WARNING = 59;
+        final int TIME_PREP = 58;
 
         long timeCurr = System.currentTimeMillis();
         long timeLast;
@@ -80,17 +76,17 @@ public class TestMock implements Observer {
         scheduledMessages.add(new HeartBeatMessageGenerator());
 
         // Set race time
-        race.setStartTime(ZonedDateTime.now().minusMinutes(TIME_START));
+        race.setStartTime(ZonedDateTime.now().plusMinutes(TIME_START));
         race.setStatus(RaceStatus.PRESTART);
 
         do {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
-            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusMinutes(TIME_WARNING))) {
+            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().minusSeconds(TIME_WARNING))) {
                 race.setStatus(RaceStatus.WARNING);
 
-            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().plusMinutes(TIME_PREP)))) {
+            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().minusSeconds(TIME_PREP)))) {
 
                 race.setStatus(RaceStatus.PREPARATORY);
                 server.stopAcceptingConnections();
