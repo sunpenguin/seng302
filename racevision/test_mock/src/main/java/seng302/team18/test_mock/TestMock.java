@@ -74,10 +74,10 @@ public class TestMock implements Observer {
         scheduledMessages.add(new HeartBeatMessageGenerator());
 
         // Set race time
-        ZonedDateTime initalTime = ZonedDateTime.now();
-        ZonedDateTime warningTime = initalTime.plusSeconds(WARNING_WAIT_TIME);
+        ZonedDateTime initialTime = ZonedDateTime.now();
+        ZonedDateTime warningTime = initialTime.plusSeconds(WARNING_WAIT_TIME);
         ZonedDateTime prepTime = warningTime.plusSeconds(PREP_WAIT_TIME);
-        ZonedDateTime connnectionCutOff = warningTime.minusSeconds(CUTOFF_DIFFERENCE);
+        ZonedDateTime connectionCutOff = warningTime.minusSeconds(CUTOFF_DIFFERENCE);
         race.setStartTime(prepTime.plusSeconds(START_WAIT_TIME));
 
         race.setStatus(RaceStatus.PRESTART);
@@ -86,11 +86,11 @@ public class TestMock implements Observer {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
-            if (ZonedDateTime.now().isAfter(connnectionCutOff)) {
+            if (ZonedDateTime.now().isAfter(connectionCutOff)) {
                 server.stopAcceptingConnections();
             }
 
-            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusMinutes(TIME_WARNING))) {
+            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(warningTime)) {
                 race.setStatus(RaceStatus.WARNING);
 
             } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(prepTime)) {

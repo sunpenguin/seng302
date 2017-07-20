@@ -57,9 +57,8 @@ public class MockDataStream {
         try {
             readConfig("/config.txt");
 
-            final int CUTOFF_DIFFERENCE = 3;
+            final int CUTOFF_DIFFERENCE = 0;
             final int SERVER_PORT = 5005;
-            final long TIME_OUT = WARNING_WAIT_TIME - CUTOFF_DIFFERENCE; // Number of seconds we will allow for more connections to be made to the server
 
             Race race = RACE_BUILDER.buildRace(REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse());
             Server server = new Server(SERVER_PORT, MAX_PLAYERS);
@@ -69,7 +68,7 @@ public class MockDataStream {
             server.addObserver(listener);
             server.addObserver(testMock);
             server.openServer();
-            listener.setTimeout(System.currentTimeMillis() + TIME_OUT);
+            listener.setTimeout(System.currentTimeMillis() + ((WARNING_WAIT_TIME - CUTOFF_DIFFERENCE) * 1000));
             testMock.runSimulation(START_WAIT_TIME, WARNING_WAIT_TIME, PREP_WAIT_TIME, CUTOFF_DIFFERENCE);
             server.close();
         } catch (IOException e) {

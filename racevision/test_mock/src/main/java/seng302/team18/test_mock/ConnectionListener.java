@@ -62,6 +62,7 @@ public class ConnectionListener implements Observer {
             int sourceID = ids.get(players.size());
             executor.submit(() -> {
                 MessageBody message = null;
+
                 while (message == null && System.currentTimeMillis() < timeout) {
                     try {
                         message = receiver.nextMessage();
