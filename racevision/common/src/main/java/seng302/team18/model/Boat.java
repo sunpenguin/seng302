@@ -11,7 +11,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  */
 
 public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
-    private PolarPattern boatPolar = new AC35PolarPattern();
+    private PolarPattern polar = new AC35PolarPattern();
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
@@ -260,7 +260,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
      */
     public double getBoatTWS(double windSpeed, double windHeading) {
         double twa = getTrueWindAngle(windHeading);
-        return boatPolar.getSpeedForBoat(twa, windSpeed);
+        return polar.getSpeedForBoat(twa, windSpeed);
     }
 
     /**
@@ -275,7 +275,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         double flippedWindDirection = (windHeading + 180) % 360; // flipping wind direction
         double theta = 180 - flippedWindDirection;
         double boatPlusTheta = heading + theta;
-        double windPlusTheta = windHeading + theta; //will be 180
+//        double windPlusTheta = windHeading + theta; //will be 180
 
         if (boatPlusTheta > 360) {
             boatPlusTheta = boatPlusTheta - 360;
@@ -299,14 +299,38 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
 
 
     /**
-     * Sets heading so that VMG towards the destination is maximum and updates the speed.
+     * Sets heading so that VMG towards up wind is maximum and updates the speed.
      *
      * @param windSpeed  double, speed of the wind in knots
      * @param windDirection double, direction of the wind (degrees)
      */
-    public void setOptimalAngle(double windSpeed, double windDirection) {
-        double optimalAngle = boatPolar.optimalAngle(coordinate, destination, windSpeed);
+    public void optimalUpwind(double windSpeed, double windDirection) {
+        double optimalAngle = polar.upWindAngle(windSpeed, windDirection);
+        double optimalSpeed = polar.upWindSpeed(windSpeed);
         setHeading(optimalAngle);
-        setSpeed(getBoatTWS(windSpeed, windDirection));
+        setSpeed(optimalSpeed);
+        System.out.println("Boat::optimalUpwind");
+        System.out.println(optimalAngle);
+        System.out.println(optimalSpeed);
+        System.out.println();
     }
+
+
+    /**
+     * Sets heading so that VMG towards downwind is maximum and updates the speed.
+     *
+     * @param windSpeed  double, speed of the wind in knots
+     * @param windDirection double, direction of the wind (degrees)
+     */
+    public void optimalDownwind(double windSpeed, double windDirection) {
+        double optimalAngle = polar.downWindAngle(windSpeed, windDirection);
+        double optimalSpeed = polar.downWindSpeed(windSpeed);
+        setHeading(optimalAngle);
+        setSpeed(optimalSpeed);
+        System.out.println("Boat::optimalDownwind");
+        System.out.println(optimalAngle);
+        System.out.println(optimalSpeed);
+        System.out.println();
+    }
+
 }

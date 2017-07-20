@@ -11,9 +11,15 @@ public class BoatRotater {
 
     private List<Boat> boats;
     private double angle;
-    private boolean clockwise = false;
-    private boolean upwind = false;
+    private Boolean clockwise;
+    private Boolean upwind;
 
+    /**
+     * Constructor for BoatRotater
+     *
+     * @param boats boats to rotate.
+     * @param angle to rotate them
+     */
     public BoatRotater(List<Boat> boats, double angle) {
         this.boats = boats;
         this.angle = angle;
@@ -27,6 +33,9 @@ public class BoatRotater {
      * @param windSpeed in knots
      */
     public void rotateUpwind(double windDirection, double windSpeed) {
+        if (upwind == null) {
+            upwind = false;
+        }
         for (Boat boat : boats) {
             double oldHeading = boat.getHeading();
             double flippedWindDirection = (windDirection + 180) % 360; // flipping wind direction
@@ -38,7 +47,7 @@ public class BoatRotater {
             }
             this.clockwise = clockwise;
             upwind = true;
-            boat.setHeading(newHeading);
+            boat.setHeading((newHeading + 360) % 360);
             boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
         }
     }
@@ -51,12 +60,16 @@ public class BoatRotater {
      * @param windSpeed in knots
      */
     public void rotateDownwind(double windDirection, double windSpeed) {
+        if (upwind == null) {
+            upwind = true;
+        }
         for (Boat boat : boats) {
             double oldHeading = boat.getHeading();
             double newHeading = headTowardsWind(boat.getHeading(), windDirection, angle);
             boolean clockwise = isClockwiseRotation(oldHeading, newHeading);
             if (!upwind && clockwise != this.clockwise) {
                 newHeading = this.clockwise ? oldHeading + angle : oldHeading - angle;
+                newHeading = (newHeading + 360) % 360;
             }
             this.clockwise = clockwise;
             upwind = false;
@@ -81,22 +94,6 @@ public class BoatRotater {
     }
 
 
-
-    /**
-     * Determines if a number n is between the two limits.
-     * The order of limit1 and limit2 does not matter.
-     *
-     * @param n number we are testing
-     * @param limit1 either the upper or lower limit
-     * @param limit2 either the upper or lower limit
-     * @return if n is between limit1 and limit2
-     */
-    private boolean isBetween(double n, double limit1, double limit2) {
-        return limit1 < n && n < limit2 || limit2 < n && n < limit1;
-    }
-
-
-
     /**
      * Finds the new angle a boat should travel at to move towards the wind if headingChange is positive
      * or away from the wind if headingChange is negative.
@@ -108,7 +105,6 @@ public class BoatRotater {
      */
     private double headTowardsWind(double boatHeading, double windHeading, double headingChange) {
         double boatToWindClockwiseAngle = boatHeading - windHeading;
-//        double newHeading;
 
         if (boatToWindClockwiseAngle < 0) {
             boatToWindClockwiseAngle += 360;
@@ -125,5 +121,19 @@ public class BoatRotater {
         }
 
         return newHeading;
+    }
+
+
+    public void setVMG(double windDirection, double windSpeed, double deadZone) {
+        final double EAST = 90;
+        final double WEST = 270;
+        for (Boat boat : boats) {
+            double heading = boat.getHeading();
+            if (WEST - deadZone > heading && heading > EAST + deadZone) {
+                boat.optimalDownwind(windSpeed, windDirection);
+            } else if (WEST + deadZone < heading || heading < EAST - deadZone) {
+                boat.optimalUpwind(windSpeed, windDirection);
+            }
+        }
     }
 }

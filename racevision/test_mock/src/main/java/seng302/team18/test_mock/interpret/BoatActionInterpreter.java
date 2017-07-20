@@ -55,12 +55,13 @@ public class BoatActionInterpreter extends MessageInterpreter {
      * @param actions to be applied.
      */
     private void applyActions(Boat boat, BoatActionMessage actions) {
+        final double DEAD_ZONE = 20d;
         if (actions.isDownwind()) {
             boatRotater.rotateDownwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
         } else if (actions.isUpwind()) {
             boatRotater.rotateUpwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
         } else if (actions.isAutopilot()){
-            boat.setOptimalAngle(race.getCourse().getWindSpeed(), race.getCourse().getWindDirection());
+            boatRotater.setVMG(race.getCourse().getWindSpeed(), race.getCourse().getWindDirection(), DEAD_ZONE);
         } else if (actions.isSailsIn()) {
             boat.setSailOut(false);
         } else if (!actions.isSailsIn()) {
@@ -68,34 +69,5 @@ public class BoatActionInterpreter extends MessageInterpreter {
         }
     }
 
-
-    /**
-     * Finds the new angle a boat should travel at to move towards the wind if headingChange is positive
-     * or away from the wind if headingChange is negative.
-     *
-     * @param boatHeading the boats current heading.
-     * @param windHeading heading of the wind.
-     * @param headingChange how much the boat should head towards the boat.
-     * @return double, the new angle.
-     */
-    private double headTowardsWind(double boatHeading, double windHeading, double headingChange) {
-        double boatToWindClockwiseAngle = boatHeading - windHeading;
-
-        if (boatToWindClockwiseAngle < 0) {
-            boatToWindClockwiseAngle += 360;
-        }
-
-        if (boatToWindClockwiseAngle < 180) {
-            return boatHeading + headingChange;
-        }
-
-        double newHeading = boatHeading - headingChange;
-
-        if (newHeading < 0) {
-            newHeading += 360;
-        }
-
-        return newHeading;
-    }
 
 }

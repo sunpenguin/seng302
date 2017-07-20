@@ -27,7 +27,7 @@ public class BoatActionInterpreterTest {
         final int boatId = 101;
         race = new Race();
         player = new Boat("name", "shortName", boatId);
-        player.setHeading(0d);
+        player.setHeading(45d);
         notPlayer = new Boat("name", "shortName", boatId + 1);
         notPlayer.setHeading(0d);
         race.setStartingList(Arrays.asList(player, notPlayer));
@@ -38,7 +38,7 @@ public class BoatActionInterpreterTest {
 
     @Test
     public void upWindTest() {
-        double expected = 357d;
+        double expected = 42d;
         MessageBody upWind = new BoatActionMessage(false, false, false, true, false);
         interpreter.interpret(upWind);
         Assert.assertEquals(expected, player.getHeading(), 0.1);
@@ -48,7 +48,7 @@ public class BoatActionInterpreterTest {
 
     @Test
     public void downWindTest() {
-        double expected = 3d;
+        double expected = 48d;
         MessageBody downWind = new BoatActionMessage(false, false, false, false, true);
         interpreter.interpret(downWind);
         Assert.assertEquals(expected, player.getHeading(), 0.1);

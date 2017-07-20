@@ -48,7 +48,7 @@ public abstract class PolarPattern {
 
 
     /**
-     * From the polars list, a singular polar is selected.
+     * From the polars map, a singular polar is selected.
      * The polar with the closest windSpeed is selected.
      * Note: If distance from two polars is the same, the lower speed polar is selected.
      *
@@ -319,7 +319,7 @@ public abstract class PolarPattern {
     /**
      * Calculates the boatSpeed of a point on a singular polar
      *
-     * @param points List<XYPiar>, list of points on a polar length 1 or 2.
+     * @param points List of XYPair, list of points on a polar length 1 or 2.
      *               For point in list X = Polar windSpeed Y = angle.
      *               Points must be from the same polar.
      * @param boatTWA double, the true wind angle of the boat
@@ -399,5 +399,62 @@ public abstract class PolarPattern {
 
         return bestAngle;
     }
+
+
+    /**
+     * Gets the optimal angle for traveling upwind.
+     *
+     * @param windSpeed speed of wind.
+     * @param windDirection direction of wind
+     * @return optimal heading.
+     */
+    public double upWindAngle(double windSpeed, double windDirection) {
+        Polar polar = getPolarForWindSpeed(windSpeed);
+        System.out.println("PolarPattern::upWindAngle");
+        System.out.println(polar.getUpWindAngle());
+        System.out.println(polar.getUpWindSpeed());
+        System.out.println(polar.getDownWindAngle());
+        System.out.println(polar.getDownWindSpeed());
+        System.out.println();
+        return (polar.getUpWindAngle() + windDirection) % 360;
+    }
+
+
+    /**
+     * Gets the optimal speed for traveling upwind.
+     *
+     * @param windSpeed speed of wind.
+     * @return optimal speed.
+     */
+    public double upWindSpeed(double windSpeed) {
+        return getPolarForWindSpeed(windSpeed).getUpWindSpeed();
+    }
+
+
+
+    /**
+     * Gets the optimal angle for traveling down wind.
+     *
+     * @param windSpeed speed of wind.
+     * @param windDirection direction of wind
+     * @return optimal heading.
+     */
+    public double downWindAngle(double windSpeed, double windDirection) {
+        Polar polar = getPolarForWindSpeed(windSpeed);
+        return (polar.getDownWindAngle() + windDirection) % 360;
+    }
+
+
+
+    /**
+     * Gets the optimal speed for traveling down wind.
+     *
+     * @param windSpeed speed of wind.
+     * @return optimal speed.
+     */
+    public double downWindSpeed(double windSpeed) {
+        return getPolarForWindSpeed(windSpeed).getDownWindSpeed();
+    }
+
 
 }
