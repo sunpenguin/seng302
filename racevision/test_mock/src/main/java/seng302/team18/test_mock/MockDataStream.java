@@ -29,7 +29,11 @@ public class MockDataStream {
     private static int MAX_PLAYERS;
 
     /**
-     * Load a properties file and read the desired configuration settings
+     * Loads a properties file (config file) and reads the data.
+     *
+     * @param path Path to the properties file
+     * @throws IOException Thrown if error occurs when reading the file
+     * @throws InvalidPlayerNumberException Thrown if an invalid MAX_PLAYERS property is given in the file
      */
     public static void readConfig(String path) throws IOException, InvalidPlayerNumberException {
         Properties prop = new Properties();
@@ -49,9 +53,7 @@ public class MockDataStream {
 
 
     /**
-     * Set up the mock by reading the XML files and creating Race, Course objects.
-     * Run the test mock.
-     * Set up the PlayerControllerReader in its own thread for listening to player actions.
+     * Main setup method for the application.
      */
     private static void runMock() {
         try {

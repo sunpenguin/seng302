@@ -25,7 +25,6 @@ public class TestMock implements Observer {
     private final Server server;
     private final XmlMessageBuilder xmlMessageBuilder;
     private final List<Boat> boats;
-    private ZonedDateTime timeout;
 
 
     /**
@@ -41,6 +40,7 @@ public class TestMock implements Observer {
         this.boats = boats;
     }
 
+
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) {
@@ -49,6 +49,7 @@ public class TestMock implements Observer {
             sendXmlMessages(client);
         }
     }
+
 
     private void sendXmlMessages(ClientConnection newPlayer) {
         MessageGenerator generatorXmlRegatta = new XmlMessageGeneratorRegatta(xmlMessageBuilder.buildRegattaMessage(race));
@@ -63,6 +64,11 @@ public class TestMock implements Observer {
 
     /**
      * Simulate the race while sending the scheduled messages
+     *
+     * @param START_WAIT_TIME Number of seconds between the preparation phase and the start time
+     * @param WARNING_WAIT_TIME Number of seconds between the time the method is executed and warning phase
+     * @param PREP_WAIT_TIME Number of seconds between the warning phase and the preparation phase
+     * @param CUTOFF_DIFFERENCE Number of seconds before entering the warning phase for not allowing new connections
      */
     public void runSimulation(int START_WAIT_TIME, int WARNING_WAIT_TIME, int PREP_WAIT_TIME, int CUTOFF_DIFFERENCE) {
         final int LOOP_FREQUENCY = 60;
