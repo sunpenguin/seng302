@@ -17,13 +17,13 @@ public class RequestEncoderTest {
     private MessageEncoder encoder = new RequestEncoder();
 
     @Test
-    public void generateBodyFirstIndex() {
+    public void generateBodyFirstIndex() throws IOException {
         byte[] actualMessage = encoder.generateBody(requestMessage);
         Assert.assertEquals(1, actualMessage[0]);
     }
 
     @Test
-    public void generateBodyOtherIndex() {
+    public void generateBodyOtherIndex() throws IOException{
         byte[] actualMessage = encoder.generateBody(requestMessage);
         Assert.assertEquals(0, actualMessage[1]);
     }

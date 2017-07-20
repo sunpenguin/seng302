@@ -48,10 +48,6 @@ public class TestMock implements Observer {
             race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
             sendXmlMessages(client);
         }
-//        else if (arg instanceof Integer) {
-//            Integer id = (Integer) arg;
-//            race.getStartingList().removeIf(boat -> boat.getId().equals(id));
-//        }
     }
 
     private void sendXmlMessages(ClientConnection newPlayer) {
@@ -94,7 +90,7 @@ public class TestMock implements Observer {
                 server.stopAcceptingConnections();
             }
 
-            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(warningTime)) {
+            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusMinutes(TIME_WARNING))) {
                 race.setStatus(RaceStatus.WARNING);
 
             } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(prepTime)) {

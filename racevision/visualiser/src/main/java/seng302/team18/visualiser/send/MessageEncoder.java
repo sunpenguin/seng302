@@ -74,7 +74,7 @@ public abstract class MessageEncoder {
      * @param message to create the body of the message from.
      * @return the message as a byte array
      */
-    protected abstract byte[] generateBody(MessageBody message);
+    protected abstract byte[] generateBody(MessageBody message) throws IOException;
 
 
     /**
