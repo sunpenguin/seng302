@@ -12,6 +12,7 @@ public class BoatRotater {
     private List<Boat> boats;
     private double angle;
     private boolean clockwise = false;
+    private boolean upwind = false;
 
     public BoatRotater(List<Boat> boats, double angle) {
         this.boats = boats;
@@ -31,22 +32,12 @@ public class BoatRotater {
             double flippedWindDirection = (windDirection + 180) % 360; // flipping wind direction
             double newHeading = headTowardsWind(boat.getHeading(), flippedWindDirection, angle);
             boolean clockwise = isClockwiseRotation(oldHeading, newHeading);
-            if (clockwise != this.clockwise) {
+            if (upwind && clockwise != this.clockwise) {
                 newHeading = this.clockwise ? oldHeading + angle : oldHeading - angle;
                 newHeading = (newHeading + 360) % 360;
             }
             this.clockwise = clockwise;
-//            clockwise = isClockwiseRotation(oldHeading, newHeading);
-//            System.out.println(clockwise);
-//
-//            if (oldHeading == windDirection) {
-//                System.out.println("equal");
-//                newHeading = clockwise ? oldHeading + angle : oldHeading - angle;
-//                newHeading = (newHeading + 360) % 360;
-//            } else if (isBetween(windDirection, oldHeading, newHeading)) {
-//                System.out.println("between");
-//                newHeading = windDirection;
-//            }
+            upwind = true;
             boat.setHeading(newHeading);
             boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
         }
@@ -64,20 +55,11 @@ public class BoatRotater {
             double oldHeading = boat.getHeading();
             double newHeading = headTowardsWind(boat.getHeading(), windDirection, angle);
             boolean clockwise = isClockwiseRotation(oldHeading, newHeading);
-            if (clockwise != this.clockwise) {
+            if (!upwind && clockwise != this.clockwise) {
                 newHeading = this.clockwise ? oldHeading + angle : oldHeading - angle;
             }
             this.clockwise = clockwise;
-//            System.out.println(clockwise);
-
-//            if (oldHeading == (windDirection + 180) % 360) {
-//                System.out.println("equal");
-//                newHeading = clockwise ? oldHeading + angle : oldHeading - angle;
-//                newHeading = (newHeading + 360) % 360;
-//            } else if (isBetween(windDirection, oldHeading, newHeading)) {
-//                System.out.println("between");
-//                newHeading = (windDirection + 180) % 360;
-//            }
+            upwind = false;
             boat.setHeading(newHeading);
             boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
         }

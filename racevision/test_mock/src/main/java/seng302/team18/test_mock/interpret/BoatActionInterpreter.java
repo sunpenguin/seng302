@@ -57,21 +57,8 @@ public class BoatActionInterpreter extends MessageInterpreter {
     private void applyActions(Boat boat, BoatActionMessage actions) {
         if (actions.isDownwind()) {
             boatRotater.rotateDownwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
-//            double windDirection = race.getCourse().getWindDirection();
-//            double windSpeed = race.getCourse().getWindSpeed();
-//            double newHeading = headTowardsWind(boat.getHeading(), windDirection, headingChange);
-//
-//            boat.setHeading(newHeading);
-//            boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
         } else if (actions.isUpwind()) {
             boatRotater.rotateUpwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
-//            double windSpeed = race.getCourse().getWindSpeed();
-//            double windDirection = race.getCourse().getWindDirection();
-//            double flippedWindDirection = (windDirection + 180) % 360; // flipping wind direction
-//            double newHeading = headTowardsWind(boat.getHeading(), flippedWindDirection, headingChange);
-//
-//            boat.setHeading(newHeading);
-//            boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
         } else if (actions.isAutopilot()){
             boat.setOptimalAngle(race.getCourse().getWindSpeed(), race.getCourse().getWindDirection());
         } else if (actions.isSailsIn()) {
