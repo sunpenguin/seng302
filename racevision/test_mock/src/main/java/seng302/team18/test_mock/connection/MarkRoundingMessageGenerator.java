@@ -43,7 +43,7 @@ public class MarkRoundingMessageGenerator extends MessageGenerator {
         // Version number
         outputSteam.write(0xFF & VERSION_NUMBER);
 
-        // Time
+        // Time  // TODO afj19, 20th July: check that this is correctly being used as epoch milliseconds
         outputSteam.write(ByteCheck.longTo6ByteArray(markRoundingEvent.getTime()));
 
         //Ack number

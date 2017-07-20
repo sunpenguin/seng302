@@ -42,7 +42,6 @@ public class BoatSailInterpreter extends MessageInterpreter {
                     boat = boatIterator.next();
                 }
                 if (boat.getId().equals(actionMessage.getSourceId())) {
-//                    System.out.println("Bro, my sails are out yea? " + actionMessage.getSailsOut());
                     boat.setSailOut(actionMessage.getSailsOut());
                 }
             }

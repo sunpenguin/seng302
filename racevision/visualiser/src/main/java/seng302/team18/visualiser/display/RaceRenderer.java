@@ -48,18 +48,20 @@ public class RaceRenderer {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
+
             if (displayBoat == null) {
                 displayBoat = new DisplayWake(pixelMapper,
                         new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++)));
                 if (boat.isControlled()) {
                     displayBoat = new BoatHighlight(pixelMapper, displayBoat);
-                } else {
-                    displayBoat = new DisplaySail(pixelMapper, displayBoat);
                 }
+                displayBoat = new DisplaySail(pixelMapper, displayBoat);
                 displayBoat.addToGroup(group);
+
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
             Coordinate boatCoordinates = boat.getCoordinate();
+
             if (boatCoordinates != null) {
                 displayBoat.setCoordinate(boatCoordinates);
                 displayBoat.setSpeed(boat.getSpeed());
@@ -67,16 +69,16 @@ public class RaceRenderer {
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
                 displayBoat.setScale(pixelMapper.getZoomFactor());
-                boat.setSailOut(false);
-                if (boat.isSailOut()) {
-                    ((DisplaySail) displayBoat).setWindDirection(POWERED_UP + race.getCourse().getWindDirection());
 
-                }else{
-                    ((DisplaySail) displayBoat).setWindDirection(DOWNWIND + race.getCourse().getWindDirection());
+                if (boat.isSailOut()) {
+                    ((DisplaySail) displayBoat).setWindDirection(180 + race.getCourse().getWindDirection());
+                } else{
+                    ((DisplaySail) displayBoat).setWindDirection(200 + race.getCourse().getWindDirection());
                 }
             }
-            }
         }
+    }
+
 
 
     /**
@@ -102,6 +104,7 @@ public class RaceRenderer {
     private void drawTrail(Boat boat, PixelMapper pixelMapper) {
         final double MAX_HEADING_DIFFERENCE = 0.75d; // smaller => smoother trail, higher => more fps
         DisplayTrail trail = trailMap.get(boat.getShortName());
+
         if (trail == null) {
             final int MAX_TRAIL_LENGTH = 100;
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
@@ -132,6 +135,12 @@ public class RaceRenderer {
     }
 
 
+    /**
+     * Sets the annotition types that are visible.
+     *
+     * @param type , AnnotationType, the type of annotiation.
+     * @param isVisible , Boolean, if the type is visible.
+     */
     public void setVisibleAnnotations(AnnotationType type, Boolean isVisible) {
         for (DisplayBoat boat : displayBoats.values()) {
             boat.setAnnotationVisible(type, isVisible);
@@ -146,6 +155,7 @@ public class RaceRenderer {
         for (Map.Entry<String, DisplayBoat> entry : displayBoats.entrySet()) {
             boatColors.put(entry.getKey(), entry.getValue().getColor());
         }
+
         return boatColors;
     }
 }

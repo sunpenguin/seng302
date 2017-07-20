@@ -11,7 +11,7 @@ import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
 /**
- * A class to Display the sail on the GUI
+ * The class to display the sails on the boat.
  */
 public class DisplaySail extends DisplayBoatDecorator {
 
@@ -67,8 +67,9 @@ public class DisplaySail extends DisplayBoatDecorator {
      */
     public void addToGroup(Group group){
         group.getChildren().add(sail);
-        sail.toFront();
         super.addToGroup(group);
+        sail.toFront();
+
     }
 
     /**

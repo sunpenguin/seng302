@@ -26,16 +26,15 @@ public class BoatTest {
     double BoatHeadingN2 = 360;
 
     //WindDirections
-    double windDirectionN = 0;
-    double windDirectionNE = 45;
-
-    double windDirectionE = 90;
-    double windDirectionSE = 120;
-    double windDirectionS = 180;
-    double windDirectionSW = 220;
-    double windDirectionW = 270;
-    double windDirectionNW = 315;
-    double windDirectionN2 = 360;
+    double windDirectionN = 180;
+    double windDirectionNE = 225;
+    double windDirectionE = 270;
+    double windDirectionSE = 300;
+    double windDirectionS = 0;
+    double windDirectionSW = 40;
+    double windDirectionW = 90;
+    double windDirectionNW = 135;
+    double windDirectionN2 = 180;
 
     @Before
     public void setUp(){

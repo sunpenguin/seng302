@@ -90,6 +90,7 @@ public class BoatsXmlEncoderTest {
         message.setDefaultFlagZ(DEFAULT_FLAG_Z);
     }
 
+
     @Before
     public void setUp() throws Exception {
         setUpMessage();
@@ -103,6 +104,7 @@ public class BoatsXmlEncoderTest {
         root = (Element) doc.getElementsByTagName(Ac35XmlBoatComponents.ROOT_BOATS.toString()).item(0);
     }
 
+
     @Test
     public void encodeModifiedTimeTest() throws Exception {
         final Element elementModified = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_MODIFIED.toString()).item(0);
@@ -112,17 +114,18 @@ public class BoatsXmlEncoderTest {
         assertTrue("xml creation time has not been correctly encoded", isAfterBefore && isBeforeAfter);
     }
 
+
+
     @Test
     public void encodeVersionTest() throws Exception {
-
         final Element elementVersion = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_VERSION.toString()).item(0);
         final String version = elementVersion.getTextContent();
         assertEquals("version has not been correctly encoded", message.getVersion(), Integer.parseInt(version));
     }
 
+
     @Test
     public void encodeSettingsTest_raceBoatType() throws Exception {
-
         final Element elementSettings = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_SETTINGS.toString()).item(0);
         final Element elementType = (Element) elementSettings.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_RACE_BOAT_TYPE.toString()).item(0);
         final String type = elementType.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_TYPE.toString());
@@ -130,11 +133,12 @@ public class BoatsXmlEncoderTest {
         assertEquals("race boat type has not been encoded correctly", message.getRaceBoatType(), type);
     }
 
+
     @Test
     public void encodeSettingsTest_boatDimension() throws Exception {
-
         final Element elementSettings = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_SETTINGS.toString()).item(0);
         final Element elementDimension = (Element) elementSettings.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOAT_DIMENSION.toString()).item(0);
+
         final String boatLength = elementDimension.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_BOAT_LENGTH.toString());
         final String hullLength = elementDimension.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_HULL_LENGTH.toString());
 
@@ -142,11 +146,12 @@ public class BoatsXmlEncoderTest {
         assertEquals("boat dimension - hull length has not been encoded correctly", ((Double) message.getHullLength()).toString(), hullLength);
     }
 
+
     @Test
     public void encodeSettingsTest_ZoneSize() throws Exception {
-
         final Element elementSettings = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_SETTINGS.toString()).item(0);
         final Element elementZoneSize = (Element) elementSettings.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_ZONE_SIZE.toString()).item(0);
+
         final String markZoneSize = elementZoneSize.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_MARK_ZONE_SIZE.toString());
         final String courseZoneSize = elementZoneSize.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_COURSE_ZONE_SIZE.toString());
 
@@ -154,11 +159,12 @@ public class BoatsXmlEncoderTest {
         assertEquals("course zone size has not been encoded correctly", ((Double) message.getCourseZoneSize()).toString(), courseZoneSize);
     }
 
+
     @Test
     public void encodeSettingsTest_ZoneLimits() throws Exception {
-
         final Element elementSettings = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_SETTINGS.toString()).item(0);
         final Element elementZoneLimits = (Element) elementSettings.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_ZONE_LIMITS.toString()).item(0);
+
         final String limit1 = elementZoneLimits.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_LIMIT_1.toString());
         final String limit2 = elementZoneLimits.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_LIMIT_2.toString());
         final String limit3 = elementZoneLimits.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_LIMIT_3.toString());
@@ -172,6 +178,7 @@ public class BoatsXmlEncoderTest {
         assertEquals("zone limit 5 has not been encoded correctly", ((Double) message.getLimit5()).toString(), limit5);
     }
 
+
     @Test
     public void encodeBoatTest_type() throws Exception {
         final Element elementBoats = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOATS.toString()).item(0);
@@ -184,6 +191,7 @@ public class BoatsXmlEncoderTest {
         }
     }
 
+
     @Test
     public void encodeBoatTest_sourceId() throws Exception {
         final Element elementBoats = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOATS.toString()).item(0);
@@ -191,15 +199,17 @@ public class BoatsXmlEncoderTest {
 
         for (int i = 0; i < boatNodes.getLength(); i++) {
             Element elementBoat = (Element) boatNodes.item(i);
+
             String encodedId = elementBoat.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_SOURCE_ID.toString());
             String expectedId = message.getBoats().get(i).getId().toString();
+
             assertEquals(String.format("sourceId for boat %d has not been encoded correctly", i), expectedId, encodedId);
         }
     }
 
+
     @Test
     public void encodeBoatTest_hullNumber() throws Exception {
-
         final Element elementBoats = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOATS.toString()).item(0);
         final NodeList boatNodes = elementBoats.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOAT.toString());
 
@@ -210,9 +220,9 @@ public class BoatsXmlEncoderTest {
         }
     }
 
+
     @Test
     public void encodeBoatTest_stoweName() throws Exception {
-
         final Element elementBoats = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOATS.toString()).item(0);
         final NodeList boatNodes = elementBoats.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOAT.toString());
 
@@ -223,6 +233,7 @@ public class BoatsXmlEncoderTest {
         }
     }
 
+
     @Test
     public void encodeBoatTest_shortName() throws Exception {
         final Element elementBoats = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOATS.toString()).item(0);
@@ -230,11 +241,14 @@ public class BoatsXmlEncoderTest {
 
         for (int i = 0; i < boatNodes.getLength(); i++) {
             Element elementBoat = (Element) boatNodes.item(i);
+
             String encodedShortName = elementBoat.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_SHORT.toString());
             String expectedShortName = message.getBoats().get(i).getShortName();
+
             assertEquals(String.format("short name for boat %d has not been encoded correctly", i), expectedShortName, encodedShortName);
         }
     }
+
 
     @Test
     public void encodeBoatTest_boatName() throws Exception {
@@ -243,42 +257,48 @@ public class BoatsXmlEncoderTest {
 
         for (int i = 0; i < boatNodes.getLength(); i++) {
             Element elementBoat = (Element) boatNodes.item(i);
+
             String encodedName = elementBoat.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_BOAT.toString());
             String expectedName = message.getBoats().get(i).getName();
+
             assertEquals(String.format("name for boat %d has not been encoded correctly", i), expectedName, encodedName);
         }
     }
 
+
     @Test
     public void encodeBoatTest_gps() throws Exception {
-
         final Element elementBoats = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOATS.toString()).item(0);
         final NodeList boatNodes = elementBoats.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOAT.toString());
 
         for (int i = 0; i < boatNodes.getLength(); i++) {
             Element elementBoat = (Element) boatNodes.item(i);
             Element elementGps = (Element) elementBoat.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_GPS_POSITION.toString()).item(0);
+
             String encodedX = elementGps.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_X.toString());
             String encodedY = elementGps.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_Y.toString());
             String encodedZ = elementGps.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_Z.toString());
+
             assertEquals(String.format("gps x for boat %d has not been encoded correctly", i), ((Double) message.getDefaultGpsX()).toString(), encodedX);
             assertEquals(String.format("gps y for boat %d has not been encoded correctly", i), ((Double) message.getDefaultGpsY()).toString(), encodedY);
             assertEquals(String.format("gps z for boat %d has not been encoded correctly", i), ((Double) message.getDefaultGpsZ()).toString(), encodedZ);
         }
     }
 
+
     @Test
     public void encodeBoatTest_flag() throws Exception {
-
         final Element elementBoats = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOATS.toString()).item(0);
         final NodeList boatNodes = elementBoats.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOAT.toString());
 
         for (int i = 0; i < boatNodes.getLength(); i++) {
             Element elementBoat = (Element) boatNodes.item(i);
             Element elementFlag = (Element) elementBoat.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_FLAG_POSITION.toString()).item(0);
+
             String encodedX = elementFlag.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_X.toString());
             String encodedY = elementFlag.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_Y.toString());
             String encodedZ = elementFlag.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_Z.toString());
+
             assertEquals(String.format("flag x for boat %d has not been encoded correctly", i), ((Double) message.getDefaultFlagX()).toString(), encodedX);
             assertEquals(String.format("flag y for boat %d has not been encoded correctly", i), ((Double) message.getDefaultFlagY()).toString(), encodedY);
             assertEquals(String.format("flag z for boat %d has not been encoded correctly", i), ((Double) message.getDefaultFlagZ()).toString(), encodedZ);

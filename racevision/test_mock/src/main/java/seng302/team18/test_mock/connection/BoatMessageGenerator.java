@@ -52,7 +52,7 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
         byte[] roll = ByteBuffer.allocate(2).array();
         byte[] speedBytes = ByteBuffer.allocate(2).array();
         byte[] cog = ByteBuffer.allocate(2).array();
-        int speedOverGround = new SpeedConverter().knotsToMms(boat.getSpeed()).intValue();
+        int speedOverGround = setSpeed();
         byte[] sog = ByteCheck.intToUShort(speedOverGround);
         byte[] windInfo = ByteBuffer.allocate(10).array();
 
@@ -81,6 +81,19 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
         outStream.write(rudderAng);
 
         return outStream.toByteArray();
+    }
+
+    /**
+     * Sets the speed depending on if the sail is in or out.
+     *
+     * @return the altered speed depending on the sails.
+     */
+    private int setSpeed() {
+        if (boat.isSailOut()) {
+            return 0;
+        } else {
+            return new SpeedConverter().knotsToMms(boat.getSpeed()).intValue();
+        }
     }
 
     /**

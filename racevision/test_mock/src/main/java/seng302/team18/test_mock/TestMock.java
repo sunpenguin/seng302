@@ -5,7 +5,7 @@ import seng302.team18.model.MarkRoundingEvent;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceStatus;
 import seng302.team18.test_mock.connection.*;
-import seng302.team18.test_mock.model.XmlMessageBuilder;
+import seng302.team18.test_mock.ac35_xml_encoding.XmlMessageBuilder;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -80,17 +80,17 @@ public class TestMock implements Observer {
         scheduledMessages.add(new HeartBeatMessageGenerator());
 
         // Set race time
-        race.setStartTime(ZonedDateTime.now().minusMinutes(TIME_START));
+        race.setStartTime(ZonedDateTime.now().minusSeconds(TIME_START));
         race.setStatus(RaceStatus.PRESTART);
 
         do {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
-            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusMinutes(TIME_WARNING))) {
+            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusSeconds(TIME_WARNING))) {
                 race.setStatus(RaceStatus.WARNING);
 
-            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().plusMinutes(TIME_PREP)))) {
+            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().plusSeconds(TIME_PREP)))) {
 
                 race.setStatus(RaceStatus.PREPARATORY);
                 server.stopAcceptingConnections();

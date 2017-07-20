@@ -15,7 +15,7 @@ public class WindDisplay extends AnimationTimer {
     private Label speedLabel;
     private double direction;
     private double speed;
-    private double scaleY = 20;
+    private double scaleY = 40;
 
     public WindDisplay(Race race, Polygon arrow, Label speedLabel) {
         this.race = race;
@@ -32,7 +32,7 @@ public class WindDisplay extends AnimationTimer {
         }
         double newWindDirection = race.getCourse().getWindDirection();
         double newWindSpeed = race.getCourse().getWindSpeed();
-        speedLabel.setText(String.format("%.4f", newWindSpeed)+ " knots");
+        speedLabel.setText(String.format("%.2f", newWindSpeed)+ " knots");
         updateWindDisplay(newWindDirection, newWindSpeed);
     }
 
@@ -41,6 +41,8 @@ public class WindDisplay extends AnimationTimer {
             arrow.setScaleY(0.3);
         } else if (newWindSpeed / scaleY <= 0.75) {
             arrow.setScaleY(newWindSpeed / scaleY);
+        } else {
+            arrow.setScaleY(0.75);
         }
         arrow.setRotate(newWindDirection);
     }

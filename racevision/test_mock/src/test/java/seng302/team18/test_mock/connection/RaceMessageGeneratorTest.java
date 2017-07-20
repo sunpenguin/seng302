@@ -6,6 +6,7 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.test_mock.model.*;
 import seng302.team18.util.ByteCheck;
+import seng302.team18.util.SpeedConverter;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -57,9 +58,9 @@ public class RaceMessageGeneratorTest {
 
     @Before
     public void setUp() throws IOException {
-        BaseRaceBuilder raceBuilder = new RaceBuilder1();
-        BaseRegattaBuilder regattaBuilder = new RegattaBuilder1();
-        BaseCourseBuilder courseBuilder = new CourseBuilder1();
+        AbstractRaceBuilder raceBuilder = new RaceBuilder1();
+        AbstractRegattaBuilder regattaBuilder = new RegattaBuilder1();
+        AbstractCourseBuilder courseBuilder = new CourseBuilder1();
         ZonedDateTime now = ZonedDateTime.now();
         currentTime = now.toInstant().toEpochMilli();
         testRace = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
@@ -119,9 +120,10 @@ public class RaceMessageGeneratorTest {
 
     @Test
     public void windSpeedTest() {
-        double expectedWindSpeed = testRace.getCourse().getWindSpeed();//5000;
-        double actualWindSpeed = ByteCheck.byteToInt(generatedBytes, WIND_SPEED_P, WIND_SPEED_L);
-        assertEquals(expectedWindSpeed, actualWindSpeed, 1e-6);
+        double expectedWindSpeed = testRace.getCourse().getWindSpeed(); // 10
+        double windSpeed = ByteCheck.byteToInt(generatedBytes, WIND_SPEED_P, WIND_SPEED_L);
+        double actualWindSpeed = new SpeedConverter().mmsToKnots(windSpeed);
+        assertEquals(expectedWindSpeed, actualWindSpeed, 1e-2);
     }
 
 

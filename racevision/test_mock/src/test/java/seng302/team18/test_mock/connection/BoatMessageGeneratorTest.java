@@ -61,9 +61,9 @@ public class BoatMessageGeneratorTest {
 
     @Test
     public void boatMessageGeneratorTest() throws IOException {
-        BaseRaceBuilder raceBuilder = new RaceBuilder1();
-        BaseRegattaBuilder regattaBuilder = new RegattaBuilder1();
-        BaseCourseBuilder courseBuilder = new CourseBuilder1();
+        AbstractRaceBuilder raceBuilder = new RaceBuilder1();
+        AbstractRegattaBuilder regattaBuilder = new RegattaBuilder1();
+        AbstractCourseBuilder courseBuilder = new CourseBuilder1();
 
         final Race testRace = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
         byte[] generatedBytes;
