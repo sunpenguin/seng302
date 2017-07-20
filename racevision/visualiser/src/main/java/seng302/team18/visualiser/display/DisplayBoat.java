@@ -45,9 +45,10 @@ public class DisplayBoat implements IBoat {
     private boolean isControlled;
     private Coordinate boatCenter;
     private Boat boatObject;
+    private boolean intersects;
 
     private PixelMapper pixelMapper;
-    private Polyline boat;
+    private Polyline boatPoly;
     private Color boatColor;
     private final double BOAT_HEIGHT = 10;
     private final double BOAT_WIDTH = 10;
@@ -75,16 +76,16 @@ public class DisplayBoat implements IBoat {
         this.pixelMapper = pixelMapper;
         this.shortName = name;
         this.boatColor = boatColor;
-        boat = new Polyline();
-        boat.getPoints().addAll(BOAT_SHAPE);
-        boat.setFill(boatColor);
-        boat.setOnMouseClicked(event -> {
+        boatPoly = new Polyline();
+        boatPoly.getPoints().addAll(BOAT_SHAPE);
+        boatPoly.setFill(boatColor);
+        boatPoly.setOnMouseClicked(event -> {
             if (location != null) {
                 pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
                 pixelMapper.setViewPortCenter(location);
             }
         });
-        boat.getTransforms().addAll(rotation, boatZoom);
+        boatPoly.getTransforms().addAll(rotation, boatZoom);
         setUpAnnotations();
     }
 
@@ -103,8 +104,8 @@ public class DisplayBoat implements IBoat {
     public void setCoordinate(Coordinate coordinate) {
         location = coordinate;
         XYPair pixels = pixelMapper.coordToPixel(coordinate);
-        boat.setLayoutX(pixels.getX());
-        boat.setLayoutY(pixels.getY());
+        boatPoly.setLayoutX(pixels.getX());
+        boatPoly.setLayoutY(pixels.getY());
         updateAnnotationText();
     }
 
@@ -133,10 +134,10 @@ public class DisplayBoat implements IBoat {
 
 
     public void addToGroup(Group group) {
-        group.getChildren().add(boat);
+        group.getChildren().add(boatPoly);
         group.getChildren().add(annotation);
         annotation.toFront();
-        boat.toFront();
+        boatPoly.toFront();
     }
 
 
@@ -172,8 +173,22 @@ public class DisplayBoat implements IBoat {
             }
         }
         annotation.setText(textToDisplay);
-        annotation.setLayoutX(boat.getLayoutX() + ANNOTATION_OFFSET_X);
-        annotation.setLayoutY(boat.getLayoutY());
+        annotation.setLayoutX(boatPoly.getLayoutX() + ANNOTATION_OFFSET_X);
+        annotation.setLayoutY(boatPoly.getLayoutY());
+    }
+
+    /**
+     * Checks if a boat is overlapping another boat
+     * @param boats List<DisplayBoat>, list of boats to check against
+     */
+    public void checkForCollision(List<DisplayBoat> boats) {
+        for (DisplayBoat boat : boats){
+            System.out.println(this.getBoatPoly());
+//            if (boat.getBoatPoly().getLayoutBounds().intersects(boatPoly.getLayoutBounds())) {
+//                System.out.println("Oh, no");
+//            }
+        }
+
     }
 
 
@@ -316,19 +331,7 @@ public class DisplayBoat implements IBoat {
         isControlled = controlled;
     }
 
-    public boolean isSailOut() {
-        return sailOut;
-    }
-
-    public void setSailOut(boolean sailOut) {
-        this.sailOut = sailOut;
-    }
-
-    public Boat getBoatObject() {
-        return boatObject;
-    }
-
-    public void setBoatObject(Boat boatObject) {
-        this.boatObject = boatObject;
+    public Polyline getBoatPoly() {
+        return boatPoly;
     }
 }

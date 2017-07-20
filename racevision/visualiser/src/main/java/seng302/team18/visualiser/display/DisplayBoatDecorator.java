@@ -4,6 +4,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polyline;
 import seng302.team18.model.Coordinate;
 
 /**
@@ -226,6 +227,11 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
     @Override
     public void setTimeAtLastMark(Long timeAtLastMark) {
         boat.setTimeAtLastMark(timeAtLastMark);
+    }
+
+    @Override
+    public Polyline getBoatPoly() {
+        return boat.getBoatPoly();
     }
 
 }

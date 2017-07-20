@@ -73,6 +73,7 @@ public class RaceRenderer {
                     ((DisplaySail) displayBoat).setWindDirection(200 + race.getCourse().getWindDirection());
                 }
             }
+//            displayBoat.checkForCollision(new ArrayList<DisplayBoat>(displayBoats.values()));
         }
     }
 
