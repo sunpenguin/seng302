@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.send;
 
+import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.message.BoatActionMessage;
 
@@ -10,18 +11,30 @@ import static org.junit.Assert.assertEquals;
  */
 public class BoatActionMessageTest {
 
-    private BoatActionMessage testBoatActionMessage = new BoatActionMessage(true, true,
-            true, true, false);
+    private BoatActionMessage testBoatActionMessage;
+
+
+    @Before
+    public void setUp() {
+        testBoatActionMessage = new BoatActionMessage(555);
+        testBoatActionMessage.setAutopilot(true);
+        testBoatActionMessage.setSailsIn(true);
+        testBoatActionMessage.setTackGybe(true);
+        testBoatActionMessage.setUpwind(true);
+    }
+
 
     @Test
     public void messageTypeTest(){
         assertEquals(100, testBoatActionMessage.getType());
     }
 
+
     @Test
     public void autoPilotTest(){
         assertEquals(true, testBoatActionMessage.isAutopilot());
     }
+
 
     @Test
     public void sailsInTest(){
@@ -34,10 +47,12 @@ public class BoatActionMessageTest {
         assertEquals(true, testBoatActionMessage.isTackGybe());
     }
 
+
     @Test
     public void upwindTest(){
         assertEquals(true, testBoatActionMessage.isUpwind());
     }
+
 
     @Test
     public void downwindTest(){
