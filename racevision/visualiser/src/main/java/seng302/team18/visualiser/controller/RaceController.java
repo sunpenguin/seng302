@@ -30,10 +30,9 @@ import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
-import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.Receiver;
-import seng302.team18.model.*;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.model.Boat;
+import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.send.Sender;
@@ -43,8 +42,6 @@ import seng302.team18.visualiser.util.SparklineDataPoint;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * The controller class for the Main Window.
@@ -295,6 +292,8 @@ public class RaceController implements Observer {
 
     /**
      * Sets the cell values for the race table, these are place, boat name and boat speed.
+     *
+     * @param boatColors a map from short name to colour for the boats
      */
     private void setUpTable(Map<String, Color> boatColors) {
         Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
@@ -377,7 +376,7 @@ public class RaceController implements Observer {
 
 
     /**
-     * retrieves the wind direction, scales the size of the arrow and then draws it on the Group
+     * Retrieves the wind direction, scales the size of the arrow and then draws it on the Group
      */
     private void startWindDirection() {
 //        arrow.setScaleX(0.4);
@@ -387,10 +386,12 @@ public class RaceController implements Observer {
 
 
     /**
-     * initialises race variables and begins the race loop. Adds listeners to the race view to listen for when the window
+     * Initialises race variables and begins the race loop. Adds listeners to the race view to listen for when the window
      * has been re-sized.
      *
-     * @param race The race which is going to be displayed.
+     * @param race        the race which is going to be displayed.
+     * @param sender      the sender
+     * @param interpreter the interpreter
      */
     public void setUp(Race race, Interpreter interpreter, Sender sender) {
 //        this.receiver = receiver;
@@ -424,9 +425,10 @@ public class RaceController implements Observer {
     }
 
 
-
     /**
      * Set up and initialise interpreter variables, adding interpreters of each relevant type to the global interpreter.
+     *
+     * @return the initialised interpreter
      */
     private MessageInterpreter initialiseInterpreter() {
         MessageInterpreter interpreter = new CompositeMessageInterpreter();
