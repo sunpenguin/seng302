@@ -5,13 +5,13 @@ package seng302.team18.message;
  */
 public class AC35MarkRoundingMessage implements MessageBody {
     private int boatId;
-    private long time;
+    private long time; // TODO afj19, 20th July: check that this is correctly being used as epoch milliseconds
 
     /**
      * Constructor for AC35MarkRoundingMessage
      *
-     * @param boatId
-     * @param time
+     * @param boatId the id of the boat
+     * @param time the time when the mark was rounded, in epoch seconds
      */
     public AC35MarkRoundingMessage(int boatId, long time) {
         this.boatId = boatId;

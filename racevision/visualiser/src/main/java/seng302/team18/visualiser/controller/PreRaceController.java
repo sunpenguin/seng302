@@ -20,6 +20,7 @@ import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.send.Sender;
+
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -44,14 +45,17 @@ public class PreRaceController {
     /**
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
      * duration before the race starts.
-     * @param race The race to be set up in the pre-race.
+     *
+     * @param race     The race to be set up in the pre-race.
+     * @param receiver the receiver
+     * @param sender   the sender
      */
     public void setUp(Race race, Receiver receiver, Sender sender) {
 //        this.interpreter = receiver;
         this.sender = sender;
         this.race = race;
         preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
-        raceNameText.setText(race.getName());
+        raceNameText.setText(race.getRegatta().getRegattaName());
         displayTimeZone(race.getStartTime());
         startTimeLabel.setText(race.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
         setUpLists();
@@ -71,7 +75,8 @@ public class PreRaceController {
 
 
     /**
-     * SHOWS THE TIME ZONE OF THE RACE
+     * Shows the time zone of the race
+     *
      * @param zoneTime USED TO GET THE UTC OFFSET
      */
     private void displayTimeZone(ZonedDateTime zoneTime) {
@@ -99,6 +104,8 @@ public class PreRaceController {
 
     /**
      * Set up and initialise interpreter variables, adding interpreters of each relevant type to the global interpreter.
+     *
+     * @return the message interpreter
      */
     private MessageInterpreter initialiseInterpreter() {
         MessageInterpreter interpreter = new CompositeMessageInterpreter();
@@ -117,7 +124,7 @@ public class PreRaceController {
     /**
      * Switches from the pre-race screen to the race screen.
      *
-     * @throws IOException
+     * @throws IOException if the FXML file cannot be loaded
      */
     public void showRace() throws IOException {
         if (hasChanged) {

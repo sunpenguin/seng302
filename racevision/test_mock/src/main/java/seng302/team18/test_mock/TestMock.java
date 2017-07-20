@@ -5,7 +5,7 @@ import seng302.team18.model.MarkRoundingEvent;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceStatus;
 import seng302.team18.test_mock.connection.*;
-import seng302.team18.test_mock.model.XmlMessageBuilder;
+import seng302.team18.test_mock.ac35_xml_encoding.XmlMessageBuilder;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;

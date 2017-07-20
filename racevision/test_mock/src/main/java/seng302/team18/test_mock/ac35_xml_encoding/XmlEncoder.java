@@ -34,8 +34,23 @@ public abstract class XmlEncoder<T extends XmlMessage> {
         return writer.getBuffer().toString();
     }
 
+
+    /**
+     * Builds a document model from the given message
+     *
+     * @param xmlMessage the message to encode
+     * @return the message encoded into a document
+     * @throws ParserConfigurationException if the XML encoding fails
+     */
     public abstract DOMSource getDomSource(T xmlMessage) throws ParserConfigurationException;
 
+
+    /**
+     * Creates a new document
+     *
+     * @return a new document
+     * @throws ParserConfigurationException if the document cannot be created
+     */
     protected Document createDocument() throws ParserConfigurationException {
         return DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
     }

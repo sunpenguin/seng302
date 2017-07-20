@@ -39,7 +39,6 @@ public class Race {
         status = RaceStatus.NOT_ACTIVE;
         currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()); //.now(course.getTimeZone())
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()); //.now(course.getTimeZone()).plusSeconds(300)
-        setRaceName("");
         raceType = RaceType.MATCH;
     }
 
@@ -164,8 +163,9 @@ public class Race {
     /**
      * Updates the position and heading of every boat in the race.
      *
-     * @param time
+     * @param time the time in seconds
      */
+    // TODO afj19, 20th July: check the temporal unit here
     public void updateBoats(double time) { // time in seconds
         for (Boat boat : startingList) {
             if (!finishedList.contains(boat)) {
@@ -179,9 +179,10 @@ public class Race {
     /**
      * Updates a boats position then heading.
      *
-     * @param boat
-     * @param time
+     * @param boat the boat
+     * @param time the time (units?)
      */
+    // TODO afj19, 20th July: check the temporal unit here
     private void updateBoat(Boat boat, double time) {
         updatePosition(boat, time);
         updateHeading(boat);
@@ -225,8 +226,8 @@ public class Race {
      * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
      * and sets the destination to the next marks coordinates.
      *
-     * @param boat
-     * @param nextLeg
+     * @param boat the boat
+     * @param nextLeg the next leg
      */
 
     public void setNextLeg(Boat boat, Leg nextLeg) {
@@ -339,14 +340,6 @@ public class Race {
         List<MarkRoundingEvent> events = markRoundingEvents;
         markRoundingEvents = new ArrayList<>();
         return events;
-    }
-
-    public String getName() {
-        return regatta.getRegattaName();
-    }
-
-    public void setRaceName(String name) {
-        regatta.setRegattaName(name);
     }
 
     public int getPlayerId() {
