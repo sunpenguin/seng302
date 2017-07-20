@@ -38,7 +38,7 @@ public class DisplayWake extends DisplayBoatDecorator {
     /**
      * Creates a new instance of DisplayBoat
      *
-     * @param pixelMapper
+     * @param pixelMapper the mapper from coordinate system to screen pixels
      * @param boat        the display boat being decorated
      */
     public DisplayWake(PixelMapper pixelMapper, DisplayBoat boat) {
@@ -52,7 +52,6 @@ public class DisplayWake extends DisplayBoatDecorator {
         wake.getTransforms().addAll(wakeSpeed, rotation, wakeZoom);
         wake.toBack();
     }
-
 
 
     public void setCoordinate(Coordinate coordinate) {
@@ -81,8 +80,8 @@ public class DisplayWake extends DisplayBoatDecorator {
 
     public void addToGroup(Group group) {
         group.getChildren().add(wake);
-        wake.toBack();
         super.addToGroup(group);
+        wake.toBack();
     }
 
 
