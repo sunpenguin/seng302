@@ -35,7 +35,7 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
-import seng302.team18.visualiser.send.Sender;
+import seng302.team18.send.Sender;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
@@ -140,7 +140,7 @@ public class RaceController implements Observer {
                             send = false;
                     }
                     if (send) {
-                        sender.send(message);
+//                        sender.send(message);
                     }
                 }
             };

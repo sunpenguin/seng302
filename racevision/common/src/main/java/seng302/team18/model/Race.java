@@ -90,18 +90,20 @@ public class Race {
     }
 
     private void setCourseForBoat(Boat boat) {
-        // Set Leg
-        boat.setLegNumber(course.getLegs().get(0).getLegNumber());
-        // Set Dest
-        boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCoordinate());
-        // Set Coordinate
-        Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
-        boat.setCoordinate(midPoint);
-        // Set Heading
-        GPSCalculations gps = new GPSCalculations();
-        boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
-        double tws = boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection());
-        boat.setSpeed(tws);
+        if (!course.getLegs().isEmpty()) {
+            // Set Leg
+            boat.setLegNumber(course.getLegs().get(0).getLegNumber());
+            // Set Dest
+            boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCoordinate());
+            // Set Coordinate
+            Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
+            boat.setCoordinate(midPoint);
+            // Set Heading
+            GPSCalculations gps = new GPSCalculations();
+            boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
+            double tws = boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection());
+            boat.setSpeed(tws);
+        }
     }
 
     public void addParticipant(Boat boat) {

@@ -1,13 +1,13 @@
-package seng302.team18.visualiser.send;
+package seng302.team18.send;
 
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
+import seng302.team18.send.MessageEncoder;
 import seng302.team18.util.ByteCheck;
 import seng302.team18.util.CRCGenerator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * Encodes RequestMessages to byte arrays.

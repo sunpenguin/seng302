@@ -34,6 +34,7 @@ public class Course {
     }
 
     public Course() {
+        legs = new ArrayList<>();
         compoundMarks = new ArrayList<>();
         boundaries = new ArrayList<>();
         markRoundings = new ArrayList<>();

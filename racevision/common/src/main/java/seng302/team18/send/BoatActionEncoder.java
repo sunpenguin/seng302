@@ -1,9 +1,8 @@
-package seng302.team18.visualiser.send;
+package seng302.team18.send;
 
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.MessageBody;
-import java.util.Arrays;
-import java.util.List;
+import seng302.team18.send.MessageEncoder;
 
 /**
  * Encodes RequestMessages to byte arrays.

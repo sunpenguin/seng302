@@ -1,4 +1,4 @@
-package seng302.team18.visualiser.send;
+package seng302.team18.send;
 
 import seng302.team18.message.MessageBody;
 import java.io.IOException;
@@ -47,13 +47,9 @@ public class Sender {
      * @param body of the message to be sent
      * @throws IOException
      */
-    public void send(MessageBody body) {
-        try {
-            MessageEncoder composer = factory.getEncoder(body.getType());
-            outStream.write(composer.encode(body));
-            outStream.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void send(MessageBody body) throws IOException {
+        MessageEncoder composer = factory.getEncoder(body.getType());
+        outStream.write(composer.encode(body));
+        outStream.flush();
     }
 }

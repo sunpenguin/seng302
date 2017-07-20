@@ -1,8 +1,9 @@
-package seng302.team18.visualiser.send;
+package seng302.team18.send;
 
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.message.BoatActionMessage;
+import seng302.team18.send.BoatActionEncoder;
 
 import static org.junit.Assert.assertEquals;
 

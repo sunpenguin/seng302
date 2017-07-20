@@ -14,10 +14,17 @@ public class Server extends Observable {
     private final int MAX_CLIENT_CONNECTION = 6;
 
     private ServerSocket serverSocket;
-    private final int PORT;
+    private final int port;
 
     public Server(int port) {
-        this.PORT = port;
+        this.port = port;
+        try {
+            serverSocket = ServerSocketFactory.getDefault().createServerSocket(this.port);
+        } catch (IOException e) {
+            System.err.println("Could not listen on port " + this.port);
+            System.err.println("Exiting program");
+            System.exit(-1);
+        }
     }
 
     /**
@@ -25,14 +32,7 @@ public class Server extends Observable {
      * Blocks waiting for the first client connection, then opens a second thread to listen for subsequent connections
      */
     public void openServer() {
-        try {
-            serverSocket = ServerSocketFactory.getDefault().createServerSocket(PORT);
-        } catch (IOException e) {
-            System.err.println("Could not listen on port " + PORT);
-            System.err.println("Exiting program");
-            System.exit(-1);
-        }
-        System.out.println("Stream opened successfully on port: " + PORT);
+        System.out.println("Stream opened successfully on port: " + port);
 
         acceptClientConnection();
         listener.start();
@@ -59,7 +59,7 @@ public class Server extends Observable {
     }
 
 
-    public void stopAcceptingConnections() {
+    public void stopAccepting() {
         listener.stopListening();
     }
 

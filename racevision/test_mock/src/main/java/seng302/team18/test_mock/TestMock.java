@@ -93,7 +93,7 @@ public class TestMock implements Observer {
             } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().plusSeconds(TIME_PREP)))) {
 
                 race.setStatus(RaceStatus.PREPARATORY);
-                server.stopAcceptingConnections();
+                server.stopAccepting();
 
                 for (Boat b : race.getStartingList()) {
                     scheduledMessages.add(new BoatMessageGenerator(b));
