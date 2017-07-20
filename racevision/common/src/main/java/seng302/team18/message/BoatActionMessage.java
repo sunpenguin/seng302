@@ -7,6 +7,7 @@ import seng302.team18.message.MessageBody;
  */
 public class BoatActionMessage implements MessageBody{
 
+    private int id = 420;
     private boolean autopilot = false;
     private boolean sailsIn = false;
     private boolean tackGybe = false;
@@ -23,6 +24,10 @@ public class BoatActionMessage implements MessageBody{
      */
     public BoatActionMessage() {}
 
+    public BoatActionMessage(int id) {
+        this.id = id;
+    }
+
 
     /**
      * Constructor for the BoatActionMessage.
@@ -31,7 +36,7 @@ public class BoatActionMessage implements MessageBody{
      * @param sailsIn the sailsIn property (accelerating is true, luffing is false)
      * @param tackGybe the tackGybe property
      * @param upwind the upwind property
-     * @param downwind the downwind property
+     * @param downwind the downwind propertyId()
      */
     public BoatActionMessage(boolean autopilot, boolean sailsIn, boolean tackGybe, boolean upwind, boolean downwind) {
         this.autopilot = autopilot;

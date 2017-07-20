@@ -66,8 +66,6 @@ public class BoatActionInterpreter extends MessageInterpreter {
         } else if (!actions.isSailsIn()) {
             boat.setSailOut(true);
         }
-
-//        boat.setSailOut(!actions.isSailsIn());
     }
 
 

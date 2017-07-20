@@ -114,8 +114,8 @@ public class CourseBuilder1 extends BaseCourseBuilder {
 
     @Override
     protected double getWindSpeed() {
-        return 10;
-    }
+        return 100;
+    } // Original = 10
 
     @Override
     protected ZoneId getTimeZone() {

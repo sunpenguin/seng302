@@ -121,6 +121,7 @@ public class RaceController implements Observer {
             keyEvent -> {
                 if (keyEvent.getCode() != null) {
                     BoatActionMessage message = new BoatActionMessage();
+                    boolean send = true;
                     switch (keyEvent.getCode()){
                         case SPACE:
                             message.setAutopilot(true);
@@ -138,8 +139,12 @@ public class RaceController implements Observer {
                             sailIn = !sailIn;
                             message.setSailsIn(sailIn);
                             break;
+                        default:
+                            send = false;
                     }
-                    sender.send(message);
+                    if (send) {
+                        sender.send(message);
+                    }
                 }
             };
         raceViewPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEventHandler);
