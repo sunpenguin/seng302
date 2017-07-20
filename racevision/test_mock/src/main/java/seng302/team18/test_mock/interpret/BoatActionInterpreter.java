@@ -18,6 +18,7 @@ public class BoatActionInterpreter extends MessageInterpreter {
     private Race race;
     private int id;
     private List<Boat> boats;
+    private BoatRotater boatRotater;
 
     /**
      * Constructor for BoatActionInterpreter.
@@ -32,6 +33,7 @@ public class BoatActionInterpreter extends MessageInterpreter {
                 .stream()
                 .filter(boat -> boat.getId().equals(id))
                 .collect(Collectors.toList());
+        this.boatRotater = new BoatRotater(boats, 3d);
     }
 
 
@@ -53,23 +55,23 @@ public class BoatActionInterpreter extends MessageInterpreter {
      * @param actions to be applied.
      */
     private void applyActions(Boat boat, BoatActionMessage actions) {
-        final double headingChange = 3d;
-
         if (actions.isDownwind()) {
-            double windDirection = race.getCourse().getWindDirection();
-            double windSpeed = race.getCourse().getWindSpeed();
-            double newHeading = headTowardsWind(boat.getHeading(), windDirection, headingChange);
-
-            boat.setHeading(newHeading);
-            boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
+            boatRotater.rotateDownwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
+//            double windDirection = race.getCourse().getWindDirection();
+//            double windSpeed = race.getCourse().getWindSpeed();
+//            double newHeading = headTowardsWind(boat.getHeading(), windDirection, headingChange);
+//
+//            boat.setHeading(newHeading);
+//            boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
         } else if (actions.isUpwind()) {
-            double windSpeed = race.getCourse().getWindSpeed();
-            double windDirection = race.getCourse().getWindDirection();
-            double flippedWindDirection = (windDirection + 180) % 360; // flipping wind direction
-            double newHeading = headTowardsWind(boat.getHeading(), flippedWindDirection, headingChange);
-
-            boat.setHeading(newHeading);
-            boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
+            boatRotater.rotateUpwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
+//            double windSpeed = race.getCourse().getWindSpeed();
+//            double windDirection = race.getCourse().getWindDirection();
+//            double flippedWindDirection = (windDirection + 180) % 360; // flipping wind direction
+//            double newHeading = headTowardsWind(boat.getHeading(), flippedWindDirection, headingChange);
+//
+//            boat.setHeading(newHeading);
+//            boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
         } else if (actions.isAutopilot()){
             boat.setOptimalAngle(race.getCourse().getWindSpeed(), race.getCourse().getWindDirection());
         } else if (actions.isSailsIn()) {

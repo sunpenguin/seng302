@@ -69,9 +69,9 @@ public class TestMock implements Observer {
      */
     public void runSimulation() {
         final int LOOP_FREQUENCY = 60;
-        final int TIME_START = -5;
-        final int TIME_WARNING = -3;
-        final int TIME_PREP = -2;
+        final int TIME_START = -1;
+        final int TIME_WARNING = -59;
+        final int TIME_PREP = -58;
 
         long timeCurr = System.currentTimeMillis();
         long timeLast;
@@ -87,10 +87,10 @@ public class TestMock implements Observer {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
-            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusMinutes(TIME_WARNING))) {
+            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusSeconds(TIME_WARNING))) {
                 race.setStatus(RaceStatus.WARNING);
 
-            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().plusMinutes(TIME_PREP)))) {
+            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().plusSeconds(TIME_PREP)))) {
 
                 race.setStatus(RaceStatus.PREPARATORY);
                 server.stopAcceptingConnections();
