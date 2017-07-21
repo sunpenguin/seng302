@@ -5,6 +5,9 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import seng302.team18.util.GPSCalculations;
+
+import java.util.List;
 
 /**
  * A class which stores information about a boat.
@@ -303,5 +306,27 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         }
 
         return trueWindAngle;
+    }
+
+    /**
+     * Method to check if boat has collided with another boat
+     *
+     * @param obstacles List<AbstractBoat>, list of boats to check if boat has collied
+     * @return boolean, true if boat has collided with any of the abstract boats
+     */
+    public boolean hasCollided(List<Boat> obstacles){
+        boolean hasCollided = false;
+        GPSCalculations calculator = new GPSCalculations();
+
+        for(Boat obstacle : obstacles) {
+            if (!obstacle.equals(this)) {
+                double collisionZone = (obstacle.boatLength / 2) + (boatLength / 2);
+                double distanceBetween = calculator.distance(coordinate, obstacle.getCoordinate());
+                if (distanceBetween < collisionZone) {
+                    hasCollided = true;
+                }
+            }
+        }
+        return hasCollided;
     }
 }

@@ -269,6 +269,9 @@ public class Race {
         if (boat.isSailOut()) {
             speed = 0;
         }
+        if (boat.hasCollided(startingList)){
+            System.out.println("oh no");
+        }
         double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
         double secondsTime = time / 1000.0d;
         double distanceTravelled = mpsSpeed * secondsTime;

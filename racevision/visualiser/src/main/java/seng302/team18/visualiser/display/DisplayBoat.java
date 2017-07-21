@@ -45,7 +45,6 @@ public class DisplayBoat implements IBoat {
     private boolean isControlled;
     private Coordinate boatCenter;
     private Boat boatObject;
-    private boolean intersects;
 
     private PixelMapper pixelMapper;
     private Polyline boatPoly;
@@ -175,20 +174,6 @@ public class DisplayBoat implements IBoat {
         annotation.setText(textToDisplay);
         annotation.setLayoutX(boatPoly.getLayoutX() + ANNOTATION_OFFSET_X);
         annotation.setLayoutY(boatPoly.getLayoutY());
-    }
-
-    /**
-     * Checks if a boat is overlapping another boat
-     * @param boats List<DisplayBoat>, list of boats to check against
-     */
-    public void checkForCollision(List<DisplayBoat> boats) {
-        for (DisplayBoat boat : boats){
-            System.out.println(this.getBoatPoly());
-//            if (boat.getBoatPoly().getLayoutBounds().intersects(boatPoly.getLayoutBounds())) {
-//                System.out.println("Oh, no");
-//            }
-        }
-
     }
 
 
