@@ -18,24 +18,30 @@ public enum BoatType {
     MARSHALL("Marshall"),
     PIN("Pin");
 
+
     private final static Map<String, BoatType> STRING_BOAT_TYPE_MAP = Collections.unmodifiableMap(initializeMapping());
+
 
     /**
      * The value name of the boat type, as used in Boats.xml of the AC35 SDI protocol.
      */
     private final String typeName;
 
+
     BoatType(String typeName) {
         this.typeName = typeName;
     }
+
 
     public String toString() {
         return typeName;
     }
 
+
     private static Map<String, BoatType> initializeMapping() {
         return Arrays.stream(values()).collect(Collectors.toMap(BoatType::toString, bt -> bt));
     }
+
 
     public static BoatType ofTypeName(String typeName) {
         return STRING_BOAT_TYPE_MAP.get(typeName);
