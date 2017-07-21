@@ -48,7 +48,6 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
 
         double windSpeed = race.getCourse().getWindSpeed();
         byte[] raceWindSpeedBytes = ByteCheck.shortToByteArray(new SpeedConverter().knotsToMms(windSpeed).shortValue());
-                // Currently 18 km/h TODO: make this a field of race or boat?
 
         byte numBoatsByte = (byte) race.getStartingList().size();
 

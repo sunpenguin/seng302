@@ -55,13 +55,13 @@ public class BoatActionInterpreter extends MessageInterpreter {
      * @param actions to be applied.
      */
     private void applyActions(Boat boat, BoatActionMessage actions) {
-        final double DEAD_ZONE = 20d;
+        final double DEAD_ZONE = 10d;
         if (actions.isDownwind()) {
             boatRotater.rotateDownwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
         } else if (actions.isUpwind()) {
             boatRotater.rotateUpwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
         } else if (actions.isAutopilot()){
-            boatRotater.setVMG(race.getCourse().getWindSpeed(), race.getCourse().getWindDirection(), DEAD_ZONE);
+            boatRotater.setVMG(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed(), DEAD_ZONE);
         } else if (actions.isSailsIn()) {
             boat.setSailOut(false);
         } else if (!actions.isSailsIn()) {
