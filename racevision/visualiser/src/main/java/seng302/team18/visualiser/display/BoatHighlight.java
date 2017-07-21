@@ -50,8 +50,8 @@ public class BoatHighlight extends DisplayBoatDecorator {
 
     public void addToGroup(Group group) {
         group.getChildren().add(highlight);
-        highlight.toFront();
         super.addToGroup(group);
+        highlight.toBack();
     }
 
 

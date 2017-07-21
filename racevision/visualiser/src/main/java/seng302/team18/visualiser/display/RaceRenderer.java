@@ -6,6 +6,7 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.util.PixelMapper;
+
 import java.util.*;
 
 /**
@@ -50,18 +51,22 @@ public class RaceRenderer {
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
 
             if (displayBoat == null) {
-                displayBoat = new DisplayWake(pixelMapper,
-                        new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++)));
+                displayBoat = new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++));
+
+                // Wake
+                displayBoat = new DisplayWake(pixelMapper, displayBoat);
+                // Highlight
                 if (boat.isControlled()) {
                     displayBoat = new BoatHighlight(pixelMapper, displayBoat);
                 }
+                // Sail
                 displayBoat = new DisplaySail(pixelMapper, displayBoat);
-                displayBoat.addToGroup(group);
 
+                displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
-            Coordinate boatCoordinates = boat.getCoordinate();
 
+            Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
                 displayBoat.setCoordinate(boatCoordinates);
                 displayBoat.setSpeed(boat.getSpeed());
@@ -71,14 +76,13 @@ public class RaceRenderer {
                 displayBoat.setScale(pixelMapper.getZoomFactor());
 
                 if (boat.isSailOut()) {
-                    ((DisplaySail) displayBoat).setWindDirection(180 + race.getCourse().getWindDirection());
-                } else{
-                    ((DisplaySail) displayBoat).setWindDirection(200 + race.getCourse().getWindDirection());
+                    ((DisplaySail) displayBoat).setWindDirection(DOWNWIND + race.getCourse().getWindDirection());
+                } else {
+                    ((DisplaySail) displayBoat).setWindDirection(POWERED_UP + race.getCourse().getWindDirection());
                 }
             }
         }
     }
-
 
 
     /**
@@ -138,7 +142,7 @@ public class RaceRenderer {
     /**
      * Sets the annotition types that are visible.
      *
-     * @param type , AnnotationType, the type of annotiation.
+     * @param type      , AnnotationType, the type of annotiation.
      * @param isVisible , Boolean, if the type is visible.
      */
     public void setVisibleAnnotations(AnnotationType type, Boolean isVisible) {

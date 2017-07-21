@@ -348,6 +348,8 @@ public class Race {
 
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
+
+        startingList.forEach(boat -> boat.setControlled(boat.getId().equals(playerId)));
     }
 
     public RaceType getRaceType() {
