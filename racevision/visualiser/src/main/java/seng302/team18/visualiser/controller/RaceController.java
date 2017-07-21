@@ -117,7 +117,7 @@ public class RaceController implements Observer {
         final EventHandler<KeyEvent> keyEventHandler =
             keyEvent -> {
                 if (keyEvent.getCode() != null) {
-                    BoatActionMessage message = new BoatActionMessage();
+                    BoatActionMessage message = new BoatActionMessage(race.getPlayerId());
                     boolean send = true;
                     switch (keyEvent.getCode()){
                         case SPACE:
