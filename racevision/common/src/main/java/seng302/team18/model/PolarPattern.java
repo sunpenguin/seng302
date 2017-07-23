@@ -410,12 +410,6 @@ public abstract class PolarPattern {
      */
     public double upWindAngle(double windSpeed, double windDirection) {
         Polar polar = getPolarForWindSpeed(windSpeed);
-        System.out.println("PolarPattern::upWindAngle");
-        System.out.println(polar.getUpWindAngle());
-        System.out.println(polar.getUpWindSpeed());
-        System.out.println(polar.getDownWindAngle());
-        System.out.println(polar.getDownWindSpeed());
-        System.out.println();
         return (polar.getUpWindAngle() + windDirection) % 360;
     }
 
