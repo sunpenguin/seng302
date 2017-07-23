@@ -260,6 +260,7 @@ public class Race {
     /**
      * Updates the boats coordinates to move closer to the boats destination.
      * Amount moved is proportional to the time passed
+     * Detects if there has been a collision between the boat and another abstract boat after updating the position
      *
      * @param boat to be moved
      * @param time that has passed
@@ -282,8 +283,14 @@ public class Race {
         boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
     }
 
+    /**
+     * Handles the collision when one is detected by printing to the console
+     *
+     * @param boat The boat that the collision was detected with
+     */
+    // TODO Handle the collision by either stopping the boat or changing its heading (csl62)
     private void handleCollision(Boat boat){
-        boat.setSpeed(0);
+        //boat.setSpeed(0);
         System.out.println("Oh no");
     }
 
