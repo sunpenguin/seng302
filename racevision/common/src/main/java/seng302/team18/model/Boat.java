@@ -10,7 +10,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  * A class which stores information about a boat.
  */
 
-public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
+public class Boat extends AbstractBoat implements GeographicLocation {
     private PolarPattern polar = new AC35PolarPattern();
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems

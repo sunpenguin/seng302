@@ -16,7 +16,7 @@ import seng302.team18.visualiser.util.PixelMapper;
 public class DisplaySail extends DisplayBoatDecorator {
 
     private Polyline sail;
-    private double windDirection;
+    private double apparentWindDirection;
     private PixelMapper pixelMapper;
     private final Rotate rotation = new Rotate(0, 0, 0);
     private final Scale zoom = new Scale(1, 1, 0, 0);
@@ -25,6 +25,9 @@ public class DisplaySail extends DisplayBoatDecorator {
             0.0, 0.0,
             0.0, SAIL_LENGTH / 2
     };
+    private double heading;
+    private boolean sailOut;
+
 
     /**
      * Creates a new instance of DisplayBoat
@@ -40,6 +43,7 @@ public class DisplaySail extends DisplayBoatDecorator {
         sail.toFront();
     }
 
+
     public void setCoordinate(Coordinate coordinate) {
         XYPair pixels = pixelMapper.coordToPixel(coordinate);
         sail.setLayoutX(pixels.getX());
@@ -47,11 +51,13 @@ public class DisplaySail extends DisplayBoatDecorator {
         super.setCoordinate(coordinate);
     }
 
+
     public void setScale(double scaleFactor) {
         zoom.setX(scaleFactor);
         zoom.setY(scaleFactor);
         super.setScale(scaleFactor);
     }
+
 
     public void addToGroup(Group group){
         group.getChildren().add(sail);
@@ -60,25 +66,27 @@ public class DisplaySail extends DisplayBoatDecorator {
 
     }
 
+
+    public void setApparentWindDirection(double apparentWind) {
+        this.apparentWindDirection = apparentWind;
+        super.setApparentWindDirection(apparentWind);
+    }
+
     public void setHeading(double heading) {
-        rotation.setAngle(360 - windDirection);
+        this.heading  = heading;
         super.setHeading(heading);
     }
 
-    public double getWindDirection() {
-        return windDirection;
-    }
+    @Override
+    public void setSailOut(boolean sailOut) {
+        this.sailOut = sailOut;
 
-    public void setWindDirection(double windDirection) {
-        this.windDirection = windDirection;
-        rotation.setAngle(windDirection);
-    }
+        if (sailOut) {
+            rotation.setAngle(apparentWindDirection);
+        } else {
+            rotation.setAngle(heading);
+        }
 
-    public void setRotation(double rotation){
-        this.rotation.setAngle(rotation);
-    }
-
-    public Rotate getRotation() {
-        return rotation;
+        super.setSailOut(sailOut);
     }
 }

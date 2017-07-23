@@ -4,7 +4,6 @@ import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
-import seng302.team18.model.IBoat;
 import seng302.team18.model.Race;
 
 import java.util.List;

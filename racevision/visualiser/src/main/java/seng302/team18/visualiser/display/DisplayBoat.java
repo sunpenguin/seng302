@@ -12,7 +12,6 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
-import seng302.team18.model.IBoat;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -25,26 +24,18 @@ import java.util.stream.Collectors;
 /**
  * A class that displays the boat on the GUI
  */
-public class DisplayBoat implements IBoat {
+public class DisplayBoat {
 
-    private String boatName;
     private String shortName;
     private DoubleProperty speed = new SimpleDoubleProperty();
     //Set to -1 initially to prevent null pointer problems
-    private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
-    private Integer id;
     private Coordinate location;
-    private Coordinate destination;
-    private IntegerProperty place;
-    private double windDirection;
     private Long timeTilNextMark;
     private Long timeSinceLastMark = 0L;
     private Long timeAtLastMark;
-    private int status;
     private boolean sailOut;
     private boolean isControlled;
-    private Coordinate boatCenter;
-    private Boat boatObject;
+    private double apparentWindDirection;
 
     private PixelMapper pixelMapper;
     private Polyline boat;
@@ -99,7 +90,6 @@ public class DisplayBoat implements IBoat {
     }
 
 
-    @Override
     public void setCoordinate(Coordinate coordinate) {
         location = coordinate;
         XYPair pixels = pixelMapper.coordToPixel(coordinate);
@@ -114,7 +104,6 @@ public class DisplayBoat implements IBoat {
     }
 
 
-    @Override
     public void setSpeed(double speed) {
         this.speed.setValue(speed);
         updateAnnotationText();
@@ -177,11 +166,6 @@ public class DisplayBoat implements IBoat {
     }
 
 
-
-    public Double[] getBOAT_SHAPE() {
-        return BOAT_SHAPE;
-    }
-
     public Color getColor() {
         return boatColor;
     }
@@ -202,31 +186,6 @@ public class DisplayBoat implements IBoat {
     }
 
 
-    public DoubleProperty speedProperty() {
-        return speed;
-    }
-
-
-    public int getLegNumber() {
-        return boatLegNumber.get();
-    }
-
-
-    public IntegerProperty legNumberProperty() {
-        return boatLegNumber;
-    }
-
-
-    public void setLegNumber(int boatLegNumber) {
-        this.boatLegNumber.set(boatLegNumber);
-    }
-
-
-    public String getName() {
-        return boatName;
-    }
-
-
     public String getShortName() {
         return shortName;
     }
@@ -234,36 +193,6 @@ public class DisplayBoat implements IBoat {
 
     public double getSpeed() {
         return speed.get();
-    }
-
-
-    public Coordinate getDestination() {
-        return destination;
-    }
-
-
-    public void setDestination(Coordinate destination) {
-        this.destination = destination;
-    }
-
-
-    public int getPlace() {
-        return place.get();
-    }
-
-
-    public void setPlace(int place) {
-        this.place.set(place);
-    }
-
-
-    public IntegerProperty placeProperty() {
-        return place;
-    }
-
-
-    public Integer getId() {
-        return id;
     }
 
 
@@ -297,16 +226,6 @@ public class DisplayBoat implements IBoat {
     }
 
 
-    public int getStatus() {
-        return status;
-    }
-
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-
     public boolean isControlled() {
         return isControlled;
     }
@@ -316,19 +235,11 @@ public class DisplayBoat implements IBoat {
         isControlled = controlled;
     }
 
-    public boolean isSailOut() {
-        return sailOut;
-    }
-
     public void setSailOut(boolean sailOut) {
         this.sailOut = sailOut;
     }
 
-    public Boat getBoatObject() {
-        return boatObject;
-    }
-
-    public void setBoatObject(Boat boatObject) {
-        this.boatObject = boatObject;
+    public void setApparentWindDirection(double apparentWind) {
+        this.apparentWindDirection = apparentWind;
     }
 }
