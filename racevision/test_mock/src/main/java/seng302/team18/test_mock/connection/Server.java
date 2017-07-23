@@ -14,10 +14,11 @@ public class Server extends Observable {
     private final int MAX_CLIENT_CONNECTION = 6;
 
     private ServerSocket serverSocket;
-    private final int PORT;
+    private final int port;
+    private boolean closeOnEmpty;
 
     public Server(int port) {
-        this.PORT = port;
+        this.port = port;
     }
 
     /**
@@ -26,13 +27,13 @@ public class Server extends Observable {
      */
     public void openServer() {
         try {
-            serverSocket = ServerSocketFactory.getDefault().createServerSocket(PORT);
+            serverSocket = ServerSocketFactory.getDefault().createServerSocket(port);
         } catch (IOException e) {
-            System.err.println("Could not listen on port " + PORT);
+            System.err.println("Could not listen on port " + port);
             System.err.println("Exiting program");
             System.exit(-1);
         }
-        System.out.println("Stream opened successfully on port: " + PORT);
+        System.out.println("Stream opened successfully on port: " + port);
 
         acceptClientConnection();
         listener.start();
@@ -99,10 +100,19 @@ public class Server extends Observable {
             ClientConnection client = clients.get(i);
             if (!client.sendMessage(message)) {
                 clients.remove(i);
-//                setChanged();
-//                notifyObservers(client.getId());
+                if (clients.isEmpty() && closeOnEmpty) {
+                    close();
+                    setChanged();
+                    notifyObservers(ServerState.CLOSED);
+                }
             }
         }
+    }
+
+
+
+    public void setCloseOnEmpty(boolean close) {
+        closeOnEmpty = close;
     }
 
 

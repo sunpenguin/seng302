@@ -25,7 +25,7 @@ public class TestMock implements Observer {
     private final Server server;
     private final XmlMessageBuilder xmlMessageBuilder;
     private final List<Boat> boats;
-
+    private boolean open = true;
 
     /**
      * The messages to be sent on a schedule during race simulation
@@ -46,11 +46,9 @@ public class TestMock implements Observer {
             ClientConnection client = (ClientConnection) arg;
             race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
             sendXmlMessages(client);
+        } else if (arg instanceof ServerState) {
+            open = !((ServerState) arg).equals(ServerState.CLOSED);
         }
-//        else if (arg instanceof Integer) {
-//            Integer id = (Integer) arg;
-//            race.getStartingList().removeIf(boat -> boat.getId().equals(id));
-//        }
     }
 
     private void sendXmlMessages(ClientConnection newPlayer) {
@@ -82,7 +80,6 @@ public class TestMock implements Observer {
         // Set race time
         race.setStartTime(ZonedDateTime.now().minusMinutes(TIME_START));
         race.setStatus(RaceStatus.PRESTART);
-
         do {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
@@ -125,7 +122,7 @@ public class TestMock implements Observer {
                 e.printStackTrace();
             }
 
-        } while (!race.isFinished());
+        } while (!race.isFinished() && open);
 
         // Sends final message
         ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
