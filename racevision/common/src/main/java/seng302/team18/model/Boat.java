@@ -301,36 +301,46 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
     /**
      * Sets heading so that VMG towards up wind is maximum and updates the speed.
      *
+     * Pre-condition: boat is heading towards from 0 to 180 degree.
+     *
      * @param windSpeed  double, speed of the wind in knots
      * @param windDirection double, direction of the wind (degrees)
      */
     public void optimalUpwind(double windSpeed, double windDirection) {
-        double optimalAngle = polar.upWindAngle(windSpeed, windDirection);
-        double optimalSpeed = polar.upWindSpeed(windSpeed);
-        setHeading(optimalAngle);
-        setSpeed(optimalSpeed);
-        System.out.println("Boat::optimalUpwind");
-        System.out.println(optimalAngle);
-        System.out.println(optimalSpeed);
-        System.out.println();
+        if (heading >= 0 && heading <= 90) {
+            double optimalAngle = polar.upWindAngle(windSpeed, windDirection);
+            double optimalSpeed = polar.upWindSpeed(windSpeed);
+            setHeading(optimalAngle);
+            setSpeed(optimalSpeed);
+        } else if (heading >= 270 && heading <= 360) {
+            double optimalAngle = 360 - polar.upWindAngle(windSpeed, windDirection);
+            double optimalSpeed = polar.upWindSpeed(windSpeed);
+            setHeading(optimalAngle);
+            setSpeed(optimalSpeed);
+        }
     }
 
 
     /**
      * Sets heading so that VMG towards downwind is maximum and updates the speed.
      *
+     * Pre-condition: boat is heading towards from 90 to 270 degree.
+     *
      * @param windSpeed  double, speed of the wind in knots
      * @param windDirection double, direction of the wind (degrees)
      */
     public void optimalDownwind(double windSpeed, double windDirection) {
-        double optimalAngle = polar.downWindAngle(windSpeed, windDirection);
-        double optimalSpeed = polar.downWindSpeed(windSpeed);
-        setHeading(optimalAngle);
-        setSpeed(optimalSpeed);
-        System.out.println("Boat::optimalDownwind");
-        System.out.println(optimalAngle);
-        System.out.println(optimalSpeed);
-        System.out.println();
+        if (heading >= 90 && heading <= 180) {
+            double optimalAngle = polar.downWindAngle(windSpeed, windDirection);
+            double optimalSpeed = polar.downWindSpeed(windSpeed);
+            setHeading(optimalAngle);
+            setSpeed(optimalSpeed);
+        } else if (heading >= 180 && heading <= 270) {
+            double optimalAngle = 360 - polar.downWindAngle(windSpeed, windDirection);
+            double optimalSpeed = polar.downWindSpeed(windSpeed);
+            setHeading(optimalAngle);
+            setSpeed(optimalSpeed);
+        }
     }
 
 }

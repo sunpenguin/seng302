@@ -15,7 +15,7 @@ public class BoatRotater {
     private Boolean upwind;
 
     /**
-     * Constructor for BoatRotater
+     * Constructor for BoatRotater.
      *
      * @param boats boats to rotate.
      * @param angle to rotate them
@@ -124,6 +124,14 @@ public class BoatRotater {
     }
 
 
+    /**
+     * Maximises the boats vmg to either upwind or downwind if it is not within the dead zone.
+     * Note: If dead zone is 10 degrees the boat will not rotate if it is heading from 80 to 100 and 250 to 280.
+     *
+     * @param windDirection direction of the wind.
+     * @param windSpeed speed of the wind in knots.
+     * @param deadZone the heading at which the boat will not rotate.
+     */
     public void setVMG(double windDirection, double windSpeed, double deadZone) {
         final double EAST = 90;
         final double WEST = 270;

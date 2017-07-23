@@ -4,7 +4,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 
 /**
- * Created by David-chan on 30/06/17.
+ * Created by David on 30/06/17.
  */
 public interface IBoat {
 
