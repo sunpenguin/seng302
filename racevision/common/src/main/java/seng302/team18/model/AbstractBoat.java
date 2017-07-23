@@ -11,7 +11,6 @@ public abstract class AbstractBoat {
     private String hullNumber;
     private Integer id;
 
-
     public AbstractBoat() {
     }
 

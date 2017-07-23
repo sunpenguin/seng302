@@ -314,14 +314,22 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
      * @param obstacles List<AbstractBoat>, list of boats to check if boat has collied
      * @return boolean, true if boat has collided with any of the abstract boats
      */
-    public boolean hasCollided(List<Boat> obstacles){
+    public boolean hasCollided(List<AbstractBoat> obstacles){
         boolean hasCollided = false;
         GPSCalculations calculator = new GPSCalculations();
-
-        for(Boat obstacle : obstacles) {
+        double collisionZone;
+        double distanceBetween;
+        for(AbstractBoat obstacle : obstacles) {
             if (!obstacle.equals(this)) {
-                double collisionZone = (obstacle.boatLength / 2) + (boatLength / 2);
-                double distanceBetween = calculator.distance(coordinate, obstacle.getCoordinate());
+                if (obstacle instanceof Boat){
+
+                    collisionZone = (((Boat)obstacle).boatLength / 2) + (boatLength / 2);
+                    distanceBetween = calculator.distance(coordinate, ((Boat)obstacle).getCoordinate());
+                } else{
+                    collisionZone = (10 / 2) + (boatLength / 2);
+                    distanceBetween = calculator.distance(coordinate, ((Mark)obstacle).getCoordinate());
+                }
+
                 if (distanceBetween < collisionZone) {
                     hasCollided = true;
                 }

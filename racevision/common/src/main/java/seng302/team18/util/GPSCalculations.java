@@ -24,7 +24,6 @@ public class GPSCalculations {
      * @param point2 Coordinates for point2
      * @return The distance in metres
      */
-    // TODO: Check if the method provides us any use. If not, can remove.
     public double distance(Coordinate point1, Coordinate point2) {
 
         double lat1 = point1.getLatitude();

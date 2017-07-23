@@ -28,7 +28,7 @@ public class Race {
     private RaceStatus status;
     private Integer playerId;
     private RaceType raceType;
-
+    GPSCalculations gps = new GPSCalculations();
 
     public Race() {
         participantIds = new ArrayList<>();
@@ -269,15 +269,22 @@ public class Race {
         if (boat.isSailOut()) {
             speed = 0;
         }
-        if (boat.hasCollided(startingList)){
-            System.out.println("oh no");
+        List<AbstractBoat> obstacles = new ArrayList<>(startingList);
+        obstacles.addAll(course.getMarks());
+        if (boat.hasCollided(obstacles)){
+            handleCollision(boat);
         }
         double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
         double secondsTime = time / 1000.0d;
         double distanceTravelled = mpsSpeed * secondsTime;
-        GPSCalculations gps = new GPSCalculations();
+
         // set next position based on current coordinate, distance travelled, and heading.
         boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+    }
+
+    private void handleCollision(Boat boat){
+        boat.setSpeed(0);
+        System.out.println("Oh no");
     }
 
 
