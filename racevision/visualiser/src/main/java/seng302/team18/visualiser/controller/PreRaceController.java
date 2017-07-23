@@ -17,6 +17,7 @@ import seng302.team18.message.RequestMessage;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
+import seng302.team18.visualiser.display.RaceStartTime;
 import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.send.Sender;
@@ -57,10 +58,13 @@ public class PreRaceController {
         preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
         raceNameText.setText(race.getRegatta().getRegattaName());
         displayTimeZone(race.getStartTime());
-        startTimeLabel.setText(race.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+
+        RaceStartTime raceStartTime = new RaceStartTime(startTimeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race);
+
         setUpLists();
         listView.setItems(FXCollections.observableList(race.getStartingList()));
         preRaceClock.start();
+        raceStartTime.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
         this.interpreter = new Interpreter(receiver);
@@ -116,6 +120,8 @@ public class PreRaceController {
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
+
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceStartTimeInterpreter(race));
 
         return interpreter;
     }

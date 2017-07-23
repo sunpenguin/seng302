@@ -127,7 +127,7 @@ public class CourseBuilder1 extends AbstractCourseBuilder {
 
     @Override
     protected ZoneId getTimeZone() {
-        return ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-3));
+        return ZoneId.ofOffset("UTC", ZoneOffset.ofHours(+12));
     }
 
 

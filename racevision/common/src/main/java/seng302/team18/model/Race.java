@@ -37,8 +37,9 @@ public class Race {
         finishedList = new ArrayList<>();
         id = 0;
         status = RaceStatus.NOT_ACTIVE;
-        currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()); //.now(course.getTimeZone())
-        startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()); //.now(course.getTimeZone()).plusSeconds(300)
+        currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()).now(course.getTimeZone());
+        startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
+        setRaceName("");
         raceType = RaceType.MATCH;
     }
 
@@ -179,8 +180,8 @@ public class Race {
     /**
      * Updates a boats position then heading.
      *
-     * @param boat the boat
-     * @param time the time (units?)
+     * @param boat to be updated
+     * @param time
      */
     // TODO afj19, 20th July: check the temporal unit here
     private void updateBoat(Boat boat, double time) {

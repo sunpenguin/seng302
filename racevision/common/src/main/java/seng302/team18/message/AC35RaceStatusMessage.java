@@ -20,8 +20,8 @@ public class AC35RaceStatusMessage implements MessageBody {
      * Constructor for AC35RaceStatusMessage.
      *
      * @param currentTime   of the race in Epoch milliseconds.
-     * @param raceStatus    of the race in Epoch milliseconds.
-     * @param startTime     of the race.
+     * @param raceStatus    of the race.
+     * @param startTime     of the race in Epoch milliseconds.
      * @param windDirection of the race.
      * @param windSpeed     of the race.
      * @param boatStatus    a list of the AC35BoatStatusMessages.
