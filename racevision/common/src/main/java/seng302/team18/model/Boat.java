@@ -307,12 +307,15 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param windDirection double, direction of the wind (degrees)
      */
     public void optimalUpwind(double windSpeed, double windDirection) {
-        if (heading >= 0 && heading <= 90) {
+        double left = (270 + windDirection) % 360;
+        double right = (90 + windDirection) % 360;
+
+        if (heading <= right) {
             double optimalAngle = polar.upWindAngle(windSpeed, windDirection);
             double optimalSpeed = polar.upWindSpeed(windSpeed);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
-        } else if (heading >= 270 && heading <= 360) {
+        } else if (heading >= left) {
             double optimalAngle = 360 - polar.upWindAngle(windSpeed, windDirection);
             double optimalSpeed = polar.upWindSpeed(windSpeed);
             setHeading(optimalAngle);
@@ -330,12 +333,16 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param windDirection double, direction of the wind (degrees)
      */
     public void optimalDownwind(double windSpeed, double windDirection) {
-        if (heading >= 90 && heading <= 180) {
+        double right = (90 + windDirection) % 360;
+        double left = (270 + windDirection) % 360;
+        double bottom = (180 + windDirection) % 360;
+
+        if (heading >= right && heading <= bottom) {
             double optimalAngle = polar.downWindAngle(windSpeed, windDirection);
             double optimalSpeed = polar.downWindSpeed(windSpeed);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
-        } else if (heading >= 180 && heading <= 270) {
+        } else if (heading >= bottom && heading <= left) {
             double optimalAngle = 360 - polar.downWindAngle(windSpeed, windDirection);
             double optimalSpeed = polar.downWindSpeed(windSpeed);
             setHeading(optimalAngle);
