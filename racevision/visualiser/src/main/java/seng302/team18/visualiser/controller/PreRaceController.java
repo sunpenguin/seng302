@@ -30,11 +30,16 @@ import java.time.format.DateTimeFormatter;
  * Controller for the pre race view
  */
 public class PreRaceController {
-    @FXML private Label timeLabel;
-    @FXML private Label startTimeLabel;
-    @FXML private ListView<Boat> listView;
-    @FXML private Label timeZoneLabel;
-    @FXML private Text raceNameText;
+    @FXML
+    private Label timeLabel;
+    @FXML
+    private Label startTimeLabel;
+    @FXML
+    private ListView<Boat> listView;
+    @FXML
+    private Label timeZoneLabel;
+    @FXML
+    private Text raceNameText;
 
     private ZoneTimeClock preRaceClock;
     private Interpreter interpreter;
@@ -73,7 +78,10 @@ public class PreRaceController {
         sender.send(new RequestMessage(true));
         stage.setOnCloseRequest((event) -> {
             interpreter.shutdownNow();
-            while (!receiver.close()) {}
+            while (!receiver.close()) {
+            }
+            System.out.println("shutting down");
+            System.exit(0);
         });
     }
 
