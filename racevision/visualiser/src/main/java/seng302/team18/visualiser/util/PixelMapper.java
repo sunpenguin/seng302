@@ -110,6 +110,24 @@ public class PixelMapper {
     }
 
     /**
+     *  Calculates the mapping ratio between the pixel and geographical coordinates
+     *
+     * @return double, The ratio value (number of pixels : meter)
+     */
+    public double mappingRatio(){
+        GPSCalculations gpsCalculator = new GPSCalculations();
+        Coordinate tenNorthOfCentre = gpsCalculator.toCoordinate(course.getCentralCoordinate(), 0, 0.01);
+
+        XYPair XYCenter = coordToPixel(course.getCentralCoordinate());
+        XYPair XYTenNorthOfCenter = coordToPixel(tenNorthOfCentre);
+
+        double distanceBetweenTen = XYCenter.calculateDistance(XYTenNorthOfCenter);
+
+        return distanceBetweenTen/10;
+    }
+
+
+    /**
      * Calculates the width of the course
      *
      * @return the width of the course using Web Mercator cartesian coordinates

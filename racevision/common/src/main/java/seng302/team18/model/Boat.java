@@ -256,7 +256,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
 
     public boolean isDownWind() {return downWind; }
 
-    public double getBoatLength() {
+    public double getLength() {
         return boatLength;
     }
 
@@ -321,14 +321,8 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         double distanceBetween;
         for(AbstractBoat obstacle : obstacles) {
             if (!obstacle.equals(this)) {
-                if (obstacle instanceof Boat){
-
-                    collisionZone = (((Boat)obstacle).boatLength / 2) + (boatLength / 2);
-                    distanceBetween = calculator.distance(coordinate, ((Boat)obstacle).getCoordinate());
-                } else{
-                    collisionZone = (10 / 2) + (boatLength / 2);
-                    distanceBetween = calculator.distance(coordinate, ((Mark)obstacle).getCoordinate());
-                }
+                collisionZone = (obstacle.getLength() / 2) + (boatLength / 2);
+                distanceBetween = calculator.distance(coordinate, (obstacle).getCoordinate());
 
                 if (distanceBetween < collisionZone) {
                     hasCollided = true;

@@ -59,45 +59,33 @@ public class RaceRenderer {
             }
             Coordinate boatCoordinates = boat.getCoordinate();
 
-            if (boatCoordinates != null) {
-                displayBoat.setCoordinate(boatCoordinates);
-                displayBoat.setSpeed(boat.getSpeed());
-                displayBoat.setHeading(boat.getHeading());
-                displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
-                displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
-                displayBoat.setScale(pixelMapper.getZoomFactor());
+           moveBoats(boatCoordinates, displayBoat, boat);
 
-                if (boat.isSailOut()) {
-                    ((DisplaySail) displayBoat).setWindDirection(180 + race.getCourse().getWindDirection());
-                } else{
-                    ((DisplaySail) displayBoat).setWindDirection(200 + race.getCourse().getWindDirection());
-                }
-            }
         }
     }
 
-//    /**
-//     * Moves the DisplayBoats according to the coordinate given by the boat object
-//     * @param coordinate The new coordinate for the displayBoat
-//     * @param displayBoat The DisplayBoat that is being moved
-//     * @param boat The boat object
-//     */
-//    private void moveBoats(Coordinate coordinate, DisplayBoat displayBoat, Boat boat){
-//        if (coordinate != null) {
-//            displayBoat.setCoordinate(coordinate);
-//            displayBoat.setSpeed(boat.getSpeed());
-//            displayBoat.setHeading(boat.getHeading());
-//            displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
-//            displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
-//            displayBoat.setScale(pixelMapper.getZoomFactor());
-//
-//            if (boat.isSailOut()) {
-//                ((DisplaySail) displayBoat).setWindDirection(180 + race.getCourse().getWindDirection());
-//            } else{
-//                ((DisplaySail) displayBoat).setWindDirection(200 + race.getCourse().getWindDirection());
-//            }
-//        }
-//    }
+    /**
+     * Moves the DisplayBoats according to the coordinate given by the boat object
+     * @param coordinate The new coordinate for the displayBoat
+     * @param displayBoat The DisplayBoat that is being moved
+     * @param boat The boat object
+     */
+    private void moveBoats(Coordinate coordinate, DisplayBoat displayBoat, Boat boat){
+        if (coordinate != null) {
+            displayBoat.setCoordinate(coordinate);
+            displayBoat.setSpeed(boat.getSpeed());
+            displayBoat.setHeading(boat.getHeading());
+            displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
+            displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
+            displayBoat.setScale(pixelMapper.getZoomFactor());
+
+            if (boat.isSailOut()) {
+                ((DisplaySail) displayBoat).setWindDirection(180 + race.getCourse().getWindDirection());
+            } else{
+                ((DisplaySail) displayBoat).setWindDirection(200 + race.getCourse().getWindDirection());
+            }
+        }
+    }
 
 
     /**

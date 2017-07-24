@@ -26,6 +26,10 @@ public class Mark extends AbstractBoat implements GeographicLocation {
         return this.coordinates;
     }
 
+    @Override
+    public double getLength() {
+        return 10.0;
+    }
 
     /**
      * Setter for mark's coordinates

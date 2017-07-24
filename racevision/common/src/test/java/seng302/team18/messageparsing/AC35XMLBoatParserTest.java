@@ -85,7 +85,7 @@ public class AC35XMLBoatParserTest {
         List<AbstractBoat>  parsedBoats = message.getBoats();
         for (int i = 0; i < parsedBoats.size(); i++) {
             if (parsedBoats.get(i) instanceof Boat) {
-                assertEquals(((Boat) expectedBoats.get(i)).getBoatLength(), ((Boat) parsedBoats.get(i)).getBoatLength(), 0.1);
+                assertEquals(( expectedBoats.get(i)).getLength(), (parsedBoats.get(i)).getLength(), 0.1);
             }
         }
     }
