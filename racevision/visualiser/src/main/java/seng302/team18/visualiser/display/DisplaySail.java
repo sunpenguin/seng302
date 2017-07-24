@@ -72,10 +72,12 @@ public class DisplaySail extends DisplayBoatDecorator {
         super.setApparentWindDirection(apparentWind);
     }
 
+
     public void setHeading(double heading) {
         this.heading  = heading;
         super.setHeading(heading);
     }
+
 
     @Override
     public void setSailOut(boolean sailOut) {

@@ -368,12 +368,12 @@ public class BoatTest {
     @Test
     public void optimalUpwindTest() {
         testBoat.setHeading(BoatHeadingNE);
-        testBoat.optimalUpwind(windSpeed, windDirectionN);
+        testBoat.optimalUpWind(windSpeed, windDirectionN);
 
         assertEquals(223.0, testBoat.getHeading(), 0.1);
 
         testBoat.setHeading(BoatHeadingNW);
-        testBoat.optimalUpwind(windSpeed, windDirectionN);
+        testBoat.optimalUpWind(windSpeed, windDirectionN);
 
         assertEquals(137.0, testBoat.getHeading(), 0.1);
     }
@@ -382,12 +382,12 @@ public class BoatTest {
     @Test
     public void optimalDownwindTest() {
         testBoat.setHeading(135);
-        testBoat.optimalDownwind(windSpeed, windDirectionN);
+        testBoat.optimalDownWind(windSpeed, windDirectionN);
 
         assertEquals(135.0, testBoat.getHeading(), 0.1);
 
         testBoat.setHeading(250);
-        testBoat.optimalDownwind(windSpeed, windDirectionN);
+        testBoat.optimalDownWind(windSpeed, windDirectionN);
 
         assertEquals(250.0, testBoat.getHeading(), 0.1);
     }
