@@ -116,14 +116,14 @@ public class PixelMapper {
      */
     public double mappingRatio(){
         GPSCalculations gpsCalculator = new GPSCalculations();
-        Coordinate tenNorthOfCentre = gpsCalculator.toCoordinate(course.getCentralCoordinate(), 0, 0.01);
+        Coordinate oneKNorthOfCentre = gpsCalculator.toCoordinate(course.getCentralCoordinate(), 0, 1000);
 
         XYPair XYCenter = coordToPixel(course.getCentralCoordinate());
-        XYPair XYTenNorthOfCenter = coordToPixel(tenNorthOfCentre);
+        XYPair XYKNorthOfCenter = coordToPixel(oneKNorthOfCentre);
 
-        double distanceBetweenTen = XYCenter.calculateDistance(XYTenNorthOfCenter);
+        double distanceBetweenK = XYCenter.calculateDistance(XYKNorthOfCenter);
 
-        return distanceBetweenTen/10;
+        return distanceBetweenK/1000;
     }
 
 
