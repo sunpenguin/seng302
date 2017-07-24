@@ -405,12 +405,11 @@ public abstract class PolarPattern {
      * Gets the optimal angle for traveling upwind.
      *
      * @param windSpeed speed of wind.
-     * @param windDirection direction of wind
      * @return optimal heading.
      */
-    public double upWindAngle(double windSpeed, double windDirection) {
+    public double upWindAngle(double windSpeed) {
         Polar polar = getPolarForWindSpeed(windSpeed);
-        return (polar.getUpWindAngle() + windDirection) % 360;
+        return polar.getUpWindAngle() % 360;
     }
 
 
@@ -430,12 +429,11 @@ public abstract class PolarPattern {
      * Gets the optimal angle for traveling down wind.
      *
      * @param windSpeed speed of wind.
-     * @param windDirection direction of wind
      * @return optimal heading.
      */
-    public double downWindAngle(double windSpeed, double windDirection) {
+    public double downWindAngle(double windSpeed) {
         Polar polar = getPolarForWindSpeed(windSpeed);
-        return (polar.getDownWindAngle() + windDirection) % 360;
+        return polar.getDownWindAngle();
     }
 
 

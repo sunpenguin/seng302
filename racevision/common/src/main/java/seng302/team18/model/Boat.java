@@ -307,16 +307,16 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param windDirection double, direction of the wind (degrees)
      */
     public void optimalUpWind(double windSpeed, double windDirection) {
-        double flippedWindDirection = (windDirection + 180) % 360;
-        boolean isRight = (heading - flippedWindDirection + 360) % 360 < 180; // Right as in not left
-
-        if (isRight) {
-            double optimalAngle = polar.upWindAngle(windSpeed, windDirection);
+        double left = 270;
+        double right = 90;
+        double windRelativeHeading = (heading - windDirection + 360) % 360;
+        if (windRelativeHeading <= right) {
+            double optimalAngle = (polar.upWindAngle(windSpeed) + windDirection) % 360;
             double optimalSpeed = polar.upWindSpeed(windSpeed);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
-        } else {
-            double optimalAngle = 360 - polar.upWindAngle(windSpeed, windDirection);
+        } else if (windRelativeHeading >= left) {
+            double optimalAngle = (360 - polar.upWindAngle(windSpeed) + windDirection) % 360;
             double optimalSpeed = polar.upWindSpeed(windSpeed);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
@@ -333,16 +333,17 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param windDirection double, direction of the wind (degrees)
      */
     public void optimalDownWind(double windSpeed, double windDirection) {
-        double flippedWindDirection = (windDirection + 180) % 360;
-        boolean isRight = (heading - flippedWindDirection + 360) % 360 < 180; // Right as in not left
-
-        if (isRight) {
-            double optimalAngle = polar.downWindAngle(windSpeed, windDirection);
+        double right = 90;
+        double left = 270;
+        double bottom = 180;
+        double windRelativeHeading = (heading - windDirection + 360) % 360;
+        if (windRelativeHeading >= right && windRelativeHeading <= bottom) {
+            double optimalAngle = (polar.downWindAngle(windSpeed) + windDirection) % 360;
             double optimalSpeed = polar.downWindSpeed(windSpeed);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
-        } else {
-            double optimalAngle = 360 - polar.downWindAngle(windSpeed, windDirection);
+        } else if (windRelativeHeading >= bottom && windRelativeHeading <= left) {
+            double optimalAngle = (360 - polar.downWindAngle(windSpeed) + windDirection) % 360;
             double optimalSpeed = polar.downWindSpeed(windSpeed);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);

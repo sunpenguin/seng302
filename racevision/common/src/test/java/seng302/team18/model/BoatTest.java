@@ -370,12 +370,12 @@ public class BoatTest {
         testBoat.setHeading(BoatHeadingNE);
         testBoat.optimalUpWind(windSpeed, windDirectionN);
 
-        assertEquals(223.0, testBoat.getHeading(), 0.1);
+        assertEquals(30.0, testBoat.getHeading(), 0.1);
 
         testBoat.setHeading(BoatHeadingNW);
         testBoat.optimalUpWind(windSpeed, windDirectionN);
 
-        assertEquals(137.0, testBoat.getHeading(), 0.1);
+        assertEquals(300.0, testBoat.getHeading(), 0.1);
     }
 
 
