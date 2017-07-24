@@ -88,8 +88,6 @@ public class XMLBoatInterpreterTest {
         interpreter.interpret(message);
 
         ZonedDateTime expectedTime = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
-        Assert.assertEquals(expectedTime, race.getCurrentTime());
-        Assert.assertEquals(expectedTime, race.getStartTime());
         Assert.assertEquals(0, race.getId());
         Assert.assertEquals(RaceStatus.NOT_ACTIVE, race.getStatus());
     }
