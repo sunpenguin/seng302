@@ -65,16 +65,18 @@ public class DisplayBoat implements IBoat {
 
     private Text annotation;
     private Long estimatedTime = 0L;
-    private int decimalPlaces = 1; // for speed annotation
+    private final int decimalPlaces = 1; // for speed annotation
     private Map<AnnotationType, Boolean> visibleAnnotations;
     private final int ANNOTATION_OFFSET_X = 10;
 
-    protected DisplayBoat() {}
+    protected DisplayBoat() {
+    }
 
     public DisplayBoat(PixelMapper pixelMapper, String name, Color boatColor) {
         this.pixelMapper = pixelMapper;
         this.shortName = name;
         this.boatColor = boatColor;
+
         boat = new Polyline();
         boat.getPoints().addAll(BOAT_SHAPE);
         boat.setFill(boatColor);
@@ -85,6 +87,7 @@ public class DisplayBoat implements IBoat {
             }
         });
         boat.getTransforms().addAll(rotation, boatZoom);
+
         setUpAnnotations();
     }
 
@@ -140,7 +143,6 @@ public class DisplayBoat implements IBoat {
     }
 
 
-
     public void setAnnotationVisible(AnnotationType type, Boolean isVisible) {
         visibleAnnotations.replace(type, isVisible);
         updateAnnotationText();
@@ -153,34 +155,41 @@ public class DisplayBoat implements IBoat {
 
 
     private void updateAnnotationText() {
-        String textToDisplay = "";
+        StringBuilder annotationText = new StringBuilder();
+
         List<Map.Entry<AnnotationType, Boolean>> sortedEntries = visibleAnnotations
                 .entrySet()
                 .stream()
                 .sorted(Comparator.comparingInt(entry -> entry.getKey().getCode()))
                 .collect(Collectors.toList());
+
         for (Map.Entry<AnnotationType, Boolean> entry : sortedEntries) {
             if (entry.getValue()) {
                 if (entry.getKey().equals(AnnotationType.NAME)) {
-                    textToDisplay += shortName + "\n";
+                    annotationText.append(shortName)
+                            .append("\n");
                 } else if (AnnotationType.SPEED.equals(entry.getKey())) {
-                    textToDisplay += String.format("%." + decimalPlaces + "f", speed.get()) + " knots\n";
+                    String formatSpecSpeed = "%." + decimalPlaces + "f";
+                    annotationText.append(String.format(formatSpecSpeed, speed.get()))
+                            .append(" knots\n");
                 } else if (AnnotationType.ESTIMATED_TIME_NEXT_MARK.equals(entry.getKey()) && estimatedTime > 0) {
-                    textToDisplay += estimatedTime + "\n";
+                    annotationText.append(estimatedTime)
+                            .append("\n");
                 } else if (AnnotationType.TIME_SINCE_LAST_MARK.equals(entry.getKey()))
-                    textToDisplay += timeSinceLastMark + "\n";
+                    annotationText.append(timeSinceLastMark)
+                            .append("\n");
             }
         }
-        annotation.setText(textToDisplay);
+        annotation.setText(annotationText.toString());
         annotation.setLayoutX(boat.getLayoutX() + ANNOTATION_OFFSET_X);
         annotation.setLayoutY(boat.getLayoutY());
     }
 
 
-
     public Double[] getBOAT_SHAPE() {
         return BOAT_SHAPE;
     }
+
 
     public Color getColor() {
         return boatColor;

@@ -4,9 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
-import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -16,7 +14,6 @@ import seng302.team18.visualiser.util.PixelMapper;
 public class DisplaySail extends DisplayBoatDecorator {
 
     private Polyline sail;
-    private double windDirection;
     private PixelMapper pixelMapper;
     private final Rotate rotation = new Rotate(0, 0, 0);
     private final Scale zoom = new Scale(1, 1, 0, 0);
@@ -40,10 +37,13 @@ public class DisplaySail extends DisplayBoatDecorator {
         sail.toFront();
     }
 
+
     /**
-     * A setter for the Coordinate that the DisplaySail is located at
-     * @param coordinate The coordinate the sail will be set to
+     * Sets the coordinates of the displayed sail
+     *
+     * @param coordinate the location of the display sail
      */
+    @Override
     public void setCoordinate(Coordinate coordinate) {
         XYPair pixels = pixelMapper.coordToPixel(coordinate);
         sail.setLayoutX(pixels.getX());
@@ -51,58 +51,51 @@ public class DisplaySail extends DisplayBoatDecorator {
         super.setCoordinate(coordinate);
     }
 
+
     /**
-     * Sets the scale factor of the DisplaySail
-     * @param scaleFactor The scale factor that will be set
+     * Sets scale factor
+     *
+     * @param scaleFactor the scale factor
      */
+    @Override
     public void setScale(double scaleFactor) {
         zoom.setX(scaleFactor);
         zoom.setY(scaleFactor);
         super.setScale(scaleFactor);
     }
 
+
     /**
-     * Adds he DisplaySail to the group so it can be displayed
+     * Adds the DisplaySail to the group so it can be displayed
+     *
      * @param group The group the DisplaySail will be added to
      */
-    public void addToGroup(Group group){
+    @Override
+    public void addToGroup(Group group) {
         group.getChildren().add(sail);
         super.addToGroup(group);
         sail.toFront();
 
     }
 
+
     /**
      * Sets the current heading of the DisplaySail
-     * @param heading The heading the sail will be set to
+     *
+     * @param heading the heading
      */
+    @Override
     public void setHeading(double heading) {
         super.setHeading(heading);
     }
 
+
     /**
-     * Sets the windDirection parameter and changes the rotation of the sail accordingly
-     * @param windDirection The direction the WindDirectio will be set to
+     * Sets the windDirection and changes the rotation of the sail accordingly
+     *
+     * @param windDirection the wind direction in degrees
      */
     public void setWindDirection(double windDirection) {
-        this.windDirection = windDirection;
         rotation.setAngle(windDirection);
-    }
-
-    /**
-     * Sets the rotation of the sail
-     * @param rotation The value the rotation will be set to
-     */
-    public void setRotation(double rotation){
-        this.rotation.setAngle(rotation);
-    }
-
-
-    /**
-     * Returns the current rotation of the sail
-     * @return
-     */
-    public Rotate getRotation() {
-        return rotation;
     }
 }

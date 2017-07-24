@@ -59,11 +59,10 @@ public class BoatHighlight extends DisplayBoatDecorator {
         super.setHeading(heading);
     }
 
+
     public void addToGroup(Group group) {
         group.getChildren().add(highlight);
         super.addToGroup(group);
         highlight.toBack();
     }
-
-
 }

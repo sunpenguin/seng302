@@ -112,7 +112,7 @@ public class RaceRenderer {
         if (trail == null) {
             final int MAX_TRAIL_LENGTH = 100;
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
-            trail = new DisplayTrail(boat.getShortName(), displayBoat.getColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
+            trail = new DisplayTrail(displayBoat.getColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
             trailMap.put(boat.getShortName(), trail);
             trail.addToGroup(group);
         }

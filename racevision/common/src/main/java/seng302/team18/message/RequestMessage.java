@@ -1,9 +1,9 @@
 package seng302.team18.message;
 
 /**
- * Created by David-chan on 2/07/17.
+ * Request message DTO for extension to controller protocol for client registration
  */
-public class RequestMessage implements MessageBody{
+public class RequestMessage implements MessageBody {
 
     private boolean isParticipating;
 
@@ -11,10 +11,12 @@ public class RequestMessage implements MessageBody{
         this.isParticipating = isParticipating;
     }
 
+
     @Override
     public int getType() {
         return AC35MessageType.REQUEST.getCode();
     }
+
 
     public boolean isParticipating() {
         return isParticipating;
