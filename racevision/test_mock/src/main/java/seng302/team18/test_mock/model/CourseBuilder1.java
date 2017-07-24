@@ -14,6 +14,8 @@ import java.util.List;
  */
 public class CourseBuilder1 extends BaseCourseBuilder {
 
+
+
     @Override
     protected List<CompoundMark> buildCompoundMarks() {
         List<CompoundMark> compoundMarks = new ArrayList<>();
