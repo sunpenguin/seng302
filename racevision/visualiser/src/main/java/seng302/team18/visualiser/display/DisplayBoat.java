@@ -44,21 +44,14 @@ public class DisplayBoat implements IBoat {
     private boolean sailOut;
     private boolean isControlled;
     private Coordinate boatCenter;
-    private Boat boatObject;
+    private double pixelLength;
 
     private PixelMapper pixelMapper;
     private Polyline boatPoly;
     private Color boatColor;
-    private final double BOAT_HEIGHT = 10;
-    private final double BOAT_WIDTH = 10;
-    private final Double[] BOAT_SHAPE = new Double[]{
-            0.0, BOAT_HEIGHT / -2,
-            0.0, BOAT_HEIGHT / 2,
-            BOAT_WIDTH / -2, BOAT_HEIGHT / 2,
-            0.0, BOAT_HEIGHT / -2,
-            BOAT_WIDTH / 2, BOAT_HEIGHT / 2,
-            0.0, BOAT_HEIGHT / 2
-    };
+    private double boatHeight;
+    private double boatWidth;
+    private Double[] boatShape;
 
     private final Rotate rotation = new Rotate(0, 0, 0);
     private final Scale boatZoom = new Scale(1, 1, 0, 0);
@@ -71,12 +64,14 @@ public class DisplayBoat implements IBoat {
 
     protected DisplayBoat() {}
 
-    public DisplayBoat(PixelMapper pixelMapper, String name, Color boatColor) {
+    public DisplayBoat(PixelMapper pixelMapper, String name, Color boatColor, double pixelLength) {
         this.pixelMapper = pixelMapper;
         this.shortName = name;
         this.boatColor = boatColor;
+        this.pixelLength = pixelLength;
         boatPoly = new Polyline();
-        boatPoly.getPoints().addAll(BOAT_SHAPE);
+        setUpBoatShape();
+        boatPoly.getPoints().addAll(boatShape);
         boatPoly.setFill(boatColor);
         boatPoly.setOnMouseClicked(event -> {
             if (location != null) {
@@ -86,6 +81,19 @@ public class DisplayBoat implements IBoat {
         });
         boatPoly.getTransforms().addAll(rotation, boatZoom);
         setUpAnnotations();
+    }
+
+    private void setUpBoatShape(){
+        boatHeight = pixelLength;
+        boatWidth = pixelLength;
+        boatShape = new Double[]{
+                0.0, boatHeight / -2,
+                0.0, boatHeight / 2,
+                boatWidth / -2, boatHeight / 2,
+                0.0, boatHeight / -2,
+                boatWidth / 2, boatHeight / 2,
+                0.0, boatHeight / 2
+        };
     }
 
 
@@ -179,7 +187,7 @@ public class DisplayBoat implements IBoat {
 
 
     public Double[] getBOAT_SHAPE() {
-        return BOAT_SHAPE;
+        return boatShape;
     }
 
     public Color getColor() {
