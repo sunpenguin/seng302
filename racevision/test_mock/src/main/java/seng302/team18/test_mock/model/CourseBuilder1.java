@@ -109,7 +109,7 @@ public class CourseBuilder1 extends BaseCourseBuilder {
 
     @Override
     protected double getWindDirection() {
-        return 0;
+        return 270;
     }
 
     @Override

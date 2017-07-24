@@ -43,7 +43,9 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
 
         byte[] expectedStartTimeBytes = ByteCheck.longTo6ByteArray(expectedStartTime); // TODO: Use a reasonable starting time
 
-        byte[] raceWindDirectionBytes = ByteCheck.shortToByteArray((short) 0x0000);
+        double WIND_DIRECTION_CONVERTER = 65536.0 / 360.0;
+        int windDirection = (int) (race.getCourse().getWindDirection() * WIND_DIRECTION_CONVERTER);
+        byte[] raceWindDirectionBytes = ByteCheck.intToUShort(windDirection);
                 // Currently set to east TODO: make this a field of race or boat?
 
         double windSpeed = race.getCourse().getWindSpeed();
