@@ -169,7 +169,6 @@ public abstract class PolarPattern {
                     closestUpperDistance = currentDistance;
                 }
             }
-            System.out.println(" ");
         }
 
         closestPolars.add(closestLowerPolar);

@@ -11,13 +11,14 @@ import java.util.*;
 public class Server extends Observable {
     private final List<ClientConnection> clients = new ArrayList<>();
     private final ServerConnectionListener listener = new ServerConnectionListener();
-    private final int MAX_CLIENT_CONNECTION = 6;
+    private final int MAX_CLIENT_CONNECTION;
 
     private ServerSocket serverSocket;
     private final int PORT;
 
-    public Server(int port) {
+    public Server(int port, int MAX_CLIENT_CONNECTION) {
         this.PORT = port;
+        this.MAX_CLIENT_CONNECTION = MAX_CLIENT_CONNECTION;
     }
 
     /**

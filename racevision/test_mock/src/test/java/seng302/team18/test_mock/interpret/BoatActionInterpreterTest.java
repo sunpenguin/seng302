@@ -20,11 +20,11 @@ public class BoatActionInterpreterTest {
     private Boat player;
     private Boat notPlayer;
     private MessageInterpreter interpreter;
+    private final int boatId = 101;
 
 
     @Before
     public void setUp() {
-        final int boatId = 101;
         race = new Race();
         player = new Boat("name", "shortName", boatId, 14.019);
         player.setHeading(0d);
@@ -39,7 +39,8 @@ public class BoatActionInterpreterTest {
     @Test
     public void upWindTest() {
         double expected = 357d;
-        MessageBody upWind = new BoatActionMessage(false, false, false, true, false);
+        BoatActionMessage upWind = new BoatActionMessage(boatId);
+        upWind.setUpwind(true);
         interpreter.interpret(upWind);
         Assert.assertEquals(expected, player.getHeading(), 0.1);
         Assert.assertEquals(0, notPlayer.getHeading(), 0.1);
@@ -49,7 +50,8 @@ public class BoatActionInterpreterTest {
     @Test
     public void downWindTest() {
         double expected = 3d;
-        MessageBody downWind = new BoatActionMessage(false, false, false, false, true);
+        BoatActionMessage downWind = new BoatActionMessage(boatId);
+        downWind.setDownwind(true);
         interpreter.interpret(downWind);
         Assert.assertEquals(expected, player.getHeading(), 0.1);
         Assert.assertEquals(0, notPlayer.getHeading(), 0.1);
@@ -58,7 +60,8 @@ public class BoatActionInterpreterTest {
 
     @Test
     public void sailInTest() {
-        MessageBody sailIn = new BoatActionMessage(false, true, false, false, false);
+        BoatActionMessage sailIn = new BoatActionMessage(boatId);
+        sailIn.setSailsIn(true);
         interpreter.interpret(sailIn);
         Assert.assertFalse(player.isSailOut());
     }
@@ -66,7 +69,7 @@ public class BoatActionInterpreterTest {
 
     @Test
     public void sailOutTest() {
-        MessageBody sailOut = new BoatActionMessage(false, false, false, false, false);
+        MessageBody sailOut = new BoatActionMessage(boatId);
         interpreter.interpret(sailOut);
         Assert.assertTrue(player.isSailOut());
     }

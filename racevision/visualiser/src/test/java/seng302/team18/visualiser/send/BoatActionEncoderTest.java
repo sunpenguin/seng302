@@ -3,6 +3,9 @@ package seng302.team18.visualiser.send;
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.message.BoatActionMessage;
+import seng302.team18.util.ByteCheck;
+
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,14 +24,25 @@ public class BoatActionEncoderTest {
      */
     @Before
     public void setUp() {
-        boolean autopilot = false;
-        boolean sailsIn = false;
-        boolean tackGybe = false;
-        boolean upwind = false;
-        boolean downwind = false;
+        int id = 341;
 
-        messageBody = new BoatActionMessage(autopilot, sailsIn, tackGybe, upwind, downwind);
+        messageBody = new BoatActionMessage(id);
         encoder = new BoatActionEncoder();
+    }
+
+
+    /**
+     * Test to see whether the id field is the same if it is encoded correctly.
+     */
+    @Test
+    public void generateBodySourceIdTest() throws IOException {
+        final int ID_INDEX = 0;
+        final int ID_LENGTH = 4;
+        encodedByte = encoder.generateBody(messageBody);
+        int actualID = ByteCheck.byteToInt(encodedByte, ID_INDEX, ID_LENGTH);
+        int expectedID = 341;
+
+        assertEquals(expectedID, actualID);
     }
 
 
@@ -36,11 +50,11 @@ public class BoatActionEncoderTest {
      * Test to see when auto pilot is active, the status of action is encoded correctly.
      */
     @Test
-    public void generateBodyAutoPilotTest() {
+    public void generateBodyAutoPilotTest() throws IOException {
         messageBody.setAutopilot(true);
         encodedByte = encoder.generateBody(messageBody);
 
-        assertEquals(1, encodedByte[0]);
+        assertEquals(1, encodedByte[4]);
     }
 
 
@@ -48,11 +62,11 @@ public class BoatActionEncoderTest {
      * Test to see when sail in is active, the status of action is encoded correctly.
      */
     @Test
-    public void generateBodySailInTest() {
+    public void generateBodySailInTest() throws IOException {
         messageBody.setSailsIn(true);
         encodedByte = encoder.generateBody(messageBody);
 
-        assertEquals(2, encodedByte[0]);
+        assertEquals(2, encodedByte[4]);
     }
 
 
@@ -60,10 +74,10 @@ public class BoatActionEncoderTest {
      * Test to see when sail in  is not active (i.e. sail out), the status of action is encoded correctly.
      */
     @Test
-    public void generateBodySailOutTest() {
+    public void generateBodySailOutTest() throws IOException {
         encodedByte = encoder.generateBody(messageBody);
 
-        assertEquals(3, encodedByte[0]);
+        assertEquals(3, encodedByte[4]);
     }
 
 
@@ -71,11 +85,11 @@ public class BoatActionEncoderTest {
      * Test to see when tack/gybe is active, the status of action is encoded correctly.
      */
     @Test
-    public void generateBodyTackGybeTest() {
+    public void generateBodyTackGybeTest() throws IOException {
         messageBody.setTackGybe(true);
         encodedByte = encoder.generateBody(messageBody);
 
-        assertEquals(4, encodedByte[0]);
+        assertEquals(4, encodedByte[4]);
     }
 
 
@@ -83,11 +97,11 @@ public class BoatActionEncoderTest {
      * Test to see when up wind is active, the status of action is encoded correctly.
      */
     @Test
-    public void generateBodyUpWindTest() {
+    public void generateBodyUpWindTest() throws IOException {
         messageBody.setUpwind(true);
         encodedByte = encoder.generateBody(messageBody);
 
-        assertEquals(5, encodedByte[0]);
+        assertEquals(5, encodedByte[4]);
     }
 
 
@@ -95,10 +109,10 @@ public class BoatActionEncoderTest {
      * Test to see when down wind is active, the status of action is encoded correctly.
      */
     @Test
-    public void generateBodyDownWindTest() {
+    public void generateBodyDownWindTest() throws IOException {
         messageBody.setDownwind(true);
         encodedByte = encoder.generateBody(messageBody);
 
-        assertEquals(6, encodedByte[0]);
+        assertEquals(6, encodedByte[4]);
     }
 }

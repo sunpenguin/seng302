@@ -16,14 +16,13 @@ import java.util.List;
 public class DisplayTrail {
     private List<Coordinate> coordinates;
     private Polyline polyline;
-    private String name;
     private Double heading;
-    private Double headingVarience;
+    private Double headingVariance;
     private Integer length;
 
-    public DisplayTrail(String name, Color color, double headingVariance, int length) {
-        this.name = name;
-        this.headingVarience = headingVariance;
+
+    public DisplayTrail(Color color, double headingVariance, int length) {
+        this.headingVariance = headingVariance;
         this.length = length;
         coordinates = new ArrayList<>();
         polyline = new Polyline();
@@ -31,24 +30,28 @@ public class DisplayTrail {
         heading = 1000000000d;
     }
 
+
     /**
      * Adds a coordinate to the list of coordinates forming the boat trail.
-     * @param coordinate The coordinate at which the boat was
-     * @param heading the heading of the boat at that point
+     *
+     * @param coordinate  The coordinate at which the boat was
+     * @param heading     the heading of the boat at that point
      * @param pixelMapper To create an XY coordinate pair
      */
     public void addPoint(Coordinate coordinate, double heading, PixelMapper pixelMapper) {
         int trailSize = polyline.getPoints().size();
-        if (Math.abs(this.heading - heading) < headingVarience && trailSize >= 4) {
+
+        if (Math.abs(this.heading - heading) < headingVariance && trailSize >= 4) {
             polyline.getPoints().remove(trailSize - 1);
             polyline.getPoints().remove(trailSize - 2);
             coordinates.remove(coordinates.size() - 1);
         }
+
         this.heading = heading;
         XYPair pixel = pixelMapper.coordToPixel(coordinate);
         polyline.getPoints().addAll(pixel.getX(), pixel.getY());
-//        System.out.println(pixel.getX());
         coordinates.add(coordinate);
+
         if (coordinates.size() > length) {
             coordinates.remove(0);
             polyline.getPoints().remove(0);
@@ -56,12 +59,15 @@ public class DisplayTrail {
         }
     }
 
+
     /**
      * Re-draw the updated boat trail on the map display.
+     *
      * @param pixelMapper To create an XY coordinate pair
      */
     public void reDraw(PixelMapper pixelMapper) {
         List<Double> updatedTrailPoints = new ArrayList<>();
+
         for (Coordinate coordinate : coordinates) {
             XYPair newPixels = pixelMapper.coordToPixel(coordinate);
             updatedTrailPoints.add(newPixels.getX());
@@ -71,9 +77,9 @@ public class DisplayTrail {
         polyline.getPoints().setAll(updatedTrailPoints);
     }
 
+
     public void addToGroup(Group group) {
         group.getChildren().add(polyline);
         polyline.toBack();
     }
-
 }

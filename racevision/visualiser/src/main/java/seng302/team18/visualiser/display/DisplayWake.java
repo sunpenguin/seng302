@@ -14,7 +14,6 @@ import seng302.team18.visualiser.util.PixelMapper;
  */
 public class DisplayWake extends DisplayBoatDecorator {
 
-
     private Polygon wake;
     private Color wakeColor = Color.CADETBLUE;
     private double wakeScaleFactor = 1.0d / 16.0d; // the wake is at normal size when the boat is moving 1 / wakeScaleFactor speed
@@ -38,7 +37,7 @@ public class DisplayWake extends DisplayBoatDecorator {
     /**
      * Creates a new instance of DisplayBoat
      *
-     * @param pixelMapper
+     * @param pixelMapper the mapper from coordinate system to screen pixels
      * @param boat        the display boat being decorated
      */
     public DisplayWake(PixelMapper pixelMapper, DisplayBoat boat) {
@@ -52,7 +51,6 @@ public class DisplayWake extends DisplayBoatDecorator {
         wake.getTransforms().addAll(wakeSpeed, rotation, wakeZoom);
         wake.toBack();
     }
-
 
 
     public void setCoordinate(Coordinate coordinate) {
@@ -79,10 +77,11 @@ public class DisplayWake extends DisplayBoatDecorator {
         super.setScale(scaleFactor);
     }
 
+
     public void addToGroup(Group group) {
         group.getChildren().add(wake);
-        wake.toFront();
         super.addToGroup(group);
+        wake.toBack();
     }
 
 
