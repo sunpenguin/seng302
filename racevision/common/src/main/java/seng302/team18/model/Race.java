@@ -272,7 +272,7 @@ public class Race {
         }
         List<AbstractBoat> obstacles = new ArrayList<>(startingList);
         obstacles.addAll(course.getMarks());
-        if (boat.hasCollided(obstacles)){
+        if (boat.hasCollided(obstacles) != null){
             handleCollision(boat);
         }
         double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
