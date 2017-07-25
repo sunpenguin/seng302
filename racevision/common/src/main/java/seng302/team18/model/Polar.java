@@ -15,16 +15,18 @@ public class Polar {
     private double downWindAngle;
     private double downWindSpeed;
 
+
     /**
      * Constructor for Polar.
      * Note: Adds Upwind and down wind angles to hashmap also.
-     * @param windSpeed Speed of the wind
-     * @param upWindAngle Upwind threshold angle
-     * @param upWindSpeed Upwind speed
+     *
+     * @param windSpeed     Speed of the wind
+     * @param upWindAngle   Upwind threshold angle
+     * @param upWindSpeed   Upwind speed
      * @param downWindAngle Downwind threshold angle
      * @param downWindSpeed Downwind speed
      */
-    public Polar(double windSpeed, double upWindAngle, double upWindSpeed, double downWindAngle, double downWindSpeed){
+    public Polar(double windSpeed, double upWindAngle, double upWindSpeed, double downWindAngle, double downWindSpeed) {
         this.windSpeed = windSpeed;
         this.upWindAngle = upWindAngle;
         this.upWindSpeed = upWindSpeed;
@@ -35,38 +37,47 @@ public class Polar {
         addToMap(this.downWindAngle, this.downWindSpeed);
     }
 
+
     /**
      * Method to add a value and key to the hashmap of angles and speeds.
+     *
      * @param trueWindAngle True wind angle for boat
-     * @param boatSpeed Speed boat travel at the angle
+     * @param boatSpeed     Speed boat travel at the angle
      */
-    public void addToMap(double trueWindAngle, double boatSpeed){
-        mapSpeedAtAngles.put(trueWindAngle,boatSpeed);
+    public void addToMap(double trueWindAngle, double boatSpeed) {
+        mapSpeedAtAngles.put(trueWindAngle, boatSpeed);
     }
+
 
     public double getWindSpeed() {
         return windSpeed;
     }
 
+
     public Map<Double, Double> getMapSpeedAtAngles() {
         return mapSpeedAtAngles;
     }
+
 
     public double getUpWindAngle() {
         return upWindAngle;
     }
 
+
     public double getUpWindSpeed() {
         return upWindSpeed;
     }
+
 
     public double getDownWindAngle() {
         return downWindAngle;
     }
 
+
     public double getDownWindSpeed() {
         return downWindSpeed;
     }
+
 
     public double getMinAngle() {
         double currentMin = upWindAngle;
@@ -77,6 +88,7 @@ public class Polar {
         }
         return currentMin;
     }
+
 
     public double getMaxAngle() {
         double currentMax = downWindAngle;
@@ -103,6 +115,7 @@ public class Polar {
         if (Double.compare(polar.downWindSpeed, downWindSpeed) != 0) return false;
         return mapSpeedAtAngles.equals(polar.mapSpeedAtAngles);
     }
+
 
     @Override
     public int hashCode() {

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by sbe67 on 5/07/17.
+ * Stores the polar data for multiple wind speeds for a type of boat
  */
 public abstract class PolarPattern {
 
@@ -42,7 +42,6 @@ public abstract class PolarPattern {
     /**
      * Creates the map of polars with wind speeds.
      * Called in constructor.
-     * Gets overridden by subclasses
      */
     abstract protected Map<Double, Polar> createMap();
 
@@ -319,13 +318,13 @@ public abstract class PolarPattern {
     /**
      * Calculates the boatSpeed of a point on a singular polar
      *
-     * @param points List of XYPair, list of points on a polar length 1 or 2.
-     *               For point in list X = Polar windSpeed Y = angle.
-     *               Points must be from the same polar.
+     * @param points  List of XYPair, list of points on a polar length 1 or 2.
+     *                For point in list X = Polar windSpeed Y = angle.
+     *                Points must be from the same polar.
      * @param boatTWA double, the true wind angle of the boat
      * @return double, the calculates windSpeed on a polar at the boats TWA
      */
-    public double getValueForPolar(List<XYPair> points, double boatTWA){
+    public double getValueForPolar(List<XYPair> points, double boatTWA) {
         Polar polar = getPolarForWindSpeed(points.get(0).getX());
         double speed = 0.0;
         if (points.size() == 2) {
@@ -347,20 +346,20 @@ public abstract class PolarPattern {
         } else {
             if (boatTWA > polar.getMaxAngle()) {
                 double max = polar.getMaxAngle();
-                double dropOffRate = (polar.getWindSpeed()/(180 - max)) / 2;
+                double dropOffRate = (polar.getWindSpeed() / (180 - max)) / 2;
                 double speedAtMax = polar.getMapSpeedAtAngles().get(max);
 
-                speed =  speedAtMax - (dropOffRate * (boatTWA - max));
+                speed = speedAtMax - (dropOffRate * (boatTWA - max));
 
             } else if (boatTWA < polar.getMinAngle()) {
                 double min = polar.getMinAngle();
-                double dropOffRate = (polar.getWindSpeed()/(min)) / 2;
+                double dropOffRate = (polar.getWindSpeed() / (min)) / 2;
                 double speedAtMin = polar.getMapSpeedAtAngles().get(min);
 
-                speed =  speedAtMin - (dropOffRate * (boatTWA - min));
+                speed = speedAtMin - (dropOffRate * (boatTWA - min));
 
             } else { //boatTWA is equal to a value in the polar
-                for (Double angle : polar.getMapSpeedAtAngles().keySet()){
+                for (Double angle : polar.getMapSpeedAtAngles().keySet()) {
                     if (angle == points.get(0).getY()) {
                         speed = polar.getMapSpeedAtAngles().get(angle);
                     }
@@ -373,8 +372,9 @@ public abstract class PolarPattern {
 
     /**
      * Find the optimal angle for a boat to sail to next mark.
-     * @param boat Coordinate
-     * @param mark Coordinate
+     *
+     * @param boat      Coordinate
+     * @param mark      Coordinate
      * @param windSpeed double
      * @return the optimal angle
      */
@@ -383,7 +383,7 @@ public abstract class PolarPattern {
         double bestAngle = 0;
         double initialBearing = GPSCalculations.getBearing(boat, mark);
 
-        for (double bearing = initialBearing; bearing < initialBearing+90; bearing ++) {
+        for (double bearing = initialBearing; bearing < initialBearing + 90; bearing++) {
             if (bearing > 359) {
                 bearing -= 360;
                 initialBearing -= 360;
@@ -404,7 +404,7 @@ public abstract class PolarPattern {
     /**
      * Gets the optimal angle for traveling upwind.
      *
-     * @param windSpeed speed of wind.
+     * @param windSpeed     speed of wind.
      * @param windDirection direction of wind
      * @return optimal heading.
      */
@@ -425,11 +425,10 @@ public abstract class PolarPattern {
     }
 
 
-
     /**
      * Gets the optimal angle for traveling down wind.
      *
-     * @param windSpeed speed of wind.
+     * @param windSpeed     speed of wind.
      * @param windDirection direction of wind
      * @return optimal heading.
      */
@@ -437,7 +436,6 @@ public abstract class PolarPattern {
         Polar polar = getPolarForWindSpeed(windSpeed);
         return (polar.getDownWindAngle() + windDirection) % 360;
     }
-
 
 
     /**

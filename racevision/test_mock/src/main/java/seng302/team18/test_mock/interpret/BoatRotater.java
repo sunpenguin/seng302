@@ -4,8 +4,9 @@ import seng302.team18.model.Boat;
 
 import java.util.List;
 
+
 /**
- * Created by dhl25 on 20/07/17.
+ * Rotates boats based as commanded by a boat action message
  */
 public class BoatRotater {
 
@@ -30,7 +31,7 @@ public class BoatRotater {
      * Rotates a boat upwind.
      *
      * @param windDirection in degrees
-     * @param windSpeed in knots
+     * @param windSpeed     in knots
      */
     public void rotateUpwind(double windDirection, double windSpeed) {
         if (upwind == null) {
@@ -57,7 +58,7 @@ public class BoatRotater {
      * Rotates a boat downwind.
      *
      * @param windDirection in degrees
-     * @param windSpeed in knots
+     * @param windSpeed     in knots
      */
     public void rotateDownwind(double windDirection, double windSpeed) {
         if (upwind == null) {
@@ -98,8 +99,8 @@ public class BoatRotater {
      * Finds the new angle a boat should travel at to move towards the wind if headingChange is positive
      * or away from the wind if headingChange is negative.
      *
-     * @param boatHeading the boats current heading.
-     * @param windHeading heading of the wind.
+     * @param boatHeading   the boats current heading.
+     * @param windHeading   heading of the wind.
      * @param headingChange how much the boat should head towards the boat.
      * @return double, the new angle.
      */
@@ -129,8 +130,8 @@ public class BoatRotater {
      * Note: If dead zone is 10 degrees the boat will not rotate if it is heading from 80 to 100 and 250 to 280.
      *
      * @param windDirection direction of the wind.
-     * @param windSpeed speed of the wind in knots.
-     * @param deadZone the heading at which the boat will not rotate.
+     * @param windSpeed     speed of the wind in knots.
+     * @param deadZone      the heading at which the boat will not rotate.
      */
     public void setVMG(double windDirection, double windSpeed, double deadZone) {
         System.out.println("BoatRotater:setVMG");

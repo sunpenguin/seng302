@@ -31,6 +31,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private boolean upWind;
     private boolean downWind;
 
+
     /**
      * A constructor for the Boat class
      *
@@ -79,6 +80,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         this.heading = heading;
     }
 
+
     /**
      * A getter for the speed of the boat
      *
@@ -87,6 +89,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     public double getSpeed() {
         return speed.get();
     }
+
 
     /**
      * A setter for the speed of the boat
@@ -182,13 +185,16 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         this.timeAtLastMark = timeAtLastMark;
     }
 
+
     public boolean isSailOut() {
         return sailOut;
     }
 
+
     public void setSailOut(boolean sailOut) {
         this.sailOut = sailOut;
     }
+
 
     @Override
     public String toString() {
@@ -207,6 +213,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
                 ", timeAtLastMark=" + timeAtLastMark +
                 '}';
     }
+
 
     public int getStatus() {
         return status;
@@ -227,34 +234,51 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         isControlled = controlled;
     }
 
+
     public void setAutoPilot(boolean autoPilot) {
         this.autoPilot = autoPilot;
     }
 
-    public boolean isAutoPilot() {return autoPilot; }
+
+    public boolean isAutoPilot() {
+        return autoPilot;
+    }
+
 
     public void setTackGybe(boolean tackGybe) {
         this.tackGybe = tackGybe;
     }
 
-    public boolean isTackGybe() {return tackGybe; }
+
+    public boolean isTackGybe() {
+        return tackGybe;
+    }
+
 
     public void setUpWind(boolean upWind) {
         this.upWind = upWind;
     }
 
-    public boolean isUpWind() {return upWind; }
+
+    public boolean isUpWind() {
+        return upWind;
+    }
+
 
     public void setDownWind(boolean downWind) {
         this.downWind = downWind;
     }
 
-    public boolean isDownWind() {return downWind; }
+
+    public boolean isDownWind() {
+        return downWind;
+    }
+
 
     /**
      * Uses boats polar pattern to calculate boats TWS
      *
-     * @param windSpeed double, the speed of the wind
+     * @param windSpeed   double, the speed of the wind
      * @param windHeading double, the direction of the wind
      * @return double, the tws of the boat
      */
@@ -262,6 +286,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         double twa = getTrueWindAngle(windHeading);
         return polar.getSpeedForBoat(twa, windSpeed);
     }
+
 
     /**
      * Gets true wind angle for boat.
@@ -300,10 +325,10 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
     /**
      * Sets heading so that VMG towards up wind is maximum and updates the speed.
-     *
+     * <p>
      * Pre-condition: boat is heading towards from 0 to 180 degree.
      *
-     * @param windSpeed  double, speed of the wind in knots
+     * @param windSpeed     double, speed of the wind in knots
      * @param windDirection double, direction of the wind (degrees)
      */
     public void optimalUpWind(double windSpeed, double windDirection) {
@@ -326,10 +351,10 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
     /**
      * Sets heading so that VMG towards downwind is maximum and updates the speed.
-     *
+     * <p>
      * Pre-condition: boat is heading towards from 90 to 270 degree.
      *
-     * @param windSpeed  double, speed of the wind in knots
+     * @param windSpeed     double, speed of the wind in knots
      * @param windDirection double, direction of the wind (degrees)
      */
     public void optimalDownWind(double windSpeed, double windDirection) {
