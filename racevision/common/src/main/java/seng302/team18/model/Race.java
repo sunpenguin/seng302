@@ -96,8 +96,7 @@ public class Race {
         // Set Dest
         boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCoordinate());
         // Set Coordinate
-        Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
-        boat.setCoordinate(midPoint);
+        boat.setCoordinate(getStartPosition(boat));
         // Set Heading
         GPSCalculations gps = new GPSCalculations();
         boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
@@ -105,10 +104,39 @@ public class Race {
         boat.setSpeed(tws);
     }
 
+
+    /**
+     * Method to calculate the starting position for a boat
+     * Prevents boats from overlapping
+     *
+     * @param boat boat to get starting position for
+     * @return position for boat to start at
+     */
+    private Coordinate getStartPosition(Boat boat) {
+        GPSCalculations calculator = new GPSCalculations();
+        Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
+        Coordinate startMark1 = course.getLeg(boat.getLegNumber()).getDeparture().getMarks().get(0).getCoordinate();
+        Coordinate startMark2= course.getLeg(boat.getLegNumber()).getDeparture().getMarks().get(1).getCoordinate();
+
+        double bearing = calculator.getBearing(startMark1, startMark2);
+
+        double offset = startingList.size();
+
+        if ((offset % 2) == 0) {
+            offset /= 2;
+        } else {
+            offset = -Math.floor(offset/2);
+        }
+
+        Coordinate startingPosition = calculator.toCoordinate(midPoint, bearing, (boat.getLength()*offset*2)+2);
+
+        return startingPosition;
+    }
+
     public void addParticipant(Boat boat) {
         // check that it is alright to add a boat at this point
-        setCourseForBoat(boat);
         startingList.add(boat);
+        setCourseForBoat(boat);
         participantIds.add(boat.getId());
     }
 
