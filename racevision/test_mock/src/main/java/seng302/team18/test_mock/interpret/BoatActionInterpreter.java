@@ -22,7 +22,7 @@ public class BoatActionInterpreter extends MessageInterpreter {
     /**
      * Constructor for BoatActionInterpreter.
      *
-     * @param race to modify
+     * @param race   to modify
      * @param boatId of the controlled boat
      */
     public BoatActionInterpreter(Race race, int boatId) {
@@ -50,7 +50,7 @@ public class BoatActionInterpreter extends MessageInterpreter {
     /**
      * Applies actions within the message to the specified boat.
      *
-     * @param boat to be manipulated.
+     * @param boat    to be manipulated.
      * @param actions to be applied.
      */
     private void applyActions(Boat boat, BoatActionMessage actions) {
@@ -59,7 +59,7 @@ public class BoatActionInterpreter extends MessageInterpreter {
             boatRotater.rotateDownwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
         } else if (actions.isUpwind()) {
             boatRotater.rotateUpwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
-        } else if (actions.isAutopilot()){
+        } else if (actions.isAutopilot()) {
             boatRotater.setVMG(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed(), DEAD_ZONE);
         } else if (actions.isSailsIn()) {
             boat.setSailOut(false);
