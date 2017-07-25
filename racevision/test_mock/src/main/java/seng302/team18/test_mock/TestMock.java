@@ -71,7 +71,7 @@ public class TestMock implements Observer {
         final int LOOP_FREQUENCY = 60;
         final int TIME_START = -1;
         final int TIME_WARNING = -59;
-        final int TIME_PREP = -58;
+        final int TIME_PREP = -55;
 
         long timeCurr = System.currentTimeMillis();
         long timeLast;

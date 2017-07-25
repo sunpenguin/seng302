@@ -127,7 +127,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         return coordinate;
     }
 
-
+    @Override
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
@@ -310,12 +310,13 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
 
     /**
      * Method to check if boat has collided with another boat
+     * TODO: jth102, sbe67 25/07, handle collisions with more than one obstacle
      *
-     * @param obstacles List<AbstractBoat>, list of boats to check if boat has collied
-     * @return boolean, true if boat has collided with any of the abstract boats
+     * @param obstacles  list of Abstract Boats to check if boat has collied
+     * @return the obstacle the boat has collided, null is not collision
      */
-    public boolean hasCollided(List<AbstractBoat> obstacles){
-        boolean hasCollided = false;
+    public AbstractBoat hasCollided(List<AbstractBoat> obstacles){
+        AbstractBoat collidedWith = null;
         GPSCalculations calculator = new GPSCalculations();
         double collisionZone;
         double distanceBetween;
@@ -325,10 +326,10 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
                 distanceBetween = calculator.distance(coordinate, (obstacle).getCoordinate());
 
                 if (distanceBetween < collisionZone) {
-                    hasCollided = true;
+                    collidedWith = obstacle;
                 }
             }
         }
-        return hasCollided;
+        return collidedWith;
     }
 }
