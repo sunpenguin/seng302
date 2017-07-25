@@ -53,10 +53,15 @@ public class ConnectionListener implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        if (!(arg instanceof ClientConnection)) {
-            return;
+        if (arg instanceof ClientConnection) {
+            addClient((ClientConnection) arg);
+        } else if (ServerState.CLOSED.equals(arg)) {
+            close();
         }
-        ClientConnection client = (ClientConnection) arg;
+    }
+
+
+    private void addClient(ClientConnection client) {
         try {
             Receiver receiver = new Receiver(client.getSocket(), factory);
             int sourceID = ids.get(players.size());
@@ -81,6 +86,7 @@ public class ConnectionListener implements Observer {
             e.printStackTrace();
         }
     }
+
 
 
     /**
@@ -117,5 +123,14 @@ public class ConnectionListener implements Observer {
     public void setTimeout(long timeout) {
         this.timeout = timeout;
     }
+
+
+    private void close() {
+        for (PlayerControllerReader player: players) {
+            player.close();
+        }
+        executor.shutdownNow();
+    }
+
 
 }

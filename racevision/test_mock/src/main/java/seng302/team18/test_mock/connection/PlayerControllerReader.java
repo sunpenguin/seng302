@@ -11,6 +11,7 @@ public class PlayerControllerReader implements Runnable {
 
     private Receiver receiver;
     private MessageInterpreter interpreter;
+    boolean open = true;
 
     public PlayerControllerReader(Receiver receiver, MessageInterpreter interpreter) {
         this.receiver = receiver;
@@ -23,11 +24,17 @@ public class PlayerControllerReader implements Runnable {
      */
     @Override
     public void run() {
-        while (true) {
+        while (open) {
             try {
                 MessageBody message = receiver.nextMessage();
                 interpreter.interpret(message);
             } catch (Exception e) {}
         }
+    }
+
+
+    public void close() {
+        open = false;
+        receiver.close();
     }
 }

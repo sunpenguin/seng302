@@ -77,7 +77,6 @@ public class Server extends Observable {
                 }
             }
         }
-
         try {
             serverSocket.close();
         } catch (IOException e) {
