@@ -127,7 +127,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         return coordinate;
     }
 
-
+    @Override
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
