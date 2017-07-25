@@ -38,7 +38,6 @@ public class BoatActionInterpreter extends MessageInterpreter {
     @Override
     public void interpret(MessageBody message) {
         if (message != null && message instanceof BoatActionMessage) {
-            System.out.println("interpret");
             BoatActionMessage actionMessage = (BoatActionMessage) message;
             for (Boat boat : boats) {
                 applyActions(boat, actionMessage);
@@ -55,10 +54,8 @@ public class BoatActionInterpreter extends MessageInterpreter {
      */
     private void applyActions(Boat boat, BoatActionMessage actions) {
         final double headingChange = 3d;
-        System.out.println("applyActions");
 
         if (actions.isDownwind()) {
-            System.out.println("downwind");
             double windDirection = race.getCourse().getWindDirection();
             double windSpeed = race.getCourse().getWindSpeed();
             double newHeading = headTowardsWind(boat.getHeading(), windDirection, headingChange);
@@ -66,7 +63,6 @@ public class BoatActionInterpreter extends MessageInterpreter {
             boat.setHeading(newHeading);
             boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
         } else if (actions.isUpwind()) {
-            System.out.println("upwind");
             double windSpeed = race.getCourse().getWindSpeed();
             double windDirection = race.getCourse().getWindDirection();
             double flippedWindDirection = (windDirection + 180) % 360; // flipping wind direction

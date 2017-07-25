@@ -3,7 +3,7 @@ package cucumber.steps;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.junit.//Assert;
+import org.junit.Assert;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
@@ -20,7 +20,7 @@ import java.net.Socket;
 import java.util.Collections;
 
 /**
- * Created by dhl25 on 21/07/17.
+ * Cucumber step definitions for receiving BoatActionMessage.
  */
 public class ReceiveBoatActionStepDefinition {
 
@@ -51,8 +51,8 @@ public class ReceiveBoatActionStepDefinition {
 
         server.addObserver(listener);
         server.openServer();
-        server.stopAccepting();
         sender.send(new RequestMessage(true));
+        server.stopAccepting();
     }
 
     @When("^the mock gets sent an upwind message$")
@@ -62,12 +62,13 @@ public class ReceiveBoatActionStepDefinition {
         sender.send(boatAction);
     }
 
-    @Then("^the players boat will head upwind\\.$")
+    @Then("^the players boat will head upwind$")
     public void the_players_boat_will_head_upwind() throws Throwable {
+        Thread.sleep(1000);
         socket.close();
         server.close();
         double expected = 87d;
-        //Assert.assertEquals(expected, boat.getHeading(), 0.1);
+        Assert.assertEquals(expected, boat.getHeading(), 0.1);
     }
 
     @When("^the mock gets sent a downwind message$")
@@ -77,12 +78,13 @@ public class ReceiveBoatActionStepDefinition {
         sender.send(boatAction);
     }
 
-    @Then("^the players boat will head downwind\\.$")
+    @Then("^the players boat will head downwind$")
     public void the_players_boat_will_head_downwind() throws Throwable {
+        Thread.sleep(1000);
         socket.close();
         server.close();
         double expected = 93d;
-        //Assert.assertEquals(expected, boat.getHeading(), 0.1);
+        Assert.assertEquals(expected, boat.getHeading(), 0.1);
     }
 
     @When("^the mock gets sent a sail in message$")
@@ -92,33 +94,33 @@ public class ReceiveBoatActionStepDefinition {
         sender.send(boatAction);
     }
 
-    @Then("^the players boat will have its sails in\\.$")
+    @Then("^the players boat will have its sails in$")
     public void the_players_boat_will_have_its_sails_in() throws Throwable {
+        Thread.sleep(1000);
         socket.close();
         server.close();
-        ////Assert.assertFalse(boat.isSailOut());
+        Assert.assertFalse(boat.isSailOut());
     }
 
-    @Given("^the boat is heading directly upwind\\.$")
+    @Given("^the boat is heading directly upwind$")
     public void the_boat_is_heading_directly_upwind() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
         boat.setHeading(windDirection);
     }
 
-    @When("^the mock gets sent an autopilot message\\.$")
+    @When("^the mock gets sent an autopilot message$")
     public void the_mock_gets_sent_an_autopilot_message() throws Throwable {
         BoatActionMessage boatAction = new BoatActionMessage();
         boatAction.setAutopilot(true);
         sender.send(boatAction);
     }
 
-    @Then("^the players boat will have its heading and speed changed to the optimal upwind vmg\\.$")
+    @Then("^the players boat will have its heading and speed changed to the optimal upwind vmg$")
     public void the_players_boat_will_have_its_heading_and_speed_changed_to_the_optimal_upwind_vmg() throws Throwable {
+        Thread.sleep(1000);
         socket.close();
         server.close();
-        double expected = 93d;
-        //Assert.assertEquals(expected, boat.getHeading(), 0.1);
+        double expected = 0d;
+        Assert.assertEquals(expected, boat.getHeading(), 0.1);
     }
-
-
 }

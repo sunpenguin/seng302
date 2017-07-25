@@ -15,7 +15,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * Created by dhl25 on 21/07/17.
+ * Cucumber step definitions for sending BoatActionMessage.
  */
 public class SendBoatActionsStepDefinition {
 
@@ -24,7 +24,7 @@ public class SendBoatActionsStepDefinition {
     private Socket socket;
     private ServerSocket serverSocket;
 
-    @Given("^the user has connected to the game\\.$")
+    @Given("^the user has connected to the game$")
     public void the_user_has_connected_to_the_game() throws Throwable {
         serverSocket = ServerSocketFactory.getDefault().createServerSocket(6423);
         socket = SocketFactory.getDefault().createSocket("localhost", 6423);
@@ -32,13 +32,13 @@ public class SendBoatActionsStepDefinition {
         sender = new Sender(socket, new ControllerMessageFactory());
     }
 
-    @When("^the upwind key is pressed\\.$")
+    @When("^the upwind key is pressed$")
     public void the_upwind_key_is_pressed() throws Throwable {
         message = new BoatActionMessage();
         message.setUpwind(true);
     }
 
-    @Then("^the message will be sent\\.$")
+    @Then("^the message will be sent$")
     public void the_message_will_be_sent() {
         try {
             sender.send(message);
@@ -55,19 +55,19 @@ public class SendBoatActionsStepDefinition {
         }
     }
 
-    @When("^the downwind key is pressed\\.$")
+    @When("^the downwind key is pressed$")
     public void the_downwind_key_is_pressed() throws Throwable {
         message = new BoatActionMessage();
         message.setDownwind(true);
     }
 
-    @When("^the sail in / out key is pressed\\.$")
+    @When("^the sail in / out key is pressed$")
     public void the_sail_in_out_key_is_pressed() throws Throwable {
         message = new BoatActionMessage();
         message.setSailsIn(true);
     }
 
-    @When("^the autopilot key is pressed\\.$")
+    @When("^the autopilot key is pressed$")
     public void the_autopilot_key_is_pressed() throws Throwable {
         message = new BoatActionMessage();
         message.setAutopilot(true);
