@@ -24,6 +24,7 @@ public class BoatHighlight extends DisplayBoatDecorator {
      * Creates a new instance of DisplayBoat
      *
      * @param boat the display boat being decorated
+     * @param pixelMapper The PixelMapper used to find where to map the highlight
      */
     public BoatHighlight(PixelMapper pixelMapper, DisplayBoat boat) {
         super(boat);

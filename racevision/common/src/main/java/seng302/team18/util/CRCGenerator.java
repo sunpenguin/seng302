@@ -7,6 +7,11 @@ public class CRCGenerator {
 
     /**
      * Calculate CRC32 checksum for header and message body.
+     *
+     * @param message Byte array containing the message to generate the CRC for.
+     * @return 4 Byte array of the calculated CRC.
+     *
+     * @throws IOException if error occurs when writing to a ByteArrayOutputStream.
      */
     public static byte[] generateCRC(byte[] message) throws IOException {
 

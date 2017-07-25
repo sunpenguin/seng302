@@ -115,7 +115,7 @@ public abstract class PolarPattern {
      * 2. The windspeed is equal to the windspeed of a polar
      *
      * @param windSpeed double, the speed of the wind
-     * @return List<Polar>, a list of polar, either of length 1 or 2
+     * @return a List of polars, either of length 1 or 2
      */
     public List<Polar> getTwoClosestPolars(double windSpeed) {
         List<Polar> closestPolars = new ArrayList<>();
@@ -187,8 +187,8 @@ public abstract class PolarPattern {
      * A polar will  return a singular point in the TWA is below the min value in the polar
      *
      * @param boatTWA       double, the direction of the wind
-     * @param closestPolars List<Polar>, list containing 1 or 2 polars
-     * @return List<XYPair>, for each item: X = Windspeed of polar, Y = Angle
+     * @param closestPolars List containing 1 or 2 polars
+     * @return List, for each item: X = Windspeed of polar, Y = Angle
      */
     public List<XYPair> getClosestPoints(double boatTWA, List<Polar> closestPolars) {
         List<XYPair> closestPoints = new ArrayList<>();

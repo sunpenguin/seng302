@@ -26,6 +26,7 @@ public class DisplaySail extends DisplayBoatDecorator {
     /**
      * Creates a new instance of DisplayBoat
      *
+     * @param mapper PixelMapper used to find where to map the sail
      * @param boat the display boat being decorated
      */
     public DisplaySail(PixelMapper mapper, DisplayBoat boat) {

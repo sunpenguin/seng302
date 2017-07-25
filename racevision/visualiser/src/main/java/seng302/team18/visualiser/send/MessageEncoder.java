@@ -17,7 +17,8 @@ public abstract class MessageEncoder {
      *
      * @param message to be encoded
      * @return the encoded message
-     * @throws IOException
+     *
+     * @throws IOException Thrown if error occurs when writing to a ByteArrayOutputStream
      */
     public byte[] encode(MessageBody message) throws IOException {
         byte[] head = generateHead(message);
@@ -38,7 +39,8 @@ public abstract class MessageEncoder {
      *
      * @param message to create header from
      * @return message header.
-     * @throws IOException
+     *
+     * @throws IOException Thrown if error occurs when writing to a ByteArrayOutputStream
      */
     protected byte[] generateHead(MessageBody message) throws IOException {
 
@@ -73,6 +75,8 @@ public abstract class MessageEncoder {
      *
      * @param message to create the body of the message from.
      * @return the message as a byte array
+     *
+     * @throws IOException Thrown if error occurs when writing to a ByteArrayOutputStream
      */
     protected abstract byte[] generateBody(MessageBody message) throws IOException;
 
@@ -83,14 +87,10 @@ public abstract class MessageEncoder {
      * @param head of message to create checksum for
      * @param body of message to create checksum for
      * @return the checksum as a byte array
+     *
+     * @throws IOException Thrown if error occurs when writing to a ByteArrayOutputStream
      */
     protected byte[] generateChecksum(byte[] head, byte[] body) throws IOException {
-//        byte[] combined = new byte[head.length + body.length];
-//
-//        System.arraycopy(head, 0, combined, 0, head.length);
-//        System.arraycopy(body, 0, combined, head.length, body.length);
-//        return CRCGenerator.generateCRC(combined);
-
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(head);
         outputStream.write(body);
