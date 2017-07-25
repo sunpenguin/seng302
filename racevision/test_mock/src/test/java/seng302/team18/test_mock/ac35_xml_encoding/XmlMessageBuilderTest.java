@@ -19,9 +19,9 @@ import static org.junit.Assert.assertTrue;
 public class XmlMessageBuilderTest {
 
     private static final List<Boat> BOATS = Arrays.asList(
-            new Boat("Boat 1", "b1", 1),
-            new Boat("Boat 2", "b2", 2),
-            new Boat("Boat 3", "b3", 3)
+            new Boat("Boat 1", "b1", 1, 14.019),
+            new Boat("Boat 2", "b2", 2, 14.019),
+            new Boat("Boat 3", "b3", 3, 14.019)
     );
 
     private IBoatsXmlDefaults boatsXmlDefaults = new BoatXmlDefaults();
