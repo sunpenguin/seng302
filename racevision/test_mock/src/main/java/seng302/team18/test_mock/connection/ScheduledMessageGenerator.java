@@ -22,6 +22,7 @@ public abstract class ScheduledMessageGenerator extends MessageGenerator {
      * Checks if it is time to send the message, delegating this if it is
      *
      * @param currTime the current time
+     * @return True if it is time to send, otherwise False.
      */
     public boolean isTimeToSend(long currTime) {
         if ((currTime - lastSent) > (1000d / frequency)) {

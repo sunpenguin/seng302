@@ -6,6 +6,7 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.util.PixelMapper;
+
 import java.util.*;
 
 /**
@@ -39,7 +40,8 @@ public class RaceRenderer {
     }
 
     /**
-     * Draws displayBoats in the Race on the Group as well as the visible annotations
+     * Draws displayBoats in the Race on the Group as well as the visible annotations including the BoatSails in both
+     * the luffing and powered up position
      */
     public void renderBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
@@ -47,18 +49,20 @@ public class RaceRenderer {
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
 
             if (displayBoat == null) {
-                displayBoat = new DisplayWake(pixelMapper,
-                        new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++)));
+                displayBoat = new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++));
+
+                // Wake
+                displayBoat = new DisplayWake(pixelMapper, displayBoat);
+                // Highlight
                 if (boat.isControlled()) {
                     displayBoat = new BoatHighlight(pixelMapper, displayBoat);
                 }
                 displayBoat = new DisplaySail(pixelMapper, displayBoat);
                 displayBoat.addToGroup(group);
-
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
-            Coordinate boatCoordinates = boat.getCoordinate();
 
+            Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
                 displayBoat.setCoordinate(boatCoordinates);
                 displayBoat.setSpeed(boat.getSpeed());
@@ -71,7 +75,6 @@ public class RaceRenderer {
             }
         }
     }
-
 
 
     /**
@@ -101,7 +104,7 @@ public class RaceRenderer {
         if (trail == null) {
             final int MAX_TRAIL_LENGTH = 100;
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
-            trail = new DisplayTrail(boat.getShortName(), displayBoat.getColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
+            trail = new DisplayTrail(displayBoat.getColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
             trailMap.put(boat.getShortName(), trail);
             trail.addToGroup(group);
         }
@@ -131,7 +134,7 @@ public class RaceRenderer {
     /**
      * Sets the annotition types that are visible.
      *
-     * @param type , AnnotationType, the type of annotiation.
+     * @param type      , AnnotationType, the type of annotiation.
      * @param isVisible , Boolean, if the type is visible.
      */
     public void setVisibleAnnotations(AnnotationType type, Boolean isVisible) {

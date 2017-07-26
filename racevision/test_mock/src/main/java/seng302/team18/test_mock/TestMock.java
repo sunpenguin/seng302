@@ -5,7 +5,7 @@ import seng302.team18.model.MarkRoundingEvent;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceStatus;
 import seng302.team18.test_mock.connection.*;
-import seng302.team18.test_mock.model.XmlMessageBuilder;
+import seng302.team18.test_mock.ac35_xml_encoding.XmlMessageBuilder;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -63,13 +63,15 @@ public class TestMock implements Observer {
 
 
     /**
-     * Simulate the race will sending the scheduled messages
+     * Simulate the race while sending the scheduled messages
+     *
+     * @param START_WAIT_TIME Number of seconds between the preparation phase and the start time
+     * @param WARNING_WAIT_TIME Number of seconds between the time the method is executed and warning phase
+     * @param PREP_WAIT_TIME Number of seconds between the warning phase and the preparation phase
+     * @param CUTOFF_DIFFERENCE Number of seconds before entering the warning phase for not allowing new connections
      */
-    public void runSimulation() {
+    public void runSimulation(int START_WAIT_TIME, int WARNING_WAIT_TIME, int PREP_WAIT_TIME, int CUTOFF_DIFFERENCE) {
         final int LOOP_FREQUENCY = 60;
-        final int TIME_START = -1;
-        final int TIME_WARNING = -59;
-        final int TIME_PREP = -58;
 
         long timeCurr = System.currentTimeMillis();
         long timeLast;
@@ -78,16 +80,26 @@ public class TestMock implements Observer {
         scheduledMessages.add(new HeartBeatMessageGenerator());
 
         // Set race time
-        race.setStartTime(ZonedDateTime.now().minusMinutes(TIME_START));
+        ZonedDateTime initialTime = ZonedDateTime.now();
+        ZonedDateTime warningTime = initialTime.plusSeconds(WARNING_WAIT_TIME);
+        ZonedDateTime prepTime = warningTime.plusSeconds(PREP_WAIT_TIME);
+        ZonedDateTime connectionCutOff = warningTime.minusSeconds(CUTOFF_DIFFERENCE);
+        race.setStartTime(prepTime.plusSeconds(START_WAIT_TIME));
+
         race.setStatus(RaceStatus.PRESTART);
+
         do {
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
-            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(race.getStartTime().plusSeconds(TIME_WARNING))) {
+            if (ZonedDateTime.now().isAfter(connectionCutOff)) {
+                server.stopAcceptingConnections();
+            }
+
+            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(warningTime)) {
                 race.setStatus(RaceStatus.WARNING);
 
-            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter((race.getStartTime().plusSeconds(TIME_PREP)))) {
+            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(prepTime)) {
 
                 race.setStatus(RaceStatus.PREPARATORY);
                 server.stopAcceptingConnections();
@@ -98,7 +110,7 @@ public class TestMock implements Observer {
 
             } else {
                 race.updateBoats((timeCurr - timeLast));
-                // Send mark rounding messages for all mark roundings that occured
+                // Send mark rounding messages for all mark roundings that occurred
                 for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
                     server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
                 }

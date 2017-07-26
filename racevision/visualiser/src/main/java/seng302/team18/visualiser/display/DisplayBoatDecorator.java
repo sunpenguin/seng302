@@ -14,13 +14,12 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
     /**
      * Creates a new instance of DisplayBoat
      *
-     * @param boat          the display boat being decorated
+     * @param boat the display boat being decorated
      */
     public DisplayBoatDecorator(DisplayBoat boat) {
         super();
         this.boat = boat;
     }
-
 
 
     @Override
@@ -35,37 +34,44 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
     }
 
 
+    @Override
     public void setScale(double scaleFactor) {
         boat.setScale(scaleFactor);
     }
 
 
+    @Override
     public void setEstimatedTime(Long estimatedTime) {
         boat.setEstimatedTime(estimatedTime);
     }
 
 
+    @Override
     public void addToGroup(Group group) {
         boat.addToGroup(group);
 
     }
 
 
+    @Override
     public void setAnnotationVisible(AnnotationType type, Boolean isVisible) {
         boat.setAnnotationVisible(type, isVisible);
     }
 
 
+    @Override
     public Boolean isAnnotationVisible(AnnotationType type) {
         return boat.isAnnotationVisible(type);
     }
 
 
+    @Override
     public Color getColor() {
         return boat.getColor();
     }
 
 
+    @Override
     public void setTimeSinceLastMark(Long timeSinceLastMark) {
         boat.setTimeSinceLastMark(timeSinceLastMark);
     }

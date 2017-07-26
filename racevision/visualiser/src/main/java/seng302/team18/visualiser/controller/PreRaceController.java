@@ -17,9 +17,11 @@ import seng302.team18.message.RequestMessage;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
+import seng302.team18.visualiser.display.RaceStartTime;
 import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.send.Sender;
+
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,11 +30,16 @@ import java.time.format.DateTimeFormatter;
  * Controller for the pre race view
  */
 public class PreRaceController {
-    @FXML private Label timeLabel;
-    @FXML private Label startTimeLabel;
-    @FXML private ListView<Boat> listView;
-    @FXML private Label timeZoneLabel;
-    @FXML private Text raceNameText;
+    @FXML
+    private Label timeLabel;
+    @FXML
+    private Label startTimeLabel;
+    @FXML
+    private ListView<Boat> listView;
+    @FXML
+    private Label timeZoneLabel;
+    @FXML
+    private Text raceNameText;
 
     private ZoneTimeClock preRaceClock;
     private Interpreter interpreter;
@@ -44,19 +51,25 @@ public class PreRaceController {
     /**
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
      * duration before the race starts.
-     * @param race The race to be set up in the pre-race.
+     *
+     * @param race     The race to be set up in the pre-race.
+     * @param receiver the receiver
+     * @param sender   the sender
      */
     public void setUp(Race race, Receiver receiver, Sender sender) {
 //        this.interpreter = receiver;
         this.sender = sender;
         this.race = race;
         preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
-        raceNameText.setText(race.getName());
+        raceNameText.setText(race.getRegatta().getRegattaName());
         displayTimeZone(race.getStartTime());
-        startTimeLabel.setText(race.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+
+        RaceStartTime raceStartTime = new RaceStartTime(startTimeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race);
+
         setUpLists();
         listView.setItems(FXCollections.observableList(race.getStartingList()));
         preRaceClock.start();
+        raceStartTime.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
         this.interpreter = new Interpreter(receiver);
@@ -65,13 +78,17 @@ public class PreRaceController {
         sender.send(new RequestMessage(true));
         stage.setOnCloseRequest((event) -> {
             interpreter.shutdownNow();
-            while (!receiver.close()) {}
+            while (!receiver.close()) {
+            }
+            System.out.println("shutting down");
+            System.exit(0);
         });
     }
 
 
     /**
-     * SHOWS THE TIME ZONE OF THE RACE
+     * Shows the time zone of the race
+     *
      * @param zoneTime USED TO GET THE UTC OFFSET
      */
     private void displayTimeZone(ZonedDateTime zoneTime) {
@@ -99,6 +116,8 @@ public class PreRaceController {
 
     /**
      * Set up and initialise interpreter variables, adding interpreters of each relevant type to the global interpreter.
+     *
+     * @return the message interpreter
      */
     private MessageInterpreter initialiseInterpreter() {
         MessageInterpreter interpreter = new CompositeMessageInterpreter();
@@ -110,6 +129,8 @@ public class PreRaceController {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
 
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceStartTimeInterpreter(race));
+
         return interpreter;
     }
 
@@ -117,7 +138,7 @@ public class PreRaceController {
     /**
      * Switches from the pre-race screen to the race screen.
      *
-     * @throws IOException
+     * @throws IOException if the FXML file cannot be loaded
      */
     public void showRace() throws IOException {
         if (hasChanged) {

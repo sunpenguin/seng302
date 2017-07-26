@@ -187,6 +187,7 @@ public class CourseRenderer {
     /**
      * Reset the line between the endpoints of a gate
      *
+     * @param endPoints List of XYPairs that are the end points of the gate
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */
     public void renderGateConnection(List<XYPair> endPoints, CompoundMark compoundMark){

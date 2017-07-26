@@ -7,43 +7,27 @@ import seng302.team18.message.MessageBody;
  */
 public class BoatActionMessage implements MessageBody{
 
-    private int id = 420;
     private boolean autopilot = false;
     private boolean sailsIn = false;
     private boolean tackGybe = false;
     private boolean upwind = false;
     private boolean downwind = false;
+    private int id = 420;
+
 
     @Override
     public int getType() {
         return 100;
     }
 
-    /**
-     * No args constructor for the BoatActionMessage sets all values to false.
-     */
-    public BoatActionMessage() {}
 
+    /**
+     * Constructor that takes in a boat id. Sets all values to false.
+     *
+     * @param id of the player boat.
+     */
     public BoatActionMessage(int id) {
         this.id = id;
-    }
-
-
-    /**
-     * Constructor for the BoatActionMessage.
-     *
-     * @param autopilot the autopilot property
-     * @param sailsIn the sailsIn property (accelerating is true, luffing is false)
-     * @param tackGybe the tackGybe property
-     * @param upwind the upwind property
-     * @param downwind the downwind propertyId()
-     */
-    public BoatActionMessage(boolean autopilot, boolean sailsIn, boolean tackGybe, boolean upwind, boolean downwind) {
-        this.autopilot = autopilot;
-        this.sailsIn = sailsIn;
-        this.tackGybe = tackGybe;
-        this.upwind = upwind;
-        this.downwind = downwind;
     }
 
 
@@ -131,5 +115,15 @@ public class BoatActionMessage implements MessageBody{
      */
     public void setDownwind(boolean downwind) {
         this.downwind = downwind;
+    }
+
+
+    /**
+     * Getter for the boat id.
+     *
+     * @return boat id
+     */
+    public int getId() {
+        return id;
     }
 }

@@ -7,13 +7,23 @@ import java.time.ZoneId;
 import java.util.List;
 
 /**
- * Created by afj19 on 10/07/17.
+ * Base implementation class for course builders.
+ * <p>
+ * This class provides a skeleton for classes that build a course.
  */
-public abstract class BaseCourseBuilder {
+public abstract class AbstractCourseBuilder {
 
+    /**
+     * The compound marks in the course
+     */
     private List<CompoundMark> compoundMarks = buildCompoundMarks();
 
 
+    /**
+     * Builds a course
+     *
+     * @return the constructed course
+     */
     public Course buildCourse() {
         Course course = new Course(compoundMarks, getBoundaryMarks(), getWindDirection(), getWindSpeed(), getTimeZone(), getMarkRoundings());
 
@@ -26,20 +36,46 @@ public abstract class BaseCourseBuilder {
     }
 
 
+    /**
+     * @return the compound marks to initialise the course with
+     */
     protected List<CompoundMark> getCompoundMarks() {
         return compoundMarks;
     }
 
 
+    /**
+     * @return the mark roundings to initialise the course  with
+     */
     protected abstract List<MarkRounding> getMarkRoundings();
 
+
+    /**
+     * @return the compound marks to initialise the course with
+     */
     protected abstract List<CompoundMark> buildCompoundMarks();
 
+
+    /**
+     * @return the boundary marks to initialise the course with
+     */
     protected abstract List<BoundaryMark> getBoundaryMarks();
 
+
+    /**
+     * @return the wind direction to initialise the course with
+     */
     protected abstract double getWindDirection();
 
+
+    /**
+     * @return the wind speed to initialise the course with
+     */
     protected abstract double getWindSpeed();
 
+
+    /**
+     * @return the time zone to initialize the course withL
+     */
     protected abstract ZoneId getTimeZone();
 }

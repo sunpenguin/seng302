@@ -67,6 +67,7 @@ public class ConnectionListener implements Observer {
             int sourceID = ids.get(players.size());
             executor.submit(() -> {
                 MessageBody message = null;
+
                 while (message == null && System.currentTimeMillis() < timeout) {
                     try {
                         message = receiver.nextMessage();
@@ -109,7 +110,7 @@ public class ConnectionListener implements Observer {
      * @param sourceID the assigned id of the player's boat.
      */
     private void addPlayer(Receiver receiver, int sourceID) {
-        PlayerControllerReader player = new PlayerControllerReader(receiver, new BoatActionInterpreter(race, sourceID));
+        PlayerControllerReader player = new PlayerControllerReader(sourceID, receiver, new BoatActionInterpreter(race, sourceID));
         players.add(player);
         executor.submit(player);
     }

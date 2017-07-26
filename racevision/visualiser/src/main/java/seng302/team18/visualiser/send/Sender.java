@@ -19,7 +19,8 @@ public class Sender {
      *
      * @param socket socket to send messages over
      * @param factory to convert messages to byte arrays.
-     * @throws IOException
+     *
+     * @throws IOException Thrown if socket::getOutputStream throws an IOException
      */
     public Sender(Socket socket, MessageEncoderFactory factory) throws IOException {
         outStream = socket.getOutputStream();
@@ -33,7 +34,8 @@ public class Sender {
      * @param host string representing the ip we want to send data to
      * @param portNumber port number of the application we want to send to
      * @param factory to convert messages to byte arrays.
-     * @throws IOException
+     *
+     * @throws IOException Thrown if socket::getOutputStream throws an IOException
      */
     public Sender(String host, int portNumber, MessageEncoderFactory factory) throws IOException {
         Socket socket = new Socket(host, portNumber);
@@ -45,7 +47,6 @@ public class Sender {
      * Sends a message after encoding it with the provided encoder.
      *
      * @param body of the message to be sent
-     * @throws IOException
      */
     public void send(MessageBody body) {
         try {

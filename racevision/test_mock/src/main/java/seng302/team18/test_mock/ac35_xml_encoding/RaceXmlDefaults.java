@@ -1,9 +1,9 @@
-package seng302.team18.test_mock.model;
+package seng302.team18.test_mock.ac35_xml_encoding;
 
 import seng302.team18.message.AC35XMLRaceMessage;
 
 /**
- * Created by afj19 on 10/07/17.
+ * Defaults for when building a Race.xml message from model classes
  */
 public class RaceXmlDefaults implements IRaceXmlDefaults {
 

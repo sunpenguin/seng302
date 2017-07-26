@@ -37,9 +37,8 @@ public class Race {
         finishedList = new ArrayList<>();
         id = 0;
         status = RaceStatus.NOT_ACTIVE;
-        currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()); //.now(course.getTimeZone())
-        startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()); //.now(course.getTimeZone()).plusSeconds(300)
-        setRaceName("");
+        currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()).now(course.getTimeZone());
+        startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         raceType = RaceType.MATCH;
     }
 
@@ -49,6 +48,8 @@ public class Race {
      *
      * @param startingList ArrayList holding all entered boats
      * @param course       Course object
+     * @param raceId Integer representing the race id
+     * @param raceType RaceType enum indicating the type of race to create
      */
     public Race(List<Boat> startingList, Course course, int raceId, RaceType raceType) {
         this.startingList = startingList;
@@ -164,8 +165,9 @@ public class Race {
     /**
      * Updates the position and heading of every boat in the race.
      *
-     * @param time
+     * @param time the time in seconds
      */
+    // TODO afj19, 20th July: check the temporal unit here
     public void updateBoats(double time) { // time in seconds
         for (Boat boat : startingList) {
             if (!finishedList.contains(boat)) {
@@ -179,9 +181,10 @@ public class Race {
     /**
      * Updates a boats position then heading.
      *
-     * @param boat
+     * @param boat to be updated
      * @param time
      */
+    // TODO afj19, 20th July: check the temporal unit here
     private void updateBoat(Boat boat, double time) {
         updatePosition(boat, time);
         updateHeading(boat);
@@ -225,8 +228,8 @@ public class Race {
      * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
      * and sets the destination to the next marks coordinates.
      *
-     * @param boat
-     * @param nextLeg
+     * @param boat the boat
+     * @param nextLeg the next leg
      */
 
     public void setNextLeg(Boat boat, Leg nextLeg) {
@@ -341,20 +344,14 @@ public class Race {
         return events;
     }
 
-    public String getName() {
-        return regatta.getRegattaName();
-    }
-
-    public void setRaceName(String name) {
-        regatta.setRegattaName(name);
-    }
-
     public int getPlayerId() {
         return playerId;
     }
 
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
+
+        startingList.forEach(boat -> boat.setControlled(boat.getId().equals(playerId)));
     }
 
     public RaceType getRaceType() {

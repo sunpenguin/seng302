@@ -3,14 +3,13 @@ package seng302.team18.messageparsing;
 import com.google.common.io.ByteStreams;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.MessageBody;
+import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
 
 /**
- * Created by dhl25 on 15/07/17.
+ * Parser for BoatActionMessages.
  */
 public class BoatActionParser implements MessageBodyParser {
 
@@ -27,8 +26,14 @@ public class BoatActionParser implements MessageBodyParser {
 
     @Override
     public MessageBody parse(byte[] bytes) {
-        BoatActionMessage message = new BoatActionMessage();
-        switch (bytes[0]) {
+
+        final int ID_INDEX = 0;
+        final int ID_LENGTH = 4;
+
+        int id = ByteCheck.byteToInt(bytes, ID_INDEX, ID_LENGTH);
+        BoatActionMessage message = new BoatActionMessage(id);
+
+        switch (bytes[4]) {
             case 1:
                 message.setAutopilot(true);
                 break;
