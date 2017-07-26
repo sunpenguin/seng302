@@ -24,6 +24,7 @@ public class DisplaySail extends DisplayBoatDecorator {
     private final Scale zoom = new Scale(1, 1, 0, 0);
     private final double SAIL_LENGTH = 20;
     private double sailLength;
+    private double heading;
 
 
     /**
@@ -52,11 +53,13 @@ public class DisplaySail extends DisplayBoatDecorator {
         super.setCoordinate(coordinate);
     }
 
+
     public void setScale(double scaleFactor) {
         zoom.setX(scaleFactor);
         zoom.setY(scaleFactor);
         super.setScale(scaleFactor);
     }
+
 
     public void addToGroup(Group group){
         group.getChildren().add(sail);
@@ -65,9 +68,29 @@ public class DisplaySail extends DisplayBoatDecorator {
 
     }
 
+
+    public void setApparentWindDirection(double apparentWind) {
+        this.windDirection = apparentWind;
+        super.setApparentWindDirection(apparentWind);
+    }
+
+
     public void setHeading(double heading) {
-        rotation.setAngle(360 - windDirection);
+        this.heading  = heading;
         super.setHeading(heading);
     }
+
+
+    @Override
+    public void setSailOut(boolean sailOut) {
+        if (sailOut) {
+            rotation.setAngle(windDirection);
+        } else {
+            rotation.setAngle(heading);
+        }
+
+        super.setSailOut(sailOut);
+    }
+
 }
 
