@@ -38,7 +38,7 @@ public class BoatActionInterpreterTest {
 
     @Test
     public void upWindTest() {
-        double expected = 42d;
+        double expected = 357d;
         BoatActionMessage upWind = new BoatActionMessage(boatId);
         upWind.setUpwind(true);
         interpreter.interpret(upWind);
@@ -49,7 +49,7 @@ public class BoatActionInterpreterTest {
 
     @Test
     public void downWindTest() {
-        double expected = 48d;
+        double expected = 3d;
         BoatActionMessage downWind = new BoatActionMessage(boatId);
         downWind.setDownwind(true);
         interpreter.interpret(downWind);
