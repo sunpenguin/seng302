@@ -32,6 +32,9 @@ public class PixelMapper {
     private final int NW_BOUND_INDEX = 0; // Used in bounds
     private final int SE_BOUND_INDEX = 1; // Used in bounds
     private final double MAP_SCALE_CORRECTION = 0.95;
+    private double scale;
+    private final double WIDTH_CORRECTION = 1.25;
+    private final double HEIGHT_CORRECTION = 2;
 
     public PixelMapper(Course course, Pane pane) {
         this.course = course;
@@ -89,13 +92,8 @@ public class PixelMapper {
             paneHeight = pane.getPrefHeight();
         }
 
-        double mappingScale;
-        if (courseWidth / courseHeight > paneWidth / paneHeight) {
-            mappingScale = paneWidth / courseWidth;
-        } else {
-            mappingScale = paneHeight / courseHeight;
-        }
-        mappingScale *= MAP_SCALE_CORRECTION * Math.pow(2, zoomLevel.intValue());
+        scale = Math.min(paneWidth/courseWidth, paneHeight/courseHeight);
+        scale *= MAP_SCALE_CORRECTION * Math.pow(2, zoomLevel.intValue());
 
         XYPair worldCoordinates = coordinateToPlane(coord);
         XYPair viewCenter = coordinateToPlane(viewPortCenter);
@@ -103,8 +101,8 @@ public class PixelMapper {
         double dX = worldCoordinates.getX() - viewCenter.getX();
         double dY = worldCoordinates.getY() - viewCenter.getY();
 
-        double x = dX * mappingScale + paneWidth / 2;
-        double y = dY * mappingScale + paneHeight / 2;
+        double x = dX * scale + paneWidth / 2;
+        double y = dY * scale + paneHeight / 2;
 
         return new XYPair(x, y);
     }
@@ -140,7 +138,9 @@ public class PixelMapper {
         double dEast = gpsCalculations.distance(course.getCentralCoordinate(), east);
 
         Coordinate furthest = (dWest > dEast) ? west : east;
-        return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getX() - coordinateToPlane(furthest).getX()) * 2;
+
+        return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getX() - coordinateToPlane(furthest).getX())
+                * WIDTH_CORRECTION;
     }
 
     /**
@@ -156,7 +156,9 @@ public class PixelMapper {
         double dSouth = gpsCalculations.distance(south, course.getCentralCoordinate());
 
         Coordinate furthest = (dNorth > dSouth) ? north : south;
-        return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getY() - coordinateToPlane(furthest).getY()) * 2;
+
+        return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getY() - coordinateToPlane(furthest).getY())
+                * HEIGHT_CORRECTION;
     }
 
     /**
