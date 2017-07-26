@@ -88,7 +88,7 @@ public class SmallCourseBuilder extends AbstractCourseBuilder {
 
     @Override
     protected double getWindDirection() {
-        return 0;
+        return 200;
     }
 
     @Override

@@ -21,7 +21,7 @@ public class BoatRotaterTest {
 
     @Before
     public void setUp() {
-        boat = new Boat("name", "nm", 10);
+        boat = new Boat("name", "nm", 10, 14.019);
         boat.setHeading(45.0d);
         rotater = new BoatRotater(Collections.singletonList(boat), rotation);
     }

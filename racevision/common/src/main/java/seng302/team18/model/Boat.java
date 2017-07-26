@@ -130,7 +130,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         return coordinate;
     }
 
-    @Override
+
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
