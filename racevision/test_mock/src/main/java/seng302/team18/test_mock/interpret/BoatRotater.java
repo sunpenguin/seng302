@@ -134,13 +134,14 @@ public class BoatRotater {
      * @param deadZone      the heading at which the boat will not rotate.
      */
     public void setVMG(double windDirection, double windSpeed, double deadZone) {
-        final double right = (90 + windDirection) % 360;
-        final double left = (270 + windDirection) % 360;
+        final double right = 90;
+        final double left = 270;
         for (Boat boat : boats) {
-            double heading = boat.getHeading();
-            if (left - deadZone > heading && heading > right + deadZone) {
+            double relativeHeading = (boat.getHeading() - windDirection + 360) % 360;
+            if (left - deadZone > relativeHeading && relativeHeading > right + deadZone) {
                 boat.optimalDownWind(windSpeed, windDirection);
-            } else if (left + deadZone < heading || heading < right - deadZone) {
+            } else if (left + deadZone < relativeHeading || relativeHeading < right - deadZone) {
+                System.out.println("BoatRotater::setVMG");
                 boat.optimalUpWind(windSpeed, windDirection);
             }
         }

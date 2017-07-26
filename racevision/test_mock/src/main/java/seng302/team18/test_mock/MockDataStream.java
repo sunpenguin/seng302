@@ -18,10 +18,10 @@ import java.util.Properties;
 public class MockDataStream {
 
     // Change concrete builders here to change the preset of race/regatta/course
-    private static final BaseRaceBuilder RACE_BUILDER = new RaceBuilder1();
-    private static final BaseCourseBuilder COURSE_BUILDER = new SmallCourseBuilder();
-    private static final BaseRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
-    private static final BaseParticipantsBuilder PARTICIPANTS_BUILDER = new ParticipantsBuilder1();
+    private static final AbstractRaceBuilder RACE_BUILDER = new RaceBuilder1();
+    private static final AbstractCourseBuilder COURSE_BUILDER = new SmallCourseBuilder();
+    private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
+    private static final AbstractParticipantsBuilder PARTICIPANTS_BUILDER = new ParticipantsBuilder1();
 
     // Change the XmlDefault implementations to change the default values for the XML messages
     private static final XmlMessageBuilder XML_MESSAGE_BUILDER = new XmlMessageBuilder(new BoatXmlDefaults(), new RaceXmlDefaults());

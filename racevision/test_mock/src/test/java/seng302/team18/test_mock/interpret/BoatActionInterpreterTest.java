@@ -20,11 +20,10 @@ public class BoatActionInterpreterTest {
     private Boat player;
     private Boat notPlayer;
     private MessageInterpreter interpreter;
-
+    private final int boatId = 101;
 
     @Before
     public void setUp() {
-        final int boatId = 101;
         race = new Race();
         player = new Boat("name", "shortName", boatId);
         player.setHeading(45d);

@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Builder with a small default course.
  */
-public class SmallCourseBuilder extends BaseCourseBuilder {
+public class SmallCourseBuilder extends AbstractCourseBuilder {
 
     @Override
     protected List<CompoundMark> buildCompoundMarks() {
@@ -88,7 +88,7 @@ public class SmallCourseBuilder extends BaseCourseBuilder {
 
     @Override
     protected double getWindDirection() {
-        return 0;
+        return 59;
     }
 
     @Override
@@ -111,15 +111,6 @@ public class SmallCourseBuilder extends BaseCourseBuilder {
         for (int i = 0; i < marks.size(); i++) {
             markRoundings.add(new MarkRounding(i + 1, getCompoundMarks().get(i), MarkRounding.Direction.SP, 3));
         }
-
-//        markRoundings.add(new MarkRounding(1, getCompoundMarks().get(0), MarkRounding.Direction.SP, 3));
-//        markRoundings.add(new MarkRounding(2, getCompoundMarks().get(1), MarkRounding.Direction.PORT, 3));
-//        markRoundings.add(new MarkRounding(3, getCompoundMarks().get(2), MarkRounding.Direction.PS, 6));
-//        markRoundings.add(new MarkRounding(4, getCompoundMarks().get(3), MarkRounding.Direction.PS, 6));
-//        markRoundings.add(new MarkRounding(5, getCompoundMarks().get(4), MarkRounding.Direction.SP, 3));
-//        markRoundings.add(new MarkRounding(6, getCompoundMarks().get(1), MarkRounding.Direction.SP, 3));
-//        markRoundings.add(new MarkRounding(7, getCompoundMarks().get(2), MarkRounding.Direction.SP, 3));
-
         return markRoundings;
     }
 }

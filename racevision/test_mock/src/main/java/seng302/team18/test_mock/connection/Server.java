@@ -135,7 +135,7 @@ public class Server extends Observable {
             }
 
             while (listening) {
-                if (clients.size() < MAX_CLIENT_CONNECTION) {
+                if (clients.size() < maxClients) {
                     acceptClientConnection();
                 } else {
                     listening = false;

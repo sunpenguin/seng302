@@ -284,7 +284,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      */
     public double getBoatTWS(double windSpeed, double windHeading) {
         double twa = getTrueWindAngle(windHeading);
-        return boatPolar.getSpeedForBoat(twa, windSpeed);
+        return polar.getSpeedForBoat(twa, windSpeed);
     }
 
 
@@ -335,12 +335,15 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         double left = 270;
         double right = 90;
         double windRelativeHeading = (heading - windDirection + 360) % 360;
+        System.out.println("Boat::optimalUpWind");
         if (windRelativeHeading <= right) {
+            System.out.println("windRelativeHeading <= right");
             double optimalAngle = (polar.upWindAngle(windSpeed) + windDirection) % 360;
             double optimalSpeed = polar.upWindSpeed(windSpeed);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
         } else if (windRelativeHeading >= left) {
+            System.out.println("windRelativeHeading >= left");
             double optimalAngle = (360 - polar.upWindAngle(windSpeed) + windDirection) % 360;
             double optimalSpeed = polar.upWindSpeed(windSpeed);
             setHeading(optimalAngle);
