@@ -29,7 +29,7 @@ public class XMLRaceInterpreterTest {
 
     @Before
     public void setUp() {
-        Boat boat = new Boat("test", "t", 0);
+        Boat boat = new Boat("test", "t", 0, 1);
         boats = new ArrayList<>();
         boats.add(boat);
         race = new Race();

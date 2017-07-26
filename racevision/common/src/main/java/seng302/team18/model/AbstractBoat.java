@@ -11,7 +11,6 @@ public abstract class AbstractBoat {
     private String hullNumber;
     private Integer id;
 
-
     public AbstractBoat() {
     }
 
@@ -22,6 +21,9 @@ public abstract class AbstractBoat {
         this.nameShort = shortName;
     }
 
+    public abstract Coordinate getCoordinate();
+
+    public abstract double getLength();
 
     public String getShortName() {
         return nameShort;

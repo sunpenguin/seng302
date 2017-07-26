@@ -20,6 +20,11 @@ public class AC35XMLHead implements MessageHead {
     }
 
 
+    /**
+     *
+     *
+     * @return
+     */
     @Override
     public int getType() {
         return type.getCode();

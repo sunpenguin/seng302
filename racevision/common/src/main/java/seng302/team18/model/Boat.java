@@ -5,6 +5,9 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import seng302.team18.util.GPSCalculations;
+
+import java.util.List;
 
 /**
  * A class which stores information about a boat.
@@ -16,6 +19,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
     private Integer id;
+    private double boatLength;
     private double heading;
     private Coordinate coordinate;
     private Coordinate destination;
@@ -39,8 +43,9 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param shortName The name of the team the boat belongs to
      * @param id        The id of the boat
      */
-    public Boat(String boatName, String shortName, int id) {
+    public Boat(String boatName, String shortName, int id, double boatLength) {
         super(id, boatName, shortName);
+        this.boatLength = boatLength;
         speed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty(1);
         timeTilNextMark = 0L;
@@ -125,7 +130,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         return coordinate;
     }
 
-
+    @Override
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
@@ -275,6 +280,11 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     }
 
 
+    public double getLength() {
+        return boatLength;
+    }
+
+
     /**
      * Uses boats polar pattern to calculate boats TWS
      *
@@ -320,6 +330,31 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         }
 
         return trueWindAngle;
+    }
+
+    /**
+     * Method to check if boat has collided with another boat
+     * TODO: jth102, sbe67 25/07, handle collisions with more than one obstacle
+     *
+     * @param obstacles  list of Abstract Boats to check if boat has collied
+     * @return the obstacle the boat has collided, null is not collision
+     */
+    public AbstractBoat hasCollided(List<AbstractBoat> obstacles){
+        AbstractBoat collidedWith = null;
+        GPSCalculations calculator = new GPSCalculations();
+        double collisionZone;
+        double distanceBetween;
+        for(AbstractBoat obstacle : obstacles) {
+            if (!obstacle.equals(this)) {
+                collisionZone = (obstacle.getLength())/2 + (boatLength/2);
+                distanceBetween = calculator.distance(coordinate, (obstacle).getCoordinate());
+
+                if (distanceBetween < collisionZone) {
+                    collidedWith = obstacle;
+                }
+            }
+        }
+        return collidedWith;
     }
 
 

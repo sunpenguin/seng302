@@ -22,12 +22,13 @@ public class BoatActionInterpreterTest {
     private MessageInterpreter interpreter;
     private final int boatId = 101;
 
+
     @Before
     public void setUp() {
         race = new Race();
-        player = new Boat("name", "shortName", boatId);
-        player.setHeading(45d);
-        notPlayer = new Boat("name", "shortName", boatId + 1);
+        player = new Boat("name", "shortName", boatId, 14.019);
+        player.setHeading(0d);
+        notPlayer = new Boat("name", "shortName", boatId + 1, 14.019);
         notPlayer.setHeading(0d);
         race.setStartingList(Arrays.asList(player, notPlayer));
         race.getCourse().setWindDirection(270d);

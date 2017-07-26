@@ -24,7 +24,6 @@ public class GPSCalculations {
      * @param point2 Coordinates for point2
      * @return The distance in metres
      */
-    // TODO: Check if the method provides us any use. If not, can remove.
     public double distance(Coordinate point1, Coordinate point2) {
 
         double lat1 = point1.getLatitude();
@@ -57,7 +56,7 @@ public class GPSCalculations {
      *
      * @param initialCoord the initial coordinate
      * @param bearing      the bearing from the initial coordinate to the destination coordinate
-     * @param distance     the distance from the initial coordinate to the destination coordinate
+     * @param distance     the distance (in kilometers) from the initial coordinate to the destination coordinate
      * @return the destination coordinate
      */
     public Coordinate toCoordinate(Coordinate initialCoord, double bearing, double distance) {

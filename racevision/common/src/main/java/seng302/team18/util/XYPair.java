@@ -58,6 +58,19 @@ public class XYPair {
         return Double.compare(xyPair.y, y) == 0;
     }
 
+    /**
+     * Calculates the distance between this XYPoint and another XYPoint
+     *
+     * @param point2 YXPair, The second point used for distance calculation
+     * @return double, The distance between the two points
+     */
+    public double calculateDistance(XYPair point2) {
+        double yDifference = point2.getY() - y;
+        double xDifference = point2.getX() - x;
+
+        return Math.sqrt(Math.pow(xDifference, 2) + Math.pow(yDifference, 2));
+    }
+
     @Override
     public int hashCode() {
         int result;
@@ -67,5 +80,10 @@ public class XYPair {
         temp = Double.doubleToLongBits(y);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return (x + "," + y);
     }
 }

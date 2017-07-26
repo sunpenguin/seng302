@@ -23,7 +23,7 @@ public class MarkRoundingMessageGeneratorTest {
 
     @Test
     public void getPayload() throws Exception {
-        final Boat boat = new Boat("testBoat", "tBoat", 101);
+        final Boat boat = new Boat("testBoat", "tBoat", 101, 14.019);
         final CompoundMark mark = new CompoundMark(
                 "TestMark",
                 Arrays.asList(

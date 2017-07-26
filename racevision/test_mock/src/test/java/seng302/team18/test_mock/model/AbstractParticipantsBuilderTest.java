@@ -36,15 +36,15 @@ public class AbstractParticipantsBuilderTest {
     private static List<Boat> setUpParticipants() {
         List<Boat> boats = new ArrayList<>();
 
-        boats.add(new Boat("Boat0", "b0", 110));
-        boats.add(new Boat("Boat1", "b1", 111));
-        boats.add(new Boat("Boat2", "b2", 112));
-        boats.add(new Boat("Boat3", "b3", 113));
-        boats.add(new Boat("Boat4", "b4", 114));
-        boats.add(new Boat("Boat5", "b5", 115));
-        boats.add(new Boat("Boat6", "b6", 116));
-        boats.add(new Boat("Boat7", "b7", 117));
-        boats.add(new Boat("Boat8", "b8", 118));
+        boats.add(new Boat("Boat0", "b0", 110, 14.019));
+        boats.add(new Boat("Boat1", "b1", 111, 14.019));
+        boats.add(new Boat("Boat2", "b2", 112, 14.019));
+        boats.add(new Boat("Boat3", "b3", 113, 14.019));
+        boats.add(new Boat("Boat4", "b4", 114, 14.019));
+        boats.add(new Boat("Boat5", "b5", 115, 14.019));
+        boats.add(new Boat("Boat6", "b6", 116, 14.019));
+        boats.add(new Boat("Boat7", "b7", 117, 14.019));
+        boats.add(new Boat("Boat8", "b8", 118, 14.019));
 
         return boats;
     }

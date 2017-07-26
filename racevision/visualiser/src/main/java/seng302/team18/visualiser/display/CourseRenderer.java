@@ -22,7 +22,8 @@ public class CourseRenderer {
     private final Color MARK_COLOR = Color.GREY;
     private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
     private final double BOUNDARY_OPACITY = 0.3;
-    private final double MARK_SIZE = 10.0;
+    private final double MARK_SIZE = 10;
+    private  double markSize;
     private final double LINE_WEIGHT = 1.0;
     private final double PADDING = 20.0;
     private Polyline border = new Polyline();
@@ -46,6 +47,7 @@ public class CourseRenderer {
      * Called if the course needs to be re-rendered due to the window being resized.
      */
     public void renderCourse() {
+        markSize = MARK_SIZE * pixelMapper.mappingRatio();
 //        System.out.println(group.getChildren().size());
 //        System.out.println(course.getCompoundMarks());
         List<CompoundMark> compoundMarks = course.getCompoundMarks();
@@ -104,7 +106,6 @@ public class CourseRenderer {
      */
     private void renderMark(Mark mark) {
         double scaledMarkSize = getScaledMarkSize();
-
         Rectangle rectangle = marks.get(mark.getId());
         if (rectangle == null) {
             rectangle = new Rectangle(scaledMarkSize, scaledMarkSize, MARK_COLOR);
@@ -220,7 +221,7 @@ public class CourseRenderer {
      * @return scaled mark size
      */
     private double getScaledMarkSize() {
-        return MARK_SIZE * pixelMapper.getZoomFactor();
+        return markSize * pixelMapper.getZoomFactor();
     }
 
     /**

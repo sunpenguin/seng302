@@ -25,7 +25,7 @@ public class XMLBoatInterpreterTest {
 
     @Before
     public void setUp() {
-        Boat boat = new Boat("test", "t", 0);
+        Boat boat = new Boat("test", "t", 0, 1);
         boats = new ArrayList<>();
         boats.add(boat);
         race = new Race();
@@ -41,7 +41,7 @@ public class XMLBoatInterpreterTest {
         MessageBody message = new AC35XMLBoatMessage(boats);
         interpreter.interpret(message);
 
-        Boat expected = new Boat("test", "t", 0);
+        Boat expected = new Boat("test", "t", 0, 1);
         Assert.assertEquals(1, race.getStartingList().size());
         Boat actual = race.getStartingList().get(0);
         Assert.assertEquals(expected.getId(), actual.getId());

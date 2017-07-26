@@ -49,11 +49,12 @@ public class RaceRenderer {
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
 
             if (displayBoat == null) {
-                displayBoat = new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++));
+                double boatPixelLength = boat.getLength() * pixelMapper.mappingRatio();
 
-                // Wake
-                displayBoat = new DisplayWake(pixelMapper, displayBoat);
-                // Highlight
+                //Wake
+                displayBoat = new DisplayWake(pixelMapper,
+                        new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++), boatPixelLength));
+                //Highlight
                 if (boat.isControlled()) {
                     displayBoat = new BoatHighlight(pixelMapper, displayBoat);
                 }

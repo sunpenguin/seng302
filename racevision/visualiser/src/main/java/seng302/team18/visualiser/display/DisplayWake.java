@@ -22,14 +22,11 @@ public class DisplayWake extends DisplayBoatDecorator {
     private final double WAKE_OFFSET = 0;
     private final double WAKE_WIDTH = 10;
     private final double WAKE_HEIGHT = 20;
-    private final Double[] WAKE_SHAPE = new Double[]{
-            0.0, WAKE_OFFSET / 2,
-            WAKE_WIDTH / -2, WAKE_OFFSET / 2 + WAKE_HEIGHT,
-            WAKE_WIDTH / 2, WAKE_OFFSET / 2 + WAKE_HEIGHT
-    };
-    private final Scale wakeSpeed = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
-    private final Scale wakeZoom = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
+    private double wakeHeight;
+    private double wakeWidth;
     private final Rotate rotation = new Rotate(0, 0, 0);
+    private Scale wakeSpeed;
+    private Scale wakeZoom;
 
     private final PixelMapper pixelMapper;
 
@@ -46,6 +43,17 @@ public class DisplayWake extends DisplayBoatDecorator {
         this.pixelMapper = pixelMapper;
 
         wake = new Polygon();
+
+        wakeHeight = WAKE_HEIGHT * pixelMapper.mappingRatio();
+        wakeWidth = WAKE_WIDTH * pixelMapper.mappingRatio();
+
+        Double[] WAKE_SHAPE = new Double[]{
+                0.0, WAKE_OFFSET / 2,
+                wakeWidth / -2, WAKE_OFFSET / 2 + wakeHeight,
+                wakeWidth / 2, WAKE_OFFSET / 2 + wakeHeight
+        };
+        wakeSpeed = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
+        wakeZoom = new Scale(1, 1, WAKE_SHAPE[0], WAKE_SHAPE[1]);
         wake.getPoints().addAll(WAKE_SHAPE);
         wake.setFill(wakeColor);
         wake.getTransforms().addAll(wakeSpeed, rotation, wakeZoom);

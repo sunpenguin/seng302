@@ -28,7 +28,7 @@ public class Race {
     private RaceStatus status;
     private Integer playerId;
     private RaceType raceType;
-
+    GPSCalculations gps = new GPSCalculations();
 
     public Race() {
         participantIds = new ArrayList<>();
@@ -97,8 +97,7 @@ public class Race {
         // Set Dest
         boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCoordinate());
         // Set Coordinate
-        Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
-        boat.setCoordinate(midPoint);
+        boat.setCoordinate(getStartPosition(boat));
         // Set Heading
         GPSCalculations gps = new GPSCalculations();
         boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
@@ -106,10 +105,39 @@ public class Race {
         boat.setSpeed(tws);
     }
 
+
+    /**
+     * Method to calculate the starting position for a boat
+     * Prevents boats from overlapping
+     *
+     * @param boat boat to get starting position for
+     * @return position for boat to start at
+     */
+    private Coordinate getStartPosition(Boat boat) {
+        GPSCalculations calculator = new GPSCalculations();
+        Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
+        Coordinate startMark1 = course.getLeg(boat.getLegNumber()).getDeparture().getMarks().get(0).getCoordinate();
+        Coordinate startMark2= course.getLeg(boat.getLegNumber()).getDeparture().getMarks().get(1).getCoordinate();
+
+        double bearing = calculator.getBearing(startMark1, startMark2);
+
+        double offset = startingList.size();
+
+        if ((offset % 2) == 0) {
+            offset /= 2;
+        } else {
+            offset = -Math.floor(offset/2);
+        }
+
+        Coordinate startingPosition = calculator.toCoordinate(midPoint, bearing, (boat.getLength()*offset+10));
+
+        return startingPosition;
+    }
+
     public void addParticipant(Boat boat) {
         // check that it is alright to add a boat at this point
-        setCourseForBoat(boat);
         startingList.add(boat);
+        setCourseForBoat(boat);
         participantIds.add(boat.getId());
     }
 
@@ -263,6 +291,7 @@ public class Race {
     /**
      * Updates the boats coordinates to move closer to the boats destination.
      * Amount moved is proportional to the time passed
+     * Detects if there has been a collision between the boat and another abstract boat after updating the position
      *
      * @param boat to be moved
      * @param time that has passed
@@ -272,12 +301,37 @@ public class Race {
         if (boat.isSailOut()) {
             speed = 0;
         }
-        double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
-        double secondsTime = time / 1000.0d;
-        double distanceTravelled = mpsSpeed * secondsTime;
-        GPSCalculations gps = new GPSCalculations();
-        // set next position based on current coordinate, distance travelled, and heading.
-        boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+        List<AbstractBoat> obstacles = new ArrayList<>(startingList);
+        obstacles.addAll(course.getMarks());
+        AbstractBoat obstacle = boat.hasCollided(obstacles);
+        if (obstacle != null){
+            handleCollision(boat, obstacle);
+        } else {
+            double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
+            double secondsTime = time / 1000.0d;
+            double distanceTravelled = mpsSpeed * secondsTime;
+
+            // set next position based on current coordinate, distance travelled, and heading.
+            boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+        }
+    }
+
+
+    /**
+     * Handles the collision when one is detected by printing to the console
+     * NOTE: Bumper car edition currently in play
+     * @param boat boat collision was detected from
+     * @param obstacle obstacle the boat collided with
+     */
+    private void handleCollision(Boat boat, AbstractBoat obstacle){
+        GPSCalculations calculator = new GPSCalculations();
+        double bearingOfCollision = calculator.getBearing(obstacle.getCoordinate(), boat.getCoordinate());
+        Coordinate newBoatCoordinate = calculator.toCoordinate(boat.getCoordinate(), bearingOfCollision, boat.getLength());
+        boat.setCoordinate(newBoatCoordinate);
+        if (obstacle instanceof Boat) {
+            Coordinate newObstacleCoordinate = calculator.toCoordinate(obstacle.getCoordinate(), bearingOfCollision, -obstacle.getLength());
+            ((Boat) obstacle).setCoordinate(newObstacleCoordinate);
+        }
     }
 
 

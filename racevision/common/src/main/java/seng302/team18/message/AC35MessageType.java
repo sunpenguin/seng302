@@ -31,6 +31,11 @@ public enum AC35MessageType {
     private static final Map<Integer, AC35MessageType> CODE_MAP = Collections.unmodifiableMap(initializeMapping());
 
 
+    /**
+     * sets the type of the message
+     *
+     * @param code the value the code will be set to
+     */
     AC35MessageType(int code) {
         this.code = code;
     }

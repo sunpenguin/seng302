@@ -38,9 +38,11 @@ public enum AC35RaceXMLComponents {
 
     private final String value;
 
+
     AC35RaceXMLComponents(String value) {
         this.value = value;
     }
+
 
     @Override
     public String toString() {

@@ -19,12 +19,22 @@ public class AC35MessageHead implements MessageHead {
         this.bodySize = bodySize;
     }
 
-
+    /**
+     * Gets the getCode of the message type.
+     *
+     * @return the getCode of the message type.
+     */
     @Override
     public int getType() {
         return type.getCode();
     }
 
+
+    /**
+     * Gets the size of the message body.
+     *
+     * @return the size of the message body.
+     */
     @Override
     public int bodySize() {
         return bodySize;
