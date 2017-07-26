@@ -109,7 +109,11 @@ public class Server extends Observable {
     }
 
 
-
+    /**
+     * Closes the server if there are no clients.
+     *
+     * @param close if there are no clients.
+     */
     public void setCloseOnEmpty(boolean close) {
         closeOnEmpty = close;
     }

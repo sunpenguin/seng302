@@ -12,7 +12,7 @@ public class MockDataStream {
 
     // Change concrete builders here to change the preset of race/regatta/course
     private static final BaseRaceBuilder RACE_BUILDER = new RaceBuilder1();
-    private static final BaseCourseBuilder COURSE_BUILDER = new CourseBuilder1();
+    private static final BaseCourseBuilder COURSE_BUILDER = new SmallCourseBuilder();
     private static final BaseRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
     private static final BaseParticipantsBuilder PARTICIPANTS_BUILDER = new ParticipantsBuilder1();
 
