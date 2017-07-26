@@ -17,7 +17,7 @@ public class SparklineDataGetter {
     /**
      * Constructor
      *
-     * @param race
+     * @param race the race
      * @param dataQueue queue to add boat position data to.
      */
     public SparklineDataGetter(Queue<SparklineDataPoint> dataQueue, Race race) {

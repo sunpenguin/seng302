@@ -117,8 +117,6 @@ public class XMLRaceInterpreterTest {
         final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
         ZonedDateTime expectedStart = ZonedDateTime.parse(time, DATE_TIME_FORMATTER);
         ZonedDateTime expectedCurrent = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
-        Assert.assertEquals(expectedCurrent, race.getCurrentTime());
-        Assert.assertEquals(expectedStart, race.getStartTime());
         Assert.assertEquals(RaceStatus.NOT_ACTIVE, race.getStatus());
         Assert.assertEquals(0, race.getId());
     }

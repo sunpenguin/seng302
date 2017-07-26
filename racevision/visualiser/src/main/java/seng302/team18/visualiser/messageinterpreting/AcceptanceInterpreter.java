@@ -6,15 +6,19 @@ import seng302.team18.message.MessageBody;
 import seng302.team18.model.Race;
 
 /**
- * Created by dhl25 on 30/06/17.
+ * The MarkLocationInterpreter that sets the client's player id
+ *
+ * @see MessageInterpreter
  */
 public class AcceptanceInterpreter extends MessageInterpreter {
 
     private Race race;
 
+
     public AcceptanceInterpreter(Race race) {
         this.race = race;
     }
+
 
     @Override
     public void interpret(MessageBody message) {

@@ -53,7 +53,7 @@ public class RaceXmlEncoderTest {
         participants = new HashMap<>();
 
         for (Integer i = 107; i < 109; i++) {
-            participants.put(i, AC35XMLRaceMessage.EntryDirection.PORT);
+            participants.put(i, (i % 2 == 0) ? AC35XMLRaceMessage.EntryDirection.PORT : AC35XMLRaceMessage.EntryDirection.STARBOARD);
         }
 
         Mark mark1 = new Mark(1, new Coordinate(22, 21));
@@ -131,9 +131,11 @@ public class RaceXmlEncoderTest {
     @Before
     public void setUp() throws Exception {
         setUpRaceMessage();
+
         beforeEncoding = LocalTime.now().truncatedTo(ChronoUnit.SECONDS);
         DOMSource domSource = raceXmlEncoder.getDomSource(raceMessage);
         afterEncoding = LocalTime.now().truncatedTo(ChronoUnit.SECONDS);
+
         Document doc = (Document) domSource.getNode();
         doc.getDocumentElement().normalize();
         root = (Element) doc.getElementsByTagName(AC35RaceXMLComponents.ROOT_RACE.toString()).item(0);
@@ -144,6 +146,7 @@ public class RaceXmlEncoderTest {
     public void encodeRaceId() throws Exception {
         Element raceIdElement = (Element) root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_RACE_ID.toString()).item(0);
         int encodedId = Integer.parseInt(raceIdElement.getTextContent());
+
         assertEquals("Race id has not been encoded correctly", raceMessage.getRaceID(), encodedId);
     }
 
@@ -151,6 +154,7 @@ public class RaceXmlEncoderTest {
     @Test
     public void encodeRaceType() throws Exception {
         Element raceTypeElement = (Element) root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_RACE_TYPE.toString()).item(0);
+
         assertEquals("Race type has not been encoded correctly", raceMessage.getRaceType(), Race.RaceType.fromValue(raceTypeElement.getTextContent()));
     }
 
@@ -159,15 +163,14 @@ public class RaceXmlEncoderTest {
     public void encodeModifiedTimeTest() throws Exception {
         final Element elementModified = (Element) root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_CREATION_TIME_DATE.toString()).item(0);
         final LocalTime modifiedTime = LocalTime.parse(elementModified.getTextContent(), XmlMessage.DATE_TIME_FORMATTER);
+
         boolean isAfterBefore = modifiedTime.equals(beforeEncoding) || modifiedTime.isAfter(beforeEncoding);
         boolean isBeforeAfter = modifiedTime.equals(afterEncoding) || modifiedTime.isBefore(afterEncoding);
+
         assertTrue("xml creation time has not been correctly encoded", isAfterBefore && isBeforeAfter);
     }
 
 
-    /**
-     * Test for encodeParticipants() method.
-     */
     @Test
     public void encodeParticipantsTest() {
         Map<Integer, AC35XMLRaceMessage.EntryDirection> encodedParticipants = new HashMap<>();
@@ -192,11 +195,6 @@ public class RaceXmlEncoderTest {
     }
 
 
-    /**
-     * Test for encodeCourse() method.
-     * The encodeCourse method is built by encodeCompoundMark and encodeMarks methods, so these two methods are tested
-     * as well.
-     */
     @Test
     public void encodeCourseTest() {
         Node course = root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_COURSE.toString()).item(0);
@@ -230,10 +228,6 @@ public class RaceXmlEncoderTest {
     }
 
 
-    /**
-     * Test for encodeCompoundMarkSequence() method.
-     * It is testing on markrounding.
-     */
     @Test
     public void encodeCompoundMarkSequenceTest() {
         List<MarkRounding> encodedMarkRoundings = new ArrayList<>();
@@ -256,9 +250,6 @@ public class RaceXmlEncoderTest {
     }
 
 
-    /**
-     * Test for encodeCourseLimits() method.
-     */
     @Test
     public void encodeCourseLimitsTest() {
         List<BoundaryMark> encodedBoundaryMarks = new ArrayList<>();

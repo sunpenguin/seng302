@@ -8,19 +8,34 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by Anton J on 11/07/2017.
+ * Base implementation class for participants builder.
+ * <p>
+ * This class provides a skeleton for classes that build a participant pool.
  */
-public abstract class BaseParticipantsBuilder {
+public abstract class AbstractParticipantsBuilder {
 
     private final List<Boat> participantPool = buildParticipantPool();
 
+
+    /**
+     * Get the entire pool of participants
+     *
+     * @return the participant pool
+     */
     public List<Boat> getParticipantPool() {
         return Collections.unmodifiableList(participantPool);
     }
 
+
+    /**
+     * Get the IDs of all participants in the pool
+     *
+     * @return the IDs of all participants in the pool
+     */
     public List<Integer> getIdPool() {
         return participantPool.stream().map(AbstractBoat::getId).collect(Collectors.toList());
     }
+
 
     protected abstract List<Boat> buildParticipantPool();
 }

@@ -83,8 +83,6 @@ public class XMLRegattaInterpreterTest {
         Assert.assertEquals(RaceStatus.NOT_ACTIVE, race.getStatus());
         Assert.assertEquals(0, race.getId());
         ZonedDateTime expected = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
-        Assert.assertEquals(expected, race.getCurrentTime());
-        Assert.assertEquals(expected, race.getStartTime());
     }
 
 
