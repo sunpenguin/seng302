@@ -89,11 +89,9 @@ public class DisplayBoat implements IBoat {
         boatWidth = pixelLength;
         boatShape = new Double[]{
                 0.0, boatHeight / -2,
-                0.0, boatHeight / 2,
                 boatWidth / -2, boatHeight / 2,
-                0.0, boatHeight / -2,
                 boatWidth / 2, boatHeight / 2,
-                0.0, boatHeight / 2
+                0.0, boatHeight / -2
         };
     }
 
