@@ -58,6 +58,7 @@ public class DisplayWake extends DisplayBoatDecorator {
         wake.setFill(wakeColor);
         wake.getTransforms().addAll(wakeSpeed, rotation, wakeZoom);
         wake.toBack();
+        wake.setOpacity(0.6);
     }
 
 

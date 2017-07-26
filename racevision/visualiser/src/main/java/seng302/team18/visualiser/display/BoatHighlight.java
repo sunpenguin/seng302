@@ -32,10 +32,11 @@ public class BoatHighlight extends DisplayBoatDecorator {
         final Translate translate = new Translate(0, 1);
 
         this.pixelMapper = pixelMapper;
-        highlight = new Circle(7);
+        highlight = new Circle(11);
         highlight.setFill(Color.YELLOW);
         highlight.getTransforms().addAll(zoom, rotation, translate);
         highlight.toBack();
+        highlight.setOpacity(0.5);
     }
 
 
