@@ -30,10 +30,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private int status;
     private boolean isControlled;
     private boolean sailOut;
-    private boolean autoPilot;
-    private boolean tackGybe;
-    private boolean upWind;
-    private boolean downWind;
 
 
     /**
@@ -52,11 +48,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         timeSinceLastMark = 0L;
         timeAtLastMark = 0L;
         isControlled = true;
-        sailOut = false; // Starts with luffing
-        autoPilot = false;
-        tackGybe = false;
-        upWind = false;
-        downWind = false;
+        sailOut = true; // Starts with luffing
     }
 
 
@@ -237,51 +229,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
     public void setControlled(boolean controlled) {
         isControlled = controlled;
-    }
-
-
-    public void setAutoPilot(boolean autoPilot) {
-        this.autoPilot = autoPilot;
-    }
-
-
-    public boolean isAutoPilot() {
-        return autoPilot;
-    }
-
-
-    public void setTackGybe(boolean tackGybe) {
-        this.tackGybe = tackGybe;
-    }
-
-
-    public boolean isTackGybe() {
-        return tackGybe;
-    }
-
-
-    public void setUpWind(boolean upWind) {
-        this.upWind = upWind;
-    }
-
-
-    public boolean isUpWind() {
-        return upWind;
-    }
-
-
-    public void setDownWind(boolean downWind) {
-        this.downWind = downWind;
-    }
-
-
-    public boolean isDownWind() {
-        return downWind;
-    }
-
-
-    public double getLength() {
-        return boatLength;
     }
 
 
