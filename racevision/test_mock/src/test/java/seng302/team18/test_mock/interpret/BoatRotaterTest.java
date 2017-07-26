@@ -17,7 +17,7 @@ public class BoatRotaterTest {
     private final double rotation = 3.0d;
     private final double deadZone = 10.0d;
     private final double windDirection = 0.0d;
-    private final double windSpeed = 100.0d;
+    private final double windSpeed = 10.0d;
 
     @Before
     public void setUp() {
@@ -29,8 +29,8 @@ public class BoatRotaterTest {
 
     @Test
     public void setVMGPassTest() {
-        double expectedHeading = 42.0d;
-        double expectedSpeed = 30.0d;
+        double expectedHeading = 43.0d;
+        double expectedSpeed = 10.0d;
         rotater.setVMG(windDirection, windSpeed, deadZone);
         Assert.assertEquals(expectedHeading, boat.getHeading(), 0.1);
         Assert.assertEquals(expectedSpeed, boat.getSpeed(), 0.1);
@@ -51,7 +51,7 @@ public class BoatRotaterTest {
     @Test
     public void rotateUpwindTest() {
         double expectedHeading = 42.0d;
-        double expectedSpeed = 30.0d;
+        double expectedSpeed = 11.95d;
         rotater.rotateUpwind(windDirection, windSpeed);
         Assert.assertEquals(expectedHeading, boat.getHeading(), 0.1);
         Assert.assertEquals(expectedSpeed, boat.getSpeed(), 0.1);
@@ -61,7 +61,7 @@ public class BoatRotaterTest {
     @Test
     public void rotateDownwindTest() {
         double expectedHeading = 48.0d;
-        double expectedSpeed = 30.0d;
+        double expectedSpeed = 12.58d;
         rotater.rotateDownwind(windDirection, windSpeed);
         Assert.assertEquals(expectedHeading, boat.getHeading(), 0.1);
         Assert.assertEquals(expectedSpeed, boat.getSpeed(), 0.1);

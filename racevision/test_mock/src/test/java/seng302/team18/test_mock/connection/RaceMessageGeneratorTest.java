@@ -112,8 +112,9 @@ public class RaceMessageGeneratorTest {
 
     @Test
     public void windDirectionTest() {
+        double WIND_DIRECTION_CONVERTER = 65536.0 / 360.0;
         double expectedWindDirection = testRace.getCourse().getWindDirection();
-        int actualWindDirection = ByteCheck.byteToInt(generatedBytes, WIND_DIR_P, WIND_DIR_L);
+        double actualWindDirection = ByteCheck.byteToInt(generatedBytes, WIND_DIR_P, WIND_DIR_L) / WIND_DIRECTION_CONVERTER;
         assertEquals(expectedWindDirection, actualWindDirection, 1e-6);
     }
 

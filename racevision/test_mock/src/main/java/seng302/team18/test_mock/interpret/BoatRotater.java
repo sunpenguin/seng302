@@ -141,7 +141,6 @@ public class BoatRotater {
             if (left - deadZone > relativeHeading && relativeHeading > right + deadZone) {
                 boat.optimalDownWind(windSpeed, windDirection);
             } else if (left + deadZone < relativeHeading || relativeHeading < right - deadZone) {
-                System.out.println("BoatRotater::setVMG");
                 boat.optimalUpWind(windSpeed, windDirection);
             }
         }
