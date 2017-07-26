@@ -24,7 +24,7 @@ public class DisplaySail extends DisplayBoatDecorator {
     private final Scale zoom = new Scale(1, 1, 0, 0);
     private final double SAIL_LENGTH = 20;
     private double sailLength;
-    private double heading;
+    private final double POWERED_UP_ANGLE = 20;
 
 
     /**
@@ -75,18 +75,13 @@ public class DisplaySail extends DisplayBoatDecorator {
     }
 
 
-    public void setHeading(double heading) {
-        this.heading  = heading;
-        super.setHeading(heading);
-    }
-
 
     @Override
     public void setSailOut(boolean sailOut) {
         if (sailOut) {
             rotation.setAngle(windDirection);
         } else {
-            rotation.setAngle(heading);
+            rotation.setAngle(windDirection + POWERED_UP_ANGLE);
         }
 
         super.setSailOut(sailOut);
