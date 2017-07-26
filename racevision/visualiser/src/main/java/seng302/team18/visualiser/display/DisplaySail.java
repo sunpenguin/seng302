@@ -20,11 +20,9 @@ public class DisplaySail extends DisplayBoatDecorator {
     private PixelMapper pixelMapper;
     private final Rotate rotation = new Rotate(0, 0, 0);
     private final Scale zoom = new Scale(1, 1, 0, 0);
-    private final double SAIL_LENGTH = 15;
-    private final Double[] SAIL_OUT = new Double[]{
-            0.0, 0.0,
-            0.0, SAIL_LENGTH / 2
-    };
+    private final double SAIL_LENGTH = 20;
+    private double sailLength;
+
 
     /**
      * Creates a new instance of DisplayBoat
@@ -35,6 +33,11 @@ public class DisplaySail extends DisplayBoatDecorator {
         super(boat);
         this.pixelMapper = mapper;
         sail = new Polyline();
+        sailLength = SAIL_LENGTH * pixelMapper.mappingRatio();
+        Double[] SAIL_OUT = new Double[]{
+                0.0, 0.0,
+                0.0, sailLength / 2
+        };
         sail.getPoints().addAll(SAIL_OUT);
         sail.getTransforms().addAll(rotation, zoom);
         sail.toFront();
