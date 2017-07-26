@@ -321,7 +321,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         double distanceBetween;
         for(AbstractBoat obstacle : obstacles) {
             if (!obstacle.equals(this)) {
-                collisionZone = (obstacle.getLength()) + (boatLength);
+                collisionZone = (obstacle.getLength())/2 + (boatLength/2);
                 distanceBetween = calculator.distance(coordinate, (obstacle).getCoordinate());
 
                 if (distanceBetween < collisionZone) {

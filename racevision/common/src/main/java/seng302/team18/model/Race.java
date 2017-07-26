@@ -127,7 +127,7 @@ public class Race {
             offset = -Math.floor(offset/2);
         }
 
-        Coordinate startingPosition = calculator.toCoordinate(midPoint, bearing, (boat.getLength()*offset*2)+2);
+        Coordinate startingPosition = calculator.toCoordinate(midPoint, bearing, (boat.getLength()*offset+10));
 
         return startingPosition;
     }
@@ -324,10 +324,10 @@ public class Race {
     private void handleCollision(Boat boat, AbstractBoat obstacle){
         GPSCalculations calculator = new GPSCalculations();
         double bearingOfCollision = calculator.getBearing(obstacle.getCoordinate(), boat.getCoordinate());
-        Coordinate newBoatCoordinate = calculator.toCoordinate(boat.getCoordinate(), bearingOfCollision, boat.getLength()*3);
+        Coordinate newBoatCoordinate = calculator.toCoordinate(boat.getCoordinate(), bearingOfCollision, boat.getLength());
         boat.setCoordinate(newBoatCoordinate);
         if (obstacle instanceof Boat) {
-            Coordinate newObstacleCoordinate = calculator.toCoordinate(obstacle.getCoordinate(), bearingOfCollision, -obstacle.getLength()*3);
+            Coordinate newObstacleCoordinate = calculator.toCoordinate(obstacle.getCoordinate(), bearingOfCollision, -obstacle.getLength());
             ((Boat) obstacle).setCoordinate(newObstacleCoordinate);
         }
     }
