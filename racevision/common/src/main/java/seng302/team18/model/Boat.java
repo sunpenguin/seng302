@@ -162,6 +162,10 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         this.timeTilNextMark = timeTilNextMark;
     }
 
+    @Override
+    public double getLength() {
+        return boatLength;
+    }
 
     public Long getTimeSinceLastMark() {
         return timeSinceLastMark;
