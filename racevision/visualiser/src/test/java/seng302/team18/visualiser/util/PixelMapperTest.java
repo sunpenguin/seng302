@@ -130,6 +130,8 @@ public class PixelMapperTest {
     }
 
 
+    @Ignore
+    @Test
     public void mappingRatioOnTinyCourseTest() {
         //Test for when 1 k above centre is outside of course
         //Make course
