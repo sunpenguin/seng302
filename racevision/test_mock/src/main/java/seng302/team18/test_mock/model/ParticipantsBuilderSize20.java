@@ -88,7 +88,7 @@ public class ParticipantsBuilderSize20 extends AbstractParticipantsBuilder {
         boat13.setStoweName("APO");
         boats.add(boat13);
 
-        Boat boat14 = new Boat("Moon Hunter", "TEAM Artemis", 135, 14.019);
+        Boat boat14 = new Boat("Moon Bow", "TEAM Tsukuyomi", 135, 14.019);
         boat14.setHullNumber("AC4515");
         boat14.setStoweName("ART");
         boats.add(boat14);
