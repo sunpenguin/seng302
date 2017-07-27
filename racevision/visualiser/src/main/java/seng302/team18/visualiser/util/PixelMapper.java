@@ -31,7 +31,7 @@ public class PixelMapper {
     public static final int ZOOM_LEVEL_4X = 1;
     private final int NW_BOUND_INDEX = 0; // Used in bounds
     private final int SE_BOUND_INDEX = 1; // Used in bounds
-    private final double MAP_SCALE_CORRECTION = 0.95;
+    private final double MAP_SCALE_CORRECTION = 0.8;
     private double scale;
     private final double WIDTH_CORRECTION = 1.25;
     private final double HEIGHT_CORRECTION = 2;
@@ -108,11 +108,11 @@ public class PixelMapper {
     }
 
     /**
-     *  Calculates the mapping ratio between the pixel and geographical coordinates
+     * Calculates the mapping ratio between the pixel and geographical coordinates
      *
      * @return double, The ratio value (number of pixels : meter)
      */
-    public double mappingRatio(){
+    public double mappingRatio() {
         GPSCalculations gpsCalculator = new GPSCalculations();
         Coordinate oneKNorthOfCentre = gpsCalculator.toCoordinate(course.getCentralCoordinate(), 0, 1000);
 
@@ -121,7 +121,7 @@ public class PixelMapper {
 
         double distanceBetweenK = XYCenter.calculateDistance(XYKNorthOfCenter);
 
-        return distanceBetweenK/1000;
+        return distanceBetweenK / 1000;
     }
 
 

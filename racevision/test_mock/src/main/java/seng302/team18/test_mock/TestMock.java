@@ -25,7 +25,7 @@ public class TestMock implements Observer {
     private final Server server;
     private final XmlMessageBuilder xmlMessageBuilder;
     private final List<Boat> boats;
-
+    private boolean open = true;
 
     /**
      * The messages to be sent on a schedule during race simulation
@@ -46,6 +46,8 @@ public class TestMock implements Observer {
             ClientConnection client = (ClientConnection) arg;
             race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
             sendXmlMessages(client);
+        } else if (arg instanceof ServerState) {
+            open = !((ServerState) arg).equals(ServerState.CLOSED);
         }
     }
 
@@ -63,12 +65,12 @@ public class TestMock implements Observer {
     /**
      * Simulate the race while sending the scheduled messages
      *
-     * @param START_WAIT_TIME Number of seconds between the preparation phase and the start time
-     * @param WARNING_WAIT_TIME Number of seconds between the time the method is executed and warning phase
-     * @param PREP_WAIT_TIME Number of seconds between the warning phase and the preparation phase
-     * @param CUTOFF_DIFFERENCE Number of seconds before entering the warning phase for not allowing new connections
+     * @param startWaitTime Number of seconds between the preparation phase and the start time
+     * @param warningWaitTime Number of seconds between the time the method is executed and warning phase
+     * @param prepWaitTime Number of seconds between the warning phase and the preparation phase
+     * @param cutoffDifference Number of seconds before entering the warning phase for not allowing new connections
      */
-    public void runSimulation(int START_WAIT_TIME, int WARNING_WAIT_TIME, int PREP_WAIT_TIME, int CUTOFF_DIFFERENCE) {
+    public void runSimulation(int startWaitTime, int warningWaitTime, int prepWaitTime, int cutoffDifference) {
         final int LOOP_FREQUENCY = 60;
 
         long timeCurr = System.currentTimeMillis();
@@ -79,10 +81,10 @@ public class TestMock implements Observer {
 
         // Set race time
         ZonedDateTime initialTime = ZonedDateTime.now();
-        ZonedDateTime warningTime = initialTime.plusSeconds(WARNING_WAIT_TIME);
-        ZonedDateTime prepTime = warningTime.plusSeconds(PREP_WAIT_TIME);
-        ZonedDateTime connectionCutOff = warningTime.minusSeconds(CUTOFF_DIFFERENCE);
-        race.setStartTime(prepTime.plusSeconds(START_WAIT_TIME));
+        ZonedDateTime warningTime = initialTime.plusSeconds(warningWaitTime);
+        ZonedDateTime prepTime = warningTime.plusSeconds(prepWaitTime);
+        ZonedDateTime connectionCutOff = warningTime.minusSeconds(cutoffDifference);
+        race.setStartTime(prepTime.plusSeconds(startWaitTime));
 
         race.setStatus(RaceStatus.PRESTART);
 
@@ -132,7 +134,7 @@ public class TestMock implements Observer {
                 e.printStackTrace();
             }
 
-        } while (!race.isFinished());
+        } while (!race.isFinished() && open);
 
         // Sends final message
         ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);

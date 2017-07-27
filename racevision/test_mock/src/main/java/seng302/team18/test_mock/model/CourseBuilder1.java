@@ -115,7 +115,7 @@ public class CourseBuilder1 extends AbstractCourseBuilder {
 
     @Override
     protected double getWindDirection() {
-        return 0;
+        return 270 ;
     }
 
 

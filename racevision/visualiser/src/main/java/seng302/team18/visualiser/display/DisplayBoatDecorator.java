@@ -1,7 +1,5 @@
 package seng302.team18.visualiser.display;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
@@ -93,50 +91,8 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
 
 
     @Override
-    public int getStatus() {
-        return boat.getStatus();
-    }
-
-
-    @Override
-    public void setStatus(int status) {
-        boat.setStatus(status);
-    }
-
-
-    @Override
-    public DoubleProperty speedProperty() {
-        return boat.speedProperty();
-    }
-
-
-    @Override
-    public int getLegNumber() {
-        return boat.getLegNumber();
-    }
-
-
-    @Override
-    public IntegerProperty legNumberProperty() {
-        return boat.legNumberProperty();
-    }
-
-
-    @Override
-    public void setLegNumber(int legNumber) {
-        boat.setLegNumber(legNumber);
-    }
-
-
-    @Override
     public Coordinate getCoordinate() {
         return boat.getCoordinate();
-    }
-
-
-    @Override
-    public String getName() {
-        return boat.getName();
     }
 
 
@@ -161,42 +117,6 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
     @Override
     public double getSpeed() {
         return boat.getSpeed();
-    }
-
-
-    @Override
-    public Coordinate getDestination() {
-        return boat.getDestination();
-    }
-
-
-    @Override
-    public void setDestination(Coordinate destination) {
-        boat.setDestination(destination);
-    }
-
-
-    @Override
-    public int getPlace() {
-        return boat.getPlace();
-    }
-
-
-    @Override
-    public void setPlace(int place) {
-        boat.setPlace(place);
-    }
-
-
-    @Override
-    public IntegerProperty placeProperty() {
-        return boat.placeProperty();
-    }
-
-
-    @Override
-    public Integer getId() {
-        return boat.getId();
     }
 
 
@@ -233,6 +153,18 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
     @Override
     public void setTimeAtLastMark(Long timeAtLastMark) {
         boat.setTimeAtLastMark(timeAtLastMark);
+    }
+
+
+    @Override
+    public void setApparentWindDirection(double apparentWind) {
+        boat.setApparentWindDirection(apparentWind);
+    }
+
+
+    @Override
+    public void setSailOut(boolean sailOut) {
+        boat.setSailOut(sailOut);
     }
 
     @Override

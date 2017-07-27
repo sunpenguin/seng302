@@ -11,14 +11,15 @@ import java.util.*;
 public class Server extends Observable {
     private final List<ClientConnection> clients = new ArrayList<>();
     private final ServerConnectionListener listener = new ServerConnectionListener();
-    private final int MAX_CLIENT_CONNECTION;
+    private final int maxClients;
 
     private ServerSocket serverSocket;
-    private final int PORT;
+    private final int port;
+    private boolean closeOnEmpty;
 
-    public Server(int port, int MAX_CLIENT_CONNECTION) {
-        this.PORT = port;
-        this.MAX_CLIENT_CONNECTION = MAX_CLIENT_CONNECTION;
+    public Server(int port, int maxClients) {
+        this.port = port;
+        this.maxClients = maxClients;
     }
 
     /**
@@ -27,13 +28,13 @@ public class Server extends Observable {
      */
     public void openServer() {
         try {
-            serverSocket = ServerSocketFactory.getDefault().createServerSocket(PORT);
+            serverSocket = ServerSocketFactory.getDefault().createServerSocket(port);
         } catch (IOException e) {
-            System.err.println("Could not listen on port " + PORT);
+            System.err.println("Could not listen on port " + port);
             System.err.println("Exiting program");
             System.exit(-1);
         }
-        System.out.println("Stream opened successfully on port: " + PORT);
+        System.out.println("Stream opened successfully on port: " + port);
 
         acceptClientConnection();
         listener.start();
@@ -77,7 +78,6 @@ public class Server extends Observable {
                 }
             }
         }
-
         try {
             serverSocket.close();
         } catch (IOException e) {
@@ -100,10 +100,23 @@ public class Server extends Observable {
             ClientConnection client = clients.get(i);
             if (!client.sendMessage(message)) {
                 clients.remove(i);
-//                setChanged();
-//                notifyObservers(client.getId());
+                if (clients.isEmpty() && closeOnEmpty) {
+                    close();
+                    setChanged();
+                    notifyObservers(ServerState.CLOSED);
+                }
             }
         }
+    }
+
+
+    /**
+     * Closes the server if there are no clients.
+     *
+     * @param close if there are no clients.
+     */
+    public void setCloseOnEmpty(boolean close) {
+        closeOnEmpty = close;
     }
 
 
@@ -122,7 +135,7 @@ public class Server extends Observable {
             }
 
             while (listening) {
-                if (clients.size() < MAX_CLIENT_CONNECTION) {
+                if (clients.size() < maxClients) {
                     acceptClientConnection();
                 } else {
                     listening = false;

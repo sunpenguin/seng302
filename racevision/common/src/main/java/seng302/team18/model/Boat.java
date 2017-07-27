@@ -13,8 +13,8 @@ import java.util.List;
  * A class which stores information about a boat.
  */
 
-public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
-    private PolarPattern boatPolar = new AC35PolarPattern();
+public class Boat extends AbstractBoat implements GeographicLocation {
+    private PolarPattern polar = new AC35PolarPattern();
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
@@ -30,10 +30,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
     private int status;
     private boolean isControlled;
     private boolean sailOut;
-    private boolean autoPilot;
-    private boolean tackGybe;
-    private boolean upWind;
-    private boolean downWind;
+
 
     /**
      * A constructor for the Boat class
@@ -52,10 +49,6 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         timeAtLastMark = 0L;
         isControlled = true;
         sailOut = true; // Starts with luffing
-        autoPilot = false;
-        tackGybe = false;
-        upWind = false;
-        downWind = false;
     }
 
 
@@ -84,6 +77,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         this.heading = heading;
     }
 
+
     /**
      * A getter for the speed of the boat
      *
@@ -92,6 +86,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
     public double getSpeed() {
         return speed.get();
     }
+
 
     /**
      * A setter for the speed of the boat
@@ -127,7 +122,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         return coordinate;
     }
 
-    @Override
+
     public void setCoordinate(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
@@ -167,6 +162,10 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         this.timeTilNextMark = timeTilNextMark;
     }
 
+    @Override
+    public double getLength() {
+        return boatLength;
+    }
 
     public Long getTimeSinceLastMark() {
         return timeSinceLastMark;
@@ -187,13 +186,16 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         this.timeAtLastMark = timeAtLastMark;
     }
 
+
     public boolean isSailOut() {
         return sailOut;
     }
 
+
     public void setSailOut(boolean sailOut) {
         this.sailOut = sailOut;
     }
+
 
     @Override
     public String toString() {
@@ -212,6 +214,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
                 ", timeAtLastMark=" + timeAtLastMark +
                 '}';
     }
+
 
     public int getStatus() {
         return status;
@@ -232,46 +235,19 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         isControlled = controlled;
     }
 
-    public void setAutoPilot(boolean autoPilot) {
-        this.autoPilot = autoPilot;
-    }
-
-    public boolean isAutoPilot() {return autoPilot; }
-
-    public void setTackGybe(boolean tackGybe) {
-        this.tackGybe = tackGybe;
-    }
-
-    public boolean isTackGybe() {return tackGybe; }
-
-    public void setUpWind(boolean upWind) {
-        this.upWind = upWind;
-    }
-
-    public boolean isUpWind() {return upWind; }
-
-    public void setDownWind(boolean downWind) {
-        this.downWind = downWind;
-    }
-
-    public boolean isDownWind() {return downWind; }
-
-    public double getLength() {
-        return boatLength;
-    }
-
 
     /**
      * Uses boats polar pattern to calculate boats TWS
      *
-     * @param windSpeed double, the speed of the wind
+     * @param windSpeed   double, the speed of the wind
      * @param windHeading double, the direction of the wind
      * @return double, the tws of the boat
      */
     public double getBoatTWS(double windSpeed, double windHeading) {
         double twa = getTrueWindAngle(windHeading);
-        return boatPolar.getSpeedForBoat(twa, windSpeed);
+        return polar.getSpeedForBoat(twa, windSpeed);
     }
+
 
     /**
      * Gets true wind angle for boat.
@@ -285,7 +261,7 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         double flippedWindDirection = (windHeading + 180) % 360; // flipping wind direction
         double theta = 180 - flippedWindDirection;
         double boatPlusTheta = heading + theta;
-        double windPlusTheta = windHeading + theta; //will be 180
+//        double windPlusTheta = windHeading + theta; //will be 180
 
         if (boatPlusTheta > 360) {
             boatPlusTheta = boatPlusTheta - 360;
@@ -321,7 +297,12 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         double distanceBetween;
         for(AbstractBoat obstacle : obstacles) {
             if (!obstacle.equals(this)) {
-                collisionZone = (obstacle.getLength())/2 + (boatLength/2);
+                collisionZone = (obstacle.getLength()) + (boatLength/2);
+
+                if (obstacle instanceof Mark) {
+                    collisionZone *= 1.3;
+                }
+
                 distanceBetween = calculator.distance(coordinate, (obstacle).getCoordinate());
 
                 if (distanceBetween < collisionZone) {
@@ -331,4 +312,58 @@ public class Boat extends AbstractBoat implements GeographicLocation, IBoat {
         }
         return collidedWith;
     }
+
+
+    /**
+     * Sets heading so that VMG towards up wind is maximum and updates the speed.
+     * <p>
+     * Pre-condition: boat is heading towards from 0 to 180 degree.
+     *
+     * @param windSpeed     double, speed of the wind in knots
+     * @param windDirection double, direction of the wind (degrees)
+     */
+    public void optimalUpWind(double windSpeed, double windDirection) {
+        double left = 270;
+        double right = 90;
+        double windRelativeHeading = (heading - windDirection + 360) % 360;
+        if (windRelativeHeading <= right) {
+            double optimalAngle = (polar.upWindAngle(windSpeed) + windDirection) % 360;
+            double optimalSpeed = polar.upWindSpeed(windSpeed);
+            setHeading(optimalAngle);
+            setSpeed(optimalSpeed);
+        } else if (windRelativeHeading >= left) {
+            double optimalAngle = (360 - polar.upWindAngle(windSpeed) + windDirection) % 360;
+            double optimalSpeed = polar.upWindSpeed(windSpeed);
+            setHeading(optimalAngle);
+            setSpeed(optimalSpeed);
+        }
+    }
+
+
+    /**
+     * Sets heading so that VMG towards downwind is maximum and updates the speed.
+     * <p>
+     * Pre-condition: boat is heading towards from 90 to 270 degree.
+     *
+     * @param windSpeed     double, speed of the wind in knots
+     * @param windDirection double, direction of the wind (degrees)
+     */
+    public void optimalDownWind(double windSpeed, double windDirection) {
+        double right = 90;
+        double left = 270;
+        double bottom = 180;
+        double windRelativeHeading = (heading - windDirection + 360) % 360;
+        if (windRelativeHeading >= right && windRelativeHeading <= bottom) {
+            double optimalAngle = (polar.downWindAngle(windSpeed) + windDirection) % 360;
+            double optimalSpeed = polar.downWindSpeed(windSpeed);
+            setHeading(optimalAngle);
+            setSpeed(optimalSpeed);
+        } else if (windRelativeHeading >= bottom && windRelativeHeading <= left) {
+            double optimalAngle = (360 - polar.downWindAngle(windSpeed) + windDirection) % 360;
+            double optimalSpeed = polar.downWindSpeed(windSpeed);
+            setHeading(optimalAngle);
+            setSpeed(optimalSpeed);
+        }
+    }
+
 }

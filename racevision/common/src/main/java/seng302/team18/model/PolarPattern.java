@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by sbe67 on 5/07/17.
+ * Stores the polar data for multiple wind speeds for a type of boat
  */
 public abstract class PolarPattern {
 
@@ -41,13 +41,12 @@ public abstract class PolarPattern {
     /**
      * Creates the map of polars with wind speeds.
      * Called in constructor.
-     * Gets overridden by subclasses
      */
     abstract protected Map<Double, Polar> createMap();
 
 
     /**
-     * From the polars list, a singular polar is selected.
+     * From the polars map, a singular polar is selected.
      * The polar with the closest windSpeed is selected.
      * Note: If distance from two polars is the same, the lower speed polar is selected.
      *
@@ -77,36 +76,6 @@ public abstract class PolarPattern {
 
 
     /**
-     * Calculates the speed at which the boat would travel.
-     *
-     * @param boatTWA   double, true wind angle of the boat
-     * @param windSpeed double, speed of the wind
-     * @return double, the speed of the boat
-     */
-    public double getSpeedForBoat(double boatTWA, double windSpeed) {
-        //Get polar to be used
-        Polar polar = getPolarForWindSpeed(windSpeed);
-        //Set initial
-        double bestAngle = polar.getUpWindAngle();
-        double bestDifference = Math.abs(boatTWA - bestAngle);
-
-        for (Map.Entry<Double, Double> currentSet : polar.getMapSpeedAtAngles().entrySet()) {
-            double currentDifference = Math.abs(boatTWA - currentSet.getKey());
-
-            if (currentDifference < bestDifference) {
-                bestAngle = currentSet.getKey();
-                bestDifference = currentDifference;
-            } else if (currentDifference == bestDifference && currentSet.getKey() < bestAngle) {
-                bestAngle = currentSet.getKey();
-                bestDifference = currentDifference;
-            }
-        }
-
-        return polar.getMapSpeedAtAngles().get(bestAngle);
-    }
-
-
-    /**
      * Method to find the two polars with the closest windSpeeds to given wind speed.
      * One polar will be less than the windspeed, one will be greater.
      * Note: May return a list on length 1.
@@ -115,9 +84,9 @@ public abstract class PolarPattern {
      * 2. The windspeed is equal to the windspeed of a polar
      *
      * @param windSpeed double, the speed of the wind
-     * @return List<Polar>, a list of polar, either of length 1 or 2
+     * @return a List of polars, either of length 1 or 2
      */
-    public List<Polar> getTwoClosestPolars(double windSpeed) {
+    public List<Polar> getClosestPolars(double windSpeed) {
         List<Polar> closestPolars = new ArrayList<>();
 
         if (windSpeedIsAboveMaxPolar(windSpeed)) {
@@ -187,15 +156,15 @@ public abstract class PolarPattern {
      * A polar will  return a singular point in the TWA is below the min value in the polar
      *
      * @param boatTWA       double, the direction of the wind
-     * @param closestPolars List<Polar>, list containing 1 or 2 polars
-     * @return List<XYPair>, for each item: X = Windspeed of polar, Y = Angle
+     * @param closestPolars List containing 1 or 2 polars
+     * @return List, for each item: X = Windspeed of polar, Y = Angle
      */
     public List<XYPair> getClosestPoints(double boatTWA, List<Polar> closestPolars) {
         List<XYPair> closestPoints = new ArrayList<>();
 
         for (Polar polar : closestPolars) {
 
-            if (boatTWAIsAboveMax(boatTWA, polar)) {
+            if (boatTWA > polar.getMaxAngle()) {
                 double maxAngle = -1;
 
                 for (double angle : polar.getMapSpeedAtAngles().keySet()) {
@@ -210,7 +179,7 @@ public abstract class PolarPattern {
                 continue;
             }
 
-            if (boatTWAIsBelowMin(boatTWA, polar)) {
+            if (boatTWA < polar.getMinAngle()) {
                 double minAngle = 181;
 
                 for (double angle : polar.getMapSpeedAtAngles().keySet()) {
@@ -258,7 +227,7 @@ public abstract class PolarPattern {
                 if (currentAngle > boatTWA) {
                     double currentDistance = Math.abs(boatTWA - currentAngle);
 
-                    if (currentDistance <= closestUppperDistacnce || closestUpperAngle > boatTWA) {
+                    if (currentDistance <= closestUppperDistacnce || closestUpperAngle < boatTWA) {
                         closestUpperAngle = currentAngle;
                         closestUppperDistacnce = currentDistance;
                     }
@@ -273,6 +242,110 @@ public abstract class PolarPattern {
         }
 
         return closestPoints;
+    }
+
+
+    /**
+     * Calculates the boatSpeed of a point on a singular polar
+     *
+     * @param points list of points on a polar length 1 or 2.
+     *               For point in list X = Polar windSpeed Y = angle.
+     *               Points must be from the same polar.
+     * @param boatTWA double, the true wind angle of the boat
+     * @return double, the calculates windSpeed on a polar at the boats TWA
+     */
+    public double getValueForPolar(List<XYPair> points, double boatTWA) {
+        Polar polar = getPolarForWindSpeed(points.get(0).getX());
+        double speed = 0.0;
+        if (points.size() == 2) {
+            //List of XYPairs where X = Angle and Y = boatspeed at angle
+            List<XYPair> speedAtPoints = new ArrayList<>();
+
+            XYPair pointA = new XYPair(points.get(0).getY(), polar.getMapSpeedAtAngles().get(points.get(0).getY()));
+            XYPair pointB = new XYPair(points.get(1).getY(), polar.getMapSpeedAtAngles().get(points.get(1).getY()));
+
+            speedAtPoints.add(pointA);
+            speedAtPoints.add(pointB);
+
+
+            speed = calculateYAtXbetween2points(speedAtPoints, boatTWA);
+
+        } else {
+            if (boatTWA > polar.getMaxAngle()) {
+                double max = polar.getMaxAngle();
+                double dropOffRate = (polar.getWindSpeed() / (180 - max)) / 2;
+                double speedAtMax = polar.getMapSpeedAtAngles().get(max);
+
+                speed = speedAtMax - (dropOffRate * (boatTWA - max));
+
+            } else if (boatTWA < polar.getMinAngle()) {
+                double min = polar.getMinAngle();
+                double dropOffRate = (polar.getWindSpeed() / (min)) / 2;
+                double speedAtMin = polar.getMapSpeedAtAngles().get(min);
+
+                speed =  speedAtMin - (dropOffRate * (boatTWA - min));
+
+            } else { //boatTWA is equal to a value in the polar
+                for (Double angle : polar.getMapSpeedAtAngles().keySet()) {
+                    if (angle == points.get(0).getY()) {
+                        speed = polar.getMapSpeedAtAngles().get(angle);
+                    }
+                }
+            }
+        }
+        return speed;
+    }
+
+
+    public double getSpeedForBoat(double boatTWA,double windSpeed) {
+        List<Polar> closestPolars = getClosestPolars(windSpeed);
+        List<XYPair> closestPoints = getClosestPoints(boatTWA, closestPolars);
+
+        List<List<XYPair>> splitClosestPoints = new ArrayList<>();
+
+        //Splitting the points into lists based on windSpeed
+        for (XYPair point : closestPoints) {
+            boolean found = false;
+
+            for (List<XYPair> polar : splitClosestPoints) {
+                if (polar.get(0).getX() == point.getX()) {
+                    found = true;
+                    polar.add(point);
+                }
+            }
+
+            if (!found) {
+                List<XYPair> newPolar = new ArrayList<>();
+                newPolar.add(point);
+                splitClosestPoints.add(newPolar);
+            }
+        }
+
+        //List of XYPairs X = windSpeed Y = calculated boatSpeed at TWA
+        List<XYPair> valuesForWindspeeds = new ArrayList<>();
+
+        for (List<XYPair> polar : splitClosestPoints) {
+            double boatSpeedForPolar = getValueForPolar(polar, boatTWA);
+            valuesForWindspeeds.add(new XYPair(polar.get(0).getX(), boatSpeedForPolar));
+        }
+
+        double boatSpeed;
+
+        if (valuesForWindspeeds.size() == 2) { //If two polars used
+            for (XYPair pair : valuesForWindspeeds){
+            }
+            boatSpeed = calculateYAtXbetween2points(valuesForWindspeeds, windSpeed);
+        } else {//Only one polar
+            if (windSpeed > closestPolars.get(0).getWindSpeed()) {  //If above highest polar value
+                double maxWindspeed = closestPolars.get(0).getWindSpeed();
+
+                boatSpeed = valuesForWindspeeds.get(0).getY() * (windSpeed / maxWindspeed);
+            } else {
+                boatSpeed = valuesForWindspeeds.get(0).getY();
+            }
+        }
+
+        return boatSpeed;
     }
 
 
@@ -314,46 +387,74 @@ public abstract class PolarPattern {
         return equalWindSpeedPolar;
     }
 
-
     /**
-     * Checks if given TWA is greater than the max angle in a polar
-     * Used in getClosestPoints()
+     * Estimates a value for Y at a X where X is between two given points.
      *
-     * @param boatTWA double, true wind angle of boat
-     * @param polar   Polar, polar to be checked
-     * @return boolean, true if given twa is greater than the max angle in a polar
+     * @param points List<XYPair>, of size two, both points outside of X
+     * @param x double, an X value to calculate Y for
+     * @return double, the estimated y value
      */
-    private boolean boatTWAIsAboveMax(double boatTWA, Polar polar) {
-        boolean aboveMax = true;
+    private double calculateYAtXbetween2points(List<XYPair> points, double x) {
+        XYPair pointA = points.get(0);
+        XYPair pointB = points.get(1);
 
-        for (double angle : polar.getMapSpeedAtAngles().keySet()) {
-            if (angle >= boatTWA) {
-                aboveMax = false;
-            }
-        }
+        double distanceFromPointA = Math.abs(x - pointA.getX());
+        double distanceFromPointB = Math.abs(x - pointB.getX());
+        double totalDistance = distanceFromPointA + distanceFromPointB;
 
-        return aboveMax;
+        double weightPointA = distanceFromPointB / totalDistance;
+        double weightPointB = distanceFromPointA / totalDistance;
+
+        double pointAComponet = (pointA.getY() * weightPointA);
+        double pointBComponet = (pointB.getY() * weightPointB);
+
+        return pointAComponet + pointBComponet;
     }
 
     /**
-     * Checks if given TWA is less than the min angle in a polar
-     * Used in getClosestPoints()
+     * Gets the optimal angle for traveling upwind.
      *
-     * @param boatTWA double, true wind angle of boat
-     * @param polar   Polar, polar to be checked
-     * @return boolean, true if given twa is less than the min angle in a polar
+     * @param windSpeed speed of wind.
+     * @return optimal heading.
      */
-    private boolean boatTWAIsBelowMin(double boatTWA, Polar polar) {
-        boolean belowMin = true;
-
-        for (double angle : polar.getMapSpeedAtAngles().keySet()) {
-            if (angle <= boatTWA) {
-                belowMin = false;
-            }
-        }
-
-        return belowMin;
+    public double upWindAngle(double windSpeed) {
+        Polar polar = getPolarForWindSpeed(windSpeed);
+        return polar.getUpWindAngle() % 360;
     }
 
+
+    /**
+     * Gets the optimal speed for traveling upwind.
+     *
+     * @param windSpeed speed of wind.
+     * @return optimal speed.
+     */
+    public double upWindSpeed(double windSpeed) {
+        return getPolarForWindSpeed(windSpeed).getUpWindSpeed();
+    }
+
+
+
+    /**
+     * Gets the optimal angle for traveling down wind.
+     *
+     * @param windSpeed speed of wind.
+     * @return optimal heading.
+     */
+    public double downWindAngle(double windSpeed) {
+        Polar polar = getPolarForWindSpeed(windSpeed);
+        return polar.getDownWindAngle();
+    }
+
+
+    /**
+     * Gets the optimal speed for traveling down wind.
+     *
+     * @param windSpeed speed of wind.
+     * @return optimal speed.
+     */
+    public double downWindSpeed(double windSpeed) {
+        return getPolarForWindSpeed(windSpeed).getDownWindSpeed();
+    }
 
 }

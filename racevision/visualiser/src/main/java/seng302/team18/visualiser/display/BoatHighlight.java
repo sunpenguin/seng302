@@ -24,6 +24,7 @@ public class BoatHighlight extends DisplayBoatDecorator {
      * Creates a new instance of DisplayBoat
      *
      * @param boat the display boat being decorated
+     * @param pixelMapper The PixelMapper used to find where to map the highlight
      */
     public BoatHighlight(PixelMapper pixelMapper, DisplayBoat boat) {
         super(boat);
@@ -31,10 +32,11 @@ public class BoatHighlight extends DisplayBoatDecorator {
         final Translate translate = new Translate(0, 1);
 
         this.pixelMapper = pixelMapper;
-        highlight = new Circle(7);
+        highlight = new Circle(11);
         highlight.setFill(Color.YELLOW);
         highlight.getTransforms().addAll(zoom, rotation, translate);
         highlight.toBack();
+        highlight.setOpacity(0.5);
     }
 
 

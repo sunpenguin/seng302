@@ -11,6 +11,12 @@ import java.io.IOException;
 public abstract class MessageGenerator {
     private int type;
 
+
+    /**
+     * Construct a MessageGenerator with a type indicating what type of message is reuired.
+     *
+     * @param type Integer representing the message type
+     */
     public MessageGenerator(int type) {
         this.type = type;
     }
@@ -41,6 +47,10 @@ public abstract class MessageGenerator {
 
     /**
      * Overridden by base classes to define behaviour when it is time to send a message/s
+     *
+     * @return A byte array of the payload of the message
+     *
+     * @throws IOException Thrown if error occurs when writing to a ByteArrayOutputStream
      */
     protected abstract byte[] getPayload() throws IOException;
 }

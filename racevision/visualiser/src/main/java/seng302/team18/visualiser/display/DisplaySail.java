@@ -1,10 +1,14 @@
+
+
 package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
+import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
+import seng302.team18.model.Course;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -14,11 +18,13 @@ import seng302.team18.visualiser.util.PixelMapper;
 public class DisplaySail extends DisplayBoatDecorator {
 
     private Polyline sail;
+    private double windDirection;
     private PixelMapper pixelMapper;
     private final Rotate rotation = new Rotate(0, 0, 0);
     private final Scale zoom = new Scale(1, 1, 0, 0);
     private final double SAIL_LENGTH = 20;
     private double sailLength;
+    private final double POWERED_UP_ANGLE = 20;
 
 
     /**
@@ -40,13 +46,6 @@ public class DisplaySail extends DisplayBoatDecorator {
         sail.toFront();
     }
 
-
-    /**
-     * Sets the coordinates of the displayed sail
-     *
-     * @param coordinate the location of the display sail
-     */
-    @Override
     public void setCoordinate(Coordinate coordinate) {
         XYPair pixels = pixelMapper.coordToPixel(coordinate);
         sail.setLayoutX(pixels.getX());
@@ -55,12 +54,6 @@ public class DisplaySail extends DisplayBoatDecorator {
     }
 
 
-    /**
-     * Sets scale factor
-     *
-     * @param scaleFactor the scale factor
-     */
-    @Override
     public void setScale(double scaleFactor) {
         zoom.setX(scaleFactor);
         zoom.setY(scaleFactor);
@@ -68,13 +61,7 @@ public class DisplaySail extends DisplayBoatDecorator {
     }
 
 
-    /**
-     * Adds the DisplaySail to the group so it can be displayed
-     *
-     * @param group The group the DisplaySail will be added to
-     */
-    @Override
-    public void addToGroup(Group group) {
+    public void addToGroup(Group group){
         group.getChildren().add(sail);
         super.addToGroup(group);
         sail.toFront();
@@ -82,23 +69,23 @@ public class DisplaySail extends DisplayBoatDecorator {
     }
 
 
-    /**
-     * Sets the current heading of the DisplaySail
-     *
-     * @param heading the heading
-     */
+    public void setApparentWindDirection(double apparentWind) {
+        this.windDirection = apparentWind;
+        super.setApparentWindDirection(apparentWind);
+    }
+
+
+
     @Override
-    public void setHeading(double heading) {
-        super.setHeading(heading);
+    public void setSailOut(boolean sailOut) {
+        if (sailOut) {
+            rotation.setAngle(windDirection);
+        } else {
+            rotation.setAngle(windDirection + POWERED_UP_ANGLE);
+        }
+
+        super.setSailOut(sailOut);
     }
 
-
-    /**
-     * Sets the windDirection and changes the rotation of the sail accordingly
-     *
-     * @param windDirection the wind direction in degrees
-     */
-    public void setWindDirection(double windDirection) {
-        rotation.setAngle(windDirection);
-    }
 }
+

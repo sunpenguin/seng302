@@ -70,7 +70,7 @@ public class DisplaySparkline extends AnimationTimer {
 
     /**
      * Reads data from the data queue
-     * @param currentTime
+     * @param currentTime Long indicating the current time in milliseconds
      */
     @Override
     public void handle(long currentTime) {

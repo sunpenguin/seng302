@@ -20,11 +20,29 @@ public class RaceRenderer {
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private Map<String, Double> headingMap;
     private int numBoats;
-    private final List<Color> BOAT_COLOURS = new ArrayList<>(
-            Arrays.asList(Color.VIOLET, Color.DARKVIOLET, Color.GREEN, Color.TOMATO, Color.YELLOWGREEN, Color.BROWN));
+    private final List<Color> BOAT_COLOURS = new ArrayList<>(Arrays.asList(
+            Color.VIOLET,
+            Color.DARKVIOLET,
+            Color.GREEN,
+            Color.TOMATO,
+            Color.YELLOWGREEN,
+            Color.BROWN,
+            Color.CHOCOLATE,
+            Color.DARKGREEN,
+            Color.GOLDENROD,
+            Color.DARKORCHID,
+            Color.DARKRED,
+            Color.INDIANRED,
+            Color.MEDIUMAQUAMARINE,
+            Color.MEDIUMSPRINGGREEN,
+            Color.SEAGREEN,
+            Color.YELLOW,
+            Color.ORANGERED,
+            Color.OLIVEDRAB,
+            Color.LAWNGREEN,
+            Color.KHAKI
+    ));
     private PixelMapper pixelMapper;
-    private final int DOWNWIND = 180;
-    private final int POWERED_UP = 200;
 
 
     /**
@@ -60,9 +78,7 @@ public class RaceRenderer {
                 if (boat.isControlled()) {
                     displayBoat = new BoatHighlight(pixelMapper, displayBoat);
                 }
-                // Sail
                 displayBoat = new DisplaySail(pixelMapper, displayBoat);
-
                 displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
@@ -74,13 +90,9 @@ public class RaceRenderer {
                 displayBoat.setHeading(boat.getHeading());
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
-                displayBoat.setScale(pixelMapper.getZoomFactor());
-
-                if (boat.isSailOut()) {
-                    ((DisplaySail) displayBoat).setWindDirection(DOWNWIND + race.getCourse().getWindDirection());
-                } else {
-                    ((DisplaySail) displayBoat).setWindDirection(POWERED_UP + race.getCourse().getWindDirection());
-                }
+                displayBoat.setScale(pixelMapper.mappingRatio());
+                displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
+                displayBoat.setSailOut(boat.isSailOut());
             }
         }
     }

@@ -48,6 +48,8 @@ public class Race {
      *
      * @param startingList ArrayList holding all entered boats
      * @param course       Course object
+     * @param raceId Integer representing the race id
+     * @param raceType RaceType enum indicating the type of race to create
      */
     public Race(List<Boat> startingList, Course course, int raceId, RaceType raceType) {
         this.startingList = startingList;

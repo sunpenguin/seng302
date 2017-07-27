@@ -6,10 +6,10 @@ junit:
 generate_artifacts:
   stage: deploy
   script:
-#    - mvn -B clean site package
-    - mvn -B clean package
-#    - tar -czf target/site.tar.gz target/site
+    - mvn -B clean site package
+#    - mvn -B clean package
+    - tar -czf target/site.tar.gz target/site
   artifacts:
     paths:
       - racevision/*/target/*.jar
-#      - target/site.tar.gz
+      - target/site.tar.gz

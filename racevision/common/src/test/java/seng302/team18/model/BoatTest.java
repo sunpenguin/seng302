@@ -36,6 +36,9 @@ public class BoatTest {
     double windDirectionNW = 135;
     double windDirectionN2 = 180;
 
+    //Wind Speed
+    double windSpeed = 10;
+
     @Before
     public void setUp(){
         testBoat = new Boat("Enterprise", "Starfleet", 10, 14.019);
@@ -361,5 +364,32 @@ public class BoatTest {
         TestCase.assertEquals(180, WN2BN2, 0);
     }
 
+
+    @Test
+    public void optimalUpwindTest() {
+        testBoat.setHeading(BoatHeadingNE);
+        testBoat.optimalUpWind(windSpeed, windDirectionN);
+
+        assertEquals(30.0, testBoat.getHeading(), 0.1);
+
+        testBoat.setHeading(BoatHeadingNW);
+        testBoat.optimalUpWind(windSpeed, windDirectionN);
+
+        assertEquals(300.0, testBoat.getHeading(), 0.1);
+    }
+
+
+    @Test
+    public void optimalDownwindTest() {
+        testBoat.setHeading(135);
+        testBoat.optimalDownWind(windSpeed, windDirectionN);
+
+        assertEquals(135.0, testBoat.getHeading(), 0.1);
+
+        testBoat.setHeading(250);
+        testBoat.optimalDownWind(windSpeed, windDirectionN);
+
+        assertEquals(250.0, testBoat.getHeading(), 0.1);
+    }
 
 }

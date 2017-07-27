@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
@@ -27,7 +28,7 @@ public class CourseRenderer {
     private final double LINE_WEIGHT = 1.0;
     private final double PADDING = 20.0;
     private Polyline border = new Polyline();
-    private Map<Integer, Rectangle> marks = new HashMap<>();
+    private Map<Integer, Circle> marks = new HashMap<>();
     private Map<String, Line> gates = new HashMap<>();
     private Course course;
     private Group group;
@@ -105,28 +106,27 @@ public class CourseRenderer {
      * @param mark Mark to reset
      */
     private void renderMark(Mark mark) {
-        double scaledMarkSize = getScaledMarkSize();
-        Rectangle rectangle = marks.get(mark.getId());
-        if (rectangle == null) {
-            rectangle = new Rectangle(scaledMarkSize, scaledMarkSize, MARK_COLOR);
+//        double scaledMarSize = getScaledMarkSize();
+        Circle circle = marks.get(mark.getId());
+        if (circle == null) {
+            circle = new Circle(markSize, MARK_COLOR);
 
-            rectangle.setOnMouseClicked((event) -> {
+            circle.setOnMouseClicked((event) -> {
                 pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
                 pixelMapper.setViewPortCenter(mark.getCoordinate());
             });
 
-            marks.put(mark.getId(), rectangle);
-            group.getChildren().addAll(rectangle);
-            rectangle.toBack();
+            marks.put(mark.getId(), circle);
+            group.getChildren().addAll(circle);
+            circle.toBack();
         }
 
-        rectangle.setWidth(scaledMarkSize);
-        rectangle.setHeight(scaledMarkSize);
+        circle.setRadius(markSize);
 
         Coordinate coordinate = mark.getCoordinate();
         XYPair pixelCoordinates = pixelMapper.coordToPixel(coordinate);
-        rectangle.setX(pixelCoordinates.getX() - (scaledMarkSize / 2.0));
-        rectangle.setY(pixelCoordinates.getY() - (scaledMarkSize / 2.0));
+        circle.setCenterX(pixelCoordinates.getX());
+        circle.setCenterY(pixelCoordinates.getY());
     }
 
 
@@ -149,16 +149,16 @@ public class CourseRenderer {
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */
     private void renderGate(CompoundMark compoundMark) {
-        double scaledMarkSize = getScaledMarkSize();
+//        double scaledMarkSize = getScaledMarkSize();
 
         List<XYPair> endPoints = new ArrayList<>();
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
-            Rectangle rectangle = marks.get(mark.getId());
-            if (rectangle == null) {
-                rectangle = new Rectangle(scaledMarkSize, scaledMarkSize, MARK_COLOR);
+            Circle circle = marks.get(mark.getId());
+            if (circle == null) {
+                circle = new Circle(markSize, MARK_COLOR);
 
-                rectangle.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                circle.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
                         pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
@@ -166,18 +166,17 @@ public class CourseRenderer {
                     }
                 });
 
-                marks.put(mark.getId(), rectangle);
-                group.getChildren().addAll(rectangle);
-                rectangle.toBack();
+                marks.put(mark.getId(), circle);
+                group.getChildren().addAll(circle);
+                circle.toBack();
             }
 
-            rectangle.setWidth(scaledMarkSize);
-            rectangle.setHeight(scaledMarkSize);
+            circle.setRadius(markSize);
 
             Coordinate coordinate = mark.getCoordinate();
             XYPair pixelCoordinates = pixelMapper.coordToPixel(coordinate);
-            rectangle.setX(pixelCoordinates.getX() - (scaledMarkSize / 2));
-            rectangle.setY(pixelCoordinates.getY() - (scaledMarkSize / 2));
+            circle.setCenterX(pixelCoordinates.getX());
+            circle.setCenterY(pixelCoordinates.getY());
             endPoints.add(pixelCoordinates);
         }
         renderGateConnection(endPoints, compoundMark);
@@ -188,6 +187,7 @@ public class CourseRenderer {
     /**
      * Reset the line between the endpoints of a gate
      *
+     * @param endPoints List of XYPairs that are the end points of the gate
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */
     public void renderGateConnection(List<XYPair> endPoints, CompoundMark compoundMark){

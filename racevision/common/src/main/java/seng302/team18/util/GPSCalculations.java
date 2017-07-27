@@ -122,7 +122,7 @@ public class GPSCalculations {
      * @param destination end point.
      * @return angle from north to destination calculated at origin.
      */
-    public double getBearing(Coordinate origin, Coordinate destination) {
+    public static double getBearing(Coordinate origin, Coordinate destination) {
         double deltaLong = (destination.getLongitude() - origin.getLongitude());
 
         double y = Math.sin(deltaLong) * Math.cos(destination.getLatitude());

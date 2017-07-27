@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.controller;
 
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -144,7 +145,11 @@ public class RaceController implements Observer {
                     }
                 }
             };
-        raceViewPane.setOnKeyPressed(keyEventHandler);
+
+        raceViewPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEventHandler);
+        raceViewPane.setFocusTraversable(true);
+        raceViewPane.requestFocus();
+        raceViewPane.focusedProperty().addListener((observable, oldValue, newValue) -> Platform.runLater(() -> raceViewPane.requestFocus()));
     }
 
 
