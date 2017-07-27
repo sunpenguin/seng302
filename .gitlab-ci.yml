@@ -11,5 +11,5 @@ generate_artifacts:
     - tar -czf target/site.tar.gz target/site
   artifacts:
     paths:
-      - racevision/*/target/*.jar
+      - gameX/*/target/*.jar
       - target/site.tar.gz
