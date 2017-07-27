@@ -175,13 +175,14 @@ local.properties
 
 # Code Recommenders
 .recommenders/
-/racevision/common/common.iml
-/racevision/test_mock/test_mock.iml
+/gameX/common/common.iml
+/gameX/test_mock/test_mock.iml
 /app.iml
-/racevision/racevision.iml
-/racevision/visualiser/visualiser.iml
+/gameX/racevision.iml
+/gameX/visualiser/visualiser.iml
 /.idea/misc.xml
 /.idea/modules.xml
 .idea/inspectionProfiles/
 /.idea/codeStyleSettings.xml
 
+/gameX/gameX.iml

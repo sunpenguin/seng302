@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RegattaConfig>
+    <RegattaID>4</RegattaID>
+    <RegattaName>Atlantic/Bermuda Test</RegattaName>
+    <CourseName>North Head</CourseName>
+    <CentralLatitude>32.298501</CentralLatitude>
+    <CentralLongitude>-64.8435</CentralLongitude>
+    <CentralAltitude>0.00</CentralAltitude>
+    <UtcOffset>-3</UtcOffset>
+    <MagneticVariation>14.1</MagneticVariation>
+</RegattaConfig>
