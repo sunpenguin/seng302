@@ -1,5 +1,7 @@
 package seng302.team18.visualiser.util;
+
 import javafx.scene.layout.Pane;
+import org.junit.Ignore;
 import org.junit.Test;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculations;
@@ -9,7 +11,6 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -23,6 +24,8 @@ public class PixelMapperTest {
     private Pane pane;
 
 
+    @Ignore
+    @Test
     public void mappingRatioOnNormalCourseTest() {
         //Make course
         BoundaryMark boundary1 = new BoundaryMark(0, new Coordinate(-43.639198, 172.675748));
@@ -45,9 +48,9 @@ public class PixelMapperTest {
 
         //Make pane
         pane = new Pane();
-        pane.setMaxSize(500,500);
-        pane.setPrefSize(500,500);
-        pane.setMinSize(500,500);
+        pane.setMaxSize(500, 500);
+        pane.setPrefSize(500, 500);
+        pane.setMinSize(500, 500);
 
         //Make mapper
         mapper = new PixelMapper(course, pane);
@@ -58,22 +61,24 @@ public class PixelMapperTest {
         GPSCalculations geoCalculator = new GPSCalculations();
 
         for (int i = 0; i < boundaries.size(); i++) {
-            for (int j = 0; j < boundaries.size(); j++){
+            for (int j = 0; j < boundaries.size(); j++) {
 
                 BoundaryMark boundaryMark1 = boundaries.get(i);
                 XYPair xy1 = mapper.coordToPixel(boundaryMark1.getCoordinate());
                 BoundaryMark boundaryMark2 = boundaries.get(j);
                 XYPair xy2 = mapper.coordToPixel(boundaryMark2.getCoordinate());
 
-                double geoDistance = geoCalculator.distance(boundaryMark1.getCoordinate(),boundaryMark2.getCoordinate());
+                double geoDistance = geoCalculator.distance(boundaryMark1.getCoordinate(), boundaryMark2.getCoordinate());
                 double xyDistance = xy1.calculateDistance(xy2);
 
-                assertEquals(geoDistance, xyDistance/mappingRatio, 200);
+                assertEquals(geoDistance, xyDistance / mappingRatio, 200);
             }
         }
     }
 
 
+    @Ignore
+    @Test
     public void mappingRatioOnLargeCourseTest() {
         //Make course
         BoundaryMark boundary1 = new BoundaryMark(0, new Coordinate(-43.546552, 173.297102));
@@ -96,9 +101,9 @@ public class PixelMapperTest {
 
         //Make pane
         pane = new Pane();
-        pane.setMaxSize(500,500);
-        pane.setPrefSize(500,500);
-        pane.setMinSize(500,500);
+        pane.setMaxSize(500, 500);
+        pane.setPrefSize(500, 500);
+        pane.setMinSize(500, 500);
 
         //Make mapper
         mapper = new PixelMapper(course, pane);
@@ -109,22 +114,24 @@ public class PixelMapperTest {
         GPSCalculations geoCalculator = new GPSCalculations();
 
         for (int i = 0; i < boundaries.size(); i++) {
-            for (int j = 0; j < boundaries.size(); j++){
+            for (int j = 0; j < boundaries.size(); j++) {
 
                 BoundaryMark boundaryMark1 = boundaries.get(i);
                 XYPair xy1 = mapper.coordToPixel(boundaryMark1.getCoordinate());
                 BoundaryMark boundaryMark2 = boundaries.get(j);
                 XYPair xy2 = mapper.coordToPixel(boundaryMark2.getCoordinate());
 
-                double geoDistance = geoCalculator.distance(boundaryMark1.getCoordinate(),boundaryMark2.getCoordinate());
+                double geoDistance = geoCalculator.distance(boundaryMark1.getCoordinate(), boundaryMark2.getCoordinate());
                 double xyDistance = xy1.calculateDistance(xy2);
 
-                assertEquals(geoDistance, xyDistance/mappingRatio, 200);
+                assertEquals(geoDistance, xyDistance / mappingRatio, 200);
             }
         }
     }
 
 
+    @Ignore
+    @Test
     public void mappingRatioOnTinyCourseTest() {
         //Test for when 1 k above centre is outside of course
         //Make course
@@ -148,9 +155,9 @@ public class PixelMapperTest {
 
         //Make pane
         pane = new Pane();
-        pane.setMaxSize(500,500);
-        pane.setPrefSize(500,500);
-        pane.setMinSize(500,500);
+        pane.setMaxSize(500, 500);
+        pane.setPrefSize(500, 500);
+        pane.setMinSize(500, 500);
 
         //Make mapper
         mapper = new PixelMapper(course, pane);
@@ -161,17 +168,17 @@ public class PixelMapperTest {
         GPSCalculations geoCalculator = new GPSCalculations();
 
         for (int i = 0; i < boundaries.size(); i++) {
-            for (int j = 0; j < boundaries.size(); j++){
+            for (int j = 0; j < boundaries.size(); j++) {
 
                 BoundaryMark boundaryMark1 = boundaries.get(i);
                 XYPair xy1 = mapper.coordToPixel(boundaryMark1.getCoordinate());
                 BoundaryMark boundaryMark2 = boundaries.get(j);
                 XYPair xy2 = mapper.coordToPixel(boundaryMark2.getCoordinate());
 
-                double geoDistance = geoCalculator.distance(boundaryMark1.getCoordinate(),boundaryMark2.getCoordinate());
+                double geoDistance = geoCalculator.distance(boundaryMark1.getCoordinate(), boundaryMark2.getCoordinate());
                 double xyDistance = xy1.calculateDistance(xy2);
 
-                assertEquals(geoDistance, xyDistance/mappingRatio, 200);
+                assertEquals(geoDistance, xyDistance / mappingRatio, 200);
             }
         }
     }
