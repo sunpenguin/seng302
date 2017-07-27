@@ -21,7 +21,7 @@ public class MockDataStream {
     private static final AbstractRaceBuilder RACE_BUILDER = new RaceBuilder1();
     private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilder2();
     private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
-    private static final AbstractParticipantsBuilder PARTICIPANTS_BUILDER = new ParticipantsBuilder1();
+    private static final AbstractParticipantsBuilder PARTICIPANTS_BUILDER = new ParticipantsBuilderSize20();
 
     // Change the XmlDefault implementations to change the default values for the XML messages
     private static final XmlMessageBuilder XML_MESSAGE_BUILDER = new XmlMessageBuilder(new BoatXmlDefaults(), new RaceXmlDefaults());
@@ -49,7 +49,7 @@ public class MockDataStream {
         PREP_WAIT_TIME = Integer.parseInt(prop.getProperty("PREP_WAIT_TIME"));
         MAX_PLAYERS = Integer.parseInt(prop.getProperty("MAX_PLAYERS"));
 
-        if (MAX_PLAYERS < 1 || MAX_PLAYERS > 6) {
+        if (MAX_PLAYERS < 1 || MAX_PLAYERS > 20) {
             throw new InvalidPlayerNumberException();
         }
     }
@@ -81,7 +81,7 @@ public class MockDataStream {
             System.out.println("Error occurred reading configuration file");
         } catch (InvalidPlayerNumberException e) {
             System.out.println("Invalid maximum number of players in configuration file.\n" +
-                               "Use a value between 1 and 6");
+                               "Use a value between 1 and 20");
         }
     }
 

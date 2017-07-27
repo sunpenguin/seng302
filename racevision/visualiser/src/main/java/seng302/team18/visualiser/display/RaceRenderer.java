@@ -20,8 +20,28 @@ public class RaceRenderer {
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private Map<String, Double> headingMap;
     private int numBoats;
-    private final List<Color> BOAT_COLOURS = new ArrayList<>(
-            Arrays.asList(Color.VIOLET, Color.DARKVIOLET, Color.GREEN, Color.TOMATO, Color.YELLOWGREEN, Color.BROWN));
+    private final List<Color> BOAT_COLOURS = new ArrayList<>(Arrays.asList(
+            Color.VIOLET,
+            Color.DARKVIOLET,
+            Color.GREEN,
+            Color.TOMATO,
+            Color.YELLOWGREEN,
+            Color.BROWN,
+            Color.CHOCOLATE,
+            Color.DARKGREEN,
+            Color.GOLDENROD,
+            Color.DARKORCHID,
+            Color.DARKRED,
+            Color.INDIANRED,
+            Color.MEDIUMAQUAMARINE,
+            Color.MEDIUMSPRINGGREEN,
+            Color.SEAGREEN,
+            Color.YELLOW,
+            Color.ORANGERED,
+            Color.OLIVEDRAB,
+            Color.LAWNGREEN,
+            Color.KHAKI
+    ));
     private PixelMapper pixelMapper;
 
 
