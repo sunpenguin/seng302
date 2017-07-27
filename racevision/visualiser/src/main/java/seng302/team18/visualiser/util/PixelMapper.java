@@ -190,10 +190,20 @@ public class PixelMapper {
         return new XYPair(webMercatorLongitude(point.getLongitude()), webMercatorLatitude(point.getLatitude()));
     }
 
+    /**
+     * Returns the zoomLevelProperty value
+     *
+     * @return The zoom level property
+     */
     public IntegerProperty zoomLevelProperty() {
         return zoomLevel;
     }
 
+    /**
+     * Sets the zoom level for the pixel mapper
+     *
+     * @param level The value the zoom level will be set to
+     */
     public void setZoomLevel(int level) {
         zoomLevel.set(level);
     }

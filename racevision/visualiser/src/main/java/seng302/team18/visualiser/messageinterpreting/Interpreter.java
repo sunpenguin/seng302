@@ -45,7 +45,10 @@ public class Interpreter {
     }
 
 
-
+    /**
+     * Shuts down the interpreter
+     *
+     */
     public void shutdownNow() {
         executor.shutdownNow();
     }

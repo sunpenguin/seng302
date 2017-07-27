@@ -25,6 +25,11 @@ public class XMLRegattaInterpreter extends MessageInterpreter {
         this.race = race;
     }
 
+    /**
+     * Interprets the XMLRegatta message
+     *
+     * @param message to be interpreted
+     */
     @Override
     public void interpret(MessageBody message) {
         if (message instanceof AC35XMLRegattaMessage) {

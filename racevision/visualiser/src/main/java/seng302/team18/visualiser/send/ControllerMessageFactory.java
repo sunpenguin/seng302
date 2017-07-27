@@ -15,6 +15,12 @@ public class ControllerMessageFactory implements MessageEncoderFactory {
     private final Map<Integer, MessageEncoder> composerMap = initialiseMap();
 
 
+    /**
+     * Returns the encoder of the message
+     *
+     * @param id of the message to be composed
+     * @return The encoder for the message
+     */
     @Override
     public MessageEncoder getEncoder(int id) {
         return composerMap.get(id);

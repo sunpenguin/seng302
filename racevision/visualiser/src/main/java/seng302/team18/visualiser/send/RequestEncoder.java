@@ -21,6 +21,12 @@ public class RequestEncoder extends MessageEncoder {
     public RequestEncoder() {}
 
 
+    /**
+     * Generates the body for the request message
+     *
+     * @param message to create the body of the message from.
+     * @return returns the message body in the form of a byte array
+     */
     @Override
     protected byte[] generateBody(MessageBody message) {
         if (message instanceof RequestMessage) {
@@ -31,6 +37,14 @@ public class RequestEncoder extends MessageEncoder {
     }
 
 
+    /**
+     * Generates the checksum for the request message
+     *
+     * @param head of message to create checksum for
+     * @param body of message to create checksum for
+     * @return the generated checksum as a byte array
+     * @throws IOException
+     */
     @Override
     protected byte[] generateChecksum(byte[] head, byte[] body) throws IOException{
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
@@ -41,6 +55,11 @@ public class RequestEncoder extends MessageEncoder {
     }
 
 
+    /**
+     * Returns the message length
+     *
+     * @return the length of the message as a short
+     */
     @Override
     protected short messageLength() {
         return 4;

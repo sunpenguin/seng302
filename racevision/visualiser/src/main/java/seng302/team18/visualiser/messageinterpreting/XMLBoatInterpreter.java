@@ -22,6 +22,11 @@ public class XMLBoatInterpreter extends MessageInterpreter {
     }
 
 
+    /**
+     * Interprets the message of the XMLBoatInterpreter
+     *
+     * @param message to be interpreted
+     */
     @Override
     public void interpret(MessageBody message) {
         if (message instanceof AC35XMLBoatMessage) {

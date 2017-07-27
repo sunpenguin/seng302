@@ -17,6 +17,11 @@ public class WindSpeedInterpreter extends MessageInterpreter {
         this.race = race;
     }
 
+    /**
+     *
+     *
+     * @param message to be interpreted
+     */
     @Override
     public void interpret(MessageBody message){
         if (message instanceof AC35RaceStatusMessage){
