@@ -11,5 +11,6 @@ generate_artifacts:
     - tar -czf target/site.tar.gz target/site
   artifacts:
     paths:
-      - gameX/*/target/*.jar
+      - gameX/racemodel/target/racemodel*.jar
+      - gameX/visualiser/target/visualiser*.jar
       - target/site.tar.gz
