@@ -128,9 +128,11 @@ public class RaceController implements Observer {
                             message.setTackGybe(true);
                             break;
                         case PAGE_UP:
+                        case UP:
                             message.setUpwind(true);
                             break;
                         case PAGE_DOWN:
+                        case DOWN:
                             message.setDownwind(true);
                             break;
                         case SHIFT:
