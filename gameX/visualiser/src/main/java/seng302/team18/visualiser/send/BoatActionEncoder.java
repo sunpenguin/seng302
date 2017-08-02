@@ -42,21 +42,21 @@ public class BoatActionEncoder extends MessageEncoder {
      */
     private byte[] generateAction(BoatActionMessage boatAction) {
         byte[] action = new byte[1];
-        action[0] = 0;
+        action[0] = boatAction.getAction();
 
-        if (boatAction.isAutopilot()) {
-            action[0] = 1;
-        } else if (boatAction.isTackGybe()) {
-            action[0] = 4;
-        } else if (boatAction.isUpwind()) {
-            action[0] = 5;
-        } else if (boatAction.isDownwind()) {
-            action[0] = 6;
-        } else if (boatAction.isSailsIn()) {
-            action[0] = 2;
-        } else if (!boatAction.isSailsIn()) {
-            action[0] = 3;
-        }
+//        if (boatAction.isAutopilot()) {
+//            action[0] = BoatActionStatus.AUTOPILOT.action();
+//        } else if (boatAction.isTackGybe()) {
+//            action[0] = BoatActionStatus.TACK_GYBE.action();
+//        } else if (boatAction.isUpwind()) {
+//            action[0] = BoatActionStatus.UPWIND.action();
+//        } else if (boatAction.isDownwind()) {
+//            action[0] = BoatActionStatus.DOWNWIND.action();
+//        } else if (boatAction.isSailsIn()) {
+//            action[0] = BoatActionStatus.SAIL_IN.action();
+//        } else if (!boatAction.isSailsIn()) {
+//            action[0] = BoatActionStatus.SAIL_OUT.action();
+//        }
 
         return action;
     }

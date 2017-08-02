@@ -122,20 +122,24 @@ public class RaceController implements Observer {
                     boolean send = true;
                     switch (keyEvent.getCode()){
                         case SPACE:
-                            message.setAutopilot(true);
+                            message.setAutoPilot();
                             break;
                         case ENTER:
-                            message.setTackGybe(true);
+                            message.setTackGybe();
                             break;
                         case PAGE_UP:
-                            message.setUpwind(true);
+                            message.setUpwind();
                             break;
                         case PAGE_DOWN:
-                            message.setDownwind(true);
+                            message.setDownwind();
                             break;
                         case SHIFT:
                             sailIn = !sailIn;
-                            message.setSailsIn(sailIn);
+                            if (sailIn) {
+                                message.setSailIn();
+                            } else {
+                                message.setSailOut();
+                            }
                             break;
                         default:
                             send = false;

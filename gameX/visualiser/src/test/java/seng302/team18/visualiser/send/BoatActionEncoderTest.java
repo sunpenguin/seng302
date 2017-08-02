@@ -51,7 +51,7 @@ public class BoatActionEncoderTest {
      */
     @Test
     public void generateBodyAutoPilotTest() throws IOException {
-        messageBody.setAutopilot(true);
+        messageBody.setAutoPilot();
         encodedByte = encoder.generateBody(messageBody);
 
         assertEquals(1, encodedByte[4]);
@@ -63,7 +63,7 @@ public class BoatActionEncoderTest {
      */
     @Test
     public void generateBodySailInTest() throws IOException {
-        messageBody.setSailsIn(true);
+        messageBody.setSailIn();
         encodedByte = encoder.generateBody(messageBody);
 
         assertEquals(2, encodedByte[4]);
@@ -75,6 +75,7 @@ public class BoatActionEncoderTest {
      */
     @Test
     public void generateBodySailOutTest() throws IOException {
+        messageBody.setSailOut();
         encodedByte = encoder.generateBody(messageBody);
 
         assertEquals(3, encodedByte[4]);
@@ -86,7 +87,7 @@ public class BoatActionEncoderTest {
      */
     @Test
     public void generateBodyTackGybeTest() throws IOException {
-        messageBody.setTackGybe(true);
+        messageBody.setTackGybe();
         encodedByte = encoder.generateBody(messageBody);
 
         assertEquals(4, encodedByte[4]);
@@ -98,7 +99,7 @@ public class BoatActionEncoderTest {
      */
     @Test
     public void generateBodyUpWindTest() throws IOException {
-        messageBody.setUpwind(true);
+        messageBody.setUpwind();
         encodedByte = encoder.generateBody(messageBody);
 
         assertEquals(5, encodedByte[4]);
@@ -110,7 +111,7 @@ public class BoatActionEncoderTest {
      */
     @Test
     public void generateBodyDownWindTest() throws IOException {
-        messageBody.setDownwind(true);
+        messageBody.setDownwind();
         encodedByte = encoder.generateBody(messageBody);
 
         assertEquals(6, encodedByte[4]);
