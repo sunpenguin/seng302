@@ -1,5 +1,5 @@
 .background {
-    -fx-background-image:url("/images/boat.jpg");
-    -fx-background-size: cover;
-
+    -fx-background-image:url("/images/BuoyLogoV2.gif");
+    -fx-background-size:  300% 170%;
+    -fx-background-position: center;
 }

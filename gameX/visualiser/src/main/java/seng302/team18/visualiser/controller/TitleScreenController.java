@@ -19,7 +19,7 @@ import java.net.Socket;
 /**
  * Controller for when the application first starts up
  */
-public class StartupController {
+public class TitleScreenController {
     @FXML private Text errorText;
     @FXML private TextField customPortField;
     @FXML private TextField customHostField;
