@@ -456,25 +456,32 @@ public class Race {
 
 
     public boolean hasPassedMark(Boat boat) {
-        return inPreRoundingZone(boat) && inPostRoundingZone(boat);
+        return inPreRoundingZone(boat) && inPostRoundingZone(boat) && isRoundingCorrectly(boat);
     }
 
     private boolean inPreRoundingZone(Boat boat) {
         double markToBoatHeading = GPSCalculations.getBearing(boat.getDestination(), boat.getCoordinate());
         Leg leg = course.getLeg(boat.getLegNumber());
-        double entryBearing = GPSCalculations.getBearing(leg.getDestination().getCoordinate(), leg.getDeparture().getCoordinate()) - markToBoatHeading;
-        return true;
+        double entryBearing = GPSCalculations.getBearing(leg.getDestination().getCoordinate(), leg.getDeparture().getCoordinate());
+        GPSCalculations gps = new GPSCalculations();
+
+        return gps.isBetween(markToBoatHeading, leg.getDestination().getPassAngle(), entryBearing);
     }
 
 
     private boolean inPostRoundingZone(Boat boat) {
         double markToBoatHeading = GPSCalculations.getBearing(boat.getDestination(), boat.getCoordinate());
-        double perpendicularAngle = (markToBoatHeading + 90) % 360;
-        return true;
+        Leg leg = course.getLeg(boat.getLegNumber() + 1);
+        double exitBearing = GPSCalculations.getBearing(leg.getDeparture().getCoordinate(), leg.getDestination().getCoordinate());
+        GPSCalculations gps = new GPSCalculations();
+
+        return gps.isBetween(markToBoatHeading, exitBearing, leg.getDestination().getPassAngle());
     }
 
 
-
+    private boolean isRoundingCorrectly(Boat boat) {
+        return true;
+    }
 
 
 }
