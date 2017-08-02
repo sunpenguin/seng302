@@ -1,5 +1,7 @@
 package seng302.team18.model;
 
+import seng302.team18.util.GPSCalculations;
+
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,8 +31,8 @@ public class Course {
         this.boundaries = new ArrayList<>(boundaries);
         this.timeZone = timeZone;
         this.markRoundings = markRoundings;
-        setupLegs();
         centralCoordinate = new Coordinate(0d, 0d);
+        setupLegs();
     }
 
     public Course() {
@@ -138,6 +140,14 @@ public class Course {
             CompoundMark dest = markRoundings.get(i + 1).getCompoundMark();
             Leg currentLeg = new Leg(dep, dest, markRoundings.get(i).getSequenceNumber());
             legs.add(currentLeg);
+        }
+        for (int i = 1; i < compoundMarks.size() - 1; i++) {
+            CompoundMark previous = compoundMarks.get(i - 1);
+            CompoundMark current = compoundMarks.get(i);
+            CompoundMark future = compoundMarks.get(i + 1);
+            double previousAngle = GPSCalculations.getBearing(previous.getCoordinate(), current.getCoordinate());
+            double futureAngle = GPSCalculations.getBearing(future.getCoordinate(), current.getCoordinate());
+            current.setPassAngle(((previousAngle + futureAngle) / 2d));
         }
     }
 

@@ -22,6 +22,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private double boatLength;
     private double heading;
     private Coordinate coordinate;
+    private Coordinate previousCoordinate;
     private Coordinate destination;
     private IntegerProperty place;
     private Long timeTilNextMark;
@@ -124,6 +125,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
 
     public void setCoordinate(Coordinate coordinate) {
+        previousCoordinate = this.coordinate;
         this.coordinate = coordinate;
     }
 
@@ -366,4 +368,8 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         }
     }
 
+
+    public Coordinate getPreviousCoordinate() {
+        return previousCoordinate;
+    }
 }

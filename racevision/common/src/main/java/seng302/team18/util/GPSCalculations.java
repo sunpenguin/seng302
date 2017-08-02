@@ -233,6 +233,19 @@ public class GPSCalculations {
 
         return findMinMaxPoints(points);
     }
+
+
+    /**
+     * Returns true if bearing is between start and finish in a clockwise sense.
+     * @param bearing
+     * @param start
+     * @param finish
+     * @return if bearing is between start and finish in a clockwise sense
+     */
+    public boolean isBetween(double bearing, double start, double finish) {
+        return true;
+    }
+
 }
 
 

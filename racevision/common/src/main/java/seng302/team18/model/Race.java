@@ -449,4 +449,32 @@ public class Race {
             return Arrays.stream(values()).collect(Collectors.toMap(RaceType::toString, rt -> rt));
         }
     }
+
+
+
+
+
+
+    public boolean hasPassedMark(Boat boat) {
+        return inPreRoundingZone(boat) && inPostRoundingZone(boat);
+    }
+
+    private boolean inPreRoundingZone(Boat boat) {
+        double markToBoatHeading = GPSCalculations.getBearing(boat.getDestination(), boat.getCoordinate());
+        Leg leg = course.getLeg(boat.getLegNumber());
+        double entryBearing = GPSCalculations.getBearing(leg.getDestination().getCoordinate(), leg.getDeparture().getCoordinate()) - markToBoatHeading;
+        return true;
+    }
+
+
+    private boolean inPostRoundingZone(Boat boat) {
+        double markToBoatHeading = GPSCalculations.getBearing(boat.getDestination(), boat.getCoordinate());
+        double perpendicularAngle = (markToBoatHeading + 90) % 360;
+        return true;
+    }
+
+
+
+
+
 }
