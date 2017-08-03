@@ -146,45 +146,23 @@ public class BoatRotater {
         }
     }
 
-    public boolean isUpwind(Boat boat, double windDirection) {
-            if (boat.getTrueWindAngle(windDirection) < 90) {
-                return true;
-            }
-        return false;
-    }
 
-    public boolean checkEast(double boatHeading, double windDirection) {
-        double flippedWindDirection = (windDirection + 180) % 360;
-        double y = 0;
-        if (flippedWindDirection + 180 >= 360) {
-            y = 180 - (360 - flippedWindDirection);
-        }
-        if ((boatHeading > flippedWindDirection && boatHeading < flippedWindDirection + 180) || boatHeading < y) {
-            return true;
-        }
-        return false;
-    }
-
-
-
+    /**
+     * Change the boat heading to either tack or gybe depending on the direction the boat is moving upwind or downwind.
+     *
+     * @param windDirection the direction of the wind.
+     * @param boat the boat to tack/gybe.
+     */
     public void setTackGybe(double windDirection, Boat boat) {
-        if (isUpwind(boat, windDirection)) {
-            if (checkEast(boat.getHeading(), windDirection)) {
-                double newHeading = 360 - boat.getHeading();
-                boat.setHeading(newHeading);
-            } else {
-                double haha = 270 + (90-boat.getHeading());
-                boat.setHeading(haha);
-            }
-        } else {
-            if (checkEast(boat.getHeading(), windDirection)) {
-                double newHeading = 90+windDirection + (270+windDirection-boat.getHeading());
-                boat.setHeading(newHeading%360);
-            } else {
-                double newHeading = 180+windDirection + (180+windDirection-boat.getHeading());
-                boat.setHeading(newHeading%360);
-            }
-        }
 
+//        if (boat.isUpwind(windDirection)) {
+//            double newHeading = ((windDirection - (boat.getHeading() - windDirection)) + 360) % 360;
+//            boat.setHeading(newHeading);
+//        } else {
+//            double newHeading = (windDirection + (windDirection - boat.getHeading()) + 360)  % 360;
+//            boat.setHeading(newHeading);
+//        }
+        double newHeading = ((windDirection - (boat.getHeading() - windDirection)) + 360) % 360;
+        boat.setHeading(newHeading);
     }
 }

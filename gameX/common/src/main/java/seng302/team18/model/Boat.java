@@ -366,4 +366,18 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         }
     }
 
+
+    /**
+     * Checks whether the boat is moviong upwind.
+     *
+     * @param windDirection the direction of the wind.
+     * @return a boolean of whether the boat is moving upwind.
+     */
+    public boolean isUpwind(double windDirection) {
+        if (getTrueWindAngle(windDirection) < 90) {
+            return true;
+        }
+
+        return false;
+    }
 }

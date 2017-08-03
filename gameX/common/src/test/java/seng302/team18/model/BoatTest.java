@@ -2,6 +2,7 @@
 package seng302.team18.model;
 
 import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -390,6 +391,23 @@ public class BoatTest {
         testBoat.optimalDownWind(windSpeed, windDirectionN);
 
         assertEquals(250.0, testBoat.getHeading(), 0.1);
+    }
+
+    @Test
+    public void isUpwindTestOne() {
+        Assert.assertTrue(testBoat.isUpwind(windDirectionS));
+    }
+
+    @Test
+    public void isUpwindTestTwo() {
+        testBoat.setHeading(315);
+        Assert.assertTrue(testBoat.isUpwind(windDirectionS));
+    }
+
+    @Test
+    public void isDownwindTest() {
+        testBoat.setHeading(135);
+        Assert.assertFalse(testBoat.isUpwind(windDirectionS));
     }
 
 }
