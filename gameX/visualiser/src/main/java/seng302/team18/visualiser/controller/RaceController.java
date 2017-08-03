@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.controller;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
@@ -19,6 +20,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -26,6 +28,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import javafx.util.StringConverter;
 import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
@@ -80,6 +83,9 @@ public class RaceController implements Observer {
     private Sender sender;
     private Receiver receiver;
 
+    private ImageView imageView;
+    private boolean controlsVisible;
+
     @FXML
     public void initialize() {
         installKeyHandler();
@@ -91,6 +97,7 @@ public class RaceController implements Observer {
             importantAnnotations.put(type, false);
         }
         group.setManaged(false);
+        loadControlScheme();
     }
 
     @FXML
@@ -111,6 +118,38 @@ public class RaceController implements Observer {
         ImageView icon = new ImageView("/images/boat-310164_640.png");
         icon.setFitHeight(18);
         icon.setFitWidth(18);
+    }
+
+
+    /**
+     *  Shows the imageView holding the control scheme by adding it to the raceViewPane.
+     */
+    private void showControlScheme() {
+        imageView.setFitWidth(raceViewPane.getWidth());
+        imageView.setVisible(true);
+        controlsVisible = true;
+    }
+
+
+    /**
+     *  Hides the imageView holding the control scheme by removing it from the raceViewPane.
+     */
+    private void hideControlScheme() {
+        imageView.setVisible(false);
+        controlsVisible = false;
+    }
+
+
+    /**
+     * Loads the control scheme image, fitted to the width of the raceViewPane.
+     */
+    private void loadControlScheme() {
+        String path = "/images/controlScheme.png";
+        Image image = new Image(path);
+        imageView = new ImageView(image);
+        imageView.setPreserveRatio(true);
+        raceViewPane.getChildren().add(imageView);
+        imageView.setVisible(false);
     }
 
 
@@ -139,6 +178,12 @@ public class RaceController implements Observer {
                             sailIn = !sailIn;
                             message.setSailsIn(sailIn);
                             break;
+                        case C:
+                            if (controlsVisible) {
+                                hideControlScheme();
+                            } else {
+                                showControlScheme();
+                            }
                         default:
                             send = false;
                     }
