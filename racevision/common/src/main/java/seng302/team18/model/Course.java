@@ -126,11 +126,11 @@ public class Course {
     }
 
 
-    public Leg getNextLeg(Leg leg) {
-        if (leg.getLegNumber() == legs.size()) {
-            return leg;
+    public Leg getNextLeg(int legNumber) {
+        if (legNumber == legs.size()) {
+            return legs.get(legNumber - 1);
         }
-        return legs.get(leg.getLegNumber());
+        return legs.get(legNumber);
     }
 
     private void setupLegs() {

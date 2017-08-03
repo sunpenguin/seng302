@@ -245,7 +245,7 @@ public class GPSCalculations {
     public boolean isBetween(double bearing, double start, double finish) {
         finish = (finish - start + 360) % 360;
         bearing = (bearing - start + 360) % 360;
-        return bearing < finish;
+        return bearing <= finish;
     }
 
 }
