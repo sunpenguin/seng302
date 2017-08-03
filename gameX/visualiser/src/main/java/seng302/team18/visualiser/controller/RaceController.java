@@ -40,6 +40,7 @@ import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.send.Sender;
+import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
@@ -83,8 +84,6 @@ public class RaceController implements Observer {
     private Sender sender;
     private Receiver receiver;
 
-    private ImageView imageView;
-    private boolean controlsVisible;
 
     @FXML
     public void initialize() {
@@ -97,7 +96,7 @@ public class RaceController implements Observer {
             importantAnnotations.put(type, false);
         }
         group.setManaged(false);
-        loadControlScheme();
+        new ControlSchemeDisplay(raceViewPane);
     }
 
     @FXML
@@ -118,38 +117,6 @@ public class RaceController implements Observer {
         ImageView icon = new ImageView("/images/boat-310164_640.png");
         icon.setFitHeight(18);
         icon.setFitWidth(18);
-    }
-
-
-    /**
-     *  Shows the imageView holding the control scheme by adding it to the raceViewPane.
-     */
-    private void showControlScheme() {
-        imageView.setFitWidth(raceViewPane.getWidth());
-        imageView.setVisible(true);
-        controlsVisible = true;
-    }
-
-
-    /**
-     *  Hides the imageView holding the control scheme by removing it from the raceViewPane.
-     */
-    private void hideControlScheme() {
-        imageView.setVisible(false);
-        controlsVisible = false;
-    }
-
-
-    /**
-     * Loads the control scheme image, fitted to the width of the raceViewPane.
-     */
-    private void loadControlScheme() {
-        String path = "/images/controlScheme.png";
-        Image image = new Image(path);
-        imageView = new ImageView(image);
-        imageView.setPreserveRatio(true);
-        raceViewPane.getChildren().add(imageView);
-        imageView.setVisible(false);
     }
 
 
@@ -178,12 +145,6 @@ public class RaceController implements Observer {
                             sailIn = !sailIn;
                             message.setSailsIn(sailIn);
                             break;
-                        case C:
-                            if (controlsVisible) {
-                                hideControlScheme();
-                            } else {
-                                showControlScheme();
-                            }
                         default:
                             send = false;
                     }
