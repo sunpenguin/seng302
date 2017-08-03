@@ -20,7 +20,7 @@ import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.RaceStartTime;
 import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.messageinterpreting.*;
-import seng302.team18.visualiser.send.Sender;
+import seng302.team18.send.Sender;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;

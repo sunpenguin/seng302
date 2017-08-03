@@ -1,4 +1,4 @@
-package seng302.team18.visualiser.send;
+package seng302.team18.send;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -7,7 +7,6 @@ import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * Created by dhl25 on 16/07/17.

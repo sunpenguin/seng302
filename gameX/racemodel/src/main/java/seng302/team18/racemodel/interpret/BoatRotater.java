@@ -154,15 +154,10 @@ public class BoatRotater {
      * @param boat the boat to tack/gybe.
      */
     public void setTackGybe(double windDirection, Boat boat) {
-
-//        if (boat.isUpwind(windDirection)) {
-//            double newHeading = ((windDirection - (boat.getHeading() - windDirection)) + 360) % 360;
-//            boat.setHeading(newHeading);
-//        } else {
-//            double newHeading = (windDirection + (windDirection - boat.getHeading()) + 360)  % 360;
-//            boat.setHeading(newHeading);
-//        }
         double newHeading = ((windDirection - (boat.getHeading() - windDirection)) + 360) % 360;
-        boat.setHeading(newHeading);
+        //TODO: hqi19, spe76, 03/08 Need to check for an area of values, not just single values.
+        if (newHeading != (windDirection + 90) % 360 && newHeading != (windDirection + 270) % 360) {
+            boat.setHeading(newHeading);
+        }
     }
 }

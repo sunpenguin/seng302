@@ -83,7 +83,7 @@ public class BoatRotaterTest {
     @Test
     public void checkGybeTestTwo() {
         rotater.setTackGybe(135, boat);
-        Assert.assertEquals(225, boat.getHeading(), 0.1);
+        Assert.assertEquals(45, boat.getHeading(), 0.1);
     }
 
 
@@ -180,5 +180,21 @@ public class BoatRotaterTest {
         boat.setHeading(100);
         rotater.setTackGybe(125, boat);
         Assert.assertEquals(150, boat.getHeading(), 0.1);
+    }
+
+
+    @Test
+    public void checkEdgeCaseTestOne() {
+        boat.setHeading(90);
+        rotater.setTackGybe(windDirection, boat);
+        Assert.assertEquals(90, boat.getHeading(), 0.1);
+    }
+
+
+    @Test
+    public void checkEdgeCaseTestTwo() {
+        boat.setHeading(270);
+        rotater.setTackGybe(windDirection, boat);
+        Assert.assertEquals(270, boat.getHeading(), 0.1);
     }
 }

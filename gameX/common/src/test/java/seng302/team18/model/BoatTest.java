@@ -392,22 +392,4 @@ public class BoatTest {
 
         assertEquals(250.0, testBoat.getHeading(), 0.1);
     }
-
-    @Test
-    public void isUpwindTestOne() {
-        Assert.assertTrue(testBoat.isUpwind(windDirectionS));
-    }
-
-    @Test
-    public void isUpwindTestTwo() {
-        testBoat.setHeading(315);
-        Assert.assertTrue(testBoat.isUpwind(windDirectionS));
-    }
-
-    @Test
-    public void isDownwindTest() {
-        testBoat.setHeading(135);
-        Assert.assertFalse(testBoat.isUpwind(windDirectionS));
-    }
-
 }

@@ -10,8 +10,8 @@ import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
-import seng302.team18.visualiser.send.ControllerMessageFactory;
-import seng302.team18.visualiser.send.Sender;
+import seng302.team18.send.ControllerMessageFactory;
+import seng302.team18.send.Sender;
 
 import javax.net.SocketFactory;
 import java.net.Socket;
