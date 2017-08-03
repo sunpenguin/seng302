@@ -67,6 +67,8 @@ public class BoatActionInterpreter extends MessageInterpreter {
             boat.setSailOut(false);
         } else if (action == BoatActionStatus.SAIL_OUT.action()) {
             boat.setSailOut(true);
+        } else if (action == BoatActionStatus.TACK_GYBE.action()) {
+            boatRotater.setTackGybe(race.getCourse().getWindDirection(), boat);
         }
     }
 

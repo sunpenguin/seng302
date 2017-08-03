@@ -1,5 +1,7 @@
 package seng302.team18.message;
 
+import seng302.team18.model.Boat;
+
 /**
  * MessageBody that contains information about a boats actions.
  */
@@ -24,32 +26,32 @@ public class BoatActionMessage implements MessageBody{
 
 
     public void setAutoPilot() {
-        action = 1;
+        action = BoatActionStatus.AUTOPILOT.action();
     }
 
 
     public void setUpwind() {
-        action = 5;
+        action = BoatActionStatus.UPWIND.action();
     }
 
 
     public void setDownwind() {
-        action = 6;
+        action = BoatActionStatus.DOWNWIND.action();
     }
 
 
     public void setSailIn() {
-        action = 2;
+        action = BoatActionStatus.SAIL_IN.action();
     }
 
 
     public void setSailOut() {
-        action = 3;
+        action = BoatActionStatus.SAIL_OUT.action();
     }
 
 
     public void setTackGybe() {
-        action = 4;
+        action = BoatActionStatus.TACK_GYBE.action();
     }
 
 

@@ -145,4 +145,46 @@ public class BoatRotater {
             }
         }
     }
+
+    public boolean isUpwind(Boat boat, double windDirection) {
+            if (boat.getTrueWindAngle(windDirection) < 90) {
+                return true;
+            }
+        return false;
+    }
+
+    public boolean checkEast(double boatHeading, double windDirection) {
+        double flippedWindDirection = (windDirection + 180) % 360;
+        double y = 0;
+        if (flippedWindDirection + 180 >= 360) {
+            y = 180 - (360 - flippedWindDirection);
+        }
+        if ((boatHeading > flippedWindDirection && boatHeading < flippedWindDirection + 180) || boatHeading < y) {
+            return true;
+        }
+        return false;
+    }
+
+
+
+    public void setTackGybe(double windDirection, Boat boat) {
+        if (isUpwind(boat, windDirection)) {
+            if (checkEast(boat.getHeading(), windDirection)) {
+                double newHeading = 360 - boat.getHeading();
+                boat.setHeading(newHeading);
+            } else {
+                double haha = 270 + (90-boat.getHeading());
+                boat.setHeading(haha);
+            }
+        } else {
+            if (checkEast(boat.getHeading(), windDirection)) {
+                double newHeading = 90+windDirection + (270+windDirection-boat.getHeading());
+                boat.setHeading(newHeading%360);
+            } else {
+                double newHeading = 180+windDirection + (180+windDirection-boat.getHeading());
+                boat.setHeading(newHeading%360);
+            }
+        }
+
+    }
 }
