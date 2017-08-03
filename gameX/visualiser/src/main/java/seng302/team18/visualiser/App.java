@@ -13,7 +13,7 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
         Parent root = loader.load(); // throws IOException
         primaryStage.setTitle("RaceVision");
-        Scene scene = new Scene(root, 800, 800);
+        Scene scene = new Scene(root, 600, 600);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();

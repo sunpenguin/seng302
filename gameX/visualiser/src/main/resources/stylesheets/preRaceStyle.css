@@ -1,5 +1,11 @@
 .background {
+    -fx-background-color: black;
+
+}
+
+.background2 {
     -fx-background-image:url("/images/BuoyLogoV2.gif");
-    -fx-background-size:  300% 170%;
+    -fx-background-size: 280% 170%;
     -fx-background-position: center;
 }
+
