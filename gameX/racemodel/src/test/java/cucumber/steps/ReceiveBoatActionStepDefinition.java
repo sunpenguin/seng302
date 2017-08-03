@@ -104,7 +104,6 @@ public class ReceiveBoatActionStepDefinition {
 
     @Given("^the boat is heading directly upwind$")
     public void the_boat_is_heading_directly_upwind() throws Throwable {
-        // Write code here that turns the phrase above into concrete actions
         boat.setHeading(windDirection);
     }
 
@@ -121,6 +120,41 @@ public class ReceiveBoatActionStepDefinition {
         socket.close();
         server.close();
         double expected = 43.0d;
+        Assert.assertEquals(expected, boat.getHeading(), 0.1);
+    }
+
+    @Given("^the boat is heading upwind")
+    public void the_boat_is_heading_upwind() throws Throwable {
+        boat.setHeading(45);
+    }
+
+    @When("^the mock gets sent a tack / gybe message$")
+    public void the_mock_gets_sent_a_tack_gybe_message() throws Throwable {
+        BoatActionMessage boatAction = new BoatActionMessage(1337);
+        boatAction.setTackGybe();
+        sender.send(boatAction);
+    }
+
+    @Then("^the players boat will tack$")
+    public void the_players_boat_will_tack() throws Throwable {
+        Thread.sleep(1000);
+        socket.close();
+        server.close();
+        double expected = 315.0d;
+        Assert.assertEquals(expected, boat.getHeading(), 0.1);
+    }
+
+    @Given("^the boat is heading downwind$")
+    public void the_boat_is_heading_downwind() throws Throwable {
+        boat.setHeading(225);
+    }
+
+    @Then("^the players boat will gybe$")
+    public void the_players_boat_will_gybe() throws Throwable {
+        Thread.sleep(1000);
+        socket.close();
+        server.close();
+        double expected = 135.0d;
         Assert.assertEquals(expected, boat.getHeading(), 0.1);
     }
 }

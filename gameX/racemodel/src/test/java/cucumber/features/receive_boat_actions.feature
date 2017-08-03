@@ -23,3 +23,15 @@ Feature: Receiving boat action messages from controllers
     And the boat is heading directly upwind
     When the mock gets sent an autopilot message
     Then the players boat will have its heading and speed changed to the optimal upwind vmg
+
+
+  Scenario: Receiving tack messages
+    And the boat is heading upwind
+    When the mock gets sent a tack / gybe message
+    Then the players boat will tack
+
+
+  Scenario: Receiving gybe messages
+    And the boat is heading downwind
+    When the mock gets sent a tack / gybe message
+    Then the players boat will gybe

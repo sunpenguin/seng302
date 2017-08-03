@@ -22,3 +22,7 @@ Feature: Sending boat actions
   Scenario: Sending autopilot action
     When the autopilot key is pressed
     Then the message will be sent
+
+  Scenario: Sending tack / gybe action
+    When the tack / gybe key is pressed
+    Then the message will be sent

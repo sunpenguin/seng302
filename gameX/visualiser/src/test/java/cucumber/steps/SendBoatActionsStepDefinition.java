@@ -74,4 +74,9 @@ public class SendBoatActionsStepDefinition {
         message.setAutoPilot();
     }
 
+    @When("^the tack / gybe key is pressed$")
+    public void the_tack_gybe_key_is_pressed() throws Throwable {
+        message = new BoatActionMessage(420);
+        message.setTackGybe();
+    }
 }
