@@ -10,9 +10,20 @@ import java.util.Collections;
 import java.util.List;
 
 public class CourseBuilderRealistic extends AbstractCourseBuilder {
+
+
     @Override
     protected List<MarkRounding> getMarkRoundings() {
-        return new ArrayList<>();
+        List<MarkRounding> markRoundings = new ArrayList<>();
+
+        markRoundings.add(new MarkRounding(1, getCompoundMarks().get(0), MarkRounding.Direction.SP, 3));
+        markRoundings.add(new MarkRounding(2, getCompoundMarks().get(1), MarkRounding.Direction.PORT, 3));
+        markRoundings.add(new MarkRounding(3, getCompoundMarks().get(2), MarkRounding.Direction.PS, 6));
+        markRoundings.add(new MarkRounding(4, getCompoundMarks().get(3), MarkRounding.Direction.PS, 6));
+        markRoundings.add(new MarkRounding(5, getCompoundMarks().get(2), MarkRounding.Direction.PS, 6));
+        markRoundings.add(new MarkRounding(6, getCompoundMarks().get(4), MarkRounding.Direction.SP, 3));
+
+        return markRoundings;
     }
 
 
