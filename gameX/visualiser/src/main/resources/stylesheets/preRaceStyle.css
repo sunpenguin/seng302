@@ -1,11 +1,18 @@
 .background {
-    -fx-background-color: black;
-
+    -fx-background-color: linear-gradient(#327D91 60%, #004B60);
+    -fx-text-fill: black;
 }
 
 .background2 {
-    -fx-background-image:url("/images/BuoyLogoV2.gif");
-    -fx-background-size: 280% 170%;
+    -fx-background-color: black;
+    -fx-background-image:url("/images/GameLogo.gif");
+    -fx-background-size: 100% 150%;
     -fx-background-position: center;
 }
 
+.button {
+    -fx-background-color: linear-gradient(#FE5A00, #FE5A00);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0;
+    -fx-text-fill: white;
+}

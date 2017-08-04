@@ -22,19 +22,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" styleClass="background" stylesheets="@stylesheets/preRaceStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.TitleScreenController">
    <children>
-      <AnchorPane layoutX="196.0" layoutY="104.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="216.0" prefWidth="196.0" styleClass="background2" stylesheets="@stylesheets/preRaceStyle.css" />
-      <Text fx:id="errorText" fill="#b50000" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="332.7294921875" x="200.0" y="200.0" />
-      <Label layoutX="40.0" layoutY="10.0" text="Welcome to Bumper Boats!" textFill="WHITE">
-         <font>
-            <Font name="Chalkboard Bold" size="40.0" />
-         </font>
-         <padding>
-            <Insets top="10.0" />
-         </padding>
-         <effect>
-            <DropShadow />
-         </effect>
-      </Label>
+      <AnchorPane layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="600.0" styleClass="background2" stylesheets="@stylesheets/preRaceStyle.css" />
       <GridPane layoutX="7.0" layoutY="345.0" prefHeight="248.0" prefWidth="585.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -61,7 +49,7 @@
                   <Font size="17.0" />
                </font>
                <effect>
-                  <DropShadow />
+                  <Bloom />
                </effect>
             </Label>
             <Button mnemonicParsing="false" onAction="#openMockStream" text="Connect!" GridPane.rowIndex="3" />
@@ -74,7 +62,7 @@
             </TextField>
             <Label contentDisplay="CENTER" text="Custom Host/Port" textFill="WHITE" GridPane.rowIndex="5">
                <effect>
-                  <DropShadow />
+                  <Bloom />
                </effect>
                <font>
                   <Font size="17.0" />
@@ -86,6 +74,7 @@
                </font>
             </Label>
             <Button fx:id="controls" mnemonicParsing="false" onAction="#showControls" text="Controls" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7" />
+            <Text fx:id="errorText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="332.7294921875" x="200.0" y="200.0" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>

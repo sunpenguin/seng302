@@ -6,7 +6,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
@@ -85,14 +88,13 @@ public class TitleScreenController {
     }
 
     public void showControls() throws IOException{
-        Stage stage = (Stage) errorText.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("controls.fxml"));
-        Parent root = loader.load(); // throws IOException
-        stage.setTitle("Controls");
-        Scene scene = new Scene(root, 800, 100);
+        Stage stage = new Stage();
+        BorderPane pane = new BorderPane();
+        ImageView img = new ImageView("images/keyboardLayout.png");
+        img.fitWidthProperty().bind(stage.widthProperty());
+        pane.setCenter(img);
+        Scene scene = new Scene(pane);
         stage.setScene(scene);
-        stage.setResizable(false);
         stage.show();
     }
-
 }
