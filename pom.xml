@@ -4,9 +4,9 @@
     <groupId>seng302</groupId>
     <artifactId>app</artifactId>
     <packaging>pom</packaging>
-    <version>0.0</version>
+    <version>5.1</version>
     <modules>
-        <module>racevision</module>
+        <module>gameX</module>
     </modules>
     <name>app</name>
     <url>https://eng-git.canterbury.ac.nz/seng302-2017/team-18</url>
