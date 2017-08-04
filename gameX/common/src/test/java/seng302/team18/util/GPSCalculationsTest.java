@@ -57,4 +57,24 @@ public class GPSCalculationsTest {
         Assert.assertEquals(expected.getLatitude(), actual.getLatitude(), delta);
         Assert.assertEquals(expected.getLongitude(), actual.getLongitude(), delta);
     }
+
+
+    /**
+     * Test for when start is greater than 0 and finish is greater than start.
+     */
+    @Test
+    public void isBetweenTestBlueSkies() {
+        Assert.assertTrue(gps.isBetween(60, 30, 90));
+        Assert.assertFalse(gps.isBetween(100, 30, 90));
+    }
+
+
+    /**
+     * When start angle is greater than finish.
+     */
+    @Test
+    public void isBetweenTestAlternative() {
+        Assert.assertTrue(gps.isBetween(60, 350, 90));
+        Assert.assertFalse(gps.isBetween(100, 350, 90));
+    }
 }

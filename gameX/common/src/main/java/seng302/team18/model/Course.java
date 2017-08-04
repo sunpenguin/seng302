@@ -1,5 +1,7 @@
 package seng302.team18.model;
 
+import seng302.team18.util.GPSCalculations;
+
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,8 +31,8 @@ public class Course {
         this.boundaries = new ArrayList<>(boundaries);
         this.timeZone = timeZone;
         this.markRoundings = markRoundings;
-        setupLegs();
         centralCoordinate = new Coordinate(0d, 0d);
+        initializeCourse();
     }
 
     public Course() {
@@ -60,7 +62,7 @@ public class Course {
     public void setMarkRoundings(Collection<MarkRounding> markRoundings) {
         this.markRoundings.clear();
         this.markRoundings.addAll(markRoundings);
-        setupLegs();
+        initializeCourse();
     }
 
     public List<MarkRounding> getMarkRoundings() {
@@ -124,20 +126,33 @@ public class Course {
     }
 
 
-    public Leg getNextLeg(Leg leg) {
-        if (leg.getLegNumber() == legs.size()) {
-            return leg;
+    public Leg getNextLeg(int legNumber) {
+        if (legNumber == legs.size()) {
+            return legs.get(legNumber - 1);
         }
-        return legs.get(leg.getLegNumber());
+        return legs.get(legNumber);
     }
 
-    private void setupLegs() {
+
+    /**
+     * Initializes the legs of the course to be in the order of the compound marks as they appear in the list.
+     * Then adds the pass angle to each compound mark (if you do not know what pass angle is talk to Alice).
+     */
+    private void initializeCourse() {
         legs = new ArrayList<>();
         for (int i = 0; i < markRoundings.size() - 1; i++) {
             CompoundMark dep = markRoundings.get(i).getCompoundMark();
             CompoundMark dest = markRoundings.get(i + 1).getCompoundMark();
             Leg currentLeg = new Leg(dep, dest, markRoundings.get(i).getSequenceNumber());
             legs.add(currentLeg);
+        }
+        for (int i = 1; i < compoundMarks.size() - 1; i++) {
+            CompoundMark previous = compoundMarks.get(i - 1);
+            CompoundMark current = compoundMarks.get(i);
+            CompoundMark future = compoundMarks.get(i + 1);
+            double previousAngle = GPSCalculations.getBearing(previous.getCoordinate(), current.getCoordinate());
+            double futureAngle = GPSCalculations.getBearing(future.getCoordinate(), current.getCoordinate());
+            current.setPassAngle(((previousAngle + futureAngle) / 2d));
         }
     }
 

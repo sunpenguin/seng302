@@ -47,7 +47,7 @@ public class BoatStatusInterpreter extends MessageInterpreter {
                 boat.setLegNumber((race.getCourse().getLegs().get(realLegNumber - 1)).getLegNumber());
             }
         } else {
-            Leg nextLeg = race.getCourse().getNextLeg(currentLeg);
+            Leg nextLeg = race.getCourse().getNextLeg(currentLeg.getLegNumber());
             if (realLegNumber == race.getCourse().getLegs().size() + 1) {
                 boat.setLegNumber(realLegNumber);
             } else if (currentLeg.getLegNumber() != realLegNumber) {
