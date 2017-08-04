@@ -17,6 +17,7 @@ public class CompoundMark implements GeographicLocation {
     private Integer id;
     private List<Mark> marks;
     private List<Boat> passed;
+    private double passAngle;
 
     public CompoundMark(String name, Collection<Mark> marks, int id) {
         this.name = name;
@@ -31,8 +32,6 @@ public class CompoundMark implements GeographicLocation {
      * @return the central coordinate
      */
     public Coordinate getCoordinate() {
-        ;
-
         if (marks.size() == GATE_SIZE) {
             GPSCalculations gps = new GPSCalculations();
             return gps.midPoint(marks.get(0).getCoordinate(), marks.get(1).getCoordinate());
@@ -82,4 +81,15 @@ public class CompoundMark implements GeographicLocation {
     public List<Mark> getMarks() {
         return marks;
     }
+
+    public double getPassAngle() {
+        return passAngle;
+    }
+
+    public void setPassAngle(double passAngle) {
+        this.passAngle = passAngle;
+    }
+
+
+
 }
