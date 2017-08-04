@@ -32,7 +32,7 @@ public class Course {
         this.timeZone = timeZone;
         this.markRoundings = markRoundings;
         centralCoordinate = new Coordinate(0d, 0d);
-        setupLegs();
+        initializeCourse();
     }
 
     public Course() {
@@ -62,7 +62,7 @@ public class Course {
     public void setMarkRoundings(Collection<MarkRounding> markRoundings) {
         this.markRoundings.clear();
         this.markRoundings.addAll(markRoundings);
-        setupLegs();
+        initializeCourse();
     }
 
     public List<MarkRounding> getMarkRoundings() {
@@ -133,7 +133,12 @@ public class Course {
         return legs.get(legNumber);
     }
 
-    private void setupLegs() {
+
+    /**
+     * Initializes the legs of the course to be in the order of the compound marks as they appear in the list.
+     * Then adds the pass angle to each compound mark (if you do not know what pass angle is talk to Alice).
+     */
+    private void initializeCourse() {
         legs = new ArrayList<>();
         for (int i = 0; i < markRoundings.size() - 1; i++) {
             CompoundMark dep = markRoundings.get(i).getCompoundMark();
