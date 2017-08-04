@@ -69,11 +69,8 @@ public class BoatRotaterTest {
     }
 
 
-    /**
-     * One to Four are Downwind East Gybe Tests.
-     */
     @Test
-    public void checkGybeTestOne() { // Gybe
+    public void checkGybeTestOne() {
         boat.setHeading(235);
         rotater.setTackGybe(windDirection, boat);
         Assert.assertEquals(125, boat.getHeading(), 0.1);
@@ -81,14 +78,14 @@ public class BoatRotaterTest {
 
 
     @Test
-    public void checkGybeTestTwo() { // Tack or Gybe?
+    public void checkGybeTestTwo() {
         rotater.setTackGybe(135, boat);
         Assert.assertEquals(225, boat.getHeading(), 0.1);
     }
 
 
     @Test
-    public void checkGybeTestThree() { // Gybe
+    public void checkGybeTestThree() {
         boat.setHeading(90);
         rotater.setTackGybe(225, boat);
         Assert.assertEquals(0, boat.getHeading(), 0.1);
@@ -96,18 +93,15 @@ public class BoatRotaterTest {
 
 
     @Test
-    public void checkGybeTestFour() { // Gybe
+    public void checkGybeTestFour() {
         boat.setHeading(45);
         rotater.setTackGybe(180, boat);
         Assert.assertEquals(315, boat.getHeading(), 0.1);
     }
 
 
-    /**
-     * The rest are downwind West Gybe Tests.
-     */
     @Test
-    public void checkGybeTestFive() { // Gybe
+    public void checkGybeTestFive() {
         boat.setHeading(125);
         rotater.setTackGybe(windDirection, boat);
         Assert.assertEquals(235, boat.getHeading(), 0.1);
@@ -115,7 +109,7 @@ public class BoatRotaterTest {
 
 
     @Test
-    public void checkGybeTestSix() { // Tack or Gybe
+    public void checkGybeTestSix() {
         boat.setHeading(0);
         rotater.setTackGybe(225, boat);
         Assert.assertEquals(90, boat.getHeading(), 0.1);
@@ -123,33 +117,15 @@ public class BoatRotaterTest {
 
 
     @Test
-    public void checkGybeTestSeven() { // Gybe
+    public void checkGybeTestSeven() {
         boat.setHeading(60);
         rotater.setTackGybe(315, boat);
         Assert.assertEquals(210, boat.getHeading(), 0.1);
     }
 
 
-    /**
-     * The next tests are for upwind west tack.
-     */
     @Test
-    public void checkTackTestOne() { // Tack
-        rotater.setTackGybe(windDirection, boat);
-        Assert.assertEquals(315, boat.getHeading(), 0.1);
-    }
-
-
-    @Test
-    public void checkTackTestTwo() { // Tack
-        boat.setHeading(240);
-        rotater.setTackGybe(225, boat);
-        Assert.assertEquals(210, boat.getHeading(), 0.1);
-    }
-
-
-    @Test
-    public void checkTackTestThree() { // Gybe
+    public void checkGybeTestEight() {
         boat.setHeading(280);
         rotater.setTackGybe(225, boat);
         Assert.assertEquals(170, boat.getHeading(), 0.1);
@@ -157,44 +133,40 @@ public class BoatRotaterTest {
 
 
     @Test
-    public void checkTackTestFour() { // Tack
-        boat.setHeading(150);
-        rotater.setTackGybe(125, boat);
-        Assert.assertEquals(100, boat.getHeading(), 0.1);
-    }
-
-
-    /**
-     * The next tests are for upwind east tack.
-     */
-    @Test
-    public void checkTackTestFive() { // Tack
-        boat.setHeading(315);
+    public void checkTackTestOne() {
         rotater.setTackGybe(windDirection, boat);
-        Assert.assertEquals(45, boat.getHeading(),0.1);
+        Assert.assertEquals(315, boat.getHeading(), 0.1);
     }
 
 
     @Test
-    public void checkTackTestSix() { // Tack
+    public void checkTackTestTwo() {
+        boat.setHeading(240);
+        rotater.setTackGybe(225, boat);
+        Assert.assertEquals(210, boat.getHeading(), 0.1);
+    }
+
+
+    @Test
+    public void checkTackTestThree() {
         boat.setHeading(100);
         rotater.setTackGybe(125, boat);
         Assert.assertEquals(150, boat.getHeading(), 0.1);
     }
 
 
-//    @Test
-//    public void checkEdgeCaseTestOne() {
-//        boat.setHeading(90);
-//        rotater.setTackGybe(windDirection, boat);
-//        Assert.assertEquals(90, boat.getHeading(), 0.1);
-//    }
-//
-//
-//    @Test
-//    public void checkEdgeCaseTestTwo() {
-//        boat.setHeading(270);
-//        rotater.setTackGybe(windDirection, boat);
-//        Assert.assertEquals(270, boat.getHeading(), 0.1);
-//    }
+    @Test
+    public void checkTackTestFour() {
+        boat.setHeading(150);
+        rotater.setTackGybe(125, boat);
+        Assert.assertEquals(100, boat.getHeading(), 0.1);
+    }
+
+
+    @Test
+    public void checkTackTestFive() {
+        boat.setHeading(315);
+        rotater.setTackGybe(windDirection, boat);
+        Assert.assertEquals(45, boat.getHeading(),0.1);
+    }
 }
