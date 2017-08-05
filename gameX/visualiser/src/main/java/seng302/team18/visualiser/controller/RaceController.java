@@ -36,7 +36,7 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
-import seng302.team18.visualiser.send.Sender;
+import seng302.team18.send.Sender;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
@@ -122,20 +122,24 @@ public class RaceController implements Observer {
                     boolean send = true;
                     switch (keyEvent.getCode()){
                         case SPACE:
-                            message.setAutopilot(true);
+                            message.setAutoPilot();
                             break;
                         case ENTER:
-                            message.setTackGybe(true);
+                            message.setTackGybe();
                             break;
                         case PAGE_UP:
-                            message.setUpwind(true);
+                            message.setUpwind();
                             break;
                         case PAGE_DOWN:
-                            message.setDownwind(true);
+                            message.setDownwind();
                             break;
                         case SHIFT:
                             sailIn = !sailIn;
-                            message.setSailsIn(sailIn);
+                            if (sailIn) {
+                                message.setSailIn();
+                            } else {
+                                message.setSailOut();
+                            }
                             break;
                         default:
                             send = false;

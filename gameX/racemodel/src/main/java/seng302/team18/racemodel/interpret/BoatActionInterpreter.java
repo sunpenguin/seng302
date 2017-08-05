@@ -2,6 +2,7 @@ package seng302.team18.racemodel.interpret;
 
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.BoatActionMessage;
+import seng302.team18.message.BoatActionStatus;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
@@ -55,16 +56,19 @@ public class BoatActionInterpreter extends MessageInterpreter {
      */
     private void applyActions(Boat boat, BoatActionMessage actions) {
         final double DEAD_ZONE = 10d;
-        if (actions.isDownwind()) {
+        byte action = actions.getAction();
+        if (action == BoatActionStatus.DOWNWIND.action()) {
             boatRotater.rotateDownwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
-        } else if (actions.isUpwind()) {
+        } else if (action == BoatActionStatus.UPWIND.action()) {
             boatRotater.rotateUpwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
-        } else if (actions.isAutopilot()) {
+        } else if (action == BoatActionStatus.AUTOPILOT.action()) {
             boatRotater.setVMG(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed(), DEAD_ZONE);
-        } else if (actions.isSailsIn()) {
+        } else if (action == BoatActionStatus.SAIL_IN.action()) {
             boat.setSailOut(false);
-        } else if (!actions.isSailsIn()) {
+        } else if (action == BoatActionStatus.SAIL_OUT.action()) {
             boat.setSailOut(true);
+        } else if (action == BoatActionStatus.TACK_GYBE.action()) {
+            boatRotater.setTackGybe(race.getCourse().getWindDirection(), boat);
         }
     }
 

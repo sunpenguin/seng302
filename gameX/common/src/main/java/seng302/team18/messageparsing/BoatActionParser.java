@@ -35,22 +35,22 @@ public class BoatActionParser implements MessageBodyParser {
 
         switch (bytes[4]) {
             case 1:
-                message.setAutopilot(true);
+                message.setAutoPilot();
                 break;
             case 2:
-                message.setSailsIn(true);
+                message.setSailIn();
                 break;
             case 3:
-                message.setSailsIn(false);
+                message.setSailOut();
                 break;
             case 4:
-                message.setTackGybe(true);
+                message.setTackGybe();
                 break;
             case 5:
-                message.setUpwind(true);
+                message.setUpwind();
                 break;
             case 6:
-                message.setDownwind(true);
+                message.setDownwind();
                 break;
         }
 

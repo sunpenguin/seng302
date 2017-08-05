@@ -20,13 +20,7 @@ public class Server extends Observable {
     public Server(int port, int maxClients) {
         this.port = port;
         this.maxClients = maxClients;
-    }
 
-    /**
-     * Opens the server.
-     * Blocks waiting for the first client connection, then opens a second thread to listen for subsequent connections
-     */
-    public void openServer() {
         try {
             serverSocket = ServerSocketFactory.getDefault().createServerSocket(port);
         } catch (IOException e) {
@@ -34,6 +28,13 @@ public class Server extends Observable {
             System.err.println("Exiting program");
             System.exit(-1);
         }
+    }
+
+    /**
+     * Opens the server.
+     * Blocks waiting for the first client connection, then opens a second thread to listen for subsequent connections
+     */
+    public void openServer() {
         System.out.println("Stream opened successfully on port: " + port);
 
         acceptClientConnection();

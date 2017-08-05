@@ -145,4 +145,16 @@ public class BoatRotater {
             }
         }
     }
+
+
+    /**
+     * Change the boat heading to either tack or gybe depending on the direction the boat is moving upwind or downwind.
+     *
+     * @param windDirection the direction of the wind.
+     * @param boat the boat to tack/gybe.
+     */
+    public void setTackGybe(double windDirection, Boat boat) {
+        double newHeading = (2 * windDirection - boat.getHeading() + 360) % 360;
+        boat.setHeading(newHeading);
+    }
 }
