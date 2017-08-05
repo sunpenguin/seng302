@@ -37,6 +37,7 @@ import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
+import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
@@ -80,6 +81,7 @@ public class RaceController implements Observer {
     private Sender sender;
     private Receiver receiver;
 
+
     @FXML
     public void initialize() {
         installKeyHandler();
@@ -91,6 +93,7 @@ public class RaceController implements Observer {
             importantAnnotations.put(type, false);
         }
         group.setManaged(false);
+        new ControlSchemeDisplay(raceViewPane);
     }
 
     @FXML
@@ -128,9 +131,11 @@ public class RaceController implements Observer {
                             message.setTackGybe();
                             break;
                         case PAGE_UP:
+                        case UP:
                             message.setUpwind();
                             break;
                         case PAGE_DOWN:
+                        case DOWN:
                             message.setDownwind();
                             break;
                         case SHIFT:
