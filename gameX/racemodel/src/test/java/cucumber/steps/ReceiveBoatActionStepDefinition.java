@@ -64,7 +64,7 @@ public class ReceiveBoatActionStepDefinition {
 
     @Then("^the players boat will head upwind$")
     public void the_players_boat_will_head_upwind() throws Throwable {
-        Thread.sleep(1000);
+        Thread.sleep(1000); // Wait for the server to receive and interpret sent message
         socket.close();
         server.close();
         double expected = 87d;

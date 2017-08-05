@@ -9,7 +9,7 @@ import seng302.team18.model.Boat;
 import java.util.Collections;
 
 /**
- * Created by David-chan on 23/07/17.
+ * Tests for BoatRotater Class
  */
 public class BoatRotaterTest {
 
