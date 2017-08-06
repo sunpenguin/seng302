@@ -2,6 +2,7 @@ package seng302.team18.racemodel.model;
 
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.model.Regatta;
 
 /**
@@ -18,13 +19,14 @@ public abstract class AbstractRaceBuilder {
      * @param course  the course the race follows
      * @return the constructed race
      */
-    public Race buildRace(Regatta regatta, Course course) {
+    public Race buildRace(Regatta regatta, Course course, RaceMode mode) {
         Race race = new Race();
 
         race.setCourse(course);
         race.setRegatta(regatta);
         race.setRaceType(getRaceType());
         race.setId(getId());
+        race.setMode(mode);
 
         return race;
     }

@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Builds a preset course. Smaller than the course from CourseBuilder1
+ * Builds a preset course to be used in the practice modes.
  * <p>
  * Concrete implementation of AbstractCourseBuilder.
  *
@@ -110,9 +110,6 @@ public class CourseBuilderPractice extends AbstractCourseBuilder {
 
         markRoundings.add(new MarkRounding(1, getCompoundMarks().get(0), MarkRounding.Direction.SP, 3));
         markRoundings.add(new MarkRounding(2, getCompoundMarks().get(1), MarkRounding.Direction.PORT, 3));
-        markRoundings.add(new MarkRounding(3, getCompoundMarks().get(2), MarkRounding.Direction.PS, 6));
-        markRoundings.add(new MarkRounding(4, getCompoundMarks().get(3), MarkRounding.Direction.PS, 6));
-        markRoundings.add(new MarkRounding(5, getCompoundMarks().get(0), MarkRounding.Direction.PS, 6));
 
         return markRoundings;
     }

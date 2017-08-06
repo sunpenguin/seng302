@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.model.*;
 import seng302.team18.util.ByteCheck;
 import seng302.team18.util.SpeedConverter;
@@ -63,7 +64,7 @@ public class RaceMessageGeneratorTest {
         AbstractCourseBuilder courseBuilder = new CourseBuilder1();
         ZonedDateTime now = ZonedDateTime.now();
         currentTime = now.toInstant().toEpochMilli();
-        testRace = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
+        testRace = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse(), RaceMode.RACE);
         testRace.setStartTime(now);
         RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(testRace);
         generatedBytes = raceMessageGenerator.getPayload();

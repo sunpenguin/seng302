@@ -73,6 +73,15 @@
                </VBox.margin>
             </GridPane>
             <Text fx:id="errorText" fill="#b50000" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="332.7294921875" x="200.0" y="200.0" />
+            <Label contentDisplay="CENTER" text="Controls Tutorial" textFill="WHITE">
+               <effect>
+                  <DropShadow />
+               </effect>
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Button mnemonicParsing="false" onAction="#startControlPractice" text="Begin! WOW!" />
          </children>
       </VBox>
    </children>

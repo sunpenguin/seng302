@@ -28,6 +28,7 @@ public class Race {
     private RaceStatus status;
     private Integer playerId;
     private RaceType raceType;
+    private RaceMode mode = RaceMode.RACE;
     GPSCalculations gps = new GPSCalculations();
 
     public Race() {
@@ -203,7 +204,7 @@ public class Race {
             if (!finishedList.contains(boat)) {
 //                updateBoat(boat, time);
                 updatePosition(boat, time);
-                if (hasPassedMark(boat)) {
+                if (hasPassedMark(boat) && mode != RaceMode.CONTROLS_TUTORIAL) {
                     setNextLeg(boat, course.getNextLeg(boat.getLegNumber()));
                 }
             }
@@ -260,9 +261,13 @@ public class Race {
         if (boat.isSailOut()) {
             speed = 0;
         }
+
         List<AbstractBoat> obstacles = new ArrayList<>(startingList);
         obstacles.addAll(course.getMarks());
-        AbstractBoat obstacle = boat.hasCollided(obstacles);
+        AbstractBoat obstacle = null;
+        if (mode != RaceMode.CONTROLS_TUTORIAL) {
+            obstacle = boat.hasCollided(obstacles);
+        }
         if (obstacle != null){
             handleCollision(boat, obstacle);
         } else {
@@ -272,10 +277,6 @@ public class Race {
 
             // set next position based on current coordinate, distance travelled, and heading.
             boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
-        }
-
-        if (hasPassedMark(boat)) {
-            setNextLeg(boat, course.getNextLeg(boat.getLegNumber()));
         }
     }
 
@@ -476,5 +477,12 @@ public class Race {
     }
 
 
+    public RaceMode getMode() {
+        return mode;
+    }
 
+
+    public void setMode(RaceMode mode) {
+        this.mode = mode;
+    }
 }

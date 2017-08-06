@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
 
@@ -24,12 +25,25 @@ public class StartupController {
     @FXML private TextField customPortField;
     @FXML private TextField customHostField;
 
+    private RaceMode mode;
 
     /**
      * Called when the mock connection button is selected, sets up a connection with the mock feed
      */
     @FXML
     private void openMockStream() {
+        mode = RaceMode.RACE;
+        openStream("127.0.0.1", 5005);
+    }
+
+
+    /**
+     * React to User selecting the Controls Tutorial mode.
+     * Start a race in ControlsTutorial mode.
+     */
+    @FXML
+    private void startControlPractice() {
+        mode = RaceMode.CONTROLS_TUTORIAL;
         openStream("127.0.0.1", 5005);
     }
 
@@ -79,7 +93,9 @@ public class StartupController {
         stage.setResizable(false);
         stage.show();
 
-        controller.setUp(new Race(), receiver, sender);
+        Race race = new Race();
+        race.setMode(mode);
+        controller.setUp(race, receiver, sender);
     }
 
 }

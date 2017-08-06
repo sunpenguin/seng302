@@ -34,13 +34,15 @@ public class CourseRenderer {
     private Group group;
     private Pane pane;
     private PixelMapper pixelMapper;
+    private RaceMode mode;
 
 
-    public CourseRenderer(PixelMapper pixelMapper, Course course, Group group, Pane pane) {
+    public CourseRenderer(PixelMapper pixelMapper, Course course, Group group, Pane pane, RaceMode mode) {
         this.course = course;
         this.group = group;
         this.pane = pane;
         this.pixelMapper = pixelMapper;
+        this.mode = mode;
     }
 
 
@@ -48,22 +50,22 @@ public class CourseRenderer {
      * Called if the course needs to be re-rendered due to the window being resized.
      */
     public void renderCourse() {
-        markSize = MARK_SIZE * pixelMapper.mappingRatio();
-//        System.out.println(group.getChildren().size());
-//        System.out.println(course.getCompoundMarks());
-        List<CompoundMark> compoundMarks = course.getCompoundMarks();
-        // Renders CompoundMarks
-        for (int i = 0; i < compoundMarks.size(); i++) {
-            CompoundMark compoundMark = compoundMarks.get(i);
-            if ((course.getMarkRoundings().get(0).getCompoundMark().getId().equals(compoundMark.getId())
-                    || course.getMarkRoundings().get(course.getMarkRoundings().size() - 1).getCompoundMark().getId().equals(compoundMark.getId()))
-                    && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) { // draw a line between the gate if its a start or finish
-                renderGate(compoundMark);
-            } else {
-                renderCompoundMark(compoundMark);
+        if (mode != RaceMode.CONTROLS_TUTORIAL) {
+            markSize = MARK_SIZE * pixelMapper.mappingRatio();
+            List<CompoundMark> compoundMarks = course.getCompoundMarks();
+            // Renders CompoundMarks
+            for (int i = 0; i < compoundMarks.size(); i++) {
+                CompoundMark compoundMark = compoundMarks.get(i);
+                if ((course.getMarkRoundings().get(0).getCompoundMark().getId().equals(compoundMark.getId())
+                        || course.getMarkRoundings().get(course.getMarkRoundings().size() - 1).getCompoundMark().getId().equals(compoundMark.getId()))
+                        && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) { // draw a line between the gate if its a start or finish
+                    renderGate(compoundMark);
+                } else {
+                    renderCompoundMark(compoundMark);
+                }
             }
+            renderBoundaries();
         }
-        renderBoundaries();
     }
 
     /**

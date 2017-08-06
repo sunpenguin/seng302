@@ -80,6 +80,7 @@ public class ConnectionListener implements Observer {
                         addPlayer(receiver, sourceID);
                         sendMessage(client, sourceID);
                     }
+                    //TODO: jth102, spe76, 06/08, when practice mode is confirmed as a request type, we can change race mode of the race here.
                 }
             });
         } catch (Exception e) {

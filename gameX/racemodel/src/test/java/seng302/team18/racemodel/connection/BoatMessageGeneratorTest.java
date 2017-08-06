@@ -3,6 +3,7 @@ package seng302.team18.racemodel.connection;
 import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.model.*;
 import seng302.team18.util.ByteCheck;
 import seng302.team18.util.SpeedConverter;
@@ -64,8 +65,9 @@ public class BoatMessageGeneratorTest {
         AbstractRaceBuilder raceBuilder = new RaceBuilder1();
         AbstractRegattaBuilder regattaBuilder = new RegattaBuilder1();
         AbstractCourseBuilder courseBuilder = new CourseBuilder1();
+        RaceMode mode = RaceMode.RACE;
 
-        final Race testRace = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
+        final Race testRace = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse(), mode);
         byte[] generatedBytes;
         List<BoatMessageGenerator> messages = new ArrayList<>();
         for (Boat boat : testRace.getStartingList()) {

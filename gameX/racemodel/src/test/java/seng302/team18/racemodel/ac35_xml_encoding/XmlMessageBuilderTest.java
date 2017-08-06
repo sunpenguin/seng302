@@ -39,7 +39,7 @@ public class XmlMessageBuilderTest {
         AbstractCourseBuilder courseBuilder = new CourseBuilder1();
         AbstractRaceBuilder raceBuilder = new RaceBuilder1();
         AbstractRegattaBuilder regattaBuilder = new RegattaBuilder1();
-        race = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
+        race = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse(), RaceMode.RACE);
         BOATS.forEach(boat -> race.addParticipant(boat));
 
         XmlMessageBuilder messageBuilder = new XmlMessageBuilder(boatsXmlDefaults, raceXmlDefaults);

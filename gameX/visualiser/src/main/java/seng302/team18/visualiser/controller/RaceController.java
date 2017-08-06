@@ -420,7 +420,7 @@ public class RaceController implements Observer {
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
-        courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
+        courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
 
         raceClock = new RaceClock(timerLabel);
         raceClock.start();

@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.model.Regatta;
 
 import static org.junit.Assert.assertEquals;
@@ -19,7 +20,7 @@ public class AbstractRaceBuilderTest {
     @Before
     public void setUp() throws Exception {
         AbstractRaceBuilder raceBuilder = new ConcreteRaceBuilder();
-        race = raceBuilder.buildRace(REGATTA, COURSE);
+        race = raceBuilder.buildRace(REGATTA, COURSE, RaceMode.RACE);
     }
 
 

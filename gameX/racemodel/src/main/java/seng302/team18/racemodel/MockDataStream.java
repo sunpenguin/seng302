@@ -2,6 +2,7 @@ package seng302.team18.racemodel;
 
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.ac35_xml_encoding.BoatXmlDefaults;
 import seng302.team18.racemodel.ac35_xml_encoding.RaceXmlDefaults;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
@@ -55,34 +56,49 @@ public class MockDataStream {
     }
 
 
+    private static void tutorialConfig() {
+        START_WAIT_TIME = 1;
+        WARNING_WAIT_TIME = 1;
+        PREP_WAIT_TIME = 0;
+        MAX_PLAYERS = 1;
+    }
+
+
     /**
      * Main setup method for the application.
      */
     private static void runMock() {
-        try {
-            readConfig("/config.txt");
+        //TODO: jth102, spe76, 06/08: Figure out a way to not hardcode the race mode
+        RaceMode mode = RaceMode.RACE;
 
-            final int CUTOFF_DIFFERENCE = 0;
-            final int SERVER_PORT = 5005;
+        final int CUTOFF_DIFFERENCE = 0;
+        final int SERVER_PORT = 5005;
 
-            Race race = RACE_BUILDER.buildRace(REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse());
-            Server server = new Server(SERVER_PORT, MAX_PLAYERS);
-            ConnectionListener listener = new ConnectionListener(race, PARTICIPANTS_BUILDER.getIdPool(), new AC35MessageParserFactory());
-            TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool());
-
-            server.setCloseOnEmpty(true);
-            server.addObserver(listener);
-            server.addObserver(testMock);
-            server.openServer();
-            listener.setTimeout(System.currentTimeMillis() + ((WARNING_WAIT_TIME - CUTOFF_DIFFERENCE) * 1000));
-            testMock.runSimulation(START_WAIT_TIME, WARNING_WAIT_TIME, PREP_WAIT_TIME, CUTOFF_DIFFERENCE);
-            server.close();
-        } catch (IOException e) {
-            System.out.println("Error occurred reading configuration file");
-        } catch (InvalidPlayerNumberException e) {
-            System.out.println("Invalid maximum number of players in configuration file.\n" +
-                               "Use a value between 1 and 20");
+        if (mode == RaceMode.CONTROLS_TUTORIAL) {
+            tutorialConfig();
+        } else {
+            try {
+                readConfig("/config.txt");
+            } catch (IOException e) {
+                System.out.println("Error occurred reading configuration file");
+            } catch (InvalidPlayerNumberException e) {
+                System.out.println("Invalid maximum number of players in configuration file.\n" +
+                        "Use a value between 1 and 20");
+            }
         }
+
+        Race race = RACE_BUILDER.buildRace(REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse(), mode);
+        Server server = new Server(SERVER_PORT, MAX_PLAYERS);
+        ConnectionListener listener = new ConnectionListener(race, PARTICIPANTS_BUILDER.getIdPool(), new AC35MessageParserFactory());
+        TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool());
+
+        server.setCloseOnEmpty(true);
+        server.addObserver(listener);
+        server.addObserver(testMock);
+        server.openServer();
+        listener.setTimeout(System.currentTimeMillis() + ((WARNING_WAIT_TIME - CUTOFF_DIFFERENCE) * 1000));
+        testMock.runSimulation(START_WAIT_TIME, WARNING_WAIT_TIME, PREP_WAIT_TIME, CUTOFF_DIFFERENCE);
+        server.close();
     }
 
 
