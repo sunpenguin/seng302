@@ -96,7 +96,7 @@ public class Race {
             // Set Leg
             boat.setLegNumber(course.getLegs().get(0).getLegNumber());
             // Set Dest
-            boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCoordinate());
+            boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCompoundMark().getCoordinate());
             // Set Coordinate
             boat.setCoordinate(getStartPosition(boat));
             // Set Heading
@@ -117,9 +117,9 @@ public class Race {
      */
     private Coordinate getStartPosition(Boat boat) {
         GPSCalculations calculator = new GPSCalculations();
-        Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
-        Coordinate startMark1 = course.getLeg(boat.getLegNumber()).getDeparture().getMarks().get(0).getCoordinate();
-        Coordinate startMark2= course.getLeg(boat.getLegNumber()).getDeparture().getMarks().get(1).getCoordinate();
+        Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCompoundMark().getCoordinate();
+        Coordinate startMark1 = course.getLeg(boat.getLegNumber()).getDeparture().getCompoundMark().getMarks().get(0).getCoordinate();
+        Coordinate startMark2= course.getLeg(boat.getLegNumber()).getDeparture().getCompoundMark().getMarks().get(1).getCoordinate();
 
         double bearing = calculator.getBearing(startMark1, startMark2);
 
@@ -224,7 +224,7 @@ public class Race {
         currentLeg.addToBoatsCompleted(boat);
         int newPlace = currentLeg.getBoatsCompleted().indexOf(boat) + 1;
         boat.setPlace(newPlace);
-        boat.setDestination(nextLeg.getDestination().getMarks().get(0).getCoordinate());
+        boat.setDestination(nextLeg.getDestination().getCompoundMark().getMarks().get(0).getCoordinate());
         boat.setLegNumber(nextLeg.getLegNumber());
 
         for (Boat currentBoat : getStartingList()) {
@@ -242,7 +242,7 @@ public class Race {
         }
 
         // TODO when this is enabled it causes the visualiser to freeze, likely due to malformed packets
-        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getLeg(boat.getLegNumber()).getDeparture()));
+        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getLeg(boat.getLegNumber()).getDeparture().getCompoundMark()));
         //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
     }
 
@@ -433,9 +433,9 @@ public class Race {
      */
     private boolean inPreRoundingZone(Coordinate coordinate, int legNumber) {
         Leg leg = course.getLeg(legNumber);
-        double markToBoatHeading = GPSCalculations.getBearing(leg.getDestination().getCoordinate(), coordinate);
+        double markToBoatHeading = GPSCalculations.getBearing(leg.getDestination().getCompoundMark().getCoordinate(), coordinate);
 
-        double entryBearing = GPSCalculations.getBearing(leg.getDestination().getCoordinate(), leg.getDeparture().getCoordinate());
+        double entryBearing = GPSCalculations.getBearing(leg.getDestination().getCompoundMark().getCoordinate(), leg.getDeparture().getCompoundMark().getCoordinate());
         GPSCalculations gps = new GPSCalculations();
 
         MarkRounding.Direction direction = course.getMarkRoundings().get(leg.getLegNumber()).getRoundingDirection();
@@ -459,8 +459,8 @@ public class Race {
      */
     private boolean inPostRoundingZone(Coordinate coordinate, int legNumber) {
         Leg leg = course.getLeg(legNumber + 1);
-        double markToBoatHeading = GPSCalculations.getBearing(leg.getDeparture().getCoordinate(), coordinate);
-        double exitBearing = GPSCalculations.getBearing(leg.getDeparture().getCoordinate(), leg.getDestination().getCoordinate());
+        double markToBoatHeading = GPSCalculations.getBearing(leg.getDeparture().getCompoundMark().getCoordinate(), coordinate);
+        double exitBearing = GPSCalculations.getBearing(leg.getDeparture().getCompoundMark().getCoordinate(), leg.getDestination().getCompoundMark().getCoordinate());
 //        System.out.println(leg.getDestination().getPassAngle());
         GPSCalculations gps = new GPSCalculations();
 

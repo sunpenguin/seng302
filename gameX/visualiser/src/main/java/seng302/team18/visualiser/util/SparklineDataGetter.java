@@ -52,7 +52,7 @@ public class SparklineDataGetter {
                 SparklineDataPoint data = new SparklineDataPoint(boat.getShortName(), boat.getPlace(), startLine);
                 dataQueue.add(data);
             }
-            String markPassedName = race.getCourse().getLeg(boat.getLegNumber()).getDeparture().getName();
+            String markPassedName = race.getCourse().getLeg(boat.getLegNumber()).getDeparture().getCompoundMark().getName();
             SparklineDataPoint data = new SparklineDataPoint(boat.getShortName(), boat.getPlace(), markPassedName);
             dataQueue.add(data);
 

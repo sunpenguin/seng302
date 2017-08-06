@@ -8,8 +8,8 @@ import java.util.List;
  * mark, a heading and the number of the leg in the race
  */
 public class Leg {
-    private CompoundMark destination;
-    private CompoundMark departure;
+    private MarkRounding destination;
+    private MarkRounding departure;
     private double heading;
     private int legNumber;
     private List<Boat> boatsCompleted;
@@ -21,18 +21,18 @@ public class Leg {
      * @param destination The CompoundMark at the end of the leg
      * @param legNumber   The number of the leg in the race
      */
-    public Leg(CompoundMark departure, CompoundMark destination, int legNumber) {
+    public Leg(MarkRounding departure, MarkRounding destination, int legNumber) {
         this.destination = destination;
         this.departure = departure;
         this.legNumber = legNumber; // TODO this might be a bad way of doing it. Might need to change it later.
         boatsCompleted = new ArrayList<>();
     }
 
-    public CompoundMark getDestination() {
+    public MarkRounding getDestination() {
         return destination;
     }
 
-    public CompoundMark getDeparture() {
+    public MarkRounding getDeparture() {
         return departure;
     }
 
