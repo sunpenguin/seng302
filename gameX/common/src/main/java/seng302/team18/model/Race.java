@@ -476,5 +476,8 @@ public class Race {
     }
 
 
+//    public boolean hasPassedGate(Boat boat) {
+//
+//    }
 
 }
