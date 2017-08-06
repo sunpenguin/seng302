@@ -142,18 +142,25 @@ public class Course {
     private void initializeCourse() {
         legs = new ArrayList<>();
         for (int i = 0; i < markRoundings.size() - 1; i++) {
-            CompoundMark dep = markRoundings.get(i).getCompoundMark();
-            CompoundMark dest = markRoundings.get(i + 1).getCompoundMark();
+            MarkRounding dep = markRoundings.get(i);
+            MarkRounding dest = markRoundings.get(i + 1);
             Leg currentLeg = new Leg(dep, dest, markRoundings.get(i).getSequenceNumber());
             legs.add(currentLeg);
         }
-        for (int i = 1; i < compoundMarks.size() - 1; i++) {
-            CompoundMark previous = compoundMarks.get(i - 1);
-            CompoundMark current = compoundMarks.get(i);
-            CompoundMark future = compoundMarks.get(i + 1);
-            double previousAngle = GPSCalculations.getBearing(previous.getCoordinate(), current.getCoordinate());
-            double futureAngle = GPSCalculations.getBearing(future.getCoordinate(), current.getCoordinate());
-            current.setPassAngle(((previousAngle + futureAngle) / 2d));
+        for (int i = 1; i < markRoundings.size() - 1; i++) {
+            MarkRounding previous = markRoundings.get(i - 1);
+            MarkRounding current = markRoundings.get(i);
+            MarkRounding future = markRoundings.get(i + 1);
+            if (current.getCompoundMark().getMarks().size() == CompoundMark.MARK_SIZE) {
+                double previousAngle = GPSCalculations.getBearing(previous.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
+                double futureAngle = GPSCalculations.getBearing(future.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
+                current.setPassAngle(((previousAngle + futureAngle) / 2d));
+            }else if (current.getCompoundMark().getMarks().size() == CompoundMark.GATE_SIZE) {
+//                Mark mark1 = current.getCompoundMark().getMarks().get(0);
+//                Mark mark2 = current.getCompoundMark().getMarks().get(1);
+//                double bearingBetweenMarks = GPSCalculations.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
+
+            }
         }
     }
 

@@ -12,6 +12,7 @@ public class MarkRounding {
     private final CompoundMark compoundMark;
     private final Direction roundingDirection;
     private final int zoneSize;
+    private double passAngle;
 
 
     /**
@@ -113,5 +114,14 @@ public class MarkRounding {
         public String toString() {
             return value;
         }
+    }
+
+
+    public double getPassAngle() {
+        return passAngle;
+    }
+
+    public void setPassAngle(double passAngle) {
+        this.passAngle = passAngle;
     }
 }
