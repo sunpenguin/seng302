@@ -33,6 +33,7 @@ public class PixelMapper {
     private final int SE_BOUND_INDEX = 1; // Used in bounds
     private final double MAP_SCALE_CORRECTION = 0.8;
 
+
     public PixelMapper(Course course, Pane pane) {
         this.course = course;
         this.pane = pane;
@@ -46,9 +47,11 @@ public class PixelMapper {
         propertyChangeSupport.addPropertyChangeListener("viewPortCenter", listener);
     }
 
+
     public void removeViewCenterListener(PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener("viewPortCenter", listener);
     }
+
 
     /**
      * Update the view port center to a certain GPS coordinate.
@@ -61,6 +64,7 @@ public class PixelMapper {
         propertyChangeSupport.firePropertyChange("viewPortCenter", old, center);
     }
 
+
     /**
      * Get the current linear zoom factor
      *
@@ -69,6 +73,7 @@ public class PixelMapper {
     public double getZoomFactor() {
         return Math.pow(2, zoomLevel.intValue());
     }
+
 
     /**
      * Maps a coordinate to a pixel value relative to the current resolution and zoom of the race view pane
@@ -95,7 +100,7 @@ public class PixelMapper {
         } else {
             mappingScale = paneHeight / courseHeight;
         }
-        mappingScale *= MAP_SCALE_CORRECTION * Math.pow(2, zoomLevel.intValue());
+        mappingScale *= MAP_SCALE_CORRECTION * getZoomFactor();
 
         XYPair worldCoordinates = coordinateToPlane(coord);
         XYPair viewCenter = coordinateToPlane(viewPortCenter);
@@ -103,11 +108,12 @@ public class PixelMapper {
         double dX = worldCoordinates.getX() - viewCenter.getX();
         double dY = worldCoordinates.getY() - viewCenter.getY();
 
-        double x = dX * mappingScale + paneWidth / 2;
-        double y = dY * mappingScale + paneHeight / 2;
+        double x = (dX * mappingScale) + (paneWidth / 2);
+        double y = (dY * mappingScale) + (paneHeight / 2);
 
         return new XYPair(x, y);
     }
+
 
     /**
      * Calculates the mapping ratio between the pixel and geographical coordinates
@@ -143,6 +149,7 @@ public class PixelMapper {
         return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getX() - coordinateToPlane(furthest).getX()) * 2;
     }
 
+
     /**
      * Calculates the height of the course
      *
@@ -159,6 +166,7 @@ public class PixelMapper {
         return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getY() - coordinateToPlane(furthest).getY()) * 2;
     }
 
+
     /**
      * Converts the given longitude to a value in [0, 256 * 2 ^ zoomLevel]
      *
@@ -169,6 +177,7 @@ public class PixelMapper {
         return 128 * (longitude + Math.PI) / Math.PI;
     }
 
+
     /**
      * Converts the given latitude to a value in [0, 256 * 2 ^ zoomLevel]
      *
@@ -178,6 +187,7 @@ public class PixelMapper {
     private double webMercatorLatitude(double latitude) {
         return 128 * (Math.PI - Math.log(Math.tan((Math.PI / 4) + (latitude / 2)))) / Math.PI;
     }
+
 
     /**
      * Converts a coordinate from GPS coordinates to cartesian coordinates in the range [0, 256 * 2 ^ zoomLevel] for
@@ -190,6 +200,7 @@ public class PixelMapper {
         return new XYPair(webMercatorLongitude(point.getLongitude()), webMercatorLatitude(point.getLatitude()));
     }
 
+
     /**
      * Returns the zoomLevelProperty value
      *
@@ -198,6 +209,7 @@ public class PixelMapper {
     public IntegerProperty zoomLevelProperty() {
         return zoomLevel;
     }
+
 
     /**
      * Sets the zoom level for the pixel mapper
