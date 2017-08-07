@@ -102,6 +102,7 @@ public class RaceController implements Observer {
     @FXML private void closeAppAction() {
         Stage stage = (Stage) raceViewPane.getScene().getWindow();
         stage.close();
+
     }
 
     /**
@@ -297,6 +298,22 @@ public class RaceController implements Observer {
         Stage inputStage = new Stage();
         inputStage.setScene(newScene);
         inputStage.showAndWait();
+    }
+
+    public void returnToTitleScreen(){
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("returnToTitleScreen.fxml"));
+        Scene newScene;
+
+        try {
+            newScene = new Scene(loader.load());
+        } catch (IOException e) {
+            // TODO: pop up maybe
+            return;
+        }
+        Stage inputStage = new Stage();
+        inputStage.setScene(newScene);
+        inputStage.showAndWait();
+        inputStage.setTitle("Exit Race");
     }
 
 
