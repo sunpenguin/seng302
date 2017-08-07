@@ -19,9 +19,9 @@ public enum RaceMode {
 
 
     /**
-     * Getter for the getCode of the race status type.
+     * Getter for the code of the race mode.
      *
-     * @return the getCode of the race status type.
+     * @return the code of the race mode.
      */
     public int getCode() {
         return this.code;

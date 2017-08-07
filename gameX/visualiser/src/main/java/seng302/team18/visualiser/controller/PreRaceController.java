@@ -14,9 +14,11 @@ import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.display.RaceStartTime;
 import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.messageinterpreting.*;
@@ -75,7 +77,20 @@ public class PreRaceController {
         this.interpreter = new Interpreter(receiver);
         interpreter.setInterpreter(initialiseInterpreter());
         interpreter.start();
-        sender.send(new RequestMessage(true));
+
+        RequestType requestType;
+
+        switch (race.getMode()) {
+            case RACE:
+                requestType = RequestType.RACING;
+                break;
+            case CONTROLS_TUTORIAL:
+                requestType = RequestType.CONTROLS_TUTORIAL;
+                break;
+            default:
+                requestType = RequestType.RACING;
+        }
+        sender.send(new RequestMessage(requestType));
         stage.setOnCloseRequest((event) -> {
             interpreter.shutdownNow();
             while (!receiver.close()) {

@@ -2,9 +2,11 @@ package seng302.team18.racemodel;
 
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 
@@ -71,16 +73,21 @@ public class ConnectionListener implements Observer {
                     try {
                         message = receiver.nextMessage();
                     } catch (IOException e) {
-//                        e.printStackTrace();
                     }
                 }
                 if (message instanceof RequestMessage) {
                     RequestMessage request = (RequestMessage) message;
-                    if (request.isParticipating()) {
-                        addPlayer(receiver, sourceID);
-                        sendMessage(client, sourceID);
+
+                    RequestType requestType = request.getAction();
+
+                    switch (requestType) {
+                        case CONTROLS_TUTORIAL:
+                            race.setMode(RaceMode.CONTROLS_TUTORIAL);
+                        case RACING:
+                            addPlayer(receiver, sourceID);
+                            sendMessage(client, sourceID);
+                            break;
                     }
-                    //TODO: jth102, spe76, 06/08, when practice mode is confirmed as a request type, we can change race mode of the race here.
                 }
             });
         } catch (Exception e) {

@@ -5,10 +5,10 @@ package seng302.team18.message;
  */
 public class RequestMessage implements MessageBody {
 
-    private boolean isParticipating;
+    private RequestType action;
 
-    public RequestMessage(boolean isParticipating) {
-        this.isParticipating = isParticipating;
+    public RequestMessage(RequestType action) {
+        this.action = action;
     }
 
 
@@ -18,7 +18,7 @@ public class RequestMessage implements MessageBody {
     }
 
 
-    public boolean isParticipating() {
-        return isParticipating;
+    public RequestType getAction() {
+        return action;
     }
 }

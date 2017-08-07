@@ -3,6 +3,7 @@ package seng302.team18.messageparsing;
 import com.google.common.io.ByteStreams;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
@@ -38,9 +39,9 @@ public class RequestParser implements MessageBodyParser {
     @Override
     public MessageBody parse(byte[] bytes) {
         final int FIELD_INDEX = 0;
-        final int FIELD_LENGTH = 4;
+        final int FIELD_LENGTH = 1;
 
-        boolean field = ByteCheck.byteToInt(bytes, FIELD_INDEX, FIELD_LENGTH) == 1;
+        RequestType field = RequestType.from(ByteCheck.byteToInt(bytes, FIELD_INDEX, FIELD_LENGTH));
 
         return new RequestMessage(field);
     }
