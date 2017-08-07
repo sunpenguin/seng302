@@ -208,13 +208,13 @@ public class Course {
         }
 
         if (futureOnExitSide && previousOnExitSide) {
-            currentMark.setGateType(MarkRounding.GateType.TGFSS);
+            currentMark.setGateType(MarkRounding.GateType.THROUGH_THEN_ROUND);
         }else if (futureOnExitSide && !previousOnExitSide) {
-            currentMark.setGateType(MarkRounding.GateType.TG);
+            currentMark.setGateType(MarkRounding.GateType.THROUGH_GATE);
         }else if (!futureOnExitSide && previousOnExitSide) {
-            currentMark.setGateType(MarkRounding.GateType.DRG);
+            currentMark.setGateType(MarkRounding.GateType.ROUND_BOTH_MAKRS);
         }else if (!futureOnExitSide && !previousOnExitSide) {
-            currentMark.setGateType(MarkRounding.GateType.RG);
+            currentMark.setGateType(MarkRounding.GateType.ROUND_THEN_THROUGH);
         }
     }
 
