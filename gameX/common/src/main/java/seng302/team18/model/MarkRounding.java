@@ -13,6 +13,7 @@ public class MarkRounding {
     private final Direction roundingDirection;
     private final int zoneSize;
     private double passAngle;
+    private GateType gateType;
 
 
     /**
@@ -117,11 +118,39 @@ public class MarkRounding {
     }
 
 
+    public enum GateType {
+        TGFSS("through gate from same side"),
+        TG("through gate from opposite side"),
+        DRG("double round gate"),
+        RG("round gate");
+
+        private String gateType;
+
+        GateType(String type) {
+            gateType = type;
+        }
+
+
+        public String getType() {
+            return gateType;
+        }
+    }
+
+
     public double getPassAngle() {
         return passAngle;
     }
 
     public void setPassAngle(double passAngle) {
         this.passAngle = passAngle;
+    }
+
+
+    public GateType getGateType() {
+        return gateType;
+    }
+
+    public void setGateType(GateType gateType) {
+        this.gateType = gateType;
     }
 }

@@ -156,11 +156,65 @@ public class Course {
                 double futureAngle = GPSCalculations.getBearing(future.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
                 current.setPassAngle(((previousAngle + futureAngle) / 2d));
             }else if (current.getCompoundMark().getMarks().size() == CompoundMark.GATE_SIZE) {
+                setGateType(previous, current, future);
 //                Mark mark1 = current.getCompoundMark().getMarks().get(0);
 //                Mark mark2 = current.getCompoundMark().getMarks().get(1);
 //                double bearingBetweenMarks = GPSCalculations.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
 
             }
+        }
+    }
+
+    /**
+     * Sets the gate type for a mark rounding that is a gate.
+     * Will be set to a value in the GateType enum
+     * @param previousMark mark before the gate
+     * @param currentMark gate
+     * @param futureMark mark after the gate
+     */
+    private void setGateType(MarkRounding previousMark, MarkRounding currentMark, MarkRounding futureMark) {
+        Mark mark1 = currentMark.getCompoundMark().getMarks().get(0);
+        Mark mark2 = currentMark.getCompoundMark().getMarks().get(1);
+        GPSCalculations calculator = new GPSCalculations();
+        double bearingBetweenMarks = GPSCalculations.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
+        double oppisiteBearing = (bearingBetweenMarks +180) % 360;
+        double bearingToFuture = GPSCalculations.getBearing(currentMark.getCompoundMark().getCoordinate(), futureMark.getCompoundMark().getCoordinate());
+        double bearingToPrevious = GPSCalculations.getBearing(currentMark.getCompoundMark().getCoordinate(), previousMark.getCompoundMark().getCoordinate());
+
+        boolean futureOnExitSide = false;
+        boolean previousOnExitSide = false;
+        if (currentMark.getRoundingDirection() == MarkRounding.Direction.SP) {
+            if (calculator.isBetween(bearingToFuture, oppisiteBearing, bearingBetweenMarks)) {
+                futureOnExitSide = true;
+            } else {
+                futureOnExitSide = false;
+            }
+            if (calculator.isBetween(bearingToPrevious, oppisiteBearing, bearingBetweenMarks)) {
+                previousOnExitSide = true;
+            } else {
+                previousOnExitSide = false;
+            }
+        } else if (currentMark.getRoundingDirection() == MarkRounding.Direction.PS) {
+            if (calculator.isBetween(bearingToFuture, oppisiteBearing, bearingBetweenMarks)) {
+                futureOnExitSide = false;
+            } else {
+                futureOnExitSide = true;
+            }
+            if (calculator.isBetween(bearingToPrevious, oppisiteBearing, bearingBetweenMarks)) {
+                previousOnExitSide = false;
+            } else {
+                previousOnExitSide = true;
+            }
+        }
+
+        if (futureOnExitSide && previousOnExitSide) {
+            currentMark.setGateType(MarkRounding.GateType.TGFSS);
+        }else if (futureOnExitSide && !previousOnExitSide) {
+            currentMark.setGateType(MarkRounding.GateType.TG);
+        }else if (!futureOnExitSide && previousOnExitSide) {
+            currentMark.setGateType(MarkRounding.GateType.DRG);
+        }else if (!futureOnExitSide && !previousOnExitSide) {
+            currentMark.setGateType(MarkRounding.GateType.RG);
         }
     }
 
