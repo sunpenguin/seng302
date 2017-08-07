@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" stylesheets="@stylesheets/preRaceStyle.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="seng302.team18.visualiser.controller.ReturnToTitleScreenController">
+<GridPane fx:id="gridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" styleClass="background" stylesheets="@stylesheets/preRaceStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.ReturnToTitleScreenController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
@@ -14,8 +15,11 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Button mnemonicParsing="false" text="Cancel" GridPane.rowIndex="2" />
-      <Button mnemonicParsing="false" text="Return to Title Screen" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-      <Label text="Do you really want to return to the title screen?" />
+      <Button mnemonicParsing="false" onAction="#cancelButtonAction" text="Cancel" GridPane.rowIndex="2" />
+      <Button fx:id="closeButton" mnemonicParsing="false" onAction="#exitRace" text="Return to Title Screen" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+      <Label alignment="CENTER" text="Do you really want to return to the title screen?" textFill="WHITE">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets></Label>
    </children>
 </GridPane>

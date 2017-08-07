@@ -99,7 +99,7 @@ public class RaceController implements Observer {
         pixelMapper.setZoomLevel(0);
     }
 
-    @FXML private void closeAppAction() {
+    @FXML public void closeRace() {
         Stage stage = (Stage) raceViewPane.getScene().getWindow();
         stage.close();
 
@@ -137,6 +137,9 @@ public class RaceController implements Observer {
                         case SHIFT:
                             sailIn = !sailIn;
                             message.setSailsIn(sailIn);
+                            break;
+                        case ESCAPE:
+                            returnToTitleScreen();
                             break;
                         default:
                             send = false;
@@ -301,13 +304,14 @@ public class RaceController implements Observer {
     }
 
     public void returnToTitleScreen(){
+
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("returnToTitleScreen.fxml"));
         Scene newScene;
 
         try {
             newScene = new Scene(loader.load());
         } catch (IOException e) {
-            // TODO: pop up maybe
+            e.printStackTrace();
             return;
         }
         Stage inputStage = new Stage();
