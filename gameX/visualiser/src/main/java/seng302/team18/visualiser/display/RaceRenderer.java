@@ -77,6 +77,7 @@ public class RaceRenderer {
                 //Highlight
                 if (boat.isControlled()) {
                     displayBoat = new BoatHighlight(pixelMapper, displayBoat);
+                    displayBoat = new BoatGuide(pixelMapper, displayBoat);
                 }
                 displayBoat = new DisplaySail(pixelMapper, displayBoat);
                 displayBoat.addToGroup(group);
@@ -119,11 +120,11 @@ public class RaceRenderer {
      * @param pixelMapper used to map a coordinate to a point on the screen.
      */
     private void drawTrail(Boat boat, PixelMapper pixelMapper) {
-        final double MAX_HEADING_DIFFERENCE = 0.75d; // smaller => smoother trail, higher => more fps
+        final double MAX_HEADING_DIFFERENCE = 0.5d; // smaller => smoother trail, higher => more fps
         DisplayTrail trail = trailMap.get(boat.getShortName());
 
         if (trail == null) {
-            final int MAX_TRAIL_LENGTH = 100;
+            final int MAX_TRAIL_LENGTH = 150;
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             trail = new DisplayTrail(displayBoat.getColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
             trailMap.put(boat.getShortName(), trail);
