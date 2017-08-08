@@ -36,7 +36,7 @@ public class CourseBuilderRealistic extends AbstractCourseBuilder {
         start1.setShortName("S1");
         start1.setBoatName("Start Line 1");
 
-        Mark start2 = new Mark(232, new Coordinate(5.2726, -4.4289));
+        Mark start2 = new Mark(232, new Coordinate(5.27269, -4.42879));
         start2.setHullNumber("LC22");
         start2.setStoweName("PIN");
         start2.setShortName("S2");
@@ -75,7 +75,7 @@ public class CourseBuilderRealistic extends AbstractCourseBuilder {
         lee1.setShortName("LG1");
         lee1.setBoatName("Leeward Gate 1");
 
-        Mark lee2 = new Mark(237, new Coordinate(5.2719, -4.42056));
+        Mark lee2 = new Mark(237, new Coordinate(5.27172, -4.42049));
         lee2.setHullNumber("LC27");
         lee2.setStoweName("PIN");
         lee2.setShortName("LG2");
@@ -104,7 +104,20 @@ public class CourseBuilderRealistic extends AbstractCourseBuilder {
 
     @Override
     protected List<BoundaryMark> getBoundaryMarks() {
-        return new ArrayList<>();
+        return Arrays.asList(
+                new BoundaryMark(1, new Coordinate(5.27732, -4.42508)),
+                new BoundaryMark(2, new Coordinate(5.27558, -4.42894)),
+                new BoundaryMark(3, new Coordinate(5.27413, -4.42864)),
+                new BoundaryMark(4, new Coordinate(5.2735, -4.43012)),
+                new BoundaryMark(5, new Coordinate(5.27196, -4.42949)),
+                new BoundaryMark(6, new Coordinate(5.27229, -4.42697)),
+                new BoundaryMark(7, new Coordinate(5.27141, -4.42501)),
+                new BoundaryMark(8, new Coordinate(5.2708, -4.42629)),
+                new BoundaryMark(9, new Coordinate(5.26955, -4.42538)),
+                new BoundaryMark(10, new Coordinate(5.26964, -4.4225)),
+                new BoundaryMark(11, new Coordinate(5.27076, -4.41785)),
+                new BoundaryMark(12, new Coordinate(5.27236, -4.41827))
+        );
     }
 
 
