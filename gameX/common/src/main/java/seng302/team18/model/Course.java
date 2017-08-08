@@ -128,8 +128,10 @@ public class Course {
 
 
     public Leg getNextLeg(int legNumber) {
-        if (legNumber == legs.size()) {
+        if (legNumber >= legs.size()) {
             return legs.get(legNumber - 1);
+        } else if (legNumber < 0) {
+            return legs.get(0);
         }
         return legs.get(legNumber);
     }

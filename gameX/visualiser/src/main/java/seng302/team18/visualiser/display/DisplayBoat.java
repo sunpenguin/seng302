@@ -36,8 +36,8 @@ public class DisplayBoat {
     private boolean sailOut;
     private boolean isControlled;
     private double apparentWindDirection;
-    private Coordinate boatCenter;
     private double pixelLength;
+    private Coordinate destination;
 
     private PixelMapper pixelMapper;
     private Polyline boatPoly;
@@ -250,16 +250,17 @@ public class DisplayBoat {
         isControlled = controlled;
     }
 
+
     public void setSailOut(boolean sailOut) {
         this.sailOut = sailOut;
     }
+
 
     public void setApparentWindDirection(double apparentWind) {
         this.apparentWindDirection = apparentWind;
     }
 
-
-    public Polyline getBoatPoly() {
-        return boatPoly;
+    public void setDestination(Coordinate destination) {
+        this.destination = destination;
     }
 }

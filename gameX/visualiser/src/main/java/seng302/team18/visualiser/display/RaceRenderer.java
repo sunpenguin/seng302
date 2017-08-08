@@ -4,6 +4,7 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
+import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -20,7 +21,7 @@ public class RaceRenderer {
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private Map<String, Double> headingMap;
     private int numBoats;
-    private final List<Color> BOAT_COLOURS = new ArrayList<>(Arrays.asList(
+    private final List<Color> BOAT_COLOURS = Arrays.asList(
             Color.VIOLET,
             Color.DARKVIOLET,
             Color.GREEN,
@@ -41,7 +42,7 @@ public class RaceRenderer {
             Color.OLIVEDRAB,
             Color.LAWNGREEN,
             Color.KHAKI
-    ));
+    );
     private PixelMapper pixelMapper;
 
 
@@ -86,14 +87,16 @@ public class RaceRenderer {
 
             Coordinate boatCoordinates = boat.getCoordinate();
             if (boatCoordinates != null) {
+                Course course = race.getCourse();
                 displayBoat.setCoordinate(boatCoordinates);
                 displayBoat.setSpeed(boat.getSpeed());
                 displayBoat.setHeading(boat.getHeading());
                 displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
                 displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
                 displayBoat.setScale(pixelMapper.mappingRatio());
-                displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
+                displayBoat.setApparentWindDirection(course.getWindDirection());
                 displayBoat.setSailOut(boat.isSailOut());
+                displayBoat.setDestination(course.getNextLeg(boat.getLegNumber()).getDestination().getCoordinate());
             }
         }
     }
