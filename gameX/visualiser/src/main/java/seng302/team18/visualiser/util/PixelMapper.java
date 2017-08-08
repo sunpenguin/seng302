@@ -31,7 +31,7 @@ public class PixelMapper {
     public static final int ZOOM_LEVEL_4X = 1;
     private final int NW_BOUND_INDEX = 0; // Used in bounds
     private final int SE_BOUND_INDEX = 1; // Used in bounds
-    private final double MAP_SCALE_CORRECTION = 0.8;
+    private final double MAP_SCALE_CORRECTION = 0.95;
 
 
     public PixelMapper(Course course, Pane pane) {
