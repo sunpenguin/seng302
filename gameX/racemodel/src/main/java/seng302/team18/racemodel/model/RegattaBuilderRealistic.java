@@ -10,6 +10,6 @@ public class RegattaBuilderRealistic extends AbstractRegattaBuilder {
 
     @Override
     protected String getRegattaName() {
-        return "Bristol Channel";
+        return "Abidjan, Cote d'Ivoire";
     }
 }
