@@ -66,6 +66,14 @@ public class ConnectionListener extends Observable implements Observer {
     }
 
 
+    /**
+     * Add a new client.
+     * If the registration is for a tutorial, update the race accordingly and the TestMock will send out the updated
+     * XML files.
+     * When the registration is received, send the client their source ID.
+     *
+     * @param client Client who is connecting.
+     */
     private void addClient(ClientConnection client) {
         try {
             Receiver receiver = new Receiver(client.getSocket(), factory);

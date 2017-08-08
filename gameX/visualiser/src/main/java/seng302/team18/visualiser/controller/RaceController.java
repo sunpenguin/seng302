@@ -34,6 +34,7 @@ import seng302.team18.message.BoatActionMessage;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
@@ -82,6 +83,8 @@ public class RaceController implements Observer {
     private Receiver receiver;
 
     private RaceBackground background;
+
+    private ControlsTutorial controlsTutorial;
 
 
     @FXML
@@ -153,6 +156,11 @@ public class RaceController implements Observer {
                             send = false;
                     }
                     if (send) {
+                        if (race.getMode() == RaceMode.CONTROLS_TUTORIAL){
+                            if (controlsTutorial.checkIfProgressed(keyEvent.getCode())){
+                                controlsTutorial.displayNext();
+                            }
+                        }
                         sender.send(message);
                     }
                 }
@@ -419,6 +427,10 @@ public class RaceController implements Observer {
 //        this.receiver = receiver;
         this.sender = sender;
         this.race = race;
+
+        if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
+            controlsTutorial = new ControlsTutorial(race, raceViewPane);
+        }
 
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
