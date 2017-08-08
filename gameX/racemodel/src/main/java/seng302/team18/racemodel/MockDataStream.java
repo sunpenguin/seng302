@@ -20,7 +20,7 @@ public class MockDataStream {
 
     // Change concrete builders here to change the preset of race/regatta/course
     private static final AbstractRaceBuilder RACE_BUILDER = new RaceBuilder1();
-    private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderPractice();
+    private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilder2();
     private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
     private static final AbstractParticipantsBuilder PARTICIPANTS_BUILDER = new ParticipantsBuilderSize20();
 
@@ -87,14 +87,16 @@ public class MockDataStream {
             }
         }
 
-        Race race = RACE_BUILDER.buildRace(REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse(), mode);
+        Race race = RACE_BUILDER.buildRace(new Race(), REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse(), mode);
         Server server = new Server(SERVER_PORT, MAX_PLAYERS);
         ConnectionListener listener = new ConnectionListener(race, PARTICIPANTS_BUILDER.getIdPool(), new AC35MessageParserFactory());
         TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool());
 
+
         server.setCloseOnEmpty(true);
         server.addObserver(listener);
         server.addObserver(testMock);
+        listener.addObserver(testMock);
         server.openServer();
         listener.setTimeout(System.currentTimeMillis() + ((WARNING_WAIT_TIME - CUTOFF_DIFFERENCE) * 1000));
         testMock.runSimulation(START_WAIT_TIME, WARNING_WAIT_TIME, PREP_WAIT_TIME, CUTOFF_DIFFERENCE);

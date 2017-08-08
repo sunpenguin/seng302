@@ -9,6 +9,7 @@ import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
+import seng302.team18.racemodel.model.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -18,7 +19,7 @@ import java.util.concurrent.Executors;
 /**
  * Class to create PlayerControllerReaders when connections made to the server
  */
-public class ConnectionListener implements Observer {
+public class ConnectionListener extends Observable implements Observer {
 
     private List<PlayerControllerReader> players;
     private Race race;
@@ -27,6 +28,9 @@ public class ConnectionListener implements Observer {
     private ExecutorService executor;
     private Long timeout;
 
+    private static final AbstractRaceBuilder RACE_BUILDER = new RaceBuilder1();
+    private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderPractice();
+    private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
 
     /**
      * Constructs a new ConnectionListener.
@@ -82,7 +86,10 @@ public class ConnectionListener implements Observer {
 
                     switch (requestType) {
                         case CONTROLS_TUTORIAL:
-                            race.setMode(RaceMode.CONTROLS_TUTORIAL);
+                            race = RACE_BUILDER.buildRace(race, REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse(),
+                                    RaceMode.CONTROLS_TUTORIAL);
+                            setChanged();
+                            notifyObservers(this);
                         case RACING:
                             addPlayer(receiver, sourceID);
                             sendMessage(client, sourceID);
@@ -139,6 +146,4 @@ public class ConnectionListener implements Observer {
         }
         executor.shutdownNow();
     }
-
-
 }

@@ -64,7 +64,7 @@ public class RaceMessageGeneratorTest {
         AbstractCourseBuilder courseBuilder = new CourseBuilder1();
         ZonedDateTime now = ZonedDateTime.now();
         currentTime = now.toInstant().toEpochMilli();
-        testRace = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse(), RaceMode.RACE);
+        testRace = raceBuilder.buildRace(new Race(), regattaBuilder.buildRegatta(), courseBuilder.buildCourse(), RaceMode.RACE);
         testRace.setStartTime(now);
         RaceMessageGenerator raceMessageGenerator = new RaceMessageGenerator(testRace);
         generatedBytes = raceMessageGenerator.getPayload();

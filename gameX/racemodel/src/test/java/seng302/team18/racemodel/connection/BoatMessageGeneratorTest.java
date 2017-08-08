@@ -67,7 +67,7 @@ public class BoatMessageGeneratorTest {
         AbstractCourseBuilder courseBuilder = new CourseBuilder1();
         RaceMode mode = RaceMode.RACE;
 
-        final Race testRace = raceBuilder.buildRace(regattaBuilder.buildRegatta(), courseBuilder.buildCourse(), mode);
+        final Race testRace = raceBuilder.buildRace(new Race(), regattaBuilder.buildRegatta(), courseBuilder.buildCourse(), mode);
         byte[] generatedBytes;
         List<BoatMessageGenerator> messages = new ArrayList<>();
         for (Boat boat : testRace.getStartingList()) {

@@ -18,11 +18,16 @@ import static java.lang.Thread.sleep;
  */
 public class TestMock implements Observer {
 
-    private final Race race;
+    private Race race;
     private final Server server;
     private final XmlMessageBuilder xmlMessageBuilder;
     private final List<Boat> boats;
     private boolean open = true;
+
+    private MessageGenerator generatorXmlRegatta;
+    private MessageGenerator generatorXmlBoats;
+    private MessageGenerator generatorXmlRace;
+
 
     /**
      * The messages to be sent on a schedule during race simulation
@@ -42,20 +47,44 @@ public class TestMock implements Observer {
         if (arg instanceof ClientConnection) {
             ClientConnection client = (ClientConnection) arg;
             race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
-            sendXmlMessages(client);
+            generateXMLs();
+            sendXmlRegatta(client);
+            sendXmlBoatRace();
         } else if (arg instanceof ServerState) {
             open = !((ServerState) arg).equals(ServerState.CLOSED);
+        } else if (arg instanceof ConnectionListener) {
+            generateXMLs();
+            sendXmlBoatRace();
         }
     }
 
-    private void sendXmlMessages(ClientConnection newPlayer) {
-        MessageGenerator generatorXmlRegatta = new XmlMessageGeneratorRegatta(xmlMessageBuilder.buildRegattaMessage(race));
-        MessageGenerator generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
-        MessageGenerator generatorXmlBoats = new XmlMessageGeneratorBoats(xmlMessageBuilder.buildBoatsXmlMessage(race));
 
-        newPlayer.sendMessage(generatorXmlRegatta.getMessage());
+    /**
+     * Generate the XML files to be sent to clients.
+     */
+    private void generateXMLs() {
+        generatorXmlRegatta = new XmlMessageGeneratorRegatta(xmlMessageBuilder.buildRegattaMessage(race));
+        generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
+        generatorXmlBoats = new XmlMessageGeneratorBoats(xmlMessageBuilder.buildBoatsXmlMessage(race));
+    }
+
+
+    /**
+     * Broadcast the race and boat XML files to all clients.
+     */
+    private void sendXmlBoatRace() {
         server.broadcast(generatorXmlRace.getMessage());
         server.broadcast(generatorXmlBoats.getMessage());
+    }
+
+
+    /**
+     * Send the regatta XML file to a new client.
+     *
+     * @param newPlayer ClientConnection used to send message through.
+     */
+    private void sendXmlRegatta(ClientConnection newPlayer) {
+        newPlayer.sendMessage(generatorXmlRegatta.getMessage());
     }
 
 

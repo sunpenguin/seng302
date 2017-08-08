@@ -15,7 +15,6 @@ public class ClientConnection {
     private InputStream in;
     private OutputStream out;
     private Socket client;
-    private Integer id;
 
 
     public ClientConnection(Socket socket) throws IOException {
@@ -52,16 +51,6 @@ public class ClientConnection {
         in.close();
         out.close();
         client.close();
-    }
-
-
-    public Integer getId() {
-        return id;
-    }
-
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
 

@@ -19,9 +19,7 @@ public abstract class AbstractRaceBuilder {
      * @param course  the course the race follows
      * @return the constructed race
      */
-    public Race buildRace(Regatta regatta, Course course, RaceMode mode) {
-        Race race = new Race();
-
+    public Race buildRace(Race race, Regatta regatta, Course course, RaceMode mode) {
         race.setCourse(course);
         race.setRegatta(regatta);
         race.setRaceType(getRaceType());

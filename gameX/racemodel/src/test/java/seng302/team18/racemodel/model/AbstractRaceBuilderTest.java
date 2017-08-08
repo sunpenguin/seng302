@@ -20,7 +20,7 @@ public class AbstractRaceBuilderTest {
     @Before
     public void setUp() throws Exception {
         AbstractRaceBuilder raceBuilder = new ConcreteRaceBuilder();
-        race = raceBuilder.buildRace(REGATTA, COURSE, RaceMode.RACE);
+        race = raceBuilder.buildRace(new Race(), REGATTA, COURSE, RaceMode.RACE);
     }
 
 
