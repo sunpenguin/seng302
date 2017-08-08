@@ -31,6 +31,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private int status;
     private boolean isControlled;
     private boolean sailOut;
+    private RoundZone roundZone = RoundZone.ZONE1;
 
 
     /**
@@ -372,4 +373,21 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     public Coordinate getPreviousCoordinate() {
         return previousCoordinate;
     }
+
+    public enum RoundZone {
+        ZONE1,
+        ZONE2,
+        ZONE3,
+        ZONE4;
+    }
+
+
+    public RoundZone getRoundZone() {
+        return roundZone;
+    }
+
+    public void setRoundZone(RoundZone roundZone) {
+        this.roundZone = roundZone;
+    }
+
 }
