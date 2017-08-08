@@ -81,6 +81,8 @@ public class RaceController implements Observer {
     private Sender sender;
     private Receiver receiver;
 
+    private RaceBackground background;
+
 
     @FXML
     public void initialize() {
@@ -94,6 +96,7 @@ public class RaceController implements Observer {
         }
         group.setManaged(false);
         new ControlSchemeDisplay(raceViewPane);
+        background = new RaceBackground(raceViewPane, "/images/water.gif");
     }
 
     @FXML
@@ -478,6 +481,7 @@ public class RaceController implements Observer {
      * (For example, when zooming in, the course features are required to change)
      */
     public void redrawFeatures() {
+        background.renderBackground();
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
         raceRenderer.reDrawTrails();
