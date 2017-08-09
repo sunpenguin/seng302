@@ -17,8 +17,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private PolarPattern polar = new AC35PolarPattern();
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
-    private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
-    private Integer id;
+    private IntegerProperty legNumber = new SimpleIntegerProperty(-1);
     private double boatLength;
     private double heading;
     private Coordinate coordinate;
@@ -106,17 +105,17 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
 
     public int getLegNumber() {
-        return boatLegNumber.get();
+        return legNumber.get();
     }
 
 
     public IntegerProperty legNumberProperty() {
-        return boatLegNumber;
+        return legNumber;
     }
 
 
     public void setLegNumber(int boatLegNumber) {
-        this.boatLegNumber.set(boatLegNumber);
+        this.legNumber.set(boatLegNumber);
     }
 
 
@@ -206,7 +205,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
                 "boatName=" + getName() +
                 ", shortName='" + getShortName() + '\'' +
                 ", speed=" + speed +
-                ", leg=" + boatLegNumber +
+                ", leg=" + legNumber +
                 ", id=" + getId() +
                 ", heading=" + heading +
                 ", coordinate=" + coordinate +
