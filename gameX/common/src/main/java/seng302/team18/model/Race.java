@@ -197,15 +197,28 @@ public class Race {
      *
      * @param time the time in seconds
      */
-    // TODO afj19, 20th July: check the temporal unit here
     public void updateBoats(double time) { // time in seconds
         for (Boat boat : startingList) {
             if (!finishedList.contains(boat)) {
-//                updateBoat(boat, time);
-                updatePosition(boat, time);
-                if (hasPassedMark(boat)) {
-                    setNextLeg(boat, course.getNextLeg(boat.getLegNumber()));
-                }
+                updateBoat(boat, time);
+            }
+        }
+    }
+
+    private void updateBoat(Boat boat, double time) {
+        updatePosition(boat, time);
+        if (hasPassedMark(boat)) {
+            setNextLeg(boat, course.getNextLeg(boat.getLegNumber()));
+        }
+        GPSCalculations calculator = new GPSCalculations();
+        List<Coordinate> boundaries = course
+                .getBoundaries()
+                .stream()
+                .map(BoundaryMark::getCoordinate)
+                .collect(Collectors.toList());
+        if (boundaries.size() > 0) {
+            if (!calculator.contains(boat.getCoordinate(), boundaries)) {
+                System.out.println("Outside");
             }
         }
     }

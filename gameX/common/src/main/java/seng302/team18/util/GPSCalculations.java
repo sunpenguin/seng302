@@ -248,6 +248,58 @@ public class GPSCalculations {
         return bearing <= finish;
     }
 
+    /**
+     * Detects whether or not a certain coordinate is located inside a polygon of coordinate points
+     * @param location The location point you are checking is inside the polygon
+     * @param boundary The polygon
+     * @return True if the location is inside the polygon, false if it is outside
+     */
+    public boolean contains(Coordinate location, List<Coordinate> boundary)
+    {
+        Coordinate lastPoint = boundary.get(boundary.size() - 1);
+        Boolean isInside = false;
+        double x = location.getLongitude();
+        for (Coordinate point : boundary)
+        {
+            double x1 = lastPoint.getLongitude();
+            double x2 = point.getLongitude();
+            double dx = x2 - x1;
+
+            if (Math.abs(dx) > 180.0)
+            {
+                // we have, most likely, just jumped the dateline (could do further validation to this effect if needed).  normalise the numbers.
+                if (x > 0)
+                {
+                    while (x1 < 0)
+                        x1 += 360;
+                    while (x2 < 0)
+                        x2 += 360;
+                }
+                else
+                {
+                    while (x1 > 0)
+                        x1 -= 360;
+                    while (x2 > 0)
+                        x2 -= 360;
+                }
+                dx = x2 - x1;
+            }
+
+            if ((x1 <= x && x2 > x) || (x1 >= x && x2 < x))
+            {
+                double grad = (point.getLatitude() - lastPoint.getLatitude()) / dx;
+                double intersectAtLat = lastPoint.getLatitude() + ((x - x1) * grad);
+
+                if (intersectAtLat > location.getLatitude())
+                    isInside = !isInside;
+            }
+            lastPoint = point;
+        }
+
+        return isInside;
+    }
+
+
 }
 
 

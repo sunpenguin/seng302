@@ -73,16 +73,25 @@ public class CourseBuilder2 extends AbstractCourseBuilder {
         mark2.setShortName("S2");
         mark2.setBoatName("Downwind2");
 
+
         CompoundMark compoundMark3 = new CompoundMark("Downwind", Arrays.asList(mark6, mark7), 14);
         compoundMarks.add(compoundMark3);
-
         return compoundMarks;
     }
 
 
     @Override
     protected List<BoundaryMark> getBoundaryMarks() {
-        return new ArrayList<>();
+        BoundaryMark boundary1 = new BoundaryMark(0, new Coordinate(32.30502, -64.85857));
+        BoundaryMark boundary2 = new BoundaryMark(1, new Coordinate(32.30502, -64.85235));
+        BoundaryMark boundary3 = new BoundaryMark(2, new Coordinate(32.29925, -64.85235));
+        BoundaryMark boundary4 = new BoundaryMark(3, new Coordinate(32.29925, -64.85857));
+        ArrayList<BoundaryMark> boundaries = new ArrayList<>();
+        boundaries.add(boundary1);
+        boundaries.add(boundary2);
+        boundaries.add(boundary3);
+        boundaries.add(boundary4);
+        return boundaries;
     }
 
 
