@@ -237,9 +237,10 @@ public class GPSCalculations {
 
     /**
      * Returns true if bearing is between start and finish in a clockwise sense.
+     *
      * @param bearing less than or equal to 360 degrees
-     * @param start less than or equal to 360 degrees
-     * @param finish less than or equal to 360 degrees
+     * @param start   less than or equal to 360 degrees
+     * @param finish  less than or equal to 360 degrees
      * @return if bearing is between start and finish in a clockwise sense
      */
     public boolean isBetween(double bearing, double start, double finish) {

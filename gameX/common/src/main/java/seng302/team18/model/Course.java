@@ -141,26 +141,33 @@ public class Course {
      */
     private void initializeCourse() {
         legs = new ArrayList<>();
+
         for (int i = 0; i < markRoundings.size() - 1; i++) {
             MarkRounding dep = markRoundings.get(i);
             MarkRounding dest = markRoundings.get(i + 1);
             Leg currentLeg = new Leg(dep, dest, markRoundings.get(i).getSequenceNumber());
+            System.out.println(String.format("%d %s %s", currentLeg.getLegNumber(), dep.getCompoundMark().getName(), dest.getCompoundMark().getName()));
+
             legs.add(currentLeg);
         }
-        for (int i = 1; i < markRoundings.size() - 1; i++) {
-            MarkRounding previous = markRoundings.get(i - 1);
-            MarkRounding current = markRoundings.get(i);
-            MarkRounding future = markRoundings.get(i + 1);
+
+        List<MarkRounding> nullBorderedRoundings = new ArrayList<>(markRoundings);
+        nullBorderedRoundings.add(0, null);
+        nullBorderedRoundings.add(null);
+
+        for (int i = 1; i < nullBorderedRoundings.size() - 1; i++) {
+
+            MarkRounding previous = nullBorderedRoundings.get(i - 1);
+            MarkRounding current = nullBorderedRoundings.get(i);
+            MarkRounding future = nullBorderedRoundings.get(i + 1);
+
             if (current.getCompoundMark().getMarks().size() == CompoundMark.MARK_SIZE) {
                 double previousAngle = GPSCalculations.getBearing(previous.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
                 double futureAngle = GPSCalculations.getBearing(future.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
                 current.setPassAngle(((previousAngle + futureAngle) / 2d));
-            }else if (current.getCompoundMark().getMarks().size() == CompoundMark.GATE_SIZE) {
-                setGateType(previous, current, future);
-//                Mark mark1 = current.getCompoundMark().getMarks().get(0);
-//                Mark mark2 = current.getCompoundMark().getMarks().get(1);
-//                double bearingBetweenMarks = GPSCalculations.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
 
+            } else if (current.getCompoundMark().getMarks().size() == CompoundMark.GATE_SIZE) {
+                setGateType(previous, current, future);
             }
         }
     }
@@ -168,53 +175,50 @@ public class Course {
     /**
      * Sets the gate type for a mark rounding that is a gate.
      * Will be set to a value in the GateType enum
+     *
      * @param previousMark mark before the gate
-     * @param currentMark gate
-     * @param futureMark mark after the gate
+     * @param currentMark  gate
+     * @param futureMark   mark after the gate
      */
     private void setGateType(MarkRounding previousMark, MarkRounding currentMark, MarkRounding futureMark) {
-        Mark mark1 = currentMark.getCompoundMark().getMarks().get(0);
-        Mark mark2 = currentMark.getCompoundMark().getMarks().get(1);
-        GPSCalculations calculator = new GPSCalculations();
-        double bearingBetweenMarks = GPSCalculations.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
-        double oppisiteBearing = (bearingBetweenMarks +180) % 360;
-        double bearingToFuture = GPSCalculations.getBearing(currentMark.getCompoundMark().getCoordinate(), futureMark.getCompoundMark().getCoordinate());
-        double bearingToPrevious = GPSCalculations.getBearing(currentMark.getCompoundMark().getCoordinate(), previousMark.getCompoundMark().getCoordinate());
-
-        boolean futureOnExitSide = false;
-        boolean previousOnExitSide = false;
-        if (currentMark.getRoundingDirection() == MarkRounding.Direction.SP) {
-            if (calculator.isBetween(bearingToFuture, oppisiteBearing, bearingBetweenMarks)) {
-                futureOnExitSide = true;
-            } else {
-                futureOnExitSide = false;
-            }
-            if (calculator.isBetween(bearingToPrevious, oppisiteBearing, bearingBetweenMarks)) {
-                previousOnExitSide = true;
-            } else {
-                previousOnExitSide = false;
-            }
-        } else if (currentMark.getRoundingDirection() == MarkRounding.Direction.PS) {
-            if (calculator.isBetween(bearingToFuture, oppisiteBearing, bearingBetweenMarks)) {
-                futureOnExitSide = false;
-            } else {
-                futureOnExitSide = true;
-            }
-            if (calculator.isBetween(bearingToPrevious, oppisiteBearing, bearingBetweenMarks)) {
-                previousOnExitSide = false;
-            } else {
-                previousOnExitSide = true;
-            }
+        if (previousMark == null) {
+            currentMark.setGateType(MarkRounding.GateType.THROUGH_GATE);
+            return;
         }
 
-        if (futureOnExitSide && previousOnExitSide) {
-            currentMark.setGateType(MarkRounding.GateType.THROUGH_THEN_ROUND);
-        }else if (futureOnExitSide && !previousOnExitSide) {
-            currentMark.setGateType(MarkRounding.GateType.THROUGH_GATE);
-        }else if (!futureOnExitSide && previousOnExitSide) {
-            currentMark.setGateType(MarkRounding.GateType.ROUND_BOTH_MAKRS);
-        }else if (!futureOnExitSide && !previousOnExitSide) {
-            currentMark.setGateType(MarkRounding.GateType.ROUND_THEN_THROUGH);
+        GPSCalculations calculator = new GPSCalculations();
+
+        Mark mark1 = currentMark.getCompoundMark().getMarks().get(0);
+        Mark mark2 = currentMark.getCompoundMark().getMarks().get(1);
+        double bearingBetweenMarks = GPSCalculations.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
+        double oppositeBearing = (bearingBetweenMarks + 180) % 360;
+
+        boolean isSP = currentMark.getRoundingDirection() == MarkRounding.Direction.SP;
+
+        Double bearingToPrevious = GPSCalculations.getBearing(currentMark.getCompoundMark().getCoordinate(), previousMark.getCompoundMark().getCoordinate());
+        boolean isPreviousonLeft = calculator.isBetween(bearingToPrevious, oppositeBearing, bearingBetweenMarks);
+        boolean previousOnExitSide = isSP == isPreviousonLeft;
+
+        if (futureMark == null) {
+            if (previousOnExitSide) {
+                currentMark.setGateType(MarkRounding.GateType.ROUND_THEN_THROUGH);
+            } else {
+                currentMark.setGateType(MarkRounding.GateType.THROUGH_GATE);
+            }
+            return;
+        }
+
+        Double bearingToFuture = GPSCalculations.getBearing(currentMark.getCompoundMark().getCoordinate(), futureMark.getCompoundMark().getCoordinate());
+        boolean isFutureOnLeft = calculator.isBetween(bearingToFuture, oppositeBearing, bearingBetweenMarks);
+        boolean futureOnExitSide = isSP == isFutureOnLeft;
+
+
+        if (futureOnExitSide) {
+            currentMark.setGateType((previousOnExitSide) ?
+                    MarkRounding.GateType.THROUGH_THEN_ROUND : MarkRounding.GateType.THROUGH_GATE);
+        } else {
+            currentMark.setGateType((previousOnExitSide) ?
+                    MarkRounding.GateType.ROUND_BOTH_MAKRS : MarkRounding.GateType.ROUND_THEN_THROUGH);
         }
     }
 
