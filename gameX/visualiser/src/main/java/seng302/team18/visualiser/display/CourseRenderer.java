@@ -8,12 +8,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Rectangle;
-import seng302.team18.model.*;
+import seng302.team18.model.CompoundMark;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Course;
+import seng302.team18.model.Mark;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A class which renders the given course on the group so it can be displayed to the user.
@@ -24,7 +29,7 @@ public class CourseRenderer {
     private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
     private final double BOUNDARY_OPACITY = 0.3;
     private final double MARK_SIZE = 10;
-    private  double markSize;
+    private double markSize;
     private final double LINE_WEIGHT = 1.0;
     private final double PADDING = 20.0;
     private Polyline border = new Polyline();
@@ -55,8 +60,8 @@ public class CourseRenderer {
         // Renders CompoundMarks
         for (int i = 0; i < compoundMarks.size(); i++) {
             CompoundMark compoundMark = compoundMarks.get(i);
-            if ((course.getMarkRoundings().get(0).getCompoundMark().getId().equals(compoundMark.getId())
-                    || course.getMarkRoundings().get(course.getMarkRoundings().size() - 1).getCompoundMark().getId().equals(compoundMark.getId()))
+            if ((course.getMarkSequence().get(0).getCompoundMark().getId().equals(compoundMark.getId())
+                    || course.getMarkSequence().get(course.getMarkSequence().size() - 1).getCompoundMark().getId().equals(compoundMark.getId()))
                     && compoundMark.getMarks().size() == CompoundMark.GATE_SIZE) { // draw a line between the gate if its a start or finish
                 renderGate(compoundMark);
             } else {
@@ -73,15 +78,16 @@ public class CourseRenderer {
         // Renders Boundaries
         group.getChildren().remove(border);
         border = new Polyline();
-        List<BoundaryMark> boundaryMarks = course.getBoundaries();
-        boundaryMarks.sort(Comparator.comparing(BoundaryMark::getSequenceID));
-        for (BoundaryMark boundary : boundaryMarks) {
-            renderBoundary(border, boundary.getCoordinate());
+
+        for (Coordinate boundaryMark : course.getCourseLimits()) {
+            renderBoundary(border, boundaryMark);
         }
-        if (course.getBoundaries().size() != 0) {
-            renderBoundary(border, course.getBoundaries().get(0).getCoordinate());
+
+        if (course.getCourseLimits().size() > 0) {
+            renderBoundary(border, course.getCourseLimits().get(0));
             group.getChildren().add(border);
         }
+
         border.setFill(BOUNDARY_FILL_COLOR);
         border.setOpacity(BOUNDARY_OPACITY);
         border.toBack();
@@ -187,10 +193,10 @@ public class CourseRenderer {
     /**
      * Reset the line between the endpoints of a gate
      *
-     * @param endPoints List of XYPairs that are the end points of the gate
+     * @param endPoints    List of XYPairs that are the end points of the gate
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */
-    public void renderGateConnection(List<XYPair> endPoints, CompoundMark compoundMark){
+    public void renderGateConnection(List<XYPair> endPoints, CompoundMark compoundMark) {
         Line line = gates.get(compoundMark.getName());
         if (line == null) {
             line = new Line(

@@ -17,12 +17,11 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private PolarPattern polar = new AC35PolarPattern();
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
-    private IntegerProperty legNumber = new SimpleIntegerProperty(-1);
+    private IntegerProperty legNumber = new SimpleIntegerProperty(0);
     private double boatLength;
     private double heading;
     private Coordinate coordinate;
     private Coordinate previousCoordinate;
-    private Coordinate destination;
     private IntegerProperty place;
     private Long timeTilNextMark;
     private Long timeSinceLastMark;
@@ -130,16 +129,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     }
 
 
-    public Coordinate getDestination() {
-        return destination;
-    }
-
-
-    public void setDestination(Coordinate destination) {
-        this.destination = destination;
-    }
-
-
     public int getPlace() {
         return place.get();
     }
@@ -209,7 +198,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
                 ", id=" + getId() +
                 ", heading=" + heading +
                 ", coordinate=" + coordinate +
-                ", destination=" + destination +
                 ", place=" + place +
                 ", timeTilNextMark=" + timeTilNextMark +
                 ", timeSinceLastMark=" + timeSinceLastMark +

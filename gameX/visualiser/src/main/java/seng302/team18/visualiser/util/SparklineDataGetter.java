@@ -1,6 +1,5 @@
 package seng302.team18.visualiser.util;
 
-import seng302.team18.message.BoatStatus;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 
@@ -30,9 +29,7 @@ public class SparklineDataGetter {
      */
     public void listenToBoat() {
         for (Boat boat : race.getStartingList()) {
-            boat.legNumberProperty().addListener((observableValue, oldleg, newleg) -> {
-                addData(boat);
-            });
+            boat.legNumberProperty().addListener((observableValue, oldleg, newleg) -> addData(boat, oldleg.intValue()));
         }
     }
 
@@ -40,23 +37,14 @@ public class SparklineDataGetter {
      * Adds data to the dataQueue
      *
      * @param boat to be added to dataQueue
+     * @param legJustRounded the number of the leg that the boat just completed
      */
-    private void addData(Boat boat) {
-        if (boat.getStatus() == BoatStatus.FINISHED.code()) {
-            String finishLine = "Finsihline";
-            SparklineDataPoint data = new SparklineDataPoint(boat.getShortName(), boat.getPlace(), finishLine);
-            dataQueue.add(data);
-        } else {
-            if (boat.getLegNumber() == 2) { // assumed that the second leg always has legno of 2 TODO:check
-                String startLine = "Startline";
-                SparklineDataPoint data = new SparklineDataPoint(boat.getShortName(), boat.getPlace(), startLine);
-                dataQueue.add(data);
-            }
-            String markPassedName = race.getCourse().getLeg(boat.getLegNumber()).getDeparture().getCompoundMark().getName();
-            SparklineDataPoint data = new SparklineDataPoint(boat.getShortName(), boat.getPlace(), markPassedName);
-            dataQueue.add(data);
-
-        }
+    private void addData(Boat boat, int legJustRounded) {
+        dataQueue.add(new SparklineDataPoint(
+                boat.getShortName(),
+                boat.getPlace(),
+                race.getCourse().getMarkSequence().get(legJustRounded).getCompoundMark().getName()
+        ));
     }
 
 }

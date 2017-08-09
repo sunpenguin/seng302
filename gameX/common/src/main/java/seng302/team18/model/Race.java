@@ -16,19 +16,22 @@ import java.util.stream.Collectors;
  * A class to represent an individual race.
  */
 public class Race {
-
-    private Regatta regatta = new Regatta();
-    private List<Boat> startingList;
-    private Course course;
-    private List<Boat> finishedList;
-    private ZonedDateTime startTime = ZonedDateTime.now();
-    private ZonedDateTime currentTime;
-    private List<Integer> participantIds;
     private int id;
     private RaceStatus status;
-    private Integer playerId;
     private RaceType raceType;
-    GPSCalculations gps = new GPSCalculations();
+    private Regatta regatta = new Regatta();
+    private Course course;
+
+    private List<Integer> participantIds;
+    private List<Boat> startingList;
+    private List<Boat> finishedList;
+
+    private ZonedDateTime startTime = ZonedDateTime.now();
+    private ZonedDateTime currentTime;
+
+    private Integer playerId;
+
+    private final GPSCalculations gps = new GPSCalculations();
 
     public Race() {
         participantIds = new ArrayList<>();
@@ -37,7 +40,7 @@ public class Race {
         finishedList = new ArrayList<>();
         id = 0;
         status = RaceStatus.NOT_ACTIVE;
-        currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()).now(course.getTimeZone());
+        currentTime = ZonedDateTime.now(course.getTimeZone());
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         raceType = RaceType.MATCH;
     }
@@ -48,8 +51,8 @@ public class Race {
      *
      * @param startingList ArrayList holding all entered boats
      * @param course       Course object
-     * @param raceId Integer representing the race id
-     * @param raceType RaceType enum indicating the type of race to create
+     * @param raceId       Integer representing the race id
+     * @param raceType     RaceType enum indicating the type of race to create
      */
     public Race(List<Boat> startingList, Course course, int raceId, RaceType raceType) {
         this.startingList = startingList;
@@ -84,27 +87,24 @@ public class Race {
      * current(starting CompoundMark) and next CompoundMark.
      */
     private void setCourseForBoats() {
-        if (course.getLegs().size() > 0) {
+        if (course.getMarkSequence().size() > 1) {
             for (Boat boat : startingList) {
                 setCourseForBoat(boat);
-                boat.setRoundZone(Boat.RoundZone.ZONE1);
             }
         }
     }
 
+
     private void setCourseForBoat(Boat boat) {
-        if (!course.getLegs().isEmpty()) {
-            // Set Leg
-            boat.setLegNumber(course.getLegs().get(0).getLegNumber());
-            // Set Dest
-            boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCompoundMark().getCoordinate());
-            // Set Coordinate
+        if (course.getMarkSequence().size() > 1) {
+            boat.setLegNumber(0);
             boat.setCoordinate(getStartPosition(boat));
-            // Set Heading
-            GPSCalculations gps = new GPSCalculations();
-            boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
-            double tws = boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection());
-            boat.setSpeed(tws);
+            boat.setHeading(gps.getBearing(
+                    course.getMarkSequence().get(0).getCompoundMark().getCoordinate(),
+                    course.getMarkSequence().get(0).getCompoundMark().getCoordinate()
+            ));
+            boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
+            boat.setRoundZone(Boat.RoundZone.ZONE1);
         }
     }
 
@@ -117,25 +117,23 @@ public class Race {
      * @return position for boat to start at
      */
     private Coordinate getStartPosition(Boat boat) {
-        GPSCalculations calculator = new GPSCalculations();
-        Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCompoundMark().getCoordinate();
-        Coordinate startMark1 = course.getLeg(boat.getLegNumber()).getDeparture().getCompoundMark().getMarks().get(0).getCoordinate();
-        Coordinate startMark2= course.getLeg(boat.getLegNumber()).getDeparture().getCompoundMark().getMarks().get(1).getCoordinate();
+        Coordinate midPoint = course.getMarkSequence().get(0).getCompoundMark().getCoordinate();
+        Coordinate startMark1 = course.getMarkSequence().get(0).getCompoundMark().getMarks().get(0).getCoordinate();
+        Coordinate startMark2 = course.getMarkSequence().get(0).getCompoundMark().getMarks().get(1).getCoordinate();
 
-        double bearing = calculator.getBearing(startMark1, startMark2);
+        double bearing = gps.getBearing(startMark1, startMark2);
 
         double offset = startingList.size();
 
         if ((offset % 2) == 0) {
             offset /= 2;
         } else {
-            offset = -Math.floor(offset/2);
+            offset = -Math.floor(offset / 2);
         }
 
-        Coordinate startingPosition = calculator.toCoordinate(midPoint, bearing, (boat.getLength()*offset+10));
-
-        return startingPosition;
+        return gps.toCoordinate(midPoint, bearing, (boat.getLength() * offset + 10));
     }
+
 
     public void addParticipant(Boat boat) {
         // check that it is alright to add a boat at this point
@@ -143,6 +141,7 @@ public class Race {
         setCourseForBoat(boat);
         participantIds.add(boat.getId());
     }
+
 
     /**
      * Starting list getter.
@@ -152,6 +151,7 @@ public class Race {
     public List<Boat> getStartingList() {
         return startingList;
     }
+
 
     /**
      * Starting list setter.
@@ -174,6 +174,7 @@ public class Race {
         }
     }
 
+
     /**
      * Course getter.
      *
@@ -182,6 +183,7 @@ public class Race {
     public Course getCourse() {
         return course;
     }
+
 
     /**
      * Course setter.
@@ -198,7 +200,6 @@ public class Race {
      *
      * @param time the time in seconds
      */
-    // TODO afj19, 20th July: check the temporal unit here
     public void updateBoats(double time) { // time in seconds
         for (Boat boat : startingList) {
             if (!finishedList.contains(boat)) {
@@ -212,24 +213,24 @@ public class Race {
      * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
      * and sets the destination to the next marks coordinates.
      *
-     * @param boat the boat
+     * @param boat    the boat
      * @param nextLeg the next leg
      */
+    public void setNextLeg(Boat boat, int nextLeg) {
+        int currentLeg = boat.getLegNumber();
+        boat.setLegNumber(nextLeg);
 
-    public void setNextLeg(Boat boat, Leg nextLeg) {
-        Leg currentLeg = course.getLeg(boat.getLegNumber());
-        currentLeg.addToBoatsCompleted(boat);
-        int newPlace = currentLeg.getBoatsCompleted().indexOf(boat) + 1;
+        int newPlace = ((Long) startingList.stream().filter(b -> b.getLegNumber() >= currentLeg).count()).intValue() + 1;
         boat.setPlace(newPlace);
-        boat.setDestination(nextLeg.getDestination().getCompoundMark().getMarks().get(0).getCoordinate());
-        boat.setLegNumber(nextLeg.getLegNumber());
 
+        // Adjust the placings of the other boats to account for the new placing of the boat
+        // TODO afj19 09/08/17: Check that this is not the cause of issue #5 (see issue tracker)
         for (Boat currentBoat : getStartingList()) {
             int currentBoatPlace = currentBoat.placeProperty().intValue();
-            int boatPlace = boat.placeProperty().intValue();
             int currentBoatLeg = currentBoat.getLegNumber();
             int boatLeg = boat.getLegNumber();
-            if (!(currentBoat.getId().equals(boat.getId())) && (currentBoatPlace == boatPlace)) {
+
+            if (!(currentBoat.getId().equals(boat.getId())) && (currentBoatPlace == newPlace)) {
                 if (currentBoatLeg >= boatLeg) {
                     currentBoat.setPlace(currentBoatPlace - 1);
                 } else {
@@ -238,9 +239,7 @@ public class Race {
             }
         }
 
-        // TODO when this is enabled it causes the visualiser to freeze, likely due to malformed packets
-        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getLeg(boat.getLegNumber()).getDeparture().getCompoundMark()));
-        //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
+        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getMarkSequence().get(currentLeg).getCompoundMark()));
     }
 
 
@@ -260,7 +259,7 @@ public class Race {
         List<AbstractBoat> obstacles = new ArrayList<>(startingList);
         obstacles.addAll(course.getMarks());
         AbstractBoat obstacle = boat.hasCollided(obstacles);
-        if (obstacle != null){
+        if (obstacle != null) {
             handleCollision(boat, obstacle);
         } else {
             double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
@@ -272,7 +271,7 @@ public class Race {
         }
 
         if (hasPassedDestination(boat)) {
-            setNextLeg(boat, course.getNextLeg(boat.getLegNumber()));
+            setNextLeg(boat, boat.getLegNumber() + 1);
         }
     }
 
@@ -280,10 +279,11 @@ public class Race {
     /**
      * Handles the collision when one is detected by printing to the console
      * NOTE: Bumper car edition currently in play
-     * @param boat boat collision was detected from
+     *
+     * @param boat     boat collision was detected from
      * @param obstacle obstacle the boat collided with
      */
-    private void handleCollision(Boat boat, AbstractBoat obstacle){
+    private void handleCollision(Boat boat, AbstractBoat obstacle) {
         GPSCalculations calculator = new GPSCalculations();
         double bearingOfCollision = calculator.getBearing(obstacle.getCoordinate(), boat.getCoordinate());
         Coordinate newBoatCoordinate = calculator.toCoordinate(boat.getCoordinate(), bearingOfCollision, boat.getLength());
@@ -418,19 +418,24 @@ public class Race {
      * @return if has passed its destination mark
      */
     private boolean hasPassedDestination(Boat boat) {
-        System.out.println(course.getLeg(boat.getLegNumber()).getDestination().getCompoundMark().getName());
-        if(course.getLeg(boat.getLegNumber()).getDestination().getCompoundMark().getMarks().size() == 1) { //if boat is rounding a mark
-            return hasPassedMark(boat);
+        // TODO afj19 10/08/17: check that this is never called once the boat is finished, or make sure that we won't get index exceptions accessing the roundings
+
+        boolean passed;
+        if (course.getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getMarks().size() == 1) { //if boat is rounding a mark
+            passed = hasPassedMark(boat);
         } else {
-            return hasPassedGate(boat);
+            passed = hasPassedGate(boat);
         }
+        System.out.println(course.getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getName() + " " + passed);
+
+        return passed;
     }
 
 
     /**
      * Method to check if a boat has passed the mark it is heading too
      *
-     * @param boat
+     * @param boat the boat in question
      * @return true if the boat has passed its destination mark
      */
     private boolean hasPassedMark(Boat boat) {
@@ -441,20 +446,21 @@ public class Race {
     /**
      * Method to check if a boat has passed the gate it is heading too
      *
-     * @param boat
+     * @param boat the boat in question
      * @return true if the boat has passed its destination gate
      */
     private boolean hasPassedGate(Boat boat) {
-        MarkRounding.GateType  gateType = course.getLeg(boat.getLegNumber()).getDestination().getGateType();
+        MarkRounding.GateType gateType = course.getMarkSequence().get(boat.getLegNumber() + 1).getGateType();
         boolean passed = false;
-        if (gateType ==  MarkRounding.GateType.THROUGH_GATE) {
+        if (gateType == MarkRounding.GateType.THROUGH_GATE) {
             passed = checkForThroughGate(boat);
-        } else if (gateType ==  MarkRounding.GateType.ROUND_THEN_THROUGH) {
+        } else if (gateType == MarkRounding.GateType.ROUND_THEN_THROUGH) {
             passed = checkForRoundThenThroughGate(boat);
-        } else if (gateType ==  MarkRounding.GateType.THROUGH_THEN_ROUND) {
+        } else if (gateType == MarkRounding.GateType.THROUGH_THEN_ROUND) {
             passed = checkForThroughThenRoundGate(boat);
-        }else if (gateType ==  MarkRounding.GateType.ROUND_BOTH_MAKRS) {
-            passed = checkForRoundBothMarksGate(boat);
+        } else if (gateType == MarkRounding.GateType.ROUND_BOTH_MAKRS) {
+            // Not checking for this type as it should never be encountered
+            passed = true;
         }
         return passed;
     }
@@ -464,22 +470,23 @@ public class Race {
      * Method to check if a was is the pre pass zone for the destination of a leg
      *
      * @param coordinate coordinate to be checked
-     * @param legNumber the leg number for the leg in course
+     * @param legNumber  the leg number for the leg in course
      * @return true if coordinate is in pre pass zone
      */
+    // TODO afj19 10/08/17: deal with fact that this is only for marks and thus the leg is pre-start or post-finish (add dbc precondition?)
     private boolean inPreRoundingZone(Coordinate coordinate, int legNumber) {
-        Leg leg = course.getLeg(legNumber);
-        double markToBoatHeading = GPSCalculations.getBearing(leg.getDestination().getCompoundMark().getCoordinate(), coordinate);
+        MarkRounding legStart = course.getMarkSequence().get(legNumber - 1);
+        CompoundMark legEnd = course.getMarkSequence().get(legNumber).getCompoundMark();
 
-        double entryBearing = GPSCalculations.getBearing(leg.getDestination().getCompoundMark().getCoordinate(), leg.getDeparture().getCompoundMark().getCoordinate());
-        GPSCalculations gps = new GPSCalculations();
+        double markToBoatHeading = gps.getBearing(legEnd.getCoordinate(), coordinate);
+        double entryBearing = gps.getBearing(legEnd.getCoordinate(), legStart.getCompoundMark().getCoordinate());
 
-        MarkRounding.Direction direction = course.getMarkRoundings().get(leg.getLegNumber()).getRoundingDirection();
+        MarkRounding.Direction direction = course.getMarkSequence().get(legNumber).getRoundingDirection();
 
         if (direction == MarkRounding.Direction.PORT) {
-            return gps.isBetween(markToBoatHeading, leg.getDestination().getPassAngle(), entryBearing);
+            return gps.isBetween(markToBoatHeading, legStart.getPassAngle(), entryBearing);
         } else if (direction == MarkRounding.Direction.STARBOARD) {
-            return gps.isBetween(markToBoatHeading,  entryBearing, leg.getDestination().getPassAngle());
+            return gps.isBetween(markToBoatHeading, entryBearing, legStart.getPassAngle());
         }
 
         return false;
@@ -490,41 +497,41 @@ public class Race {
      * Method to check if a coordinate is in the post pass zone for a leg
      *
      * @param coordinate coordinate to be checked
-     * @param legNumber the leg number for the leg in course
-     * @return true of coordinate is in [ost pass zone
+     * @param legNumber  the leg number for the leg in course
+     * @return true of coordinate is in post pass zone
      */
+    // TODO afj19 10/08/17: deal with fact that this is only for marks and thus the leg is pre-start or post-finish (add dbc precondition?)
     private boolean inPostRoundingZone(Coordinate coordinate, int legNumber) {
-        Leg leg = course.getLeg(legNumber + 1);
-        double markToBoatHeading = GPSCalculations.getBearing(leg.getDeparture().getCompoundMark().getCoordinate(), coordinate);
-        double exitBearing = GPSCalculations.getBearing(leg.getDeparture().getCompoundMark().getCoordinate(), leg.getDestination().getCompoundMark().getCoordinate());
-//        System.out.println(leg.getDestination().getPassAngle());
-        GPSCalculations gps = new GPSCalculations();
+        MarkRounding legStart = course.getMarkSequence().get(legNumber);
+        CompoundMark legEnd = course.getMarkSequence().get(legNumber + 1).getCompoundMark();
 
-        MarkRounding.Direction direction = course.getMarkRoundings().get(leg.getLegNumber() - 1).getRoundingDirection();
+        double markToBoatHeading = gps.getBearing(legStart.getCompoundMark().getCoordinate(), coordinate);
+        double exitBearing = gps.getBearing(legStart.getCompoundMark().getCoordinate(), legEnd.getCoordinate());
+
+        MarkRounding.Direction direction = course.getMarkSequence().get(legNumber - 1).getRoundingDirection();
 
         if (direction == MarkRounding.Direction.PORT) {
-            return gps.isBetween(markToBoatHeading, exitBearing, leg.getDeparture().getPassAngle());
+            return gps.isBetween(markToBoatHeading, exitBearing, legStart.getPassAngle());
         } else if (direction == MarkRounding.Direction.STARBOARD) {
-            return gps.isBetween(markToBoatHeading, leg.getDeparture().getPassAngle(), exitBearing);
+            return gps.isBetween(markToBoatHeading, legStart.getPassAngle(), exitBearing);
         }
 
         return false;
     }
 
 
-    public boolean checkForThroughGate(Boat boat) {
-        MarkRounding gate = course.getLeg(boat.getLegNumber()).getDestination();
-        GPSCalculations calculator = new GPSCalculations();
-        double mark1ToBoatBearing = GPSCalculations.getBearing(gate.getCompoundMark().getMarks().get(0).getCoordinate(), boat.getCoordinate());
-        double mark2ToBoatBearing = GPSCalculations.getBearing(gate.getCompoundMark().getMarks().get(1).getCoordinate(), boat.getCoordinate());
-        double mark1ToMark2Bearing = GPSCalculations.getBearing(gate.getCompoundMark().getMarks().get(0).getCoordinate(), gate.getCompoundMark().getMarks().get(1).getCoordinate());
-        double mark2ToMark1Bearing = GPSCalculations.getBearing(gate.getCompoundMark().getMarks().get(1).getCoordinate(), gate.getCompoundMark().getMarks().get(0).getCoordinate());
+    private boolean checkForThroughGate(Boat boat) {
+        MarkRounding gate = course.getMarkSequence().get(boat.getLegNumber());
+        double mark1ToBoatBearing = this.gps.getBearing(gate.getCompoundMark().getMarks().get(0).getCoordinate(), boat.getCoordinate());
+        double mark2ToBoatBearing = this.gps.getBearing(gate.getCompoundMark().getMarks().get(1).getCoordinate(), boat.getCoordinate());
+        double mark1ToMark2Bearing = this.gps.getBearing(gate.getCompoundMark().getMarks().get(0).getCoordinate(), gate.getCompoundMark().getMarks().get(1).getCoordinate());
+        double mark2ToMark1Bearing = this.gps.getBearing(gate.getCompoundMark().getMarks().get(1).getCoordinate(), gate.getCompoundMark().getMarks().get(0).getCoordinate());
 
-        if (calculator.isBetween(mark1ToBoatBearing, (mark1ToMark2Bearing-90)%360, (mark1ToMark2Bearing+90)%360)
-            && calculator.isBetween(mark2ToBoatBearing, (mark2ToMark1Bearing-90)%360, (mark2ToMark1Bearing+90)%360)) {
-            double mark1toBoatPrevious = GPSCalculations.getBearing(gate.getCompoundMark().getMarks().get(0).getCoordinate(), boat.getPreviousCoordinate());
-            if (calculator.isBetween(mark1ToBoatBearing, (mark1ToMark2Bearing+180)%360, mark1ToMark2Bearing) &&
-                    !calculator.isBetween(mark1toBoatPrevious, (mark1ToMark2Bearing+180)%360, mark1ToMark2Bearing)) {
+        if (gps.isBetween(mark1ToBoatBearing, (mark1ToMark2Bearing - 90) % 360, (mark1ToMark2Bearing + 90) % 360)
+                && gps.isBetween(mark2ToBoatBearing, (mark2ToMark1Bearing - 90) % 360, (mark2ToMark1Bearing + 90) % 360)) {
+            double mark1toBoatPrevious = gps.getBearing(gate.getCompoundMark().getMarks().get(0).getCoordinate(), boat.getPreviousCoordinate());
+            if (gps.isBetween(mark1ToBoatBearing, (mark1ToMark2Bearing + 180) % 360, mark1ToMark2Bearing) &&
+                    !gps.isBetween(mark1toBoatPrevious, (mark1ToMark2Bearing + 180) % 360, mark1ToMark2Bearing)) {
                 return true;
             }
         }
@@ -532,30 +539,29 @@ public class Race {
     }
 
 
-    public boolean checkForRoundThenThroughGate(Boat boat) {
-        MarkRounding gate = course.getLeg(boat.getLegNumber()).getDestination();
+    private boolean checkForRoundThenThroughGate(Boat boat) {
+        MarkRounding gate = course.getMarkSequence().get(boat.getLegNumber());
         Mark mark1 = gate.getCompoundMark().getMarks().get(0);
         Mark mark2 = gate.getCompoundMark().getMarks().get(1);
-        GPSCalculations calculator = new GPSCalculations();
 
-        double mark1ToBoatBearing = GPSCalculations.getBearing(mark1.getCoordinate(), boat.getCoordinate());
-        double mark2ToBoatBearing = GPSCalculations.getBearing(mark2.getCoordinate(), boat.getCoordinate());
-        double mark1ToMark2Bearing = GPSCalculations.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
-        double mark2ToMark1Bearing = GPSCalculations.getBearing(mark2.getCoordinate(), mark1.getCoordinate());
+        double mark1ToBoatBearing = this.gps.getBearing(mark1.getCoordinate(), boat.getCoordinate());
+        double mark2ToBoatBearing = this.gps.getBearing(mark2.getCoordinate(), boat.getCoordinate());
+        double mark1ToMark2Bearing = this.gps.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
+        double mark2ToMark1Bearing = this.gps.getBearing(mark2.getCoordinate(), mark1.getCoordinate());
         if (boat.getRoundZone() == Boat.RoundZone.ZONE1) {
-            if (calculator.isBetween(mark1ToBoatBearing, (mark2ToMark1Bearing - 90) % 360, (mark2ToMark1Bearing + 90) % 360)) { // pre-rounding mark1
-                double previousAngle = GPSCalculations.getBearing(mark1.getCoordinate(), boat.getPreviousCoordinate());
-                if (calculator.isBetween(previousAngle, mark2ToMark1Bearing, mark1ToMark2Bearing) && !(calculator.isBetween(mark1ToBoatBearing, mark2ToMark1Bearing, mark1ToMark2Bearing))) {
+            if (gps.isBetween(mark1ToBoatBearing, (mark2ToMark1Bearing - 90) % 360, (mark2ToMark1Bearing + 90) % 360)) { // pre-rounding mark1
+                double previousAngle = this.gps.getBearing(mark1.getCoordinate(), boat.getPreviousCoordinate());
+                if (gps.isBetween(previousAngle, mark2ToMark1Bearing, mark1ToMark2Bearing) && !(gps.isBetween(mark1ToBoatBearing, mark2ToMark1Bearing, mark1ToMark2Bearing))) {
                     boat.setRoundZone(Boat.RoundZone.ZONE2);
                 }
-            } else if (calculator.isBetween(mark2ToBoatBearing, (mark1ToMark2Bearing - 90) % 360, (mark1ToMark2Bearing + 90) % 360)) { // pre-rounding mark2
-                double previousAngle = GPSCalculations.getBearing(mark1.getCoordinate(), boat.getPreviousCoordinate());
-                if (calculator.isBetween(previousAngle, mark2ToMark1Bearing, mark1ToMark2Bearing) && !(calculator.isBetween(mark1ToBoatBearing, mark2ToMark1Bearing, mark1ToMark2Bearing))) {
+            } else if (gps.isBetween(mark2ToBoatBearing, (mark1ToMark2Bearing - 90) % 360, (mark1ToMark2Bearing + 90) % 360)) { // pre-rounding mark2
+                double previousAngle = this.gps.getBearing(mark1.getCoordinate(), boat.getPreviousCoordinate());
+                if (gps.isBetween(previousAngle, mark2ToMark1Bearing, mark1ToMark2Bearing) && !(gps.isBetween(mark1ToBoatBearing, mark2ToMark1Bearing, mark1ToMark2Bearing))) {
                     boat.setRoundZone(Boat.RoundZone.ZONE2);
                 }
             }
         } else if (boat.getRoundZone() == Boat.RoundZone.ZONE2) {
-            if(checkForThroughGate(boat)) {
+            if (checkForThroughGate(boat)) {
                 boat.setRoundZone(Boat.RoundZone.ZONE1);
                 return true;
             }
@@ -563,22 +569,16 @@ public class Race {
         return false;
     }
 
-    public boolean checkForRoundBothMarksGate(Boat boat) {
-        //Note implemented as not necessary
-        return true;
-    }
 
-
-    public boolean checkForThroughThenRoundGate(Boat boat) {
-        MarkRounding gate = course.getLeg(boat.getLegNumber()).getDestination();
+    private boolean checkForThroughThenRoundGate(Boat boat) {
+        MarkRounding gate = course.getMarkSequence().get(boat.getLegNumber());
         Mark mark1 = gate.getCompoundMark().getMarks().get(0);
         Mark mark2 = gate.getCompoundMark().getMarks().get(1);
-        GPSCalculations calculator = new GPSCalculations();
 
-        double mark1ToBoatBearing = GPSCalculations.getBearing(mark1.getCoordinate(), boat.getCoordinate());
-        double mark2ToBoatBearing = GPSCalculations.getBearing(mark2.getCoordinate(), boat.getCoordinate());
-        double mark1ToMark2Bearing = GPSCalculations.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
-        double mark2ToMark1Bearing = GPSCalculations.getBearing(mark2.getCoordinate(), mark1.getCoordinate());
+        double mark1ToBoatBearing = this.gps.getBearing(mark1.getCoordinate(), boat.getCoordinate());
+        double mark2ToBoatBearing = this.gps.getBearing(mark2.getCoordinate(), boat.getCoordinate());
+        double mark1ToMark2Bearing = this.gps.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
+        double mark2ToMark1Bearing = this.gps.getBearing(mark2.getCoordinate(), mark1.getCoordinate());
 
         if (boat.getRoundZone() == Boat.RoundZone.ZONE1) {
             if (checkForThroughGate(boat)) {
@@ -586,15 +586,15 @@ public class Race {
                 return false;
             }
         } else if (boat.getRoundZone() == Boat.RoundZone.ZONE2) {
-            if (calculator.isBetween(mark1ToBoatBearing, (mark2ToMark1Bearing - 90) % 360, (mark2ToMark1Bearing + 90) % 360)) { //rounding mark 1
-                double previousAngle = GPSCalculations.getBearing(mark1.getCoordinate(), boat.getPreviousCoordinate());
-                if (calculator.isBetween(previousAngle, mark2ToMark1Bearing, mark1ToMark2Bearing) && !(calculator.isBetween(mark1ToBoatBearing, mark2ToMark1Bearing, mark1ToMark2Bearing))) {
+            if (gps.isBetween(mark1ToBoatBearing, (mark2ToMark1Bearing - 90) % 360, (mark2ToMark1Bearing + 90) % 360)) { //rounding mark 1
+                double previousAngle = this.gps.getBearing(mark1.getCoordinate(), boat.getPreviousCoordinate());
+                if (gps.isBetween(previousAngle, mark2ToMark1Bearing, mark1ToMark2Bearing) && !(gps.isBetween(mark1ToBoatBearing, mark2ToMark1Bearing, mark1ToMark2Bearing))) {
                     boat.setRoundZone(Boat.RoundZone.ZONE1);
                     return true;
                 }
-            } else if (calculator.isBetween(mark2ToBoatBearing, (mark1ToMark2Bearing - 90) % 360, (mark1ToMark2Bearing + 90) % 360)) { //rounding mark 2
-                double previousAngle = GPSCalculations.getBearing(mark1.getCoordinate(), boat.getPreviousCoordinate());
-                if (calculator.isBetween(previousAngle, mark2ToMark1Bearing, mark1ToMark2Bearing) && !(calculator.isBetween(mark1ToBoatBearing, mark2ToMark1Bearing, mark1ToMark2Bearing))) {
+            } else if (gps.isBetween(mark2ToBoatBearing, (mark1ToMark2Bearing - 90) % 360, (mark1ToMark2Bearing + 90) % 360)) { //rounding mark 2
+                double previousAngle = this.gps.getBearing(mark1.getCoordinate(), boat.getPreviousCoordinate());
+                if (gps.isBetween(previousAngle, mark2ToMark1Bearing, mark1ToMark2Bearing) && !(gps.isBetween(mark1ToBoatBearing, mark2ToMark1Bearing, mark1ToMark2Bearing))) {
                     boat.setRoundZone(Boat.RoundZone.ZONE1);
                     return true;
                 }

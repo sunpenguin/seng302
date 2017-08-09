@@ -44,7 +44,7 @@ public class RaceXmlEncoderTest {
         Map<Integer, AC35XMLRaceMessage.EntryDirection> participants;
         List<CompoundMark> compoundMarks;
         List<MarkRounding> markRoundings;
-        List<BoundaryMark> boundaryMarks;
+        List<Coordinate> boundaryMarks;
         int raceID;
 
         final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss-Z");
@@ -99,10 +99,10 @@ public class RaceXmlEncoderTest {
         markRoundings.add(markRounding3);
         markRoundings.add(markRounding4);
 
-        BoundaryMark b1 = new BoundaryMark(1, new Coordinate(33, 34));
-        BoundaryMark b2 = new BoundaryMark(2, new Coordinate(13, 14));
-        BoundaryMark b3 = new BoundaryMark(3, new Coordinate(53, 54));
-        BoundaryMark b4 = new BoundaryMark(4, new Coordinate(43, 44));
+        Coordinate b1 = new Coordinate(33, 34);
+        Coordinate b2 = new Coordinate(13, 14);
+        Coordinate b3 = new Coordinate(53, 54);
+        Coordinate b4 = new Coordinate(43, 44);
 
         boundaryMarks = new ArrayList<>();
         boundaryMarks.add(b1);
@@ -252,7 +252,7 @@ public class RaceXmlEncoderTest {
 
     @Test
     public void encodeCourseLimitsTest() {
-        List<BoundaryMark> encodedBoundaryMarks = new ArrayList<>();
+        List<Coordinate> encodedBoundaryMarks = new ArrayList<>();
 
         Node boundaryNode = root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_COURSE_BOUNDARIES.toString()).item(0);
         Element boundaryElement = (Element) boundaryNode;
@@ -264,11 +264,11 @@ public class RaceXmlEncoderTest {
             int seqId = Integer.parseInt(boundaryMarkElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_SEQUENCE_ID.toString()));
             double lat = Double.parseDouble(boundaryMarkElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_LATITUDE.toString()));
             double lon = Double.parseDouble(boundaryMarkElement.getAttribute(AC35RaceXMLComponents.ATTRIBUTE_LONGITUDE.toString()));
-            encodedBoundaryMarks.add(new BoundaryMark(seqId, new Coordinate(lat, lon)));
+            encodedBoundaryMarks.add(new Coordinate(lat, lon));
         }
 
-        BoundaryMark firstBoundaryMark = raceMessage.getBoundaryMarks().get(0);
-        BoundaryMark firstEncodedBoundaryMark = encodedBoundaryMarks.get(0);
-        assertEquals(firstBoundaryMark.getSequenceID(), firstEncodedBoundaryMark.getSequenceID());
+        Coordinate firstBoundaryMark = raceMessage.getBoundaryMarks().get(0);
+        Coordinate firstEncodedBoundaryMark = encodedBoundaryMarks.get(0);
+        assertEquals(firstBoundaryMark, firstEncodedBoundaryMark);
     }
 }

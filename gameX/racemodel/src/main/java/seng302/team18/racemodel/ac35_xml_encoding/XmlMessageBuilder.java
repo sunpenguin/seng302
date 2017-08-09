@@ -99,14 +99,14 @@ public class XmlMessageBuilder {
             participants.put(boat.getId(), raceDefaults.getParticipantEntryDirection());
         }
 
-        message.setBoundaryMarks(race.getCourse().getBoundaries());
+        message.setBoundaryMarks(race.getCourse().getCourseLimits());
         message.setCompoundMarks(race.getCourse().getCompoundMarks());
         message.setStartTime(race.getStartTime().format(XmlMessage.DATE_TIME_FORMATTER));
         message.setStartPostponed(race.getStatus().equals(RaceStatus.POSTPONED));
         message.setRaceType(race.getRaceType());
         message.setRaceID(race.getId());
         message.setParticipants(participants);
-        message.setMarkRoundings(race.getCourse().getMarkRoundings());
+        message.setMarkRoundings(race.getCourse().getMarkSequence());
 
         return message;
     }

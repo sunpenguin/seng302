@@ -1,9 +1,12 @@
 package seng302.team18.util;
 
-import seng302.team18.model.*;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Course;
+import seng302.team18.model.Mark;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Class for making GPS calculations.
@@ -122,7 +125,7 @@ public class GPSCalculations {
      * @param destination end point.
      * @return angle from north to destination calculated at origin.
      */
-    public static double getBearing(Coordinate origin, Coordinate destination) {
+    public double getBearing(Coordinate origin, Coordinate destination) {
         double deltaLong = (destination.getLongitude() - origin.getLongitude());
 
         double y = Math.sin(deltaLong) * Math.cos(destination.getLatitude());
@@ -221,16 +224,11 @@ public class GPSCalculations {
     public List<Coordinate> findMinMaxPoints(Course course) {
         List<Coordinate> points = new ArrayList<>();
 
-        for (BoundaryMark boundaryMark : course.getBoundaries()) {
-            points.add(boundaryMark.getCoordinate());
-        }
-
-        for (CompoundMark compoundMark : course.getCompoundMarks()) {
-            for (Mark mark : compoundMark.getMarks()) {
-                points.add(mark.getCoordinate());
-            }
-        }
-
+        points.addAll(course.getCourseLimits());
+        points.addAll(course.getCompoundMarks().stream()
+                .flatMap(compoundMark -> compoundMark.getMarks().stream().map(Mark::getCoordinate))
+                .collect(Collectors.toList())
+        );
         return findMinMaxPoints(points);
     }
 

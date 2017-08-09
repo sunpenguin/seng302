@@ -13,62 +13,59 @@ import java.util.List;
  */
 public class Course {
 
-    private List<CompoundMark> compoundMarks;
-    private List<Leg> legs;
-    private double windDirection;
-    private double windSpeed;
-    private List<BoundaryMark> boundaries;
-    private Coordinate centralCoordinate;
-    private ZoneId timeZone;
-    private List<MarkRounding> markRoundings;
     private String name = "";
 
-    public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, double windSpeed,
-                  ZoneId timeZone, List<MarkRounding> markRoundings) {
-        this.compoundMarks = new ArrayList<>(marks);
+    private List<CompoundMark> compoundMarks = new ArrayList<>();
+    private List<MarkRounding> markSequence = new ArrayList<>();
+    private List<Coordinate> courseLimits = new ArrayList<>();
+
+    private double windDirection = 0d;
+    private double windSpeed = 0d;
+
+    private Coordinate centralCoordinate = new Coordinate(0d, 0d);
+    private ZoneId timeZone = ZoneId.systemDefault();
+
+
+    public Course(Collection<CompoundMark> marks, Collection<Coordinate> boundaries, double windDirection, double windSpeed,
+                  ZoneId timeZone, List<MarkRounding> markSequence) {
+        this.compoundMarks.addAll(marks);
+        this.courseLimits.addAll(boundaries);
+        this.markSequence.addAll(markSequence);
         this.windDirection = windDirection;
         this.windSpeed = windSpeed;
-        this.boundaries = new ArrayList<>(boundaries);
-        this.timeZone = timeZone;
-        this.markRoundings = markRoundings;
         centralCoordinate = new Coordinate(0d, 0d);
+        this.timeZone = timeZone;
+
         initializeCourse();
     }
 
+
     public Course() {
-        legs = new ArrayList<>();
-        compoundMarks = new ArrayList<>();
-        boundaries = new ArrayList<>();
-        markRoundings = new ArrayList<>();
-        timeZone = ZoneId.systemDefault();
-        windDirection = 0d;
-        windSpeed = 0d;
-        centralCoordinate = new Coordinate(0d, 0d);
     }
 
-    /**
-     * A getter for the CompoundMarks in the course
-     *
-     * @return the list of CompoundMarks
-     */
+
     public List<CompoundMark> getCompoundMarks() {
         return compoundMarks;
     }
+
 
     public void setCompoundMarks(Collection<CompoundMark> compoundMarks) {
         this.compoundMarks.clear();
         this.compoundMarks.addAll(compoundMarks);
     }
 
-    public void setMarkRoundings(Collection<MarkRounding> markRoundings) {
-        this.markRoundings.clear();
-        this.markRoundings.addAll(markRoundings);
+
+    public List<MarkRounding> getMarkSequence() {
+        return markSequence;
+    }
+
+
+    public void setMarkSequence(Collection<MarkRounding> markSequence) {
+        this.markSequence.clear();
+        this.markSequence.addAll(markSequence);
         initializeCourse();
     }
 
-    public List<MarkRounding> getMarkRoundings() {
-        return markRoundings;
-    }
 
     public double getWindDirection() {
         return windDirection;
@@ -79,13 +76,16 @@ public class Course {
         this.windDirection = windDirection;
     }
 
+
     public double getWindSpeed() {
         return windSpeed;
     }
 
+
     public void setWindSpeed(double windSpeed) {
         this.windSpeed = windSpeed;
     }
+
 
     public List<Mark> getMarks() {
         List<Mark> marks = new ArrayList<>();
@@ -95,43 +95,37 @@ public class Course {
         return marks;
     }
 
-    public List<BoundaryMark> getBoundaries() {
-        return new ArrayList<>(boundaries);
+
+    public List<Coordinate> getCourseLimits() {
+        return new ArrayList<>(courseLimits);
     }
 
-    public void setBoundaries(Collection<BoundaryMark> boundaries) {
-        this.boundaries.clear();
-        this.boundaries.addAll(boundaries);
+
+    public void setCourseLimits(Collection<Coordinate> boundaries) {
+        this.courseLimits.clear();
+        this.courseLimits.addAll(boundaries);
     }
 
-    public void setTimeZone(ZoneId timeZone) {
-        this.timeZone = timeZone;
-    }
 
     public ZoneId getTimeZone() {
         return timeZone;
     }
 
-    public void setCentralCoordinate(Coordinate centralCoordinate) {
-        if (this.centralCoordinate.getLatitude() == 0d && this.centralCoordinate.getLongitude() == 0d) {
-            this.centralCoordinate = centralCoordinate;
-        }
+
+    public void setTimeZone(ZoneId timeZone) {
+        this.timeZone = timeZone;
     }
+
 
     public Coordinate getCentralCoordinate() {
         return centralCoordinate;
     }
 
-    public List<Leg> getLegs() {
-        return legs;
-    }
 
-
-    public Leg getNextLeg(int legNumber) {
-        if (legNumber == legs.size()) {
-            return legs.get(legNumber - 1);
+    public void setCentralCoordinate(Coordinate centralCoordinate) {
+        if (this.centralCoordinate.getLatitude() == 0d && this.centralCoordinate.getLongitude() == 0d) {
+            this.centralCoordinate = centralCoordinate;
         }
-        return legs.get(legNumber);
     }
 
 
@@ -140,103 +134,85 @@ public class Course {
      * Then adds the pass angle to each compound mark (if you do not know what pass angle is talk to Alice).
      */
     private void initializeCourse() {
-        legs = new ArrayList<>();
+        if (markSequence.size() < 2) return;
 
-        for (int i = 0; i < markRoundings.size() - 1; i++) {
-            MarkRounding dep = markRoundings.get(i);
-            MarkRounding dest = markRoundings.get(i + 1);
-            Leg currentLeg = new Leg(dep, dest, markRoundings.get(i).getSequenceNumber());
-            System.out.println(String.format("%d %s %s", currentLeg.getLegNumber(), dep.getCompoundMark().getName(), dest.getCompoundMark().getName()));
-
-            legs.add(currentLeg);
-        }
-
-        List<MarkRounding> nullBorderedRoundings = new ArrayList<>(markRoundings);
-        nullBorderedRoundings.add(0, null);
+        List<MarkRounding> nullBorderedRoundings = new ArrayList<>();
+        nullBorderedRoundings.add(null);
+        nullBorderedRoundings.addAll(markSequence);
         nullBorderedRoundings.add(null);
 
-        for (int i = 1; i < nullBorderedRoundings.size() - 1; i++) {
+        MarkRounding previous;
+        MarkRounding current = null;
+        MarkRounding future = nullBorderedRoundings.get(1);
 
-            MarkRounding previous = nullBorderedRoundings.get(i - 1);
-            MarkRounding current = nullBorderedRoundings.get(i);
-            MarkRounding future = nullBorderedRoundings.get(i + 1);
+        GPSCalculations calculator = new GPSCalculations();
+
+        for (int i = 1; i < nullBorderedRoundings.size() - 1; i++) {
+            previous = current;
+            current = future;
+            future = nullBorderedRoundings.get(i + 1);
 
             if (current.getCompoundMark().getMarks().size() == CompoundMark.MARK_SIZE) {
-                double previousAngle = GPSCalculations.getBearing(previous.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
-                double futureAngle = GPSCalculations.getBearing(future.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
+                double previousAngle = calculator.getBearing(previous.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
+                double futureAngle = calculator.getBearing(future.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
                 current.setPassAngle(((previousAngle + futureAngle) / 2d));
-
             } else if (current.getCompoundMark().getMarks().size() == CompoundMark.GATE_SIZE) {
                 setGateType(previous, current, future);
             }
         }
     }
 
+
     /**
      * Sets the gate type for a mark rounding that is a gate.
      * Will be set to a value in the GateType enum
      *
-     * @param previousMark mark before the gate
-     * @param currentMark  gate
-     * @param futureMark   mark after the gate
+     * @param previousRounding mark before the gate
+     * @param rounding         gate
+     * @param nextRounding     mark after the gate
      */
-    private void setGateType(MarkRounding previousMark, MarkRounding currentMark, MarkRounding futureMark) {
-        if (previousMark == null) {
-            currentMark.setGateType(MarkRounding.GateType.THROUGH_GATE);
+    private void setGateType(MarkRounding previousRounding, MarkRounding rounding, MarkRounding nextRounding) {
+        if (previousRounding == null) {
+            rounding.setGateType(MarkRounding.GateType.THROUGH_GATE);
             return;
         }
 
         GPSCalculations calculator = new GPSCalculations();
 
-        Mark mark1 = currentMark.getCompoundMark().getMarks().get(0);
-        Mark mark2 = currentMark.getCompoundMark().getMarks().get(1);
-        double bearingBetweenMarks = GPSCalculations.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
+        Mark mark1 = rounding.getCompoundMark().getMarks().get(0);
+        Mark mark2 = rounding.getCompoundMark().getMarks().get(1);
+        double bearingBetweenMarks = calculator.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
         double oppositeBearing = (bearingBetweenMarks + 180) % 360;
 
-        boolean isSP = currentMark.getRoundingDirection() == MarkRounding.Direction.SP;
+        boolean isSP = rounding.getRoundingDirection() == MarkRounding.Direction.SP;
 
-        Double bearingToPrevious = GPSCalculations.getBearing(currentMark.getCompoundMark().getCoordinate(), previousMark.getCompoundMark().getCoordinate());
-        boolean isPreviousonLeft = calculator.isBetween(bearingToPrevious, oppositeBearing, bearingBetweenMarks);
-        boolean previousOnExitSide = isSP == isPreviousonLeft;
+        Double bearingToPrevious = calculator.getBearing(rounding.getCompoundMark().getCoordinate(), previousRounding.getCompoundMark().getCoordinate());
+        boolean isPreviousOnLeft = calculator.isBetween(bearingToPrevious, oppositeBearing, bearingBetweenMarks);
+        boolean previousOnExitSide = isSP == isPreviousOnLeft;
 
-        if (futureMark == null) {
+        if (nextRounding == null) {
             if (previousOnExitSide) {
-                currentMark.setGateType(MarkRounding.GateType.ROUND_THEN_THROUGH);
+                rounding.setGateType(MarkRounding.GateType.ROUND_THEN_THROUGH);
             } else {
-                currentMark.setGateType(MarkRounding.GateType.THROUGH_GATE);
+                rounding.setGateType(MarkRounding.GateType.THROUGH_GATE);
             }
             return;
         }
 
-        Double bearingToFuture = GPSCalculations.getBearing(currentMark.getCompoundMark().getCoordinate(), futureMark.getCompoundMark().getCoordinate());
+        Double bearingToFuture = calculator.getBearing(rounding.getCompoundMark().getCoordinate(), nextRounding.getCompoundMark().getCoordinate());
         boolean isFutureOnLeft = calculator.isBetween(bearingToFuture, oppositeBearing, bearingBetweenMarks);
         boolean futureOnExitSide = isSP == isFutureOnLeft;
 
 
         if (futureOnExitSide) {
-            currentMark.setGateType((previousOnExitSide) ?
+            rounding.setGateType((previousOnExitSide) ?
                     MarkRounding.GateType.THROUGH_THEN_ROUND : MarkRounding.GateType.THROUGH_GATE);
         } else {
-            currentMark.setGateType((previousOnExitSide) ?
+            rounding.setGateType((previousOnExitSide) ?
                     MarkRounding.GateType.ROUND_BOTH_MAKRS : MarkRounding.GateType.ROUND_THEN_THROUGH);
         }
     }
 
-    /**
-     * Method find a leg with the correct legNumber from the courses legs.
-     *
-     * @param legNumber integer, the leg number of the leg to be found.
-     * @return Leg with the same leg number as the integer given.
-     */
-    public Leg getLeg(int legNumber) {
-        Leg foundLeg = legs.get(0);
-        for (Leg leg : legs) {
-            if (leg.getLegNumber() == legNumber) {
-                foundLeg = leg;
-            }
-        }
-        return foundLeg;
-    }
 
     public String getName() {
         return name;

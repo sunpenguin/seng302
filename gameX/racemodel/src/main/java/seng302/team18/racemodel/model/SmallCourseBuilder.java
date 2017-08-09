@@ -1,6 +1,9 @@
 package seng302.team18.racemodel.model;
 
-import seng302.team18.model.*;
+import seng302.team18.model.CompoundMark;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Mark;
+import seng302.team18.model.MarkRounding;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -19,12 +22,12 @@ public class SmallCourseBuilder extends AbstractCourseBuilder {
         List<CompoundMark> compoundMarks = new ArrayList<>();
 
         // start
-        Mark start1 = new Mark(131, new Coordinate(32.292393,-64.857638));
+        Mark start1 = new Mark(131, new Coordinate(32.292393, -64.857638));
         start1.setHullNumber("LC21");
         start1.setStoweName("PRO");
         start1.setShortName("S1");
         start1.setBoatName("StartLine1");
-        Mark start2 = new Mark(132, new Coordinate(32.294425,-64.85678));
+        Mark start2 = new Mark(132, new Coordinate(32.294425, -64.85678));
         start2.setHullNumber("LC22");
         start2.setStoweName("PIN");
         start2.setShortName("S2");
@@ -32,7 +35,7 @@ public class SmallCourseBuilder extends AbstractCourseBuilder {
         compoundMarks.add(new CompoundMark("Start Line", Arrays.asList(start1, start2), 11));
 
         // first mark
-        Mark center = new Mark(133, new Coordinate(32.293663,-64.853389));
+        Mark center = new Mark(133, new Coordinate(32.293663, -64.853389));
         center.setHullNumber("LC23");
         center.setStoweName("M1");
         center.setShortName("Mark");
@@ -82,7 +85,7 @@ public class SmallCourseBuilder extends AbstractCourseBuilder {
     }
 
     @Override
-    protected List<BoundaryMark> getBoundaryMarks() {
+    protected List<Coordinate> getBoundaryMarks() {
         return new ArrayList<>();
     }
 

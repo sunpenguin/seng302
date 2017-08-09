@@ -9,10 +9,6 @@ import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.*;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -24,7 +20,7 @@ public class XMLRaceInterpreterTest {
     private MessageInterpreter interpreter;
     private List<AbstractBoat> boats;
     private List<CompoundMark> compoundMarks;
-    private List<BoundaryMark> boundaryMarks;
+    private List<Coordinate> boundaryMarks;
     private final String time = "2017-05-02T22:45:55+1200";
 
     @Before
@@ -37,7 +33,7 @@ public class XMLRaceInterpreterTest {
 
         // boundaries
         boundaryMarks = new ArrayList<>();
-        boundaryMarks.add(new BoundaryMark(0, new Coordinate(0d, 0d)));
+        boundaryMarks.add(new Coordinate(0d, 0d));
 
         // compound marks
         compoundMarks = new ArrayList<>();
@@ -62,14 +58,6 @@ public class XMLRaceInterpreterTest {
         interpreter.interpret(message);
     }
 
-//    ZonedDateTime startTime = ZonedDateTime.parse(raceMessage.getStartTime(), DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-//    race.setStartTime(startTime);
-//    race.setParticipantIds(raceMessage.getParticipantIDs());
-//
-//    Course course = race.getCourse();
-//    course.setCompoundMarks(raceMessage.getCompoundMarks());
-//    course.setBoundaries(raceMessage.getBoundaryMarks());
-
     /**
      * test to see if nothing in boats have changed
      */
@@ -90,15 +78,15 @@ public class XMLRaceInterpreterTest {
         interpreter.interpret(message);
 
         Course expected = new Course();
-        expected.setBoundaries(boundaryMarks);
+        expected.setCourseLimits(boundaryMarks);
         expected.setCompoundMarks(compoundMarks);
         Course actual = race.getCourse();
         Assert.assertEquals(expected.getCentralCoordinate(), actual.getCentralCoordinate());
         Assert.assertEquals(0d, expected.getWindDirection(), 0.01);
         Assert.assertEquals(expected.getTimeZone(), actual.getTimeZone());
-        Assert.assertEquals(expected.getBoundaries().size(), actual.getBoundaries().size());
-        for (int i = 0; i < expected.getBoundaries().size(); i++) {
-            Assert.assertEquals(expected.getBoundaries().get(i), actual.getBoundaries().get(i));
+        Assert.assertEquals(expected.getCourseLimits().size(), actual.getCourseLimits().size());
+        for (int i = 0; i < expected.getCourseLimits().size(); i++) {
+            Assert.assertEquals(expected.getCourseLimits().get(i), actual.getCourseLimits().get(i));
         }
         Assert.assertEquals(expected.getCompoundMarks().size(), actual.getCompoundMarks().size());
         for (int i = 0; i < expected.getCompoundMarks().size(); i++) {
@@ -114,9 +102,6 @@ public class XMLRaceInterpreterTest {
         MessageBody message = new AC35XMLBoatMessage(boats);
         interpreter.interpret(message);
 
-        final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ");
-        ZonedDateTime expectedStart = ZonedDateTime.parse(time, DATE_TIME_FORMATTER);
-        ZonedDateTime expectedCurrent = ZonedDateTime.ofInstant(Instant.EPOCH, ZoneId.systemDefault());
         Assert.assertEquals(RaceStatus.NOT_ACTIVE, race.getStatus());
         Assert.assertEquals(0, race.getId());
     }

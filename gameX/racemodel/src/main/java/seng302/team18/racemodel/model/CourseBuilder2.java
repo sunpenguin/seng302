@@ -1,6 +1,9 @@
 package seng302.team18.racemodel.model;
 
-import seng302.team18.model.*;
+import seng302.team18.model.CompoundMark;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Mark;
+import seng302.team18.model.MarkRounding;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -81,14 +84,14 @@ public class CourseBuilder2 extends AbstractCourseBuilder {
 
 
     @Override
-    protected List<BoundaryMark> getBoundaryMarks() {
+    protected List<Coordinate> getBoundaryMarks() {
         return new ArrayList<>();
     }
 
 
     @Override
     protected double getWindDirection() {
-        return 200 ;
+        return 200;
     }
 
 
