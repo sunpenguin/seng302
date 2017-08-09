@@ -1,6 +1,7 @@
 package seng302.team18.visualiser.controller;
 
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -428,9 +429,6 @@ public class RaceController implements Observer {
         this.sender = sender;
         this.race = race;
 
-        if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
-            controlsTutorial = new ControlsTutorial(raceViewPane);
-        }
 
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
@@ -443,19 +441,53 @@ public class RaceController implements Observer {
         raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel));
         raceLoop.start();
 
-        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
-        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> redrawFeatures());
-        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
-        pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
+        registerListeners();
 
         startWindDirection();
         setUpTable(raceRenderer.boatColors());
         setNoneAnnotationLevel();
         setUpSparklines(raceRenderer.boatColors());
 
+
         Stage stage = (Stage) tableView.getScene().getWindow();
 //        Interpreter interpreter = new Interpreter(receiver, stage);
         interpreter.setInterpreter(initialiseInterpreter());
+    }
+
+
+    /**
+     * Register any required listeners.
+     *
+     */
+    private void registerListeners() {
+        InvalidationListener listenerWidth = observable -> {
+            redrawFeatures();
+            updateControlsTutorial();
+        };
+        raceViewPane.widthProperty().addListener(listenerWidth);
+
+        InvalidationListener listenerHeight = observable -> {
+            redrawFeatures();
+            updateControlsTutorial();
+        };
+        raceViewPane.heightProperty().addListener(listenerHeight);
+
+        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
+        pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
+    }
+
+
+    /**
+     * Re draw the current elements of the controls tutorial, or initialise it if it is NULL.
+     */
+    private void updateControlsTutorial() {
+        if(race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
+            if (controlsTutorial == null) {
+                controlsTutorial = new ControlsTutorial(raceViewPane);
+            } else {
+                controlsTutorial.draw();
+            }
+        }
     }
 
 
