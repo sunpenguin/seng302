@@ -75,7 +75,11 @@ public class PreRaceController {
         this.interpreter = new Interpreter(receiver);
         interpreter.setInterpreter(initialiseInterpreter());
         interpreter.start();
-        sender.send(new RequestMessage(true));
+        try {
+            sender.send(new RequestMessage(true));
+        } catch (IOException e) {
+            // TODO Callum / David 9 August show error (has been disconnected)
+        }
         stage.setOnCloseRequest((event) -> {
             interpreter.shutdownNow();
             while (!receiver.close()) {

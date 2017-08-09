@@ -1,21 +1,19 @@
 package seng302.team18.model;
 
+import seng302.team18.message.BoatStatus;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.SpeedConverter;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
 /**
  * A class to represent an individual race.
  */
-public class Race {
+public class Race extends Observable {
 
     private Regatta regatta = new Regatta();
     private List<Boat> startingList;
@@ -218,7 +216,9 @@ public class Race {
                 .collect(Collectors.toList());
         if (boundaries.size() > 0) {
             if (!calculator.contains(boat.getCoordinate(), boundaries)) {
-                System.out.println("Outside");
+                boat.setStatus(BoatStatus.DSQ);
+                setChanged();
+                notifyObservers(boat);
             }
         }
     }
@@ -399,6 +399,7 @@ public class Race {
     public void setRaceType(RaceType raceType) {
         this.raceType = raceType;
     }
+
 
     public enum RaceType {
         MATCH("Match"),

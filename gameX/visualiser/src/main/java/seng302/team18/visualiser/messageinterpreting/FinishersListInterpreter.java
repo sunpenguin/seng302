@@ -3,6 +3,7 @@ package seng302.team18.visualiser.messageinterpreting;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
+import seng302.team18.message.BoatStatus;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
@@ -41,16 +42,10 @@ public class FinishersListInterpreter extends MessageInterpreter {
             for (AC35BoatStatusMessage boatStatus : boatStates) {
                 race.getStartingList()
                         .stream()
-                        .filter(boat -> boat.getId().equals(boatStatus.getBoatId()) && boatStatus.getBoatStatus() == 3)
+                        .filter(boat -> boat.getId().equals(boatStatus.getBoatId())
+                                && boatStatus.getBoatStatus().equals(BoatStatus.FINISHED))
                         .forEach(finishedList::add);
             }
-//            Map<Integer, List> boatStatus = statusMessage.getBoatStatus();
-//            for (Boat boat : race.getStartingList()) {
-//                if (!finishedList.contains(boat) &&
-//                            (int) boatStatus.get(boat.getId()).get(statusMessage.getBoatStatusPosition()) == 3) {
-//                    finishedList.add(boat);
-//                }
-//            }
         }
     }
 }

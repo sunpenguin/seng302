@@ -5,6 +5,8 @@ import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.*;
 
+import java.io.IOException;
+
 /**
  * Class for reading and interpreting messages sent by Human controlled players
  */
@@ -13,7 +15,7 @@ public class PlayerControllerReader implements Runnable {
     private int id;
     private Receiver receiver;
     private MessageInterpreter interpreter;
-    boolean open = true;
+    private boolean open = true;
 
     public PlayerControllerReader(int id, Receiver receiver, MessageInterpreter interpreter) {
         this.id = id;
@@ -41,8 +43,8 @@ public class PlayerControllerReader implements Runnable {
                     }
                 }
 //                Thread.sleep(1000L);
-            } catch (Exception e) {
-//                e.printStackTrace();
+            } catch (IOException e) {
+                close();
             }
         }
     }

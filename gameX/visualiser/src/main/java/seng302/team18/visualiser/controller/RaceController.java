@@ -153,7 +153,12 @@ public class RaceController implements Observer {
                             send = false;
                     }
                     if (send) {
-                        sender.send(message);
+                        try {
+                            sender.send(message);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            // TODO 9 August David / Callum go back to title screen.
+                        }
                     }
                 }
             };

@@ -42,7 +42,7 @@ public class SparklineDataGetter {
      * @param boat to be added to dataQueue
      */
     private void addData(Boat boat) {
-        if (boat.getStatus() == BoatStatus.FINISHED.code()) {
+        if (boat.getStatus().equals(BoatStatus.FINISHED)) {
             String finishLine = "Finsihline";
             SparklineDataPoint data = new SparklineDataPoint(boat.getShortName(), boat.getPlace(), finishLine);
             dataQueue.add(data);

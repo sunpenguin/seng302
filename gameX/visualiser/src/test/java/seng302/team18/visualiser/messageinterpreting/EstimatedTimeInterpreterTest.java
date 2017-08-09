@@ -6,6 +6,7 @@ import org.junit.Test;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
+import seng302.team18.message.BoatStatus;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
@@ -36,9 +37,9 @@ public class EstimatedTimeInterpreterTest {
 //        boatStatus.put(100, new ArrayList(Arrays.asList(2, 2, 10000000L)));
 //        boatStatus.put(69, new ArrayList(Arrays.asList(2, 2, -9999998L)));
         List<AC35BoatStatusMessage> boatStates = new ArrayList<>();
-        boatStates.add(new AC35BoatStatusMessage(420, 2, 2, 0));
-        boatStates.add(new AC35BoatStatusMessage(100, 2, 2, 10000000));
-        boatStates.add(new AC35BoatStatusMessage(69, 2, 2, -9999998L));
+        boatStates.add(new AC35BoatStatusMessage(420, 2, BoatStatus.RACING, 0));
+        boatStates.add(new AC35BoatStatusMessage(100, 2, BoatStatus.RACING, 10000000));
+        boatStates.add(new AC35BoatStatusMessage(69, 2, BoatStatus.RACING, -9999998L));
         message = new AC35RaceStatusMessage(1l, 1, 1l, 1, 0, boatStates);
         interpreter = new EstimatedTimeInterpreter(race);
     }

@@ -4,6 +4,7 @@ import com.google.common.io.ByteStreams;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
+import seng302.team18.message.BoatStatus;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
@@ -67,10 +68,12 @@ public class AC35RaceStatusParser implements MessageBodyParser {
         int i = 0;
         while (BOAT_SOURCEID_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i) < bytes.length) {
             int boatID = ByteCheck.byteToInt(bytes, BOAT_SOURCEID_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), BOAT_SOURCEID_LENGTH);
-            int boatStatus = ByteCheck.byteToInt(bytes, BOAT_STATUS_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), BOAT_STATUS_LENGTH);
+            BoatStatus status = BoatStatus.from(
+                    ByteCheck.byteToInt(bytes, BOAT_STATUS_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), BOAT_STATUS_LENGTH));
+
             int leg = ByteCheck.byteToInt(bytes, 29 + (SINGLE_BOAT_STATUS_LENGTH * i), 1);
             long estimatedTime = ByteCheck.byteToLong(bytes, ESTIMATED_TIME_AT_NEXT_MARK_INDEX + (SINGLE_BOAT_STATUS_LENGTH * i), ESTIMATED_TIME_AT_NEXT_MARK_LENGTH);
-            AC35BoatStatusMessage boatStatusMessage = new AC35BoatStatusMessage(boatID, leg, boatStatus, estimatedTime);
+            AC35BoatStatusMessage boatStatusMessage = new AC35BoatStatusMessage(boatID, leg, status, estimatedTime);
             boatStates.add(boatStatusMessage);
             i += 1;
         }
