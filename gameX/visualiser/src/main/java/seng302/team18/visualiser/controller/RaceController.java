@@ -429,7 +429,7 @@ public class RaceController implements Observer {
         this.race = race;
 
         if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
-            controlsTutorial = new ControlsTutorial(race, raceViewPane);
+            controlsTutorial = new ControlsTutorial(raceViewPane);
         }
 
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);

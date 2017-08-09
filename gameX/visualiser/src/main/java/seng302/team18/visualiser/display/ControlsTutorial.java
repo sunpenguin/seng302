@@ -16,7 +16,6 @@ import static com.google.common.collect.ComparisonChain.start;
  * Class to handle running the controls tutorial
  */
 public class ControlsTutorial {
-    private Race race;
     private Pane pane;
     private int currentKeyIndex = 0;
     private List<BoatControls> keyList = Arrays.asList(BoatControls.SAILS,
@@ -31,14 +30,10 @@ public class ControlsTutorial {
     /**
      * Begin a controls tutorial. Taking the user though the inputs to play the game.
      *
-     * @param race The race.
      * @param pane The pane to put graphical elements on.
      */
-    public ControlsTutorial(Race race, Pane pane) {
-        this.race = race;
+    public ControlsTutorial(Pane pane) {
         this.pane = pane;
-
-        start();
     }
 
     public boolean checkIfProgressed(KeyCode code){
@@ -55,6 +50,6 @@ public class ControlsTutorial {
         UP,
         DOWN,
         TACK_GYBE,
-        VMG;
+        VMG
     }
 }
