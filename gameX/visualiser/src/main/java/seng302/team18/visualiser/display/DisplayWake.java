@@ -94,6 +94,12 @@ public class DisplayWake extends DisplayBoatDecorator {
     }
 
 
+    public void removeFrom(Group group) {
+        group.getChildren().remove(wake);
+        super.removeFrom(group);
+    }
+
+
     public void setHeading(double heading) {
         rotation.setAngle(heading);
         super.setHeading(heading);

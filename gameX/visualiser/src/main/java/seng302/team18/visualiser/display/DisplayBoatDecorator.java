@@ -172,4 +172,9 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
         return boat.getBoatPoly();
     }
 
+
+    @Override
+    public void removeFrom(Group group) {
+        boat.removeFrom(group);
+    }
 }

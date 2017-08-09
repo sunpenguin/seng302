@@ -181,6 +181,16 @@ public class DisplayBoat {
     }
 
 
+    /**
+     * Removes the boat from the given group.
+     *
+     * @param group to remove from.
+     */
+    public void removeFrom(Group group) {
+        group.getChildren().remove(boatPoly);
+    }
+
+
     public Color getColor() {
         return boatColor;
     }
