@@ -172,45 +172,49 @@ public class Course {
      * @param nextRounding     mark after the gate
      */
     private void setGateType(MarkRounding previousRounding, MarkRounding rounding, MarkRounding nextRounding) {
+        MarkRounding.GateType gateType;
         if (previousRounding == null) {
-            rounding.setGateType(MarkRounding.GateType.THROUGH_GATE);
-            return;
-        }
+            gateType = MarkRounding.GateType.THROUGH_GATE;
 
-        GPSCalculations calculator = new GPSCalculations();
-
-        Mark mark1 = rounding.getCompoundMark().getMarks().get(0);
-        Mark mark2 = rounding.getCompoundMark().getMarks().get(1);
-        double bearingBetweenMarks = calculator.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
-        double oppositeBearing = (bearingBetweenMarks + 180) % 360;
-
-        boolean isSP = rounding.getRoundingDirection() == MarkRounding.Direction.SP;
-
-        Double bearingToPrevious = calculator.getBearing(rounding.getCompoundMark().getCoordinate(), previousRounding.getCompoundMark().getCoordinate());
-        boolean isPreviousOnLeft = calculator.isBetween(bearingToPrevious, oppositeBearing, bearingBetweenMarks);
-        boolean previousOnExitSide = isSP == isPreviousOnLeft;
-
-        if (nextRounding == null) {
-            if (previousOnExitSide) {
-                rounding.setGateType(MarkRounding.GateType.ROUND_THEN_THROUGH);
-            } else {
-                rounding.setGateType(MarkRounding.GateType.THROUGH_GATE);
-            }
-            return;
-        }
-
-        Double bearingToFuture = calculator.getBearing(rounding.getCompoundMark().getCoordinate(), nextRounding.getCompoundMark().getCoordinate());
-        boolean isFutureOnLeft = calculator.isBetween(bearingToFuture, oppositeBearing, bearingBetweenMarks);
-        boolean futureOnExitSide = isSP == isFutureOnLeft;
-
-
-        if (futureOnExitSide) {
-            rounding.setGateType((previousOnExitSide) ?
-                    MarkRounding.GateType.THROUGH_THEN_ROUND : MarkRounding.GateType.THROUGH_GATE);
         } else {
-            rounding.setGateType((previousOnExitSide) ?
-                    MarkRounding.GateType.ROUND_BOTH_MAKRS : MarkRounding.GateType.ROUND_THEN_THROUGH);
+
+            GPSCalculations calculator = new GPSCalculations();
+
+            Mark mark1 = rounding.getCompoundMark().getMarks().get(0);
+            Mark mark2 = rounding.getCompoundMark().getMarks().get(1);
+            double bearingBetweenMarks = calculator.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
+            double oppositeBearing = (bearingBetweenMarks + 180) % 360;
+
+            boolean isSP = rounding.getRoundingDirection() == MarkRounding.Direction.SP;
+
+            Double bearingToPrevious = calculator.getBearing(rounding.getCompoundMark().getCoordinate(), previousRounding.getCompoundMark().getCoordinate());
+            boolean isPreviousOnLeft = calculator.isBetween(bearingToPrevious, oppositeBearing, bearingBetweenMarks);
+            boolean previousOnExitSide = isSP == isPreviousOnLeft;
+
+            if (nextRounding == null) {
+                if (previousOnExitSide) {
+                    gateType = MarkRounding.GateType.ROUND_THEN_THROUGH;
+                } else {
+                    gateType = MarkRounding.GateType.THROUGH_GATE;
+                }
+            } else {
+
+                Double bearingToFuture = calculator.getBearing(rounding.getCompoundMark().getCoordinate(), nextRounding.getCompoundMark().getCoordinate());
+                boolean isFutureOnLeft = calculator.isBetween(bearingToFuture, oppositeBearing, bearingBetweenMarks);
+                boolean futureOnExitSide = isSP == isFutureOnLeft;
+
+
+                if (futureOnExitSide) {
+                    gateType = (previousOnExitSide) ?
+                            MarkRounding.GateType.THROUGH_THEN_ROUND : MarkRounding.GateType.THROUGH_GATE;
+                } else {
+                    gateType = (previousOnExitSide) ?
+                            MarkRounding.GateType.ROUND_BOTH_MAKRS : MarkRounding.GateType.ROUND_THEN_THROUGH;
+                }
+            }
         }
+        System.out.println("" + rounding.getCompoundMark().getName() + ": " + gateType.getType());
+        rounding.setGateType(gateType);
     }
 
 
