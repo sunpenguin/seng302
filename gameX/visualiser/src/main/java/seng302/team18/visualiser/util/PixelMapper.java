@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.layout.Pane;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
+import seng302.team18.model.GeographicLocation;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.XYPair;
 
@@ -21,17 +22,20 @@ public class PixelMapper {
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
     private final Course course;
+    private GeographicLocation object;
     private final Pane pane;
     private Coordinate viewPortCenter;
     private final IntegerProperty zoomLevel = new SimpleIntegerProperty(0);
     private List<Coordinate> bounds; // 2 coordinates: NW bound, SE bound
 
     private GPSCalculations gpsCalculations;
+    private boolean isTracking = false;
 
     public static final int ZOOM_LEVEL_4X = 1;
     private final int NW_BOUND_INDEX = 0; // Used in bounds
     private final int SE_BOUND_INDEX = 1; // Used in bounds
     private final double MAP_SCALE_CORRECTION = 0.8;
+
 
     public PixelMapper(Course course, Pane pane) {
         this.course = course;
@@ -46,9 +50,11 @@ public class PixelMapper {
         propertyChangeSupport.addPropertyChangeListener("viewPortCenter", listener);
     }
 
+
     public void removeViewCenterListener(PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener("viewPortCenter", listener);
     }
+
 
     /**
      * Update the view port center to a certain GPS coordinate.
@@ -61,6 +67,7 @@ public class PixelMapper {
         propertyChangeSupport.firePropertyChange("viewPortCenter", old, center);
     }
 
+
     /**
      * Get the current linear zoom factor
      *
@@ -70,6 +77,7 @@ public class PixelMapper {
         return Math.pow(2, zoomLevel.intValue());
     }
 
+
     /**
      * Maps a coordinate to a pixel value relative to the current resolution and zoom of the race view pane
      * NOTE: Origin is at the top left corner (X and Y increase to the right and downwards respectively)
@@ -78,6 +86,9 @@ public class PixelMapper {
      * @return XYPair containing the x and y pixel values
      */
     public XYPair coordToPixel(Coordinate coord) {
+        if (isTracking) {
+            setViewPortCenter(object.getCoordinate());
+        }
         bounds = gpsCalculations.findMinMaxPoints(course);
 
         double courseWidth = calcCourseWidth();
@@ -108,6 +119,7 @@ public class PixelMapper {
 
         return new XYPair(x, y);
     }
+
 
     /**
      * Calculates the mapping ratio between the pixel and geographical coordinates
@@ -143,6 +155,7 @@ public class PixelMapper {
         return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getX() - coordinateToPlane(furthest).getX()) * 2;
     }
 
+
     /**
      * Calculates the height of the course
      *
@@ -159,6 +172,7 @@ public class PixelMapper {
         return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getY() - coordinateToPlane(furthest).getY()) * 2;
     }
 
+
     /**
      * Converts the given longitude to a value in [0, 256 * 2 ^ zoomLevel]
      *
@@ -169,6 +183,7 @@ public class PixelMapper {
         return 128 * (longitude + Math.PI) / Math.PI;
     }
 
+
     /**
      * Converts the given latitude to a value in [0, 256 * 2 ^ zoomLevel]
      *
@@ -178,6 +193,7 @@ public class PixelMapper {
     private double webMercatorLatitude(double latitude) {
         return 128 * (Math.PI - Math.log(Math.tan((Math.PI / 4) + (latitude / 2)))) / Math.PI;
     }
+
 
     /**
      * Converts a coordinate from GPS coordinates to cartesian coordinates in the range [0, 256 * 2 ^ zoomLevel] for
@@ -190,6 +206,7 @@ public class PixelMapper {
         return new XYPair(webMercatorLongitude(point.getLongitude()), webMercatorLatitude(point.getLatitude()));
     }
 
+
     /**
      * Returns the zoomLevelProperty value
      *
@@ -199,6 +216,7 @@ public class PixelMapper {
         return zoomLevel;
     }
 
+
     /**
      * Sets the zoom level for the pixel mapper
      *
@@ -206,5 +224,25 @@ public class PixelMapper {
      */
     public void setZoomLevel(int level) {
         zoomLevel.set(level);
+    }
+
+
+    /**
+     * Sets the object to track.
+     *
+     * @param object the object to track
+     */
+    public void track(GeographicLocation object) {
+        this.object = object;
+    }
+
+
+    /**
+     * Sets the tracking boolean to whether to track or not.
+     *
+     * @param tracking whether to track or not
+     */
+    public void setTracking(boolean tracking) {
+        isTracking = tracking;
     }
 }

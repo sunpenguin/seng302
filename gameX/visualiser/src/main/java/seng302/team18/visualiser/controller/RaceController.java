@@ -99,11 +99,6 @@ public class RaceController implements Observer {
         background = new RaceBackground(raceViewPane, "/images/water.gif");
     }
 
-    @FXML
-    private void zoomOutButtonAction() {
-        pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
-        pixelMapper.setZoomLevel(0);
-    }
 
     @FXML private void closeAppAction() {
         Stage stage = (Stage) raceViewPane.getScene().getWindow();
@@ -148,6 +143,20 @@ public class RaceController implements Observer {
                             } else {
                                 message.setSailOut();
                             }
+                            break;
+                        case Z:
+                            Boat boat = race.getBoat(race.getPlayerId());
+                            pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                            pixelMapper.track(boat);
+                            pixelMapper.setTracking(true);
+                            send = false;
+                            break;
+                        case X:
+                            pixelMapper.setTracking(false);
+                            pixelMapper.setZoomLevel(0);
+                            pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
+
+                            send = false;
                             break;
                         default:
                             send = false;
