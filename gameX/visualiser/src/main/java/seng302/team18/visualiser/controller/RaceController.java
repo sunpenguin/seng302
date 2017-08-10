@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -18,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -42,6 +44,7 @@ import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
 
+import javax.swing.table.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -58,6 +61,7 @@ public class RaceController implements Observer {
     @FXML private TableColumn<Boat, String> boatNameColumn;
     @FXML private TableColumn<Boat, Double> boatSpeedColumn;
     @FXML private TableColumn<Boat, String> boatColorColumn;
+    @FXML private TableColumn<Boat, String> boatStatusColumn;
     @FXML private Pane raceViewPane;
     @FXML private Polygon arrow;
     @FXML private Label speedLabel;
@@ -79,7 +83,6 @@ public class RaceController implements Observer {
     private Map<AnnotationType, Boolean> importantAnnotations;
 
     private Sender sender;
-    private Receiver receiver;
 
     private RaceBackground background;
 
@@ -341,7 +344,9 @@ public class RaceController implements Observer {
                 });
         tableView.setItems(sortedList);
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
-        boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("shortName"));
+        boatStatusColumn.setCellValueFactory(new PropertyValueFactory<>("statusString"));
+
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
         boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
             @Override
@@ -377,6 +382,7 @@ public class RaceController implements Observer {
         columns.add(boatColorColumn);
         columns.add(boatNameColumn);
         columns.add(boatSpeedColumn);
+        columns.add(boatStatusColumn);
 
         for (TableColumn<Boat, ?> column : columns) {
             column.setResizable(false);
@@ -446,8 +452,6 @@ public class RaceController implements Observer {
         setNoneAnnotationLevel();
         setUpSparklines(raceRenderer.boatColors());
 
-        Stage stage = (Stage) tableView.getScene().getWindow();
-//        Interpreter interpreter = new Interpreter(receiver, stage);
         interpreter.setInterpreter(initialiseInterpreter());
     }
 
