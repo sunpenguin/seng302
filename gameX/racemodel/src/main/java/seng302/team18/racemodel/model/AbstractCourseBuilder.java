@@ -25,13 +25,15 @@ public abstract class AbstractCourseBuilder {
      * @return the constructed course
      */
     public Course buildCourse() {
-        Course course = new Course(compoundMarks, getBoundaryMarks(), getWindDirection(), getWindSpeed(), getTimeZone(), getMarkRoundings());
+        Course course = new Course(compoundMarks, getBoundaryMarks(), getMarkRoundings());
 
         GPSCalculations gpsCalculations = new GPSCalculations();
         List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(course);
         Coordinate center = gpsCalculations.midPoint(extremes.get(0), extremes.get(1));
         course.setCentralCoordinate(center);
-
+        course.setWindDirection(getWindDirection());
+        course.setWindSpeed(getWindSpeed());
+        course.setTimeZone(getTimeZone());
         return course;
     }
 
