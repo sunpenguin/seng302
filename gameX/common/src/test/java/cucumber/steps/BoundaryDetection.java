@@ -1,24 +1,87 @@
-package seng302.team18.racemodel.model;
+package cucumber.steps;
 
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import org.junit.Assert;
+import seng302.team18.message.BoatStatus;
 import seng302.team18.model.*;
 
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
- * Builds a preset course. Smaller than the course from CourseBuilder1
- * <p>
- * Concrete implementation of AbstractCourseBuilder.
- *
- * @see seng302.team18.racemodel.model.AbstractCourseBuilder
+ * Created by dhl25 on 10/08/17.
  */
-public class CourseBuilder2 extends AbstractCourseBuilder {
+public class BoundaryDetection {
 
-    @Override
-    protected List<CompoundMark> buildCompoundMarks() {
+    private Boat boat;
+    private Race race;
+    private BoatStatus oldStatus = BoatStatus.RACING;
+    private BoatStatus newStatus = BoatStatus.RACING;
+    private boolean hasChanged = false;
+    private Observer observer = new Observer() {
+        @Override
+        public void update(Observable o, Object arg) {
+            if (arg instanceof Boat) {
+                Boat boat =  (Boat) arg;
+                newStatus = boat.getStatus();
+            }
+        }
+    };
+
+    @Given("^a course$")
+    public void a_course() throws Throwable {
+        BoundaryMark boundary1 = new BoundaryMark(0, new Coordinate(32.30502, -64.85857));
+        BoundaryMark boundary2 = new BoundaryMark(1, new Coordinate(32.30502, -64.85235));
+        BoundaryMark boundary3 = new BoundaryMark(2, new Coordinate(32.29925, -64.85235));
+        BoundaryMark boundary4 = new BoundaryMark(3, new Coordinate(32.29925, -64.85857));
+        List<BoundaryMark> boundaries = new ArrayList<>();
+        boundaries.add(boundary1);
+        boundaries.add(boundary2);
+        boundaries.add(boundary3);
+        boundaries.add(boundary4);
+
+        race = new Race();
+        Course course = new Course(getCompoundMarks(), boundaries, getRoundings());
+        race.setCourse(course);
+        race.addObserver(observer);
+    }
+
+    @Given("^a boat inside the courses bounds$")
+    public void a_boat_inside_the_courses_bounds() throws Throwable {
+        boat = new Boat("name", "shortName", 1, 1);
+        boat.setCoordinate(new Coordinate(32.30463, -64.85245));
+        boat.setStatus(oldStatus);
+        race.addParticipant(boat);
+    }
+
+    @When("^the player stays inside the boundary$")
+    public void the_player_stays_inside_the_boundary() throws Throwable {
+        race.updateBoats(1);
+    }
+
+    @Then("^the players status will stay the same$")
+    public void the_players_status_will_stay_the_same() throws Throwable {
+        Assert.assertEquals(oldStatus, boat.getStatus());
+        Assert.assertEquals(oldStatus, newStatus);
+    }
+
+    @When("^the player moves outside the boundary$")
+    public void the_player_moves_outside_the_boundary() throws Throwable {
+        boat.setSailOut(false);
+        boat.setSpeed(100000);
+        race.updateBoats(999999999);
+    }
+
+    @Then("^the players status will be set to disqualified\\.$")
+    public void the_players_status_will_be_set_to_disqualified() throws Throwable {
+        Assert.assertEquals(BoatStatus.DSQ, boat.getStatus());
+        Assert.assertEquals(BoatStatus.DSQ, newStatus);
+    }
+
+
+
+    private List<CompoundMark> getCompoundMarks() {
         List<CompoundMark> compoundMarks = new ArrayList<>();
 
         // Start & Finish Line
@@ -80,41 +143,7 @@ public class CourseBuilder2 extends AbstractCourseBuilder {
     }
 
 
-    @Override
-    protected List<BoundaryMark> getBoundaryMarks() {
-        BoundaryMark boundary1 = new BoundaryMark(0, new Coordinate(32.30502, -64.85857));
-        BoundaryMark boundary2 = new BoundaryMark(1, new Coordinate(32.30502, -64.85235));
-        BoundaryMark boundary3 = new BoundaryMark(2, new Coordinate(32.29925, -64.85235));
-        BoundaryMark boundary4 = new BoundaryMark(3, new Coordinate(32.29925, -64.85857));
-        List<BoundaryMark> boundaries = new ArrayList<>();
-        boundaries.add(boundary1);
-        boundaries.add(boundary2);
-        boundaries.add(boundary3);
-        boundaries.add(boundary4);
-        return boundaries;
-    }
-
-
-    @Override
-    protected double getWindDirection() {
-        return 200 ;
-    }
-
-
-    @Override
-    protected double getWindSpeed() {
-        return 30;
-    }
-
-
-    @Override
-    protected ZoneId getTimeZone() {
-        return ZoneId.ofOffset("UTC", ZoneOffset.ofHours(+12));
-    }
-
-
-    @Override
-    protected List<MarkRounding> getMarkRoundings() {
+    private List<MarkRounding> getRoundings() {
         List<MarkRounding> markRoundings = new ArrayList<>();
 
         markRoundings.add(new MarkRounding(1, getCompoundMarks().get(0), MarkRounding.Direction.SP, 3));

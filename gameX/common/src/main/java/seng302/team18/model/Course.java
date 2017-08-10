@@ -23,13 +23,9 @@ public class Course {
     private List<MarkRounding> markRoundings;
     private String name = "";
 
-    public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, double windDirection, double windSpeed,
-                  ZoneId timeZone, List<MarkRounding> markRoundings) {
+    public Course(Collection<CompoundMark> marks, Collection<BoundaryMark> boundaries, List<MarkRounding> markRoundings) {
         this.compoundMarks = new ArrayList<>(marks);
-        this.windDirection = windDirection;
-        this.windSpeed = windSpeed;
         this.boundaries = new ArrayList<>(boundaries);
-        this.timeZone = timeZone;
         this.markRoundings = markRoundings;
         centralCoordinate = new Coordinate(0d, 0d);
         initializeCourse();
@@ -164,13 +160,12 @@ public class Course {
      * @return Leg with the same leg number as the integer given.
      */
     public Leg getLeg(int legNumber) {
-        Leg foundLeg = legs.get(0);
         for (Leg leg : legs) {
             if (leg.getLegNumber() == legNumber) {
-                foundLeg = leg;
+                return leg;
             }
         }
-        return foundLeg;
+        return null;
     }
 
     public String getName() {
