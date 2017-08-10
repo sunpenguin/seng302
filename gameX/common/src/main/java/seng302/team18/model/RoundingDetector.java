@@ -115,16 +115,15 @@ public class RoundingDetector {
         double mark2ToBoatBearing = GPS.getBearing(gate.getCompoundMark().getMarks().get(1).getCoordinate(), boat.getCoordinate());
         double mark1ToMark2Bearing = GPS.getBearing(gate.getCompoundMark().getMarks().get(0).getCoordinate(), gate.getCompoundMark().getMarks().get(1).getCoordinate());
         double mark2ToMark1Bearing = GPS.getBearing(gate.getCompoundMark().getMarks().get(1).getCoordinate(), gate.getCompoundMark().getMarks().get(0).getCoordinate());
+        double mark1toBoatPrevious = GPS.getBearing(gate.getCompoundMark().getMarks().get(0).getCoordinate(), boat.getPreviousCoordinate());
 
-        if (GPS.isBetween(mark1ToBoatBearing, (mark1ToMark2Bearing - 90) % 360, (mark1ToMark2Bearing + 90) % 360)
-                && GPS.isBetween(mark2ToBoatBearing, (mark2ToMark1Bearing - 90) % 360, (mark2ToMark1Bearing + 90) % 360)) {
-            double mark1toBoatPrevious = GPS.getBearing(gate.getCompoundMark().getMarks().get(0).getCoordinate(), boat.getPreviousCoordinate());
-            if (GPS.isBetween(mark1ToBoatBearing, (mark1ToMark2Bearing + 180) % 360, mark1ToMark2Bearing) &&
-                    !GPS.isBetween(mark1toBoatPrevious, (mark1ToMark2Bearing + 180) % 360, mark1ToMark2Bearing)) {
-                return true;
-            }
-        }
-        return false;
+        boolean isInsideMark1 = GPS.isBetween(mark1ToBoatBearing, (mark1ToMark2Bearing - 90) % 360, (mark1ToMark2Bearing + 90) % 360);
+        boolean isInsideMark2 = GPS.isBetween(mark2ToBoatBearing, (mark2ToMark1Bearing - 90) % 360, (mark2ToMark1Bearing + 90) % 360);
+        boolean isPS = gate.getRoundingDirection().equals(MarkRounding.Direction.PS);
+        boolean isBehindGate = GPS.isBetween(mark1ToBoatBearing, (mark1ToMark2Bearing + 180) % 360, mark1ToMark2Bearing) != isPS;
+        boolean wasBehindGate = GPS.isBetween(mark1toBoatPrevious, (mark1ToMark2Bearing + 180) % 360, mark1ToMark2Bearing) != isPS;
+
+        return isInsideMark1 && isInsideMark2 && isBehindGate && !wasBehindGate;
     }
 
 
@@ -149,7 +148,7 @@ public class RoundingDetector {
                 }
             }
         } else if (boat.getRoundZone() == Boat.RoundZone.ZONE2) {
-            if (checkForThroughGate(boat, gate)) {
+            if (!checkForThroughGate(boat, gate)) {
                 boat.setRoundZone(Boat.RoundZone.ZONE1);
                 return true;
             }
@@ -168,7 +167,7 @@ public class RoundingDetector {
         double mark2ToMark1Bearing = GPS.getBearing(mark2.getCoordinate(), mark1.getCoordinate());
 
         if (boat.getRoundZone() == Boat.RoundZone.ZONE1) {
-            if (checkForThroughGate(boat, gate)) {
+            if (!checkForThroughGate(boat, gate)) {
                 boat.setRoundZone(Boat.RoundZone.ZONE2);
                 return false;
             }

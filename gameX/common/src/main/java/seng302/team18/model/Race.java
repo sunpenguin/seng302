@@ -119,11 +119,15 @@ public class Race {
      * @return position for boat to start at
      */
     private Coordinate getStartPosition(Boat boat) {
-        Coordinate midPoint = course.getMarkSequence().get(0).getCompoundMark().getCoordinate();
-        Coordinate startMark1 = course.getMarkSequence().get(0).getCompoundMark().getMarks().get(0).getCoordinate();
-        Coordinate startMark2 = course.getMarkSequence().get(0).getCompoundMark().getMarks().get(1).getCoordinate();
+        MarkRounding startRounding = course.getMarkSequence().get(0);
+        Coordinate midPoint = startRounding.getCompoundMark().getCoordinate();
+        Coordinate startMark1 = startRounding.getCompoundMark().getMarks().get(0).getCoordinate();
+        Coordinate startMark2 = startRounding.getCompoundMark().getMarks().get(1).getCoordinate();
 
         double bearing = gps.getBearing(startMark1, startMark2);
+
+        double diff = (startRounding.getRoundingDirection().equals(MarkRounding.Direction.PS)) ? -90: 90;
+        double behind = (bearing + diff + 360) % 360;
 
         double offset = startingList.size();
 
@@ -133,7 +137,8 @@ public class Race {
             offset = -Math.floor(offset / 2);
         }
 
-        return gps.toCoordinate(midPoint, bearing, (boat.getLength() * offset + 10));
+        Coordinate behindMidPoint = gps.toCoordinate(midPoint, behind, boat.getLength() * 3);
+        return gps.toCoordinate(behindMidPoint, bearing, (boat.getLength() * offset + 10));
     }
 
 
