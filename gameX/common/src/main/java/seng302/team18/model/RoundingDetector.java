@@ -94,7 +94,7 @@ public class RoundingDetector {
      */
     private boolean hasPassedGate(Boat boat, MarkRounding gate) {
         MarkRounding.GateType gateType = gate.getGateType();
-        System.out.println("Checking if passing gate type: " + gateType.getType());
+//        System.out.println("Checking if passing gate type: " + gateType.getType());
         boolean passed = false;
         if (gateType == MarkRounding.GateType.THROUGH_GATE) {
             passed = checkForThroughGate(boat, gate);
@@ -128,6 +128,7 @@ public class RoundingDetector {
 
 
     private boolean checkForRoundThenThroughGate(Boat boat, MarkRounding gate) {
+        System.out.println("check round then through");
         Mark mark1 = gate.getCompoundMark().getMarks().get(0);
         Mark mark2 = gate.getCompoundMark().getMarks().get(1);
 
@@ -135,20 +136,24 @@ public class RoundingDetector {
         double mark2ToBoatBearing = GPS.getBearing(mark2.getCoordinate(), boat.getCoordinate());
         double mark1ToMark2Bearing = GPS.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
         double mark2ToMark1Bearing = GPS.getBearing(mark2.getCoordinate(), mark1.getCoordinate());
+
+        double oppMark2ToMark1 = (mark2ToMark1Bearing + 180) % 360;
         if (boat.getRoundZone() == Boat.RoundZone.ZONE1) {
-            if (GPS.isBetween(mark1ToBoatBearing, (mark2ToMark1Bearing - 90) % 360, (mark2ToMark1Bearing + 90) % 360)) { // pre-rounding mark1
+            if (GPS.isBetween(mark2ToBoatBearing, (oppMark2ToMark1 - 90) % 360, (oppMark2ToMark1 + 90) % 360)) { // pre-rounding mark1
                 double previousAngle = GPS.getBearing(mark1.getCoordinate(), boat.getPreviousCoordinate());
                 if (GPS.isBetween(previousAngle, mark2ToMark1Bearing, mark1ToMark2Bearing) && !(GPS.isBetween(mark1ToBoatBearing, mark2ToMark1Bearing, mark1ToMark2Bearing))) {
                     boat.setRoundZone(Boat.RoundZone.ZONE2);
+                    System.out.println(boat.getRoundZone());
                 }
             } else if (GPS.isBetween(mark2ToBoatBearing, (mark1ToMark2Bearing - 90) % 360, (mark1ToMark2Bearing + 90) % 360)) { // pre-rounding mark2
-                double previousAngle = GPS.getBearing(mark1.getCoordinate(), boat.getPreviousCoordinate());
+                double previousAngle = GPS.getBearing(mark2.getCoordinate(), boat.getPreviousCoordinate());
                 if (GPS.isBetween(previousAngle, mark2ToMark1Bearing, mark1ToMark2Bearing) && !(GPS.isBetween(mark1ToBoatBearing, mark2ToMark1Bearing, mark1ToMark2Bearing))) {
                     boat.setRoundZone(Boat.RoundZone.ZONE2);
+                    System.out.println(boat.getRoundZone());
                 }
             }
         } else if (boat.getRoundZone() == Boat.RoundZone.ZONE2) {
-            if (!checkForThroughGate(boat, gate)) {
+            if (checkForThroughGate(boat, gate)) {
                 boat.setRoundZone(Boat.RoundZone.ZONE1);
                 return true;
             }
@@ -165,6 +170,8 @@ public class RoundingDetector {
         double mark2ToBoatBearing = GPS.getBearing(mark2.getCoordinate(), boat.getCoordinate());
         double mark1ToMark2Bearing = GPS.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
         double mark2ToMark1Bearing = GPS.getBearing(mark2.getCoordinate(), mark1.getCoordinate());
+
+        boolean throughGate = checkForThroughGate(boat, gate);
 
         if (boat.getRoundZone() == Boat.RoundZone.ZONE1) {
             if (!checkForThroughGate(boat, gate)) {
