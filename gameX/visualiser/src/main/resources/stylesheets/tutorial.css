@@ -1,0 +1,15 @@
+@font-face {
+    src: url("/font/Munro.ttf");
+}
+
+.label {
+    -fx-font-size: 25;
+    -fx-font-family: "Munro";
+}
+
+.hbox {
+    -fx-background-color: aqua;
+    -fx-padding: 10px;
+    -fx-border-color: black;
+    -fx-border-width: 3px;
+}

@@ -1,7 +1,6 @@
 package seng302.team18.visualiser.display;
 
-import javafx.animation.Animation;
-import javafx.geometry.Rectangle2D;
+import javafx.beans.InvalidationListener;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,10 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Class to handle running the controls tutorial
@@ -29,12 +25,14 @@ public class ControlsTutorial {
     private final int HEIGHT   = 128;
 
     private Pane pane;
+    private SpriteAnimation animation;
     private ImageView tickView;
+    private Label actionLabel = new Label();
     private ImageView actionImage = new ImageView();
     private HBox promptBox = new HBox();
-    private Label label = new Label("PRESS");
     private Map<BoatControls, Image> imageMap = new HashMap<>();
     private int currentKeyIndex = 0;
+
     private List<BoatControls> keyList = Arrays.asList(BoatControls.SAILS,
                                                     BoatControls.UP,
                                                     BoatControls.DOWN,
@@ -51,10 +49,42 @@ public class ControlsTutorial {
      */
     public ControlsTutorial(Pane pane) {
         this.pane = pane;
-        pane.getChildren().add(promptBox);
-        promptBox.getChildren().addAll(label, actionImage);
 
-        // Map all of the controls to an appropriate image
+        actionLabel.setWrapText(true);
+        actionLabel.setText("WOW PRESS A BUTTON. If you do it will get you through this!!!");
+
+        pane.getChildren().add(promptBox);
+        promptBox.getChildren().addAll(actionLabel, actionImage);
+
+        promptBox.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/tutorial.css").toExternalForm());
+        promptBox.getStyleClass().add("hbox");
+
+        setMapping();
+        registerListeners();
+    }
+
+
+    /**
+     * Register any required listeners.
+     *
+     */
+    private void registerListeners() {
+        InvalidationListener listenerWidth = observable -> {
+            draw();
+        };
+        promptBox.widthProperty().addListener(listenerWidth);
+
+        InvalidationListener listenerHeight = observable -> {
+            draw();
+        };
+        promptBox.heightProperty().addListener(listenerHeight);
+    }
+
+
+    /**
+     * Set up a mapping from each action to an associated image.
+     */
+    private void setMapping() {
         imageMap.put(BoatControls.TACK_GYBE, new Image(TutorialImage.ENTER.toString()));
         imageMap.put(BoatControls.SAILS, new Image(TutorialImage.SHIFT.toString()));
         imageMap.put(BoatControls.UP, new Image(TutorialImage.UP.toString()));
@@ -142,37 +172,42 @@ public class ControlsTutorial {
 
 
     /**
+     * Draw the current element(s) of the tutorial.
+     * If screen is resized, this method will also be called so the elements can be repositioned.
+     */
+    public void draw() {
+        promptBox.setPrefWidth(pane.getWidth());
+        promptBox.setMaxWidth(pane.getWidth());
+
+        Image image = imageMap.get(keyList.get(currentKeyIndex));
+        actionImage.setImage(image);
+
+        promptBox.setLayoutX(0.0);
+        promptBox.setLayoutY(pane.getHeight() - promptBox.getHeight());
+//        System.out.println(promptBox.getWidth());
+//        System.out.println("BOX HEIGHT -> " + promptBox.getHeight());
+//        System.out.printf("drawing! -> X:%.2f  Y:%.2f\n", promptBox.getLayoutX(), promptBox.getLayoutY());
+    }
+
+
+    /**
      * Begin an animation for a tick to let user know action is completed.
      */
     public void tickAnimation() {
         tickView = new ImageView("/images/tutorial/tick128.png");
-        tickView.setViewport(new Rectangle2D(OFFSET_X, OFFSET_Y, WIDTH, HEIGHT));
 
-        final Animation animation = new SpriteAnimation(
+        animation = new SpriteAnimation(
                 tickView,
                 Duration.millis(1500),
                 COUNT, COLUMNS,
                 OFFSET_X, OFFSET_Y,
                 WIDTH, HEIGHT
         );
-        tickView.setScaleX(0.5);
-        tickView.setScaleY(0.5);
-        animation.setCycleCount(Animation.INDEFINITE);
+        tickView.setScaleX(1);
+        tickView.setScaleY(1);
+        animation.setCycleCount(1);
         animation.play();
-
         pane.getChildren().add(tickView);
-    }
-
-
-    /**
-     * Draw the current element(s) of the tutorial.
-     * If screen is resized, this method will also be called so the elements can be repositioned.
-     */
-    public void draw() {
-        actionImage.setImage(imageMap.get(keyList.get(currentKeyIndex)));
-        System.out.println(actionImage.getImage());
-        promptBox.setLayoutX(0.0);
-        promptBox.setLayoutY(pane.getHeight() - 50);
     }
 
 

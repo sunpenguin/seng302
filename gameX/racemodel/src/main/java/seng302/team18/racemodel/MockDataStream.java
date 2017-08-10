@@ -56,35 +56,22 @@ public class MockDataStream {
     }
 
 
-    private static void tutorialConfig() {
-        START_WAIT_TIME = 1;
-        WARNING_WAIT_TIME = 1;
-        PREP_WAIT_TIME = 0;
-        MAX_PLAYERS = 1;
-    }
-
-
     /**
      * Main setup method for the application.
      */
     private static void runMock() {
-        //TODO: jth102, spe76, 06/08: Figure out a way to not hardcode the race mode
         RaceMode mode = RaceMode.RACE;
 
         final int CUTOFF_DIFFERENCE = 0;
         final int SERVER_PORT = 5005;
 
-        if (mode == RaceMode.CONTROLS_TUTORIAL) {
-            tutorialConfig();
-        } else {
-            try {
-                readConfig("/config.txt");
-            } catch (IOException e) {
-                System.out.println("Error occurred reading configuration file");
-            } catch (InvalidPlayerNumberException e) {
-                System.out.println("Invalid maximum number of players in configuration file.\n" +
-                        "Use a value between 1 and 20");
-            }
+        try {
+            readConfig("/config.txt");
+        } catch (IOException e) {
+            System.out.println("Error occurred reading configuration file");
+        } catch (InvalidPlayerNumberException e) {
+            System.out.println("Invalid maximum number of players in configuration file.\n" +
+                    "Use a value between 1 and 20");
         }
 
         Race race = RACE_BUILDER.buildRace(new Race(), REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse(), mode);
