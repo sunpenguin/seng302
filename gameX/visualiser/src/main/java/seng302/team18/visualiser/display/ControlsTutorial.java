@@ -51,8 +51,17 @@ public class ControlsTutorial {
 
 
     public void displayNext() {
-        System.out.println("displaying :" + keyList.get(currentKeyIndex));
-        currentKeyIndex = (currentKeyIndex + 1) % keyList.size();
+        if (currentKeyIndex < keyList.size()) {
+            System.out.println("displaying :" + keyList.get(currentKeyIndex));
+        } else {
+            finishTutorial();
+        }
+    }
+
+
+    public void finishTutorial(){
+        currentKeyIndex -= 1;
+        System.out.println("tutorial over");
     }
 
 
@@ -98,7 +107,7 @@ public class ControlsTutorial {
 
 
     /**
-     * May be updated in future to check if actual tack/Gybe occurred
+     * May be updated in future to check if actual tack /
      * @param code
      * @return
      */
@@ -151,8 +160,9 @@ public class ControlsTutorial {
      * If screen is resized, this method will be called so the elements can be repositioned.
      */
     public void draw() {
-        // TODO jth102 09/08: Draw the current elements for the tutorial.
-        tickView.setLayoutX(pane.getWidth() / 2);
-        tickView.setLayoutY(pane.getHeight() / 2);
+//        // TODO jth102 09/08: Draw the current elements for the tutorial.
+//        tickView.setLayoutX(pane.getWidth() / 2);
+//        tickView.setLayoutY(pane.getHeight() / 2);
     }
+
 }

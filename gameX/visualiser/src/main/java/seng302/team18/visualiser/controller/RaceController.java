@@ -484,6 +484,7 @@ public class RaceController implements Observer {
         if(race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
             if (controlsTutorial == null) {
                 controlsTutorial = new ControlsTutorial(raceViewPane);
+                controlsTutorial.displayNext();
             } else {
                 controlsTutorial.draw();
             }
