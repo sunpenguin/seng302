@@ -17,14 +17,12 @@ import seng302.team18.message.RequestMessage;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.visualiser.display.RaceStartTime;
-import seng302.team18.visualiser.display.ZoneTimeClock;
+import seng302.team18.visualiser.display.PreRaceTimes;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.send.Sender;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Controller for the pre race view
@@ -41,7 +39,6 @@ public class PreRaceController {
     @FXML
     private Text raceNameText;
 
-    private ZoneTimeClock preRaceClock;
     private Interpreter interpreter;
     private Sender sender;
     private Race race;
@@ -57,19 +54,15 @@ public class PreRaceController {
      * @param sender   the sender
      */
     public void setUp(Race race, Receiver receiver, Sender sender) {
-//        this.interpreter = receiver;
         this.sender = sender;
         this.race = race;
-        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
         raceNameText.setText(race.getRegatta().getRegattaName());
         displayTimeZone(race.getStartTime());
 
-        RaceStartTime raceStartTime = new RaceStartTime(startTimeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race);
-
         setUpLists();
         listView.setItems(FXCollections.observableList(race.getStartingList()));
-        preRaceClock.start();
-        raceStartTime.start();
+        PreRaceTimes preRaceTimes = new PreRaceTimes(startTimeLabel, timeZoneLabel, timeLabel, race);
+        preRaceTimes.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
         this.interpreter = new Interpreter(receiver);
@@ -129,7 +122,7 @@ public class PreRaceController {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
 
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceStartTimeInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
 
         return interpreter;
     }
