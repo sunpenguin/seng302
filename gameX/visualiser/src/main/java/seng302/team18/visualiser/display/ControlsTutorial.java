@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import sun.security.krb5.internal.KdcErrException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,9 +46,81 @@ public class ControlsTutorial {
      */
     public ControlsTutorial(Pane pane) {
         this.pane = pane;
-
-        tickAnimation();
     }
+
+
+
+    public void displayNext() {
+        System.out.println("displaying :" + keyList.get(currentKeyIndex));
+        currentKeyIndex = (currentKeyIndex + 1) % keyList.size();
+    }
+
+
+    /**
+     * Method to check if the key the user has pressed progresses them in the tutorial
+     *
+     * @param code the keycode the user has pressed
+     * @return true if the user has progressed in the tutorial
+     */
+    public boolean checkIfProgressed(KeyCode code) {
+        boolean result = false;
+        if (keyList.get(currentKeyIndex) == BoatControls.SAILS) {
+            result = checkSails(code);
+        } else if (keyList.get(currentKeyIndex) == BoatControls.UP) {
+            result = checkUp(code);
+        } else if (keyList.get(currentKeyIndex) == BoatControls.DOWN) {
+            result = checkDown(code);
+        } else if (keyList.get(currentKeyIndex) == BoatControls.TACK_GYBE) {
+            result = checkTackGybe(code);
+        } else if (keyList.get(currentKeyIndex) == BoatControls.VMG) {
+            result = checkVMG(code);
+        }
+        if (result) {
+            currentKeyIndex += 1;
+        }
+        return result;
+    }
+
+
+    private boolean checkSails(KeyCode code) {
+        return code == KeyCode.SHIFT;
+    }
+
+
+    private boolean checkUp(KeyCode code) {
+        return code == KeyCode.PAGE_UP || code == KeyCode.UP;
+    }
+
+
+    private boolean checkDown(KeyCode code) {
+        return code == KeyCode.PAGE_DOWN || code == KeyCode.DOWN;
+    }
+
+
+    /**
+     * May be updated in future to check if actual tack/Gybe occurred
+     * @param code
+     * @return
+     */
+    private boolean checkTackGybe(KeyCode code) {
+        return code == KeyCode.ENTER;
+    }
+
+
+    private boolean checkVMG(KeyCode code) {
+        return code == KeyCode.SPACE;
+    }
+
+
+    public enum BoatControls {
+        SAILS,
+        UP,
+        DOWN,
+        TACK_GYBE,
+        VMG
+    }
+
+
 
 
     /**
@@ -81,23 +154,5 @@ public class ControlsTutorial {
         // TODO jth102 09/08: Draw the current elements for the tutorial.
         tickView.setLayoutX(pane.getWidth() / 2);
         tickView.setLayoutY(pane.getHeight() / 2);
-    }
-
-
-    public boolean checkIfProgressed(KeyCode code){
-        return true;
-    }
-
-    public void displayNext() {
-        System.out.println("displaying :" + keyList.get(currentKeyIndex));
-        currentKeyIndex = (currentKeyIndex + 1) % keyList.size();
-    }
-
-    public enum BoatControls {
-        SAILS,
-        UP,
-        DOWN,
-        TACK_GYBE,
-        VMG
     }
 }

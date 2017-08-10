@@ -23,6 +23,7 @@ public class ControlsTutorialTest {
         tutorial = new ControlsTutorial(new Pane());
     }
 
+    @Test
     public void checkProgressedTestBlueSkies() {
         List<KeyCode> keyCodes = new ArrayList<>();
         keyCodes.add(KeyCode.SHIFT);
@@ -51,6 +52,8 @@ public class ControlsTutorialTest {
         Assert.assertEquals(expected,actual);
     }
 
+
+    @Test
     public void checkProgressedTestBlueSkies2() {
         List<KeyCode> keyCodes = new ArrayList<>();
         keyCodes.add(KeyCode.SHIFT);
@@ -79,6 +82,8 @@ public class ControlsTutorialTest {
         Assert.assertEquals(expected,actual);
     }
 
+
+    @Test
     public void checkProgressedTestAcceptable() {
         List<KeyCode> keyCodes = new ArrayList<>();
         keyCodes.add(KeyCode.SHIFT);
@@ -125,6 +130,8 @@ public class ControlsTutorialTest {
         Assert.assertEquals(expected,actual);
     }
 
+
+    @Test
     public void checkProgressedTestMonkeyFoundAKeyboard() {
         List<KeyCode> keyCodes = createAwfulList();
 
