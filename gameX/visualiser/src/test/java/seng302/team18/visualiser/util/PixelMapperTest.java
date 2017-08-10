@@ -53,7 +53,9 @@ public class PixelMapperTest {
         pane.setMinSize(500, 500);
 
         //Make mapper
-        mapper = new PixelMapper(course, pane);
+        GPSCalculations gps = new GPSCalculations();
+        List<Coordinate> bounds = gps.findMinMaxPoints(course);
+        mapper = new PixelMapper(bounds.get(0), bounds.get(1), course.getCentralCoordinate(), pane);
 
         //get mapping ratio
         double mappingRatio = mapper.mappingRatio();
@@ -106,7 +108,9 @@ public class PixelMapperTest {
         pane.setMinSize(500, 500);
 
         //Make mapper
-        mapper = new PixelMapper(course, pane);
+        GPSCalculations gps = new GPSCalculations();
+        List<Coordinate> bounds = gps.findMinMaxPoints(course);
+        mapper = new PixelMapper(bounds.get(0), bounds.get(1), course.getCentralCoordinate(), pane);
 
         //get mapping ratio
         double mappingRatio = mapper.mappingRatio();
@@ -160,7 +164,9 @@ public class PixelMapperTest {
         pane.setMinSize(500, 500);
 
         //Make mapper
-        mapper = new PixelMapper(course, pane);
+        GPSCalculations gps = new GPSCalculations();
+        List<Coordinate> bounds = gps.findMinMaxPoints(course);
+        mapper = new PixelMapper(bounds.get(0), bounds.get(1), course.getCentralCoordinate(), pane);
 
         //get mapping ratio
         double mappingRatio = mapper.mappingRatio();
