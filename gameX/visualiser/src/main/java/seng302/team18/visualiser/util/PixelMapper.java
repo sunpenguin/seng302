@@ -1,7 +1,7 @@
 package seng302.team18.visualiser.util;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.Pane;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
@@ -25,16 +25,17 @@ public class PixelMapper {
     private GeographicLocation object;
     private final Pane pane;
     private Coordinate viewPortCenter;
-    private final IntegerProperty zoomLevel = new SimpleIntegerProperty(0);
+    private final DoubleProperty zoomLevel = new SimpleDoubleProperty(0);
     private List<Coordinate> bounds; // 2 coordinates: NW bound, SE bound
+    private double maxZoom = Double.POSITIVE_INFINITY;
 
     private GPSCalculations gpsCalculations;
     private boolean isTracking = false;
 
-    public static final int ZOOM_LEVEL_4X = 1;
-    private final int NW_BOUND_INDEX = 0; // Used in bounds
+    private final int NW_BOUND_INDEX = 0; // Used in boundsal int ZOOM_LEVEL_4X = 1;al int ZOOM_LEVEL_4X = 1;
     private final int SE_BOUND_INDEX = 1; // Used in bounds
     private final double MAP_SCALE_CORRECTION = 0.8;
+    private final double zoomCorrection = 4; // corrects zoom level to sensible values ie setZoom 4 magnifies by 4
 
 
     public PixelMapper(Course course, Pane pane) {
@@ -74,7 +75,7 @@ public class PixelMapper {
      * @return the zoom factor
      */
     public double getZoomFactor() {
-        return Math.pow(2, zoomLevel.intValue());
+        return Math.pow(2, zoomLevel.doubleValue());
     }
 
 
@@ -106,7 +107,7 @@ public class PixelMapper {
         } else {
             mappingScale = paneHeight / courseHeight;
         }
-        mappingScale *= MAP_SCALE_CORRECTION * Math.pow(2, zoomLevel.intValue());
+        mappingScale *= MAP_SCALE_CORRECTION * Math.pow(2, zoomLevel.doubleValue());
 
         XYPair worldCoordinates = coordinateToPlane(coord);
         XYPair viewCenter = coordinateToPlane(viewPortCenter);
@@ -212,18 +213,28 @@ public class PixelMapper {
      *
      * @return The zoom level property
      */
-    public IntegerProperty zoomLevelProperty() {
+    public DoubleProperty zoomLevelProperty() {
         return zoomLevel;
     }
 
 
     /**
-     * Sets the zoom level for the pixel mapper
+     * Sets the zoom level for the pixel mapper.
+     * Does not zoom in beyond the max value.
      *
      * @param level The value the zoom level will be set to
      */
-    public void setZoomLevel(int level) {
-        zoomLevel.set(level);
+    public void setZoomLevel(double level) {
+        if (level < maxZoom) {
+            zoomLevel.set(level / 4d);
+        } else {
+            zoomLevel.set(maxZoom);
+        }
+    }
+
+
+    public double getZoomLevel() {
+        return zoomLevel.get() * 4d;
     }
 
 
@@ -244,5 +255,10 @@ public class PixelMapper {
      */
     public void setTracking(boolean tracking) {
         isTracking = tracking;
+    }
+
+
+    public void setMaxZoom(double maxZoom) {
+        this.maxZoom = maxZoom;
     }
 }

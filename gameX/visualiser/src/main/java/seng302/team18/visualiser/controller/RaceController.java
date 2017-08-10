@@ -145,10 +145,14 @@ public class RaceController implements Observer {
                             }
                             break;
                         case Z:
-                            Boat boat = race.getBoat(race.getPlayerId());
-                            pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
-                            pixelMapper.track(boat);
-                            pixelMapper.setTracking(true);
+                            if (pixelMapper.getZoomLevel() > 0) {
+                                pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() + 1);
+                            } else {
+                                Boat boat = race.getBoat(race.getPlayerId());
+                                pixelMapper.setZoomLevel(1);
+                                pixelMapper.track(boat);
+                                pixelMapper.setTracking(true);
+                            }
                             send = false;
                             break;
                         case X:
@@ -430,6 +434,7 @@ public class RaceController implements Observer {
         this.race = race;
 
         pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
+        pixelMapper.setMaxZoom(16d);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);

@@ -72,7 +72,7 @@ public class DisplayBoat implements GeographicLocation {
             if (location != null) {
                 pixelMapper.track(this);
                 pixelMapper.setTracking(true);
-                pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                pixelMapper.setZoomLevel(4);
                 pixelMapper.setViewPortCenter(location);
             }
         });
