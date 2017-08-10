@@ -114,7 +114,12 @@ public class TestMock implements Observer {
 
         race.setStatus(RaceStatus.PRESTART);
 
+
         do {
+            if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
+                switchToPrep();
+            }
+
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
@@ -126,32 +131,13 @@ public class TestMock implements Observer {
                 race.setStatus(RaceStatus.WARNING);
 
             } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(prepTime)) {
-
-                race.setStatus(RaceStatus.PREPARATORY);
-                server.stopAcceptingConnections();
-
-                for (Boat b : race.getStartingList()) {
-                    scheduledMessages.add(new BoatMessageGenerator(b));
-                }
-
+                switchToPrep();
             } else {
-                race.updateBoats((timeCurr - timeLast));
-                // Send mark rounding messages for all mark roundings that occurred
-                for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
-                    server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
-                }
-
-                if ((race.getStatus() == RaceStatus.PREPARATORY) && ZonedDateTime.now().isAfter(race.getStartTime())) {
-                    race.setStatus(RaceStatus.STARTED);
-                }
+                switchToStarted();
             }
 
-            // Send messages if needed
-            for (ScheduledMessageGenerator sendable : scheduledMessages) {
-                if (sendable.isTimeToSend(timeCurr)) {
-                    server.broadcast(sendable.getMessage());
-                }
-            }
+            runRace(timeCurr, timeLast);
+            updateClients(timeCurr);
 
             // Sleep
             try {
@@ -165,5 +151,61 @@ public class TestMock implements Observer {
         // Sends final message
         ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
         server.broadcast(raceMessageGenerator.getMessage());
+    }
+
+
+    /**
+     * Switch into the preparatory stage.
+     * At this time, also stop accepting new connections and set up a BoatMessageGenerator for each boat.
+     */
+    private void switchToPrep() {
+        race.setStatus(RaceStatus.PREPARATORY);
+        server.stopAcceptingConnections();
+
+        for (Boat b : race.getStartingList()) {
+            scheduledMessages.add(new BoatMessageGenerator(b));
+        }
+    }
+
+
+    /**
+     * If at the necessary time, switch the RaceStatus to STARTED.
+     */
+    private void switchToStarted() {
+        if ((race.getStatus() == RaceStatus.PREPARATORY) && ZonedDateTime.now().isAfter(race.getStartTime())) {
+            race.setStatus(RaceStatus.STARTED);
+        }
+    }
+
+
+    /**
+     * Run the race.
+     * Updates the position of boats
+     *
+     * @param timeCurr The current time (milliseconds)
+     * @param timeLast The time (milliseconds) from the previous loop in runSimulation.
+     */
+    private void runRace(long timeCurr, long timeLast) {
+        race.updateBoats((timeCurr - timeLast));
+    }
+
+
+    /**
+     * Update the clients by sending any necessary new race info to them.
+     * Sends out updates for positions, mark roundings, etc.
+     *
+     * @param timeCurr The current time (milliseconds)
+     */
+    private void updateClients(long timeCurr) {
+        for (ScheduledMessageGenerator sendable : scheduledMessages) {
+            if (sendable.isTimeToSend(timeCurr)) {
+                server.broadcast(sendable.getMessage());
+            }
+        }
+
+        for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
+            server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
+            System.out.println("MARK ROUNING");
+        }
     }
 }
