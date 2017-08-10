@@ -2,14 +2,18 @@ package seng302.team18.visualiser.display;
 
 import javafx.animation.Animation;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import sun.security.krb5.internal.KdcErrException;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Class to handle running the controls tutorial
@@ -24,11 +28,12 @@ public class ControlsTutorial {
     private final int WIDTH    = 128;
     private final int HEIGHT   = 128;
 
-    private ImageView tickView;
-
-
-
     private Pane pane;
+    private ImageView tickView;
+    private ImageView actionImage = new ImageView();
+    private HBox promptBox = new HBox();
+    private Label label = new Label("PRESS");
+    private Map<BoatControls, Image> imageMap = new HashMap<>();
     private int currentKeyIndex = 0;
     private List<BoatControls> keyList = Arrays.asList(BoatControls.SAILS,
                                                     BoatControls.UP,
@@ -46,6 +51,15 @@ public class ControlsTutorial {
      */
     public ControlsTutorial(Pane pane) {
         this.pane = pane;
+        pane.getChildren().add(promptBox);
+        promptBox.getChildren().addAll(label, actionImage);
+
+        // Map all of the controls to an appropriate image
+        imageMap.put(BoatControls.TACK_GYBE, new Image(TutorialImage.ENTER.toString()));
+        imageMap.put(BoatControls.SAILS, new Image(TutorialImage.SHIFT.toString()));
+        imageMap.put(BoatControls.UP, new Image(TutorialImage.UP.toString()));
+        imageMap.put(BoatControls.DOWN, new Image(TutorialImage.DOWN.toString()));
+        imageMap.put(BoatControls.VMG, new Image(TutorialImage.SPACE.toString()));
     }
 
 
@@ -55,7 +69,7 @@ public class ControlsTutorial {
      */
     public void displayNext() {
         if (currentKeyIndex < keyList.size()) {
-            System.out.println("displaying :" + keyList.get(currentKeyIndex));
+            draw();
         } else {
             finishTutorial();
         }
@@ -65,7 +79,7 @@ public class ControlsTutorial {
     /**
      * Finish the tutorial and inform the user.
      */
-    public void finishTutorial(){
+    private void finishTutorial(){
         currentKeyIndex -= 1;
         System.out.println("tutorial over");
     }
@@ -127,22 +141,11 @@ public class ControlsTutorial {
     }
 
 
-    public enum BoatControls {
-        SAILS,
-        UP,
-        DOWN,
-        TACK_GYBE,
-        VMG
-    }
-
-
-
-
     /**
      * Begin an animation for a tick to let user know action is completed.
      */
     public void tickAnimation() {
-        tickView = new ImageView("/images/tick128.png");
+        tickView = new ImageView("/images/tutorial/tick128.png");
         tickView.setViewport(new Rectangle2D(OFFSET_X, OFFSET_Y, WIDTH, HEIGHT));
 
         final Animation animation = new SpriteAnimation(
@@ -163,12 +166,24 @@ public class ControlsTutorial {
 
     /**
      * Draw the current element(s) of the tutorial.
-     * If screen is resized, this method will be called so the elements can be repositioned.
+     * If screen is resized, this method will also be called so the elements can be repositioned.
      */
     public void draw() {
-//        // TODO jth102 09/08: Draw the current elements for the tutorial.
-//        tickView.setLayoutX(pane.getWidth() / 2);
-//        tickView.setLayoutY(pane.getHeight() / 2);
+        actionImage.setImage(imageMap.get(keyList.get(currentKeyIndex)));
+        System.out.println(actionImage.getImage());
+        promptBox.setLayoutX(0.0);
+        promptBox.setLayoutY(pane.getHeight() - 50);
     }
 
+
+    /**
+     * Register a code for each of the controls of the boat.
+     */
+    public enum BoatControls {
+        SAILS,
+        UP,
+        DOWN,
+        TACK_GYBE,
+        VMG
+    }
 }
