@@ -225,16 +225,18 @@ public class PixelMapper {
      * @param level The value the zoom level will be set to
      */
     public void setZoomLevel(double level) {
-        if (level < maxZoom) {
-            zoomLevel.set(level / 4d);
+        if (level < 0) {
+            zoomLevel.set(0);
+        } else if (level < maxZoom) {
+            zoomLevel.set(level / zoomCorrection);
         } else {
-            zoomLevel.set(maxZoom);
+            zoomLevel.set(maxZoom / zoomCorrection);
         }
     }
 
 
     public double getZoomLevel() {
-        return zoomLevel.get() * 4d;
+        return zoomLevel.get() * zoomCorrection;
     }
 
 
