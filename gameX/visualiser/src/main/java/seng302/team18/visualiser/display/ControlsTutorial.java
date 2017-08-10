@@ -49,7 +49,10 @@ public class ControlsTutorial {
     }
 
 
-
+    /**
+     * Display the prompt for the next key to press.
+     * If all actions completed, finish the tutorial.
+     */
     public void displayNext() {
         if (currentKeyIndex < keyList.size()) {
             System.out.println("displaying :" + keyList.get(currentKeyIndex));
@@ -59,6 +62,9 @@ public class ControlsTutorial {
     }
 
 
+    /**
+     * Finish the tutorial and inform the user.
+     */
     public void finishTutorial(){
         currentKeyIndex -= 1;
         System.out.println("tutorial over");
@@ -108,8 +114,8 @@ public class ControlsTutorial {
 
     /**
      * May be updated in future to check if actual tack /
-     * @param code
-     * @return
+     * @param code Code for the key press.
+     * @return True if key code was correct for a tack/gybe
      */
     private boolean checkTackGybe(KeyCode code) {
         return code == KeyCode.ENTER;
