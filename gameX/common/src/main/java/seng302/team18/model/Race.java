@@ -216,7 +216,6 @@ public class Race extends Observable {
                 .collect(Collectors.toList());
         if (boundaries.size() > 0) {
             if (!calculator.contains(boat.getCoordinate(), boundaries)) {
-                System.out.println("kjahfukkkeshfalfijhoiakuserhgfkuhsakjshfuegshcbkesufhukebsjehvdzjhvcjhdsgfurbvh xhgdfjhxf");
                 boat.setStatus(BoatStatus.DSQ);
                 setChanged();
                 notifyObservers(boat);

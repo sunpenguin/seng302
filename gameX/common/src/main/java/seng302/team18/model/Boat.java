@@ -224,7 +224,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
 
     public void setStatus(BoatStatus status) {
-        System.out.println(status);
         statusStringProperty.setValue(status.toString());
         this.status = status;
     }
