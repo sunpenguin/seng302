@@ -14,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -63,6 +64,7 @@ public class RaceController implements Observer {
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
     @FXML private Slider slider;
+    @FXML private Pane returnToTitleScreenPane;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -139,7 +141,11 @@ public class RaceController implements Observer {
                             message.setSailsIn(sailIn);
                             break;
                         case ESCAPE:
-                            returnToTitleScreen();
+                            try {
+                                returnToTitleScreen();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             break;
                         default:
                             send = false;
@@ -303,22 +309,18 @@ public class RaceController implements Observer {
         inputStage.showAndWait();
     }
 
-    public void returnToTitleScreen(){
-
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("returnToTitleScreen.fxml"));
-        Scene newScene;
-
-        try {
-            newScene = new Scene(loader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-        Stage inputStage = new Stage();
-        inputStage.setScene(newScene);
-        inputStage.showAndWait();
-        inputStage.setTitle("Exit Race");
+    public void returnToTitleScreen() throws IOException{
+        returnToTitleScreenPane = FXMLLoader.load(getClass().getClassLoader().getResource("PreRace.fxml"));
+        returnToTitleScreenPane.setPrefHeight(raceViewPane.getPrefHeight());
+        returnToTitleScreenPane.setPrefWidth(322);
+        group.getChildren().add(returnToTitleScreenPane);
+        returnToTitleScreenPane.toFront();
     }
+
+    public void cancelButtonAction(){
+        System.out.println("cancelled");
+    }
+
 
 
     /**
@@ -519,4 +521,6 @@ public class RaceController implements Observer {
             }
         }
     }
+
+
 }
