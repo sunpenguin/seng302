@@ -116,7 +116,6 @@ public class PixelMapper {
             mappingScale = paneHeight / courseHeight;
         }
         mappingScale *= MAP_SCALE_CORRECTION * getZoomFactor();
-        mappingScale *= MAP_SCALE_CORRECTION * Math.pow(2, zoomLevel.doubleValue());
 
         XYPair worldCoordinates = coordinateToPlane(coord);
         XYPair viewCenter = coordinateToPlane(viewPortCenter);
