@@ -14,7 +14,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -64,7 +63,9 @@ public class RaceController implements Observer {
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
     @FXML private Slider slider;
-    @FXML private Pane returnToTitleScreenPane;
+
+    private Pane escapeMenuPane;
+    private EscapeMenuController escapeMenuController;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -84,6 +85,7 @@ public class RaceController implements Observer {
 
     @FXML
     public void initialize() {
+        loadEscapeMenu();
         installKeyHandler();
         setSliderListener();
         sliderSetup();
@@ -141,16 +143,11 @@ public class RaceController implements Observer {
                             message.setSailsIn(sailIn);
                             break;
                         case ESCAPE:
-                            try {
-                                System.out.println(returnToTitleScreenPane);
-                                if (returnToTitleScreenPane == null) {
-                                    returnToTitleScreen();
-                                } else {
-                                    group.getChildren().remove(returnToTitleScreenPane);
-                                    returnToTitleScreenPane = null;
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            if (group.getChildren().contains(escapeMenuPane)) {
+                                group.getChildren().remove(escapeMenuPane);
+                            } else {
+                                loadEscapeMenu();
+                                openEscapeMenu();
                             }
                             send = false;
                             break;
@@ -316,21 +313,29 @@ public class RaceController implements Observer {
         inputStage.showAndWait();
     }
 
-    public void returnToTitleScreen() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("return.fxml"));
-        returnToTitleScreenPane = loader.load();
-        ReturnToTitleScreenController controller = loader.getController();
-        controller.setGroup(group);
-        group.getChildren().add(returnToTitleScreenPane);
-        returnToTitleScreenPane.toFront();
-        returnToTitleScreenPane.setLayoutX((raceViewPane.getWidth() / 2) - returnToTitleScreenPane.getMinWidth() / 2);
-        returnToTitleScreenPane.setLayoutY((raceViewPane.getHeight() / 2) - returnToTitleScreenPane.getMinHeight() / 2);
+
+    /**
+     * Loads the FXML and controller for the escape menu.
+     */
+    private void loadEscapeMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
+            escapeMenuPane = loader.load();
+            escapeMenuController = loader.getController();
+            escapeMenuController.setGroup(group);
+        } catch(IOException e) {}
     }
 
-    public void cancelButtonAction(){
-        System.out.println("cancelled");
-    }
 
+    /**
+     * Opens the escapeMenu by adding to the group and placing it in the middle of the race view.
+     */
+    public void openEscapeMenu() {
+        group.getChildren().add(escapeMenuPane);
+        escapeMenuPane.toFront();
+        escapeMenuPane.setLayoutX((raceViewPane.getWidth() / 2) - escapeMenuPane.getMinWidth() / 2);
+        escapeMenuPane.setLayoutY((raceViewPane.getHeight() / 2) - escapeMenuPane.getMinHeight() / 2);
+    }
 
 
     /**

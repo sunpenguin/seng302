@@ -20,7 +20,7 @@ import java.io.IOException;
 /**
  * Controller for the menu that is brought up from the race view.
  */
-public class ReturnToTitleScreenController {
+public class EscapeMenuController {
 
     RaceController raceController;
     Group group;
@@ -28,15 +28,19 @@ public class ReturnToTitleScreenController {
     @FXML private Pane pane;
 
 
-    @FXML public void initialize() {
+    @FXML public void initialize() {}
+
+
+    @FXML private void returnAction() {
+        returnToTitle();
     }
 
-    @FXML private void returnToTitle() {
+
+    public void returnToTitle() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
 
         try {
             Parent root = loader.load();
-//            TitleScreenController controller = loader.getController();
             Stage stage = (Stage) group.getScene().getWindow();
             Scene scene = new Scene(root, 600, 600);
             stage.setMaxHeight(625);
