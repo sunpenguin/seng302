@@ -142,10 +142,17 @@ public class RaceController implements Observer {
                             break;
                         case ESCAPE:
                             try {
-                                returnToTitleScreen();
+                                System.out.println(returnToTitleScreenPane);
+                                if (returnToTitleScreenPane == null) {
+                                    returnToTitleScreen();
+                                } else {
+                                    group.getChildren().remove(returnToTitleScreenPane);
+                                    returnToTitleScreenPane = null;
+                                }
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+                            send = false;
                             break;
                         default:
                             send = false;
@@ -309,12 +316,15 @@ public class RaceController implements Observer {
         inputStage.showAndWait();
     }
 
-    public void returnToTitleScreen() throws IOException{
-        returnToTitleScreenPane = FXMLLoader.load(getClass().getClassLoader().getResource("PreRace.fxml"));
-        returnToTitleScreenPane.setPrefHeight(raceViewPane.getPrefHeight());
-        returnToTitleScreenPane.setPrefWidth(322);
+    public void returnToTitleScreen() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("return.fxml"));
+        returnToTitleScreenPane = loader.load();
+        ReturnToTitleScreenController controller = loader.getController();
+        controller.setGroup(group);
         group.getChildren().add(returnToTitleScreenPane);
         returnToTitleScreenPane.toFront();
+        returnToTitleScreenPane.setLayoutX((raceViewPane.getWidth() / 2) - returnToTitleScreenPane.getMinWidth() / 2);
+        returnToTitleScreenPane.setLayoutY((raceViewPane.getHeight() / 2) - returnToTitleScreenPane.getMinHeight() / 2);
     }
 
     public void cancelButtonAction(){
@@ -521,6 +531,4 @@ public class RaceController implements Observer {
             }
         }
     }
-
-
 }
