@@ -32,8 +32,9 @@ public class PixelMapper {
     private GPSCalculations gpsCalculations;
     private boolean isTracking = false;
 
-    private final double MAP_SCALE_CORRECTION = 0.8;
     private final double ZOOM_CORRECTION = 4; // corrects zoom level to sensible values ie setZoom 4 magnifies by 4
+    private final double MAP_SCALE_CORRECTION = 0.95;
+
 
 
     /**
@@ -114,6 +115,7 @@ public class PixelMapper {
         } else {
             mappingScale = paneHeight / courseHeight;
         }
+        mappingScale *= MAP_SCALE_CORRECTION * getZoomFactor();
         mappingScale *= MAP_SCALE_CORRECTION * Math.pow(2, zoomLevel.doubleValue());
 
         XYPair worldCoordinates = coordinateToPlane(coord);
@@ -122,8 +124,8 @@ public class PixelMapper {
         double dX = worldCoordinates.getX() - viewCenter.getX();
         double dY = worldCoordinates.getY() - viewCenter.getY();
 
-        double x = dX * mappingScale + paneWidth / 2;
-        double y = dY * mappingScale + paneHeight / 2;
+        double x = (dX * mappingScale) + (paneWidth / 2);
+        double y = (dY * mappingScale) + (paneHeight / 2);
 
         return new XYPair(x, y);
     }
@@ -227,7 +229,7 @@ public class PixelMapper {
 
     /**
      * Sets the zoom level for the pixel mapper.
-     * Does not zoom in beyond the max value.
+     * Does not zoom in beyond the max value or below 0.
      *
      * @param level The value the zoom level will be set to
      */
