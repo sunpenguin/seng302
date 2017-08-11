@@ -25,8 +25,6 @@ public class ReturnToTitleScreenController {
     RaceController raceController;
     Group group;
 
-    @FXML private Button returnButton;
-    @FXML private Button cancelButton;
     @FXML private Pane pane;
 
 
@@ -34,7 +32,19 @@ public class ReturnToTitleScreenController {
     }
 
     @FXML private void returnToTitle() {
-        System.out.println("returning");
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
+
+        try {
+            Parent root = loader.load();
+//            TitleScreenController controller = loader.getController();
+            Stage stage = (Stage) group.getScene().getWindow();
+            Scene scene = new Scene(root, 600, 600);
+            stage.setMaxHeight(625);
+            stage.setMaxWidth(600);
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {}
     }
 
 

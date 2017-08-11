@@ -6,7 +6,6 @@
 
 <AnchorPane fx:id="pane" maxHeight="250.0" maxWidth="250.0" minHeight="250.0" minWidth="250.0" opacity="0.8" prefHeight="250.0" prefWidth="250.0" styleClass="background" stylesheets="@stylesheets/preRaceStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.ReturnToTitleScreenController">
    <children>
-      <Button fx:id="returnButton" layoutX="53.0" layoutY="60.0" mnemonicParsing="false" onAction="#returnToTitle" text="Return to titlescreen" AnchorPane.topAnchor="60.0" />
-      <Button fx:id="cancelButton" layoutX="98.0" layoutY="136.0" mnemonicParsing="false" text="Cancel" AnchorPane.bottomAnchor="89.0" />
+      <Button fx:id="returnButton" layoutX="49.0" layoutY="113.0" mnemonicParsing="false" onAction="#returnToTitle" text="Return to titlescreen" AnchorPane.topAnchor="113.0" />
    </children>
 </AnchorPane>
