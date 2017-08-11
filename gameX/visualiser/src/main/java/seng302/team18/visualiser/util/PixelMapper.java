@@ -1,10 +1,10 @@
 package seng302.team18.visualiser.util;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.Pane;
 import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
+import seng302.team18.model.GeographicLocation;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.XYPair;
 
@@ -20,26 +20,38 @@ public class PixelMapper {
 
     private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    private final Course course;
+    private Coordinate center;
+    private Coordinate northWest;
+    private Coordinate southEast;
+    private GeographicLocation object;
     private final Pane pane;
     private Coordinate viewPortCenter;
-    private final IntegerProperty zoomLevel = new SimpleIntegerProperty(0);
-    private List<Coordinate> bounds; // 2 coordinates: NW bound, SE bound
+    private final DoubleProperty zoomLevel = new SimpleDoubleProperty(0);
+    private double maxZoom = Double.POSITIVE_INFINITY;
 
     private GPSCalculations gpsCalculations;
+    private boolean isTracking = false;
 
-    public static final int ZOOM_LEVEL_4X = 1;
-    private final int NW_BOUND_INDEX = 0; // Used in bounds
-    private final int SE_BOUND_INDEX = 1; // Used in bounds
+    private final double ZOOM_CORRECTION = 4; // corrects zoom level to sensible values ie setZoom 4 magnifies by 4
     private final double MAP_SCALE_CORRECTION = 0.95;
 
 
-    public PixelMapper(Course course, Pane pane) {
-        this.course = course;
+
+    /**
+     * Constructor for PixelMapper.
+     *
+     * @param northWest corner
+     * @param southEast corner
+     * @param center center of the map
+     * @param pane to map to
+     */
+    public PixelMapper(Coordinate northWest, Coordinate southEast, Coordinate center, Pane pane) {
         this.pane = pane;
         gpsCalculations = new GPSCalculations();
-        bounds = gpsCalculations.findMinMaxPoints(course);
-        viewPortCenter = course.getCentralCoordinate();
+        this.northWest = northWest;
+        this.southEast = southEast;
+        this.center = center;
+        viewPortCenter = center;
     }
 
 
@@ -71,7 +83,7 @@ public class PixelMapper {
      * @return the zoom factor
      */
     public double getZoomFactor() {
-        return Math.pow(2, zoomLevel.intValue());
+        return Math.pow(2, zoomLevel.doubleValue());
     }
 
 
@@ -83,7 +95,10 @@ public class PixelMapper {
      * @return XYPair containing the x and y pixel values
      */
     public XYPair coordToPixel(Coordinate coord) {
-        bounds = gpsCalculations.findMinMaxPoints(course);
+        if (isTracking) {
+            setViewPortCenter(object.getCoordinate());
+        }
+//        bounds = gpsCalculations.findMinMaxPoints(course);
 
         double courseWidth = calcCourseWidth();
         double courseHeight = calcCourseHeight();
@@ -122,9 +137,9 @@ public class PixelMapper {
      */
     public double mappingRatio() {
         GPSCalculations gpsCalculator = new GPSCalculations();
-        Coordinate oneKNorthOfCentre = gpsCalculator.toCoordinate(course.getCentralCoordinate(), 0, 1000);
+        Coordinate oneKNorthOfCentre = gpsCalculator.toCoordinate(center, 0, 1000);
 
-        XYPair XYCenter = coordToPixel(course.getCentralCoordinate());
+        XYPair XYCenter = coordToPixel(center);
         XYPair XYKNorthOfCenter = coordToPixel(oneKNorthOfCentre);
 
         double distanceBetweenK = XYCenter.calculateDistance(XYKNorthOfCenter);
@@ -139,14 +154,14 @@ public class PixelMapper {
      * @return the width of the course using Web Mercator cartesian coordinates
      */
     private double calcCourseWidth() {
-        Coordinate west = new Coordinate(course.getCentralCoordinate().getLongitude(), bounds.get(NW_BOUND_INDEX).getLongitude());
-        Coordinate east = new Coordinate(course.getCentralCoordinate().getLongitude(), bounds.get(SE_BOUND_INDEX).getLongitude());
+        Coordinate west = new Coordinate(center.getLongitude(), northWest.getLongitude());
+        Coordinate east = new Coordinate(center.getLongitude(), southEast.getLongitude());
 
-        double dWest = gpsCalculations.distance(west, course.getCentralCoordinate());
-        double dEast = gpsCalculations.distance(course.getCentralCoordinate(), east);
+        double dWest = gpsCalculations.distance(west, center);
+        double dEast = gpsCalculations.distance(center, east);
 
         Coordinate furthest = (dWest > dEast) ? west : east;
-        return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getX() - coordinateToPlane(furthest).getX()) * 2;
+        return Math.abs(coordinateToPlane(center).getX() - coordinateToPlane(furthest).getX()) * 2;
     }
 
 
@@ -156,14 +171,14 @@ public class PixelMapper {
      * @return the width of the course using Web Mercator cartesian coordinates
      */
     private double calcCourseHeight() {
-        Coordinate north = new Coordinate(bounds.get(NW_BOUND_INDEX).getLatitude(), course.getCentralCoordinate().getLatitude());
-        Coordinate south = new Coordinate(bounds.get(SE_BOUND_INDEX).getLatitude(), course.getCentralCoordinate().getLatitude());
+        Coordinate north = new Coordinate(northWest.getLatitude(), center.getLatitude());
+        Coordinate south = new Coordinate(southEast.getLatitude(), center.getLatitude());
 
-        double dNorth = gpsCalculations.distance(north, course.getCentralCoordinate());
-        double dSouth = gpsCalculations.distance(south, course.getCentralCoordinate());
+        double dNorth = gpsCalculations.distance(north, center);
+        double dSouth = gpsCalculations.distance(south, center);
 
         Coordinate furthest = (dNorth > dSouth) ? north : south;
-        return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getY() - coordinateToPlane(furthest).getY()) * 2;
+        return Math.abs(coordinateToPlane(center).getY() - coordinateToPlane(furthest).getY()) * 2;
     }
 
 
@@ -206,17 +221,54 @@ public class PixelMapper {
      *
      * @return The zoom level property
      */
-    public IntegerProperty zoomLevelProperty() {
+    public DoubleProperty zoomLevelProperty() {
         return zoomLevel;
     }
 
 
     /**
-     * Sets the zoom level for the pixel mapper
+     * Sets the zoom level for the pixel mapper.
+     * Does not zoom in beyond the max value or below 0.
      *
      * @param level The value the zoom level will be set to
      */
-    public void setZoomLevel(int level) {
-        zoomLevel.set(level);
+    public void setZoomLevel(double level) {
+        if (level < 0) {
+            zoomLevel.set(0);
+        } else if (level < maxZoom) {
+            zoomLevel.set(level / ZOOM_CORRECTION);
+        } else {
+            zoomLevel.set(maxZoom / ZOOM_CORRECTION);
+        }
+    }
+
+
+    public double getZoomLevel() {
+        return zoomLevel.get() * ZOOM_CORRECTION;
+    }
+
+
+    /**
+     * Sets the object to track.
+     *
+     * @param object the object to track
+     */
+    public void track(GeographicLocation object) {
+        this.object = object;
+    }
+
+
+    /**
+     * Sets the tracking boolean to whether to track or not.
+     *
+     * @param tracking whether to track or not
+     */
+    public void setTracking(boolean tracking) {
+        isTracking = tracking;
+    }
+
+
+    public void setMaxZoom(double maxZoom) {
+        this.maxZoom = maxZoom;
     }
 }

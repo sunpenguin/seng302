@@ -33,7 +33,9 @@ import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
+import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
+import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
@@ -99,11 +101,6 @@ public class RaceController implements Observer {
         background = new RaceBackground(raceViewPane, "/images/water.gif");
     }
 
-    @FXML
-    private void zoomOutButtonAction() {
-        pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
-        pixelMapper.setZoomLevel(0);
-    }
 
     @FXML private void closeAppAction() {
         Stage stage = (Stage) raceViewPane.getScene().getWindow();
@@ -148,6 +145,27 @@ public class RaceController implements Observer {
                             } else {
                                 message.setSailOut();
                             }
+                            break;
+                        case Z:
+                            if (pixelMapper.getZoomLevel() > 0) {
+                                pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() + 1);
+                            } else {
+                                Boat boat = race.getBoat(race.getPlayerId());
+                                pixelMapper.setZoomLevel(1);
+                                pixelMapper.track(boat);
+                                pixelMapper.setTracking(true);
+                            }
+                            send = false;
+                            break;
+                        case X:
+                            if (pixelMapper.getZoomLevel() - 1 <= 0) {
+                                pixelMapper.setTracking(false);
+                                pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
+                            }
+                            pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() - 1);
+
+
+                            send = false;
                             break;
                         default:
                             send = false;
@@ -420,7 +438,10 @@ public class RaceController implements Observer {
         this.sender = sender;
         this.race = race;
 
-        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
+        GPSCalculations gps = new GPSCalculations();
+        List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
+        pixelMapper = new PixelMapper(bounds.get(0), bounds.get(1), race.getCourse().getCentralCoordinate(), raceViewPane);
+        pixelMapper.setMaxZoom(16d);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
