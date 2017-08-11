@@ -2,6 +2,7 @@
 package seng302.team18.model;
 
 import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -391,5 +392,4 @@ public class BoatTest {
 
         assertEquals(250.0, testBoat.getHeading(), 0.1);
     }
-
 }

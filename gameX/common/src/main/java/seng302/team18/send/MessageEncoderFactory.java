@@ -1,4 +1,4 @@
-package seng302.team18.visualiser.send;
+package seng302.team18.send;
 
 /**
  * Factory for creating MessageEncoders.

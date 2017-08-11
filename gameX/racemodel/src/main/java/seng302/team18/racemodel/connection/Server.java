@@ -20,13 +20,7 @@ public class Server extends Observable {
     public Server(int port, int maxClients) {
         this.port = port;
         this.maxClients = maxClients;
-    }
 
-    /**
-     * Opens the server.
-     * Blocks waiting for the first client connection, then opens a second thread to listen for subsequent connections
-     */
-    public void openServer() {
         try {
             serverSocket = ServerSocketFactory.getDefault().createServerSocket(port);
         } catch (IOException e) {
@@ -34,6 +28,13 @@ public class Server extends Observable {
             System.err.println("Exiting program");
             System.exit(-1);
         }
+    }
+
+    /**
+     * Opens the server.
+     * Blocks waiting for the first client connection, then opens a second thread to listen for subsequent connections
+     */
+    public void openServer() {
         System.out.println("Stream opened successfully on port: " + port);
 
         acceptClientConnection();
@@ -56,7 +57,9 @@ public class Server extends Observable {
         } catch (SocketTimeoutException e) {
             // The time out expired, no big deal
         } catch(IOException e) {
-            e.printStackTrace();
+            setChanged();
+            notifyObservers(ServerState.CLOSED);
+            close();
         }
     }
 
@@ -71,6 +74,7 @@ public class Server extends Observable {
      * (Blocking)
      */
     public void close() {
+        stopAcceptingConnections();
         while (!clients.isEmpty()) {
             for (int i = 0; i < clients.size(); i++) {
                 if (clients.get(i).isClosed()) {
@@ -79,6 +83,7 @@ public class Server extends Observable {
             }
         }
         try {
+
             serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();

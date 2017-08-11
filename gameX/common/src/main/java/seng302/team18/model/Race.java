@@ -92,17 +92,19 @@ public class Race {
     }
 
     private void setCourseForBoat(Boat boat) {
-        // Set Leg
-        boat.setLegNumber(course.getLegs().get(0).getLegNumber());
-        // Set Dest
-        boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCoordinate());
-        // Set Coordinate
-        boat.setCoordinate(getStartPosition(boat));
-        // Set Heading
-        GPSCalculations gps = new GPSCalculations();
-        boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
-        double tws = boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection());
-        boat.setSpeed(tws);
+        if (!course.getLegs().isEmpty()) {
+            // Set Leg
+            boat.setLegNumber(course.getLegs().get(0).getLegNumber());
+            // Set Dest
+            boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCoordinate());
+            // Set Coordinate
+            boat.setCoordinate(getStartPosition(boat));
+            // Set Heading
+            GPSCalculations gps = new GPSCalculations();
+            boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
+            double tws = boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection());
+            boat.setSpeed(tws);
+        }
     }
 
 
@@ -201,54 +203,11 @@ public class Race {
             if (!finishedList.contains(boat)) {
 //                updateBoat(boat, time);
                 updatePosition(boat, time);
+                if (hasPassedMark(boat)) {
+                    setNextLeg(boat, course.getNextLeg(boat.getLegNumber()));
+                }
             }
         }
-    }
-
-
-    /**
-     * Updates a boats position then heading.
-     *
-     * @param boat to be updated
-     * @param time
-     */
-    // TODO afj19, 20th July: check the temporal unit here
-    private void updateBoat(Boat boat, double time) {
-        updatePosition(boat, time);
-        updateHeading(boat);
-    }
-
-
-    /**
-     * Changes the boats heading so that if it has reached its destination
-     * it heads in the direction of its next destination. Otherwise set the heading
-     * to be in the direction of its current destination.
-     *
-     * @param boat to be updated
-     */
-    private void updateHeading(Boat boat) {
-        // if boat gets within range of its next destination changes its destination and heading
-        if ((Math.abs(boat.getDestination().getLongitude() - boat.getCoordinate().getLongitude()) < 0.0001)
-                && (Math.abs(boat.getDestination().getLatitude() - boat.getCoordinate().getLatitude()) < 0.0001)) {
-            Leg nextLeg = course.getNextLeg(course.getLeg(boat.getLegNumber())); // find next leg
-            // if current leg is the last leg boat is now finished
-            if (nextLeg.equals(course.getLeg(boat.getLegNumber()))) {
-                finishedList.add(boat);
-                boat.setSpeed(0d);
-                boat.setLegNumber(boat.getLegNumber() + 1);
-                return;
-            }
-            if (course.getLeg(boat.getLegNumber()).getDestination().getMarks().size() == CompoundMark.GATE_SIZE &&  // if the destination is a gate
-                    !boat.getDestination().equals(nextLeg.getDeparture().getMarks().get(0).getCoordinate())) { // and it hasn't gone around the gate
-                boat.setDestination(nextLeg.getDeparture().getMarks().get(0).getCoordinate()); // move around the gate
-            } else { // the destination was a mark or is already gone around gate so move onto the next leg
-                setNextLeg(boat, nextLeg);
-            }
-        }
-        GPSCalculations gps = new GPSCalculations();
-        boat.setHeading(gps.getBearing(boat.getCoordinate(), boat.getDestination()));
-        double tws = boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection());
-        boat.setSpeed(tws);
     }
 
 
@@ -313,6 +272,10 @@ public class Race {
 
             // set next position based on current coordinate, distance travelled, and heading.
             boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+        }
+
+        if (hasPassedMark(boat)) {
+            setNextLeg(boat, course.getNextLeg(boat.getLegNumber()));
         }
     }
 
@@ -448,5 +411,84 @@ public class Race {
         private static Map<String, RaceType> initializeMapping() {
             return Arrays.stream(values()).collect(Collectors.toMap(RaceType::toString, rt -> rt));
         }
+    }
+
+
+    /**
+     * Checks if a boat has past its destination mark.
+     *
+     * @param boat the boat to be checked
+     * @return if has passed its destination mark
+     */
+    public boolean hasPassedMark(Boat boat) {
+        return inPreRoundingZone(boat.getPreviousCoordinate(), boat.getLegNumber()) && inPostRoundingZone(boat.getCoordinate(), boat.getLegNumber());
+    }
+
+    /**
+     * Method to check if a was is the pre pass zone for the destination of a leg
+     *
+     * @param coordinate coordinate to be checked
+     * @param legNumber the leg number for the leg in course
+     * @return true if coordinate is in pre pass zone
+     */
+    private boolean inPreRoundingZone(Coordinate coordinate, int legNumber) {
+        Leg leg = course.getLeg(legNumber);
+        double markToBoatHeading = GPSCalculations.getBearing(leg.getDestination().getCoordinate(), coordinate);
+
+        double entryBearing = GPSCalculations.getBearing(leg.getDestination().getCoordinate(), leg.getDeparture().getCoordinate());
+        GPSCalculations gps = new GPSCalculations();
+
+        MarkRounding.Direction direction = course.getMarkRoundings().get(leg.getLegNumber()).getRoundingDirection();
+
+        if (direction == MarkRounding.Direction.PORT) {
+            return gps.isBetween(markToBoatHeading, leg.getDestination().getPassAngle(), entryBearing);
+        } else if (direction == MarkRounding.Direction.STARBOARD) {
+            return gps.isBetween(markToBoatHeading,  entryBearing, leg.getDestination().getPassAngle());
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Method to check if a coordinate is in the post pass zone for a leg
+     *
+     * @param coordinate coordinate to be checked
+     * @param legNumber the leg number for the leg in course
+     * @return true of coordinate is in [ost pass zone
+     */
+    private boolean inPostRoundingZone(Coordinate coordinate, int legNumber) {
+        Leg leg = course.getLeg(legNumber + 1);
+        double markToBoatHeading = GPSCalculations.getBearing(leg.getDeparture().getCoordinate(), coordinate);
+        double exitBearing = GPSCalculations.getBearing(leg.getDeparture().getCoordinate(), leg.getDestination().getCoordinate());
+//        System.out.println(leg.getDestination().getPassAngle());
+        GPSCalculations gps = new GPSCalculations();
+
+        MarkRounding.Direction direction = course.getMarkRoundings().get(leg.getLegNumber() - 1).getRoundingDirection();
+
+        if (direction == MarkRounding.Direction.PORT) {
+            return gps.isBetween(markToBoatHeading, exitBearing, leg.getDeparture().getPassAngle());
+        } else if (direction == MarkRounding.Direction.STARBOARD) {
+            return gps.isBetween(markToBoatHeading, leg.getDeparture().getPassAngle(), exitBearing);
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Gets a boat from the race given an ID.
+     *
+     * @param id the ID of the boat.
+     * @return the boat with the specified ID, null otherwise.
+     */
+    public Boat getBoat(int id) {
+        for (Boat boat : startingList) {
+            if (boat.getId() == id) {
+                return boat;
+            }
+        }
+
+        return null;
     }
 }

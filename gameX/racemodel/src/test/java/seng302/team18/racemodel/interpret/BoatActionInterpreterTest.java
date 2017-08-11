@@ -40,7 +40,7 @@ public class BoatActionInterpreterTest {
     public void upWindTest() {
         double expected = 357d;
         BoatActionMessage upWind = new BoatActionMessage(boatId);
-        upWind.setUpwind(true);
+        upWind.setUpwind();
         interpreter.interpret(upWind);
         Assert.assertEquals(expected, player.getHeading(), 0.1);
         Assert.assertEquals(0, notPlayer.getHeading(), 0.1);
@@ -51,7 +51,7 @@ public class BoatActionInterpreterTest {
     public void downWindTest() {
         double expected = 3d;
         BoatActionMessage downWind = new BoatActionMessage(boatId);
-        downWind.setDownwind(true);
+        downWind.setDownwind();
         interpreter.interpret(downWind);
         Assert.assertEquals(expected, player.getHeading(), 0.1);
         Assert.assertEquals(0, notPlayer.getHeading(), 0.1);
@@ -61,7 +61,7 @@ public class BoatActionInterpreterTest {
     @Test
     public void sailInTest() {
         BoatActionMessage sailIn = new BoatActionMessage(boatId);
-        sailIn.setSailsIn(true);
+        sailIn.setSailIn();
         interpreter.interpret(sailIn);
         Assert.assertFalse(player.isSailOut());
     }

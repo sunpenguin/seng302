@@ -33,10 +33,13 @@ import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
+import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
+import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
-import seng302.team18.visualiser.send.Sender;
+import seng302.team18.send.Sender;
+import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
@@ -83,6 +86,9 @@ public class RaceController implements Observer {
     private Sender sender;
     private Receiver receiver;
 
+    private RaceBackground background;
+
+
     @FXML
     public void initialize() {
         loadEscapeMenu();
@@ -95,13 +101,10 @@ public class RaceController implements Observer {
             importantAnnotations.put(type, false);
         }
         group.setManaged(false);
+        new ControlSchemeDisplay(raceViewPane);
+        background = new RaceBackground(raceViewPane, "/images/water.gif");
     }
 
-    @FXML
-    private void zoomOutButtonAction() {
-        pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
-        pixelMapper.setZoomLevel(0);
-    }
 
     @FXML public void closeRace() {
         Stage stage = (Stage) raceViewPane.getScene().getWindow();
@@ -127,20 +130,47 @@ public class RaceController implements Observer {
                     boolean send = true;
                     switch (keyEvent.getCode()){
                         case SPACE:
-                            message.setAutopilot(true);
+                            message.setAutoPilot();
                             break;
                         case ENTER:
-                            message.setTackGybe(true);
+                            message.setTackGybe();
                             break;
                         case PAGE_UP:
-                            message.setUpwind(true);
+                        case UP:
+                            message.setUpwind();
                             break;
                         case PAGE_DOWN:
-                            message.setDownwind(true);
+                        case DOWN:
+                            message.setDownwind();
                             break;
                         case SHIFT:
                             sailIn = !sailIn;
-                            message.setSailsIn(sailIn);
+                            if (sailIn) {
+                                message.setSailIn();
+                            } else {
+                                message.setSailOut();
+                            }
+                            break;
+                        case Z:
+                            if (pixelMapper.getZoomLevel() > 0) {
+                                pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() + 1);
+                            } else {
+                                Boat boat = race.getBoat(race.getPlayerId());
+                                pixelMapper.setZoomLevel(1);
+                                pixelMapper.track(boat);
+                                pixelMapper.setTracking(true);
+                            }
+                            send = false;
+                            break;
+                        case X:
+                            if (pixelMapper.getZoomLevel() - 1 <= 0) {
+                                pixelMapper.setTracking(false);
+                                pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
+                            }
+                            pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() - 1);
+
+
+                            send = false;
                             break;
                         case ESCAPE:
                             if (group.getChildren().contains(escapeMenuPane)) {
@@ -446,7 +476,10 @@ public class RaceController implements Observer {
         this.sender = sender;
         this.race = race;
 
-        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
+        GPSCalculations gps = new GPSCalculations();
+        List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
+        pixelMapper = new PixelMapper(bounds.get(0), bounds.get(1), race.getCourse().getCentralCoordinate(), raceViewPane);
+        pixelMapper.setMaxZoom(16d);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
@@ -507,6 +540,7 @@ public class RaceController implements Observer {
      * (For example, when zooming in, the course features are required to change)
      */
     public void redrawFeatures() {
+        background.renderBackground();
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
         raceRenderer.reDrawTrails();

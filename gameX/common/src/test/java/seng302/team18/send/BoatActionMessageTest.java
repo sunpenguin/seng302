@@ -1,4 +1,4 @@
-package seng302.team18.visualiser.send;
+package seng302.team18.send;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,10 +17,6 @@ public class BoatActionMessageTest {
     @Before
     public void setUp() {
         testBoatActionMessage = new BoatActionMessage(555);
-        testBoatActionMessage.setAutopilot(true);
-        testBoatActionMessage.setSailsIn(true);
-        testBoatActionMessage.setTackGybe(true);
-        testBoatActionMessage.setUpwind(true);
     }
 
 
@@ -32,30 +28,35 @@ public class BoatActionMessageTest {
 
     @Test
     public void autoPilotTest(){
-        assertEquals(true, testBoatActionMessage.isAutopilot());
+        testBoatActionMessage.setAutoPilot();
+        assertEquals(1, testBoatActionMessage.getAction());
     }
 
 
     @Test
     public void sailsInTest(){
-        assertEquals(true, testBoatActionMessage.isSailsIn());
+        testBoatActionMessage.setSailIn();
+        assertEquals(2, testBoatActionMessage.getAction());
     }
 
 
     @Test
     public void tackGybeTest(){
-        assertEquals(true, testBoatActionMessage.isTackGybe());
+        testBoatActionMessage.setTackGybe();
+        assertEquals(4, testBoatActionMessage.getAction());
     }
 
 
     @Test
     public void upwindTest(){
-        assertEquals(true, testBoatActionMessage.isUpwind());
+        testBoatActionMessage.setUpwind();
+        assertEquals(5, testBoatActionMessage.getAction());
     }
 
 
     @Test
     public void downwindTest(){
-        assertEquals(false, testBoatActionMessage.isDownwind());
+        testBoatActionMessage.setDownwind();
+        assertEquals(6, testBoatActionMessage.getAction());
     }
 }
