@@ -36,3 +36,11 @@
     -fx-graphic: url('/images/title_screen/view_controls_button_alt.png');
 }
 
+.quitImage {
+    -fx-graphic: url('/images/title_screen/quit_button.png');
+}
+
+.quitImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/title_screen/quit_button_alt.png');
+}

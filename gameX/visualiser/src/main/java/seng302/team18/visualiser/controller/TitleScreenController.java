@@ -33,6 +33,8 @@ public class TitleScreenController {
     private Image hostButtonImage;
     private Label controlsLabel;
     private Image controlsButtonImage;
+    private Label quitLabel;
+    private Image quitButtonImage;
 
     private Image controlsImage;
     private ImageView controlsImageView;
@@ -40,8 +42,11 @@ public class TitleScreenController {
 
 
     public void initialize() {
+        pane.setMaxWidth(600);
+        pane.setMaxHeight(600);
         initialiseHostButton();
         initialiseControlsButton();
+        initialiseQuitButton();
         loadBoatAnimation();
     }
 
@@ -89,7 +94,7 @@ public class TitleScreenController {
      */
     private void initialiseHostButton() {
         hostLabel = new Label();
-        hostLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/preRaceStyle.css").toExternalForm());
+        hostLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
         hostLabel.getStyleClass().add("hostImage");
         pane.getChildren().add(hostLabel);
 
@@ -97,6 +102,37 @@ public class TitleScreenController {
         hostLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) hostButtonImage.getWidth(), 2)));
         hostLabel.setLayoutY((600 / 2) + 100);
         hostLabel.setOnMouseClicked(event -> openMockStream());
+    }
+
+
+    /**
+     * Set up the button for viewing the controls
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
+    private void initialiseControlsButton() {
+        controlsLabel = new Label();
+        controlsLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
+        controlsLabel.getStyleClass().add("controlsImage");
+        pane.getChildren().add(controlsLabel);
+
+        controlsButtonImage = new Image("/images/title_screen/view_controls_button.png");
+        controlsLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) controlsButtonImage.getWidth(), 2)));
+        controlsLabel.setLayoutY((600 / 2) + 150);
+        controlsLabel.setOnMouseClicked(event -> toggleControlsView());
+    }
+
+
+    private void initialiseQuitButton() {
+        quitLabel = new Label();
+        quitLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
+        quitLabel.getStyleClass().add("quitImage");
+        pane.getChildren().add(quitLabel);
+
+        quitButtonImage = new Image("/images/title_screen/quit_button.png");
+        quitLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) quitButtonImage.getWidth(), 2)));
+        quitLabel.setLayoutY((600 / 2) + 200);
+        System.out.println(pane.getWidth() + " " + pane.getHeight());
+        quitLabel.setOnMouseClicked(event -> System.exit(0));
     }
 
 
@@ -114,23 +150,6 @@ public class TitleScreenController {
         pane.getChildren().add(boatImageView2);
         boatImageView2.setLayoutX(5);
         boatImageView2.setLayoutY((pane.getPrefHeight()) - (boatImage.getHeight() + 5));
-    }
-
-
-    /**
-     * Set up the button for viewing the controls
-     * Image used will changed when hovered over as defined in the preRaceStyle css.
-     */
-    private void initialiseControlsButton() {
-        controlsLabel = new Label();
-        controlsLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/preRaceStyle.css").toExternalForm());
-        controlsLabel.getStyleClass().add("controlsImage");
-        pane.getChildren().add(controlsLabel);
-
-        controlsButtonImage = new Image("/images/title_screen/view_controls_button.png");
-        controlsLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) controlsButtonImage.getWidth(), 2)));
-        controlsLabel.setLayoutY((600 / 2) + 150);
-        controlsLabel.setOnMouseClicked(event -> toggleControlsView());
     }
 
 

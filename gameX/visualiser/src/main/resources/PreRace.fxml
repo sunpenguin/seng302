@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="578.0" prefWidth="777.0" styleClass="background" stylesheets="@stylesheets/preRaceStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.PreRaceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="578.0" prefWidth="777.0" styleClass="background" stylesheets="@stylesheets/titleScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.PreRaceController">
    <children>
       <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -114,7 +114,7 @@
                </effect>
             </Text>
             <ListView fx:id="listView" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-            <Label stylesheets="@stylesheets/preRaceStyle.css" text="Welcome to RaceVision!" textFill="WHITE" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+            <Label stylesheets="@stylesheets/titleScreen.css" text="Welcome to RaceVision!" textFill="WHITE" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
                <font>
                   <Font size="34.0" />
                </font>
