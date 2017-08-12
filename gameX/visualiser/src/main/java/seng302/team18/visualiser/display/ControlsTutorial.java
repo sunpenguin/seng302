@@ -1,6 +1,7 @@
 package seng302.team18.visualiser.display;
 
 import javafx.beans.InvalidationListener;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -27,6 +28,7 @@ public class ControlsTutorial {
     private Pane pane;
     private SpriteAnimation animation;
     private ImageView tickView;
+    private Label pressLabel = new Label("PRESS");
     private Label actionLabel = new Label();
     private ImageView actionImage = new ImageView();
     private HBox promptBox = new HBox();
@@ -51,10 +53,12 @@ public class ControlsTutorial {
         this.pane = pane;
 
         actionLabel.setWrapText(true);
-        actionLabel.setText("WOW PRESS A BUTTON. If you do it will get you through this!!!");
+        actionLabel.setPadding(new Insets(5));
+        pressLabel.setMinWidth(60);
+        pressLabel.setWrapText(true);
 
         pane.getChildren().add(promptBox);
-        promptBox.getChildren().addAll(actionLabel, actionImage);
+        promptBox.getChildren().addAll(pressLabel, actionImage, actionLabel);
 
         promptBox.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/tutorial.css").toExternalForm());
         promptBox.getStyleClass().add("hbox");
@@ -178,15 +182,22 @@ public class ControlsTutorial {
     public void draw() {
         promptBox.setPrefWidth(pane.getWidth());
         promptBox.setMaxWidth(pane.getWidth());
+        promptBox.setMinHeight(76);
+        promptBox.setMaxHeight(76);
+        promptBox.setPrefHeight(76);
+
+
 
         Image image = imageMap.get(keyList.get(currentKeyIndex));
         actionImage.setImage(image);
 
-        promptBox.setLayoutX(0.0);
+
+        actionLabel.setText(getCurrentPromptText());
+
+        promptBox.setLayoutX(0);
         promptBox.setLayoutY(pane.getHeight() - promptBox.getHeight());
-//        System.out.println(promptBox.getWidth());
-//        System.out.println("BOX HEIGHT -> " + promptBox.getHeight());
-//        System.out.printf("drawing! -> X:%.2f  Y:%.2f\n", promptBox.getLayoutX(), promptBox.getLayoutY());
+//        System.out.println("BOX HEIGHT -> " + promptBox.getHeight() + "  Ylayout:" + promptBox.getLayoutY());
+//        System.out.println("  ");
     }
 
 
@@ -208,6 +219,23 @@ public class ControlsTutorial {
         animation.setCycleCount(1);
         animation.play();
         pane.getChildren().add(tickView);
+    }
+
+
+    private String getCurrentPromptText(){
+        BoatControls control = keyList.get(currentKeyIndex);
+        if (control == BoatControls.SAILS) {
+            return "TO TOGGLE SAIL IN/OUT";
+        } else if (control == BoatControls.UP) {
+            return "TO STEER BOAT UPWIND";
+        }else if (control == BoatControls.DOWN) {
+            return "TO STEER BOAT DOWNWIND";
+        }else if (control == BoatControls.TACK_GYBE) {
+            return "TO PREFORM A TACK OR A GYBE";
+        }else if (control == BoatControls.VMG) {
+            return "TO SNAP TO THE OPTIMAL VMG";
+        }
+        return "Oh no";
     }
 
 
