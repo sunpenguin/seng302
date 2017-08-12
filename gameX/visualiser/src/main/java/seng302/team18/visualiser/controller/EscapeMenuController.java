@@ -1,19 +1,14 @@
 package seng302.team18.visualiser.controller;
 
-import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import seng302.team18.message.BoatActionMessage;
 
 import java.io.IOException;
 
@@ -22,20 +17,39 @@ import java.io.IOException;
  */
 public class EscapeMenuController {
 
-    RaceController raceController;
-    Group group;
+    private RaceController raceController;
+    private Group group;
+    private Label quitLabel;
+    private Image quitButtonImage;
 
     @FXML private Pane pane;
 
 
-    @FXML public void initialize() {}
-
-
-    @FXML private void returnAction() {
-        returnToTitle();
+    @FXML public void initialize() {
+        initialiseQuitButton();
     }
 
 
+    /**
+     * Set up the button for viewing the controls
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
+    private void initialiseQuitButton() {
+        quitLabel = new Label();
+        quitLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/escape_menu.css").toExternalForm());
+        quitLabel.getStyleClass().add("quitImage");
+        pane.getChildren().add(quitLabel);
+
+        quitButtonImage = new Image("/images/escape_menu/quit_button_image.png");
+        quitLabel.setLayoutX((pane.getPrefWidth() / 2) - (Math.floorDiv((int) quitButtonImage.getWidth(), 2)));
+        quitLabel.setLayoutY((pane.getPrefHeight() / 2) - (Math.floorDiv((int) quitButtonImage.getHeight(), 2)));
+        quitLabel.setOnMouseClicked(event -> returnToTitle());
+    }
+
+
+    /**
+     * Return the user to the title screen.
+     */
     public void returnToTitle() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
 

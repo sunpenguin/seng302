@@ -4,8 +4,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="pane" maxHeight="250.0" maxWidth="250.0" minHeight="250.0" minWidth="250.0" opacity="0.8" prefHeight="250.0" prefWidth="250.0" styleClass="background" stylesheets="@stylesheets/preRaceStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.EscapeMenuController">
-   <children>
-      <Button fx:id="returnButton" layoutX="49.0" layoutY="113.0" mnemonicParsing="false" onAction="#returnAction" text="Return to titlescreen" AnchorPane.topAnchor="113.0" />
-   </children>
+
+<AnchorPane fx:id="pane" maxHeight="250.0" maxWidth="250.0" minHeight="250.0" minWidth="250.0" opacity="0.85" prefHeight="250.0" prefWidth="250.0" styleClass="background" stylesheets="@stylesheets/escape_menu.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.EscapeMenuController">
 </AnchorPane>

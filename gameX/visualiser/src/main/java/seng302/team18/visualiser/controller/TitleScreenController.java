@@ -42,6 +42,7 @@ public class TitleScreenController {
     public void initialize() {
         initialiseHostButton();
         initialiseControlsButton();
+        loadBoatAnimation();
     }
 
 
@@ -92,10 +93,27 @@ public class TitleScreenController {
         hostLabel.getStyleClass().add("hostImage");
         pane.getChildren().add(hostLabel);
 
-        hostButtonImage = new Image("/images/title_screen/host_new_game.png");
+        hostButtonImage = new Image("/images/title_screen/play_button.png");
         hostLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) hostButtonImage.getWidth(), 2)));
         hostLabel.setLayoutY((600 / 2) + 100);
         hostLabel.setOnMouseClicked(event -> openMockStream());
+    }
+
+
+    /**
+     * Loads and places a small animation on the title screen in the bottom corner.
+     */
+    private void loadBoatAnimation() {
+        Image boatImage = new Image("/images/title_screen/boatAnimated.gif");
+        ImageView boatImageView = new ImageView(boatImage);
+        pane.getChildren().add(boatImageView);
+        boatImageView.setLayoutX((pane.getPrefWidth()) - (boatImage.getWidth() + 5));
+        boatImageView.setLayoutY((pane.getPrefHeight()) - (boatImage.getHeight() + 5));
+
+        ImageView boatImageView2 = new ImageView(boatImage);
+        pane.getChildren().add(boatImageView2);
+        boatImageView2.setLayoutX(5);
+        boatImageView2.setLayoutY((pane.getPrefHeight()) - (boatImage.getHeight() + 5));
     }
 
 
@@ -109,7 +127,7 @@ public class TitleScreenController {
         controlsLabel.getStyleClass().add("controlsImage");
         pane.getChildren().add(controlsLabel);
 
-        controlsButtonImage = new Image("/images/title_screen/view_controls.png");
+        controlsButtonImage = new Image("/images/title_screen/view_controls_button.png");
         controlsLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) controlsButtonImage.getWidth(), 2)));
         controlsLabel.setLayoutY((600 / 2) + 150);
         controlsLabel.setOnMouseClicked(event -> toggleControlsView());

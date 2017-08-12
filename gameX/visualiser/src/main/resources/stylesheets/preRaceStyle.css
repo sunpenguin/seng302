@@ -1,5 +1,6 @@
 .background {
-    -fx-background-color: linear-gradient(#327D91 60%, #004060);
+    /*-fx-background-color: linear-gradient(#327D91 60%, #004060);*/
+    -fx-background-color: #327D91;
     -fx-text-fill: black;
 }
 
@@ -18,20 +19,20 @@
 }
 
 .hostImage {
-    -fx-graphic: url('/images/title_screen/host_new_game.png');
+    -fx-graphic: url('/images/title_screen/play_button.png');
 }
 
 .hostImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/title_screen/host_new_game_orange.png');
+    -fx-graphic: url('/images/title_screen/play_button_alt.png');
 }
 
 .controlsImage {
-    -fx-graphic: url('/images/title_screen/view_controls.png');
+    -fx-graphic: url('/images/title_screen/view_controls_button.png');
 }
 
 .controlsImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/title_screen/view_controls_orange.png');
+    -fx-graphic: url('/images/title_screen/view_controls_button_alt.png');
 }
 
