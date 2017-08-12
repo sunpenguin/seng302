@@ -49,8 +49,6 @@ public class CourseRenderer {
      */
     public void renderCourse() {
         markSize = MARK_SIZE * pixelMapper.mappingRatio();
-//        System.out.println(group.getChildren().size());
-//        System.out.println(course.getCompoundMarks());
         List<CompoundMark> compoundMarks = course.getCompoundMarks();
         // Renders CompoundMarks
         for (int i = 0; i < compoundMarks.size(); i++) {
@@ -78,7 +76,7 @@ public class CourseRenderer {
         for (BoundaryMark boundary : boundaryMarks) {
             renderBoundary(border, boundary.getCoordinate());
         }
-        if (course.getBoundaries().size() != 0) {
+        if (course.getBoundaries().size() != 0 && !group.getChildren().contains(border)) {
             renderBoundary(border, course.getBoundaries().get(0).getCoordinate());
             group.getChildren().add(border);
         }

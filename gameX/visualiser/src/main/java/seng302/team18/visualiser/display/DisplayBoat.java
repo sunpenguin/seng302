@@ -81,8 +81,8 @@ public class DisplayBoat implements GeographicLocation {
     }
 
     private void setUpBoatShape(){
-        boatHeight = pixelLength;
-        boatWidth = pixelLength;
+        boatHeight = pixelLength + 2;
+        boatWidth = pixelLength - 2;
         boatShape = new Double[]{
                 0.0, boatHeight / -2,
                 boatWidth / -2, boatHeight / 2,
