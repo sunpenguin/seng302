@@ -28,6 +28,7 @@ public class TitleScreenController {
     @FXML private TextField customPortField;
     @FXML private TextField customHostField;
     @FXML private AnchorPane pane;
+    @FXML private AnchorPane paneInner;
 
     private Label hostLabel;
     private Image hostButtonImage;
@@ -42,12 +43,12 @@ public class TitleScreenController {
 
 
     public void initialize() {
-        pane.setMaxWidth(600);
-        pane.setMaxHeight(600);
+        registerListeners();
         initialiseHostButton();
         initialiseControlsButton();
         initialiseQuitButton();
         loadBoatAnimation();
+        reDraw();
     }
 
 
@@ -89,6 +90,15 @@ public class TitleScreenController {
 
 
     /**
+     * Register any necessary listeners.
+     */
+    private void registerListeners() {
+        pane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> reDraw());
+        pane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> reDraw());
+    }
+
+
+    /**
      * Set up the button for hosting a new game.
      * Image used will changed when hovered over as defined in the preRaceStyle css.
      */
@@ -96,7 +106,7 @@ public class TitleScreenController {
         hostLabel = new Label();
         hostLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
         hostLabel.getStyleClass().add("hostImage");
-        pane.getChildren().add(hostLabel);
+        paneInner.getChildren().add(hostLabel);
 
         hostButtonImage = new Image("/images/title_screen/play_button.png");
         hostLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) hostButtonImage.getWidth(), 2)));
@@ -113,7 +123,7 @@ public class TitleScreenController {
         controlsLabel = new Label();
         controlsLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
         controlsLabel.getStyleClass().add("controlsImage");
-        pane.getChildren().add(controlsLabel);
+        paneInner.getChildren().add(controlsLabel);
 
         controlsButtonImage = new Image("/images/title_screen/view_controls_button.png");
         controlsLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) controlsButtonImage.getWidth(), 2)));
@@ -126,12 +136,11 @@ public class TitleScreenController {
         quitLabel = new Label();
         quitLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
         quitLabel.getStyleClass().add("quitImage");
-        pane.getChildren().add(quitLabel);
+        paneInner.getChildren().add(quitLabel);
 
         quitButtonImage = new Image("/images/title_screen/quit_button.png");
         quitLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) quitButtonImage.getWidth(), 2)));
         quitLabel.setLayoutY((600 / 2) + 200);
-        System.out.println(pane.getWidth() + " " + pane.getHeight());
         quitLabel.setOnMouseClicked(event -> System.exit(0));
     }
 
@@ -142,14 +151,22 @@ public class TitleScreenController {
     private void loadBoatAnimation() {
         Image boatImage = new Image("/images/title_screen/boatAnimated.gif");
         ImageView boatImageView = new ImageView(boatImage);
-        pane.getChildren().add(boatImageView);
-        boatImageView.setLayoutX((pane.getPrefWidth()) - (boatImage.getWidth() + 5));
-        boatImageView.setLayoutY((pane.getPrefHeight()) - (boatImage.getHeight() + 5));
+        paneInner.getChildren().add(boatImageView);
+        boatImageView.setLayoutX((paneInner.getPrefWidth()) - (boatImage.getWidth() + 5));
+        boatImageView.setLayoutY((paneInner.getPrefHeight()) - (boatImage.getHeight() + 5));
 
         ImageView boatImageView2 = new ImageView(boatImage);
-        pane.getChildren().add(boatImageView2);
+        paneInner.getChildren().add(boatImageView2);
         boatImageView2.setLayoutX(5);
-        boatImageView2.setLayoutY((pane.getPrefHeight()) - (boatImage.getHeight() + 5));
+        boatImageView2.setLayoutY((paneInner.getPrefHeight()) - (boatImage.getHeight() + 5));
+    }
+
+
+    private void reDraw() {
+        if (!(paneInner.getWidth() == 0)) {
+            paneInner.setLayoutX((pane.getWidth() / 2) - (paneInner.getWidth() / 2));
+            paneInner.setLayoutY((pane.getHeight() / 2) - (paneInner.getHeight() / 2));
+        }
     }
 
 
@@ -163,10 +180,11 @@ public class TitleScreenController {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
         Parent root = loader.load(); // throws IOException
         PreRaceController controller = loader.getController();
-        stage.setTitle("RaceVision");
+        stage.setTitle("High Seas");
         Scene scene = new Scene(root, 777, 578);
+        stage.setMinWidth(777);
+        stage.setMinHeight(578);
         stage.setScene(scene);
-        stage.setResizable(false);
         stage.show();
         controller.setUp(new Race(), receiver, sender);
     }

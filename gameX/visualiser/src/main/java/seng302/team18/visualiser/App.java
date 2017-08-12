@@ -15,7 +15,9 @@ public class App extends Application {
         primaryStage.setTitle("RaceVision");
         Scene scene = new Scene(root, 600, 600);
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
+        primaryStage.setMinHeight(600);
+        primaryStage.setMinWidth(600);
+        primaryStage.setResizable(true);
         primaryStage.show();
     }
 

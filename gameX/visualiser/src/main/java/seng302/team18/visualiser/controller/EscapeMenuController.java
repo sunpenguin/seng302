@@ -57,9 +57,9 @@ public class EscapeMenuController {
             Parent root = loader.load();
             Stage stage = (Stage) group.getScene().getWindow();
             Scene scene = new Scene(root, 600, 600);
-            stage.setMaxHeight(625);
-            stage.setMaxWidth(600);
-            stage.setResizable(false);
+            stage.setMinHeight(625);
+            stage.setMinWidth(600);
+            stage.setResizable(true);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {}
