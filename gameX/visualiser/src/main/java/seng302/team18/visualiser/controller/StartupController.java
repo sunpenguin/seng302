@@ -13,9 +13,16 @@ import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
+import seng302.team18.visualiser.util.ConfigReader;
 
 import javax.net.SocketFactory;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Controller for when the application first starts up
@@ -26,6 +33,12 @@ public class StartupController {
     @FXML private TextField customHostField;
 
     private RaceMode mode;
+
+
+    @FXML
+    private void initialize() {
+//        createModel();
+    }
 
     /**
      * Called when the mock connection button is selected, sets up a connection with the mock feed
@@ -96,6 +109,29 @@ public class StartupController {
         Race race = new Race();
         race.setMode(mode);
         controller.setUp(race, receiver, sender);
+    }
+
+
+    /**
+     * Creates the model in a new process.
+     * Reads in the file path to the model jar from the config file "visualiser-config.txt" (from the same directory).
+     */
+    private void createModel() {
+        final String CONFIG_FILE_NAME = "visualiser-config.txt";
+        final List<String> tokens = Collections.singletonList("MODEL_PATH");
+        ConfigReader reader = new ConfigReader(tokens);
+        InputStream configStream = null;
+        try {
+            configStream = new FileInputStream(CONFIG_FILE_NAME);
+            String filePath = reader.parseConfig(configStream).get("MODEL_PATH");
+            Runtime.getRuntime().exec("java -jar " + filePath);
+        } catch (IOException e) {
+            if (null == configStream) {
+                System.out.println("You don't have a config file"); // TODO August 12 DHL25 / HQI19 have to show error but title screen incomplete
+            } else {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

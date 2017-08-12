@@ -4,6 +4,8 @@ import javafx.stage.Stage;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.Receiver;
+
+import java.net.SocketAddress;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -42,6 +44,12 @@ public class Interpreter {
 
     public void setInterpreter(MessageInterpreter interpreter) {
         this.interpreter = interpreter;
+    }
+
+
+    public SocketAddress getIp() {
+        return receiver.getSocket().getRemoteSocketAddress();
+//        return receiver.getSocket().getInetAddress();
     }
 
 

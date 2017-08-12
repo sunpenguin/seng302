@@ -3,6 +3,7 @@ package seng302.team18.visualiser.display;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class ControlsTutorialTest {
     public void setup() {
         tutorial = new ControlsTutorial(new Pane());
     }
+
 
     @Test
     public void checkProgressedTestBlueSkies() {

@@ -42,6 +42,10 @@ public class PreRaceController {
     private Label timeZoneLabel;
     @FXML
     private Text raceNameText;
+    @FXML
+    private Label ipLabel;
+    @FXML
+    private Label portLabel;
 
     private ZoneTimeClock preRaceClock;
     private Interpreter interpreter;
@@ -77,6 +81,8 @@ public class PreRaceController {
         this.interpreter = new Interpreter(receiver);
         interpreter.setInterpreter(initialiseInterpreter());
         interpreter.start();
+        showIp();
+//        showPort();
 
         RequestType requestType;
 
@@ -93,8 +99,7 @@ public class PreRaceController {
         sender.send(new RequestMessage(requestType));
         stage.setOnCloseRequest((event) -> {
             interpreter.shutdownNow();
-            while (!receiver.close()) {
-            }
+            while (!receiver.close()) {}
             System.out.println("shutting down");
             System.exit(0);
         });
@@ -180,6 +185,11 @@ public class PreRaceController {
      */
     public void updateBoatList() {
         listView.setItems(FXCollections.observableList(race.getStartingList()));
+    }
+
+
+    private void showIp() {
+        ipLabel.setText(interpreter.getIp().toString());
     }
 
 }
