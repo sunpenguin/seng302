@@ -18,13 +18,13 @@ import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.display.RaceStartTime;
 import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -67,7 +67,7 @@ public class PreRaceController {
         this.sender = sender;
         this.race = race;
         preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
-        raceNameText.setText(race.getRegatta().getRegattaName());
+        raceNameText.setText(race.getRegatta().getName());
         displayTimeZone(race.getStartTime());
 
         RaceStartTime raceStartTime = new RaceStartTime(startTimeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race);
@@ -81,8 +81,7 @@ public class PreRaceController {
         this.interpreter = new Interpreter(receiver);
         interpreter.setInterpreter(initialiseInterpreter());
         interpreter.start();
-        showIp();
-//        showPort();
+        showNetWorkInfo();
 
         RequestType requestType;
 
@@ -188,8 +187,11 @@ public class PreRaceController {
     }
 
 
-    private void showIp() {
-        ipLabel.setText(interpreter.getIp().toString());
+    private void showNetWorkInfo() {
+        Socket socket = interpreter.getSocket();
+        ipLabel.setText(socket.getRemoteSocketAddress().toString());
+//        ipLabel.setText(socket.getInetAddress().toString());
+        portLabel.setText(String.valueOf(socket.getPort()));
     }
 
 }

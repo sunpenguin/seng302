@@ -124,7 +124,7 @@ public class XmlMessageBuilder {
 
         return new AC35XMLRegattaMessage(
                 regatta.getRegattaID(),
-                regatta.getRegattaName(),
+                regatta.getName(),
                 race.getCourse().getName(),
                 centre.getLatitude(),
                 centre.getLongitude(),
