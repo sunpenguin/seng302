@@ -189,8 +189,7 @@ public class PreRaceController {
 
     private void showNetWorkInfo() {
         Socket socket = interpreter.getSocket();
-        ipLabel.setText(socket.getRemoteSocketAddress().toString());
-//        ipLabel.setText(socket.getInetAddress().toString());
+        ipLabel.setText(socket.getInetAddress().toString());
         portLabel.setText(String.valueOf(socket.getPort()));
     }
 

@@ -17,7 +17,6 @@ import seng302.team18.visualiser.util.ConfigReader;
 
 import javax.net.SocketFactory;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
@@ -37,7 +36,7 @@ public class StartupController {
 
     @FXML
     private void initialize() {
-//        createModel();
+        createModel();
     }
 
     /**

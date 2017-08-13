@@ -8,7 +8,6 @@ import java.util.*;
  */
 public class ConfigReader {
 
-    private Scanner scanner;
     private final List<String> tokens;
 
     public ConfigReader(List<String> tokens) {
