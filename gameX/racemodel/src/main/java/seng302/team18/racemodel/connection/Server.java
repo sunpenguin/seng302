@@ -84,6 +84,9 @@ public class Server extends Observable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        setChanged();
+        notifyObservers(ServerState.CLOSED);
     }
 
 
@@ -103,8 +106,6 @@ public class Server extends Observable {
                 clients.remove(i);
                 if (clients.isEmpty() && closeOnEmpty) {
                     close();
-                    setChanged();
-                    notifyObservers(ServerState.CLOSED);
                 }
             }
         }
