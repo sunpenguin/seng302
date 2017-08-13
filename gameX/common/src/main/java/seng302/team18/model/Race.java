@@ -387,6 +387,24 @@ public class Race {
         this.raceType = raceType;
     }
 
+
+    /**
+     * Gets a boat from the race given an ID.
+     *
+     * @param id the ID of the boat.
+     * @return the boat with the specified ID, null otherwise.
+     */
+    public Boat getBoat(int id) {
+        for (Boat boat : startingList) {
+            if (boat.getId() == id) {
+                return boat;
+            }
+        }
+
+        return null;
+    }
+
+
     public enum RaceType {
         MATCH("Match"),
         FLEET("Fleet");

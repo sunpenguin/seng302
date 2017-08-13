@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Builder with a small default course.
  */
-public class SmallCourseBuilder extends AbstractCourseBuilder {
+public class CourseBuilderSmall extends AbstractCourseBuilder {
 
     @Override
     protected List<CompoundMark> buildCompoundMarks() {

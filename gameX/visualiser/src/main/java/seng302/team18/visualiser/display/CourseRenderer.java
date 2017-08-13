@@ -54,8 +54,6 @@ public class CourseRenderer {
      */
     public void renderCourse() {
         markSize = MARK_SIZE * pixelMapper.mappingRatio();
-//        System.out.println(group.getChildren().size());
-//        System.out.println(course.getCompoundMarks());
         List<CompoundMark> compoundMarks = course.getCompoundMarks();
         // Renders CompoundMarks
         for (int i = 0; i < compoundMarks.size(); i++) {
@@ -83,7 +81,7 @@ public class CourseRenderer {
             renderBoundary(border, boundaryMark);
         }
 
-        if (course.getCourseLimits().size() > 0) {
+        if (course.getCourseLimits().size() > 0 && !group.getChildren().contains(border)) {
             renderBoundary(border, course.getCourseLimits().get(0));
             group.getChildren().add(border);
         }
@@ -118,7 +116,7 @@ public class CourseRenderer {
             circle = new Circle(markSize, MARK_COLOR);
 
             circle.setOnMouseClicked((event) -> {
-                pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                pixelMapper.setZoomLevel(4);
                 pixelMapper.setViewPortCenter(mark.getCoordinate());
             });
 
@@ -167,7 +165,7 @@ public class CourseRenderer {
                 circle.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                        pixelMapper.setZoomLevel(4);
                         pixelMapper.setViewPortCenter(mark.getCoordinate());
                     }
                 });
