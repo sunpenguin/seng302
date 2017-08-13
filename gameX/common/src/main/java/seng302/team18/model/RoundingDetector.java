@@ -96,7 +96,7 @@ public class RoundingDetector {
             passed = checkForThroughAndRoundGate(boat, gate, false);
         } else if (gateType == MarkRounding.GateType.THROUGH_THEN_ROUND) {
             passed = checkForThroughAndRoundGate(boat, gate, true);
-        } else if (gateType == MarkRounding.GateType.ROUND_BOTH_MAKRS) {
+        } else if (gateType == MarkRounding.GateType.ROUND_BOTH_MARKS) {
             // Not checking for this type as it should never be encountered
             passed = true;
         }

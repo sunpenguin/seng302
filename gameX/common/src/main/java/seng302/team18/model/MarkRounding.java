@@ -119,10 +119,10 @@ public class MarkRounding {
 
 
     public enum GateType {
-        THROUGH_THEN_ROUND("through gate from same side"),
-        THROUGH_GATE("through gate from opposite side"),
-        ROUND_BOTH_MAKRS("double round gate"),
-        ROUND_THEN_THROUGH("round gate");
+        THROUGH_THEN_ROUND("through gate on arrival, round gate on departure"),
+        THROUGH_GATE("straight through gate"),
+        ROUND_BOTH_MARKS("s-bend gate (round both marks)"),
+        ROUND_THEN_THROUGH("round gate on arrival, through gate on departure");
 
         private String gateType;
 

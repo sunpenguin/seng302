@@ -145,7 +145,7 @@ public class Course {
         MarkRounding current = null;
         MarkRounding future = nullBorderedRoundings.get(1);
 
-        GPSCalculations calculator = new GPSCalculations();
+
 
         for (int i = 1; i < nullBorderedRoundings.size() - 1; i++) {
             previous = current;
@@ -153,13 +153,21 @@ public class Course {
             future = nullBorderedRoundings.get(i + 1);
 
             if (current.getCompoundMark().getMarks().size() == CompoundMark.MARK_SIZE) {
-                double previousAngle = calculator.getBearing(previous.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
-                double futureAngle = calculator.getBearing(future.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
-                current.setPassAngle(((previousAngle + futureAngle) / 2d));
+                setMarkRoundingAngle(previous, current, future);
             } else if (current.getCompoundMark().getMarks().size() == CompoundMark.GATE_SIZE) {
                 setGateType(previous, current, future);
             }
         }
+    }
+
+
+    private void setMarkRoundingAngle(MarkRounding previous, MarkRounding current, MarkRounding future) {
+        GPSCalculations calculator = new GPSCalculations();
+
+        double previousAngle = calculator.getBearing(previous.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
+        double futureAngle = calculator.getBearing(future.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
+
+        current.setPassAngle((((previousAngle + futureAngle) % 360) / 2d));
     }
 
 
@@ -209,7 +217,7 @@ public class Course {
                             MarkRounding.GateType.THROUGH_THEN_ROUND : MarkRounding.GateType.THROUGH_GATE;
                 } else {
                     gateType = (previousOnExitSide) ?
-                            MarkRounding.GateType.ROUND_BOTH_MAKRS : MarkRounding.GateType.ROUND_THEN_THROUGH;
+                            MarkRounding.GateType.ROUND_BOTH_MARKS : MarkRounding.GateType.ROUND_THEN_THROUGH;
                 }
             }
         }
