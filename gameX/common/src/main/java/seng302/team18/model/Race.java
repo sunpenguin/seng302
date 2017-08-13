@@ -107,6 +107,7 @@ public class Race {
             ));
             boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
             boat.setRoundZone(Boat.RoundZone.ZONE1);
+            boat.setStatus(BoatStatus.PRE_START);
         }
     }
 
@@ -126,7 +127,7 @@ public class Race {
 
         double bearing = gps.getBearing(startMark1, startMark2);
 
-        double diff = (startRounding.getRoundingDirection().equals(MarkRounding.Direction.PS)) ? -90: 90;
+        double diff = (startRounding.getRoundingDirection().equals(MarkRounding.Direction.PS)) ? -90 : 90;
         double behind = (bearing + diff + 360) % 360;
 
         double offset = startingList.size();
@@ -209,9 +210,7 @@ public class Race {
      */
     public void updateBoats(double time) { // time in seconds
         for (Boat boat : startingList) {
-            if (!finishedList.contains(boat)) {
-                updatePosition(boat, time);
-            }
+            updatePosition(boat, time);
         }
     }
 
@@ -247,6 +246,10 @@ public class Race {
         }
 
         markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getMarkSequence().get(currentLeg).getCompoundMark()));
+
+        if (nextLeg == course.getMarkSequence().size()) {
+            boat.setStatus(BoatStatus.FINISHED);
+        }
     }
 
 
@@ -277,7 +280,7 @@ public class Race {
             boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
         }
 
-        if (detector.hasPassedDestination(boat, course)) {
+        if (boat.getStatus().equals(BoatStatus.RACING) && detector.hasPassedDestination(boat, course)) {
             setNextLeg(boat, boat.getLegNumber() + 1);
         }
     }

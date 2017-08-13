@@ -1,9 +1,6 @@
 package seng302.team18.racemodel;
 
-import seng302.team18.model.Boat;
-import seng302.team18.model.MarkRoundingEvent;
-import seng302.team18.model.Race;
-import seng302.team18.model.RaceStatus;
+import seng302.team18.model.*;
 import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
 
@@ -117,6 +114,9 @@ public class TestMock implements Observer {
 
                 if ((race.getStatus() == RaceStatus.PREPARATORY) && ZonedDateTime.now().isAfter(race.getStartTime())) {
                     race.setStatus(RaceStatus.STARTED);
+                    race.getStartingList().stream()
+                            .filter(boat -> boat.getStatus().equals(BoatStatus.PRE_START))
+                            .forEach(boat -> boat.setStatus(BoatStatus.RACING));
                 }
             }
 
