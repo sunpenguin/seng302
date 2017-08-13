@@ -53,13 +53,13 @@ public class CourseBuilder2 extends AbstractCourseBuilder {
         mark1.setHullNumber("LC21");
         mark1.setStoweName("PRO");
         mark1.setShortName("S1");
-        mark1.setBoatName("Upwind1");
+        mark1.setBoatName("Downwind1");
 
         Mark mark5 = new Mark(235, new Coordinate(32.30463, -64.85245));
         mark2.setHullNumber("LC22");
         mark2.setStoweName("PIN");
         mark2.setShortName("S2");
-        mark2.setBoatName("Upwind2");
+        mark2.setBoatName("Downwind2");
 
         CompoundMark compoundMark2 = new CompoundMark("Downwind", Arrays.asList(mark4, mark5), 13);
         compoundMarks.add(compoundMark2);
@@ -68,13 +68,13 @@ public class CourseBuilder2 extends AbstractCourseBuilder {
         mark1.setHullNumber("LC21");
         mark1.setStoweName("PRO");
         mark1.setShortName("S1");
-        mark1.setBoatName("Downwind1");
+        mark1.setBoatName("Upwind1");
 
         Mark mark7 = new Mark(237, new Coordinate(32.29935, -64.85564));
         mark2.setHullNumber("LC22");
         mark2.setStoweName("PIN");
         mark2.setShortName("S2");
-        mark2.setBoatName("Downwind2");
+        mark2.setBoatName("Upwind2");
 
         CompoundMark compoundMark3 = new CompoundMark("Upwind", Arrays.asList(mark6, mark7), 14);
         compoundMarks.add(compoundMark3);
