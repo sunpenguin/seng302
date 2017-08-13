@@ -213,7 +213,6 @@ public class Course {
                 }
             }
         }
-        System.out.println("" + rounding.getCompoundMark().getName() + ": " + gateType.getType());
         rounding.setGateType(gateType);
     }
 

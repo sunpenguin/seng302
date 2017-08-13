@@ -5,10 +5,7 @@ import seng302.team18.util.SpeedConverter;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -24,7 +21,6 @@ public class Race {
 
     private List<Integer> participantIds;
     private List<Boat> startingList;
-    private List<Boat> finishedList;
 
     private ZonedDateTime startTime = ZonedDateTime.now();
     private ZonedDateTime currentTime;
@@ -39,7 +35,6 @@ public class Race {
         participantIds = new ArrayList<>();
         startingList = new ArrayList<>();
         course = new Course();
-        finishedList = new ArrayList<>();
         id = 0;
         status = RaceStatus.NOT_ACTIVE;
         currentTime = ZonedDateTime.now(course.getTimeZone());
@@ -59,7 +54,6 @@ public class Race {
     public Race(List<Boat> startingList, Course course, int raceId, RaceType raceType) {
         this.startingList = startingList;
         this.course = course;
-        finishedList = new ArrayList<>();
         participantIds = startingList.stream()
                 .map(Boat::getId)
                 .collect(Collectors.toList());
@@ -305,13 +299,12 @@ public class Race {
     }
 
 
-    public List<Boat> getFinishedList() {
-        return finishedList;
-    }
-
-
     public boolean isFinished() {
-        return startingList.size() == finishedList.size() && startingList.size() != 0;
+        Collection<BoatStatus> finishedStatuses = Arrays.asList(BoatStatus.DNF, BoatStatus.DNS, BoatStatus.FINISHED, BoatStatus.DSQ);
+        int numFinished = (int) startingList.stream()
+                .filter(boat -> finishedStatuses.contains(boat.getStatus()))
+                .count();
+        return startingList.size() == numFinished && startingList.size() != 0;
     }
 
     public ZonedDateTime getStartTime() {
