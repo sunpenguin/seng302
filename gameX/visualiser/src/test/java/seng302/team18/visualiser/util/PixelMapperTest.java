@@ -303,10 +303,10 @@ public class PixelMapperTest {
         double[] distances = {10, 100, 500, 1000, 2500, 5000, 10000, 20000};
         for (double distance : distances) {
             Coordinate centre = new Coordinate(51.58072, -3.98796);
-            BoundaryMark n = new BoundaryMark(1, gps.toCoordinate(centre, 0, distance));
-            BoundaryMark e = new BoundaryMark(1, gps.toCoordinate(centre, 90, distance));
-            BoundaryMark s = new BoundaryMark(1, gps.toCoordinate(centre, 180, distance));
-            BoundaryMark w = new BoundaryMark(1, gps.toCoordinate(centre, 270, distance));
+            Coordinate n =  gps.toCoordinate(centre, 0, distance);
+            Coordinate e =  gps.toCoordinate(centre, 90, distance);
+            Coordinate s =  gps.toCoordinate(centre, 180, distance);
+            Coordinate w =  gps.toCoordinate(centre, 270, distance);
 
             Course course = new Course(
                     Collections.emptyList(),
@@ -327,10 +327,10 @@ public class PixelMapperTest {
             TestPixelMapper pixelMapper = new TestPixelMapper(course, pane);
 
             XYPair middle = pixelMapper.coordToPixel(centre);
-            XYPair t = pixelMapper.coordToPixel(n.getCoordinate());
-            XYPair r = pixelMapper.coordToPixel(e.getCoordinate());
-            XYPair b = pixelMapper.coordToPixel(s.getCoordinate());
-            XYPair l = pixelMapper.coordToPixel(w.getCoordinate());
+            XYPair t = pixelMapper.coordToPixel(n);
+            XYPair r = pixelMapper.coordToPixel(e);
+            XYPair b = pixelMapper.coordToPixel(s);
+            XYPair l = pixelMapper.coordToPixel(w);
 
 //            System.out.println("up   : " + (middle.getY() - t.getY()));
 //            System.out.println("right: " + (r.getX() - middle.getX()));
@@ -345,14 +345,14 @@ public class PixelMapperTest {
             System.out.println("    NW   : " + pixelMapper.coordToPixel(pixelMapper.bounds.get(pixelMapper.NW_BOUND_INDEX)));
             System.out.println("    SE   : " + pixelMapper.coordToPixel(pixelMapper.bounds.get(pixelMapper.SE_BOUND_INDEX)));
             System.out.println("    mid  : " + middle + "    " + pixelMapper.coordinateToPlane(centre));
-            System.out.println("    up   : " + t + "    " + pixelMapper.coordinateToPlane(n.getCoordinate()));
-            System.out.println("    right: " + r + "    " + pixelMapper.coordinateToPlane(e.getCoordinate()));
-            System.out.println("    down : " + b + "    " + pixelMapper.coordinateToPlane(s.getCoordinate()));
-            System.out.println("    left : " + l + "    " + pixelMapper.coordinateToPlane(w.getCoordinate()));
-            System.out.println("    dN: " + (pixelMapper.coordinateToPlane(centre).getY() - pixelMapper.coordinateToPlane(n.getCoordinate()).getY()));
-            System.out.println("    dE: " + (pixelMapper.coordinateToPlane(e.getCoordinate()).getX() - pixelMapper.coordinateToPlane(centre).getX()));
-            System.out.println("    dS: " + (pixelMapper.coordinateToPlane(s.getCoordinate()).getY() - pixelMapper.coordinateToPlane(centre).getY()));
-            System.out.println("    dW: " + (pixelMapper.coordinateToPlane(centre).getX() - pixelMapper.coordinateToPlane(w.getCoordinate()).getX()));
+            System.out.println("    up   : " + t + "    " + pixelMapper.coordinateToPlane(n));
+            System.out.println("    right: " + r + "    " + pixelMapper.coordinateToPlane(e));
+            System.out.println("    down : " + b + "    " + pixelMapper.coordinateToPlane(s));
+            System.out.println("    left : " + l + "    " + pixelMapper.coordinateToPlane(w));
+            System.out.println("    dN: " + (pixelMapper.coordinateToPlane(centre).getY() - pixelMapper.coordinateToPlane(n).getY()));
+            System.out.println("    dE: " + (pixelMapper.coordinateToPlane(e).getX() - pixelMapper.coordinateToPlane(centre).getX()));
+            System.out.println("    dS: " + (pixelMapper.coordinateToPlane(s).getY() - pixelMapper.coordinateToPlane(centre).getY()));
+            System.out.println("    dW: " + (pixelMapper.coordinateToPlane(centre).getX() - pixelMapper.coordinateToPlane(w).getX()));
         }
     }
 }

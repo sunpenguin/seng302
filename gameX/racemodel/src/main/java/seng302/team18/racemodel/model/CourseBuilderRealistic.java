@@ -1,6 +1,9 @@
 package seng302.team18.racemodel.model;
 
-import seng302.team18.model.*;
+import seng302.team18.model.CompoundMark;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Mark;
+import seng302.team18.model.MarkRounding;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -103,20 +106,20 @@ public class CourseBuilderRealistic extends AbstractCourseBuilder {
 
 
     @Override
-    protected List<BoundaryMark> getBoundaryMarks() {
+    protected List<Coordinate> getBoundaryMarks() {
         return Arrays.asList(
-                new BoundaryMark(1, new Coordinate(5.27732, -4.42508)),
-                new BoundaryMark(2, new Coordinate(5.27558, -4.42894)),
-                new BoundaryMark(3, new Coordinate(5.27413, -4.42864)),
-                new BoundaryMark(4, new Coordinate(5.2735, -4.43012)),
-                new BoundaryMark(5, new Coordinate(5.27196, -4.42949)),
-                new BoundaryMark(6, new Coordinate(5.27229, -4.42697)),
-                new BoundaryMark(7, new Coordinate(5.27141, -4.42501)),
-                new BoundaryMark(8, new Coordinate(5.2708, -4.42629)),
-                new BoundaryMark(9, new Coordinate(5.26955, -4.42538)),
-                new BoundaryMark(10, new Coordinate(5.26964, -4.4225)),
-                new BoundaryMark(11, new Coordinate(5.27076, -4.41785)),
-                new BoundaryMark(12, new Coordinate(5.27236, -4.41827))
+                new Coordinate(5.27732, -4.42508),
+                new Coordinate(5.27558, -4.42894),
+                new Coordinate(5.27413, -4.42864),
+                new Coordinate(5.2735, -4.43012),
+                new Coordinate(5.27196, -4.42949),
+                new Coordinate(5.27229, -4.42697),
+                new Coordinate(5.27141, -4.42501),
+                new Coordinate(5.2708, -4.42629),
+                new Coordinate(5.26955, -4.42538),
+                new Coordinate(5.26964, -4.4225),
+                new Coordinate(5.27076, -4.41785),
+                new Coordinate(5.27236, -4.41827)
         );
     }
 
