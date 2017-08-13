@@ -7,7 +7,7 @@
 .background2 {
     -fx-background-color: black;
     -fx-background-image:url("/images/title_screen/GameLogo2.gif");
-    -fx-background-size: 90% 90%;
+    -fx-background-size: 90% 100%;
     -fx-background-position: center;
 }
 

@@ -41,6 +41,8 @@ public class TitleScreenController {
     private ImageView controlsImageView;
     private boolean controlsVisible = false;
 
+    private Stage stage;
+
 
     public void initialize() {
         registerListeners();
@@ -48,7 +50,6 @@ public class TitleScreenController {
         initialiseControlsButton();
         initialiseQuitButton();
         loadBoatAnimation();
-        reDraw();
     }
 
 
@@ -132,6 +133,10 @@ public class TitleScreenController {
     }
 
 
+    /**
+     * Set up the button for quitting the app.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
     private void initialiseQuitButton() {
         quitLabel = new Label();
         quitLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
@@ -162,10 +167,18 @@ public class TitleScreenController {
     }
 
 
-    private void reDraw() {
+    /**
+     * Re draw the the pane which holds elements of the title screen to be in the middle of the window.
+     */
+    public void reDraw() {
         if (!(paneInner.getWidth() == 0)) {
-            paneInner.setLayoutX((pane.getWidth() / 2) - (paneInner.getWidth() / 2));
-            paneInner.setLayoutY((pane.getHeight() / 2) - (paneInner.getHeight() / 2));
+            paneInner.setLayoutX((pane.getScene().getWidth() / 2) - (paneInner.getWidth() / 2));
+            paneInner.setLayoutY((pane.getScene().getHeight() / 2) - (paneInner.getHeight() / 2));
+        }
+
+        else if (stage != null) {
+            paneInner.setLayoutX((stage.getWidth() / 2) - (300));
+            paneInner.setLayoutY((stage.getHeight() / 2) - (300));
         }
     }
 
@@ -178,13 +191,11 @@ public class TitleScreenController {
     private void startConnection(Receiver receiver, Sender sender) throws Exception {
         Stage stage = (Stage) errorText.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
-        Parent root = loader.load(); // throws IOException
+        Parent root = loader.load();
         PreRaceController controller = loader.getController();
+        controller.setStage(stage);
         stage.setTitle("High Seas");
-        Scene scene = new Scene(root, 777, 578);
-        stage.setMinWidth(777);
-        stage.setMinHeight(578);
-        stage.setScene(scene);
+        pane.getScene().setRoot(root);
         stage.show();
         controller.setUp(new Race(), receiver, sender);
     }
@@ -203,9 +214,14 @@ public class TitleScreenController {
             controlsImageView = new ImageView(controlsImage);
             pane.getChildren().add(controlsImageView);
             controlsImageView.setPreserveRatio(true);
-            controlsImageView.setFitWidth(pane.getWidth());
-            controlsImageView.setLayoutY(pane.getHeight() / 2 - (controlsImage.getHeight() / 3));
+            controlsImageView.setFitWidth(paneInner.getWidth());
+            controlsImageView.setLayoutX((pane.getWidth() / 2) - (paneInner.getWidth() / 2));
             controlsVisible = true;
         }
+    }
+
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }
