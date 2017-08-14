@@ -483,7 +483,7 @@ public class RaceController implements Observer {
     private void updateControlsTutorial() {
         if(race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
             if (controlsTutorial == null) {
-                controlsTutorial = new ControlsTutorial(raceViewPane);
+                controlsTutorial = new ControlsTutorial(raceViewPane, race.getCourse().getWindDirection(), race.getStartingList().get(0));
                 controlsTutorial.displayNext();
             } else {
                 controlsTutorial.draw();

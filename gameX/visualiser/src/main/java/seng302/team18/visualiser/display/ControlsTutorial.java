@@ -2,6 +2,7 @@ package seng302.team18.visualiser.display;
 
 import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,6 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+import seng302.team18.model.Boat;
 
 import java.util.*;
 
@@ -16,6 +18,11 @@ import java.util.*;
  * Class to handle running the controls tutorial
  */
 public class ControlsTutorial {
+
+    private Boat boat;
+    private double windAngle;
+    private double boatOldTWA;
+    private boolean boatOldSailsOut;
 
     // TODO jth102 9/08: Make class for each animation? Store all this + frame time, repetitions, size scale
     private final int COLUMNS  =   7;
@@ -28,20 +35,45 @@ public class ControlsTutorial {
     private Pane pane;
     private SpriteAnimation animation;
     private ImageView tickView;
+
+    private HBox controlPromptBox = new HBox();
     private Label pressLabel = new Label("PRESS");
-    private Label actionLabel = new Label();
+    private Label keyActionLabel = new Label();
     private ImageView actionImage = new ImageView();
-    private HBox promptBox = new HBox();
+
+    private HBox actionPromptBox = new HBox();
+    private Label actionLabel = new Label();
+
     private Map<BoatControls, Image> imageMap = new HashMap<>();
     private int currentKeyIndex = 0;
 
+
+    private final int INDEX_SAILS1 = 0;
+    private final int INDEX_UP1 = 1;
+    private final int INDEX_UP2 = 2;
+    private final int INDEX_UP3 = 3;
+    private final int INDEX_DOWN1 = 4;
+    private final int INDEX_DOWN2 = 5;
+    private final int INDEX_DOWN3 = 6;
+    private final int INDEX_VMG = 7;
+    private final int INDEX_TACK = 8;
+    private final int INDEX_GYBE = 9;
+    private final int INDEX_SAILS2 = 10;
+    private final int INDEX_ESC = 11;
+
+
     private List<BoatControls> keyList = Arrays.asList(BoatControls.SAILS,
                                                     BoatControls.UP,
+                                                    BoatControls.UP,
+                                                    BoatControls.UP,
+                                                    BoatControls.DOWN,
+                                                    BoatControls.DOWN,
                                                     BoatControls.DOWN,
                                                     BoatControls.VMG,
                                                     BoatControls.TACK_GYBE,
                                                     BoatControls.TACK_GYBE,
-                                                    BoatControls.SAILS);
+                                                    BoatControls.SAILS,
+                                                    BoatControls.ESC);
 
 
     /**
@@ -49,19 +81,33 @@ public class ControlsTutorial {
      *
      * @param pane The pane to put graphical elements on.
      */
-    public ControlsTutorial(Pane pane) {
+    public ControlsTutorial(Pane pane, double windAngle, Boat boat) { // should only be one boat in tutorial
         this.pane = pane;
+        this.windAngle = windAngle;
+        this.boat = boat;
 
-        actionLabel.setWrapText(true);
-        actionLabel.setPadding(new Insets(5));
+        boatOldSailsOut = boat.isSailOut();
+        boatOldTWA = boat.getTrueWindAngle(windAngle);
+
+        keyActionLabel.setWrapText(true);
+        keyActionLabel.setPadding(new Insets(5));
         pressLabel.setMinWidth(60);
+        pressLabel.setPadding(new Insets(5));
         pressLabel.setWrapText(true);
+        actionLabel.setPadding(new Insets(5));
+        actionLabel.setWrapText(true);
 
-        pane.getChildren().add(promptBox);
-        promptBox.getChildren().addAll(pressLabel, actionImage, actionLabel);
+        pane.getChildren().addAll(actionPromptBox, controlPromptBox);
 
-        promptBox.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/tutorial.css").toExternalForm());
-        promptBox.getStyleClass().add("hbox");
+        actionPromptBox.getChildren().addAll(actionLabel);
+        controlPromptBox.getChildren().addAll(pressLabel, actionImage, keyActionLabel);
+
+
+        controlPromptBox.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/tutorial.css").toExternalForm());
+        controlPromptBox.getStyleClass().add("hbox1");
+
+        actionPromptBox.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/tutorial.css").toExternalForm());
+        actionPromptBox.getStyleClass().add("hbox2");
 
         setMapping();
         registerListeners();
@@ -76,12 +122,14 @@ public class ControlsTutorial {
         InvalidationListener listenerWidth = observable -> {
             draw();
         };
-        promptBox.widthProperty().addListener(listenerWidth);
+        controlPromptBox.widthProperty().addListener(listenerWidth);
+        actionPromptBox.widthProperty().addListener(listenerWidth);
 
         InvalidationListener listenerHeight = observable -> {
             draw();
         };
-        promptBox.heightProperty().addListener(listenerHeight);
+        controlPromptBox.heightProperty().addListener(listenerHeight);
+        actionPromptBox.heightProperty().addListener(listenerHeight);
     }
 
 
@@ -94,6 +142,8 @@ public class ControlsTutorial {
         imageMap.put(BoatControls.UP, new Image(TutorialImage.UP.toString()));
         imageMap.put(BoatControls.DOWN, new Image(TutorialImage.DOWN.toString()));
         imageMap.put(BoatControls.VMG, new Image(TutorialImage.SPACE.toString()));
+        imageMap.put(BoatControls.ESC, new Image(TutorialImage.ESC.toString()));
+
     }
 
 
@@ -180,24 +230,31 @@ public class ControlsTutorial {
      * If screen is resized, this method will also be called so the elements can be repositioned.
      */
     public void draw() {
-        promptBox.setPrefWidth(pane.getWidth());
-        promptBox.setMaxWidth(pane.getWidth());
-        promptBox.setMinHeight(76);
-        promptBox.setMaxHeight(76);
-        promptBox.setPrefHeight(76);
+        controlPromptBox.setPrefWidth(pane.getWidth());
+        controlPromptBox.setMaxWidth(pane.getWidth());
+        controlPromptBox.setMinHeight(60);
+        controlPromptBox.setMaxHeight(60);
+        controlPromptBox.setPrefHeight(60);
+
+        actionPromptBox.setPrefWidth(pane.getWidth());
+        actionPromptBox.setMaxWidth(pane.getWidth());
+        actionPromptBox.setMinHeight(60);
+        actionPromptBox.setMaxHeight(60);
+        actionPromptBox.setPrefHeight(60);
 
 
 
         Image image = imageMap.get(keyList.get(currentKeyIndex));
         actionImage.setImage(image);
+        keyActionLabel.setText(getCurrentPromptText());
 
+        actionLabel.setText(getActionPromptText());
 
-        actionLabel.setText(getCurrentPromptText());
+        controlPromptBox.setLayoutX(0);
+        controlPromptBox.setLayoutY(pane.getHeight() - controlPromptBox.getHeight());
 
-        promptBox.setLayoutX(0);
-        promptBox.setLayoutY(pane.getHeight() - promptBox.getHeight());
-//        System.out.println("BOX HEIGHT -> " + promptBox.getHeight() + "  Ylayout:" + promptBox.getLayoutY());
-//        System.out.println("  ");
+        actionPromptBox.setLayoutX(0);
+        actionPromptBox.setLayoutY(pane.getHeight() - controlPromptBox.getHeight() - actionPromptBox.getHeight());
     }
 
 
@@ -221,6 +278,35 @@ public class ControlsTutorial {
         pane.getChildren().add(tickView);
     }
 
+    private String getActionPromptText(){
+        if (currentKeyIndex == INDEX_SAILS1) {              //Sails
+            return "PUT SAILS OUT";
+        } else if (currentKeyIndex == INDEX_UP1) {          //UP
+            return "STEER UPWIND 9 DEGREES";
+        } else if (currentKeyIndex == INDEX_UP2) {          //UP
+            return "STEER UPWIND 6 DEGREES";
+        } else if (currentKeyIndex == INDEX_UP3) {          //UP
+            return "STEER UPWIND 3 DEGREES";
+        } else if (currentKeyIndex == INDEX_DOWN1) {        //DOWN
+            return "STEER DOWNWIND 9 DEGREES";
+        } else if (currentKeyIndex == INDEX_DOWN2) {        //DOWN
+            return "STEER DOWNWIND 6 DEGREES";
+        } else if (currentKeyIndex == INDEX_DOWN3) {        //DOWN
+            return "STEER DOWNWIND 3 DEGREES";
+        }  else if (currentKeyIndex == INDEX_VMG) {         //VMG
+            return "OPTIMISE YOUR UPWIND/DOWNWIND VMG";
+        } else if (currentKeyIndex == INDEX_TACK) {         //TACK
+            return "PREFORM A TACK";
+        } else if (currentKeyIndex == INDEX_GYBE) {         //GYBE
+            return "PREFORM A GYBE";
+        } else if (currentKeyIndex == INDEX_SAILS2) {       //SAILS
+            return "BRING THE SAILS IN";
+        } else if (currentKeyIndex == INDEX_ESC) {          //ESC
+            return "LEAVE THE TUTORIAL";
+        }
+        return "oh no";
+    }
+
 
     private String getCurrentPromptText(){
         BoatControls control = keyList.get(currentKeyIndex);
@@ -234,6 +320,8 @@ public class ControlsTutorial {
             return "TO PREFORM A TACK OR A GYBE";
         }else if (control == BoatControls.VMG) {
             return "TO SNAP TO THE OPTIMAL VMG";
+        } else if (control == BoatControls.ESC) {
+            return "TO EXIT TUTORIAL";
         }
         return "Oh no";
     }
@@ -247,6 +335,7 @@ public class ControlsTutorial {
         UP,
         DOWN,
         TACK_GYBE,
-        VMG
+        VMG,
+        ESC
     }
 }

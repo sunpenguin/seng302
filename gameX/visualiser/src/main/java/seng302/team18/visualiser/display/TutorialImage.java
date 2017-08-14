@@ -8,7 +8,8 @@ public enum TutorialImage {
     SPACE("/images/tutorial/space.png"),
     UP("/images/tutorial/up.png"),
     DOWN("/images/tutorial/down.png"),
-    ENTER("/images/tutorial/enter.png");
+    ENTER("/images/tutorial/enter.png"),
+    ESC("/images/tutorial/esc.png");
 
     private final String text;
 

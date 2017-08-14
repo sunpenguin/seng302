@@ -7,9 +7,15 @@
     -fx-font-family: "Munro";
 }
 
-.hbox {
+.hbox1 {
     -fx-background-color: aqua;
     -fx-padding: 10px;
     -fx-border-color: black;
-    -fx-border-width: 3px;
+    -fx-border-width: 0px 3px 3px 3px;
+}
+.hbox2 {
+    -fx-background-color: aqua;
+    -fx-padding: 10px;
+    -fx-border-color: black;
+    -fx-border-width: 3px 3px 0px 3px;
 }

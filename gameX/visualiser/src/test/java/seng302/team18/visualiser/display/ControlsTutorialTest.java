@@ -10,17 +10,21 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
+import seng302.team18.model.Boat;
 
 /**
  * Test class for the controls tutorial.
  */
 public class ControlsTutorialTest {
     private ControlsTutorial tutorial;
+    private Boat boat =  new Boat("testBoat", "TB",101, 14);
+    private double windAngle = 0.0;
+
 
 
     @Before
     public void setup() {
-        tutorial = new ControlsTutorial(new Pane());
+        tutorial = new ControlsTutorial(new Pane(), windAngle, boat);
     }
 
     @Test
