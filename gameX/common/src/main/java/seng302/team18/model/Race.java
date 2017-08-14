@@ -13,23 +13,21 @@ import java.util.stream.Collectors;
  * A class to represent an individual race.
  */
 public class Race {
+    private final GPSCalculations gps = new GPSCalculations();
+    private final RoundingDetector detector = new RoundingDetector();
     private int id;
     private RaceStatus status;
     private RaceType raceType;
     private Regatta regatta = new Regatta();
     private Course course;
-
     private List<Integer> participantIds;
     private List<Boat> startingList;
-
     private ZonedDateTime startTime = ZonedDateTime.now();
     private ZonedDateTime currentTime;
-
     private Integer playerId;
+    private List<MarkRoundingEvent> markRoundingEvents = new ArrayList<>();
+    private List<YachtEvent> yachtEvents = new ArrayList<>();
 
-    private final GPSCalculations gps = new GPSCalculations();
-
-    private final RoundingDetector detector = new RoundingDetector();
 
     public Race() {
         participantIds = new ArrayList<>();
@@ -64,7 +62,6 @@ public class Race {
         setInitialSpeed();
     }
 
-
     /**
      * Sets the speed of the boats at the start line
      */
@@ -75,7 +72,6 @@ public class Race {
             speed -= 10;
         }
     }
-
 
     /**
      * Called in Race constructor.
@@ -90,7 +86,6 @@ public class Race {
         }
     }
 
-
     private void setCourseForBoat(Boat boat) {
         if (course.getMarkSequence().size() > 1) {
             boat.setLegNumber(0);
@@ -104,7 +99,6 @@ public class Race {
             boat.setStatus(BoatStatus.PRE_START);
         }
     }
-
 
     /**
      * Method to calculate the starting position for a boat
@@ -136,14 +130,12 @@ public class Race {
         return gps.toCoordinate(behindMidPoint, bearing, (boat.getLength() * offset + 10));
     }
 
-
     public void addParticipant(Boat boat) {
         // check that it is alright to add a boat at this point
         startingList.add(boat);
         setCourseForBoat(boat);
         participantIds.add(boat.getId());
     }
-
 
     /**
      * Starting list getter.
@@ -153,7 +145,6 @@ public class Race {
     public List<Boat> getStartingList() {
         return startingList;
     }
-
 
     /**
      * Starting list setter.
@@ -176,7 +167,6 @@ public class Race {
         }
     }
 
-
     /**
      * Course getter.
      *
@@ -186,7 +176,6 @@ public class Race {
         return course;
     }
 
-
     /**
      * Course setter.
      *
@@ -195,7 +184,6 @@ public class Race {
     public void setCourse(Course course) {
         this.course = course;
     }
-
 
     /**
      * Updates the position and heading of every boat in the race.
@@ -207,7 +195,6 @@ public class Race {
             updatePosition(boat, time);
         }
     }
-
 
     /**
      * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
@@ -246,7 +233,6 @@ public class Race {
         }
     }
 
-
     /**
      * Updates the boats coordinates to move closer to the boats destination.
      * Amount moved is proportional to the time passed
@@ -276,9 +262,11 @@ public class Race {
 
         if (boat.getStatus().equals(BoatStatus.RACING) && detector.hasPassedDestination(boat, course)) {
             setNextLeg(boat, boat.getLegNumber() + 1);
+        } else if (boat.getStatus().equals(BoatStatus.PRE_START) && boat.getLegNumber() == 0 && detector.hasPassedDestination(boat, course)) {
+             yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat, YachtEventCode.OVER_START_LINE_EARLY));
+             boat.setStatus(BoatStatus.OCS);
         }
     }
-
 
     /**
      * Handles the collision when one is detected by printing to the console
@@ -297,7 +285,6 @@ public class Race {
             ((Boat) obstacle).setCoordinate(newObstacleCoordinate);
         }
     }
-
 
     public boolean isFinished() {
         Collection<BoatStatus> finishedStatuses = Arrays.asList(BoatStatus.DNF, BoatStatus.DNS, BoatStatus.FINISHED, BoatStatus.DSQ);
@@ -329,12 +316,12 @@ public class Race {
         startingList.addAll(newList);
     }
 
-    public void setCurrentTime(ZonedDateTime currentTime) {
-        this.currentTime = currentTime;
-    }
-
     public ZonedDateTime getCurrentTime() {
         return currentTime;
+    }
+
+    public void setCurrentTime(ZonedDateTime currentTime) {
+        this.currentTime = currentTime;
     }
 
     public int getId() {
@@ -353,11 +340,15 @@ public class Race {
         this.status = status;
     }
 
-    private List<MarkRoundingEvent> markRoundingEvents = new ArrayList<>();
-
     public List<MarkRoundingEvent> popMarkRoundingEvents() {
         List<MarkRoundingEvent> events = markRoundingEvents;
         markRoundingEvents = new ArrayList<>();
+        return events;
+    }
+
+    public List<YachtEvent> popYachtEvents() {
+        List<YachtEvent> events = yachtEvents;
+        yachtEvents = new ArrayList<>();
         return events;
     }
 
@@ -375,6 +366,10 @@ public class Race {
         return raceType;
     }
 
+    public void setRaceType(RaceType raceType) {
+        this.raceType = raceType;
+    }
+
     public Regatta getRegatta() {
         return regatta;
     }
@@ -382,11 +377,6 @@ public class Race {
     public void setRegatta(Regatta regatta) {
         this.regatta = regatta;
     }
-
-    public void setRaceType(RaceType raceType) {
-        this.raceType = raceType;
-    }
-
 
     /**
      * Gets a boat from the race given an ID.
@@ -409,17 +399,11 @@ public class Race {
         MATCH("Match"),
         FLEET("Fleet");
 
-        private final String value;
-
         private final static Map<String, RaceType> MAPPING = initializeMapping();
+        private final String value;
 
         RaceType(String value) {
             this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return value;
         }
 
         public static RaceType fromValue(String value) {
@@ -428,6 +412,11 @@ public class Race {
 
         private static Map<String, RaceType> initializeMapping() {
             return Arrays.stream(values()).collect(Collectors.toMap(RaceType::toString, rt -> rt));
+        }
+
+        @Override
+        public String toString() {
+            return value;
         }
     }
 }
