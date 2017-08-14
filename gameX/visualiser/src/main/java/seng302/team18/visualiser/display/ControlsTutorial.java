@@ -2,7 +2,6 @@ package seng302.team18.visualiser.display;
 
 import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,7 +19,7 @@ import java.util.*;
 public class ControlsTutorial {
 
     private Boat boat;
-    private double windAngle;
+    private double windDirection;
     private double boatOldTWA;
     private boolean boatOldSailsOut;
 
@@ -83,7 +82,7 @@ public class ControlsTutorial {
      */
     public ControlsTutorial(Pane pane, double windAngle, Boat boat) { // should only be one boat in tutorial
         this.pane = pane;
-        this.windAngle = windAngle;
+        this.windDirection = windAngle;
         this.boat = boat;
 
         boatOldSailsOut = boat.isSailOut();
@@ -190,13 +189,25 @@ public class ControlsTutorial {
         }
         if (result) {
             currentKeyIndex += 1;
+            boatOldSailsOut = boat.isSailOut();
+            boatOldTWA = boat.getTrueWindAngle(windDirection);
         }
         return result;
     }
 
 
     private boolean checkSails(KeyCode code) {
-        return code == KeyCode.SHIFT;
+        boolean result = code == KeyCode.SHIFT;
+        if (currentKeyIndex == INDEX_SAILS1) {
+            if (!boatOldSailsOut && boat.isSailOut()) {
+                result = false;
+            }
+        } else if (currentKeyIndex == INDEX_SAILS2) {
+            if (boatOldSailsOut && !boat.isSailOut()) {
+                result = false;
+            }
+        }
+        return result;
     }
 
 
