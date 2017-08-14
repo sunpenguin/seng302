@@ -34,6 +34,7 @@ public class CourseRenderer {
     private Group group;
     private Pane pane;
     private PixelMapper pixelMapper;
+    private RaceMode mode;
 
 
     public CourseRenderer(PixelMapper pixelMapper, Course course, Group group, Pane pane, RaceMode mode) {

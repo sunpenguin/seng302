@@ -12,6 +12,7 @@ public class ClientConnection {
     private InputStream in;
     private OutputStream out;
     private Socket client;
+    private Integer id;
 
 
     public ClientConnection(Socket socket) throws IOException {
@@ -54,6 +55,16 @@ public class ClientConnection {
     }
 
 
+    public Integer getId() {
+        return id;
+    }
+
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+
     /**
      * Returns true if the Socket has been closed.
      *
@@ -70,3 +81,5 @@ public class ClientConnection {
         }
     }
 }
+
+

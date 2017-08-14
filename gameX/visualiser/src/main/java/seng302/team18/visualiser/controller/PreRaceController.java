@@ -20,8 +20,6 @@ import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
-import seng302.team18.visualiser.display.RaceStartTime;
-import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.display.PreRaceTimes;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
