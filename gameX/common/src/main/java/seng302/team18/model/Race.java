@@ -85,7 +85,7 @@ public class Race {
      * Set up the course CompoundMarks for each boat in the race as well as set the
      * current(starting CompoundMark) and next CompoundMark.
      */
-    private void setCourseForBoats() {
+    public void setCourseForBoats() {
         if (course.getLegs().size() > 0) {
             for (Boat boat : startingList) {
                 setCourseForBoat(boat);

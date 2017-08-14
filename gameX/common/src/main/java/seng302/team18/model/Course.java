@@ -119,7 +119,17 @@ public class Course {
     }
 
     public Coordinate getCentralCoordinate() {
-        return centralCoordinate;
+        GPSCalculations calculator = new GPSCalculations();
+        List<Coordinate> coordinates = new ArrayList<>();
+        for (BoundaryMark bMark : boundaries) {
+            coordinates.add(bMark.getCoordinate());
+        }
+        for (CompoundMark cMark : compoundMarks) {
+            for (Mark mark: cMark.getMarks()){
+                coordinates.add(mark.getCoordinate());
+            }
+        }
+        return calculator.getCentralCoordinate(coordinates);
     }
 
     public List<Leg> getLegs() {

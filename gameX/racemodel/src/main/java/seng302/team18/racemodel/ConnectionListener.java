@@ -29,7 +29,7 @@ public class ConnectionListener extends Observable implements Observer {
     private Long timeout;
 
     private static final AbstractRaceBuilder RACE_BUILDER = new RaceBuilder1();
-    private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderRealistic();
+    private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderPractice();
     private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
 
     /**
@@ -98,6 +98,7 @@ public class ConnectionListener extends Observable implements Observer {
                                     RaceMode.CONTROLS_TUTORIAL);
                             setChanged();
                             notifyObservers(this);
+                            race.setCourseForBoats();
                         case RACING:
                             addPlayer(receiver, sourceID);
                             sendMessage(client, sourceID);
