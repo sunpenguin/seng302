@@ -194,8 +194,6 @@ public class ControlsTutorial {
         }
         if (result) {
             currentKeyIndex += 1;
-            boatOldSailsOut = boat.isSailOut();
-            boatOldTWA = boat.getTrueWindAngle(windDirection);
         }
         return result;
     }
@@ -214,21 +212,42 @@ public class ControlsTutorial {
             }
         }
 
-        if (!result) {
-            boatOldSailsOut = !boatOldSailsOut;
-        }
+        boatOldSailsOut = boat.isSailOut();
+        boatOldTWA = boat.getTrueWindAngle(windDirection);
 
         return result;
     }
 
 
     private boolean checkUp(KeyCode code) {
-        return code == KeyCode.PAGE_UP || code == KeyCode.UP;
+        if (code == KeyCode.PAGE_UP || code == KeyCode.UP) {
+            if (currentKeyIndex == INDEX_UP1 && boatOldTWA <= boat.getTrueWindAngle(windDirection)) {
+                return true;
+            }else if (currentKeyIndex == INDEX_UP2 && boatOldTWA + 3 <= boat.getTrueWindAngle(windDirection)) {
+                return true;
+            }else if (currentKeyIndex == INDEX_UP3 && boatOldTWA + 6 <= boat.getTrueWindAngle(windDirection)) {
+                boatOldSailsOut = boat.isSailOut();
+                boatOldTWA = boat.getTrueWindAngle(windDirection);
+                return true;
+            }
+        }
+        return false;
     }
 
 
     private boolean checkDown(KeyCode code) {
-        return code == KeyCode.PAGE_DOWN || code == KeyCode.DOWN;
+        if (code == KeyCode.PAGE_DOWN || code == KeyCode.DOWN) {
+            if (currentKeyIndex == INDEX_DOWN1 && boatOldTWA >= boat.getTrueWindAngle(windDirection)) {
+                return true;
+            }else if (currentKeyIndex == INDEX_DOWN2 && boatOldTWA - 3 >= boat.getTrueWindAngle(windDirection)) {
+                return true;
+            }else if (currentKeyIndex == INDEX_DOWN3 && boatOldTWA - 6 >= boat.getTrueWindAngle(windDirection)) {
+                boatOldSailsOut = boat.isSailOut();
+                boatOldTWA = boat.getTrueWindAngle(windDirection);
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -238,11 +257,19 @@ public class ControlsTutorial {
      * @return True if key code was correct for a tack/gybe
      */
     private boolean checkTackGybe(KeyCode code) {
-        return code == KeyCode.ENTER;
+        if (code == KeyCode.ENTER) {
+            if (currentKeyIndex == INDEX_TACK) {
+                return (boat.getTrueWindAngle(windDirection) <= 90);
+            } else if (currentKeyIndex == INDEX_GYBE) {
+                return (boat.getTrueWindAngle(windDirection) >= 90);
+            }
+        }
+        return false;
     }
 
 
     private boolean checkVMG(KeyCode code) {
+        //TODO find a way to get dead ZONE sbe67 14/8/2017
         return code == KeyCode.SPACE;
     }
 
@@ -273,8 +300,6 @@ public class ControlsTutorial {
         actionLabel.setText(getActionPromptText());
 
         controlPromptBox.setLayoutX(0);
-        System.out.println(pane.getHeight());
-        System.out.println(controlPromptBox.getHeight());
         controlPromptBox.setLayoutY(pane.getHeight() - controlPromptBox.getHeight());
 
 
