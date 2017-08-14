@@ -120,15 +120,7 @@ public class Course {
 
     public Coordinate getCentralCoordinate() {
         GPSCalculations calculator = new GPSCalculations();
-        List<Coordinate> coordinates = new ArrayList<>();
-        for (BoundaryMark bMark : boundaries) {
-            coordinates.add(bMark.getCoordinate());
-        }
-        for (CompoundMark cMark : compoundMarks) {
-            for (Mark mark: cMark.getMarks()){
-                coordinates.add(mark.getCoordinate());
-            }
-        }
+        List<Coordinate> coordinates = calculator.findMinMaxPoints(this);
         return calculator.getCentralCoordinate(coordinates);
     }
 
