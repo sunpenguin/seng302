@@ -1,0 +1,46 @@
+.background {
+    /*-fx-background-color: linear-gradient(#327D91 60%, #004060);*/
+    -fx-background-color: #327D91;
+    -fx-text-fill: black;
+}
+
+.background2 {
+    -fx-background-color: black;
+    -fx-background-image:url("/images/title_screen/GameLogo2.gif");
+    -fx-background-size: 90% 100%;
+    -fx-background-position: center;
+}
+
+.button {
+    -fx-background-color: linear-gradient(#FE5A00, #FE5A00);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0;
+    -fx-text-fill: white;
+}
+
+.hostImage {
+    -fx-graphic: url('/images/title_screen/play_button.png');
+}
+
+.hostImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/title_screen/play_button_alt.png');
+}
+
+.controlsImage {
+    -fx-graphic: url('/images/title_screen/view_controls_button.png');
+}
+
+.controlsImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/title_screen/view_controls_button_alt.png');
+}
+
+.quitImage {
+    -fx-graphic: url('/images/title_screen/quit_button.png');
+}
+
+.quitImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/title_screen/quit_button_alt.png');
+}

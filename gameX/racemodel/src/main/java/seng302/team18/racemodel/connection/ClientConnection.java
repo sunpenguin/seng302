@@ -1,9 +1,6 @@
 package seng302.team18.racemodel.connection;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -21,6 +18,9 @@ public class ClientConnection {
         client = socket;
         out = new DataOutputStream(client.getOutputStream());
         in = socket.getInputStream();
+        if (!in.markSupported()) {
+            in = new BufferedInputStream(in);
+        }
     }
 
 
@@ -61,7 +61,10 @@ public class ClientConnection {
      */
     public boolean isClosed() {
         try {
-            return in.read() == -1;
+            in.mark(1);
+            boolean isClosed = in.read() == -1;
+            in.reset();
+            return isClosed;
         } catch (IOException e) {
             return true;
         }

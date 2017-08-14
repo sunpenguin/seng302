@@ -1,6 +1,7 @@
 package seng302.team18.racemodel;
 
 import seng302.team18.model.*;
+import seng302.team18.message.BoatStatus;
 import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
 
@@ -52,6 +53,9 @@ public class TestMock implements Observer {
             sendXmlBoatRace();
         } else if (arg instanceof ServerState) {
             open = !((ServerState) arg).equals(ServerState.CLOSED);
+        } else if (arg instanceof Integer) {
+            Integer id = (Integer) arg;
+            race.setBoatStatus(id, BoatStatus.DNF);
         } else if (arg instanceof ConnectionListener) {
             generateXMLs();
             sendXmlBoatRace();

@@ -19,6 +19,7 @@ public class AC35MessageHead implements MessageHead {
         this.bodySize = bodySize;
     }
 
+
     /**
      * Gets the code of the message type.
      *

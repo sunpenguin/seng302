@@ -34,7 +34,6 @@ public class CourseRenderer {
     private Group group;
     private Pane pane;
     private PixelMapper pixelMapper;
-    private RaceMode mode;
 
 
     public CourseRenderer(PixelMapper pixelMapper, Course course, Group group, Pane pane, RaceMode mode) {
@@ -80,7 +79,7 @@ public class CourseRenderer {
         for (BoundaryMark boundary : boundaryMarks) {
             renderBoundary(border, boundary.getCoordinate());
         }
-        if (course.getBoundaries().size() != 0) {
+        if (course.getBoundaries().size() != 0 && !group.getChildren().contains(border)) {
             renderBoundary(border, course.getBoundaries().get(0).getCoordinate());
             group.getChildren().add(border);
         }
@@ -114,7 +113,7 @@ public class CourseRenderer {
             circle = new Circle(markSize, MARK_COLOR);
 
             circle.setOnMouseClicked((event) -> {
-                pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                pixelMapper.setZoomLevel(4);
                 pixelMapper.setViewPortCenter(mark.getCoordinate());
             });
 
@@ -163,7 +162,7 @@ public class CourseRenderer {
                 circle.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                        pixelMapper.setZoomLevel(4);
                         pixelMapper.setViewPortCenter(mark.getCoordinate());
                     }
                 });

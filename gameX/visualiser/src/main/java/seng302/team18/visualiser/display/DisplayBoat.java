@@ -12,6 +12,7 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
+import seng302.team18.model.GeographicLocation;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * A class that displays the boat on the GUI
  */
-public class DisplayBoat {
+public class DisplayBoat implements GeographicLocation {
 
     private String shortName;
     private DoubleProperty speed = new SimpleDoubleProperty();
@@ -69,7 +70,9 @@ public class DisplayBoat {
         boatPoly.setFill(boatColor);
         boatPoly.setOnMouseClicked(event -> {
             if (location != null) {
-                pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                pixelMapper.track(this);
+                pixelMapper.setTracking(true);
+                pixelMapper.setZoomLevel(4);
                 pixelMapper.setViewPortCenter(location);
             }
         });
@@ -78,8 +81,8 @@ public class DisplayBoat {
     }
 
     private void setUpBoatShape(){
-        boatHeight = pixelLength;
-        boatWidth = pixelLength;
+        boatHeight = pixelLength + 2;
+        boatWidth = pixelLength - 2;
         boatShape = new Double[]{
                 0.0, boatHeight / -2,
                 boatWidth / -2, boatHeight / 2,
@@ -250,9 +253,11 @@ public class DisplayBoat {
         isControlled = controlled;
     }
 
+
     public void setSailOut(boolean sailOut) {
         this.sailOut = sailOut;
     }
+
 
     public void setApparentWindDirection(double apparentWind) {
         this.apparentWindDirection = apparentWind;

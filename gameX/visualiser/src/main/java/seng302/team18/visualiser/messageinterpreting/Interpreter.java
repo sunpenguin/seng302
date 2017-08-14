@@ -49,8 +49,9 @@ public class Interpreter {
      * Shuts down the interpreter
      *
      */
-    public void shutdownNow() {
+    public boolean close() {
         executor.shutdownNow();
+        return receiver.close();
     }
 
 }

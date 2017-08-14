@@ -128,7 +128,7 @@ public class XmlMessageBuilder {
                 race.getCourse().getName(),
                 centre.getLatitude(),
                 centre.getLongitude(),
-                utcOffset.toString()
+                utcOffset.equals(ZoneOffset.UTC) ? "0" : utcOffset.toString()
         );
     }
 
