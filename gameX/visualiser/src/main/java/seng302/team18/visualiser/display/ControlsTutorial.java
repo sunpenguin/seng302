@@ -199,6 +199,11 @@ public class ControlsTutorial {
     }
 
 
+    /**
+     * Checks if the user has progressed throught the sail section
+     * @param code key code given by user
+     * @return true if progressed
+     */
     private boolean checkSails(KeyCode code) {
         boolean result = false;
 
@@ -219,13 +224,20 @@ public class ControlsTutorial {
     }
 
 
+    /**
+     * Method to check if the user has progressed though up section of the tutorial
+     *
+     * @param code key code given by user
+     * @return true if progressed
+     */
     private boolean checkUp(KeyCode code) {
+        //NOTE the odd setting and comparisons of sails out, this is because everthing is checked before the message is sent
         if (code == KeyCode.PAGE_UP || code == KeyCode.UP) {
             if (currentKeyIndex == INDEX_UP1 && boatOldTWA <= boat.getTrueWindAngle(windDirection)) {
                 return true;
-            }else if (currentKeyIndex == INDEX_UP2 && boatOldTWA + 3 <= boat.getTrueWindAngle(windDirection)) {
+            }else if (currentKeyIndex == INDEX_UP2 && boatOldTWA + 2.9 <= boat.getTrueWindAngle(windDirection)) {
                 return true;
-            }else if (currentKeyIndex == INDEX_UP3 && boatOldTWA + 6 <= boat.getTrueWindAngle(windDirection)) {
+            }else if (currentKeyIndex == INDEX_UP3 && boatOldTWA + 5.9 <= boat.getTrueWindAngle(windDirection)) {
                 boatOldSailsOut = boat.isSailOut();
                 boatOldTWA = boat.getTrueWindAngle(windDirection);
                 return true;
@@ -235,13 +247,22 @@ public class ControlsTutorial {
     }
 
 
+    /**
+     * Method to check if the user has progressed though DOWN section of the tutorial
+     *
+     * @param code key code given by user
+     * @return true if progressed
+     */
     private boolean checkDown(KeyCode code) {
+        //NOTE the odd setting and comparisons of sails out, this is because everthing is checked before the message is sent
         if (code == KeyCode.PAGE_DOWN || code == KeyCode.DOWN) {
-            if (currentKeyIndex == INDEX_DOWN1 && boatOldTWA >= boat.getTrueWindAngle(windDirection)) {
+            if (currentKeyIndex == INDEX_DOWN1 && boatOldTWA + 3 >= boat.getTrueWindAngle(windDirection)) {
+                boatOldSailsOut = boat.isSailOut();
+                boatOldTWA = boat.getTrueWindAngle(windDirection);
                 return true;
-            }else if (currentKeyIndex == INDEX_DOWN2 && boatOldTWA - 3 >= boat.getTrueWindAngle(windDirection)) {
+            }else if (currentKeyIndex == INDEX_DOWN2 && boatOldTWA - 2.9 >= boat.getTrueWindAngle(windDirection)) {
                 return true;
-            }else if (currentKeyIndex == INDEX_DOWN3 && boatOldTWA - 6 >= boat.getTrueWindAngle(windDirection)) {
+            }else if (currentKeyIndex == INDEX_DOWN3 && boatOldTWA - 5.9 >= boat.getTrueWindAngle(windDirection)) {
                 boatOldSailsOut = boat.isSailOut();
                 boatOldTWA = boat.getTrueWindAngle(windDirection);
                 return true;
@@ -328,6 +349,10 @@ public class ControlsTutorial {
         pane.getChildren().add(tickView);
     }
 
+    /**
+     * Gets the text to inform the user of what to do
+     * @return returns the text as a string
+     */
     private String getActionPromptText(){
         if (currentKeyIndex == INDEX_SAILS1) {              //Sails
             return "BRING SAILS IN";
@@ -346,9 +371,9 @@ public class ControlsTutorial {
         }  else if (currentKeyIndex == INDEX_VMG) {         //VMG
             return "OPTIMISE YOUR UPWIND/DOWNWIND VMG";
         } else if (currentKeyIndex == INDEX_TACK) {         //TACK
-            return "PREFORM A TACK";
+            return "PREFORM A TACK (YOU MUST BE FACING UPWIND)";
         } else if (currentKeyIndex == INDEX_GYBE) {         //GYBE
-            return "PREFORM A GYBE";
+            return "PREFORM A GYBE (YOU MUST BE FACING DOWNWIND)";
         } else if (currentKeyIndex == INDEX_SAILS2) {       //SAILS
             return "PUT THE SAILS OUT";
         } else if (currentKeyIndex == INDEX_ESC) {          //ESC
@@ -358,6 +383,10 @@ public class ControlsTutorial {
     }
 
 
+    /**
+     * Gets the test to be displayed next to the prompt button
+     * @return the text as a string
+     */
     private String getCurrentPromptText(){
         BoatControls control = keyList.get(currentKeyIndex);
         if (control == BoatControls.SAILS) {
