@@ -40,9 +40,9 @@ public class PreRaceTimes extends AnimationTimer {
         currentTimeLabel.setText(race.getCurrentTime().format(formatter));
 
         if (race.getCourse().getTimeZone().toString().equals("UTC")) {
-            timeZoneLabel.setText("UTC +0");
+            timeZoneLabel.setText("UTC+00:00");
         } else {
-            timeZoneLabel.setText("UTC " + race.getCourse().getTimeZone());
+            timeZoneLabel.setText(race.getCourse().getTimeZone().toString());
         }
     }
 }
