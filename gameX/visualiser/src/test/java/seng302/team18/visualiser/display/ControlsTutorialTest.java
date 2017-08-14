@@ -8,6 +8,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javafx.scene.control.Label;
 
 import org.junit.Assert;
 import seng302.team18.model.Boat;
@@ -27,7 +28,6 @@ public class ControlsTutorialTest {
         tutorial = new ControlsTutorial(new Pane(), windAngle, boat);
     }
 
-    @Test
     public void checkProgressedTestBlueSkies() {
         List<KeyCode> keyCodes = new ArrayList<>();
         keyCodes.add(KeyCode.SHIFT);
@@ -57,7 +57,6 @@ public class ControlsTutorialTest {
     }
 
 
-    @Test
     public void checkProgressedTestBlueSkies2() {
         List<KeyCode> keyCodes = new ArrayList<>();
         keyCodes.add(KeyCode.SHIFT);
@@ -87,7 +86,6 @@ public class ControlsTutorialTest {
     }
 
 
-    @Test
     public void checkProgressedTestAcceptable() {
         List<KeyCode> keyCodes = new ArrayList<>();
         keyCodes.add(KeyCode.SHIFT);
@@ -135,7 +133,6 @@ public class ControlsTutorialTest {
     }
 
 
-    @Test
     public void checkProgressedTestMonkeyFoundAKeyboard() {
         List<KeyCode> keyCodes = createAwfulList();
 
