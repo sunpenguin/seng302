@@ -93,6 +93,8 @@ public class TestMock implements Observer {
                 server.stopAcceptingConnections();
             }
 
+            race.setCurrentTime(ZonedDateTime.now());
+
             if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(warningTime)) {
                 race.setStatus(RaceStatus.WARNING);
 
@@ -110,6 +112,10 @@ public class TestMock implements Observer {
                 // Send mark rounding messages for all mark roundings that occurred
                 for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
                     server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
+                }
+
+                for (YachtEvent event : race.popYachtEvents()) {
+                    server.broadcast((new YachtEventCodeMessageGenerator(event, race.getId())).getMessage());
                 }
 
                 if ((race.getStatus() == RaceStatus.PREPARATORY) && ZonedDateTime.now().isAfter(race.getStartTime())) {

@@ -62,6 +62,7 @@ public class Race {
         setInitialSpeed();
     }
 
+
     /**
      * Sets the speed of the boats at the start line
      */
@@ -72,6 +73,7 @@ public class Race {
             speed -= 10;
         }
     }
+
 
     /**
      * Called in Race constructor.
@@ -86,6 +88,7 @@ public class Race {
         }
     }
 
+
     private void setCourseForBoat(Boat boat) {
         if (course.getMarkSequence().size() > 1) {
             boat.setLegNumber(0);
@@ -99,6 +102,7 @@ public class Race {
             boat.setStatus(BoatStatus.PRE_START);
         }
     }
+
 
     /**
      * Method to calculate the starting position for a boat
@@ -130,12 +134,14 @@ public class Race {
         return gps.toCoordinate(behindMidPoint, bearing, (boat.getLength() * offset + 10));
     }
 
+
     public void addParticipant(Boat boat) {
         // check that it is alright to add a boat at this point
         startingList.add(boat);
         setCourseForBoat(boat);
         participantIds.add(boat.getId());
     }
+
 
     /**
      * Starting list getter.
@@ -145,6 +151,7 @@ public class Race {
     public List<Boat> getStartingList() {
         return startingList;
     }
+
 
     /**
      * Starting list setter.
@@ -167,6 +174,7 @@ public class Race {
         }
     }
 
+
     /**
      * Course getter.
      *
@@ -176,6 +184,7 @@ public class Race {
         return course;
     }
 
+
     /**
      * Course setter.
      *
@@ -184,6 +193,7 @@ public class Race {
     public void setCourse(Course course) {
         this.course = course;
     }
+
 
     /**
      * Updates the position and heading of every boat in the race.
@@ -195,6 +205,7 @@ public class Race {
             updatePosition(boat, time);
         }
     }
+
 
     /**
      * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
@@ -233,6 +244,7 @@ public class Race {
         }
     }
 
+
     /**
      * Updates the boats coordinates to move closer to the boats destination.
      * Amount moved is proportional to the time passed
@@ -263,10 +275,19 @@ public class Race {
         if (boat.getStatus().equals(BoatStatus.RACING) && detector.hasPassedDestination(boat, course)) {
             setNextLeg(boat, boat.getLegNumber() + 1);
         } else if (boat.getStatus().equals(BoatStatus.PRE_START) && boat.getLegNumber() == 0 && detector.hasPassedDestination(boat, course)) {
-             yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat, YachtEventCode.OVER_START_LINE_EARLY));
-             boat.setStatus(BoatStatus.OCS);
+            yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OVER_START_LINE_EARLY));
+            boat.setStatus(BoatStatus.OCS);
+            Coordinate c = course.getMarkSequence().get(0).getCompoundMark().getCoordinate();
+            Coordinate newCoord = new Coordinate(c.getLatitude() - 0.0005, c.getLongitude() - 0.0005);
+            boat.setSpeed(0);
+            boat.setSailOut(true);
+            boat.setCoordinate(newCoord);
+        } else if (boat.getStatus().equals(BoatStatus.OCS) && currentTime.isAfter(startTime.plusSeconds(5))) {
+            yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OCS_PENALTY_COMPLETE));
+            boat.setStatus(BoatStatus.RACING);
         }
     }
+
 
     /**
      * Handles the collision when one is detected by printing to the console
@@ -286,6 +307,7 @@ public class Race {
         }
     }
 
+
     public boolean isFinished() {
         Collection<BoatStatus> finishedStatuses = Arrays.asList(BoatStatus.DNF, BoatStatus.DNS, BoatStatus.FINISHED, BoatStatus.DSQ);
         int numFinished = (int) startingList.stream()
@@ -294,13 +316,16 @@ public class Race {
         return startingList.size() == numFinished && startingList.size() != 0;
     }
 
+
     public ZonedDateTime getStartTime() {
         return startTime;
     }
 
+
     public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
     }
+
 
     /**
      * Sets participants and removes non participants for current list of boats.
@@ -316,29 +341,36 @@ public class Race {
         startingList.addAll(newList);
     }
 
+
     public ZonedDateTime getCurrentTime() {
         return currentTime;
     }
+
 
     public void setCurrentTime(ZonedDateTime currentTime) {
         this.currentTime = currentTime;
     }
 
+
     public int getId() {
         return id;
     }
+
 
     public void setId(int id) {
         this.id = id;
     }
 
+
     public RaceStatus getStatus() {
         return status;
     }
 
+
     public void setStatus(RaceStatus status) {
         this.status = status;
     }
+
 
     public List<MarkRoundingEvent> popMarkRoundingEvents() {
         List<MarkRoundingEvent> events = markRoundingEvents;
@@ -346,15 +378,18 @@ public class Race {
         return events;
     }
 
+
     public List<YachtEvent> popYachtEvents() {
         List<YachtEvent> events = yachtEvents;
         yachtEvents = new ArrayList<>();
         return events;
     }
 
+
     public int getPlayerId() {
         return playerId;
     }
+
 
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
@@ -362,21 +397,26 @@ public class Race {
         startingList.forEach(boat -> boat.setControlled(boat.getId().equals(playerId)));
     }
 
+
     public RaceType getRaceType() {
         return raceType;
     }
+
 
     public void setRaceType(RaceType raceType) {
         this.raceType = raceType;
     }
 
+
     public Regatta getRegatta() {
         return regatta;
     }
 
+
     public void setRegatta(Regatta regatta) {
         this.regatta = regatta;
     }
+
 
     /**
      * Gets a boat from the race given an ID.

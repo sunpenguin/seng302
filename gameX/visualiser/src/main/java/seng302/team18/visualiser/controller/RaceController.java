@@ -46,6 +46,7 @@ import seng302.team18.visualiser.util.SparklineDataPoint;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The controller class for the Main Window.
@@ -139,7 +140,7 @@ public class RaceController implements Observer {
                             message.setDownwind();
                             break;
                         case SHIFT:
-                            sailIn = !sailIn;
+                            sailIn = getPlayerBoat().isSailOut();
                             if (sailIn) {
                                 message.setSailIn();
                             } else {
@@ -180,6 +181,20 @@ public class RaceController implements Observer {
         raceViewPane.setFocusTraversable(true);
         raceViewPane.requestFocus();
         raceViewPane.focusedProperty().addListener((observable, oldValue, newValue) -> Platform.runLater(() -> raceViewPane.requestFocus()));
+    }
+
+
+    /**
+     * Gets the current player's boat depending on the visualiser.
+     *
+     * @return the boat controlled by the user.
+     */
+    private Boat getPlayerBoat() {
+        List playerBoatList = race.getStartingList()
+                .stream()
+                .filter(boat -> boat.getId() == race.getPlayerId())
+                .collect(Collectors.toList());
+        return (Boat) playerBoatList.get(0);
     }
 
 
@@ -489,6 +504,7 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
         interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(raceClock));
+        interpreter.add(AC35MessageType.YACHT_EVENT.getCode(), new YachtEventInterpreter(race));
 
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
 

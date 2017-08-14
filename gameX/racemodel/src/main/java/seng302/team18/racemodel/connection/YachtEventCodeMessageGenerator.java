@@ -54,7 +54,7 @@ public class YachtEventCodeMessageGenerator extends MessageGenerator {
         outputSteam.write(ByteCheck.intToByteArray(raceId));
 
         // Boat(source) id
-        outputSteam.write(ByteCheck.intToByteArray(event.getBoat().getId()));
+        outputSteam.write(ByteCheck.intToByteArray(event.getBoatId()));
 
         // Incident ID
         outputSteam.write(ByteCheck.intToByteArray(0));
