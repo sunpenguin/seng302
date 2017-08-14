@@ -561,7 +561,7 @@ public class RaceController implements Observer {
     /**
      * Re draw the current elements of the controls tutorial, or initialise it if it is NULL.
      */
-    private void updateControlsTutorial() {
+    public void updateControlsTutorial() {
         if(race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
             if (controlsTutorial == null) {
                 controlsTutorial = new ControlsTutorial(raceViewPane, race.getCourse().getWindDirection(), race.getStartingList().get(0));

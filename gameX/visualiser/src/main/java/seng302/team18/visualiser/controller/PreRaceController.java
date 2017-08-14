@@ -172,6 +172,8 @@ public class PreRaceController {
         stage.setMaximized(true);
         stage.show();
         controller.setUp(race, interpreter, sender);
+        controller.updateControlsTutorial();
+        controller.updateControlsTutorial();
     }
 
 
