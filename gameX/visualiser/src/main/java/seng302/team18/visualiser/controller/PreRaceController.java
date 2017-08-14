@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -44,6 +45,7 @@ public class PreRaceController {
     private Interpreter interpreter;
     private Sender sender;
     private Race race;
+
     private boolean hasChanged = false;
 
     private Stage stage;

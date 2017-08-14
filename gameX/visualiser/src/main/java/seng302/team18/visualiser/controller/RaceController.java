@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.controller;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
@@ -21,11 +22,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import javafx.util.StringConverter;
 import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
@@ -66,6 +69,7 @@ public class RaceController implements Observer {
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
     @FXML private Slider slider;
+    @FXML private AnchorPane tabView;
 
     private Pane escapeMenuPane;
     private EscapeMenuController escapeMenuController;
@@ -87,6 +91,7 @@ public class RaceController implements Observer {
     private Interpreter interpreter;
 
     private RaceBackground background;
+    private FadeTransition fadeIn = new FadeTransition(Duration.millis(150));
 
 
     @FXML
@@ -103,6 +108,8 @@ public class RaceController implements Observer {
         group.setManaged(false);
         new ControlSchemeDisplay(raceViewPane);
         background = new RaceBackground(raceViewPane, "/images/water.gif");
+        tabView.setVisible(false);
+        initialiseFadeTransition();
     }
 
 
@@ -167,6 +174,10 @@ public class RaceController implements Observer {
                                 loadEscapeMenu();
                                 openEscapeMenu();
                             }
+                            send = false;
+                            break;
+                        case TAB:
+                            toggleTabView();
                             send = false;
                             break;
                         default:
@@ -333,6 +344,32 @@ public class RaceController implements Observer {
 
 
     /**
+     * Set up a fade transition for the tab view.
+     * Tab view will fade in when tab is pressed.
+     */
+    private void initialiseFadeTransition() {
+        fadeIn.setNode(tabView);
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(0.85);
+        fadeIn.setCycleCount(1);
+        fadeIn.setAutoReverse(true);
+    }
+
+
+    /**
+     * Toggle the tabView (holds detailed race info on and off)
+     */
+    private void toggleTabView() {
+        if (tabView.isVisible()) {
+            tabView.setVisible(false);
+        } else {
+            tabView.setVisible(true);
+            fadeIn.play();
+        }
+    }
+
+
+    /**
      * Loads the FXML and controller for the escape menu.
      */
     private void loadEscapeMenu() {
@@ -340,7 +377,6 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             escapeMenuController = loader.getController();
-//            escapeMenuController.setGroup(group);
             escapeMenuController.setup(group, interpreter, sender);
         } catch(IOException e) {}
     }
