@@ -151,7 +151,7 @@ public class Race {
      *
      * @param id Source ID for the boat to have its status changed.
      */
-    public void setStatus(Integer id, BoatStatus status) {
+    public void setBoatStatus(Integer id, BoatStatus status) {
         for (Boat boat : startingList) {
             if (boat.getId().equals(id)) {
                 boat.setStatus(status.code());

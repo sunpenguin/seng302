@@ -72,7 +72,6 @@ public class ClientConnection {
      */
     public boolean isClosed() {
         try {
-            System.out.println("IS CLOSED()");
             in.mark(1);
             boolean isClosed = in.read() == -1;
             in.reset();
