@@ -155,6 +155,7 @@ public class Race {
         for (Boat boat : startingList) {
             if (boat.getId().equals(id)) {
                 boat.setStatus(status.code());
+                System.out.println(boat.getName() + " " + boat.getStatus());
             }
         }
     }

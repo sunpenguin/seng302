@@ -100,6 +100,7 @@ public class RaceController implements Observer {
         installKeyHandler();
         setSliderListener();
         sliderSetup();
+        interpreter.addObserver(this);
         fpsOn = true;
         importantAnnotations = new HashMap<>();
         for (AnnotationType type : AnnotationType.values()) {
