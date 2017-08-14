@@ -197,16 +197,22 @@ public class ControlsTutorial {
 
 
     private boolean checkSails(KeyCode code) {
-        boolean result = code == KeyCode.SHIFT;
+        boolean result = false;
+
         if (currentKeyIndex == INDEX_SAILS1) {
-            if (!boatOldSailsOut && boat.isSailOut()) {
-                result = false;
+            if (boatOldSailsOut) {
+                result = (code == KeyCode.SHIFT);
             }
         } else if (currentKeyIndex == INDEX_SAILS2) {
-            if (boatOldSailsOut && !boat.isSailOut()) {
-                result = false;
+            if (!boatOldSailsOut) {
+                result = (code == KeyCode.SHIFT);
             }
         }
+
+        if (!result) {
+            boatOldSailsOut = !boatOldSailsOut;
+        }
+
         return result;
     }
 
@@ -291,7 +297,7 @@ public class ControlsTutorial {
 
     private String getActionPromptText(){
         if (currentKeyIndex == INDEX_SAILS1) {              //Sails
-            return "PUT SAILS OUT";
+            return "BRING SAILS IN";
         } else if (currentKeyIndex == INDEX_UP1) {          //UP
             return "STEER UPWIND 9 DEGREES";
         } else if (currentKeyIndex == INDEX_UP2) {          //UP
@@ -311,7 +317,7 @@ public class ControlsTutorial {
         } else if (currentKeyIndex == INDEX_GYBE) {         //GYBE
             return "PREFORM A GYBE";
         } else if (currentKeyIndex == INDEX_SAILS2) {       //SAILS
-            return "BRING THE SAILS IN";
+            return "PUT THE SAILS OUT";
         } else if (currentKeyIndex == INDEX_ESC) {          //ESC
             return "LEAVE THE TUTORIAL";
         }
