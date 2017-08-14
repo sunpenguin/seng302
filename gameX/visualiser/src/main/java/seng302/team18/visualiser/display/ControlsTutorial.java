@@ -2,6 +2,7 @@ package seng302.team18.visualiser.display;
 
 import javafx.beans.InvalidationListener;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -100,6 +101,9 @@ public class ControlsTutorial {
 
         actionPromptBox.getChildren().addAll(actionLabel);
         controlPromptBox.getChildren().addAll(pressLabel, actionImage, keyActionLabel);
+
+        controlPromptBox.setAlignment(Pos.CENTER);
+        actionPromptBox.setAlignment(Pos.CENTER);
 
 
         controlPromptBox.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/tutorial.css").toExternalForm());
@@ -269,7 +273,10 @@ public class ControlsTutorial {
         actionLabel.setText(getActionPromptText());
 
         controlPromptBox.setLayoutX(0);
+        System.out.println(pane.getHeight());
+        System.out.println(controlPromptBox.getHeight());
         controlPromptBox.setLayoutY(pane.getHeight() - controlPromptBox.getHeight());
+
 
         actionPromptBox.setLayoutX(0);
         actionPromptBox.setLayoutY(pane.getHeight() - controlPromptBox.getHeight() - actionPromptBox.getHeight());
