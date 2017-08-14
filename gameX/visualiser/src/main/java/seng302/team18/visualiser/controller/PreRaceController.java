@@ -4,10 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.interpreting.CompositeMessageInterpreter;
@@ -38,11 +39,20 @@ public class PreRaceController {
     private Label timeZoneLabel;
     @FXML
     private Text raceNameText;
+    @FXML
+    private Pane pane;
 
     private Interpreter interpreter;
     private Sender sender;
     private Race race;
+
     private boolean hasChanged = false;
+
+    private Stage stage;
+
+
+    public void initialize() {
+    }
 
 
     /**
@@ -70,7 +80,7 @@ public class PreRaceController {
         interpreter.start();
         sender.send(new RequestMessage(true));
         stage.setOnCloseRequest((event) -> {
-            interpreter.shutdownNow();
+            interpreter.close();
             while (!receiver.close()) {
             }
             System.out.println("shutting down");
@@ -142,12 +152,9 @@ public class PreRaceController {
         Parent root = loader.load(); // throws IOException
         RaceController controller = loader.getController();
         Stage stage = (Stage) raceNameText.getScene().getWindow();
-        stage.setTitle("RaceVision");
-        Scene scene = new Scene(root, 1280, 720);
+        pane.getScene().setRoot(root);
         stage.setResizable(true);
-        stage.setMinHeight(700);
-        stage.setMinWidth(1000);
-        stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
         controller.setUp(race, interpreter, sender);
     }
@@ -160,4 +167,8 @@ public class PreRaceController {
         listView.setItems(FXCollections.observableList(race.getStartingList()));
     }
 
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 }
