@@ -5,6 +5,7 @@ import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.BoatActionStatus;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
+import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Race;
 
 import java.util.List;
@@ -42,7 +43,9 @@ public class BoatActionInterpreter extends MessageInterpreter {
         if (message != null && message instanceof BoatActionMessage) {
             BoatActionMessage actionMessage = (BoatActionMessage) message;
             for (Boat boat : boats) {
-                applyActions(boat, actionMessage);
+                if (!boat.getStatus().equals(BoatStatus.OCS)) {
+                    applyActions(boat, actionMessage);
+                }
             }
         }
     }
