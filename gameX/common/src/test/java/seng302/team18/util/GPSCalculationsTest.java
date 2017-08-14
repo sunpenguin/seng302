@@ -6,6 +6,8 @@ import org.junit.Test;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 
+import java.util.Arrays;
+
 /**
  * Created by jth102 on 17/03/17.
  */
@@ -76,5 +78,27 @@ public class GPSCalculationsTest {
     public void isBetweenTestAlternative() {
         Assert.assertTrue(gps.isBetween(60, 350, 90));
         Assert.assertFalse(gps.isBetween(100, 350, 90));
+    }
+
+    @Test
+    public void notContainsTest() {
+        boolean doesContain = gps.contains(new Coordinate(0, 0),
+                Arrays.asList(
+                        new Coordinate(100, 100),
+                        new Coordinate(101, 101),
+                        new Coordinate(102, 102),
+                        new Coordinate(99, 99)));
+        Assert.assertFalse(doesContain);
+    }
+
+
+    @Test
+    public void containsTest() {
+        boolean doesContain = gps.contains(new Coordinate(32.3547,-89.3985),
+                Arrays.asList(
+                        new Coordinate(25.767368,-80.18930),
+                        new Coordinate(34.088808,-118.40612),
+                        new Coordinate(40.727093,-73.97864)));
+        Assert.assertTrue(doesContain);
     }
 }
