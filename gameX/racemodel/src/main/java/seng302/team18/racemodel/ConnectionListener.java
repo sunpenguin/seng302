@@ -98,6 +98,7 @@ public class ConnectionListener implements Observer {
     private void sendMessage(ClientConnection player, int sourceID) {
         byte[] message = new AcceptanceMessageGenerator(sourceID).getMessage();
         player.sendMessage(message);
+        player.setId(sourceID);
     }
 
 

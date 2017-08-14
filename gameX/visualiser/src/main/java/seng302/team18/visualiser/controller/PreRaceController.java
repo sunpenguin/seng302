@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -79,7 +78,7 @@ public class PreRaceController {
         interpreter.start();
         sender.send(new RequestMessage(true));
         stage.setOnCloseRequest((event) -> {
-            interpreter.shutdownNow();
+            interpreter.close();
             while (!receiver.close()) {
             }
             System.out.println("shutting down");
@@ -153,7 +152,6 @@ public class PreRaceController {
         Stage stage = (Stage) raceNameText.getScene().getWindow();
         pane.getScene().setRoot(root);
         stage.setResizable(true);
-//        stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
         controller.setUp(race, interpreter, sender);

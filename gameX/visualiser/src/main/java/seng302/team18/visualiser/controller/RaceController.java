@@ -84,7 +84,7 @@ public class RaceController implements Observer {
     private Map<AnnotationType, Boolean> importantAnnotations;
 
     private Sender sender;
-    private Receiver receiver;
+    private Interpreter interpreter;
 
     private RaceBackground background;
 
@@ -106,22 +106,10 @@ public class RaceController implements Observer {
     }
 
 
-    @FXML public void closeRace() {
-        Stage stage = (Stage) raceViewPane.getScene().getWindow();
-        stage.close();
-
-    }
-
     /**
-     * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
+     * Register key presses to certain methods.
+     * Handles boat control, zooming.
      */
-    private void loadIcon() {
-        ImageView icon = new ImageView("/images/boat-310164_640.png");
-        icon.setFitHeight(18);
-        icon.setFitWidth(18);
-    }
-
-
     private void installKeyHandler() {
         final EventHandler<KeyEvent> keyEventHandler =
             keyEvent -> {
@@ -352,7 +340,8 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             escapeMenuController = loader.getController();
-            escapeMenuController.setGroup(group);
+//            escapeMenuController.setGroup(group);
+            escapeMenuController.setup(group, interpreter, sender);
         } catch(IOException e) {}
     }
 
@@ -500,8 +489,7 @@ public class RaceController implements Observer {
         setNoneAnnotationLevel();
         setUpSparklines(raceRenderer.boatColors());
 
-        Stage stage = (Stage) tableView.getScene().getWindow();
-//        Interpreter interpreter = new Interpreter(receiver, stage);
+        this.interpreter = interpreter;
         interpreter.setInterpreter(initialiseInterpreter());
     }
 

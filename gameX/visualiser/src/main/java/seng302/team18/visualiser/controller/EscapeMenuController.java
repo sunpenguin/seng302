@@ -9,6 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import seng302.team18.send.Sender;
+import seng302.team18.visualiser.messageinterpreting.Interpreter;
 
 import java.io.IOException;
 
@@ -17,13 +19,14 @@ import java.io.IOException;
  */
 public class EscapeMenuController {
 
+    @FXML private Pane pane;
+
     private RaceController raceController;
     private Group group;
     private Label quitLabel;
     private Image quitButtonImage;
-
-    @FXML private Pane pane;
-
+    private Interpreter interpreter;
+    private Sender sender;
 
     @FXML public void initialize() {
         initialiseQuitButton();
@@ -43,7 +46,10 @@ public class EscapeMenuController {
         quitButtonImage = new Image("/images/escape_menu/quit_button_image.png");
         quitLabel.setLayoutX((pane.getPrefWidth() / 2) - (Math.floorDiv((int) quitButtonImage.getWidth(), 2)));
         quitLabel.setLayoutY((pane.getPrefHeight() / 2) - (Math.floorDiv((int) quitButtonImage.getHeight(), 2)));
-        quitLabel.setOnMouseClicked(event -> returnToTitle());
+        quitLabel.setOnMouseClicked(event -> {
+            closeConnection();
+            returnToTitle();
+        });
     }
 
 
@@ -67,20 +73,26 @@ public class EscapeMenuController {
     }
 
 
-    public Group getGroup() {
-        return group;
+    /**
+     * Close the connection to the server by closing the interpreter and sender.
+     */
+    private void closeConnection() {
+        interpreter.close();
+        sender.close();
     }
 
-    public void setGroup(Group group) {
+
+    /**
+     * Set up the escape menu.
+     *
+     * @param group Group to place menu on
+     * @param interpreter Interpreter to close when we quit the race.
+     * @param sender Sender to close when we quit the race.
+     */
+    public void setup(Group group, Interpreter interpreter, Sender sender) {
         this.group = group;
-    }
-
-    public RaceController getRaceController() {
-        return raceController;
-    }
-
-    public void setRaceController(RaceController raceController) {
-        this.raceController = raceController;
+        this.interpreter = interpreter;
+        this.sender = sender;
     }
 }
 
