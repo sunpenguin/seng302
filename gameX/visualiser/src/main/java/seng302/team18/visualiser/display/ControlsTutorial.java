@@ -176,6 +176,7 @@ public class ControlsTutorial {
      */
     public boolean checkIfProgressed(KeyCode code) {
         boolean result = false;
+        //
         if (keyList.get(currentKeyIndex) == BoatControls.SAILS) {
             result = checkSails(code);
         } else if (keyList.get(currentKeyIndex) == BoatControls.UP) {
