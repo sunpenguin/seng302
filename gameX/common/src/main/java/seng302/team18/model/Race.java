@@ -274,18 +274,36 @@ public class Race {
 
         if (boat.getStatus().equals(BoatStatus.RACING) && detector.hasPassedDestination(boat, course)) {
             setNextLeg(boat, boat.getLegNumber() + 1);
-        } else if (boat.getStatus().equals(BoatStatus.PRE_START) && boat.getLegNumber() == 0 && detector.hasPassedDestination(boat, course)) {
-            yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OVER_START_LINE_EARLY));
-            boat.setStatus(BoatStatus.OCS);
-            Coordinate c = course.getMarkSequence().get(0).getCompoundMark().getCoordinate();
-            Coordinate newCoord = new Coordinate(c.getLatitude() - 0.0005, c.getLongitude() - 0.0005);
-            boat.setSpeed(0);
-            boat.setSailOut(true);
-            boat.setCoordinate(newCoord);
+        } else if (boat.getStatus().equals(BoatStatus.PRE_START) && boat.getLegNumber() == 0
+                && detector.hasPassedDestination(boat, course)) {
+            statusOSCPenalty(boat, course.getMarkSequence().get(0));
         } else if (boat.getStatus().equals(BoatStatus.OCS) && currentTime.isAfter(startTime.plusSeconds(5))) {
             yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OCS_PENALTY_COMPLETE));
             boat.setStatus(BoatStatus.RACING);
+            boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
         }
+    }
+
+
+    /**
+     * Sets the boat to appropriate conditions when a boat has an OCS status.
+     *
+     * @param boat the boat which has the OCS status
+     * @param gate the start gate
+     */
+    private void statusOSCPenalty(Boat boat, MarkRounding gate) {
+        yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OVER_START_LINE_EARLY));
+        boat.setStatus(BoatStatus.OCS);
+        Mark mark1 = gate.getCompoundMark().getMarks().get(0);
+        Mark mark2 = gate.getCompoundMark().getMarks().get(1);
+
+        double mark1ToMark2Bearing = gps.getBearing(mark1.getCoordinate(), mark2.getCoordinate()) + 90 % 360;
+        Coordinate c = gps.toCoordinate(gate.getCompoundMark().getCoordinate(), mark1ToMark2Bearing, boat.getLength() * 5);
+        Coordinate newCoord = new Coordinate(c.getLatitude(), c.getLongitude());
+
+        boat.setSpeed(0);
+        boat.setSailOut(true);
+        boat.setCoordinate(newCoord);
     }
 
 
