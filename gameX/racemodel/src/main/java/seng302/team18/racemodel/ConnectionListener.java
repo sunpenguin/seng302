@@ -92,6 +92,11 @@ public class ConnectionListener extends Observable implements Observer {
 
                     RequestType requestType = request.getAction();
 
+                    if (!players.isEmpty() && requestType.code() != race.getMode().getCode()){
+                        sendMessage(client, sourceID, RequestType.FAILURE_CLIENT_TYPE);
+                        return;
+                    }
+
                     switch (requestType) {
                         case CONTROLS_TUTORIAL:
                             race = RACE_BUILDER.buildRace(race, REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse(),
@@ -122,6 +127,14 @@ public class ConnectionListener extends Observable implements Observer {
     private void sendMessage(ClientConnection player, int sourceID, RequestType requestType) {
         byte[] message = new AcceptanceMessageGenerator(sourceID, requestType).getMessage();
         player.sendMessage(message);
+        if (requestType == RequestType.FAILURE_CLIENT_TYPE) {
+            try {
+                player.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
         player.setId(sourceID);
     }
 

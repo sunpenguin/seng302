@@ -27,7 +27,7 @@ public class AcceptanceInterpreter extends MessageInterpreter {
             int sourceId = ((AcceptanceMessage) message).getSourceId();
             RequestType requestType =  ((AcceptanceMessage) message).getRequestType();
             if (requestType.code() != race.getMode().getCode()) {
-                //TODO: Make this show error and return to title screen sbe67 15/8/2017
+                //TODO Return user to title screen sbe67 15/8/2017
             }
             race.setPlayerId(sourceId);
 

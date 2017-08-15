@@ -11,7 +11,9 @@ public enum RequestType {
     VIEWING(0),
     RACING(1),
     CONTROLS_TUTORIAL(2),
-    GHOST(3);
+    GHOST(3),
+
+    FAILURE_CLIENT_TYPE(18);
 
 
     private int code;
