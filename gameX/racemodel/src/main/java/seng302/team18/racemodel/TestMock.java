@@ -2,6 +2,11 @@ package seng302.team18.racemodel;
 
 import seng302.team18.message.BoatStatus;
 import seng302.team18.model.*;
+import seng302.team18.message.BoatStatus;
+import seng302.team18.model.Boat;
+import seng302.team18.model.MarkRoundingEvent;
+import seng302.team18.model.Race;
+import seng302.team18.model.RaceStatus;
 import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
 
@@ -42,12 +47,16 @@ public class TestMock implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) {
             ClientConnection client = (ClientConnection) arg;
+            race.addParticipant(boats.get(race.getStartingList().size()));
             client.setId(boats.get(race.getStartingList().size()).getId());
             race.addParticipant(boats.get(race.getStartingList().size()));
             sendXmlMessages(client);
         } else if (arg instanceof ServerState) {
-            open = !ServerState.CLOSED.equals(arg);
-        } else if (arg instanceof Boat) {
+            open = !((ServerState) arg).equals(ServerState.CLOSED);
+        } else if (arg instanceof Integer) {
+            Integer id = (Integer) arg;
+            race.setBoatStatus(id, BoatStatus.DNF);
+        }  else if (arg instanceof Boat) {
             Boat boat  = (Boat) arg;
             if (boat.getStatus().equals(BoatStatus.DSQ)) {
                 server.closeConnection(boat.getId());

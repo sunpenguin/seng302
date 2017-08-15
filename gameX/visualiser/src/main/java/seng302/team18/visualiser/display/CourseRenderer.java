@@ -112,7 +112,7 @@ public class CourseRenderer {
             circle = new Circle(markSize, MARK_COLOR);
 
             circle.setOnMouseClicked((event) -> {
-                pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                pixelMapper.setZoomLevel(4);
                 pixelMapper.setViewPortCenter(mark.getCoordinate());
             });
 
@@ -161,7 +161,7 @@ public class CourseRenderer {
                 circle.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        pixelMapper.setZoomLevel(PixelMapper.ZOOM_LEVEL_4X);
+                        pixelMapper.setZoomLevel(4);
                         pixelMapper.setViewPortCenter(mark.getCoordinate());
                     }
                 });

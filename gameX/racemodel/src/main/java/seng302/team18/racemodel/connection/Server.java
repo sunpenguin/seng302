@@ -57,7 +57,9 @@ public class Server extends Observable {
         } catch (SocketTimeoutException e) {
             // The time out expired, no big deal
         } catch(IOException e) {
-            e.printStackTrace();
+            setChanged();
+            notifyObservers(ServerState.CLOSED);
+            close();
         }
     }
 
@@ -72,6 +74,7 @@ public class Server extends Observable {
      * (Blocking)
      */
     public void close() {
+        stopAcceptingConnections();
         while (!clients.isEmpty()) {
             for (int i = 0; i < clients.size(); i++) {
                 if (clients.get(i).isClosed()) {
@@ -80,6 +83,7 @@ public class Server extends Observable {
             }
         }
         try {
+
             serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -99,12 +103,16 @@ public class Server extends Observable {
         }
         for (int i = 0; i < clients.size(); i++) {
             ClientConnection client = clients.get(i);
+            Integer id = client.getId();
             if (!client.sendMessage(message)) {
                 clients.remove(i);
                 if (clients.isEmpty() && closeOnEmpty) {
                     close();
                     setChanged();
                     notifyObservers(ServerState.CLOSED);
+                } else {
+                    setChanged();
+                    notifyObservers(id);
                 }
             }
         }

@@ -1,0 +1,12 @@
+.background {
+    -fx-background-color: #327D91;
+}
+
+.quitImage {
+    -fx-graphic: url('/images/escape_menu/quit_button_image.png');
+}
+
+.quitImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/escape_menu/quit_button_image_alt.png');
+}

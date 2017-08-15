@@ -12,7 +12,7 @@ public class Sender {
 
     private MessageEncoderFactory factory;
     private OutputStream outStream;
-
+    private Socket socket;
 
     /**
      * Constructor for the Sender. Requires ip, port, and MessageEncoderFactory.
@@ -25,6 +25,7 @@ public class Sender {
     public Sender(Socket socket, MessageEncoderFactory factory) throws IOException {
         outStream = socket.getOutputStream();
         this.factory = factory;
+        this.socket = socket;
     }
 
 
@@ -65,6 +66,23 @@ public class Sender {
                 outStream.close();
                 isOpen = false;
             } catch (IOException e) {}
+        }
+    }
+
+
+
+    /**
+     * Closes the socket data is coming from.
+     *
+     * @return if the socket successfully closed.
+     */
+    public boolean close() {
+        try {
+            outStream.close();
+            socket.close();
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 }

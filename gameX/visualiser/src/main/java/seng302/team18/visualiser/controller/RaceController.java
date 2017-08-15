@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.controller;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
@@ -11,10 +12,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -23,11 +26,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import javafx.util.StringConverter;
 import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
@@ -35,7 +40,9 @@ import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
+import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
+import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
@@ -68,6 +75,10 @@ public class RaceController implements Observer {
     @FXML private CategoryAxis yPositionsAxis;
     @FXML private LineChart<String, String> sparklinesChart;
     @FXML private Slider slider;
+    @FXML private AnchorPane tabView;
+
+    private Pane escapeMenuPane;
+    private EscapeMenuController escapeMenuController;
 
     private boolean fpsOn;
     private boolean onImportant;
@@ -83,8 +94,10 @@ public class RaceController implements Observer {
     private Map<AnnotationType, Boolean> importantAnnotations;
 
     private Sender sender;
+    private Interpreter interpreter;
 
     private RaceBackground background;
+    private FadeTransition fadeIn = new FadeTransition(Duration.millis(150));
 
 
     @FXML
@@ -100,29 +113,15 @@ public class RaceController implements Observer {
         group.setManaged(false);
         new ControlSchemeDisplay(raceViewPane);
         background = new RaceBackground(raceViewPane, "/images/water.gif");
+        tabView.setVisible(false);
+        initialiseFadeTransition();
     }
 
-    @FXML
-    private void zoomOutButtonAction() {
-        pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
-        pixelMapper.setZoomLevel(0);
-    }
-
-    @FXML private void closeAppAction() {
-        Stage stage = (Stage) raceViewPane.getScene().getWindow();
-        stage.close();
-    }
 
     /**
-     * Loads an icon as an image, sets its size to 18x18 pixels then applies it to the menu
+     * Register key presses to certain methods.
+     * Handles boat control, zooming.
      */
-    private void loadIcon() {
-        ImageView icon = new ImageView("/images/boat-310164_640.png");
-        icon.setFitHeight(18);
-        icon.setFitWidth(18);
-    }
-
-
     private void installKeyHandler() {
         final EventHandler<KeyEvent> keyEventHandler =
             keyEvent -> {
@@ -151,6 +150,39 @@ public class RaceController implements Observer {
                             } else {
                                 message.setSailOut();
                             }
+                            break;
+                        case Z:
+                            if (pixelMapper.getZoomLevel() > 0) {
+                                pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() + 1);
+                            } else {
+                                Boat boat = race.getBoat(race.getPlayerId());
+                                pixelMapper.setZoomLevel(1);
+                                pixelMapper.track(boat);
+                                pixelMapper.setTracking(true);
+                            }
+                            send = false;
+                            break;
+                        case X:
+                            if (pixelMapper.getZoomLevel() - 1 <= 0) {
+                                pixelMapper.setTracking(false);
+                                pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
+                            }
+                            pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() - 1);
+
+
+                            send = false;
+                            break;
+                        case ESCAPE:
+                            if (group.getChildren().contains(escapeMenuPane)) {
+                                group.getChildren().remove(escapeMenuPane);
+                            } else {
+                                openEscapeMenu("");
+                            }
+                            send = false;
+                            break;
+                        case TAB:
+                            toggleTabView();
+                            send = false;
                             break;
                         default:
                             send = false;
@@ -321,6 +353,61 @@ public class RaceController implements Observer {
 
 
     /**
+     * Set up a fade transition for the tab view.
+     * Tab view will fade in when tab is pressed.
+     */
+    private void initialiseFadeTransition() {
+        fadeIn.setNode(tabView);
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(0.85);
+        fadeIn.setCycleCount(1);
+        fadeIn.setAutoReverse(true);
+    }
+
+
+    /**
+     * Toggle the tabView (holds detailed race info on and off)
+     */
+    private void toggleTabView() {
+        if (tabView.isVisible()) {
+            tabView.setVisible(false);
+        } else {
+            tabView.setVisible(true);
+            fadeIn.play();
+        }
+    }
+
+
+    /**
+     * Loads the FXML and controller for the escape menu.
+     */
+    private void loadEscapeMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
+            escapeMenuPane = loader.load();
+            escapeMenuController = loader.getController();
+            escapeMenuController.setup(group, interpreter, sender);
+        } catch(IOException e) {}
+    }
+
+
+    /**
+     * Opens the escapeMenu by adding to the group and placing it in the middle of the race view.
+     */
+    private void openEscapeMenu(String message) {
+        Label label = new Label(message);
+        label.setStyle("-fx-text-fill: red");
+        escapeMenuPane.getChildren().add(label);
+        label.setLayoutX(escapeMenuPane.getWidth()/2 - label.getWidth()/2);
+        label.setLayoutY(label.getHeight());
+        group.getChildren().add(escapeMenuPane);
+        escapeMenuPane.toFront();
+        escapeMenuPane.setLayoutX((raceViewPane.getWidth() / 2) - escapeMenuPane.getMinWidth() / 2);
+        escapeMenuPane.setLayoutY((raceViewPane.getHeight() / 2) - escapeMenuPane.getMinHeight() / 2);
+    }
+
+
+    /**
      * Sets the cell values for the race table, these are place, boat name and boat speed.
      *
      * @param boatColors a map from short name to colour for the boats
@@ -431,7 +518,10 @@ public class RaceController implements Observer {
         this.sender = sender;
         this.race = race;
 
-        pixelMapper = new PixelMapper(race.getCourse(), raceViewPane);
+        GPSCalculations gps = new GPSCalculations();
+        List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
+        pixelMapper = new PixelMapper(bounds.get(0), bounds.get(1), race.getCourse().getCentralCoordinate(), raceViewPane);
+        pixelMapper.setMaxZoom(16d);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
@@ -452,7 +542,11 @@ public class RaceController implements Observer {
         setNoneAnnotationLevel();
         setUpSparklines(raceRenderer.boatColors());
 
+        this.interpreter = interpreter;
         interpreter.setInterpreter(initialiseInterpreter());
+        interpreter.addObserver(this);
+
+        loadEscapeMenu();
     }
 
 
@@ -518,6 +612,24 @@ public class RaceController implements Observer {
             if (onImportant) {
                 setToImportantAnnotationLevel();
             }
+        } else if (arg instanceof Boolean){
+
+            Task<Void> task = new Task<Void>() {
+
+                @Override protected Void call() throws Exception {
+
+                        Platform.runLater(new Runnable() {
+                            @Override public void run() {
+                                openEscapeMenu("Host has disconnected!");
+
+                            }
+                        });
+                    return null;
+                }
+            };
+
+            task.run();
+            task.cancel();
         }
     }
 }

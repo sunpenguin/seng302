@@ -134,12 +134,29 @@ public class Race extends Observable {
         return startingPosition;
     }
 
+
     public void addParticipant(Boat boat) {
         // check that it is alright to add a boat at this point
         startingList.add(boat);
         setCourseForBoat(boat);
         participantIds.add(boat.getId());
     }
+
+
+    /**
+     * Set the status for boat.
+     *
+     * @param id Source ID for the boat to have its status changed.
+     */
+    public void setBoatStatus(Integer id, BoatStatus status) {
+        for (Boat boat : startingList) {
+            if (boat.getId().equals(id)) {
+                boat.setStatus(status.code());
+                System.out.println(boat.getName() + " " + boat.getStatus());
+            }
+        }
+    }
+
 
     /**
      * Starting list getter.
@@ -490,5 +507,19 @@ public class Race extends Observable {
     }
 
 
+    /**
+     * Gets a boat from the race given an ID.
+     *
+     * @param id the ID of the boat.
+     * @return the boat with the specified ID, null otherwise.
+     */
+    public Boat getBoat(int id) {
+        for (Boat boat : startingList) {
+            if (boat.getId() == id) {
+                return boat;
+            }
+        }
 
+        return null;
+    }
 }
