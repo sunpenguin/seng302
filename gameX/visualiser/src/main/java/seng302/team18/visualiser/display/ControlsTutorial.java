@@ -245,11 +245,11 @@ public class ControlsTutorial {
     private boolean checkUp(KeyCode code) {
         //NOTE the odd setting and comparisons of sails out, this is because everthing is checked before the message is sent
         if (code == KeyCode.PAGE_UP || code == KeyCode.UP) {
-            if (currentKeyIndex == INDEX_UP1 && boatOldTWA <= boat.getTrueWindAngle(windDirection)) {
+            if (currentKeyIndex == INDEX_UP1 && boatOldTWA >= boat.getTrueWindAngle(windDirection)) {
                 return true;
-            }else if (currentKeyIndex == INDEX_UP2 && boatOldTWA + 2.9 <= boat.getTrueWindAngle(windDirection)) {
+            }else if (currentKeyIndex == INDEX_UP2 && boatOldTWA > boat.getTrueWindAngle(windDirection) + 2.9) {
                 return true;
-            }else if (currentKeyIndex == INDEX_UP3 && boatOldTWA + 5.9 <= boat.getTrueWindAngle(windDirection)) {
+            }else if (currentKeyIndex == INDEX_UP3 && boatOldTWA > boat.getTrueWindAngle(windDirection)  + 5.9) {
                 boatOldSailsOut = boat.isSailOut();
                 boatOldTWA = boat.getTrueWindAngle(windDirection);
                 return true;
@@ -272,9 +272,9 @@ public class ControlsTutorial {
                 boatOldSailsOut = boat.isSailOut();
                 boatOldTWA = boat.getTrueWindAngle(windDirection);
                 return true;
-            }else if (currentKeyIndex == INDEX_DOWN2 && boatOldTWA - 2.9 >= boat.getTrueWindAngle(windDirection)) {
+            }else if (currentKeyIndex == INDEX_DOWN2 && boatOldTWA + 2.9 <= boat.getTrueWindAngle(windDirection)) {
                 return true;
-            }else if (currentKeyIndex == INDEX_DOWN3 && boatOldTWA - 5.9 >= boat.getTrueWindAngle(windDirection)) {
+            }else if (currentKeyIndex == INDEX_DOWN3 && boatOldTWA + 5.9 <= boat.getTrueWindAngle(windDirection)) {
                 boatOldSailsOut = boat.isSailOut();
                 boatOldTWA = boat.getTrueWindAngle(windDirection);
                 return true;
@@ -292,15 +292,20 @@ public class ControlsTutorial {
     private boolean checkTackGybe(KeyCode code) {
         if (code == KeyCode.ENTER) {
             if (currentKeyIndex == INDEX_TACK) {
-                return (boat.getTrueWindAngle(windDirection) >= 90);
-            } else if (currentKeyIndex == INDEX_GYBE) {
                 return (boat.getTrueWindAngle(windDirection) <= 90);
+            } else if (currentKeyIndex == INDEX_GYBE) {
+                return (boat.getTrueWindAngle(windDirection) >= 90);
             }
         }
         return false;
     }
 
 
+    /**
+     * Method to check if user has optimised their VMG
+     * @param code users key code
+     * @return true if the user optimises their VMG
+     */
     private boolean checkVMG(KeyCode code) {
         if (code == KeyCode.SPACE) {
             double relativeHeading = (boat.getHeading() - windDirection + 360) % 360;
@@ -421,6 +426,11 @@ public class ControlsTutorial {
             return "TO EXIT TUTORIAL";
         }
         return "Oh no";
+    }
+
+
+    public void setWindDirection(double windDirection) {
+        this.windDirection = windDirection;
     }
 
 

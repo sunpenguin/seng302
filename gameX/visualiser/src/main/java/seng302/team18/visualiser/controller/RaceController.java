@@ -189,6 +189,7 @@ public class RaceController implements Observer {
                     }
                     if (send) {
                         if (race.getMode() == RaceMode.CONTROLS_TUTORIAL){
+                            controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
                             if (controlsTutorial.checkIfProgressed(keyEvent.getCode())){
                                 controlsTutorial.displayNext();
                             }
