@@ -24,7 +24,7 @@ public class CourseBuilderRealistic extends AbstractCourseBuilder {
         markRoundings.add(new MarkRounding(3, getCompoundMarks().get(3), MarkRounding.Direction.SP, 6));
         markRoundings.add(new MarkRounding(4, getCompoundMarks().get(2), MarkRounding.Direction.SP, 6));
         markRoundings.add(new MarkRounding(5, getCompoundMarks().get(3), MarkRounding.Direction.SP, 6));
-        markRoundings.add(new MarkRounding(6, getCompoundMarks().get(4), MarkRounding.Direction.PS, 3));
+        markRoundings.add(new MarkRounding(6, getCompoundMarks().get(4), MarkRounding.Direction.SP, 3));
 
         return markRoundings;
     }

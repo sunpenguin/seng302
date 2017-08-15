@@ -146,7 +146,6 @@ public class Course {
         MarkRounding future = nullBorderedRoundings.get(1);
 
 
-
         for (int i = 1; i < nullBorderedRoundings.size() - 1; i++) {
             previous = current;
             current = future;
@@ -190,37 +189,29 @@ public class Course {
 
             Mark mark1 = rounding.getCompoundMark().getMarks().get(0);
             Mark mark2 = rounding.getCompoundMark().getMarks().get(1);
-            double bearingBetweenMarks = calculator.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
-            double oppositeBearing = (bearingBetweenMarks + 180) % 360;
+            double bearingMark1To2 = calculator.getBearing(mark1.getCoordinate(), mark2.getCoordinate());
+            double bearingMark2To1 = (bearingMark1To2 + 180) % 360;
 
             boolean isSP = rounding.getRoundingDirection() == MarkRounding.Direction.SP;
 
             Double bearingToPrevious = calculator.getBearing(rounding.getCompoundMark().getCoordinate(), previousRounding.getCompoundMark().getCoordinate());
-            boolean isPreviousOnLeft = calculator.isBetween(bearingToPrevious, oppositeBearing, bearingBetweenMarks);
-            boolean previousOnExitSide = isSP == isPreviousOnLeft;
+            boolean isPreviousOnEntrance = calculator.isBetween(bearingToPrevious, bearingMark2To1, bearingMark1To2) == isSP;
 
             if (nextRounding == null) {
-                if (previousOnExitSide) {
-                    gateType = MarkRounding.GateType.ROUND_THEN_THROUGH;
-                } else {
-                    gateType = MarkRounding.GateType.THROUGH_GATE;
-                }
+                gateType = (isPreviousOnEntrance) ? MarkRounding.GateType.THROUGH_GATE : MarkRounding.GateType.ROUND_THEN_THROUGH;
+
             } else {
-
                 Double bearingToFuture = calculator.getBearing(rounding.getCompoundMark().getCoordinate(), nextRounding.getCompoundMark().getCoordinate());
-                boolean isFutureOnLeft = calculator.isBetween(bearingToFuture, oppositeBearing, bearingBetweenMarks);
-                boolean futureOnExitSide = isSP == isFutureOnLeft;
+                boolean isNextOnExitSide = calculator.isBetween(bearingToFuture, bearingMark1To2, bearingMark2To1) == isSP;
 
-
-                if (futureOnExitSide) {
-                    gateType = (previousOnExitSide) ?
-                            MarkRounding.GateType.THROUGH_THEN_ROUND : MarkRounding.GateType.THROUGH_GATE;
+                if (isNextOnExitSide) {
+                    gateType = (isPreviousOnEntrance) ? MarkRounding.GateType.THROUGH_GATE : MarkRounding.GateType.ROUND_THEN_THROUGH;
                 } else {
-                    gateType = (previousOnExitSide) ?
-                            MarkRounding.GateType.ROUND_BOTH_MARKS : MarkRounding.GateType.ROUND_THEN_THROUGH;
+                    gateType = (isPreviousOnEntrance) ? MarkRounding.GateType.THROUGH_THEN_ROUND : MarkRounding.GateType.ROUND_BOTH_MARKS;
                 }
             }
         }
+
         rounding.setGateType(gateType);
     }
 
