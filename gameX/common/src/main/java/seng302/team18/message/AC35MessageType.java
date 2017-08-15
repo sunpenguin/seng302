@@ -41,26 +41,26 @@ public enum AC35MessageType {
     }
 
     /**
-     * Returns the AC35MessageType associated with a getCode. If none exists then it returns null.
+     * Returns the AC35MessageType associated with a code. If none exists then it returns null.
      *
      * @param code representing the AC35MessageType.
-     * @return the AC35MessageType associated with a getCode.
+     * @return the AC35MessageType associated with a code.
      */
     public static AC35MessageType from(int code) {
         return CODE_MAP.get(code);
     }
 
     /**
-     * Getter for the getCode of the message type.
+     * Getter for the code of the message type.
      *
-     * @return the getCode of the message type.
+     * @return the code of the message type.
      */
     public int getCode() {
         return code;
     }
 
     /**
-     * Creates a map between a getCode and its message type.
+     * Creates a map between a code and its message type.
      *
      * @return a map between all codes and their message type.
      */

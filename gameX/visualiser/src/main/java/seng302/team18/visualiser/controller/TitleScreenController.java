@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
 
@@ -41,6 +42,8 @@ public class TitleScreenController {
     private ImageView controlsImageView;
     private boolean controlsVisible = false;
 
+    private RaceMode mode;
+
     private Stage stage;
 
 
@@ -57,8 +60,21 @@ public class TitleScreenController {
      * Called when the mock connection button is selected, sets up a connection with the mock feed
      */
     private void openMockStream() {
+        mode = RaceMode.RACE;
         openStream("127.0.0.1", 5005);
     }
+
+
+    /**
+     * React to User selecting the Controls Tutorial mode.
+     * Start a race in ControlsTutorial mode.
+     */
+    @FXML
+    private void startControlPractice() {
+        mode = RaceMode.CONTROLS_TUTORIAL;
+        openStream("127.0.0.1", 5005);
+    }
+
 
     @FXML
     private void openCustomStream() {
@@ -197,7 +213,10 @@ public class TitleScreenController {
         stage.setTitle("High Seas");
         pane.getScene().setRoot(root);
         stage.show();
-        controller.setUp(new Race(), receiver, sender);
+
+        Race race = new Race();
+        race.setMode(mode);
+        controller.setUp(race, receiver, sender);
     }
 
 

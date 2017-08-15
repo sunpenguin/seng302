@@ -119,7 +119,9 @@ public class Course {
     }
 
     public Coordinate getCentralCoordinate() {
-        return centralCoordinate;
+        GPSCalculations calculator = new GPSCalculations();
+        List<Coordinate> coordinates = calculator.findMinMaxPoints(this);
+        return calculator.getCentralCoordinate(coordinates);
     }
 
     public List<Leg> getLegs() {
