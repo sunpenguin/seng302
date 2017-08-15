@@ -1,5 +1,6 @@
 package seng302.team18.model;
 
+import seng302.team18.message.BoatStatus;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.SpeedConverter;
 
@@ -144,6 +145,20 @@ public class Race {
         startingList.add(boat);
         setCourseForBoat(boat);
         participantIds.add(boat.getId());
+    }
+
+
+    /**
+     * Set the status for boat.
+     *
+     * @param id Source ID for the boat to have its status changed.
+     */
+    public void setBoatStatus(Integer id, BoatStatus status) {
+        for (Boat boat : startingList) {
+            if (boat.getId().equals(id)) {
+                boat.setStatus(status.code());
+            }
+        }
     }
 
 

@@ -143,6 +143,6 @@ public class CourseBuilderRealistic extends AbstractCourseBuilder {
 
     @Override
     protected ZoneId getTimeZone() {
-        return ZoneId.ofOffset("UTC", ZoneOffset.ofHours(0));
+        return ZoneId.ofOffset("UTC", ZoneOffset.ofHours(5));
     }
 }

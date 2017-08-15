@@ -41,10 +41,13 @@ public class TestMock implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) {
             ClientConnection client = (ClientConnection) arg;
-            race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
+            race.addParticipant(boats.get(race.getStartingList().size()));
             sendXmlMessages(client);
         } else if (arg instanceof ServerState) {
             open = !((ServerState) arg).equals(ServerState.CLOSED);
+        } else if (arg instanceof Integer) {
+            Integer id = (Integer) arg;
+            race.setBoatStatus(id, BoatStatus.DNF);
         }
     }
 

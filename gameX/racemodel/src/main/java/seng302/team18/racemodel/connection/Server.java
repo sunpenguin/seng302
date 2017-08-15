@@ -106,10 +106,14 @@ public class Server extends Observable {
         }
         for (int i = 0; i < clients.size(); i++) {
             ClientConnection client = clients.get(i);
+            Integer id = client.getId();
             if (!client.sendMessage(message)) {
                 clients.remove(i);
                 if (clients.isEmpty() && closeOnEmpty) {
                     close();
+                } else {
+                    setChanged();
+                    notifyObservers(id);
                 }
             }
         }
