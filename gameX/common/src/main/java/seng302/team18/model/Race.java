@@ -237,7 +237,7 @@ public class Race {
             }
         }
 
-        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getMarkSequence().get(currentLeg).getCompoundMark()));
+        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getMarkSequence().get(currentLeg)));
 
         if (nextLeg == course.getMarkSequence().size()) {
             boat.setStatus(BoatStatus.FINISHED);
