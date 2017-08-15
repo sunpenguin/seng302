@@ -94,6 +94,8 @@ public class RaceRenderer {
                 displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
                 displayBoat.setSailOut(boat.isSailOut());
             }
+
+            displayBoat.setBoatStatus(boat.getStatus());
         }
     }
 

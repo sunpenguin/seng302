@@ -26,7 +26,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private Long timeTilNextMark;
     private Long timeSinceLastMark;
     private Long timeAtLastMark;
-    private BoatStatus status;
+    private BoatStatus status = BoatStatus.UNDEFINED;
     private boolean isControlled;
     private boolean sailOut;
     private RoundZone roundZone = RoundZone.ZONE1;
