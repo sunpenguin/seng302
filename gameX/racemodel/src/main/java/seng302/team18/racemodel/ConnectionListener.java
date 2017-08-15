@@ -101,7 +101,7 @@ public class ConnectionListener extends Observable implements Observer {
                             race.setCourseForBoats();
                         case RACING:
                             addPlayer(receiver, sourceID);
-                            sendMessage(client, sourceID);
+                            sendMessage(client, sourceID, requestType);
                             break;
                     }
                 }
@@ -119,8 +119,8 @@ public class ConnectionListener extends Observable implements Observer {
      * @param player the socket to send player messages to.
      * @param sourceID the assigned id of the player's boat.
      */
-    private void sendMessage(ClientConnection player, int sourceID) {
-        byte[] message = new AcceptanceMessageGenerator(sourceID).getMessage();
+    private void sendMessage(ClientConnection player, int sourceID, RequestType requestType) {
+        byte[] message = new AcceptanceMessageGenerator(sourceID, requestType).getMessage();
         player.sendMessage(message);
         player.setId(sourceID);
     }
