@@ -3,7 +3,7 @@ package seng302.team18.message;
 import seng302.team18.model.CompoundMark;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.MarkRounding;
-import seng302.team18.model.Race;
+import seng302.team18.model.RaceType;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class AC35XMLRaceMessage implements XmlMessage {
 
     private int raceID;
-    private Race.RaceType raceType;
+    private RaceType raceType;
     private String startTime;
     private boolean isStartPostponed;
     private Map<Integer, EntryDirection> participants;
@@ -142,12 +142,12 @@ public class AC35XMLRaceMessage implements XmlMessage {
     }
 
 
-    public Race.RaceType getRaceType() {
+    public RaceType getRaceType() {
         return raceType;
     }
 
 
-    public void setRaceType(Race.RaceType raceType) {
+    public void setRaceType(RaceType raceType) {
         this.raceType = raceType;
     }
 

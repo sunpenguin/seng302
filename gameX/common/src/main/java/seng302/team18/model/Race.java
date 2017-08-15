@@ -5,7 +5,10 @@ import seng302.team18.util.SpeedConverter;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -450,31 +453,5 @@ public class Race {
         }
 
         return null;
-    }
-
-
-    public enum RaceType {
-        MATCH("Match"),
-        FLEET("Fleet");
-
-        private final static Map<String, RaceType> MAPPING = initializeMapping();
-        private final String value;
-
-        RaceType(String value) {
-            this.value = value;
-        }
-
-        public static RaceType fromValue(String value) {
-            return MAPPING.get(value);
-        }
-
-        private static Map<String, RaceType> initializeMapping() {
-            return Arrays.stream(values()).collect(Collectors.toMap(RaceType::toString, rt -> rt));
-        }
-
-        @Override
-        public String toString() {
-            return value;
-        }
     }
 }

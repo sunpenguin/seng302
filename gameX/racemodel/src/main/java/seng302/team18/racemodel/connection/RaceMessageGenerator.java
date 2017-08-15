@@ -41,19 +41,18 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
 
         long expectedStartTime = race.getStartTime().toInstant().toEpochMilli();
 
-        byte[] expectedStartTimeBytes = ByteCheck.longTo6ByteArray(expectedStartTime); // TODO: Use a reasonable starting time
+        byte[] expectedStartTimeBytes = ByteCheck.longTo6ByteArray(expectedStartTime);
 
         double WIND_DIRECTION_CONVERTER = 65536.0 / 360.0;
         int windDirection = (int) (race.getCourse().getWindDirection() * WIND_DIRECTION_CONVERTER);
         byte[] raceWindDirectionBytes = ByteCheck.intToUShort(windDirection);
-                // Currently set to east TODO: make this a field of race or boat?
 
         double windSpeed = race.getCourse().getWindSpeed();
         byte[] raceWindSpeedBytes = ByteCheck.shortToByteArray(new SpeedConverter().knotsToMms(windSpeed).shortValue());
 
         byte numBoatsByte = (byte) race.getStartingList().size();
 
-        byte raceTypeByte = 0x2; // Currently set to fleet race TODO: add this to race xml parser + race class
+        byte raceTypeByte = race.getRaceType().getCode();
 
         outputSteam.write(messageVersionNumberBytes);
         outputSteam.write(currentTimeBytes);

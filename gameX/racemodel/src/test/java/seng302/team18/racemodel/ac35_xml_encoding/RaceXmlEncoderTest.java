@@ -119,7 +119,7 @@ public class RaceXmlEncoderTest {
         raceMessage.setMarkRoundings(markRoundings);
         raceMessage.setParticipants(participants);
         raceMessage.setStartTime(startTime);
-        raceMessage.setRaceType(Race.RaceType.MATCH);
+        raceMessage.setRaceType(RaceType.MATCH);
     }
 
 
@@ -155,7 +155,7 @@ public class RaceXmlEncoderTest {
     public void encodeRaceType() throws Exception {
         Element raceTypeElement = (Element) root.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_RACE_TYPE.toString()).item(0);
 
-        assertEquals("Race type has not been encoded correctly", raceMessage.getRaceType(), Race.RaceType.fromValue(raceTypeElement.getTextContent()));
+        assertEquals("Race type has not been encoded correctly", raceMessage.getRaceType(), RaceType.fromValue(raceTypeElement.getTextContent()));
     }
 
 
