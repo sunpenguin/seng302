@@ -12,7 +12,7 @@ public class AcceptanceParserTest {
 
     @Test
     public void parseTest() {
-        byte[] bytes = {105, 0, 0, 0};
+        byte[] bytes = {105, 0, 0, 0, 0};
         MessageBodyParser parser = new AcceptanceParser();
         AcceptanceMessage message = (AcceptanceMessage) parser.parse(bytes);
 
