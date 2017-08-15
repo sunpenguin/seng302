@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import seng302.team18.model.Boat;
 
@@ -46,6 +47,8 @@ public class ControlsTutorial {
 
     private Map<BoatControls, Image> imageMap = new HashMap<>();
     private int currentKeyIndex = 0;
+
+    private VBox tutorialBox = new VBox(actionPromptBox, controlPromptBox);
 
 
     private final int INDEX_SAILS1 = 0;
@@ -111,6 +114,14 @@ public class ControlsTutorial {
 
         actionPromptBox.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/tutorial.css").toExternalForm());
         actionPromptBox.getStyleClass().add("hbox2");
+
+        controlPromptBox.setMinHeight(60);
+        controlPromptBox.setMaxHeight(60);
+        controlPromptBox.setPrefHeight(60);
+
+        actionPromptBox.setMinHeight(60);
+        actionPromptBox.setMaxHeight(60);
+        actionPromptBox.setPrefHeight(60);
 
         setMapping();
         registerListeners();
@@ -280,9 +291,9 @@ public class ControlsTutorial {
     private boolean checkTackGybe(KeyCode code) {
         if (code == KeyCode.ENTER) {
             if (currentKeyIndex == INDEX_TACK) {
-                return (boat.getTrueWindAngle(windDirection) <= 90);
-            } else if (currentKeyIndex == INDEX_GYBE) {
                 return (boat.getTrueWindAngle(windDirection) >= 90);
+            } else if (currentKeyIndex == INDEX_GYBE) {
+                return (boat.getTrueWindAngle(windDirection) <= 90);
             }
         }
         return false;
@@ -302,30 +313,24 @@ public class ControlsTutorial {
     public void draw() {
         controlPromptBox.setPrefWidth(pane.getWidth());
         controlPromptBox.setMaxWidth(pane.getWidth());
-        controlPromptBox.setMinHeight(60);
-        controlPromptBox.setMaxHeight(60);
-        controlPromptBox.setPrefHeight(60);
+
 
         actionPromptBox.setPrefWidth(pane.getWidth());
         actionPromptBox.setMaxWidth(pane.getWidth());
-        actionPromptBox.setMinHeight(60);
-        actionPromptBox.setMaxHeight(60);
-        actionPromptBox.setPrefHeight(60);
-
-
 
         Image image = imageMap.get(keyList.get(currentKeyIndex));
         actionImage.setImage(image);
-        keyActionLabel.setText(getCurrentPromptText());
 
+        keyActionLabel.setText(getCurrentPromptText());
         actionLabel.setText(getActionPromptText());
 
-        controlPromptBox.setLayoutX(0);
-        controlPromptBox.setLayoutY(pane.getHeight() - controlPromptBox.getHeight());
+        controlPromptBox.setLayoutY(actionPromptBox.getHeight());
 
+        actionPromptBox.setLayoutY(0);
+        controlPromptBox.setLayoutY(actionPromptBox.getHeight());
 
-        actionPromptBox.setLayoutX(0);
-        actionPromptBox.setLayoutY(pane.getHeight() - controlPromptBox.getHeight() - actionPromptBox.getHeight());
+        actionPromptBox.setTranslateY(pane.getHeight() - (controlPromptBox.getHeight() * 2));
+        controlPromptBox.setTranslateY(pane.getHeight() - (controlPromptBox.getHeight() * 2));
     }
 
 
@@ -349,13 +354,14 @@ public class ControlsTutorial {
         pane.getChildren().add(tickView);
     }
 
+
     /**
      * Gets the text to inform the user of what to do
      * @return returns the text as a string
      */
     private String getActionPromptText(){
         if (currentKeyIndex == INDEX_SAILS1) {              //Sails
-            return "BRING SAILS IN";
+            return "WELCOME TO THE TUTORIAL! BEGIN BY BRINGING YOUR SAILS IN TO POWER THE BOAT";
         } else if (currentKeyIndex == INDEX_UP1) {          //UP
             return "STEER UPWIND 9 DEGREES";
         } else if (currentKeyIndex == INDEX_UP2) {          //UP
@@ -371,13 +377,13 @@ public class ControlsTutorial {
         }  else if (currentKeyIndex == INDEX_VMG) {         //VMG
             return "OPTIMISE YOUR UPWIND/DOWNWIND VMG";
         } else if (currentKeyIndex == INDEX_TACK) {         //TACK
-            return "PREFORM A TACK (YOU MUST BE FACING UPWIND)";
+            return "PERFORM A TACK (YOU MUST BE FACING UPWIND)";
         } else if (currentKeyIndex == INDEX_GYBE) {         //GYBE
-            return "PREFORM A GYBE (YOU MUST BE FACING DOWNWIND)";
+            return "PERFORM A GYBE (YOU MUST BE FACING DOWNWIND)";
         } else if (currentKeyIndex == INDEX_SAILS2) {       //SAILS
-            return "PUT THE SAILS OUT";
+            return "PUT THE SAILS OUT TO STOP THE BOAT";
         } else if (currentKeyIndex == INDEX_ESC) {          //ESC
-            return "LEAVE THE TUTORIAL";
+            return "TUTORIAL FINISHED! YOU ARE NOW READY TO SAIL THE HIGH SEAS";
         }
         return "oh no";
     }

@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 public class ControlSchemeDisplay {
     private Pane pane;
     private ImageView imageView;
+    private Image image;
     private boolean controlsVisible;
 
 
@@ -35,7 +36,7 @@ public class ControlSchemeDisplay {
      */
     private void loadControlScheme() {
         String path = "/images/controlScheme.png";
-        Image image = new Image(path);
+        image = new Image(path);
         imageView = new ImageView(image);
         imageView.setPreserveRatio(true);
         pane.getChildren().add(imageView);
@@ -47,7 +48,7 @@ public class ControlSchemeDisplay {
      *  Shows the imageView holding the control scheme by adding it to the raceViewPane.
      */
     private void showControlScheme() {
-        imageView.setFitWidth(pane.getWidth());
+        imageView.setLayoutX((pane.getWidth() / 2) - (image.getWidth() / 2));
         imageView.setVisible(true);
         controlsVisible = true;
     }
