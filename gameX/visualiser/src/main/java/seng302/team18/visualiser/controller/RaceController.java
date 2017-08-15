@@ -11,10 +11,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
@@ -96,11 +98,9 @@ public class RaceController implements Observer {
 
     @FXML
     public void initialize() {
-        loadEscapeMenu();
         installKeyHandler();
         setSliderListener();
         sliderSetup();
-        interpreter.addObserver(this);
         fpsOn = true;
         importantAnnotations = new HashMap<>();
         for (AnnotationType type : AnnotationType.values()) {
@@ -172,8 +172,7 @@ public class RaceController implements Observer {
                             if (group.getChildren().contains(escapeMenuPane)) {
                                 group.getChildren().remove(escapeMenuPane);
                             } else {
-                                loadEscapeMenu();
-                                openEscapeMenu();
+                                openEscapeMenu("");
                             }
                             send = false;
                             break;
@@ -386,7 +385,12 @@ public class RaceController implements Observer {
     /**
      * Opens the escapeMenu by adding to the group and placing it in the middle of the race view.
      */
-    public void openEscapeMenu() {
+    private void openEscapeMenu(String message) {
+        Label label = new Label(message);
+        label.setStyle("-fx-text-fill: red");
+        escapeMenuPane.getChildren().add(label);
+        label.setLayoutX(escapeMenuPane.getWidth()/2 - label.getWidth()/2);
+        label.setLayoutY(label.getHeight());
         group.getChildren().add(escapeMenuPane);
         escapeMenuPane.toFront();
         escapeMenuPane.setLayoutX((raceViewPane.getWidth() / 2) - escapeMenuPane.getMinWidth() / 2);
@@ -528,6 +532,9 @@ public class RaceController implements Observer {
 
         this.interpreter = interpreter;
         interpreter.setInterpreter(initialiseInterpreter());
+        interpreter.addObserver(this);
+
+        loadEscapeMenu();
     }
 
 
@@ -593,6 +600,24 @@ public class RaceController implements Observer {
             if (onImportant) {
                 setToImportantAnnotationLevel();
             }
+        } else if (arg instanceof Boolean){
+
+            Task<Void> task = new Task<Void>() {
+
+                @Override protected Void call() throws Exception {
+
+                        Platform.runLater(new Runnable() {
+                            @Override public void run() {
+                                openEscapeMenu("Host has disconnected!");
+
+                            }
+                        });
+                    return null;
+                }
+            };
+
+            task.run();
+            task.cancel();
         }
     }
 }
