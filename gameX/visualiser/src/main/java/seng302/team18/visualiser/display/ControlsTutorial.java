@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import seng302.team18.model.Boat;
+import seng302.team18.util.VMGAngles;
 
 import java.util.*;
 
@@ -301,8 +302,19 @@ public class ControlsTutorial {
 
 
     private boolean checkVMG(KeyCode code) {
-        //TODO find a way to get dead ZONE sbe67 14/8/2017
-        return code == KeyCode.SPACE;
+        if (code == KeyCode.SPACE) {
+            double relativeHeading = (boat.getHeading() - windDirection + 360) % 360;
+            double left = VMGAngles.LEFT.getValue();
+            double right = VMGAngles.RIGHT.getValue();
+            double deadZone = VMGAngles.DEAD_ZONE.getValue();
+            if (left - deadZone > relativeHeading && relativeHeading > right + deadZone) {
+                return true;
+            } else if (left + deadZone < relativeHeading || relativeHeading < right - deadZone) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
@@ -365,15 +377,15 @@ public class ControlsTutorial {
         } else if (currentKeyIndex == INDEX_UP1) {          //UP
             return "STEER UPWIND 9 DEGREES";
         } else if (currentKeyIndex == INDEX_UP2) {          //UP
-            return "STEER UPWIND 6 DEGREES";
+            return "6 DEGREES TO GO";
         } else if (currentKeyIndex == INDEX_UP3) {          //UP
-            return "STEER UPWIND 3 DEGREES";
+            return "3 DEGREES TO GO";
         } else if (currentKeyIndex == INDEX_DOWN1) {        //DOWN
             return "STEER DOWNWIND 9 DEGREES";
         } else if (currentKeyIndex == INDEX_DOWN2) {        //DOWN
-            return "STEER DOWNWIND 6 DEGREES";
+            return "6 DEGREES TO GO";
         } else if (currentKeyIndex == INDEX_DOWN3) {        //DOWN
-            return "STEER DOWNWIND 3 DEGREES";
+            return "3 DEGREES TO GO";
         }  else if (currentKeyIndex == INDEX_VMG) {         //VMG
             return "OPTIMISE YOUR UPWIND/DOWNWIND VMG";
         } else if (currentKeyIndex == INDEX_TACK) {         //TACK
