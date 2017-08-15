@@ -36,7 +36,7 @@ public class StartupController {
 
     @FXML
     private void initialize() {
-        createModel();
+
     }
 
     /**
@@ -45,6 +45,22 @@ public class StartupController {
     @FXML
     private void openMockStream() {
         mode = RaceMode.RACE;
+        openStream("127.0.0.1", 5005);
+    }
+
+
+    /**
+     * opens a model as a new process and connects to it
+     */
+    // TODO dhl25 15 Aug: add a button for this
+    private void startHost() {
+        createModel();
+        mode = RaceMode.RACE;
+        try {
+            Thread.sleep(400); // it need some time set up the connection
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         openStream("127.0.0.1", 5005);
     }
 
