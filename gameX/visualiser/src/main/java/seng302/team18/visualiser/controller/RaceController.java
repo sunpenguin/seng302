@@ -553,29 +553,6 @@ public class RaceController implements Observer {
         loadEscapeMenu();
 
         int id = race.getPlayerId();
-
-        ExecutorService executor;
-        executor = Executors.newSingleThreadExecutor();
-        executor.submit(() -> {
-            while(true) {
-                for (Boat boat : race.getStartingList()) {
-                    if ((id == boat.getId()) && (boat.getStatus().equals(BoatStatus.DSQ))) {
-
-                        Runnable runnable = new Runnable() {
-                            @Override public void run() {
-                                boolean shutdown = false;
-                                while (!shutdown) {
-                                    openEscapeMenu("YOU DOG");
-                                    shutdown = true;
-                                }
-                                return;
-                            }
-                        };
-                        Platform.runLater(runnable);
-                    }
-                }
-            }
-        });
     }
 
 
@@ -595,7 +572,9 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindSpeedInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new EstimatedTimeInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishersListInterpreter(race));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new BoatStatusInterpreter(race));
+        BoatStatusInterpreter boatStatusInterpreter = new BoatStatusInterpreter(race);
+        boatStatusInterpreter.addObserver(this);
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), boatStatusInterpreter);
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLocationInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
@@ -641,7 +620,7 @@ public class RaceController implements Observer {
             if (onImportant) {
                 setToImportantAnnotationLevel();
             }
-        } else if (arg instanceof Boolean){
+        } else if (arg instanceof Boolean) {
 
             Task<Void> task = new Task<Void>() {
 
@@ -649,7 +628,7 @@ public class RaceController implements Observer {
 
                         Platform.runLater(new Runnable() {
                             @Override public void run() {
-                                openEscapeMenu("Host has disconnected!");
+                                openEscapeMenu("CONNECTION TO SERVER LOST");
 
                             }
                         });
@@ -657,6 +636,22 @@ public class RaceController implements Observer {
                 }
             };
 
+            task.run();
+            task.cancel();
+        } else if (arg instanceof Boat) {
+            Task<Void> task = new Task<Void>() {
+
+                @Override protected Void call() throws Exception {
+
+                    Platform.runLater(new Runnable() {
+                        @Override public void run() {
+                            openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES");
+
+                        }
+                    });
+                    return null;
+                }
+            };
             task.run();
             task.cancel();
         }
