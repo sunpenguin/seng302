@@ -6,6 +6,7 @@ import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -38,6 +39,7 @@ import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
+import seng302.team18.message.BoatStatus;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
@@ -54,6 +56,8 @@ import seng302.team18.visualiser.util.SparklineDataPoint;
 import javax.swing.table.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * The controller class for the Main Window.
@@ -547,6 +551,31 @@ public class RaceController implements Observer {
         interpreter.addObserver(this);
 
         loadEscapeMenu();
+
+        int id = race.getPlayerId();
+
+        ExecutorService executor;
+        executor = Executors.newSingleThreadExecutor();
+        executor.submit(() -> {
+            while(true) {
+                for (Boat boat : race.getStartingList()) {
+                    if ((id == boat.getId()) && (boat.getStatus().equals(BoatStatus.DSQ))) {
+
+                        Runnable runnable = new Runnable() {
+                            @Override public void run() {
+                                boolean shutdown = false;
+                                while (!shutdown) {
+                                    openEscapeMenu("YOU DOG");
+                                    shutdown = true;
+                                }
+                                return;
+                            }
+                        };
+                        Platform.runLater(runnable);
+                    }
+                }
+            }
+        });
     }
 
 

@@ -49,19 +49,19 @@ public class TestMock implements Observer {
             ClientConnection client = (ClientConnection) arg;
             race.addParticipant(boats.get(race.getStartingList().size()));
             client.setId(boats.get(race.getStartingList().size()).getId());
-            race.addParticipant(boats.get(race.getStartingList().size()));
             sendXmlMessages(client);
         } else if (arg instanceof ServerState) {
             open = !((ServerState) arg).equals(ServerState.CLOSED);
         } else if (arg instanceof Integer) {
             Integer id = (Integer) arg;
             race.setBoatStatus(id, BoatStatus.DNF);
-        }  else if (arg instanceof Boat) {
-            Boat boat  = (Boat) arg;
-            if (boat.getStatus().equals(BoatStatus.DSQ)) {
-                server.closeConnection(boat.getId());
-            }
         }
+//        else if (arg instanceof Boat) {
+//            Boat boat  = (Boat) arg;
+//            if (boat.getStatus().equals(BoatStatus.DSQ)) {
+//                server.closeConnection(boat.getId());
+//            }
+//        }
     }
 
     private void sendXmlMessages(ClientConnection newPlayer) {

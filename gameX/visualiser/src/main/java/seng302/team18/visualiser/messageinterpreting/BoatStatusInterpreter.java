@@ -9,9 +9,10 @@ import seng302.team18.model.Leg;
 import seng302.team18.model.Race;
 
 import java.util.List;
+import java.util.Observable;
 
 /**
- * Created by jth102 on 4/05/17.
+ * Class to interpret the status of a boat.
  */
 public class BoatStatusInterpreter extends MessageInterpreter {
     private Race race;

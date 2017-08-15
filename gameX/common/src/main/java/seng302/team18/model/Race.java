@@ -1,5 +1,6 @@
 package seng302.team18.model;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import seng302.team18.message.BoatStatus;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.SpeedConverter;
@@ -151,7 +152,7 @@ public class Race extends Observable {
     public void setBoatStatus(Integer id, BoatStatus status) {
         for (Boat boat : startingList) {
             if (boat.getId().equals(id)) {
-                boat.setStatus(status.code());
+                boat.setStatus(status);
                 System.out.println(boat.getName() + " " + boat.getStatus());
             }
         }
@@ -232,7 +233,7 @@ public class Race extends Observable {
                 .map(BoundaryMark::getCoordinate)
                 .collect(Collectors.toList());
         if (boundaries.size() > 0) {
-            if (!calculator.contains(boat.getCoordinate(), boundaries)) {
+            if (!calculator.contains(boat.getCoordinate(), boundaries) && !(boat.getStatus().equals(BoatStatus.DSQ))) {
                 boat.setStatus(BoatStatus.DSQ);
                 setChanged();
                 notifyObservers(boat);

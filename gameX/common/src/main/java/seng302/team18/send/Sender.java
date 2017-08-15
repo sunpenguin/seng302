@@ -71,18 +71,18 @@ public class Sender {
 
 
 
-    /**
-     * Closes the socket data is coming from.
-     *
-     * @return if the socket successfully closed.
-     */
-    public boolean close() {
-        try {
-            outStream.close();
-            socket.close();
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
-    }
+//    /**
+//     * Closes the socket data is coming from.
+//     *
+//     * @return if the socket successfully closed.
+//     */
+//    public boolean close() {
+//        try {
+//            outStream.close();
+//            socket.close();
+//            return true;
+//        } catch (IOException e) {
+//            return false;
+//        }
+//    }
 }

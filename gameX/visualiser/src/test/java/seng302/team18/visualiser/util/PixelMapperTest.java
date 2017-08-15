@@ -308,11 +308,13 @@ public class PixelMapperTest {
             Course course = new Course(
                     Collections.emptyList(),
                     Arrays.asList(n, e, s, w),
-                    0.0,
-                    0.0,
-                    ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-4)),
                     Collections.emptyList()
             );
+
+
+//            0.0,
+//                    0.0,
+//                    ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-4)),
 
             course.setCentralCoordinate(centre);
 
