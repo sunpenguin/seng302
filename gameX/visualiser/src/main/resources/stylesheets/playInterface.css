@@ -1,0 +1,8 @@
+.hostImage {
+    -fx-graphic: url('/images/playInterface/host_button.gif');
+}
+
+.hostImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/playInterface/host_button_alt.gif');
+}

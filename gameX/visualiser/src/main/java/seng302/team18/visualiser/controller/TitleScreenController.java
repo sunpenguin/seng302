@@ -3,7 +3,6 @@ package seng302.team18.visualiser.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -19,6 +18,7 @@ import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
 
 import javax.net.SocketFactory;
+import java.io.IOException;
 import java.net.Socket;
 
 /**
@@ -60,8 +60,23 @@ public class TitleScreenController {
      * Called when the mock connection button is selected, sets up a connection with the mock feed
      */
     private void openMockStream() {
-        mode = RaceMode.RACE;
-        openStream("127.0.0.1", 5005);
+//        mode = RaceMode.RACE;
+//        openStream("127.0.0.1", 5005);
+
+        Stage stage = (Stage) errorText.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PlayInterface.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        PlayInterfaceController controller = loader.getController();
+        controller.setStage(stage);
+        stage.setTitle("High Seas");
+        pane.getScene().setRoot(root);
+        stage.setMaximized(true);
+        stage.show();
     }
 
 

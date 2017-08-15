@@ -1,0 +1,85 @@
+package seng302.team18.visualiser.controller;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
+/**
+ * Created by jth102 on 16/08/17.
+ */
+public class PlayInterfaceController {
+
+    @FXML private Pane innerPane;
+    @FXML private Pane outerPane;
+
+    private Stage stage;
+
+    private Label hostLabel;
+    private Label tutorialLabel;
+    private Image hostImage;
+    private Image tutorialImage;
+
+
+    public void initialize() {
+        registerListeners();
+        initialiseHostButton();
+    }
+
+
+    /**
+     * Set up the button for hosting a new game.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
+    private void initialiseHostButton() {
+        hostLabel = new Label();
+        hostLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/playInterface.css").toExternalForm());
+        hostLabel.getStyleClass().add("hostImage");
+        innerPane.getChildren().add(hostLabel);
+
+        hostImage = new Image("/images/playInterface/host_button.gif");
+        hostLabel.setLayoutX((800 / 2) - (Math.floorDiv((int) hostImage.getWidth(), 2)));
+        hostLabel.setLayoutY((800 / 2) + 100);
+        hostLabel.setOnMouseClicked(event -> hostButtonAction());
+    }
+
+
+    /**
+     * Act on user pressing the host new game button.
+     */
+    private void hostButtonAction() {
+        System.out.println("PLAY");
+    }
+
+
+    /**
+     * Register any necessary listeners.
+     */
+    private void registerListeners() {
+        outerPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> reDraw());
+        outerPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> reDraw());
+    }
+
+
+    /**
+     * Re draw the the pane which holds elements of the play interface to be in the middle of the window.
+     */
+    public void reDraw() {
+        if (!(innerPane.getWidth() == 0)) {
+            innerPane.setLayoutX((outerPane.getScene().getWidth() / 2) - (innerPane.getWidth() / 2));
+            innerPane.setLayoutY((innerPane.getScene().getHeight() / 2) - (innerPane.getHeight() / 2));
+        }
+
+        else if (stage != null) {
+            innerPane.setLayoutX((stage.getWidth() / 2) - (400));
+            innerPane.setLayoutY((stage.getHeight() / 2) - (400));
+        }
+    }
+
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+}
