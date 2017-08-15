@@ -95,7 +95,7 @@ public class Race {
     private void setCourseForBoat(Boat boat) {
         if (course.getMarkSequence().size() > 1) {
             boat.setLegNumber(0);
-            boat.setCoordinate(getStartPosition(boat));
+            boat.setCoordinate(getStartPosition(boat, boat.getLength() * 3));
             boat.setHeading(gps.getBearing(
                     course.getMarkSequence().get(0).getCompoundMark().getCoordinate(),
                     course.getMarkSequence().get(0).getCompoundMark().getCoordinate()
@@ -111,10 +111,11 @@ public class Race {
      * Method to calculate the starting position for a boat
      * Prevents boats from overlapping
      *
-     * @param boat boat to get starting position for
+     * @param boat       boat to get starting position for
+     * @param distBehind the distance behind the start line to place the boat (m)
      * @return position for boat to start at
      */
-    private Coordinate getStartPosition(Boat boat) {
+    private Coordinate getStartPosition(Boat boat, double distBehind) {
         MarkRounding startRounding = course.getMarkSequence().get(0);
         Coordinate midPoint = startRounding.getCompoundMark().getCoordinate();
         Coordinate startMark1 = startRounding.getCompoundMark().getMarks().get(0).getCoordinate();
@@ -133,7 +134,7 @@ public class Race {
             offset = -Math.floor(offset / 2);
         }
 
-        Coordinate behindMidPoint = gps.toCoordinate(midPoint, behind, boat.getLength() * 3);
+        Coordinate behindMidPoint = gps.toCoordinate(midPoint, behind, distBehind);
         return gps.toCoordinate(behindMidPoint, bearing, (boat.getLength() * offset + 10));
     }
 
@@ -279,7 +280,7 @@ public class Race {
             setNextLeg(boat, boat.getLegNumber() + 1);
         } else if (boat.getStatus().equals(BoatStatus.PRE_START) && boat.getLegNumber() == 0
                 && detector.hasPassedDestination(boat, course)) {
-            statusOSCPenalty(boat, course.getMarkSequence().get(0));
+            statusOSCPenalty(boat);
         } else if (boat.getStatus().equals(BoatStatus.OCS) && currentTime.isAfter(startTime.plusSeconds(5))) {
             yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OCS_PENALTY_COMPLETE));
             boat.setStatus(BoatStatus.RACING);
@@ -292,21 +293,15 @@ public class Race {
      * Sets the boat to appropriate conditions when a boat has an OCS status.
      *
      * @param boat the boat which has the OCS status
-     * @param gate the start gate
      */
-    private void statusOSCPenalty(Boat boat, MarkRounding gate) {
+    private void statusOSCPenalty(Boat boat) {
         yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OVER_START_LINE_EARLY));
         boat.setStatus(BoatStatus.OCS);
-        Mark mark1 = gate.getCompoundMark().getMarks().get(0);
-        Mark mark2 = gate.getCompoundMark().getMarks().get(1);
 
-        double mark1ToMark2Bearing = gps.getBearing(mark1.getCoordinate(), mark2.getCoordinate()) + 90 % 360;
-        Coordinate c = gps.toCoordinate(gate.getCompoundMark().getCoordinate(), mark1ToMark2Bearing, boat.getLength() * 5);
-        Coordinate newCoord = new Coordinate(c.getLatitude(), c.getLongitude());
+        boat.setCoordinate(getStartPosition(boat, boat.getLength() * 6));
 
         boat.setSpeed(0);
         boat.setSailOut(true);
-        boat.setCoordinate(newCoord);
     }
 
 
