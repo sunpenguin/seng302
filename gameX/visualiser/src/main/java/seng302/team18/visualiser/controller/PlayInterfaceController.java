@@ -25,6 +25,7 @@ public class PlayInterfaceController {
 
     public void initialize() {
         registerListeners();
+        initialiseTutorialButton();
         initialiseHostButton();
     }
 
@@ -41,8 +42,25 @@ public class PlayInterfaceController {
 
         hostImage = new Image("/images/playInterface/host_button.gif");
         hostLabel.setLayoutX((800 / 2) - (Math.floorDiv((int) hostImage.getWidth(), 2)));
-        hostLabel.setLayoutY((800 / 2) + 100);
+        hostLabel.setLayoutY((800 / 2) + 50);
         hostLabel.setOnMouseClicked(event -> hostButtonAction());
+    }
+
+
+    /**
+     * Set up the button for hosting a new game.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
+    private void initialiseTutorialButton() {
+        tutorialLabel = new Label();
+        tutorialLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/playInterface.css").toExternalForm());
+        tutorialLabel.getStyleClass().add("tutorialImage");
+        innerPane.getChildren().add(tutorialLabel);
+
+        tutorialImage= new Image("/images/playInterface/tutorial_button.gif");
+        tutorialLabel.setLayoutX((800 / 2) - (Math.floorDiv((int) tutorialImage.getWidth(), 2)));
+        tutorialLabel.setLayoutY((800 / 2) + 100);
+        tutorialLabel.setOnMouseClicked(event -> hostButtonAction());
     }
 
 
@@ -51,6 +69,14 @@ public class PlayInterfaceController {
      */
     private void hostButtonAction() {
         System.out.println("PLAY");
+    }
+
+
+    /**
+     * Act on user pressing the host new game button.
+     */
+    private void tutorialButtonAction() {
+        System.out.println("TUTORIAL");
     }
 
 
