@@ -1,8 +1,10 @@
 package seng302.team18.racemodel;
 
+import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
 import seng302.team18.message.RequestType;
+import seng302.team18.messageparsing.AcceptanceParser;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
@@ -93,7 +95,11 @@ public class ConnectionListener extends Observable implements Observer {
                     RequestType requestType = request.getAction();
 
                     if (!players.isEmpty() && requestType.code() != race.getMode().getCode()){
+                        //If a player connects to an already opened server that cannot accept acceptance type
                         sendMessage(client, sourceID, RequestType.FAILURE_CLIENT_TYPE);
+                        AcceptanceMessage failMessage = new AcceptanceMessage(sourceID,RequestType.FAILURE_CLIENT_TYPE);
+                        setChanged();
+                        notifyObservers(failMessage);
                         return;
                     }
 
