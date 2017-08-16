@@ -1,6 +1,7 @@
 package seng302.team18.racemodel;
 
 import seng302.team18.model.*;
+import seng302.team18.message.BoatStatus;
 import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
 
@@ -18,11 +19,16 @@ import static java.lang.Thread.sleep;
  */
 public class TestMock implements Observer {
 
-    private final Race race;
+    private Race race;
     private final Server server;
     private final XmlMessageBuilder xmlMessageBuilder;
     private final List<Boat> boats;
     private boolean open = true;
+
+    private MessageGenerator generatorXmlRegatta;
+    private MessageGenerator generatorXmlBoats;
+    private MessageGenerator generatorXmlRace;
+
 
     /**
      * The messages to be sent on a schedule during race simulation
@@ -41,24 +47,48 @@ public class TestMock implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) {
             ClientConnection client = (ClientConnection) arg;
-            race.addParticipant(boats.get(race.getStartingList().size()));
-            sendXmlMessages(client);
+            race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
+            generateXMLs();
+            sendXmlRegatta(client);
+            sendXmlBoatRace();
         } else if (arg instanceof ServerState) {
             open = !((ServerState) arg).equals(ServerState.CLOSED);
         } else if (arg instanceof Integer) {
             Integer id = (Integer) arg;
             race.setBoatStatus(id, BoatStatus.DNF);
+        } else if (arg instanceof ConnectionListener) {
+            generateXMLs();
+            sendXmlBoatRace();
         }
     }
 
-    private void sendXmlMessages(ClientConnection newPlayer) {
-        MessageGenerator generatorXmlRegatta = new XmlMessageGeneratorRegatta(xmlMessageBuilder.buildRegattaMessage(race));
-        MessageGenerator generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
-        MessageGenerator generatorXmlBoats = new XmlMessageGeneratorBoats(xmlMessageBuilder.buildBoatsXmlMessage(race));
 
-        newPlayer.sendMessage(generatorXmlRegatta.getMessage());
+    /**
+     * Generate the XML files to be sent to clients.
+     */
+    private void generateXMLs() {
+        generatorXmlRegatta = new XmlMessageGeneratorRegatta(xmlMessageBuilder.buildRegattaMessage(race));
+        generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
+        generatorXmlBoats = new XmlMessageGeneratorBoats(xmlMessageBuilder.buildBoatsXmlMessage(race));
+    }
+
+
+    /**
+     * Broadcast the race and boat XML files to all clients.
+     */
+    private void sendXmlBoatRace() {
         server.broadcast(generatorXmlRace.getMessage());
         server.broadcast(generatorXmlBoats.getMessage());
+    }
+
+
+    /**
+     * Send the regatta XML file to a new client.
+     *
+     * @param newPlayer ClientConnection used to send message through.
+     */
+    private void sendXmlRegatta(ClientConnection newPlayer) {
+        newPlayer.sendMessage(generatorXmlRegatta.getMessage());
     }
 
 
@@ -88,7 +118,12 @@ public class TestMock implements Observer {
 
         race.setStatus(RaceStatus.PRESTART);
 
+
         do {
+            if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
+                switchToPrep();
+            }
+
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 
@@ -102,39 +137,13 @@ public class TestMock implements Observer {
                 race.setStatus(RaceStatus.WARNING);
 
             } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(prepTime)) {
-
-                race.setStatus(RaceStatus.PREPARATORY);
-                server.stopAcceptingConnections();
-
-                for (Boat b : race.getStartingList()) {
-                    scheduledMessages.add(new BoatMessageGenerator(b));
-                }
-
+                switchToPrep();
             } else {
-                race.updateBoats((timeCurr - timeLast));
-                // Send mark rounding messages for all mark roundings that occurred
-                for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
-                    server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
-                }
-
-                for (YachtEvent event : race.popYachtEvents()) {
-                    server.broadcast((new YachtEventCodeMessageGenerator(event, race.getId())).getMessage());
-                }
-
-                if ((race.getStatus() == RaceStatus.PREPARATORY) && ZonedDateTime.now().isAfter(race.getStartTime())) {
-                    race.setStatus(RaceStatus.STARTED);
-                    race.getStartingList().stream()
-                            .filter(boat -> boat.getStatus().equals(BoatStatus.PRE_START))
-                            .forEach(boat -> boat.setStatus(BoatStatus.RACING));
-                }
+                switchToStarted();
             }
 
-            // Send messages if needed
-            for (ScheduledMessageGenerator sendable : scheduledMessages) {
-                if (sendable.isTimeToSend(timeCurr)) {
-                    server.broadcast(sendable.getMessage());
-                }
-            }
+            runRace(timeCurr, timeLast);
+            updateClients(timeCurr);
 
             // Sleep
             try {
@@ -149,5 +158,69 @@ public class TestMock implements Observer {
         race.setStatus(RaceStatus.FINISHED);
         ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
         server.broadcast(raceMessageGenerator.getMessage());
+    }
+
+
+    /**
+     * Switch into the preparatory stage.
+     * At this time, also stop accepting new connections and set up a BoatMessageGenerator for each boat.
+     */
+    private void switchToPrep() {
+        race.setStatus(RaceStatus.PREPARATORY);
+        server.stopAcceptingConnections();
+
+        for (Boat b : race.getStartingList()) {
+            scheduledMessages.add(new BoatMessageGenerator(b));
+        }
+    }
+
+
+    /**
+     * If at the necessary time, switch the RaceStatus to STARTED.
+     */
+    private void switchToStarted() {
+        if ((race.getStatus() == RaceStatus.PREPARATORY) && ZonedDateTime.now().isAfter(race.getStartTime())) {
+            race.setStatus(RaceStatus.STARTED);
+            race.getStartingList().stream()
+                    .filter(boat -> boat.getStatus().equals(BoatStatus.PRE_START))
+                    .forEach(boat -> boat.setStatus(BoatStatus.RACING));
+
+        }
+    }
+
+
+    /**
+     * Run the race.
+     * Updates the position of boats
+     *
+     * @param timeCurr The current time (milliseconds)
+     * @param timeLast The time (milliseconds) from the previous loop in runSimulation.
+     */
+    private void runRace(long timeCurr, long timeLast) {
+        race.updateBoats((timeCurr - timeLast));
+    }
+
+
+    /**
+     * Update the clients by sending any necessary new race info to them.
+     * Sends out updates for positions, mark roundings, etc.
+     *
+     * @param timeCurr The current time (milliseconds)
+     */
+    private void updateClients(long timeCurr) {
+        for (ScheduledMessageGenerator sendable : scheduledMessages) {
+            if (sendable.isTimeToSend(timeCurr)) {
+                server.broadcast(sendable.getMessage());
+            }
+        }
+
+        for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
+            server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
+            System.out.println("MARK ROUNING");
+        }
+
+        for (YachtEvent event : race.popYachtEvents()) {
+            server.broadcast((new YachtEventCodeMessageGenerator(event, race.getId())).getMessage());
+        }
     }
 }

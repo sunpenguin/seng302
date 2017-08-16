@@ -30,7 +30,7 @@ public class Race {
     private Integer playerId;
     private List<MarkRoundingEvent> markRoundingEvents = new ArrayList<>();
     private List<YachtEvent> yachtEvents = new ArrayList<>();
-
+    private RaceMode mode = RaceMode.RACE;
 
     public Race() {
         participantIds = new ArrayList<>();
@@ -83,7 +83,7 @@ public class Race {
      * Set up the course CompoundMarks for each boat in the race as well as set the
      * current(starting CompoundMark) and next CompoundMark.
      */
-    private void setCourseForBoats() {
+    public void setCourseForBoats() {
         if (course.getMarkSequence().size() > 1) {
             for (Boat boat : startingList) {
                 setCourseForBoat(boat);
@@ -276,9 +276,13 @@ public class Race {
         if (boat.isSailOut()) {
             speed = 0;
         }
+
         List<AbstractBoat> obstacles = new ArrayList<>(startingList);
         obstacles.addAll(course.getMarks());
-        AbstractBoat obstacle = boat.hasCollided(obstacles);
+        AbstractBoat obstacle = null;
+        if (mode != RaceMode.CONTROLS_TUTORIAL) {
+            obstacle = boat.hasCollided(obstacles);
+        }
         if (obstacle != null) {
             handleCollision(boat, obstacle);
         } else {
@@ -290,15 +294,17 @@ public class Race {
             boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
         }
 
-        if (boat.getStatus().equals(BoatStatus.RACING) && detector.hasPassedDestination(boat, course)) {
-            setNextLeg(boat, boat.getLegNumber() + 1);
-        } else if (boat.getStatus().equals(BoatStatus.PRE_START) && boat.getLegNumber() == 0
-                && detector.hasPassedDestination(boat, course)) {
-            statusOSCPenalty(boat);
-        } else if (boat.getStatus().equals(BoatStatus.OCS) && currentTime.isAfter(startTime.plusSeconds(5))) {
-            yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OCS_PENALTY_COMPLETE));
-            boat.setStatus(BoatStatus.RACING);
-            boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
+        if (!mode.equals(RaceMode.CONTROLS_TUTORIAL)) {
+            if (boat.getStatus().equals(BoatStatus.RACING) && detector.hasPassedDestination(boat, course)) {
+                setNextLeg(boat, boat.getLegNumber() + 1);
+            } else if (boat.getStatus().equals(BoatStatus.PRE_START) && boat.getLegNumber() == 0
+                    && detector.hasPassedDestination(boat, course)) {
+                statusOSCPenalty(boat);
+            } else if (boat.getStatus().equals(BoatStatus.OCS) && currentTime.isAfter(startTime.plusSeconds(5))) {
+                yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OCS_PENALTY_COMPLETE));
+                boat.setStatus(BoatStatus.RACING);
+                boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
+            }
         }
     }
 
@@ -462,5 +468,15 @@ public class Race {
         }
 
         return null;
+    }
+
+
+    public RaceMode getMode() {
+        return mode;
+    }
+
+
+    public void setMode(RaceMode mode) {
+        this.mode = mode;
     }
 }

@@ -25,26 +25,26 @@ public enum BoatStatus {
     }
 
     /**
-     * Returns the boat status associated with a getCode. If none exists then it returns null.
+     * Returns the boat status associated with a code. If none exists then it returns null.
      *
      * @param code representing the boat status.
-     * @return the boat status associated with a getCode.
+     * @return the boat status associated with a code.
      */
     public static BoatStatus from(int code) {
         return CODE_MAP.get(code);
     }
 
     /**
-     * Getter for the getCode of the boat status type.
+     * Getter for the code of the boat status type.
      *
-     * @return the getCode of the boat status type.
+     * @return the code of the boat status type.
      */
     public int code() {
         return code;
     }
 
     /**
-     * Creates a map between a getCode and its boat status type.
+     * Creates a map between a code and its boat status type.
      *
      * @return a map between all codes and boat status type.
      */

@@ -7,6 +7,7 @@ import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Race;
+import seng302.team18.util.VMGAngles;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,14 +61,13 @@ public class BoatActionInterpreter extends MessageInterpreter {
      * @param actions to be applied.
      */
     private void applyActions(Boat boat, BoatActionMessage actions) {
-        final double DEAD_ZONE = 10d;
         byte action = actions.getAction();
         if (action == BoatActionStatus.DOWNWIND.action()) {
             boatRotater.rotateDownwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
         } else if (action == BoatActionStatus.UPWIND.action()) {
             boatRotater.rotateUpwind(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed());
         } else if (action == BoatActionStatus.AUTOPILOT.action()) {
-            boatRotater.setVMG(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed(), DEAD_ZONE);
+            boatRotater.setVMG(race.getCourse().getWindDirection(), race.getCourse().getWindSpeed(), VMGAngles.DEAD_ZONE.getValue());
         } else if (action == BoatActionStatus.SAIL_IN.action()) {
             boat.setSailOut(false);
         } else if (action == BoatActionStatus.SAIL_OUT.action()) {

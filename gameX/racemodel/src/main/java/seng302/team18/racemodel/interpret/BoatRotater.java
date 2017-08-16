@@ -1,6 +1,7 @@
 package seng302.team18.racemodel.interpret;
 
 import seng302.team18.model.Boat;
+import seng302.team18.util.VMGAngles;
 
 import java.util.List;
 
@@ -134,8 +135,8 @@ public class BoatRotater {
      * @param deadZone      the heading at which the boat will not rotate.
      */
     public void setVMG(double windDirection, double windSpeed, double deadZone) {
-        final double right = 90;
-        final double left = 270;
+        final double right = VMGAngles.RIGHT.getValue();
+        final double left = VMGAngles.LEFT.getValue();
         for (Boat boat : boats) {
             double relativeHeading = (boat.getHeading() - windDirection + 360) % 360;
             if (left - deadZone > relativeHeading && relativeHeading > right + deadZone) {

@@ -2,6 +2,7 @@ package seng302.team18.visualiser.controller;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -38,6 +39,7 @@ import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
 import seng302.team18.send.Sender;
 import seng302.team18.util.GPSCalculations;
+import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
@@ -101,6 +103,8 @@ public class RaceController implements Observer {
     private FadeTransition fadeIn = new FadeTransition(Duration.millis(150));
 
     private Map<String, Color> colours;
+    private ControlsTutorial controlsTutorial;
+
 
     @FXML
     public void initialize() {
@@ -192,6 +196,12 @@ public class RaceController implements Observer {
                             send = false;
                     }
                     if (send) {
+                        if (race.getMode() == RaceMode.CONTROLS_TUTORIAL){
+                            controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
+                            if (controlsTutorial.checkIfProgressed(keyEvent.getCode())){
+                                controlsTutorial.displayNext();
+                            }
+                        }
                         sender.send(message);
                     }
                 }
@@ -525,7 +535,7 @@ public class RaceController implements Observer {
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         colours = raceRenderer.boatColors();
-        courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane);
+        courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
 
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
@@ -533,10 +543,7 @@ public class RaceController implements Observer {
         raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel));
         raceLoop.start();
 
-        raceViewPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> redrawFeatures());
-        raceViewPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> redrawFeatures());
-        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
-        pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
+        registerListeners();
 
         startWindDirection();
         setUpTable();
@@ -547,6 +554,43 @@ public class RaceController implements Observer {
         interpreter.setInterpreter(initialiseInterpreter());
 
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
+    }
+
+
+    /**
+     * Register any required listeners.
+     *
+     */
+    private void registerListeners() {
+        InvalidationListener listenerWidth = observable -> {
+            redrawFeatures();
+            updateControlsTutorial();
+        };
+        raceViewPane.widthProperty().addListener(listenerWidth);
+
+        InvalidationListener listenerHeight = observable -> {
+            redrawFeatures();
+            updateControlsTutorial();
+        };
+        raceViewPane.heightProperty().addListener(listenerHeight);
+
+        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
+        pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
+    }
+
+
+    /**
+     * Re draw the current elements of the controls tutorial, or initialise it if it is NULL.
+     */
+    public void updateControlsTutorial() {
+        if(race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
+            if (controlsTutorial == null) {
+                controlsTutorial = new ControlsTutorial(raceViewPane, race.getCourse().getWindDirection(), race.getStartingList().get(0));
+                controlsTutorial.displayNext();
+            } else {
+                controlsTutorial.draw();
+            }
+        }
     }
 
 
