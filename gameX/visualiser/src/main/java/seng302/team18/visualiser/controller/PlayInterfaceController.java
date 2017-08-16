@@ -214,7 +214,7 @@ public class PlayInterfaceController {
      * Act on user pressing the host new game button.
      */
     private void hostButtonAction() {
-        System.out.println("PLAY");
+        System.out.println("BEGIN HOST");
     }
 
 
