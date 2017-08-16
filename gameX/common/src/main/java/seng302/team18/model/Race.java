@@ -234,33 +234,32 @@ public class Race {
      */
     public void setNextLeg(Boat boat, int nextLeg) {
         int currentLeg = boat.getLegNumber();
-        boat.setLegNumber(nextLeg);
 
-        // TODO Sunguin 16/08/17: The placings are a bit wrong right now (if on same leg, the one with the lower ID will be first?)
-        int newPlace = ((Long) startingList.stream().filter(b -> b.getLegNumber() >= currentLeg).count()).intValue();
-        boat.setPlace(newPlace);
+        if (currentLeg == nextLeg) return;
 
-        // Adjust the placings of the other boats to account for the new placing of the boat
-        // TODO afj19 09/08/17: Check that this is not the cause of issue #5 (see issue tracker)
-        for (Boat currentBoat : getStartingList()) {
-            int currentBoatPlace = currentBoat.placeProperty().intValue();
-            int currentBoatLeg = currentBoat.getLegNumber();
-            int boatLeg = boat.getLegNumber();
+        final int newPlace = ((Long) startingList.stream().filter(b -> b.getLegNumber() >= nextLeg).count()).intValue() + 1;
+        final int oldPace = boat.getPlace();
 
-            if (!(currentBoat.getId().equals(boat.getId())) && (currentBoatPlace == newPlace)) {
-                if (currentBoatLeg >= boatLeg) {
-                    currentBoat.setPlace(currentBoatPlace - 1);
-                } else {
-                    currentBoat.setPlace(currentBoatPlace + 1);
-                }
-            }
+        if (oldPace < newPlace) {
+            startingList.stream()
+                    .filter(boat1 -> boat1.getPlace() <= newPlace)
+                    .filter(boat1 -> oldPace < boat1.getPlace())
+                    .forEach(boat1 -> boat1.setPlace(boat1.getPlace() + 1));
+        } else if (newPlace < oldPace) {
+            startingList.stream()
+                    .filter(boat1 -> boat1.getPlace() < oldPace)
+                    .filter(boat1 -> newPlace <= boat1.getPlace())
+                    .forEach(boat1 -> boat1.setPlace(boat1.getPlace() + 1));
         }
 
+        boat.setPlace(newPlace);
         markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getMarkSequence().get(currentLeg)));
 
         if (nextLeg == course.getMarkSequence().size()) {
             boat.setStatus(BoatStatus.FINISHED);
         }
+
+        boat.setLegNumber(nextLeg);
     }
 
 
