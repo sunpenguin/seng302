@@ -13,7 +13,7 @@ import java.util.List;
  * A class which stores information about a boat.
  */
 
-public class Boat extends AbstractBoat implements GeographicLocation {
+public class Boat extends AbstractBoat implements GeographicLocation, Comparable<Boat> {
     private PolarPattern polar = new AC35PolarPattern();
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
@@ -377,4 +377,13 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         this.roundZone = roundZone;
     }
 
+
+    @Override
+    public int compareTo(Boat boat) {
+        if (place.intValue() <= boat.getPlace()) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
 }

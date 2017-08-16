@@ -143,3 +143,11 @@
 .table-view > .virtual-flow > .scroll-bar > .decrement-button {
     -fx-opacity: 0;
 }
+
+.finishTable {
+    -fx-font-size: 20;
+    -fx-background-color: aqua;
+    -fx-padding: 10px;
+    -fx-border-color: black;
+    -fx-border-width: 5px 5px 5px 5px;
+}

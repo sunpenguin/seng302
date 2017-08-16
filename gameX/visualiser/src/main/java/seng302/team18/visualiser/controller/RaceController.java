@@ -23,6 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
@@ -70,11 +71,19 @@ public class RaceController implements Observer {
     @FXML private Slider slider;
     @FXML private AnchorPane tabView;
 
-    @FXML private AnchorPane finisherPane;
-    @FXML private TableView<Boat> finisherTable;
-    @FXML private TableColumn<Boat, Integer> finisherPlace;
-    @FXML private TableColumn<Boat, String> finisherColour;
-    @FXML private TableColumn<Boat, String> finisherName;
+//    @FXML private AnchorPane finisherPane;
+//    @FXML private TableView<Boat> finisherTable;
+//    @FXML private TableColumn<Boat, Integer> finisherPlace;
+//    @FXML private TableColumn<Boat, String> finisherColour;
+//    @FXML private TableColumn<Boat, String> finisherName;
+
+
+    private Pane finisherPane;
+    private TableView<Boat> finisherTable = new TableView<>();
+    private TableColumn<Boat, Integer> finisherPlace = new TableColumn<>();
+    private TableColumn<Boat, String> finisherColour = new TableColumn<>();
+    private TableColumn<Boat, String> finisherName = new TableColumn<>();
+
 
     private SortedList<Boat> sortedList;
 
@@ -592,68 +601,25 @@ public class RaceController implements Observer {
 
 
     public void showFinishersList() {
-        constructList();
-        displayList();
-    }
+        List<Boat> boats = race.getStartingList();
+        Collections.sort(boats, Comparator.naturalOrder());
 
+        String result = "FINAL PLACINGS\n\n\n";
 
-    private void constructList() {
-        finisherTable.setItems(sortedList);
-        finisherPlace.setCellValueFactory(new PropertyValueFactory<>("place"));
-        finisherName.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        colours = raceRenderer.boatColors();
-        finisherColour.setCellFactory(column -> new TableCell<Boat, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem("", empty);
-
-                Boat boat = (Boat) getTableRow().getItem();
-                if (boat != null) {
-                    Color colour = colours.get(boat.getShortName());
-                    if (colour != null) {
-                        setStyle(String.format("-fx-background-color: #%02x%02x%02x", (int) (colour.getRed() * 255), (int) (colour.getGreen() * 255), (int) (colour.getBlue() * 255)));
-                    }
-                }
-            }
-        });
-
-        Collection<TableColumn<Boat, ?>> columns = new ArrayList<>();
-        columns.add(finisherPlace);
-        columns.add(finisherColour);
-        columns.add(finisherName);
-
-        for (TableColumn<Boat, ?> column : columns) {
-            column.setResizable(false);
-            column.setSortable(false);
+        for (Boat b : boats) {
+            result += b.getPlace() + ": " + b.getShortName() + "\n\n";
         }
 
-        finisherTable.getColumns().setAll(columns);
+        result = result.substring(0, result.length() - 2);
 
-        // Resets the columns to the original order whenever the user tries to change them
-        finisherTable.getColumns().addListener(new ListChangeListener<TableColumn<Boat, ?>>() {
-            public boolean suspended;
+        Label resultLabel = new Label(result);
+        VBox resultBox = new VBox(resultLabel);
+        resultBox.getStylesheets().addAll(RaceController.class.getResource("/stylesheets/style.css").toExternalForm());
+        resultBox.getStyleClass().add("finishTable");
+        raceViewPane.getChildren().add(resultBox);
 
-            @Override
-            public void onChanged(ListChangeListener.Change change) {
-                change.next();
-                if (change.wasReplaced() && !suspended) {
-                    this.suspended = true;
-                    finisherTable.getColumns().setAll(columns);
-                    this.suspended = false;
-                }
-            }
-        });
-
-        // TODO: Sunguin 16/08/17 The centering of this is off by alot and I'm not sure why
-        finisherPane.setLayoutX(raceViewPane.getPrefWidth() / 2 - (Math.floorDiv((int) finisherTable.getWidth(), 2)));
-        finisherPane.setLayoutY(raceViewPane.getPrefHeight() / 2 - (Math.floorDiv((int) finisherTable.getHeight(), 2)));
-    }
-
-
-    private void displayList() {
-        finisherPane.toFront();
-        finisherPane.setVisible(true);
+        resultBox.setLayoutX(50);
+        resultBox.setLayoutY(200);
     }
 
 
