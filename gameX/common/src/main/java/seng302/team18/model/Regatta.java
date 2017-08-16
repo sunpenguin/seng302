@@ -17,7 +17,7 @@ public class Regatta {
         RegattaID = regattaID;
     }
 
-    public String getRegattaName() {
+    public String getName() {
         return RegattaName;
     }
 

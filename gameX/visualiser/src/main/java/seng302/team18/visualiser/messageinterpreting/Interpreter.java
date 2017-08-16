@@ -1,9 +1,10 @@
 package seng302.team18.visualiser.messageinterpreting;
 
-import javafx.stage.Stage;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.Receiver;
+
+import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -42,6 +43,11 @@ public class Interpreter {
 
     public void setInterpreter(MessageInterpreter interpreter) {
         this.interpreter = interpreter;
+    }
+
+
+    public Socket getSocket() {
+        return receiver.getSocket();
     }
 
 

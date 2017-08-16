@@ -97,11 +97,11 @@ public class AC35RaceParserTest {
 //            List<Mark> expected = expectedCMM.get(i).getMarks();
 //
 ////            assertEquals(expected.size(), actual.size());
-////            assertEquals(expectedCM.getRegattaName(), actualCM.getRegattaName());
+////            assertEquals(expectedCM.getName(), actualCM.getName());
 //
 //            for (int j = 0; j < actual.size(); j++) {
 ////                assertEquals(expected.get(j).getId(), actual.get(j).getId());
-////                assertEquals(expected.get(j).getRegattaName(), actual.get(j).getRegattaName()); TODO: if mark names are used we need to test them here
+////                assertEquals(expected.get(j).getName(), actual.get(j).getName()); TODO: if mark names are used we need to test them here
 //                assertEquals(expected.get(j).getCoordinate().getLatitude(), actual.get(j).getCoordinate().getLatitude(), 0.000001);
 //                assertEquals(expected.get(j).getCoordinate().getLongitude(), actual.get(j).getCoordinate().getLongitude(), 0.000001);
 //            }

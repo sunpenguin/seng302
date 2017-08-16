@@ -30,7 +30,7 @@ public class BaseRegattaBuilderTest {
 
     @Test
     public void buildRegattaTest_name() throws Exception {
-        assertEquals(REGATTA_NAME, regatta.getRegattaName());
+        assertEquals(REGATTA_NAME, regatta.getName());
     }
 
 

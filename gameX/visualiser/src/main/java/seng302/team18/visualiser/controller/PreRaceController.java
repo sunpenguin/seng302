@@ -22,10 +22,13 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.display.PreRaceTimes;
+import seng302.team18.visualiser.display.RaceStartTime;
+import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -43,6 +46,10 @@ public class PreRaceController {
     private Label timeZoneLabel;
     @FXML
     private Text raceNameText;
+    @FXML
+    private Label ipLabel;
+    @FXML
+    private Label portLabel;
     @FXML
     private Pane pane;
 
@@ -70,7 +77,8 @@ public class PreRaceController {
     public void setUp(Race race, Receiver receiver, Sender sender) {
         this.sender = sender;
         this.race = race;
-        raceNameText.setText(race.getRegatta().getRegattaName());
+        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
+        raceNameText.setText(race.getRegatta().getName());
         displayTimeZone(race.getStartTime());
 
         setUpLists();
@@ -79,6 +87,8 @@ public class PreRaceController {
         preRaceTimes.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
+        showNetWorkInfo();
+
         this.interpreter = new Interpreter(receiver);
         interpreter.setInterpreter(initialiseInterpreter());
 
@@ -98,6 +108,7 @@ public class PreRaceController {
         MessageInterpreter acceptanceResponse = new AcceptanceResponseInterpreter(responses, sender);
         interpreter.getInterpreter().add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
         interpreter.start();
+
         RequestType requestType;
         switch (race.getMode()) {
             case RACE:
@@ -197,4 +208,11 @@ public class PreRaceController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+    private void showNetWorkInfo() {
+        Socket socket = interpreter.getSocket();
+        ipLabel.setText(socket.getInetAddress().toString());
+        portLabel.setText(String.valueOf(socket.getPort()));
+    }
+
 }
