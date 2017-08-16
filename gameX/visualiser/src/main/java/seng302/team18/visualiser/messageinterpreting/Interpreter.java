@@ -45,6 +45,11 @@ public class Interpreter {
     }
 
 
+    public MessageInterpreter getInterpreter() {
+        return interpreter;
+    }
+
+
     /**
      * Shuts down the interpreter
      *

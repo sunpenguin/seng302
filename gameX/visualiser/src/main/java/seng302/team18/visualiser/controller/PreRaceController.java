@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
 import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.Receiver;
@@ -26,6 +27,7 @@ import seng302.team18.send.Sender;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 /**
  * Controller for the pre race view
@@ -79,9 +81,8 @@ public class PreRaceController {
         Stage stage = (Stage) listView.getScene().getWindow();
         this.interpreter = new Interpreter(receiver);
         interpreter.setInterpreter(initialiseInterpreter());
-        interpreter.start();
 
-        initConnection();
+//        initConnection();
 
         stage.setOnCloseRequest((event) -> {
             interpreter.close();
@@ -93,7 +94,10 @@ public class PreRaceController {
     }
 
 
-    private void initConnection() {
+    public void initConnection(List<MessageBody> responses) {
+        MessageInterpreter acceptanceResponse = new AcceptanceResponseInterpreter(responses, sender);
+        interpreter.getInterpreter().add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
+        interpreter.start();
         RequestType requestType;
         switch (race.getMode()) {
             case RACE:
@@ -107,7 +111,6 @@ public class PreRaceController {
         }
         sender.send(new RequestMessage(requestType));
         // wait until response
-
     }
 
 

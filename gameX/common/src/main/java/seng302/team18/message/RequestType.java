@@ -36,6 +36,16 @@ public enum RequestType {
 
 
     /**
+     * Returns if the code is an error code.
+     *
+     * @return if error.
+     */
+    public boolean isError() {
+        return code >= 16;
+    }
+
+
+    /**
      * Returns the request type associated with a code. If none exists then it returns null.
      *
      * @param code representing the boat status.

@@ -5,9 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import seng302.team18.message.ColourMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.message.NameMessage;
 
 import java.util.ArrayList;
 import java.util.List;
