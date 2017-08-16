@@ -20,7 +20,6 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -34,14 +33,13 @@ import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
-import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
+import seng302.team18.send.Sender;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
-import seng302.team18.send.Sender;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
@@ -540,6 +538,8 @@ public class RaceController implements Observer {
 
         this.interpreter = interpreter;
         interpreter.setInterpreter(initialiseInterpreter());
+
+        race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
     }
 
 
