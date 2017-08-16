@@ -58,12 +58,10 @@ public class TitleScreenController {
 
 
     /**
-     * Called when the mock connection button is selected, sets up a connection with the mock feed
+     * Called when users selects "Play" button.
+     * Takes user to PlayInterface.
      */
-    private void openMockStream() {
-//        mode = RaceMode.RACE;
-//        openStream("127.0.0.1", 5005);
-
+    private void toPlayScreen() {
         Stage stage = (Stage) errorText.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PlayInterface.fxml"));
         Parent root = null;
@@ -78,47 +76,6 @@ public class TitleScreenController {
         pane.getScene().setRoot(root);
         stage.setMaximized(true);
         stage.show();
-    }
-
-
-    /**
-     * React to User selecting the Controls Tutorial mode.
-     * Start a race in ControlsTutorial mode.
-     */
-    @FXML
-    private void startControlPractice() {
-        mode = RaceMode.CONTROLS_TUTORIAL;
-        openStream("127.0.0.1", 5005);
-    }
-
-
-    @FXML
-    private void openCustomStream() {
-        String host = customHostField.getText();
-        String portString = customPortField.getText();
-
-        if (host.isEmpty() || portString.isEmpty()) {
-            errorText.setText("Please enter a custom host and port");
-            return;
-        }
-
-        try {
-            int port = Integer.parseInt(portString);
-            openStream(host, port);
-        } catch (NumberFormatException e) {
-            errorText.setText("Please enter a valid port number");
-            return;
-        }
-    }
-
-
-    private void openStream(String host, int port) {
-        try {
-            Socket socket = SocketFactory.getDefault().createSocket(host, port);
-            startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
-        } catch (Exception e) {
-            errorText.setText(String.format("Could not establish connection to stream at: %s:%d", host, port));
-        }
     }
 
 
@@ -144,7 +101,7 @@ public class TitleScreenController {
         hostButtonImage = new Image("/images/title_screen/play_button.png");
         hostLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) hostButtonImage.getWidth(), 2)));
         hostLabel.setLayoutY((600 / 2) + 100);
-        hostLabel.setOnMouseClicked(event -> openMockStream());
+        hostLabel.setOnMouseClicked(event -> toPlayScreen());
     }
 
 
@@ -215,26 +172,26 @@ public class TitleScreenController {
     }
 
 
-    /**
-     * Creates a controller manager object and begins an instance of the program.
-     *
-     * @throws Exception A connection error
-     */
-    private void startConnection(Receiver receiver, Sender sender) throws Exception {
-        Stage stage = (Stage) errorText.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
-        Parent root = loader.load();
-        PreRaceController controller = loader.getController();
-        controller.setStage(stage);
-        stage.setTitle("High Seas");
-        pane.getScene().setRoot(root);
-        stage.show();
-
-        Race race = new Race();
-        race.setMode(mode);
-        controller.setUp(race, receiver, sender);
-        controller.initConnection(new ArrayList<>());
-    }
+//    /**
+//     * Creates a controller manager object and begins an instance of the program.
+//     *
+//     * @throws Exception A connection error
+//     */
+//    private void startConnection(Receiver receiver, Sender sender) throws Exception {
+//        Stage stage = (Stage) errorText.getScene().getWindow();
+//        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
+//        Parent root = loader.load();
+//        PreRaceController controller = loader.getController();
+//        controller.setStage(stage);
+//        stage.setTitle("High Seas");
+//        pane.getScene().setRoot(root);
+//        stage.show();
+//
+//        Race race = new Race();
+//        race.setMode(mode);
+//        controller.setUp(race, receiver, sender);
+//        controller.initConnection(new ArrayList<>());
+//    }
 
 
     /**

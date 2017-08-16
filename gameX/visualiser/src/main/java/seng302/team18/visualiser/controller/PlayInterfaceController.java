@@ -16,12 +16,21 @@ import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
 import javafx.stage.Stage;
 import seng302.team18.message.MessageBody;
+import seng302.team18.messageparsing.AC35MessageParserFactory;
+import seng302.team18.messageparsing.Receiver;
+import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
+import seng302.team18.send.ControllerMessageFactory;
+import seng302.team18.send.Sender;
+import seng302.team18.visualiser.util.ConfigReader;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.net.SocketFactory;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.Socket;
+import java.util.*;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,6 +54,7 @@ public class PlayInterfaceController {
     private Image rightImage;
     private Label leftLabel;
     private Label rightLabel;
+    private RaceMode mode;
 
     private Polyline boat;
 
@@ -212,7 +222,14 @@ public class PlayInterfaceController {
      * Act on user pressing the host new game button.
      */
     private void hostButtonAction() {
-        System.out.println("BEGIN HOST");
+        createModel();
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mode = RaceMode.RACE;
+        openStream("127.0.0.1", 5005);
     }
 
 
@@ -220,7 +237,47 @@ public class PlayInterfaceController {
      * Act on user pressing the host new game button.
      */
     private void tutorialButtonAction() {
-        System.out.println("TUTORIAL");
+        createModel();
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mode = RaceMode.CONTROLS_TUTORIAL;
+        openStream("127.0.0.1", 5005);
+    }
+
+
+    private void openStream(String host, int port) {
+        try {
+            Socket socket = SocketFactory.getDefault().createSocket(host, port);
+            startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            //errorText.setText(String.format("Could not establish connection to stream at: %s:%d", host, port));
+        }
+    }
+
+
+    /**
+     * Creates a controller manager object and begins an instance of the program.
+     *
+     * @throws Exception A connection error
+     */
+    private void startConnection(Receiver receiver, Sender sender) throws Exception {
+        Stage stage = (Stage) innerPane.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
+        Parent root = loader.load();
+        PreRaceController controller = loader.getController();
+        controller.setStage(stage);
+        stage.setTitle("High Seas");
+        outerPane.getScene().setRoot(root);
+        stage.show();
+
+        Race race = new Race();
+        race.setMode(mode);
+        controller.setUp(race, receiver, sender);
+        controller.initConnection(new ArrayList<>());
     }
 
 
@@ -263,5 +320,30 @@ public class PlayInterfaceController {
     private void setName() { //TODO FINSIH SAM DAVID 16 AUG
 //        customisationMessages.add(new NameMessage());
     }
+
+
+    /**
+     * Creates the model in a new process.
+     * Reads in the file path to the model jar from the config file "visualiser-config.txt" (from the same directory).
+     */
+    private void createModel() {
+        final String CONFIG_FILE_NAME = "visualiser-config.txt";
+        final List<String> tokens = Collections.singletonList("MODEL_PATH");
+        ConfigReader reader = new ConfigReader(tokens);
+        InputStream configStream = null;
+        try {
+            configStream = new FileInputStream(CONFIG_FILE_NAME);
+            String filePath = reader.parseConfig(configStream).get("MODEL_PATH");
+            Runtime.getRuntime().exec("java -jar " + filePath);
+        } catch (IOException e) {
+            if (null == configStream) {
+                System.out.println("You don't have a config file"); // TODO August 12 DHL25 / HQI19 have to show error but title screen incomplete
+            } else {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
 }

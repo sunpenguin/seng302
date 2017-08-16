@@ -1,10 +1,8 @@
 package seng302.team18.send;
 
-import com.google.common.base.Charsets;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+import java.io.ByteArrayOutputStream;
 import seng302.team18.message.ColourMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.message.NameMessage;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;
@@ -18,13 +16,13 @@ public class ColourEncoder extends MessageEncoder {
         if (message instanceof ColourMessage) {
             ColourMessage colourMessage = (ColourMessage) message;
             // convert string to byte[]
-            ByteOutputStream messageBytes = new ByteOutputStream();
+            ByteArrayOutputStream messageBytes = new ByteArrayOutputStream();
             byte[] sourceIDBytes = ByteCheck.intToByteArray(colourMessage.getSourceID());
             byte[] colourBytes = colourMessage.getColor();
             messageBytes.write(sourceIDBytes);
             messageBytes.write(colourBytes);
 
-            return messageBytes.getBytes();
+            return messageBytes.toByteArray();
         }
         return null;
     }

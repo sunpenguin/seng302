@@ -12,10 +12,10 @@
             <Text fx:id="errorText" fill="RED" layoutX="-66.0" layoutY="356.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="332.7294921875" x="200.0" y="200.0" />
             <TextField fx:id="customPortField" layoutX="288.0" layoutY="562.0" maxWidth="75.0" promptText="port" />
             <TextField fx:id="customHostField" layoutX="144.0" layoutY="561.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="133.0" promptText="hostname/ip" />
-            <Button layoutX="379.0" layoutY="562.0" mnemonicParsing="false" onAction="#openCustomStream" text="Connect!" />
+            <Button layoutX="379.0" layoutY="562.0" mnemonicParsing="false" text="Connect!" />
             <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #327D91;" styleClass="background2">
                <children>
-                  <Button layoutX="518.0" layoutY="14.0" mnemonicParsing="false" onAction="#startControlPractice" text="practice" />
+                  <Button layoutX="518.0" layoutY="14.0" mnemonicParsing="false" text="practice" />
                </children></Pane>
          </children>
       </AnchorPane>
