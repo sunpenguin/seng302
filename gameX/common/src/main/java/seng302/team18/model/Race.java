@@ -148,6 +148,20 @@ public class Race {
 
 
     /**
+     * Removes a participant from the race
+     * @param boatID id for the participant to be removed
+     */
+    public void removeParticipant (int boatID) {
+        for (Boat boat : startingList) {
+            if(boat.getId().equals(boatID)){
+                startingList.remove(boat);
+                participantIds.remove(boatID);
+            }
+        }
+    }
+
+
+    /**
      * Set the status for boat.
      *
      * @param id Source ID for the boat to have its status changed.

@@ -6,14 +6,16 @@ package seng302.team18.message;
 public class AcceptanceMessage implements MessageBody {
 
     private int sourceId;
+    private RequestType requestType;
 
 
     /**
      * Constructor for RegistrationMessage
      * @param sourceId the allocated sourceId for the players boat.
      */
-    public AcceptanceMessage(int sourceId) {
+    public AcceptanceMessage(int sourceId, RequestType requestType) {
         this.sourceId = sourceId;
+        this.requestType = requestType;
     }
 
 
@@ -29,6 +31,11 @@ public class AcceptanceMessage implements MessageBody {
      */
     public int getSourceId() {
         return sourceId;
+    }
+
+
+    public RequestType getRequestType() {
+        return requestType;
     }
 
 }

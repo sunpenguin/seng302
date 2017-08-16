@@ -1,8 +1,10 @@
 package seng302.team18.racemodel.connection;
 
 import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.RequestType;
 import seng302.team18.util.ByteCheck;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
@@ -11,21 +13,32 @@ import java.io.IOException;
 public class AcceptanceMessageGenerator extends MessageGenerator {
 
     private int sourceID;
+    private RequestType status;
 
 
     /**
      * Constructs a response packet with the specified source ID indicating the boat the player controls.
      *
+     *
      * @param sourceID int, ID of the boat
      */
-    public AcceptanceMessageGenerator(int sourceID) {
+    public AcceptanceMessageGenerator(int sourceID, RequestType status) {
         super(AC35MessageType.ACCEPTANCE.getCode());
         this.sourceID = sourceID;
+        this.status = status;
     }
 
 
     @Override
     protected byte[] getPayload() throws IOException {
-        return ByteCheck.intToByteArray(sourceID);
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+
+        byte[] sourceIDBytes = ByteCheck.intToByteArray(sourceID);
+        byte statusByte = (byte) status.code();
+
+        outStream.write(sourceIDBytes);
+        outStream.write(statusByte);
+
+        return outStream.toByteArray();
     }
 }

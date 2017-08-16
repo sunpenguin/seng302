@@ -1,13 +1,17 @@
 package seng302.team18.model;
 
+import seng302.team18.message.RequestType;
+
 /**
  * Enum for the different modes.
  */
 public enum RaceMode {
-    RACE(0),
-    CONTROLS_TUTORIAL(1),
-    RACE_TUTORIAL(2),
-    START_TUTORIAL(3);
+    SPECTATION(RequestType.VIEWING.code()),
+    RACE(RequestType.RACING.code()),
+    CONTROLS_TUTORIAL(RequestType.CONTROLS_TUTORIAL.code()),
+    GHOST(RequestType.GHOST.code()),
+    RACE_TUTORIAL(4),
+    START_TUTORIAL(5);
 
 
     private int code;
