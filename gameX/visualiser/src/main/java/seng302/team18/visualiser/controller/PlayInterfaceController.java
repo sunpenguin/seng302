@@ -3,9 +3,14 @@ package seng302.team18.visualiser.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import seng302.team18.message.ColourMessage;
+import seng302.team18.message.MessageBody;
+import seng302.team18.message.NameMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jth102 on 16/08/17.
@@ -14,16 +19,18 @@ public class PlayInterfaceController {
 
     @FXML private Pane innerPane;
     @FXML private Pane outerPane;
-
     private Stage stage;
-
     private Label hostLabel;
     private Label tutorialLabel;
     private Image hostImage;
     private Image tutorialImage;
 
+    private List<MessageBody> customisationMessages;
 
+
+    @FXML
     public void initialize() {
+        customisationMessages = new ArrayList<>();
         registerListeners();
         initialiseTutorialButton();
         initialiseHostButton();
@@ -108,4 +115,16 @@ public class PlayInterfaceController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+
+    //@FXML
+    private void setColor() { //TODO FINSIH SAM DAVID 16 AUG
+//        customisationMessages.add(new ColourMessage());
+    }
+
+    //@FXML
+    private void setName() { //TODO FINSIH SAM DAVID 16 AUG
+//        customisationMessages.add(new NameMessage());
+    }
+
 }
