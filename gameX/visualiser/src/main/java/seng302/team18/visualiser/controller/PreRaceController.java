@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -20,10 +19,7 @@ import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.display.PreRaceTimes;
-import seng302.team18.visualiser.display.RaceStartTime;
-import seng302.team18.visualiser.display.ZoneTimeClock;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
 
@@ -77,7 +73,6 @@ public class PreRaceController {
     public void setUp(Race race, Receiver receiver, Sender sender) {
         this.sender = sender;
         this.race = race;
-        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
         raceNameText.setText(race.getRegatta().getName());
         displayTimeZone(race.getStartTime());
 
@@ -87,12 +82,9 @@ public class PreRaceController {
         preRaceTimes.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
-        showNetWorkInfo();
-
         this.interpreter = new Interpreter(receiver);
         interpreter.setInterpreter(initialiseInterpreter());
-
-//        initConnection();
+        showNetWorkInfo();
 
         stage.setOnCloseRequest((event) -> {
             interpreter.close();
@@ -121,7 +113,6 @@ public class PreRaceController {
                 requestType = RequestType.RACING;
         }
         sender.send(new RequestMessage(requestType));
-        // wait until response
     }
 
 

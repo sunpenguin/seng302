@@ -20,6 +20,7 @@ import seng302.team18.send.Sender;
 import javax.net.SocketFactory;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Controller for when the application first starts up
@@ -232,6 +233,7 @@ public class TitleScreenController {
         Race race = new Race();
         race.setMode(mode);
         controller.setUp(race, receiver, sender);
+        controller.initConnection(new ArrayList<>());
     }
 
 
