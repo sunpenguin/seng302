@@ -15,6 +15,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
 import javafx.stage.Stage;
+import seng302.team18.message.ColourMessage;
+import seng302.team18.message.MessageBody;
+import seng302.team18.message.NameMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -27,15 +33,15 @@ public class PlayInterfaceController {
 
     @FXML private Pane innerPane;
     @FXML private Pane outerPane;
-
     private Stage stage;
-
     private Label hostLabel;
     private Label tutorialLabel;
     private Label backLabel;
     private Image hostImage;
     private Image tutorialImage;
     private Image backImage;
+
+    private List<MessageBody> customisationMessages;
 
     private Image leftImage;
     private Image rightImage;
@@ -48,7 +54,10 @@ public class PlayInterfaceController {
     private List<Color> boatColours = Arrays.asList(Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
                                                     Color.CYAN, Color.BLUE, Color.PURPLE, Color.MAGENTA);
 
+
+    @FXML
     public void initialize() {
+        customisationMessages = new ArrayList<>();
         registerListeners();
         initialiseTutorialButton();
         initialiseHostButton();
@@ -245,4 +254,16 @@ public class PlayInterfaceController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+
+    //@FXML
+    private void setColor() { //TODO FINSIH SAM DAVID 16 AUG
+//        customisationMessages.add(new ColourMessage());
+    }
+
+    //@FXML
+    private void setName() { //TODO FINSIH SAM DAVID 16 AUG
+//        customisationMessages.add(new NameMessage());
+    }
+
 }

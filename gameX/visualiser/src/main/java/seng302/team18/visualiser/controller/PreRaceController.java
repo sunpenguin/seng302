@@ -81,8 +81,20 @@ public class PreRaceController {
         interpreter.setInterpreter(initialiseInterpreter());
         interpreter.start();
 
-        RequestType requestType;
+        initConnection();
 
+        stage.setOnCloseRequest((event) -> {
+            interpreter.close();
+            while (!receiver.close()) {
+            }
+            System.out.println("shutting down");
+            System.exit(0);
+        });
+    }
+
+
+    private void initConnection() {
+        RequestType requestType;
         switch (race.getMode()) {
             case RACE:
                 requestType = RequestType.RACING;
@@ -94,13 +106,8 @@ public class PreRaceController {
                 requestType = RequestType.RACING;
         }
         sender.send(new RequestMessage(requestType));
-        stage.setOnCloseRequest((event) -> {
-            interpreter.close();
-            while (!receiver.close()) {
-            }
-            System.out.println("shutting down");
-            System.exit(0);
-        });
+        // wait until response
+
     }
 
 
@@ -146,7 +153,6 @@ public class PreRaceController {
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
-
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
 
         return interpreter;
