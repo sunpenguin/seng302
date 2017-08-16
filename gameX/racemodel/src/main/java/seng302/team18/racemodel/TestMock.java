@@ -146,6 +146,7 @@ public class TestMock implements Observer {
         } while (!race.isFinished() && open);
 
         // Sends final message
+        race.setStatus(RaceStatus.FINISHED);
         ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
         server.broadcast(raceMessageGenerator.getMessage());
     }
