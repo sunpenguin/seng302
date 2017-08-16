@@ -143,3 +143,13 @@
 .table-view > .virtual-flow > .scroll-bar > .decrement-button {
     -fx-opacity: 0;
 }
+
+
+.backImage {
+    -fx-graphic: url('/images/back_button.gif');
+}
+
+.backImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/back_button_alt.gif');
+}

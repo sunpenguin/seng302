@@ -69,7 +69,7 @@ public class TitleScreenController {
         try {
             root = loader.load();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error occurred loading play interface screen");
         }
         PlayInterfaceController controller = loader.getController();
         controller.setStage(stage);
