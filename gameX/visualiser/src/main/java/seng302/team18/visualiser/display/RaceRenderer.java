@@ -64,40 +64,46 @@ public class RaceRenderer {
      */
     public void renderBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
-            Boat boat = race.getStartingList().get(i);
-            DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
+                Boat boat = race.getStartingList().get(i);
+                DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
 
-            if (displayBoat == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
-                double boatPixelLength = boat.getLength() * pixelMapper.mappingRatio();
+                if (displayBoat == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
+                    double boatPixelLength = boat.getLength() * pixelMapper.mappingRatio();
 
-                //Wake
-                displayBoat = new DisplayWake(pixelMapper,
-                        new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++), boatPixelLength));
-                //Highlight
-                if (boat.isControlled()) {
-                    displayBoat = new BoatHighlight(pixelMapper, displayBoat);
+                    //Wake
+                    displayBoat = new DisplayWake(pixelMapper,
+                            new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++), boatPixelLength));
+                    //Highlight
+                    if (boat.isControlled()) {
+                        displayBoat = new BoatHighlight(pixelMapper, displayBoat);
+                    }
+                    displayBoat = new DisplaySail(pixelMapper, displayBoat);
+                    displayBoat.addToGroup(group);
+                    displayBoats.put(boat.getShortName(), displayBoat);
                 }
-                displayBoat = new DisplaySail(pixelMapper, displayBoat);
-                displayBoat.addToGroup(group);
-                displayBoats.put(boat.getShortName(), displayBoat);
+
+                if (displayBoat != null && BoatStatus.DSQ.equals(boat.getStatus())) {
+                    displayBoat.removeFrom(group);
+                    displayBoats.remove(boat.getShortName());
+                    DisplayTrail trail = trailMap.remove(boat.getShortName());
+                    trail.removeFrom(group);
+                } else if (displayBoat != null && boat.getCoordinate() != null) {
+                    if (boat.getStatus().equals(BoatStatus.DSQ) || boat.getStatus().equals(BoatStatus.DNF)) {
+                        group.getChildren().remove(displayBoat);
+                        displayBoats.remove(boat.getShortName());
+                    } else {
+                        displayBoat.setCoordinate(boat.getCoordinate());
+                        displayBoat.setSpeed(boat.getSpeed());
+                        displayBoat.setHeading(boat.getHeading());
+                        displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
+                        displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
+                        displayBoat.setScale(pixelMapper.mappingRatio());
+                        displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
+                        displayBoat.setSailOut(boat.isSailOut());
+                    }
+                }
             }
 
-            if (displayBoat != null && BoatStatus.DSQ.equals(boat.getStatus())) {
-                displayBoat.removeFrom(group);
-                displayBoats.remove(boat.getShortName());
-                DisplayTrail trail = trailMap.remove(boat.getShortName());;
-                trail.removeFrom(group);
-            } else if (displayBoat != null && boat.getCoordinate() != null) {
-                displayBoat.setCoordinate(boat.getCoordinate());
-                displayBoat.setSpeed(boat.getSpeed());
-                displayBoat.setHeading(boat.getHeading());
-                displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
-                displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
-                displayBoat.setScale(pixelMapper.mappingRatio());
-                displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
-                displayBoat.setSailOut(boat.isSailOut());
-            }
-        }
     }
 
 
@@ -108,7 +114,7 @@ public class RaceRenderer {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
-            if (boatCoordinates != null) {
+            if (boatCoordinates != null && !(boat.getStatus().equals(BoatStatus.DSQ))) {
                 drawTrail(boat, pixelMapper);
             }
         }
@@ -122,18 +128,22 @@ public class RaceRenderer {
      * @param pixelMapper used to map a coordinate to a point on the screen.
      */
     private void drawTrail(Boat boat, PixelMapper pixelMapper) {
-        final double MAX_HEADING_DIFFERENCE = 0.75d; // smaller => smoother trail, higher => more fps
-        DisplayTrail trail = trailMap.get(boat.getShortName());
+        if(boat.getStatus().equals(BoatStatus.DSQ)){
+            group.getChildren().remove(trailMap.get(boat.getShortName()));
+        }else {
+            final double MAX_HEADING_DIFFERENCE = 0.75d; // smaller => smoother trail, higher => more fps
+            DisplayTrail trail = trailMap.get(boat.getShortName());
 
-        if (trail == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
-            final int MAX_TRAIL_LENGTH = 100;
-            DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
-            trail = new DisplayTrail(displayBoat.getColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
-            trailMap.put(boat.getShortName(), trail);
-            trail.addToGroup(group);
-        }
-        if (trail != null) {
-            trail.addPoint(boat.getCoordinate(), boat.getHeading(), pixelMapper);
+            if (trail == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
+                final int MAX_TRAIL_LENGTH = 100;
+                DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
+                trail = new DisplayTrail(displayBoat.getColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
+                trailMap.put(boat.getShortName(), trail);
+                trail.addToGroup(group);
+            }
+            if (trail != null) {
+                trail.addPoint(boat.getCoordinate(), boat.getHeading(), pixelMapper);
+            }
         }
     }
 

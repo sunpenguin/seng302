@@ -586,7 +586,6 @@ public class RaceController implements Observer {
         return interpreter;
     }
 
-
     /**
      * To call when course features need redrawing.
      * (For example, when zooming in, the course features are required to change)
