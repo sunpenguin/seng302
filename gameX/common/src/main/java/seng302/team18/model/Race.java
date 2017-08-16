@@ -123,7 +123,7 @@ public class Race {
 
         double bearing = gps.getBearing(startMark1, startMark2);
 
-        double diff = (startRounding.getRoundingDirection().equals(MarkRounding.Direction.PS)) ? -90 : 90;
+        double diff = (startRounding.getRoundingDirection().equals(MarkRounding.Direction.PS)) ? 90 : -90;
         double behind = (bearing + diff + 360) % 360;
 
         double offset = startingList.size();

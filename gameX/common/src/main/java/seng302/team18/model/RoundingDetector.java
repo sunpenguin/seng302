@@ -110,8 +110,8 @@ public class RoundingDetector {
         double mark1toBoatPrevious = GPS.getBearing(gate.getCompoundMark().getMarks().get(0).getCoordinate(), boat.getPreviousCoordinate());
 
         boolean isPS = gate.getRoundingDirection().equals(MarkRounding.Direction.PS);
-        boolean isBehindGate = GPS.isBetween(mark1ToBoatBearing, (mark1ToMark2Bearing + 180) % 360, mark1ToMark2Bearing) != isPS;
-        boolean wasBehindGate = GPS.isBetween(mark1toBoatPrevious, (mark1ToMark2Bearing + 180) % 360, mark1ToMark2Bearing) != isPS;
+        boolean isBehindGate = GPS.isBetween(mark1ToBoatBearing, (mark1ToMark2Bearing + 180) % 360, mark1ToMark2Bearing) == isPS;
+        boolean wasBehindGate = GPS.isBetween(mark1toBoatPrevious, (mark1ToMark2Bearing + 180) % 360, mark1ToMark2Bearing) == isPS;
 
         return isInsideGate(boat, gate.getCompoundMark()) && isBehindGate && !wasBehindGate;
     }
