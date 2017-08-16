@@ -236,7 +236,8 @@ public class Race {
         int currentLeg = boat.getLegNumber();
         boat.setLegNumber(nextLeg);
 
-        int newPlace = ((Long) startingList.stream().filter(b -> b.getLegNumber() >= currentLeg).count()).intValue() + 1;
+        // TODO Sunguin 16/08/17: The placings are a bit wrong right now (if on same leg, the one with the lower ID will be first?)
+        int newPlace = ((Long) startingList.stream().filter(b -> b.getLegNumber() >= currentLeg).count()).intValue();
         boat.setPlace(newPlace);
 
         // Adjust the placings of the other boats to account for the new placing of the boat

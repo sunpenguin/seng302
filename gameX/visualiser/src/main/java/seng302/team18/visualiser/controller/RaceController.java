@@ -497,7 +497,6 @@ public class RaceController implements Observer {
      * Retrieves the wind direction, scales the size of the arrow and then draws it on the Group
      */
     private void startWindDirection() {
-//        arrow.setScaleX(0.4);
         windDisplay = new WindDisplay(race, arrow, speedLabel);
         windDisplay.start();
     }
@@ -512,7 +511,6 @@ public class RaceController implements Observer {
      * @param interpreter the interpreter
      */
     public void setUp(Race race, Interpreter interpreter, Sender sender) {
-//        this.receiver = receiver;
         this.sender = sender;
         this.race = race;
 

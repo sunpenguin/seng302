@@ -11,7 +11,7 @@ import seng302.team18.model.Race;
 import java.util.List;
 
 /**
- * Created by jth102 on 4/05/17.
+ * Interpreter to interpret AC35RaceStatusMessages for a boat status
  */
 public class BoatStatusInterpreter extends MessageInterpreter {
     private Race race;
@@ -40,6 +40,6 @@ public class BoatStatusInterpreter extends MessageInterpreter {
 
 
     private void setLeg(Boat boat, int realLegNumber) {
-        boat.setLegNumber(realLegNumber);
+        race.setNextLeg(boat, realLegNumber);
     }
 }
