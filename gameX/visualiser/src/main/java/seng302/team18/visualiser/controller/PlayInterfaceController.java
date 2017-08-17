@@ -4,7 +4,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -48,6 +50,12 @@ public class PlayInterfaceController {
     private Image hostImage;
     private Image tutorialImage;
     private Image backImage;
+
+    @FXML
+    private TextField customHostField;
+    @FXML
+    private TextField customPortField;
+
 
     private List<MessageBody> customisationMessages;
 
@@ -257,6 +265,13 @@ public class PlayInterfaceController {
             e.printStackTrace();
             //errorText.setText(String.format("Could not establish connection to stream at: %s:%d", host, port));
         }
+    }
+
+    public void connectButtonAction(){
+        mode = RaceMode.RACE;
+        String host = customHostField.getText();
+        int port = Integer.parseInt(customPortField.getText());
+        openStream(host, port);
     }
 
 

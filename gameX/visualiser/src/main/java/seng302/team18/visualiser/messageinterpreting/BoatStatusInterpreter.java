@@ -6,11 +6,8 @@ import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.model.BoatStatus;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
-import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Race;
-
 import java.util.List;
-import java.util.Observable;
 
 /**
  * Interpreter to interpret AC35RaceStatusMessages for a boat status
