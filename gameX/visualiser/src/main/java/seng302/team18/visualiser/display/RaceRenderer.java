@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
+import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -21,7 +22,7 @@ public class RaceRenderer {
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private Map<String, Double> headingMap;
     private int numBoats;
-    private final List<Color> BOAT_COLOURS = new ArrayList<>(Arrays.asList(
+    private final List<Color> BOAT_COLOURS = Arrays.asList(
             Color.VIOLET,
             Color.DARKVIOLET,
             Color.GREEN,
@@ -42,7 +43,7 @@ public class RaceRenderer {
             Color.OLIVEDRAB,
             Color.LAWNGREEN,
             Color.KHAKI
-    ));
+    );
     private PixelMapper pixelMapper;
 
 
@@ -77,6 +78,7 @@ public class RaceRenderer {
                     //Highlight
                     if (boat.isControlled()) {
                         displayBoat = new BoatHighlight(pixelMapper, displayBoat);
+                        displayBoat = new BoatGuide(pixelMapper, displayBoat);
                     }
                     displayBoat = new DisplaySail(pixelMapper, displayBoat);
                     displayBoat.addToGroup(group);
@@ -99,6 +101,11 @@ public class RaceRenderer {
                     displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
                     displayBoat.setSailOut(boat.isSailOut());
                     displayBoat.setBoatStatus(boat.getStatus());
+                    if (boat.getLegNumber() < race.getCourse().getMarkSequence().size()) {
+                        displayBoat.setDestination(race.getCourse().getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getCoordinate());
+                    } else {
+                        displayBoat.setDestination(null);
+                    }
                 }
         }
 
@@ -129,11 +136,11 @@ public class RaceRenderer {
         if(boat.getStatus().equals(BoatStatus.DSQ)){
             group.getChildren().remove(trailMap.get(boat.getShortName()));
         }else {
-            final double MAX_HEADING_DIFFERENCE = 0.75d; // smaller => smoother trail, higher => more fps
+            final double MAX_HEADING_DIFFERENCE = 0.5d; // smaller => smoother trail, higher => more fps
             DisplayTrail trail = trailMap.get(boat.getShortName());
 
             if (trail == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
-                final int MAX_TRAIL_LENGTH = 100;
+                final int MAX_TRAIL_LENGTH = 150;
                 DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
                 trail = new DisplayTrail(displayBoat.getColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
                 trailMap.put(boat.getShortName(), trail);
