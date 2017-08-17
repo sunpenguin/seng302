@@ -130,10 +130,11 @@ public class XmlMessageBuilderTest {
 
     @Test
     public void buildRaceXmlMessage_boundaries() throws Exception {
-        assertEquals("wrong number of boundary marks", race.getCourse().getBoundaries().size(), raceMessage.getBoundaryMarks().size());
+        assertEquals("wrong number of boundary marks", race.getCourse().getCourseLimits().size(), raceMessage.getBoundaryMarks().size());
 
-        for (BoundaryMark boundaryMark : race.getCourse().getBoundaries()) {
-            assertTrue("message does not contain boundary mark: " + boundaryMark.getSequenceID(), raceMessage.getBoundaryMarks().contains(boundaryMark));
+        for (int i = 0; i < race.getCourse().getCourseLimits().size(); i++) {
+            Coordinate boundaryMark = race.getCourse().getCourseLimits().get(i);
+            assertTrue("message does not contain boundary mark: " + i, raceMessage.getBoundaryMarks().contains(boundaryMark));
         }
     }
 
@@ -185,9 +186,9 @@ public class XmlMessageBuilderTest {
 
     @Test
     public void buildRaceXmlMessage_markRounding() throws Exception {
-        assertEquals("wrong number of mark roundings", race.getCourse().getMarkRoundings().size(), raceMessage.getMarkRoundings().size());
+        assertEquals("wrong number of mark roundings", race.getCourse().getMarkSequence().size(), raceMessage.getMarkRoundings().size());
 
-        for (MarkRounding rounding : race.getCourse().getMarkRoundings()) {
+        for (MarkRounding rounding : race.getCourse().getMarkSequence()) {
             assertTrue("message does not contain rounding: " + rounding.getSequenceNumber(), raceMessage.getMarkRoundings().contains(rounding));
         }
     }

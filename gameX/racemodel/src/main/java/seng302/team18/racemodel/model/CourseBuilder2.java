@@ -1,6 +1,9 @@
 package seng302.team18.racemodel.model;
 
-import seng302.team18.model.*;
+import seng302.team18.model.CompoundMark;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Mark;
+import seng302.team18.model.MarkRounding;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -50,30 +53,30 @@ public class CourseBuilder2 extends AbstractCourseBuilder {
         mark1.setHullNumber("LC21");
         mark1.setStoweName("PRO");
         mark1.setShortName("S1");
-        mark1.setBoatName("Upwind1");
+        mark1.setBoatName("Downwind1");
 
         Mark mark5 = new Mark(235, new Coordinate(32.30463, -64.85245));
         mark2.setHullNumber("LC22");
         mark2.setStoweName("PIN");
         mark2.setShortName("S2");
-        mark2.setBoatName("Upwind2");
+        mark2.setBoatName("Downwind2");
 
-        CompoundMark compoundMark2 = new CompoundMark("Upwind", Arrays.asList(mark4, mark5), 13);
+        CompoundMark compoundMark2 = new CompoundMark("Downwind", Arrays.asList(mark4, mark5), 13);
         compoundMarks.add(compoundMark2);
 
         Mark mark6 = new Mark(236, new Coordinate(32.29966, -64.85654));
         mark1.setHullNumber("LC21");
         mark1.setStoweName("PRO");
         mark1.setShortName("S1");
-        mark1.setBoatName("Downwind1");
+        mark1.setBoatName("Upwind1");
 
         Mark mark7 = new Mark(237, new Coordinate(32.29935, -64.85564));
         mark2.setHullNumber("LC22");
         mark2.setStoweName("PIN");
         mark2.setShortName("S2");
-        mark2.setBoatName("Downwind2");
+        mark2.setBoatName("Upwind2");
 
-        CompoundMark compoundMark3 = new CompoundMark("Downwind", Arrays.asList(mark6, mark7), 14);
+        CompoundMark compoundMark3 = new CompoundMark("Upwind", Arrays.asList(mark6, mark7), 14);
         compoundMarks.add(compoundMark3);
 
         return compoundMarks;
@@ -81,14 +84,14 @@ public class CourseBuilder2 extends AbstractCourseBuilder {
 
 
     @Override
-    protected List<BoundaryMark> getBoundaryMarks() {
+    protected List<Coordinate> getBoundaryMarks() {
         return new ArrayList<>();
     }
 
 
     @Override
     protected double getWindDirection() {
-        return 200 ;
+        return 200;
     }
 
 

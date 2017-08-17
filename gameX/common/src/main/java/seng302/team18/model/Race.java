@@ -1,6 +1,5 @@
 package seng302.team18.model;
 
-import seng302.team18.message.BoatStatus;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.SpeedConverter;
 
@@ -8,8 +7,8 @@ import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -17,29 +16,29 @@ import java.util.stream.Collectors;
  * A class to represent an individual race.
  */
 public class Race {
-
-    private Regatta regatta = new Regatta();
-    private List<Boat> startingList;
-    private Course course;
-    private List<Boat> finishedList;
-    private ZonedDateTime startTime = ZonedDateTime.now();
-    private ZonedDateTime currentTime;
-    private List<Integer> participantIds;
+    private final GPSCalculations gps = new GPSCalculations();
+    private final RoundingDetector detector = new RoundingDetector();
     private int id;
     private RaceStatus status;
-    private Integer playerId;
     private RaceType raceType;
+    private Regatta regatta = new Regatta();
+    private Course course;
+    private List<Integer> participantIds;
+    private List<Boat> startingList;
+    private ZonedDateTime startTime = ZonedDateTime.now();
+    private ZonedDateTime currentTime;
+    private Integer playerId;
+    private List<MarkRoundingEvent> markRoundingEvents = new ArrayList<>();
+    private List<YachtEvent> yachtEvents = new ArrayList<>();
     private RaceMode mode = RaceMode.RACE;
-    GPSCalculations gps = new GPSCalculations();
 
     public Race() {
         participantIds = new ArrayList<>();
         startingList = new ArrayList<>();
         course = new Course();
-        finishedList = new ArrayList<>();
         id = 0;
         status = RaceStatus.NOT_ACTIVE;
-        currentTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone()).now(course.getTimeZone());
+        currentTime = ZonedDateTime.now(course.getTimeZone());
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         raceType = RaceType.MATCH;
     }
@@ -50,13 +49,12 @@ public class Race {
      *
      * @param startingList ArrayList holding all entered boats
      * @param course       Course object
-     * @param raceId Integer representing the race id
-     * @param raceType RaceType enum indicating the type of race to create
+     * @param raceId       Integer representing the race id
+     * @param raceType     RaceType enum indicating the type of race to create
      */
     public Race(List<Boat> startingList, Course course, int raceId, RaceType raceType) {
         this.startingList = startingList;
         this.course = course;
-        finishedList = new ArrayList<>();
         participantIds = startingList.stream()
                 .map(Boat::getId)
                 .collect(Collectors.toList());
@@ -86,26 +84,25 @@ public class Race {
      * current(starting CompoundMark) and next CompoundMark.
      */
     public void setCourseForBoats() {
-        if (course.getLegs().size() > 0) {
+        if (course.getMarkSequence().size() > 1) {
             for (Boat boat : startingList) {
                 setCourseForBoat(boat);
             }
         }
     }
 
+
     private void setCourseForBoat(Boat boat) {
-        if (!course.getLegs().isEmpty()) {
-            // Set Leg
-            boat.setLegNumber(course.getLegs().get(0).getLegNumber());
-            // Set Dest
-            boat.setDestination(course.getLeg(boat.getLegNumber()).getDestination().getCoordinate());
-            // Set Coordinate
-            boat.setCoordinate(getStartPosition(boat));
-            // Set Heading
-            GPSCalculations gps = new GPSCalculations();
-            boat.setHeading(gps.getBearing(boat.getCoordinate(), (boat.getDestination())));
-            double tws = boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection());
-            boat.setSpeed(tws);
+        if (course.getMarkSequence().size() > 1) {
+            boat.setLegNumber(0);
+            boat.setCoordinate(getStartPosition(boat, boat.getLength() * 3));
+            boat.setHeading(gps.getBearing(
+                    course.getMarkSequence().get(0).getCompoundMark().getCoordinate(),
+                    course.getMarkSequence().get(1).getCompoundMark().getCoordinate()
+            ));
+            boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
+            boat.setRoundZone(Boat.RoundZone.ZONE1);
+            boat.setStatus(BoatStatus.PRE_START);
         }
     }
 
@@ -114,28 +111,31 @@ public class Race {
      * Method to calculate the starting position for a boat
      * Prevents boats from overlapping
      *
-     * @param boat boat to get starting position for
+     * @param boat       boat to get starting position for
+     * @param distBehind the distance behind the start line to place the boat (m)
      * @return position for boat to start at
      */
-    private Coordinate getStartPosition(Boat boat) {
-        GPSCalculations calculator = new GPSCalculations();
-        Coordinate midPoint = course.getLeg(boat.getLegNumber()).getDeparture().getCoordinate();
-        Coordinate startMark1 = course.getLeg(boat.getLegNumber()).getDeparture().getMarks().get(0).getCoordinate();
-        Coordinate startMark2= course.getLeg(boat.getLegNumber()).getDeparture().getMarks().get(1).getCoordinate();
+    private Coordinate getStartPosition(Boat boat, double distBehind) {
+        MarkRounding startRounding = course.getMarkSequence().get(0);
+        Coordinate midPoint = startRounding.getCompoundMark().getCoordinate();
+        Coordinate startMark1 = startRounding.getCompoundMark().getMarks().get(0).getCoordinate();
+        Coordinate startMark2 = startRounding.getCompoundMark().getMarks().get(1).getCoordinate();
 
-        double bearing = calculator.getBearing(startMark1, startMark2);
+        double bearing = gps.getBearing(startMark1, startMark2);
+
+        double diff = (startRounding.getRoundingDirection().equals(MarkRounding.Direction.PS)) ? 90 : -90;
+        double behind = (bearing + diff + 360) % 360;
 
         double offset = startingList.size();
 
         if ((offset % 2) == 0) {
             offset /= 2;
         } else {
-            offset = -Math.floor(offset/2);
+            offset = -Math.floor(offset / 2);
         }
 
-        Coordinate startingPosition = calculator.toCoordinate(midPoint, bearing, (boat.getLength()*offset+10));
-
-        return startingPosition;
+        Coordinate behindMidPoint = gps.toCoordinate(midPoint, behind, distBehind);
+        return gps.toCoordinate(behindMidPoint, bearing, (boat.getLength() * offset + 10));
     }
 
 
@@ -155,7 +155,7 @@ public class Race {
     public void setBoatStatus(Integer id, BoatStatus status) {
         for (Boat boat : startingList) {
             if (boat.getId().equals(id)) {
-                boat.setStatus(status.code());
+                boat.setStatus(status);
             }
         }
     }
@@ -169,6 +169,7 @@ public class Race {
     public List<Boat> getStartingList() {
         return startingList;
     }
+
 
     /**
      * Starting list setter.
@@ -191,6 +192,7 @@ public class Race {
         }
     }
 
+
     /**
      * Course getter.
      *
@@ -199,6 +201,7 @@ public class Race {
     public Course getCourse() {
         return course;
     }
+
 
     /**
      * Course setter.
@@ -215,16 +218,9 @@ public class Race {
      *
      * @param time the time in seconds
      */
-    // TODO afj19, 20th July: check the temporal unit here
     public void updateBoats(double time) { // time in seconds
         for (Boat boat : startingList) {
-            if (!finishedList.contains(boat)) {
-//                updateBoat(boat, time);
-                updatePosition(boat, time);
-                if (hasPassedMark(boat) && mode != RaceMode.CONTROLS_TUTORIAL) {
-                    setNextLeg(boat, course.getNextLeg(boat.getLegNumber()));
-                }
-            }
+            updatePosition(boat, time);
         }
     }
 
@@ -233,35 +229,37 @@ public class Race {
      * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
      * and sets the destination to the next marks coordinates.
      *
-     * @param boat the boat
+     * @param boat    the boat
      * @param nextLeg the next leg
      */
+    public void setNextLeg(Boat boat, int nextLeg) {
+        int currentLeg = boat.getLegNumber();
 
-    public void setNextLeg(Boat boat, Leg nextLeg) {
-        Leg currentLeg = course.getLeg(boat.getLegNumber());
-        currentLeg.addToBoatsCompleted(boat);
-        int newPlace = currentLeg.getBoatsCompleted().indexOf(boat) + 1;
-        boat.setPlace(newPlace);
-        boat.setDestination(nextLeg.getDestination().getMarks().get(0).getCoordinate());
-        boat.setLegNumber(nextLeg.getLegNumber());
+        if (currentLeg == nextLeg) return;
 
-        for (Boat currentBoat : getStartingList()) {
-            int currentBoatPlace = currentBoat.placeProperty().intValue();
-            int boatPlace = boat.placeProperty().intValue();
-            int currentBoatLeg = currentBoat.getLegNumber();
-            int boatLeg = boat.getLegNumber();
-            if (!(currentBoat.getId().equals(boat.getId())) && (currentBoatPlace == boatPlace)) {
-                if (currentBoatLeg >= boatLeg) {
-                    currentBoat.setPlace(currentBoatPlace - 1);
-                } else {
-                    currentBoat.setPlace(currentBoatPlace + 1);
-                }
-            }
+        final int newPlace = ((Long) startingList.stream().filter(b -> b.getLegNumber() >= nextLeg).count()).intValue() + 1;
+        final int oldPace = boat.getPlace();
+
+        if (oldPace < newPlace) {
+            startingList.stream()
+                    .filter(boat1 -> boat1.getPlace() <= newPlace)
+                    .filter(boat1 -> oldPace < boat1.getPlace())
+                    .forEach(boat1 -> boat1.setPlace(boat1.getPlace() + 1));
+        } else if (newPlace < oldPace) {
+            startingList.stream()
+                    .filter(boat1 -> boat1.getPlace() < oldPace)
+                    .filter(boat1 -> newPlace <= boat1.getPlace())
+                    .forEach(boat1 -> boat1.setPlace(boat1.getPlace() + 1));
         }
 
-        // TODO when this is enabled it causes the visualiser to freeze, likely due to malformed packets
-        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getLeg(boat.getLegNumber()).getDeparture()));
-        //startingList.set(startingList.indexOf(boat), boat); // forces list to notify the tableview
+        boat.setPlace(newPlace);
+        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getMarkSequence().get(currentLeg)));
+
+        if (nextLeg == course.getMarkSequence().size()) {
+            boat.setStatus(BoatStatus.FINISHED);
+        }
+
+        boat.setLegNumber(nextLeg);
     }
 
 
@@ -285,7 +283,7 @@ public class Race {
         if (mode != RaceMode.CONTROLS_TUTORIAL) {
             obstacle = boat.hasCollided(obstacles);
         }
-        if (obstacle != null){
+        if (obstacle != null) {
             handleCollision(boat, obstacle);
         } else {
             double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
@@ -295,16 +293,46 @@ public class Race {
             // set next position based on current coordinate, distance travelled, and heading.
             boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
         }
+
+        if (!mode.equals(RaceMode.CONTROLS_TUTORIAL)) {
+            if (boat.getStatus().equals(BoatStatus.RACING) && detector.hasPassedDestination(boat, course)) {
+                setNextLeg(boat, boat.getLegNumber() + 1);
+            } else if (boat.getStatus().equals(BoatStatus.PRE_START) && boat.getLegNumber() == 0
+                    && detector.hasPassedDestination(boat, course)) {
+                statusOSCPenalty(boat);
+            } else if (boat.getStatus().equals(BoatStatus.OCS) && currentTime.isAfter(startTime.plusSeconds(5))) {
+                yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OCS_PENALTY_COMPLETE));
+                boat.setStatus(BoatStatus.RACING);
+                boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
+            }
+        }
+    }
+
+
+    /**
+     * Sets the boat to appropriate conditions when a boat has an OCS status.
+     *
+     * @param boat the boat which has the OCS status
+     */
+    private void statusOSCPenalty(Boat boat) {
+        yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OVER_START_LINE_EARLY));
+        boat.setStatus(BoatStatus.OCS);
+
+        boat.setCoordinate(getStartPosition(boat, boat.getLength() * 6));
+
+        boat.setSpeed(0);
+        boat.setSailOut(true);
     }
 
 
     /**
      * Handles the collision when one is detected by printing to the console
      * NOTE: Bumper car edition currently in play
-     * @param boat boat collision was detected from
+     *
+     * @param boat     boat collision was detected from
      * @param obstacle obstacle the boat collided with
      */
-    private void handleCollision(Boat boat, AbstractBoat obstacle){
+    private void handleCollision(Boat boat, AbstractBoat obstacle) {
         GPSCalculations calculator = new GPSCalculations();
         double bearingOfCollision = calculator.getBearing(obstacle.getCoordinate(), boat.getCoordinate());
         Coordinate newBoatCoordinate = calculator.toCoordinate(boat.getCoordinate(), bearingOfCollision, boat.getLength());
@@ -316,22 +344,24 @@ public class Race {
     }
 
 
-    public List<Boat> getFinishedList() {
-        return finishedList;
-    }
-
-
     public boolean isFinished() {
-        return startingList.size() == finishedList.size() && startingList.size() != 0;
+        Collection<BoatStatus> finishedStatuses = Arrays.asList(BoatStatus.DNF, BoatStatus.DNS, BoatStatus.FINISHED, BoatStatus.DSQ);
+        int numFinished = (int) startingList.stream()
+                .filter(boat -> finishedStatuses.contains(boat.getStatus()))
+                .count();
+        return startingList.size() == numFinished && startingList.size() != 0;
     }
+
 
     public ZonedDateTime getStartTime() {
         return startTime;
     }
 
+
     public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
     }
+
 
     /**
      * Sets participants and removes non participants for current list of boats.
@@ -347,31 +377,36 @@ public class Race {
         startingList.addAll(newList);
     }
 
-    public void setCurrentTime(ZonedDateTime currentTime) {
-        this.currentTime = currentTime;
-    }
 
     public ZonedDateTime getCurrentTime() {
         return currentTime;
     }
 
+
+    public void setCurrentTime(ZonedDateTime currentTime) {
+        this.currentTime = currentTime;
+    }
+
+
     public int getId() {
         return id;
     }
+
 
     public void setId(int id) {
         this.id = id;
     }
 
+
     public RaceStatus getStatus() {
         return status;
     }
+
 
     public void setStatus(RaceStatus status) {
         this.status = status;
     }
 
-    private List<MarkRoundingEvent> markRoundingEvents = new ArrayList<>();
 
     public List<MarkRoundingEvent> popMarkRoundingEvents() {
         List<MarkRoundingEvent> events = markRoundingEvents;
@@ -379,9 +414,18 @@ public class Race {
         return events;
     }
 
+
+    public List<YachtEvent> popYachtEvents() {
+        List<YachtEvent> events = yachtEvents;
+        yachtEvents = new ArrayList<>();
+        return events;
+    }
+
+
     public int getPlayerId() {
         return playerId;
     }
+
 
     public void setPlayerId(int playerId) {
         this.playerId = playerId;
@@ -389,108 +433,24 @@ public class Race {
         startingList.forEach(boat -> boat.setControlled(boat.getId().equals(playerId)));
     }
 
+
     public RaceType getRaceType() {
         return raceType;
     }
 
-    public Regatta getRegatta() {
-        return regatta;
-    }
-
-    public void setRegatta(Regatta regatta) {
-        this.regatta = regatta;
-    }
 
     public void setRaceType(RaceType raceType) {
         this.raceType = raceType;
     }
 
-    public enum RaceType {
-        MATCH("Match"),
-        FLEET("Fleet");
 
-        private final String value;
-
-        private final static Map<String, RaceType> MAPPING = initializeMapping();
-
-        RaceType(String value) {
-            this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return value;
-        }
-
-        public static RaceType fromValue(String value) {
-            return MAPPING.get(value);
-        }
-
-        private static Map<String, RaceType> initializeMapping() {
-            return Arrays.stream(values()).collect(Collectors.toMap(RaceType::toString, rt -> rt));
-        }
+    public Regatta getRegatta() {
+        return regatta;
     }
 
 
-    /**
-     * Checks if a boat has past its destination mark.
-     *
-     * @param boat the boat to be checked
-     * @return if has passed its destination mark
-     */
-    public boolean hasPassedMark(Boat boat) {
-        return inPreRoundingZone(boat.getPreviousCoordinate(), boat.getLegNumber()) && inPostRoundingZone(boat.getCoordinate(), boat.getLegNumber());
-    }
-
-    /**
-     * Method to check if a was is the pre pass zone for the destination of a leg
-     *
-     * @param coordinate coordinate to be checked
-     * @param legNumber the leg number for the leg in course
-     * @return true if coordinate is in pre pass zone
-     */
-    private boolean inPreRoundingZone(Coordinate coordinate, int legNumber) {
-        Leg leg = course.getLeg(legNumber);
-        double markToBoatHeading = GPSCalculations.getBearing(leg.getDestination().getCoordinate(), coordinate);
-
-        double entryBearing = GPSCalculations.getBearing(leg.getDestination().getCoordinate(), leg.getDeparture().getCoordinate());
-        GPSCalculations gps = new GPSCalculations();
-
-        MarkRounding.Direction direction = course.getMarkRoundings().get(leg.getLegNumber()).getRoundingDirection();
-
-        if (direction == MarkRounding.Direction.PORT) {
-            return gps.isBetween(markToBoatHeading, leg.getDestination().getPassAngle(), entryBearing);
-        } else if (direction == MarkRounding.Direction.STARBOARD) {
-            return gps.isBetween(markToBoatHeading,  entryBearing, leg.getDestination().getPassAngle());
-        }
-
-        return false;
-    }
-
-
-    /**
-     * Method to check if a coordinate is in the post pass zone for a leg
-     *
-     * @param coordinate coordinate to be checked
-     * @param legNumber the leg number for the leg in course
-     * @return true of coordinate is in [ost pass zone
-     */
-    private boolean inPostRoundingZone(Coordinate coordinate, int legNumber) {
-        Leg leg = course.getLeg(legNumber + 1);
-        double markToBoatHeading = GPSCalculations.getBearing(leg.getDeparture().getCoordinate(), coordinate);
-        double exitBearing = GPSCalculations.getBearing(leg.getDeparture().getCoordinate(), leg.getDestination().getCoordinate());
-//        System.out.println(leg.getDestination().getPassAngle());
-        GPSCalculations gps = new GPSCalculations();
-
-        MarkRounding.Direction direction = course.getMarkRoundings().get(leg.getLegNumber() - 1).getRoundingDirection();
-
-        if (direction == MarkRounding.Direction.PORT) {
-            return gps.isBetween(markToBoatHeading, exitBearing, leg.getDeparture().getPassAngle());
-        } else if (direction == MarkRounding.Direction.STARBOARD) {
-            return gps.isBetween(markToBoatHeading, leg.getDeparture().getPassAngle(), exitBearing);
-        }
-
-        return false;
+    public void setRegatta(Regatta regatta) {
+        this.regatta = regatta;
     }
 
 

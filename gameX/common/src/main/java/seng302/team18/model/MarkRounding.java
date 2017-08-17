@@ -12,6 +12,8 @@ public class MarkRounding {
     private final CompoundMark compoundMark;
     private final Direction roundingDirection;
     private final int zoneSize;
+    private double passAngle;
+    private GateType gateType;
 
 
     /**
@@ -113,5 +115,42 @@ public class MarkRounding {
         public String toString() {
             return value;
         }
+    }
+
+
+    public enum GateType {
+        THROUGH_THEN_ROUND("through gate on arrival, round gate on departure"),
+        THROUGH_GATE("straight through gate"),
+        ROUND_BOTH_MARKS("s-bend gate (round both marks)"),
+        ROUND_THEN_THROUGH("round gate on arrival, through gate on departure");
+
+        private String gateType;
+
+        GateType(String type) {
+            gateType = type;
+        }
+
+
+        public String getType() {
+            return gateType;
+        }
+    }
+
+
+    public double getPassAngle() {
+        return passAngle;
+    }
+
+    public void setPassAngle(double passAngle) {
+        this.passAngle = passAngle;
+    }
+
+
+    public GateType getGateType() {
+        return gateType;
+    }
+
+    public void setGateType(GateType gateType) {
+        this.gateType = gateType;
     }
 }

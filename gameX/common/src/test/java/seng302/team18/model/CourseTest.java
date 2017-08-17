@@ -1,13 +1,10 @@
 package seng302.team18.model;
 
 import org.junit.Before;
-import org.junit.Test;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * A test class for the Course class
@@ -45,37 +42,37 @@ public class CourseTest {
 //    }
 
     @Before
-    public void setUp(){
+    public void setUp() {
         Mark mark1 = new Mark(1, new Coordinate(88, 102));
         Mark mark2 = new Mark(2, new Coordinate(88.1, 102.1));
-        List<Mark> marks =  new ArrayList<>();
+        List<Mark> marks = new ArrayList<>();
         marks.add(mark2);
         marks.add(mark1);
-        startLine = new CompoundMark("Start" , marks, 20);
+        startLine = new CompoundMark("Start", marks, 20);
 
         Mark mark3 = new Mark(3, new Coordinate(88.5, 102.5));
-        List<Mark> centre =  new ArrayList<>();
+        List<Mark> centre = new ArrayList<>();
         centre.add(mark3);
-        CompoundMark centreC = new CompoundMark("Mark1" , centre, 20);
+        CompoundMark centreC = new CompoundMark("Mark1", centre, 20);
 
         Mark mark4 = new Mark(1, new Coordinate(89, 103));
         Mark mark5 = new Mark(2, new Coordinate(89.1, 103.1));
-        List<Mark> finish =  new ArrayList<>();
+        List<Mark> finish = new ArrayList<>();
         finish.add(mark4);
         finish.add(mark5);
-        CompoundMark finishLine = new CompoundMark("finish" , finish, 20);
+        CompoundMark finishLine = new CompoundMark("finish", finish, 20);
 
         List<CompoundMark> compoundMarks = new ArrayList<>();
         compoundMarks.add(startLine);
         compoundMarks.add(centreC);
         compoundMarks.add(finishLine);
 
-        List<BoundaryMark> boundaries = new ArrayList<>();
+        List<Coordinate> boundaries = new ArrayList<>();
 
-        boundaries.add(new BoundaryMark(0, new Coordinate(90, 90)));
-        boundaries.add(new BoundaryMark(1, new Coordinate(90, -90)));
-        boundaries.add(new BoundaryMark(2, new Coordinate(-90, -90)));
-        boundaries.add(new BoundaryMark(3, new Coordinate(-90, 90)));
+        boundaries.add(new Coordinate(90, 90));
+        boundaries.add(new Coordinate(90, -90));
+        boundaries.add(new Coordinate(-90, -90));
+        boundaries.add(new Coordinate(-90, 90));
 
         List<MarkRounding> markRoundings = new ArrayList<>();
 
@@ -83,18 +80,6 @@ public class CourseTest {
         markRoundings.add(new MarkRounding(1, centreC, MarkRounding.Direction.PORT, 3));
         markRoundings.add(new MarkRounding(2, finishLine, MarkRounding.Direction.PORT, 3));
 
-        course = new Course(compoundMarks, boundaries, 0, 0, ZoneId.of( "UTC-03:00"), markRoundings);
-
-    }
-
-    @Test
-    public void getLegFromLefNumberTest(){
-        Leg actualLeg1 = course.getLeg(0);
-        Leg actualLeg2 = course.getLeg(1);
-
-        Leg expectedLeg1 = course.getLegs().get(0);
-        Leg expectedLeg2 = course.getLegs().get(1);
-        assertEquals(actualLeg1, expectedLeg1);
-        assertEquals(actualLeg2, expectedLeg2);
+        course = new Course(compoundMarks, boundaries, 0, 0, ZoneId.of("UTC-03:00"), markRoundings);
     }
 }

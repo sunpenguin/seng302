@@ -2,10 +2,7 @@ package seng302.team18.racemodel.connection;
 
 import org.junit.Test;
 import seng302.team18.message.AC35MessageType;
-import seng302.team18.model.Boat;
-import seng302.team18.model.CompoundMark;
-import seng302.team18.model.Mark;
-import seng302.team18.model.MarkRoundingEvent;
+import seng302.team18.model.*;
 import seng302.team18.util.ByteCheck;
 
 import java.util.Arrays;
@@ -24,16 +21,19 @@ public class MarkRoundingMessageGeneratorTest {
     @Test
     public void getPayload() throws Exception {
         final Boat boat = new Boat("testBoat", "tBoat", 101, 14.019);
+        boat.setStatus(BoatStatus.RACING);
         final CompoundMark mark = new CompoundMark(
                 "TestMark",
                 Arrays.asList(
                         new Mark(11, "Mark 1", "M1"),
                         new Mark(12, "Mark 2", "M2")
                 ),
-                100);
+                100
+        );
+        final MarkRounding rounding = new MarkRounding(1, mark, MarkRounding.Direction.PORT, 3);
         final long time = System.currentTimeMillis();
 
-        MarkRoundingEvent event = new MarkRoundingEvent(time, boat, mark);
+        MarkRoundingEvent event = new MarkRoundingEvent(time, boat, rounding);
         MarkRoundingMessageGenerator messageGenerator = new MarkRoundingMessageGenerator(event, RACE_ID);
 
         message = messageGenerator.getMessage();
@@ -51,8 +51,8 @@ public class MarkRoundingMessageGeneratorTest {
         checkField("ack num", 0, 2);
         checkField("race id", RACE_ID, 4);
         checkField("yacht id", boat.getId(), 4);
-        checkField("boat status", 0, 1);
-        checkField("rounding side", 0, 1);
+        checkField("boat status", 1, 1);
+        checkField("rounding side", 1, 1);
         checkField("mark type", (mark.getMarks().size() == 2) ? 0x02 : 0x01, 1);
         checkField("mark id", mark.getId(), 1);
 

@@ -7,28 +7,31 @@ public class MarkRoundingEvent {
 
     private final long time;
     private final Boat boat;
-    private final CompoundMark compoundMark;
+    private final MarkRounding markRounding;
 
     /**
-     * @param time         the time at which the boat rounded the mark
+     * @param time         the time at which the boat rounded the mark (epoch milliseconds)
      * @param boat         the boat
-     * @param compoundMark the mark
+     * @param markRounding the rounding completed
      */
-    public MarkRoundingEvent(long time, Boat boat, CompoundMark compoundMark) {
+    public MarkRoundingEvent(long time, Boat boat, MarkRounding markRounding) {
         this.time = time;
         this.boat = boat;
-        this.compoundMark = compoundMark;
+        this.markRounding = markRounding;
     }
+
 
     public long getTime() {
         return time;
     }
 
+
     public Boat getBoat() {
         return boat;
     }
 
-    public CompoundMark getCompoundMark() {
-        return compoundMark;
+
+    public MarkRounding getMarkRounding() {
+        return markRounding;
     }
 }

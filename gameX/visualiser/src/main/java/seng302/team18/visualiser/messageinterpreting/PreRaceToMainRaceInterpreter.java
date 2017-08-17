@@ -13,16 +13,16 @@ import java.util.List;
 /**
  * Class for swapping views based on AC35RaceStatusMessages.
  */
-public class RaceStatusInterpreter extends MessageInterpreter {
+public class PreRaceToMainRaceInterpreter extends MessageInterpreter {
 
 
     private PreRaceController controller;
 
     /**
-     * Constructor for RaceStatusInterpreter.
+     * Constructor for PreRaceToMainRaceInterpreter.
      * @param controller used for swapping views
      */
-    public RaceStatusInterpreter(PreRaceController controller) {
+    public PreRaceToMainRaceInterpreter(PreRaceController controller) {
         this.controller = controller;
     }
 
@@ -38,7 +38,7 @@ public class RaceStatusInterpreter extends MessageInterpreter {
                     try {
                         controller.showRace();
                     } catch (IOException e) {
-                        //e.printStackTrace();
+                        e.printStackTrace();
                     }
                 });
             }
