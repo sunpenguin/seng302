@@ -1,1 +1,1 @@
-MODEL_PATH=gameX/racemodel/target/racemodel-5.1.jar
+MODEL_PATH=gameX/racemodel/target/racemodel-6.0.jar
