@@ -21,6 +21,8 @@ public class BoatGuide extends DisplayBoatDecorator {
     private Coordinate location;
     private PixelMapper mapper;
 
+    private final static GPSCalculations GPS = new GPSCalculations();
+
 
     public BoatGuide(PixelMapper mapper, DisplayBoat boat) {
         super(boat);
@@ -60,8 +62,12 @@ public class BoatGuide extends DisplayBoatDecorator {
 
 
     public void setDestination(Coordinate destination) {
-        double destinationHeading = GPSCalculations.getBearing(location, destination);
-        rotation.setAngle(destinationHeading);
+        if (destination != null) {
+            double destinationHeading = GPS.getBearing(location, destination);
+            rotation.setAngle(destinationHeading);
+        } else {
+            arrow.setVisible(false);
+        }
         super.setDestination(destination);
     }
 
