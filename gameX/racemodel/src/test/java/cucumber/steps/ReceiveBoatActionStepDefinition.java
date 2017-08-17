@@ -6,6 +6,7 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
@@ -51,7 +52,7 @@ public class ReceiveBoatActionStepDefinition {
 
         server.addObserver(listener);
         server.openServer();
-        sender.send(new RequestMessage(true));
+        sender.send(new RequestMessage(RequestType.RACING));
         server.stopAcceptingConnections();
     }
 

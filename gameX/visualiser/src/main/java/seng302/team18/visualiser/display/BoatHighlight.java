@@ -6,6 +6,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
+import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
@@ -19,6 +20,8 @@ public class BoatHighlight extends DisplayBoatDecorator {
     private Circle highlight;
     private Scale zoom = new Scale(0, 0);
     private final Rotate rotation = new Rotate(0, 0, 0);
+    private final static Color defaultColour = Color.YELLOW;
+    private final static Color frozenColour = Color.RED;
 
     /**
      * Creates a new instance of DisplayBoat
@@ -33,7 +36,7 @@ public class BoatHighlight extends DisplayBoatDecorator {
 
         this.pixelMapper = pixelMapper;
         highlight = new Circle(11);
-        highlight.setFill(Color.YELLOW);
+        highlight.setFill(defaultColour);
         highlight.getTransforms().addAll(zoom, rotation, translate);
         highlight.toBack();
         highlight.setOpacity(0.5);
@@ -71,5 +74,22 @@ public class BoatHighlight extends DisplayBoatDecorator {
     public void removeFrom(Group group) {
         group.getChildren().remove(highlight);
         super.removeFrom(group);
+    }
+
+
+    @Override
+    public void setBoatStatus(BoatStatus status) {
+        if (!getStatus().equals(status)) {
+            switch (status) {
+                case OCS:
+                    highlight.setFill(frozenColour);
+                    break;
+                case RACING:
+                    highlight.setFill(defaultColour);
+                    break;
+            }
+        }
+
+        super.setBoatStatus(status);
     }
 }

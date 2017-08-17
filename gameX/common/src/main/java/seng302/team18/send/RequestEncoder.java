@@ -2,7 +2,6 @@ package seng302.team18.send;
 
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
-import seng302.team18.util.ByteCheck;
 import seng302.team18.util.CRCGenerator;
 
 import java.io.ByteArrayOutputStream;
@@ -30,7 +29,10 @@ public class RequestEncoder extends MessageEncoder {
     protected byte[] generateBody(MessageBody message) {
         if (message instanceof RequestMessage) {
             RequestMessage requestMessage = (RequestMessage) message;
-            return ByteCheck.intToByteArray(requestMessage.isParticipating() ? 1 : 0);
+
+            byte[] value = new byte[1];
+            value[0] = (byte) requestMessage.getAction().code();
+            return value;
         }
         return null;
     }
@@ -61,7 +63,7 @@ public class RequestEncoder extends MessageEncoder {
      */
     @Override
     protected short messageLength() {
-        return 4;
+        return 1;
     }
 
 }

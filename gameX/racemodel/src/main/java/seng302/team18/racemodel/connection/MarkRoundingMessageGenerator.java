@@ -56,14 +56,36 @@ public class MarkRoundingMessageGenerator extends MessageGenerator {
         outputSteam.write(ByteCheck.intToByteArray(markRoundingEvent.getBoat().getId()));
 
         // Boat status - defaulting to 0 for 'unknown'
-        outputSteam.write(0x00);
+        byte boatStatus = 0x00;
+        switch (markRoundingEvent.getBoat().getStatus()) {
+            case RACING:
+                boatStatus = 0x01;
+                break;
+            case DSQ:
+                boatStatus = 0x02;
+                break;
+            case DNF:
+            case DNS:
+                boatStatus = 0x03;
+                break;
+        }
+        outputSteam.write(boatStatus);
 
         // Rounding side - defaulting to 0 for 'unknown'
-        outputSteam.write(0x00);
+        byte roundingSide = 0x00;
+        switch (markRoundingEvent.getMarkRounding().getRoundingDirection()) {
+            case PORT:
+                roundingSide = 0x01;
+                break;
+            case STARBOARD:
+                roundingSide = 0x02;
+                break;
+        }
+        outputSteam.write(roundingSide);
 
         // Mark type
         byte markType = 0x00;
-        switch (markRoundingEvent.getCompoundMark().getMarks().size()) {
+        switch (markRoundingEvent.getMarkRounding().getCompoundMark().getMarks().size()) {
             case CompoundMark.MARK_SIZE:
                 markType = 0x01;
                 break;
@@ -74,7 +96,7 @@ public class MarkRoundingMessageGenerator extends MessageGenerator {
         outputSteam.write(markType);
 
         // Mark id
-        outputSteam.write(markRoundingEvent.getCompoundMark().getId());
+        outputSteam.write(markRoundingEvent.getMarkRounding().getCompoundMark().getId());
 
         return outputSteam.toByteArray();
     }

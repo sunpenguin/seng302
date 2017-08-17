@@ -19,6 +19,7 @@ public class RaceRenderer {
     private Race race;
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
+    private Map<String, Double> headingMap;
     private int numBoats;
     private final List<Color> BOAT_COLOURS = new ArrayList<>(Arrays.asList(
             Color.VIOLET,
@@ -98,7 +99,8 @@ public class RaceRenderer {
                     displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
                     displayBoat.setSailOut(boat.isSailOut());
                 }
-            }
+            displayBoat.setBoatStatus(boat.getStatus());
+        }
 
     }
 

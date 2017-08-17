@@ -3,6 +3,7 @@ package seng302.team18.visualiser.display;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
+import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Coordinate;
 
 /**
@@ -167,6 +168,7 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
         boat.setSailOut(sailOut);
     }
 
+
     @Override
     public Polyline getBoatPoly() {
         return boat.getBoatPoly();
@@ -176,5 +178,16 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
     @Override
     public void removeFrom(Group group) {
         boat.removeFrom(group);
+    }
+
+    @Override
+    public void setBoatStatus(BoatStatus status) {
+        boat.setBoatStatus(status);
+    }
+
+
+    @Override
+    public BoatStatus getStatus() {
+        return boat.getStatus();
     }
 }

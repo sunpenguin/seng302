@@ -5,7 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.*;
+import seng302.team18.model.CompoundMark;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Mark;
+import seng302.team18.model.MarkRounding;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -25,7 +28,7 @@ public class AC35XMLRaceParserTest {
 
     private List<CompoundMark> expectedCompoundMarks;
     private List<MarkRounding> expectedMarkRounding;
-    private List<BoundaryMark> expectedBoundaries;
+    private List<Coordinate> expectedBoundaries;
 
     private Integer byteArrayLength = 99999;
     private Double delta = 0.001;
@@ -92,16 +95,16 @@ public class AC35XMLRaceParserTest {
 
         // List of Boundary Marks
         expectedBoundaries = new ArrayList<>();
-        expectedBoundaries.add(new BoundaryMark(1, new Coordinate(57.6739450, 11.8417100)));
-        expectedBoundaries.add(new BoundaryMark(2, new Coordinate(57.6709520, 11.8485010)));
-        expectedBoundaries.add(new BoundaryMark(3, new Coordinate(57.6690260, 11.8472790)));
-        expectedBoundaries.add(new BoundaryMark(4, new Coordinate(57.6693140, 11.8457610)));
-        expectedBoundaries.add(new BoundaryMark(5, new Coordinate(57.6665370, 11.8432910)));
-        expectedBoundaries.add(new BoundaryMark(6, new Coordinate(57.6641400, 11.8385840)));
-        expectedBoundaries.add(new BoundaryMark(7, new Coordinate(57.6629430, 11.8332030)));
-        expectedBoundaries.add(new BoundaryMark(8, new Coordinate(57.6629480, 11.8249660)));
-        expectedBoundaries.add(new BoundaryMark(9, new Coordinate(57.6686890, 11.8250920)));
-        expectedBoundaries.add(new BoundaryMark(10, new Coordinate(57.6708220, 11.8321340)));
+        expectedBoundaries.add(new Coordinate(57.6739450, 11.8417100));
+        expectedBoundaries.add(new Coordinate(57.6709520, 11.8485010));
+        expectedBoundaries.add(new Coordinate(57.6690260, 11.8472790));
+        expectedBoundaries.add(new Coordinate(57.6693140, 11.8457610));
+        expectedBoundaries.add(new Coordinate(57.6665370, 11.8432910));
+        expectedBoundaries.add(new Coordinate(57.6641400, 11.8385840));
+        expectedBoundaries.add(new Coordinate(57.6629430, 11.8332030));
+        expectedBoundaries.add(new Coordinate(57.6629480, 11.8249660));
+        expectedBoundaries.add(new Coordinate(57.6686890, 11.8250920));
+        expectedBoundaries.add(new Coordinate(57.6708220, 11.8321340));
     }
 
     @Test
@@ -139,13 +142,12 @@ public class AC35XMLRaceParserTest {
 
     @Test
     public void parseAC35XMLRaceBoundariesTest() {
-        List<BoundaryMark> actualBoundaries = raceMessageToTest.getBoundaryMarks();
+        List<Coordinate> actualBoundaries = raceMessageToTest.getBoundaryMarks();
 
         Assert.assertEquals(expectedBoundaries.size(), actualBoundaries.size());
-        Assert.assertEquals(expectedBoundaries.get(4).getSequenceID(), actualBoundaries.get(4).getSequenceID());
         Assert.assertEquals(
-                expectedBoundaries.get(9).getCoordinate().getLatitude(),
-                actualBoundaries.get(9).getCoordinate().getLatitude(),
+                expectedBoundaries.get(9).getLatitude(),
+                actualBoundaries.get(9).getLatitude(),
                 delta);
     }
 }

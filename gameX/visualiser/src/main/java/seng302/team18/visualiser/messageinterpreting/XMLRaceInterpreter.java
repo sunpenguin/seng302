@@ -3,7 +3,8 @@ package seng302.team18.visualiser.messageinterpreting;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.*;
+import seng302.team18.model.Course;
+import seng302.team18.model.Race;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -41,9 +42,9 @@ public class XMLRaceInterpreter extends MessageInterpreter {
             race.setParticipantIds(new ArrayList<>(raceMessage.getParticipants().keySet()));
 
             Course course = race.getCourse();
-            course.setMarkRoundings(raceMessage.getMarkRoundings());
             course.setCompoundMarks(raceMessage.getCompoundMarks());
-            course.setBoundaries(raceMessage.getBoundaryMarks());
+            course.setMarkSequence(raceMessage.getMarkRoundings());
+            course.setCourseLimits(raceMessage.getBoundaryMarks());
         }
     }
 

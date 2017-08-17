@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 public class AbstractCourseBuilderTest {
     private final List<CompoundMark> compoundMarks = setUpCompoundMarks();
     private final List<MarkRounding> markRoundings = setUpMarkRoundings();
-    private final List<BoundaryMark> boundaryMarks = setUpBoundaryMarks();
+    private final List<Coordinate> boundaryMarks = setUpBoundaryMarks();
     private final double windDirection = 50.5;
     private final double windSpeed = 15;
     private final ZoneId timeZone = ZoneId.of(ZoneId.systemDefault().getId());
@@ -45,11 +45,11 @@ public class AbstractCourseBuilderTest {
 
     @Test
     public void buildCourse_boundary() throws Exception {
-        assertEquals("incorrect number of course boundaries", boundaryMarks.size(), course.getBoundaries().size());
+        assertEquals("incorrect number of course boundary marks", boundaryMarks.size(), course.getCourseLimits().size());
 
         for (int i = 0; i < boundaryMarks.size(); i++) {
-            BoundaryMark expected = boundaryMarks.get(i);
-            BoundaryMark actual = course.getBoundaries().get(i);
+            Coordinate expected = boundaryMarks.get(i);
+            Coordinate actual = course.getCourseLimits().get(i);
 
             assertEquals("course boundary" + i + "is not as expected", expected, actual);
         }
@@ -76,11 +76,11 @@ public class AbstractCourseBuilderTest {
 
     @Test
     public void buildCourse_markRoundings() throws Exception {
-        assertEquals("incorrect number of mark roundings", markRoundings.size(), course.getMarkRoundings().size());
+        assertEquals("incorrect number of mark roundings", markRoundings.size(), course.getMarkSequence().size());
 
         for (int i = 0; i < markRoundings.size(); i++) {
             MarkRounding expected = markRoundings.get(i);
-            MarkRounding actual = course.getMarkRoundings().get(i);
+            MarkRounding actual = course.getMarkSequence().get(i);
 
             assertEquals("mark rounding " + i + "is not as expected", expected, actual);
         }
@@ -174,16 +174,14 @@ public class AbstractCourseBuilderTest {
     }
 
 
-    private List<BoundaryMark> setUpBoundaryMarks() {
-        List<BoundaryMark> boundaryMarks = new ArrayList<>();
-
-        boundaryMarks.add(new BoundaryMark(1, new Coordinate(32.31056, -64.84599)));
-        boundaryMarks.add(new BoundaryMark(2, new Coordinate(32.30125, -64.82783)));
-        boundaryMarks.add(new BoundaryMark(3, new Coordinate(32.28718, -64.83796)));
-        boundaryMarks.add(new BoundaryMark(5, new Coordinate(32.29022, -64.86268)));
-        boundaryMarks.add(new BoundaryMark(6, new Coordinate(32.30510, -64.85530)));
-
-        return boundaryMarks;
+    private List<Coordinate> setUpBoundaryMarks() {
+        return Arrays.asList(
+                new Coordinate(32.31056, -64.84599),
+                new Coordinate(32.30125, -64.82783),
+                new Coordinate(32.28718, -64.83796),
+                new Coordinate(32.29022, -64.86268),
+                new Coordinate(32.30510, -64.85530)
+        );
     }
 
 
@@ -199,7 +197,7 @@ public class AbstractCourseBuilderTest {
         }
 
         @Override
-        protected List<BoundaryMark> getBoundaryMarks() {
+        protected List<Coordinate> getBoundaryMarks() {
             return boundaryMarks;
         }
 

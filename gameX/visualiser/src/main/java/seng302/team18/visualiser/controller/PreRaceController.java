@@ -7,7 +7,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -15,9 +14,11 @@ import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.display.PreRaceTimes;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
@@ -78,11 +79,25 @@ public class PreRaceController {
         this.interpreter = new Interpreter(receiver);
         interpreter.setInterpreter(initialiseInterpreter());
         interpreter.start();
+
+        RequestType requestType;
+
+        switch (race.getMode()) {
+            case RACE:
+                requestType = RequestType.RACING;
+                break;
+            case CONTROLS_TUTORIAL:
+                requestType = RequestType.CONTROLS_TUTORIAL;
+                break;
+            default:
+                requestType = RequestType.RACING;
+        }
         try {
             sender.send(new RequestMessage(true));
         } catch (IOException e) {
             // TODO Callum / David 9 August show error (has been disconnected)
         }
+
         stage.setOnCloseRequest((event) -> {
             interpreter.close();
             while (!receiver.close()) {
@@ -133,7 +148,7 @@ public class PreRaceController {
         interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
 
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
@@ -161,6 +176,8 @@ public class PreRaceController {
         stage.setMaximized(true);
         stage.show();
         controller.setUp(race, interpreter, sender);
+        controller.updateControlsTutorial();
+        controller.updateControlsTutorial();
     }
 
 

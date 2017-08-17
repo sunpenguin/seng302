@@ -5,7 +5,10 @@ import org.w3c.dom.Element;
 import seng302.team18.message.AC35RaceXMLComponents;
 import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.XmlMessage;
-import seng302.team18.model.*;
+import seng302.team18.model.CompoundMark;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Mark;
+import seng302.team18.model.MarkRounding;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
@@ -152,14 +155,16 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
     }
 
 
-    private Element encodeCourseLimits(Document doc, List<BoundaryMark> boundaryMarks) {
+    private Element encodeCourseLimits(Document doc, List<Coordinate> boundaryMarks) {
         Element courseLimits = doc.createElement(AC35RaceXMLComponents.ELEMENT_COURSE_BOUNDARIES.toString());
 
-        for (BoundaryMark boundaryMark : boundaryMarks) {
+        for (int i = 0; i < boundaryMarks.size(); i++) {
+            Coordinate boundaryMark = boundaryMarks.get(i);
+
             Element limit = doc.createElement(AC35RaceXMLComponents.ELEMENT_LIMIT.toString());
-            limit.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_SEQUENCE_ID.toString(), boundaryMark.getSequenceID().toString());
-            limit.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_LATITUDE.toString(), boundaryMark.getCoordinate().getLatitude().toString());
-            limit.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_LONGITUDE.toString(), boundaryMark.getCoordinate().getLongitude().toString());
+            limit.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_SEQUENCE_ID.toString(), ((Integer) i).toString());
+            limit.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_LATITUDE.toString(), boundaryMark.getLatitude().toString());
+            limit.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_LONGITUDE.toString(), boundaryMark.getLongitude().toString());
             courseLimits.appendChild(limit);
         }
 

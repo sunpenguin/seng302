@@ -4,13 +4,15 @@ import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceType;
+import seng302.team18.model.RaceMode;
 import seng302.team18.model.Regatta;
 
 import static org.junit.Assert.assertEquals;
 
 public class AbstractRaceBuilderTest {
     private static final int RACE_ID = 1234;
-    private static final Race.RaceType RACE_TYPE = Race.RaceType.MATCH;
+    private static final RaceType RACE_TYPE = RaceType.MATCH;
     private static final Course COURSE = new Course();
     private static final Regatta REGATTA = new Regatta();
 
@@ -19,7 +21,7 @@ public class AbstractRaceBuilderTest {
     @Before
     public void setUp() throws Exception {
         AbstractRaceBuilder raceBuilder = new ConcreteRaceBuilder();
-        race = raceBuilder.buildRace(REGATTA, COURSE);
+        race = raceBuilder.buildRace(new Race(), REGATTA, COURSE, RaceMode.RACE);
     }
 
 
@@ -55,7 +57,7 @@ public class AbstractRaceBuilderTest {
 
 
         @Override
-        protected Race.RaceType getRaceType() {
+        protected RaceType getRaceType() {
             return RACE_TYPE;
         }
     }
