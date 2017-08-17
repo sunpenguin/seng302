@@ -8,14 +8,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
-import seng302.team18.message.AC35MessageType;
-import seng302.team18.message.MessageBody;
-import seng302.team18.message.RequestMessage;
-import seng302.team18.message.RequestType;
+import seng302.team18.message.*;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
@@ -26,7 +24,6 @@ import seng302.team18.send.Sender;
 import java.io.IOException;
 import java.net.Socket;
 import java.time.ZonedDateTime;
-import java.util.List;
 
 /**
  * Controller for the pre race view
@@ -96,9 +93,7 @@ public class PreRaceController {
     }
 
 
-    public void initConnection(List<MessageBody> responses) {
-        MessageInterpreter acceptanceResponse = new AcceptanceResponseInterpreter(responses, sender);
-        interpreter.getInterpreter().add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
+    public void initConnection(Color color) {
         interpreter.start();
 
         RequestType requestType;
@@ -113,6 +108,10 @@ public class PreRaceController {
                 requestType = RequestType.RACING;
         }
         sender.send(new RequestMessage(requestType));
+
+        MessageInterpreter acceptanceResponse = new ColourResponder(color, sender);
+        interpreter.getInterpreter().add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
+
     }
 
 

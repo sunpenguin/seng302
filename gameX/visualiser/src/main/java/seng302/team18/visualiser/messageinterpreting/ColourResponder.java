@@ -1,7 +1,9 @@
 package seng302.team18.visualiser.messageinterpreting;
 
+import javafx.scene.paint.Color;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AcceptanceMessage;
+import seng302.team18.message.ColourMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.send.Sender;
 
@@ -10,15 +12,15 @@ import java.util.List;
 /**
  * Created by dhl25 on 16/08/17.
  */
-public class AcceptanceResponseInterpreter extends MessageInterpreter {
+public class ColourResponder extends MessageInterpreter {
 
 
-    private List<MessageBody> messages;
+    private Color color;
     private Sender sender;
 
 
-    public AcceptanceResponseInterpreter(List<MessageBody> messages, Sender sender) {
-        this.messages = messages;
+    public ColourResponder(Color color, Sender sender) {
+        this.color = color;
         this.sender = sender;
     }
 
@@ -28,9 +30,7 @@ public class AcceptanceResponseInterpreter extends MessageInterpreter {
         if (message instanceof AcceptanceMessage) {
             AcceptanceMessage acceptanceMessage = (AcceptanceMessage) message;
             if (!acceptanceMessage.getRequestType().isError()) {
-                for (MessageBody messageBody : messages) {
-                    sender.send(messageBody);
-                }
+                sender.send(new ColourMessage(color, acceptanceMessage.getSourceId()));
             }
         }
     }

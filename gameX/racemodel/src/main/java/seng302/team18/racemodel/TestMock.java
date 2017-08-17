@@ -137,6 +137,8 @@ public class TestMock implements Observer {
 
         do {
             if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
+                generateXMLs();
+                sendXmlBoatRace();
                 switchToPrep();
             }
 
@@ -151,6 +153,8 @@ public class TestMock implements Observer {
                 race.setStatus(RaceStatus.WARNING);
 
             } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(prepTime)) {
+                generateXMLs();
+                sendXmlBoatRace();
                 switchToPrep();
             } else {
                 switchToStarted();
@@ -225,7 +229,6 @@ public class TestMock implements Observer {
 
         for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
             server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
-            System.out.println("MARK ROUNING");
         }
     }
 }

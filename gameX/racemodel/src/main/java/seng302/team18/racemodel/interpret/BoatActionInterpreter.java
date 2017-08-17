@@ -40,10 +40,12 @@ public class BoatActionInterpreter extends MessageInterpreter {
 
     @Override
     public void interpret(MessageBody message) {
-        if (message != null && message instanceof BoatActionMessage) {
+        if (message instanceof BoatActionMessage) {
             BoatActionMessage actionMessage = (BoatActionMessage) message;
-            for (Boat boat : boats) {
-                applyActions(boat, actionMessage);
+            if (actionMessage.getId() == id) {
+                for (Boat boat : boats) {
+                    applyActions(boat, actionMessage);
+                }
             }
         }
     }

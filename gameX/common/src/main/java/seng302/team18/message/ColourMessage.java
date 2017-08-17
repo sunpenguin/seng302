@@ -1,21 +1,23 @@
 package seng302.team18.message;
 
+import javafx.scene.paint.Color;
+
 /**
  * Class to hold colour request message data
  */
 public class ColourMessage implements MessageBody {
 
 
-    private byte[] colour;
+    private Color colour;
     private int sourceID;
 
-    public void ColourMessage(byte[] color, int sourceID) {
+    public ColourMessage(Color color, int sourceID) {
         this.colour = color;
         this.sourceID = sourceID;
     }
 
 
-    public byte[] getColor() {
+    public Color getColour() {
         return colour;
     }
 
@@ -25,7 +27,7 @@ public class ColourMessage implements MessageBody {
 
     @Override
     public int getType() {
-        return AC35MessageType.COLOR.getCode();
+        return AC35MessageType.COLOUR.getCode();
     }
 
 

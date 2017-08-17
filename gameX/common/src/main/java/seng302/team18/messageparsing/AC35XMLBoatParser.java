@@ -1,5 +1,6 @@
 package seng302.team18.messageparsing;
 
+import javafx.scene.paint.Color;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -106,12 +107,15 @@ public class AC35XMLBoatParser implements MessageBodyParser {
             String boatType = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_TYPE.toString());
             String boatName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_BOAT.toString());
             String boatShortName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_SHORT.toString());
+            String colourString = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_COLOUR.toString());
+            Color colour = Color.web(colourString);
             int boatId = Integer.parseInt(boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_SOURCE_ID.toString()));
-            double boatLength = Double.parseDouble(((Element) boatDimensionsNode).getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_BOAT_LENGTH.toString()));
+            double boatLength = Double.parseDouble(boatDimensionsNode.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_BOAT_LENGTH.toString()));
 
             switch (BoatType.ofTypeName(boatType)) {
                 case YACHT:
                     boat = new Boat(boatName, boatShortName, boatId, boatLength);
+                    boat.setColour(colour);
                     break;
                 case MARK:
                     boat = new Mark(boatId, boatName, boatShortName);

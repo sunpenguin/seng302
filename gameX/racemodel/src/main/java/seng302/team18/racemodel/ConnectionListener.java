@@ -1,16 +1,15 @@
 package seng302.team18.racemodel;
 
-import seng302.team18.message.AcceptanceMessage;
-import seng302.team18.message.MessageBody;
-import seng302.team18.message.RequestMessage;
-import seng302.team18.message.RequestType;
-import seng302.team18.messageparsing.AcceptanceParser;
+import seng302.team18.interpreting.CompositeMessageInterpreter;
+import seng302.team18.interpreting.MessageInterpreter;
+import seng302.team18.message.*;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
+import seng302.team18.racemodel.interpret.ColourInterpreter;
 import seng302.team18.racemodel.model.*;
 
 import java.io.IOException;
@@ -86,8 +85,7 @@ public class ConnectionListener extends Observable implements Observer {
                 while (message == null && System.currentTimeMillis() < timeout) {
                     try {
                         message = receiver.nextMessage();
-                    } catch (IOException e) {
-                    }
+                    } catch (IOException e) {}
                 }
                 if (message instanceof RequestMessage) {
                     RequestMessage request = (RequestMessage) message;
@@ -153,7 +151,11 @@ public class ConnectionListener extends Observable implements Observer {
      * @param sourceID the assigned id of the player's boat.
      */
     private void addPlayer(Receiver receiver, int sourceID) {
-        PlayerControllerReader player = new PlayerControllerReader(sourceID, receiver, new BoatActionInterpreter(race, sourceID));
+        MessageInterpreter interpreter = new CompositeMessageInterpreter();
+        interpreter.add(AC35MessageType.COLOUR.getCode(), new ColourInterpreter(race.getStartingList()));
+        interpreter.add(AC35MessageType.BOAT_ACTION.getCode(), new BoatActionInterpreter(race, sourceID));
+
+        PlayerControllerReader player = new PlayerControllerReader(sourceID, receiver, interpreter);
         players.add(player);
         executor.submit(player);
     }

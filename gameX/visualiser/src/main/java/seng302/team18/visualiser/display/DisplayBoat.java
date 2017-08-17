@@ -267,4 +267,8 @@ public class DisplayBoat implements GeographicLocation {
     public Polyline getBoatPoly() {
         return boatPoly;
     }
+
+    public void setColour(Color boatColor) {
+        this.boatColor = boatColor;
+    }
 }

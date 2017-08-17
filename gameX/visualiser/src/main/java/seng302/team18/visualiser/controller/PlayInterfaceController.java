@@ -15,6 +15,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.shape.VertexFormat;
 import javafx.stage.Stage;
+import seng302.team18.message.ColourMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
@@ -277,7 +278,7 @@ public class PlayInterfaceController {
         Race race = new Race();
         race.setMode(mode);
         controller.setUp(race, receiver, sender);
-        controller.initConnection(new ArrayList<>());
+        controller.initConnection(boatColours.get(colourIndex));
     }
 
 

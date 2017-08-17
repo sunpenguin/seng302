@@ -36,8 +36,7 @@ public class ControllerMessageFactory implements MessageEncoderFactory {
         Map<Integer, MessageEncoder> composerMap = new HashMap<>();
         composerMap.put(AC35MessageType.BOAT_ACTION.getCode(), new BoatActionEncoder());
         composerMap.put(AC35MessageType.REQUEST.getCode(), new RequestEncoder());
-        composerMap.put(AC35MessageType.COLOR.getCode(), new ColourEncoder());
-        composerMap.put(AC35MessageType.NAME.getCode(), new ColourEncoder());
+        composerMap.put(AC35MessageType.COLOUR.getCode(), new ColourEncoder());
 
         return Collections.unmodifiableMap(composerMap);
     }

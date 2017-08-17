@@ -73,7 +73,7 @@ public class RaceRenderer {
 
                 //Wake
                 displayBoat = new DisplayWake(pixelMapper,
-                        new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++), boatPixelLength));
+                        new DisplayBoat(pixelMapper, boat.getShortName(), boat.getColour(), boatPixelLength));
                 //Highlight
                 if (boat.isControlled()) {
                     displayBoat = new BoatHighlight(pixelMapper, displayBoat);
@@ -93,6 +93,7 @@ public class RaceRenderer {
                 displayBoat.setScale(pixelMapper.mappingRatio());
                 displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
                 displayBoat.setSailOut(boat.isSailOut());
+                displayBoat.setColour(boat.getColour());
             }
         }
     }

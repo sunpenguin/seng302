@@ -5,6 +5,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.paint.Color;
 import seng302.team18.util.GPSCalculations;
 
 import java.util.List;
@@ -31,7 +32,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private int status;
     private boolean isControlled;
     private boolean sailOut;
-
 
     /**
      * A constructor for the Boat class

@@ -27,7 +27,7 @@ public enum AC35MessageType {
     REQUEST(55),
     ACCEPTANCE(56),
     BOAT_ACTION(100),
-    COLOR(105),
+    COLOUR(105),
     NAME(106);
 
     private int code;

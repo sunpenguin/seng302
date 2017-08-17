@@ -172,4 +172,9 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
         return boat.getBoatPoly();
     }
 
+    @Override
+    public void setColour(Color color) {
+        boat.setColour(color);
+    }
+
 }

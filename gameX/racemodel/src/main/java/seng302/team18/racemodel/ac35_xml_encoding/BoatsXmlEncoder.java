@@ -105,6 +105,7 @@ public class BoatsXmlEncoder extends XmlEncoder<AC35XMLBoatMessage> {
 
 
     private Element encodeBoat(Document doc, AC35XMLBoatMessage boatMessage, AbstractBoat boat) {
+        final int ALPHA_VALUE_LENGTH = 2;
 
         Element element = doc.createElement(Ac35XmlBoatComponents.ELEMENT_BOAT.toString());
         element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_SOURCE_ID.toString(), boat.getId().toString());
@@ -113,6 +114,9 @@ public class BoatsXmlEncoder extends XmlEncoder<AC35XMLBoatMessage> {
         element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_STOWE.toString(), boat.getStoweName());
         element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_SHORT.toString(), boat.getShortName());
         element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_BOAT.toString(), boat.getName());
+        String color = boat.getColour().toString();
+        color = color.substring(0, color.length() - ALPHA_VALUE_LENGTH);
+        element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_COLOUR.toString(), color);
 
         Element gpsPosition = doc.createElement(Ac35XmlBoatComponents.ELEMENT_GPS_POSITION.toString());
         gpsPosition.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_Z.toString(), ((Double) boatMessage.getDefaultGpsZ()).toString());

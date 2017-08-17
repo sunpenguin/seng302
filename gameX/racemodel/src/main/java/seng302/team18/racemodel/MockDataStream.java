@@ -1,5 +1,6 @@
 package seng302.team18.racemodel;
 
+import javafx.scene.paint.Color;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
