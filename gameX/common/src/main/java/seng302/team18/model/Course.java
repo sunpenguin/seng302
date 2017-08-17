@@ -39,6 +39,16 @@ public class Course {
         initializeCourse();
     }
 
+    public Course(Collection<CompoundMark> marks, Collection<Coordinate> boundaries, List<MarkRounding> markSequence) {
+        this.compoundMarks.addAll(marks);
+        this.courseLimits.addAll(boundaries);
+        this.markSequence.addAll(markSequence);
+        centralCoordinate = new Coordinate(0d, 0d);
+        this.timeZone = ZoneId.systemDefault();
+
+        initializeCourse();
+    }
+
 
     public Course() {
     }

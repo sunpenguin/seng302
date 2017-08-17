@@ -30,6 +30,7 @@ public enum BoatStatus {
      * @param code representing the boat status.
      * @return the boat status associated with a code.
      */
+    // Code not used for anything right now. Can be removed if not needed.
     public static BoatStatus from(int code) {
         return CODE_MAP.get(code);
     }

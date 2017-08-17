@@ -58,7 +58,6 @@ public class BoatHighlight extends DisplayBoatDecorator {
     }
 
 
-    @Override
     public void setHeading(double heading) {
         rotation.setAngle(heading);
         super.setHeading(heading);
@@ -69,6 +68,12 @@ public class BoatHighlight extends DisplayBoatDecorator {
         group.getChildren().add(highlight);
         super.addToGroup(group);
         highlight.toBack();
+    }
+
+
+    public void removeFrom(Group group) {
+        group.getChildren().remove(highlight);
+        super.removeFrom(group);
     }
 
 

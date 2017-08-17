@@ -3,12 +3,14 @@ package seng302.team18.visualiser.messageinterpreting;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
+import seng302.team18.model.BoatStatus;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Race;
 
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Interpreter to interpret AC35RaceStatusMessages for a boat status
@@ -31,7 +33,11 @@ public class BoatStatusInterpreter extends MessageInterpreter {
                         .stream()
                         .filter(boat -> boat.getId().equals(boatStatus.getBoatId()))
                         .forEach(boat -> {
-                            boat.setStatus(BoatStatus.from(boatStatus.getBoatStatus()));
+                            if ((boat.getId() == race.getPlayerId()) && (boatStatus.getBoatStatus() == BoatStatus.DSQ) && (boat.getStatus() != BoatStatus.DSQ)) {
+                                setChanged();
+                                notifyObservers(boat);
+                            }
+                            boat.setStatus(boatStatus.getBoatStatus());
                             setLeg(boat, boatStatus.getLegNumber());
                         });
             }
