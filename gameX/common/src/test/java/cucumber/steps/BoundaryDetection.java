@@ -4,7 +4,6 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
-import seng302.team18.message.BoatStatus;
 import seng302.team18.model.*;
 
 import java.util.*;
@@ -31,11 +30,11 @@ public class BoundaryDetection {
 
     @Given("^a course$")
     public void a_course() throws Throwable {
-        BoundaryMark boundary1 = new BoundaryMark(0, new Coordinate(32.30502, -64.85857));
-        BoundaryMark boundary2 = new BoundaryMark(1, new Coordinate(32.30502, -64.85235));
-        BoundaryMark boundary3 = new BoundaryMark(2, new Coordinate(32.29925, -64.85235));
-        BoundaryMark boundary4 = new BoundaryMark(3, new Coordinate(32.29925, -64.85857));
-        List<BoundaryMark> boundaries = new ArrayList<>();
+        Coordinate boundary1 = new Coordinate(32.30502, -64.85857);
+        Coordinate boundary2 = new Coordinate(32.30502, -64.85235);
+        Coordinate boundary3 = new Coordinate(32.29925, -64.85235);
+        Coordinate boundary4 = new Coordinate(32.29925, -64.85857);
+        List<Coordinate> boundaries = new ArrayList<>();
         boundaries.add(boundary1);
         boundaries.add(boundary2);
         boundaries.add(boundary3);

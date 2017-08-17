@@ -2,7 +2,7 @@ package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import seng302.team18.message.BoatStatus;
+import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
@@ -99,7 +99,7 @@ public class RaceRenderer {
                     displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
                     displayBoat.setSailOut(boat.isSailOut());
                 }
-            displayBoat.setBoatStatus(boat.getStatus());
+//            displayBoat.setBoatStatus(boat.getStatus());
         }
 
     }

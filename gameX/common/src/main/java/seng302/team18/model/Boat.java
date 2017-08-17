@@ -2,7 +2,6 @@ package seng302.team18.model;
 
 
 import javafx.beans.property.*;
-import seng302.team18.message.BoatStatus;
 import seng302.team18.util.GPSCalculations;
 
 import java.util.List;

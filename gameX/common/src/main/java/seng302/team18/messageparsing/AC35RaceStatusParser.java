@@ -4,7 +4,7 @@ import com.google.common.io.ByteStreams;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.message.BoatStatus;
+import seng302.team18.model.BoatStatus;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;

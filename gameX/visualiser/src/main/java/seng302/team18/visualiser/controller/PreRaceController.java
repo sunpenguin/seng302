@@ -93,7 +93,7 @@ public class PreRaceController {
                 requestType = RequestType.RACING;
         }
         try {
-            sender.send(new RequestMessage(true));
+            sender.send(new RequestMessage(requestType));
         } catch (IOException e) {
             // TODO Callum / David 9 August show error (has been disconnected)
         }

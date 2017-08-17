@@ -1,7 +1,5 @@
 package seng302.team18.model;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
-import seng302.team18.message.BoatStatus;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.SpeedConverter;
 
@@ -228,13 +226,11 @@ public class Race extends Observable {
     }
 
     private void updateBoat(Boat boat, double time) {
+        GPSCalculations calculator = new GPSCalculations();
+
         updatePosition(boat, time);
 
-        List<Coordinate> boundaries = course
-                .getBoundaries()
-                .stream()
-                .map(BoundaryMark::getCoordinate)
-                .collect(Collectors.toList());
+        List<Coordinate> boundaries = course.getCourseLimits();
         if (boundaries.size() > 0) {
             if (!calculator.contains(boat.getCoordinate(), boundaries) && !(boat.getStatus().equals(BoatStatus.DSQ))) {
                 boat.setStatus(BoatStatus.DSQ);

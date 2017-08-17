@@ -39,15 +39,12 @@ import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
-import seng302.team18.messageparsing.Receiver;
-import seng302.team18.message.BoatStatus;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
 import seng302.team18.send.Sender;
 import seng302.team18.model.RaceMode;
 import seng302.team18.util.GPSCalculations;
-import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
@@ -637,7 +634,6 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindDirectionInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindSpeedInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new EstimatedTimeInterpreter(race));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishersListInterpreter(race));
         BoatStatusInterpreter boatStatusInterpreter = new BoatStatusInterpreter(race);
         boatStatusInterpreter.addObserver(this);
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), boatStatusInterpreter);
@@ -667,7 +663,7 @@ public class RaceController implements Observer {
 
     public void showFinishersList() {
         constructList();
-        displayList();
+//        displayList();
     }
 
 
