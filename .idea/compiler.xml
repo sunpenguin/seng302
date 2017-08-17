@@ -8,7 +8,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="common" />
         <module name="racemodel" />
-        <module name="test_mock" />
         <module name="visualiser" />
       </profile>
     </annotationProcessing>
