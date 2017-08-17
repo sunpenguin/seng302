@@ -2,10 +2,12 @@ package seng302.team18.interpreting;
 
 import seng302.team18.message.MessageBody;
 
+import java.util.Observable;
+
 /**
  * Abstract class for interpreting MessageBody.
  */
-public abstract class MessageInterpreter {
+public abstract class MessageInterpreter extends Observable {
 
 
     /**

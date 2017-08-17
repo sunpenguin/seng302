@@ -115,10 +115,11 @@
                                    <children>
                                        <TableView fx:id="tableView" prefHeight="242.0" prefWidth="458.0" AnchorPane.bottomAnchor="-33.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                            <columns>
-                                               <TableColumn fx:id="boatPositionColumn" prefWidth="87.0" text="Position" />
-                                               <TableColumn fx:id="boatColorColumn" maxWidth="25.0" minWidth="-Infinity" prefWidth="25.0" />
-                                               <TableColumn fx:id="boatNameColumn" minWidth="0.0" prefWidth="228.0" text="Name" />
-                                               <TableColumn fx:id="boatSpeedColumn" maxWidth="173.0" prefWidth="117.0" text="Speed (knots)" />
+                                               <TableColumn fx:id="boatPositionColumn" prefWidth="52.0" text="Place" />
+                                               <TableColumn fx:id="boatColorColumn" maxWidth="50.0" minWidth="-Infinity" prefWidth="39.0" />
+                                               <TableColumn fx:id="boatNameColumn" minWidth="0.0" prefWidth="175.0" text="Name" />
+                                               <TableColumn fx:id="boatSpeedColumn" maxWidth="173.0" minWidth="0.0" prefWidth="88.0" text="Speed (kn)" />
+                                    <TableColumn fx:id="boatStatusColumn" prefWidth="103.0" text="Status" />
                                            </columns>
                                        </TableView>
                                    </children>

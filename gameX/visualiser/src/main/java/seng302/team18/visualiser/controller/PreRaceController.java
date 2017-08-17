@@ -92,7 +92,12 @@ public class PreRaceController {
             default:
                 requestType = RequestType.RACING;
         }
-        sender.send(new RequestMessage(requestType));
+        try {
+            sender.send(new RequestMessage(requestType));
+        } catch (IOException e) {
+            // TODO Callum / David 9 August show error (has been disconnected)
+        }
+
         stage.setOnCloseRequest((event) -> {
             interpreter.close();
             while (!receiver.close()) {

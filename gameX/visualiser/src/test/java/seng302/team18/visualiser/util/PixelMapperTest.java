@@ -49,7 +49,7 @@ public class PixelMapperTest {
         List<CompoundMark> marks = new ArrayList<>();
         List<MarkRounding> markRoundings = new ArrayList<>();
 
-        course = new Course(marks, boundaries, 0.0, 0.0, ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-3)), markRoundings);
+        course = new Course(marks, boundaries, markRoundings);
 
         course.setCentralCoordinate(new Coordinate(-43.630318, 172.675192));
 
@@ -104,7 +104,7 @@ public class PixelMapperTest {
         List<CompoundMark> marks = new ArrayList<>();
         List<MarkRounding> markRoundings = new ArrayList<>();
 
-        course = new Course(marks, boundaries, 0.0, 0.0, ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-3)), markRoundings);
+        course = new Course(marks, boundaries, markRoundings);
 
         course.setCentralCoordinate(new Coordinate(-43.273253, 173.337622));
 
@@ -160,7 +160,7 @@ public class PixelMapperTest {
         List<CompoundMark> marks = new ArrayList<>();
         List<MarkRounding> markRoundings = new ArrayList<>();
 
-        course = new Course(marks, boundaries, 0.0, 0.0, ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-3)), markRoundings);
+        course = new Course(marks, boundaries, markRoundings);
 
         course.setCentralCoordinate(new Coordinate(-43.552622, 172.708628));
 
@@ -311,11 +311,13 @@ public class PixelMapperTest {
             Course course = new Course(
                     Collections.emptyList(),
                     Arrays.asList(n, e, s, w),
-                    0.0,
-                    0.0,
-                    ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-4)),
                     Collections.emptyList()
             );
+
+
+//            0.0,
+//                    0.0,
+//                    ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-4)),
 
             course.setCentralCoordinate(centre);
 

@@ -1,10 +1,7 @@
 package seng302.team18.model;
 
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import seng302.team18.util.GPSCalculations;
 
 import java.util.List;
@@ -27,6 +24,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private Long timeSinceLastMark;
     private Long timeAtLastMark;
     private BoatStatus status = BoatStatus.UNDEFINED;
+    private StringProperty statusStringProperty = new SimpleStringProperty();
     private boolean isControlled;
     private boolean sailOut;
     private RoundZone roundZone = RoundZone.ZONE1;
@@ -49,6 +47,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         timeAtLastMark = 0L;
         isControlled = true;
         sailOut = true; // Starts with luffing
+        status = BoatStatus.UNDEFINED;
     }
 
 
@@ -212,6 +211,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
 
     public void setStatus(BoatStatus status) {
+        statusStringProperty.setValue(status.toString());
         this.status = status;
     }
 
@@ -377,4 +377,8 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         this.roundZone = roundZone;
     }
 
+
+    public StringProperty statusStringProperty() {
+        return statusStringProperty;
+    }
 }

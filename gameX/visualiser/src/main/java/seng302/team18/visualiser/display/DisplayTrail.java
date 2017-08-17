@@ -82,4 +82,13 @@ public class DisplayTrail {
         group.getChildren().add(polyline);
         polyline.toBack();
     }
+
+
+    /**
+     * Removes the trail from the group.
+     * @param group
+     */
+    public void removeFrom(Group group) {
+        group.getChildren().remove(polyline);
+    }
 }

@@ -176,6 +176,11 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
 
 
     @Override
+    public void removeFrom(Group group) {
+        boat.removeFrom(group);
+    }
+
+    @Override
     public void setBoatStatus(BoatStatus status) {
         boat.setBoatStatus(status);
     }
