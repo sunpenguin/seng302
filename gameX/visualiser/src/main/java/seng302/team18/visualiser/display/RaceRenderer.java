@@ -98,8 +98,8 @@ public class RaceRenderer {
                     displayBoat.setScale(pixelMapper.mappingRatio());
                     displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
                     displayBoat.setSailOut(boat.isSailOut());
+                    displayBoat.setBoatStatus(boat.getStatus());
                 }
-//            displayBoat.setBoatStatus(boat.getStatus());
         }
 
     }
