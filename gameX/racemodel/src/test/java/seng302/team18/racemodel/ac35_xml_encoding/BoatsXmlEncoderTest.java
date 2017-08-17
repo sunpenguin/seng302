@@ -237,7 +237,7 @@ public class BoatsXmlEncoderTest {
     @Test
     public void encodeBoatTest_shortName() throws Exception {
         final Element elementBoats = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOATS.toString()).item(0);
-        final NodeList boatNodes = elementBoats.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOAT.toString());
+        final NodeList boatNodes = elementBoats.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOAT.toString( ));
 
         for (int i = 0; i < boatNodes.getLength(); i++) {
             Element elementBoat = (Element) boatNodes.item(i);
@@ -262,6 +262,23 @@ public class BoatsXmlEncoderTest {
             String expectedName = message.getBoats().get(i).getName();
 
             assertEquals(String.format("name for boat %d has not been encoded correctly", i), expectedName, encodedName);
+        }
+    }
+
+
+    @Test
+    public void encodeBoatTest_colour() throws Exception {
+        final Element elementBoats = (Element) root.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOATS.toString()).item(0);
+        final NodeList boatNodes = elementBoats.getElementsByTagName(Ac35XmlBoatComponents.ELEMENT_BOAT.toString());
+
+        for (int i = 0; i < boatNodes.getLength(); i++) {
+            Element elementBoat = (Element) boatNodes.item(i);
+
+            String encodedColour = elementBoat.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_COLOUR.toString());
+            String expectedColourLong =  message.getBoats().get(i).getColour().toString();
+            String expectedColour = expectedColourLong.substring(0, expectedColourLong.length() - 2);
+
+            assertEquals(String.format("Colour for boat %d has not been encoded correctly", i), expectedColour, encodedColour);
         }
     }
 
