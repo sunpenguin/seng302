@@ -97,7 +97,7 @@ public class PreRaceController {
         interpreter.start();
 
         RequestType requestType;
-
+        System.out.println(race.getMode());
         switch (race.getMode()) {
             case RACE:
                 requestType = RequestType.RACING;
