@@ -273,6 +273,8 @@ public class Race extends Observable {
 
         if (nextLeg == course.getMarkSequence().size()) {
             boat.setStatus(BoatStatus.FINISHED);
+            boat.setSpeed(0);
+            boat.setSailOut(true);
         }
 
         boat.setLegNumber(nextLeg);
@@ -299,6 +301,12 @@ public class Race extends Observable {
         if (mode != RaceMode.CONTROLS_TUTORIAL) {
             obstacle = boat.hasCollided(obstacles);
         }
+        if (obstacle instanceof Boat && ((Boat) obstacle).getStatus().equals(BoatStatus.FINISHED)) {
+            obstacle = null;
+        } else if (boat.getStatus().equals(BoatStatus.FINISHED)){
+            obstacle =null;
+        }
+
         if (obstacle != null) {
             handleCollision(boat, obstacle);
         } else {
