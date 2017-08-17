@@ -7,7 +7,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import seng302.team18.message.AC35RaceXMLComponents;
 import seng302.team18.message.AC35XMLRaceMessage;
-import seng302.team18.model.*;
+import seng302.team18.model.CompoundMark;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Mark;
+import seng302.team18.model.MarkRounding;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,10 +19,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A parser which reads information from an XML stream and creates messages representing information about the race.
@@ -65,7 +66,7 @@ public class AC35XMLRaceParser implements MessageBodyParser {
         List<MarkRounding> markRoundings = parseMarkRoundings(markSequenceNode, compoundMarks);
 
         Node boundariesNode = raceElement.getElementsByTagName(AC35RaceXMLComponents.ELEMENT_COURSE_BOUNDARIES.toString()).item(0); // boundaries
-        List<BoundaryMark> boundaries = parseBoundaries(boundariesNode);
+        List<Coordinate> boundaries = parseBoundaries(boundariesNode);
 
         AC35XMLRaceMessage message = new AC35XMLRaceMessage();
         message.setRaceID(id);
@@ -217,7 +218,25 @@ public class AC35XMLRaceParser implements MessageBodyParser {
      * @param boundariesNode The element from the XML with information about the mark sequence.
      * @return A list of boundary marks mapping out the outer edge of the course.
      */
-    private List<BoundaryMark> parseBoundaries(Node boundariesNode) {
+    private List<Coordinate> parseBoundaries(Node boundariesNode) {
+
+        class BoundaryMark {
+            private final int sequenceID;
+            private final Coordinate coordinate;
+
+            public BoundaryMark(int sequenceID, Coordinate coordinate) {
+                this.sequenceID = sequenceID;
+                this.coordinate = coordinate;
+            }
+
+            private int getSequenceID() {
+                return sequenceID;
+            }
+
+            private Coordinate getCoordinate() {
+                return coordinate;
+            }
+        }
 
         List<BoundaryMark> boundaries = new ArrayList<>();
 
@@ -235,6 +254,9 @@ public class AC35XMLRaceParser implements MessageBodyParser {
                 }
             }
         }
-        return boundaries;
+        return boundaries.stream()
+                .sorted(Comparator.comparingInt(BoundaryMark::getSequenceID))
+                .map(BoundaryMark::getCoordinate)
+                .collect(Collectors.toList());
     }
 }

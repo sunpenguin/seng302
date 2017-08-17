@@ -155,7 +155,7 @@ public class PreRaceController {
         interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
 

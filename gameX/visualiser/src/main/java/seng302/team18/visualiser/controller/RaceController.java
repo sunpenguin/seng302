@@ -21,7 +21,6 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -35,15 +34,14 @@ import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
-import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
+import seng302.team18.send.Sender;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
-import seng302.team18.send.Sender;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
@@ -51,6 +49,7 @@ import seng302.team18.visualiser.util.SparklineDataPoint;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The controller class for the Main Window.
@@ -72,6 +71,14 @@ public class RaceController implements Observer {
     @FXML private LineChart<String, String> sparklinesChart;
     @FXML private Slider slider;
     @FXML private AnchorPane tabView;
+
+    @FXML private AnchorPane finisherPane;
+    @FXML private TableView<Boat> finisherTable;
+    @FXML private TableColumn<Boat, Integer> finisherPlace;
+    @FXML private TableColumn<Boat, String> finisherColour;
+    @FXML private TableColumn<Boat, String> finisherName;
+
+    private SortedList<Boat> sortedList;
 
     private Pane escapeMenuPane;
     private EscapeMenuController escapeMenuController;
@@ -95,6 +102,7 @@ public class RaceController implements Observer {
     private RaceBackground background;
     private FadeTransition fadeIn = new FadeTransition(Duration.millis(150));
 
+    private Map<String, Color> colours;
     private ControlsTutorial controlsTutorial;
 
 
@@ -143,7 +151,7 @@ public class RaceController implements Observer {
                             message.setDownwind();
                             break;
                         case SHIFT:
-                            sailIn = !sailIn;
+                            sailIn = getPlayerBoat().isSailOut();
                             if (sailIn) {
                                 message.setSailIn();
                             } else {
@@ -203,6 +211,20 @@ public class RaceController implements Observer {
         raceViewPane.setFocusTraversable(true);
         raceViewPane.requestFocus();
         raceViewPane.focusedProperty().addListener((observable, oldValue, newValue) -> Platform.runLater(() -> raceViewPane.requestFocus()));
+    }
+
+
+    /**
+     * Gets the current player's boat depending on the visualiser.
+     *
+     * @return the boat controlled by the user.
+     */
+    private Boat getPlayerBoat() {
+        List playerBoatList = race.getStartingList()
+                .stream()
+                .filter(boat -> boat.getId() == race.getPlayerId())
+                .collect(Collectors.toList());
+        return (Boat) playerBoatList.get(0);
     }
 
 
@@ -405,17 +427,15 @@ public class RaceController implements Observer {
 
     /**
      * Sets the cell values for the race table, these are place, boat name and boat speed.
-     *
-     * @param boatColors a map from short name to colour for the boats
      */
-    private void setUpTable(Map<String, Color> boatColors) {
+    private void setUpTable() {
         Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
                 boat.placeProperty(), boat.speedProperty()
         };
         ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
         observableList.addAll(race.getStartingList());
 
-        SortedList<Boat> sortedList = new SortedList<>(observableList,
+        sortedList = new SortedList<>(observableList,
                 (Boat boat1, Boat boat2) -> {
                     if (boat1.getPlace() < boat2.getPlace()) {
                         return -1;
@@ -441,18 +461,17 @@ public class RaceController implements Observer {
             }
         });
 
+        colours = raceRenderer.boatColors();
         boatColorColumn.setCellFactory(column -> new TableCell<Boat, String>() {
-            private final Map<String, Color> colors = boatColors;
-
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem("", empty);
 
                 Boat boat = (Boat) getTableRow().getItem();
                 if (boat != null) {
-                    Color color = colors.get(boat.getShortName());
-                    if (color != null) {
-                        setStyle(String.format("-fx-background-color: #%02x%02x%02x", (int) (color.getRed() * 255), (int) (color.getGreen() * 255), (int) (color.getBlue() * 255)));
+                    Color colour = colours.get(boat.getShortName());
+                    if (colour != null) {
+                        setStyle(String.format("-fx-background-color: #%02x%02x%02x", (int) (colour.getRed() * 255), (int) (colour.getGreen() * 255), (int) (colour.getBlue() * 255)));
                     }
                 }
             }
@@ -492,7 +511,6 @@ public class RaceController implements Observer {
      * Retrieves the wind direction, scales the size of the arrow and then draws it on the Group
      */
     private void startWindDirection() {
-//        arrow.setScaleX(0.4);
         windDisplay = new WindDisplay(race, arrow, speedLabel);
         windDisplay.start();
     }
@@ -507,7 +525,6 @@ public class RaceController implements Observer {
      * @param interpreter the interpreter
      */
     public void setUp(Race race, Interpreter interpreter, Sender sender) {
-//        this.receiver = receiver;
         this.sender = sender;
         this.race = race;
 
@@ -517,6 +534,7 @@ public class RaceController implements Observer {
         pixelMapper.setMaxZoom(16d);
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
+        colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
 
         raceClock = new RaceClock(timerLabel);
@@ -528,12 +546,14 @@ public class RaceController implements Observer {
         registerListeners();
 
         startWindDirection();
-        setUpTable(raceRenderer.boatColors());
+        setUpTable();
         setNoneAnnotationLevel();
         setUpSparklines(raceRenderer.boatColors());
 
         this.interpreter = interpreter;
         interpreter.setInterpreter(initialiseInterpreter());
+
+        race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
     }
 
 
@@ -589,13 +609,13 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindDirectionInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindSpeedInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new EstimatedTimeInterpreter(race));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishersListInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new BoatStatusInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLocationInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
         interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(raceClock));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishRaceInterpreter(this));
 
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
 
@@ -612,6 +632,72 @@ public class RaceController implements Observer {
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
         raceRenderer.reDrawTrails();
+    }
+
+
+    public void showFinishersList() {
+        constructList();
+        displayList();
+    }
+
+
+    private void constructList() {
+        finisherTable.setItems(sortedList);
+        finisherPlace.setCellValueFactory(new PropertyValueFactory<>("place"));
+        finisherName.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        colours = raceRenderer.boatColors();
+        finisherColour.setCellFactory(column -> new TableCell<Boat, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem("", empty);
+
+                Boat boat = (Boat) getTableRow().getItem();
+                if (boat != null) {
+                    Color colour = colours.get(boat.getShortName());
+                    if (colour != null) {
+                        setStyle(String.format("-fx-background-color: #%02x%02x%02x", (int) (colour.getRed() * 255), (int) (colour.getGreen() * 255), (int) (colour.getBlue() * 255)));
+                    }
+                }
+            }
+        });
+
+        Collection<TableColumn<Boat, ?>> columns = new ArrayList<>();
+        columns.add(finisherPlace);
+        columns.add(finisherColour);
+        columns.add(finisherName);
+
+        for (TableColumn<Boat, ?> column : columns) {
+            column.setResizable(false);
+            column.setSortable(false);
+        }
+
+        finisherTable.getColumns().setAll(columns);
+
+        // Resets the columns to the original order whenever the user tries to change them
+        finisherTable.getColumns().addListener(new ListChangeListener<TableColumn<Boat, ?>>() {
+            public boolean suspended;
+
+            @Override
+            public void onChanged(ListChangeListener.Change change) {
+                change.next();
+                if (change.wasReplaced() && !suspended) {
+                    this.suspended = true;
+                    finisherTable.getColumns().setAll(columns);
+                    this.suspended = false;
+                }
+            }
+        });
+
+        // TODO: Sunguin 16/08/17 The centering of this is off by alot and I'm not sure why
+        finisherPane.setLayoutX(raceViewPane.getPrefWidth() / 2 - (Math.floorDiv((int) finisherTable.getWidth(), 2)));
+        finisherPane.setLayoutY(raceViewPane.getPrefHeight() / 2 - (Math.floorDiv((int) finisherTable.getHeight(), 2)));
+    }
+
+
+    private void displayList() {
+        finisherPane.toFront();
+        finisherPane.setVisible(true);
     }
 
 

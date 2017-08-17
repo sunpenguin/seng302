@@ -131,7 +131,7 @@ public class RaceMessageGeneratorTest {
 
     @Test
     public void raceTypeTest() {
-        int expectedRaceType = 2;
+        int expectedRaceType = ((int) testRace.getRaceType().getCode());
         int actualRaceType = ByteCheck.byteToInt(generatedBytes, RACE_TYPE_P, RACE_TYPE_L);
         assertEquals(expectedRaceType, actualRaceType);
     }

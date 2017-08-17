@@ -17,8 +17,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Math.abs;
-
 /**
  * Created by david on 5/2/17.
  */
@@ -73,9 +71,9 @@ public class WindDirectionInterpreterTest {
         Assert.assertEquals(expectedWindDirection, actual.getWindDirection(), 0.01);
         Assert.assertEquals(expected.getTimeZone(), actual.getTimeZone());
         Assert.assertEquals(expected.getCentralCoordinate(), actual.getCentralCoordinate());
-        Assert.assertEquals(expected.getBoundaries().size(), actual.getBoundaries().size());
-        for (int i = 0; i < expected.getBoundaries().size(); i++) {
-            Assert.assertEquals(expected.getBoundaries().get(i), actual.getBoundaries().get(i));
+        Assert.assertEquals(expected.getCourseLimits().size(), actual.getCourseLimits().size());
+        for (int i = 0; i < expected.getCourseLimits().size(); i++) {
+            Assert.assertEquals(expected.getCourseLimits().get(i), actual.getCourseLimits().get(i));
         }
         Assert.assertEquals(expected.getCompoundMarks().size(), actual.getCompoundMarks().size());
         for (int i = 0; i < expected.getCompoundMarks().size(); i++) {

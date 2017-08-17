@@ -3,6 +3,7 @@ package seng302.team18.racemodel.model;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
+import seng302.team18.model.RaceType;
 import seng302.team18.model.Regatta;
 
 /**
@@ -39,5 +40,5 @@ public abstract class AbstractRaceBuilder {
     /**
      * @return the type of the race
      */
-    protected abstract Race.RaceType getRaceType();
+    protected abstract RaceType getRaceType();
 }

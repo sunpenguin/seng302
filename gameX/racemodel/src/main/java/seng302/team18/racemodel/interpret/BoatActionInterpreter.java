@@ -5,6 +5,7 @@ import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.BoatActionStatus;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
+import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Race;
 import seng302.team18.util.VMGAngles;
 
@@ -42,9 +43,11 @@ public class BoatActionInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof BoatActionMessage) {
             BoatActionMessage actionMessage = (BoatActionMessage) message;
-            if (actionMessage.getId() == id) {
-                for (Boat boat : boats) {
+            for (Boat boat : boats) {
+                if (boat.getStatus() != BoatStatus.OCS && actionMessage.getId() == id) {
                     applyActions(boat, actionMessage);
+                } else if (boat.getStatus().equals(BoatStatus.OCS)) {
+                    boat.setSailOut(true);
                 }
             }
         }

@@ -95,6 +95,8 @@ public class RaceRenderer {
                 displayBoat.setSailOut(boat.isSailOut());
                 displayBoat.setColour(boat.getColour());
             }
+
+            displayBoat.setBoatStatus(boat.getStatus());
         }
     }
 

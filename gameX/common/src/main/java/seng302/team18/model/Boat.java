@@ -18,20 +18,19 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private PolarPattern polar = new AC35PolarPattern();
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
-    private IntegerProperty boatLegNumber = new SimpleIntegerProperty(-1);
-    private Integer id;
+    private IntegerProperty legNumber = new SimpleIntegerProperty(0);
     private double boatLength;
     private double heading;
     private Coordinate coordinate;
     private Coordinate previousCoordinate;
-    private Coordinate destination;
     private IntegerProperty place;
     private Long timeTilNextMark;
     private Long timeSinceLastMark;
     private Long timeAtLastMark;
-    private int status;
+    private BoatStatus status = BoatStatus.UNDEFINED;
     private boolean isControlled;
     private boolean sailOut;
+    private RoundZone roundZone = RoundZone.ZONE1;
 
     /**
      * A constructor for the Boat class
@@ -105,17 +104,17 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
 
     public int getLegNumber() {
-        return boatLegNumber.get();
+        return legNumber.get();
     }
 
 
     public IntegerProperty legNumberProperty() {
-        return boatLegNumber;
+        return legNumber;
     }
 
 
     public void setLegNumber(int boatLegNumber) {
-        this.boatLegNumber.set(boatLegNumber);
+        this.legNumber.set(boatLegNumber);
     }
 
 
@@ -127,16 +126,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     public void setCoordinate(Coordinate coordinate) {
         previousCoordinate = this.coordinate;
         this.coordinate = coordinate;
-    }
-
-
-    public Coordinate getDestination() {
-        return destination;
-    }
-
-
-    public void setDestination(Coordinate destination) {
-        this.destination = destination;
     }
 
 
@@ -205,11 +194,10 @@ public class Boat extends AbstractBoat implements GeographicLocation {
                 "boatName=" + getName() +
                 ", shortName='" + getShortName() + '\'' +
                 ", speed=" + speed +
-                ", leg=" + boatLegNumber +
+                ", leg=" + legNumber +
                 ", id=" + getId() +
                 ", heading=" + heading +
                 ", coordinate=" + coordinate +
-                ", destination=" + destination +
                 ", place=" + place +
                 ", timeTilNextMark=" + timeTilNextMark +
                 ", timeSinceLastMark=" + timeSinceLastMark +
@@ -218,12 +206,12 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     }
 
 
-    public int getStatus() {
+    public BoatStatus getStatus() {
         return status;
     }
 
 
-    public void setStatus(int status) {
+    public void setStatus(BoatStatus status) {
         this.status = status;
     }
 
@@ -372,4 +360,21 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     public Coordinate getPreviousCoordinate() {
         return previousCoordinate;
     }
+
+    public enum RoundZone {
+        ZONE1,
+        ZONE2,
+        ZONE3,
+        ZONE4;
+    }
+
+
+    public RoundZone getRoundZone() {
+        return roundZone;
+    }
+
+    public void setRoundZone(RoundZone roundZone) {
+        this.roundZone = roundZone;
+    }
+
 }

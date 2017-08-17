@@ -1,6 +1,6 @@
 package seng302.team18.racemodel.model;
 
-import seng302.team18.model.Race;
+import seng302.team18.model.RaceType;
 
 /**
  * Builds a preset race.
@@ -18,7 +18,7 @@ public class RaceBuilder1 extends AbstractRaceBuilder {
 
 
     @Override
-    protected Race.RaceType getRaceType() {
-        return Race.RaceType.MATCH;
+    protected RaceType getRaceType() {
+        return RaceType.MATCH;
     }
 }

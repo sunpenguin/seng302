@@ -1,6 +1,9 @@
 package seng302.team18.racemodel.model;
 
-import seng302.team18.model.*;
+import seng302.team18.model.CompoundMark;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Course;
+import seng302.team18.model.MarkRounding;
 import seng302.team18.util.GPSCalculations;
 
 import java.time.ZoneId;
@@ -59,7 +62,7 @@ public abstract class AbstractCourseBuilder {
     /**
      * @return the boundary marks to initialise the course with
      */
-    protected abstract List<BoundaryMark> getBoundaryMarks();
+    protected abstract List<Coordinate> getBoundaryMarks();
 
 
     /**

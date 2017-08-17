@@ -3,9 +3,8 @@ package seng302.team18.racemodel;
 import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
-import seng302.team18.message.BoatStatus;
-import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
+import seng302.team18.racemodel.connection.*;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class TestMock implements Observer {
     }
 
     /**
-     * Called by server and connection listener
+     * Called by server, race, and connection listener
      * @param o
      * @param arg
      */
@@ -111,9 +110,9 @@ public class TestMock implements Observer {
     /**
      * Simulate the race while sending the scheduled messages
      *
-     * @param startWaitTime Number of seconds between the preparation phase and the start time
-     * @param warningWaitTime Number of seconds between the time the method is executed and warning phase
-     * @param prepWaitTime Number of seconds between the warning phase and the preparation phase
+     * @param startWaitTime    Number of seconds between the preparation phase and the start time
+     * @param warningWaitTime  Number of seconds between the time the method is executed and warning phase
+     * @param prepWaitTime     Number of seconds between the warning phase and the preparation phase
      * @param cutoffDifference Number of seconds before entering the warning phase for not allowing new connections
      */
     public void runSimulation(int startWaitTime, int warningWaitTime, int prepWaitTime, int cutoffDifference) {
@@ -149,6 +148,8 @@ public class TestMock implements Observer {
                 server.stopAcceptingConnections();
             }
 
+            race.setCurrentTime(ZonedDateTime.now());
+
             if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(warningTime)) {
                 race.setStatus(RaceStatus.WARNING);
 
@@ -173,6 +174,7 @@ public class TestMock implements Observer {
         } while (!race.isFinished() && open);
 
         // Sends final message
+        race.setStatus(RaceStatus.FINISHED);
         ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
         server.broadcast(raceMessageGenerator.getMessage());
     }
@@ -198,6 +200,10 @@ public class TestMock implements Observer {
     private void switchToStarted() {
         if ((race.getStatus() == RaceStatus.PREPARATORY) && ZonedDateTime.now().isAfter(race.getStartTime())) {
             race.setStatus(RaceStatus.STARTED);
+            race.getStartingList().stream()
+                    .filter(boat -> boat.getStatus().equals(BoatStatus.PRE_START))
+                    .forEach(boat -> boat.setStatus(BoatStatus.RACING));
+
         }
     }
 
@@ -229,6 +235,10 @@ public class TestMock implements Observer {
 
         for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
             server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
+        }
+
+        for (YachtEvent event : race.popYachtEvents()) {
+            server.broadcast((new YachtEventCodeMessageGenerator(event, race.getId())).getMessage());
         }
     }
 }

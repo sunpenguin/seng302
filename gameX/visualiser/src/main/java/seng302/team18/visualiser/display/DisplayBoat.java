@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import seng302.team18.model.Boat;
+import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.GeographicLocation;
 import seng302.team18.util.XYPair;
@@ -39,6 +40,7 @@ public class DisplayBoat implements GeographicLocation {
     private double apparentWindDirection;
     private Coordinate boatCenter;
     private double pixelLength;
+    private BoatStatus status = BoatStatus.UNDEFINED;
 
     private PixelMapper pixelMapper;
     private Polyline boatPoly;
@@ -266,6 +268,16 @@ public class DisplayBoat implements GeographicLocation {
 
     public Polyline getBoatPoly() {
         return boatPoly;
+    }
+
+
+    public void setBoatStatus(BoatStatus status) {
+        this.status = status;
+    }
+
+
+    public BoatStatus getStatus() {
+        return status;
     }
 
     public void setColour(Color boatColor) {
