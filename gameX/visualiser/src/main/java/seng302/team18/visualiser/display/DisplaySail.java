@@ -6,9 +6,8 @@ import javafx.scene.Group;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
-import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
+import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -19,12 +18,13 @@ public class DisplaySail extends DisplayBoatDecorator {
 
     private Polyline sail;
     private double windDirection;
+    private double heading;
     private PixelMapper pixelMapper;
     private final Rotate rotation = new Rotate(0, 0, 0);
     private final Scale zoom = new Scale(1, 1, 0, 0);
     private final double SAIL_LENGTH = 20;
     private double sailLength;
-    private final double POWERED_UP_ANGLE = 20;
+    private final double poweredUpAngle = 60;
 
 
     /**
@@ -68,10 +68,11 @@ public class DisplaySail extends DisplayBoatDecorator {
     }
 
 
-    public void removeFrom(Group group) {
-        group.getChildren().remove(sail);
-        super.removeFrom(group);
+    public void setHeading(double heading) {
+        this.heading = heading;
+        super.setHeading(heading);
     }
+
 
 
     public void setApparentWindDirection(double apparentWind) {
@@ -83,13 +84,35 @@ public class DisplaySail extends DisplayBoatDecorator {
 
     @Override
     public void setSailOut(boolean sailOut) {
+        final int MAX_DEVIATION = 90;
+        double sailAngle;
         if (sailOut) {
-            rotation.setAngle(windDirection);
+            sailAngle = getSailAngle(windDirection, MAX_DEVIATION);
+        } else if ((windDirection - heading + 360) % 360 > 180) {
+            sailAngle = getSailAngle(windDirection + poweredUpAngle, MAX_DEVIATION);
         } else {
-            rotation.setAngle(windDirection + POWERED_UP_ANGLE);
+            sailAngle = getSailAngle(windDirection - poweredUpAngle, MAX_DEVIATION);
         }
-
+        rotation.setAngle(sailAngle);
         super.setSailOut(sailOut);
+    }
+
+
+    /**
+     * Determines what the angle of the sail should be given the maximum allowed deviation from the boats heading.
+     *
+     * @param sailAngle angle of the sail.
+     * @param maxDeviation max angle from directly .
+     * @return the sails rotation.
+     */
+    private double getSailAngle(double sailAngle, double maxDeviation) {
+        GPSCalculations gps = new GPSCalculations();
+        double headingPlus = (heading + maxDeviation) % 360;
+        double headingMinus = (heading - maxDeviation + 360) % 360;
+        if (gps.isBetween(sailAngle, headingPlus, headingMinus)) {
+            return maxDeviation + heading;
+        }
+        return sailAngle;
     }
 
 }
