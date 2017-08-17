@@ -87,20 +87,16 @@ public class RaceRenderer {
                     displayBoats.remove(boat.getShortName());
                     DisplayTrail trail = trailMap.remove(boat.getShortName());
                     trail.removeFrom(group);
+
                 } else if (displayBoat != null && boat.getCoordinate() != null) {
-                    if (boat.getStatus().equals(BoatStatus.DSQ) || boat.getStatus().equals(BoatStatus.DNF)) {
-                        group.getChildren().remove(displayBoat);
-                        displayBoats.remove(boat.getShortName());
-                    } else {
-                        displayBoat.setCoordinate(boat.getCoordinate());
-                        displayBoat.setSpeed(boat.getSpeed());
-                        displayBoat.setHeading(boat.getHeading());
-                        displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
-                        displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
-                        displayBoat.setScale(pixelMapper.mappingRatio());
-                        displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
-                        displayBoat.setSailOut(boat.isSailOut());
-                    }
+                    displayBoat.setCoordinate(boat.getCoordinate());
+                    displayBoat.setSpeed(boat.getSpeed());
+                    displayBoat.setHeading(boat.getHeading());
+                    displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
+                    displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
+                    displayBoat.setScale(pixelMapper.mappingRatio());
+                    displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
+                    displayBoat.setSailOut(boat.isSailOut());
                 }
             }
 
@@ -167,7 +163,7 @@ public class RaceRenderer {
 
 
     /**
-     * Sets the annotition types that are visible.
+     * Sets the annotation types that are visible.
      *
      * @param type      , AnnotationType, the type of annotiation.
      * @param isVisible , Boolean, if the type is visible.

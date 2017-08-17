@@ -40,7 +40,6 @@ import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.BoatStatus;
-import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
@@ -53,11 +52,8 @@ import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
 
-import javax.swing.table.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * The controller class for the Main Window.
@@ -127,7 +123,7 @@ public class RaceController implements Observer {
      * Handles boat control, zooming.
      */
     private void installKeyHandler() {
-        final EventHandler<KeyEvent> keyEventHandler =
+        EventHandler<KeyEvent> keyEventHandler =
             keyEvent -> {
                 if (keyEvent.getCode() != null) {
                     BoatActionMessage message = new BoatActionMessage(race.getPlayerId());
@@ -195,8 +191,7 @@ public class RaceController implements Observer {
                         try {
                             sender.send(message);
                         } catch (IOException e) {
-                            e.printStackTrace();
-                            // TODO 9 August David / Callum go back to title screen.
+                           openEscapeMenu("You have been disconnected!");
                         }
                     }
                 }
@@ -399,15 +394,19 @@ public class RaceController implements Observer {
      * Opens the escapeMenu by adding to the group and placing it in the middle of the race view.
      */
     private void openEscapeMenu(String message) {
-        Label label = new Label(message);
-        label.setStyle("-fx-text-fill: red");
-        escapeMenuPane.getChildren().add(label);
-        label.setLayoutX(escapeMenuPane.getWidth()/2 - label.getWidth()/2);
-        label.setLayoutY(label.getHeight());
-        group.getChildren().add(escapeMenuPane);
-        escapeMenuPane.toFront();
-        escapeMenuPane.setLayoutX((raceViewPane.getWidth() / 2) - escapeMenuPane.getMinWidth() / 2);
-        escapeMenuPane.setLayoutY((raceViewPane.getHeight() / 2) - escapeMenuPane.getMinHeight() / 2);
+        if (group.getChildren().contains(escapeMenuPane)){
+            return;
+        }else {
+            Label label = new Label(message);
+            label.setStyle("-fx-text-fill: red");
+            escapeMenuPane.getChildren().add(label);
+            label.setLayoutX(escapeMenuPane.getWidth() / 2 - label.getWidth() / 2);
+            label.setLayoutY(label.getHeight());
+            group.getChildren().add(escapeMenuPane);
+            escapeMenuPane.toFront();
+            escapeMenuPane.setLayoutX((raceViewPane.getWidth() / 2) - escapeMenuPane.getMinWidth() / 2);
+            escapeMenuPane.setLayoutY((raceViewPane.getHeight() / 2) - escapeMenuPane.getMinHeight() / 2);
+        }
     }
 
 
@@ -553,6 +552,7 @@ public class RaceController implements Observer {
         loadEscapeMenu();
 
         int id = race.getPlayerId();
+
     }
 
 
@@ -645,7 +645,7 @@ public class RaceController implements Observer {
                     Platform.runLater(new Runnable() {
                         @Override public void run() {
                             openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES");
-
+                            sender.close();
                         }
                     });
                     return null;
