@@ -86,4 +86,9 @@ public class Receiver {
             return false;
         }
     }
+
+
+    public Socket getSocket() {
+        return socket;
+    }
 }

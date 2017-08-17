@@ -288,4 +288,8 @@ public class DisplayBoat implements GeographicLocation {
     public BoatStatus getStatus() {
         return status;
     }
+
+    public void setColour(Color boatColor) {
+        this.boatColor = boatColor;
+    }
 }

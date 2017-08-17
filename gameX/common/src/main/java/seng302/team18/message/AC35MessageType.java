@@ -23,9 +23,12 @@ public enum AC35MessageType {
     MARK_ROUNDING(38),
     COURSE_WIND(44),
     AVERAGE_WIND(47),
+    // non ac35 codes
     REQUEST(55),
     ACCEPTANCE(56),
-    BOAT_ACTION(100);
+    BOAT_ACTION(100),
+    COLOUR(105),
+    NAME(106);
 
     private int code;
     private static final Map<Integer, AC35MessageType> CODE_MAP = Collections.unmodifiableMap(initializeMapping());

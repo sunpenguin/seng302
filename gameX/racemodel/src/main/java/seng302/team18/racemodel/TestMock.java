@@ -1,5 +1,7 @@
 package seng302.team18.racemodel;
 
+import seng302.team18.message.AcceptanceMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
 import seng302.team18.racemodel.connection.*;
@@ -42,6 +44,11 @@ public class TestMock implements Observer {
         this.boats = boats;
     }
 
+    /**
+     * Called by server, race, and connection listener
+     * @param o
+     * @param arg
+     */
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) {
@@ -59,6 +66,15 @@ public class TestMock implements Observer {
         } else if (arg instanceof ConnectionListener) {
             generateXMLs();
             sendXmlBoatRace();
+        } else if (arg instanceof AcceptanceMessage) {
+            AcceptanceMessage message = (AcceptanceMessage) arg;
+            if (message.getRequestType() == RequestType.FAILURE_CLIENT_TYPE) {
+                System.out.println("Remove " + message.getSourceId() + " From the race");
+                race.removeParticipant(message.getSourceId());
+                System.out.println(race.getStartingList());
+                generateXMLs();
+                sendXmlBoatRace();
+            }
         }
     }
 
@@ -121,6 +137,8 @@ public class TestMock implements Observer {
 
         do {
             if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
+                generateXMLs();
+                sendXmlBoatRace();
                 switchToPrep();
             }
 
@@ -137,6 +155,8 @@ public class TestMock implements Observer {
                 race.setStatus(RaceStatus.WARNING);
 
             } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(prepTime)) {
+                generateXMLs();
+                sendXmlBoatRace();
                 switchToPrep();
             } else {
                 switchToStarted();

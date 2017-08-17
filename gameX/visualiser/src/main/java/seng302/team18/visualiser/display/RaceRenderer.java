@@ -2,11 +2,7 @@ package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import seng302.team18.model.BoatStatus;
-import seng302.team18.model.Boat;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
-import seng302.team18.model.Race;
+import seng302.team18.model.*;
 import seng302.team18.visualiser.util.PixelMapper;
 
 import java.util.*;
@@ -22,6 +18,7 @@ public class RaceRenderer {
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private Map<String, Double> headingMap;
     private int numBoats;
+    //TODO: remove these colours sbe67 17/8
     private final List<Color> BOAT_COLOURS = Arrays.asList(
             Color.VIOLET,
             Color.DARKVIOLET,
@@ -74,9 +71,9 @@ public class RaceRenderer {
 
                     //Wake
                     displayBoat = new DisplayWake(pixelMapper,
-                            new DisplayBoat(pixelMapper, boat.getShortName(), BOAT_COLOURS.get(numBoats++), boatPixelLength));
+                            new DisplayBoat(pixelMapper, boat.getShortName(), boat.getColour(), boatPixelLength));
                     //Highlight
-                    if (boat.isControlled()) {
+                    if (boat.isControlled() && race.getMode() != RaceMode.CONTROLS_TUTORIAL) {
                         displayBoat = new BoatHighlight(pixelMapper, displayBoat);
                         displayBoat = new BoatGuide(pixelMapper, displayBoat);
                     }
@@ -101,6 +98,7 @@ public class RaceRenderer {
                     displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
                     displayBoat.setSailOut(boat.isSailOut());
                     displayBoat.setBoatStatus(boat.getStatus());
+                    displayBoat.setColour(boat.getColour());
                     if (boat.getLegNumber() < race.getCourse().getMarkSequence().size()) {
                         displayBoat.setDestination(race.getCourse().getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getCoordinate());
                     } else {

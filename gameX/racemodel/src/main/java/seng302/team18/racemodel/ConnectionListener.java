@@ -1,14 +1,15 @@
 package seng302.team18.racemodel;
 
-import seng302.team18.message.MessageBody;
-import seng302.team18.message.RequestMessage;
-import seng302.team18.message.RequestType;
+import seng302.team18.interpreting.CompositeMessageInterpreter;
+import seng302.team18.interpreting.MessageInterpreter;
+import seng302.team18.message.*;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
+import seng302.team18.racemodel.interpret.ColourInterpreter;
 import seng302.team18.racemodel.model.*;
 
 import java.io.IOException;
@@ -84,13 +85,21 @@ public class ConnectionListener extends Observable implements Observer {
                 while (message == null && System.currentTimeMillis() < timeout) {
                     try {
                         message = receiver.nextMessage();
-                    } catch (IOException e) {
-                    }
+                    } catch (IOException e) {}
                 }
                 if (message instanceof RequestMessage) {
                     RequestMessage request = (RequestMessage) message;
 
                     RequestType requestType = request.getAction();
+
+                    if (!players.isEmpty() && requestType.code() != race.getMode().getCode()){
+                        //If a player connects to an already opened server that cannot accept acceptance type
+                        sendMessage(client, sourceID, RequestType.FAILURE_CLIENT_TYPE);
+                        AcceptanceMessage failMessage = new AcceptanceMessage(sourceID,RequestType.FAILURE_CLIENT_TYPE);
+                        setChanged();
+                        notifyObservers(failMessage);
+                        return;
+                    }
 
                     switch (requestType) {
                         case CONTROLS_TUTORIAL:
@@ -101,7 +110,7 @@ public class ConnectionListener extends Observable implements Observer {
                             race.setCourseForBoats();
                         case RACING:
                             addPlayer(receiver, sourceID);
-                            sendMessage(client, sourceID);
+                            sendMessage(client, sourceID, requestType);
                             break;
                     }
                 }
@@ -119,9 +128,17 @@ public class ConnectionListener extends Observable implements Observer {
      * @param player the socket to send player messages to.
      * @param sourceID the assigned id of the player's boat.
      */
-    private void sendMessage(ClientConnection player, int sourceID) {
-        byte[] message = new AcceptanceMessageGenerator(sourceID).getMessage();
+    private void sendMessage(ClientConnection player, int sourceID, RequestType requestType) {
+        byte[] message = new AcceptanceMessageGenerator(sourceID, requestType).getMessage();
         player.sendMessage(message);
+        if (requestType == RequestType.FAILURE_CLIENT_TYPE) {
+            try {
+                player.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
         player.setId(sourceID);
     }
 
@@ -134,7 +151,11 @@ public class ConnectionListener extends Observable implements Observer {
      * @param sourceID the assigned id of the player's boat.
      */
     private void addPlayer(Receiver receiver, int sourceID) {
-        PlayerControllerReader player = new PlayerControllerReader(sourceID, receiver, new BoatActionInterpreter(race, sourceID));
+        MessageInterpreter interpreter = new CompositeMessageInterpreter();
+        interpreter.add(AC35MessageType.COLOUR.getCode(), new ColourInterpreter(race.getStartingList()));
+        interpreter.add(AC35MessageType.BOAT_ACTION.getCode(), new BoatActionInterpreter(race, sourceID));
+
+        PlayerControllerReader player = new PlayerControllerReader(sourceID, receiver, interpreter);
         players.add(player);
         executor.submit(player);
     }

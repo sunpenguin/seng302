@@ -8,22 +8,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
-import seng302.team18.message.AC35MessageType;
-import seng302.team18.message.RequestMessage;
-import seng302.team18.message.RequestType;
+import seng302.team18.message.*;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.display.PreRaceTimes;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.time.ZonedDateTime;
 
 /**
@@ -40,6 +39,10 @@ public class PreRaceController {
     private Label timeZoneLabel;
     @FXML
     private Text raceNameText;
+    @FXML
+    private Label ipLabel;
+    @FXML
+    private Label portLabel;
     @FXML
     private Pane pane;
 
@@ -67,7 +70,7 @@ public class PreRaceController {
     public void setUp(Race race, Receiver receiver, Sender sender) {
         this.sender = sender;
         this.race = race;
-        raceNameText.setText(race.getRegatta().getRegattaName());
+        raceNameText.setText(race.getRegatta().getName());
         displayTimeZone(race.getStartTime());
 
         setUpLists();
@@ -78,6 +81,19 @@ public class PreRaceController {
         Stage stage = (Stage) listView.getScene().getWindow();
         this.interpreter = new Interpreter(receiver);
         interpreter.setInterpreter(initialiseInterpreter());
+        showNetWorkInfo();
+
+        stage.setOnCloseRequest((event) -> {
+            interpreter.close();
+            while (!receiver.close()) {
+            }
+            System.out.println("shutting down");
+            System.exit(0);
+        });
+    }
+
+
+    public void initConnection(Color color) {
         interpreter.start();
 
         RequestType requestType;
@@ -98,13 +114,8 @@ public class PreRaceController {
             // TODO Callum / David 9 August show error (has been disconnected)
         }
 
-        stage.setOnCloseRequest((event) -> {
-            interpreter.close();
-            while (!receiver.close()) {
-            }
-            System.out.println("shutting down");
-            System.exit(0);
-        });
+        MessageInterpreter acceptanceResponse = new ColourResponder(color, sender);
+        interpreter.getInterpreter().add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
     }
 
 
@@ -192,4 +203,11 @@ public class PreRaceController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+    private void showNetWorkInfo() {
+        Socket socket = interpreter.getSocket();
+        ipLabel.setText(socket.getInetAddress().toString());
+        portLabel.setText(String.valueOf(socket.getPort()));
+    }
+
 }

@@ -49,6 +49,7 @@ public class AC35MessageParserFactory implements MessageParserFactory {
         parserMap.put(AC35MessageType.ACCEPTANCE, new AcceptanceParser());
         parserMap.put(AC35MessageType.REQUEST, new RequestParser());
         parserMap.put(AC35MessageType.BOAT_ACTION, new BoatActionParser());
+        parserMap.put(AC35MessageType.COLOUR, new ColourParser());
 
         return parserMap;
     }

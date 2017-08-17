@@ -7,6 +7,8 @@ import seng302.team18.messageparsing.Receiver;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.Observable;
+
+import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -61,6 +63,16 @@ public class Interpreter extends Observable {
 
     public void setInterpreter(MessageInterpreter interpreter) {
         this.interpreter = interpreter;
+    }
+
+
+    public Socket getSocket() {
+        return receiver.getSocket();
+    }
+
+
+    public MessageInterpreter getInterpreter() {
+        return interpreter;
     }
 
 

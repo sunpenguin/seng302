@@ -445,4 +445,8 @@ public class ControlsTutorial {
         VMG,
         ESC
     }
+
+    public void setBoat (Boat boat){
+        this.boat = boat;
+    }
 }

@@ -41,10 +41,10 @@ public class BoatActionInterpreter extends MessageInterpreter {
 
     @Override
     public void interpret(MessageBody message) {
-        if (message != null && message instanceof BoatActionMessage) {
+        if (message instanceof BoatActionMessage) {
             BoatActionMessage actionMessage = (BoatActionMessage) message;
             for (Boat boat : boats) {
-                if (boat.getStatus() != BoatStatus.OCS) {
+                if (boat.getStatus() != BoatStatus.OCS && actionMessage.getId() == id) {
                     applyActions(boat, actionMessage);
                 } else if (boat.getStatus().equals(BoatStatus.OCS)) {
                     boat.setSailOut(true);

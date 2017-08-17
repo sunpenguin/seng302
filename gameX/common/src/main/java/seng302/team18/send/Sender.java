@@ -1,5 +1,6 @@
 package seng302.team18.send;
 
+
 import seng302.team18.message.MessageBody;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,7 +16,7 @@ public class Sender {
     private Socket socket;
 
     /**
-     * Constructor for the Sender. Requires ip, port, and MessageEncoderFactory.
+     * Constructor for the Sender. Requires a socket and MessageEncoderFactory.
      *
      * @param socket socket to send messages over
      * @param factory to convert messages to byte arrays.
@@ -30,17 +31,13 @@ public class Sender {
 
 
     /**
-     * Constructor for the Sender. Requires ip, port, and MessageEncoderFactory.
+     * Constructor for the Sender. Requires OutputStream and MessageEncoderFactory.
      *
-     * @param host string representing the ip we want to send data to
-     * @param portNumber port number of the application we want to send to
+     * @param outputStream to write data to.
      * @param factory to convert messages to byte arrays.
-     *
-     * @throws IOException Thrown if socket::getOutputStream throws an IOException
      */
-    public Sender(String host, int portNumber, MessageEncoderFactory factory) throws IOException {
-        Socket socket = new Socket(host, portNumber);
-        outStream = socket.getOutputStream();
+    public Sender(OutputStream outputStream, MessageEncoderFactory factory) {
+        outStream = outputStream;
         this.factory = factory;
     }
 

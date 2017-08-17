@@ -202,7 +202,7 @@ public class XmlMessageBuilderTest {
 
     @Test
     public void buildRegattaMessage_name() throws Exception {
-        assertEquals(race.getRegatta().getRegattaName(), regattaMessage.getRegattaName());
+        assertEquals(race.getRegatta().getName(), regattaMessage.getRegattaName());
     }
 
 

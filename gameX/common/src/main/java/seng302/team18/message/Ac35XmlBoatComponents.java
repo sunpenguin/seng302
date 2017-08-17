@@ -45,7 +45,8 @@ public enum Ac35XmlBoatComponents {
     ATTRIBUTE_HULL_NUMBER("HullNumber"),
     ATTRIBUTE_NAME_STOWE("StoweName"),
     ATTRIBUTE_NAME_SHORT("ShortName"),
-    ATTRIBUTE_NAME_BOAT("BoatName");
+    ATTRIBUTE_NAME_BOAT("BoatName"),
+    ATTRIBUTE_COLOUR("Colour");
 
 
     private final String value;
