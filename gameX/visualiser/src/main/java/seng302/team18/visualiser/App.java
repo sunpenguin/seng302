@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import seng302.team18.visualiser.controller.TitleScreenController;
 
 public class App extends Application {
 
@@ -12,10 +13,14 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
         Parent root = loader.load(); // throws IOException
-        primaryStage.setTitle("RaceVision");
-        Scene scene = new Scene(root, 800, 800);
+        TitleScreenController controller = loader.getController();
+        controller.setStage(primaryStage);
+        controller.reDraw();
+        primaryStage.setTitle("High Seas");
+        Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

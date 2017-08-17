@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
 
 import java.io.IOException;
 
@@ -37,7 +38,7 @@ public class MessageEncoderTest {
     @Before
     public void setUp() throws IOException {
         MessageEncoder encoder = new TestClass();
-        MessageBody request = new RequestMessage(false);
+        MessageBody request = new RequestMessage(RequestType.VIEWING);
         head = encoder.generateHead(request);
         checksum = encoder.generateChecksum(head, encoder.generateChecksum(head, encoder.generateBody(request)));
     }

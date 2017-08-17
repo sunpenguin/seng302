@@ -25,7 +25,8 @@ public class MarkRoundingInterpreter extends MessageInterpreter {
         this.race = race;
     }
 
-    /***
+
+    /**
      * Interpret method for MarkRoundingInterpreter. Gets the boat's time at last mark passed from the message.
      *
      * @param message to be interpreted. Of type AC35MarkRoundingMessage.

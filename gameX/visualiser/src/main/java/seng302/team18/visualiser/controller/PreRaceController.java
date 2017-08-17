@@ -4,27 +4,27 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.visualiser.display.RaceStartTime;
-import seng302.team18.visualiser.display.ZoneTimeClock;
+import seng302.team18.model.RaceMode;
+import seng302.team18.visualiser.display.PreRaceTimes;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Controller for the pre race view
@@ -40,12 +40,20 @@ public class PreRaceController {
     private Label timeZoneLabel;
     @FXML
     private Text raceNameText;
+    @FXML
+    private Pane pane;
 
-    private ZoneTimeClock preRaceClock;
     private Interpreter interpreter;
     private Sender sender;
     private Race race;
+
     private boolean hasChanged = false;
+
+    private Stage stage;
+
+
+    public void initialize() {
+    }
 
 
     /**
@@ -57,27 +65,36 @@ public class PreRaceController {
      * @param sender   the sender
      */
     public void setUp(Race race, Receiver receiver, Sender sender) {
-//        this.interpreter = receiver;
         this.sender = sender;
         this.race = race;
-        preRaceClock = new ZoneTimeClock(timeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race.getCurrentTime());
         raceNameText.setText(race.getRegatta().getRegattaName());
         displayTimeZone(race.getStartTime());
 
-        RaceStartTime raceStartTime = new RaceStartTime(startTimeLabel, DateTimeFormatter.ofPattern("HH:mm:ss"), race);
-
         setUpLists();
         listView.setItems(FXCollections.observableList(race.getStartingList()));
-        preRaceClock.start();
-        raceStartTime.start();
+        PreRaceTimes preRaceTimes = new PreRaceTimes(startTimeLabel, timeZoneLabel, timeLabel, race);
+        preRaceTimes.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
         this.interpreter = new Interpreter(receiver);
         interpreter.setInterpreter(initialiseInterpreter());
         interpreter.start();
-        sender.send(new RequestMessage(true));
+
+        RequestType requestType;
+
+        switch (race.getMode()) {
+            case RACE:
+                requestType = RequestType.RACING;
+                break;
+            case CONTROLS_TUTORIAL:
+                requestType = RequestType.CONTROLS_TUTORIAL;
+                break;
+            default:
+                requestType = RequestType.RACING;
+        }
+        sender.send(new RequestMessage(requestType));
         stage.setOnCloseRequest((event) -> {
-            interpreter.shutdownNow();
+            interpreter.close();
             while (!receiver.close()) {
             }
             System.out.println("shutting down");
@@ -126,10 +143,10 @@ public class PreRaceController {
         interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(this));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
 
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceStartTimeInterpreter(race));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
 
         return interpreter;
     }
@@ -149,14 +166,13 @@ public class PreRaceController {
         Parent root = loader.load(); // throws IOException
         RaceController controller = loader.getController();
         Stage stage = (Stage) raceNameText.getScene().getWindow();
-        stage.setTitle("RaceVision");
-        Scene scene = new Scene(root, 1280, 720);
+        pane.getScene().setRoot(root);
         stage.setResizable(true);
-        stage.setMinHeight(700);
-        stage.setMinWidth(1000);
-        stage.setScene(scene);
+        stage.setMaximized(true);
         stage.show();
         controller.setUp(race, interpreter, sender);
+        controller.updateControlsTutorial();
+        controller.updateControlsTutorial();
     }
 
 
@@ -167,4 +183,8 @@ public class PreRaceController {
         listView.setItems(FXCollections.observableList(race.getStartingList()));
     }
 
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 }

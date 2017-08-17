@@ -35,7 +35,7 @@ public class RaceTimeInterpreterTest {
         race = new Race();
         race.setStartingList(boats);
         raceTimeInterpreter = new RaceTimeInterpreter(race);
-        message = new AC35RaceStatusMessage(13000, 0, 2000, 0, 0,new ArrayList<>());
+        message = new AC35RaceStatusMessage(13000, 0, 2000, 0, 0, new ArrayList<>());
         raceTimeInterpreter.interpret(message);
     }
 
@@ -71,9 +71,9 @@ public class RaceTimeInterpreterTest {
         Course actual = race.getCourse();
         Assert.assertEquals(expected.getCentralCoordinate(), actual.getCentralCoordinate());
         Assert.assertEquals(expected.getTimeZone(), actual.getTimeZone());
-        Assert.assertEquals(expected.getBoundaries().size(), actual.getBoundaries().size());
-        for (int i = 0; i < expected.getBoundaries().size(); i++) {
-            Assert.assertEquals(expected.getBoundaries().get(i), actual.getBoundaries().get(i));
+        Assert.assertEquals(expected.getCourseLimits().size(), actual.getCourseLimits().size());
+        for (int i = 0; i < expected.getCourseLimits().size(); i++) {
+            Assert.assertEquals(expected.getCourseLimits().get(i), actual.getCourseLimits().get(i));
         }
         Assert.assertEquals(expected.getCompoundMarks().size(), actual.getCompoundMarks().size());
         for (int i = 0; i < expected.getCompoundMarks().size(); i++) {

@@ -1,6 +1,9 @@
 package seng302.team18.racemodel.model;
 
-import seng302.team18.model.*;
+import seng302.team18.model.CompoundMark;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Mark;
+import seng302.team18.model.MarkRounding;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -99,15 +102,15 @@ public class CourseBuilder1 extends AbstractCourseBuilder {
 
 
     @Override
-    protected List<BoundaryMark> getBoundaryMarks() {
-        List<BoundaryMark> boundaryMarks = new ArrayList<>();
+    protected List<Coordinate> getBoundaryMarks() {
+        List<Coordinate> boundaryMarks = new ArrayList<>();
 
-        boundaryMarks.add(new BoundaryMark(1, new Coordinate(32.31056, -64.84599)));
-        boundaryMarks.add(new BoundaryMark(2, new Coordinate(32.30125, -64.82783)));
-        boundaryMarks.add(new BoundaryMark(3, new Coordinate(32.28718, -64.83796)));
-        boundaryMarks.add(new BoundaryMark(4, new Coordinate(32.28108, -64.85023)));
-        boundaryMarks.add(new BoundaryMark(5, new Coordinate(32.29022, -64.86268)));
-        boundaryMarks.add(new BoundaryMark(6, new Coordinate(32.30510, -64.85530)));
+        boundaryMarks.add(new Coordinate(32.31056, -64.84599));
+        boundaryMarks.add(new Coordinate(32.30125, -64.82783));
+        boundaryMarks.add(new Coordinate(32.28718, -64.83796));
+        boundaryMarks.add(new Coordinate(32.28108, -64.85023));
+        boundaryMarks.add(new Coordinate(32.29022, -64.86268));
+        boundaryMarks.add(new Coordinate(32.30510, -64.85530));
 
         return boundaryMarks;
     }
@@ -115,7 +118,7 @@ public class CourseBuilder1 extends AbstractCourseBuilder {
 
     @Override
     protected double getWindDirection() {
-        return 270 ;
+        return 270;
     }
 
 

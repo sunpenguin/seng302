@@ -98,6 +98,8 @@ public class RaceRenderer {
                 displayBoat.setSailOut(boat.isSailOut());
                 displayBoat.setDestination(course.getNextLeg(boat.getLegNumber()).getDestination().getCoordinate());
             }
+
+            displayBoat.setBoatStatus(boat.getStatus());
         }
     }
 

@@ -2,11 +2,14 @@ package seng302.team18.racemodel;
 
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
+import seng302.team18.racemodel.model.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -16,7 +19,7 @@ import java.util.concurrent.Executors;
 /**
  * Class to create PlayerControllerReaders when connections made to the server
  */
-public class ConnectionListener implements Observer {
+public class ConnectionListener extends Observable implements Observer {
 
     private List<PlayerControllerReader> players;
     private Race race;
@@ -25,6 +28,9 @@ public class ConnectionListener implements Observer {
     private ExecutorService executor;
     private Long timeout;
 
+    private static final AbstractRaceBuilder RACE_BUILDER = new RaceBuilder1();
+    private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderPractice();
+    private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
 
     /**
      * Constructs a new ConnectionListener.
@@ -60,6 +66,14 @@ public class ConnectionListener implements Observer {
     }
 
 
+    /**
+     * Add a new client.
+     * If the registration is for a tutorial, update the race accordingly and the TestMock will send out the updated
+     * XML files.
+     * When the registration is received, send the client their source ID.
+     *
+     * @param client Client who is connecting.
+     */
     private void addClient(ClientConnection client) {
         try {
             Receiver receiver = new Receiver(client.getSocket(), factory);
@@ -71,14 +85,24 @@ public class ConnectionListener implements Observer {
                     try {
                         message = receiver.nextMessage();
                     } catch (IOException e) {
-//                        e.printStackTrace();
                     }
                 }
                 if (message instanceof RequestMessage) {
                     RequestMessage request = (RequestMessage) message;
-                    if (request.isParticipating()) {
-                        addPlayer(receiver, sourceID);
-                        sendMessage(client, sourceID);
+
+                    RequestType requestType = request.getAction();
+
+                    switch (requestType) {
+                        case CONTROLS_TUTORIAL:
+                            race = RACE_BUILDER.buildRace(race, REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse(),
+                                    RaceMode.CONTROLS_TUTORIAL);
+                            setChanged();
+                            notifyObservers(this);
+                            race.setCourseForBoats();
+                        case RACING:
+                            addPlayer(receiver, sourceID);
+                            sendMessage(client, sourceID);
+                            break;
                     }
                 }
             });
@@ -98,6 +122,7 @@ public class ConnectionListener implements Observer {
     private void sendMessage(ClientConnection player, int sourceID) {
         byte[] message = new AcceptanceMessageGenerator(sourceID).getMessage();
         player.sendMessage(message);
+        player.setId(sourceID);
     }
 
 
@@ -131,6 +156,4 @@ public class ConnectionListener implements Observer {
         }
         executor.shutdownNow();
     }
-
-
 }
