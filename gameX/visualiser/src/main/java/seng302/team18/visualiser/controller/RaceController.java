@@ -684,7 +684,7 @@ public class RaceController implements Observer {
         boats.sort(Comparator.comparing(Boat::getPlace));
         String result = "FINAL PLACINGS\n\n\n";
         for (Boat b : boats) {
-            result += b.getPlace() + ": " + b.getShortName() + "\n\n";
+            result += b.getPlace() + ": " + b.getShortName() + " " + b.getStatus().name() + "\n\n";
         }
         result = result.substring(0, result.length() - 2);
         Label resultLabel = new Label(result);
