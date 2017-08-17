@@ -9,6 +9,8 @@ import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Race;
 import seng302.team18.util.VMGAngles;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,7 @@ public class BoatActionInterpreter extends MessageInterpreter {
     private int id;
     private List<Boat> boats;
     private BoatRotater boatRotater;
+    private final static Collection<BoatStatus> UNCONTROLLABLE_STATUSES = Arrays.asList(BoatStatus.OCS, BoatStatus.FINISHED);
 
     /**
      * Constructor for BoatActionInterpreter.
@@ -44,9 +47,10 @@ public class BoatActionInterpreter extends MessageInterpreter {
         if (message instanceof BoatActionMessage) {
             BoatActionMessage actionMessage = (BoatActionMessage) message;
             for (Boat boat : boats) {
-                if (boat.getStatus() != BoatStatus.OCS && actionMessage.getId() == id) {
+//                if (!boat.getStatus().equals(BoatStatus.OCS && actionMessage.getId() == id) || !boat.getStatus().equals(BoatStatus.FINISHED)) {
+                if (!UNCONTROLLABLE_STATUSES.contains(boat.getStatus()) && actionMessage.getId() == id) {
                     applyActions(boat, actionMessage);
-                } else if (boat.getStatus().equals(BoatStatus.OCS)) {
+                } else {
                     boat.setSailOut(true);
                 }
             }
