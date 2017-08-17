@@ -100,13 +100,13 @@ public class RaceRenderer {
                     displayBoat.setScale(pixelMapper.mappingRatio());
                     displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
                     displayBoat.setSailOut(boat.isSailOut());
+                    displayBoat.setBoatStatus(boat.getStatus());
                     if (boat.getLegNumber() < race.getCourse().getMarkSequence().size()) {
                         displayBoat.setDestination(race.getCourse().getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getCoordinate());
                     } else {
                         displayBoat.setDestination(null);
                     }
                 }
-//            displayBoat.setBoatStatus(boat.getStatus());
         }
 
     }
