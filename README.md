@@ -1,4 +1,4 @@
-#High Seas
+# High Seas
 
 High Seas is a game that is designed for people to compete with each other.
 High Seas uses yachts to simulate actual yachts racing around a course.  
@@ -6,7 +6,7 @@ This data must follow the extended AC35 protocol.
 The game receives data from the user via key presses on the yacht they are controlling
 and every other user can visualise these actions on their instance of the application.
 
-##Packaging the Project
+## Packaging the Project
 To create the jar files required to run the program, 
 package the program through the command line, from the project root folder:
 On Linux use
@@ -23,7 +23,7 @@ mvn package
 ```
 
 
-##Getting started
+## Getting started
 To run the program the file visualiser-5.1.jar must be run through the command line:
  
 On Linux use
@@ -39,7 +39,7 @@ On Mac OS use
 java -jar visualiser-5.1.jar
 ```
 
-####Configurations
+#### Configurations
 In the same directory, there must also exist a file called "config.txt". 
 
 This must contain the following:  
@@ -50,7 +50,7 @@ MAX_PLAYERS=20
 
 where the user can define the numbers to be any value (except MAX_PLAYERS, which is 1 <= MAX_PLAYERS <= 20).
 
-##Using the Application
+## Using the Application
 The user is presented with an interface with three buttons. This is the home screen.
 The user can select either "Play", "View Controls" or "Quit". 
  
@@ -66,7 +66,7 @@ Selecting "View Controls" again will hide this image.
 
 The "Quit" option will close the application down.
 
-##During a Race
+## During a Race
 Once a connection is established with one of the streams the user will be displayed 
 one of two views.
 
@@ -86,12 +86,12 @@ the home screen.
 Through the application annotations about the race are displayed. Some can be 
 controlled via the application.
 
-###Penalties
+### Penalties
 
-####Start Line
+#### Start Line
 When a user passes the startline early,  a penalty will be set and the highlight turns red. 
 This means the user does not have control of their boat anymore until the highlight changes back to yellow.
 
-####Out Of Boundaries
+#### Out Of Boundaries
 When a user sails across the boundaries defined, the user will be disqualified and be taken out of the race.
 The user will have to then quit the game and go back to the home screen.
