@@ -97,6 +97,7 @@ public class PreRaceController {
         interpreter.start();
 
         RequestType requestType;
+
         switch (race.getMode()) {
             case RACE:
                 requestType = RequestType.RACING;
@@ -107,11 +108,14 @@ public class PreRaceController {
             default:
                 requestType = RequestType.RACING;
         }
-        sender.send(new RequestMessage(requestType));
+        try {
+            sender.send(new RequestMessage(requestType));
+        } catch (IOException e) {
+            // TODO Callum / David 9 August show error (has been disconnected)
+        }
 
         MessageInterpreter acceptanceResponse = new ColourResponder(color, sender);
         interpreter.getInterpreter().add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
-
     }
 
 
@@ -157,6 +161,7 @@ public class PreRaceController {
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
+
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
 
         return interpreter;

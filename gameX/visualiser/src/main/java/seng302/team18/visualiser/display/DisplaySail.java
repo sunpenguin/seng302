@@ -65,7 +65,12 @@ public class DisplaySail extends DisplayBoatDecorator {
         group.getChildren().add(sail);
         super.addToGroup(group);
         sail.toFront();
+    }
 
+
+    public void removeFrom(Group group) {
+        group.getChildren().remove(sail);
+        super.removeFrom(group);
     }
 
 

@@ -170,10 +170,15 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
 
 
     @Override
-    public Polyline getBoatPoly() {
-        return boat.getBoatPoly();
+    public void setDestination(Coordinate destination) {
+        boat.setDestination(destination);
     }
 
+
+    @Override
+    public void removeFrom(Group group) {
+        boat.removeFrom(group);
+    }
 
     @Override
     public void setBoatStatus(BoatStatus status) {

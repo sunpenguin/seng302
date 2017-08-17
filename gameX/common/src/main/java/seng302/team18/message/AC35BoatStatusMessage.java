@@ -1,5 +1,7 @@
 package seng302.team18.message;
 
+import seng302.team18.model.*;
+
 /**
  * MessageBody that contains information about a boats leg number, status and estimated time at next mark.
  */
@@ -7,7 +9,7 @@ public class AC35BoatStatusMessage {
 
     private int boatId;
     private int legNumber;
-    private int boatStatus;
+    private BoatStatus boatStatus;
     private long estimatedTimeAtNextMark;
 
     /**
@@ -18,7 +20,7 @@ public class AC35BoatStatusMessage {
      * @param boatStatus              status of the boat.
      * @param estimatedTimeAtNextMark in Epoch milliseconds.
      */
-    public AC35BoatStatusMessage(int boatId, int legNumber, int boatStatus, long estimatedTimeAtNextMark) {
+    public AC35BoatStatusMessage(int boatId, int legNumber, BoatStatus boatStatus, long estimatedTimeAtNextMark) {
         this.boatId = boatId;
         this.legNumber = legNumber;
         this.boatStatus = boatStatus;
@@ -55,9 +57,9 @@ public class AC35BoatStatusMessage {
      * 6 DSQ (disqualified)
      * 7 OCS (On Course Side – across start line early)
      *
-     * @return int that represents the boats status.
+     * @return that represents the boats status.
      */
-    public int getBoatStatus() {
+    public BoatStatus getBoatStatus() {
         return boatStatus;
     }
 

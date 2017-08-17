@@ -38,8 +38,8 @@ public class DisplayBoat implements GeographicLocation {
     private boolean sailOut;
     private boolean isControlled;
     private double apparentWindDirection;
-    private Coordinate boatCenter;
     private double pixelLength;
+    private Coordinate destination;
     private BoatStatus status = BoatStatus.UNDEFINED;
 
     private PixelMapper pixelMapper;
@@ -186,6 +186,16 @@ public class DisplayBoat implements GeographicLocation {
     }
 
 
+    /**
+     * Removes the boat from the given group.
+     *
+     * @param group to remove from.
+     */
+    public void removeFrom(Group group) {
+        group.getChildren().remove(boatPoly);
+    }
+
+
     public Color getColor() {
         return boatColor;
     }
@@ -265,9 +275,8 @@ public class DisplayBoat implements GeographicLocation {
         this.apparentWindDirection = apparentWind;
     }
 
-
-    public Polyline getBoatPoly() {
-        return boatPoly;
+    public void setDestination(Coordinate destination) {
+        this.destination = destination;
     }
 
 

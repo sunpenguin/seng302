@@ -5,6 +5,7 @@ import seng302.team18.util.SpeedConverter;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * A class to represent an individual race.
  */
-public class Race {
+public class Race extends Observable {
     private final GPSCalculations gps = new GPSCalculations();
     private final RoundingDetector detector = new RoundingDetector();
     private int id;
@@ -234,7 +235,22 @@ public class Race {
      */
     public void updateBoats(double time) { // time in seconds
         for (Boat boat : startingList) {
-            updatePosition(boat, time);
+            updateBoat(boat, time);
+        }
+    }
+
+    private void updateBoat(Boat boat, double time) {
+        GPSCalculations calculator = new GPSCalculations();
+
+        updatePosition(boat, time);
+
+        List<Coordinate> boundaries = course.getCourseLimits();
+        if (boundaries.size() > 0) {
+            if (!calculator.contains(boat.getCoordinate(), boundaries) && !(boat.getStatus().equals(BoatStatus.DSQ))) {
+                boat.setStatus(BoatStatus.DSQ);
+                setChanged();
+                notifyObservers(boat);
+            }
         }
     }
 

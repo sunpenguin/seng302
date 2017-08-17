@@ -46,30 +46,40 @@ public class Sender {
      *
      * @param body of the message to be sent
      */
-    public void send(MessageBody body) {
-        try {
-            MessageEncoder composer = factory.getEncoder(body.getType());
-            outStream.write(composer.encode(body));
-            outStream.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void send(MessageBody body) throws IOException {
+        MessageEncoder composer = factory.getEncoder(body.getType());
+        outStream.write(composer.encode(body));
+        outStream.flush();
     }
-
 
 
     /**
-     * Closes the socket data is coming from.
-     *
-     * @return if the socket successfully closed.
+     * Closes OutputStream used to send data. Blocks until it closes.
      */
-    public boolean close() {
-        try {
-            outStream.close();
-            socket.close();
-            return true;
-        } catch (IOException e) {
-            return false;
+    public void close() {
+        boolean isOpen = true;
+        while (isOpen) {
+            try {
+                outStream.close();
+                isOpen = false;
+            } catch (IOException e) {}
         }
     }
+
+
+
+//    /**
+//     * Closes the socket data is coming from.
+//     *
+//     * @return if the socket successfully closed.
+//     */
+//    public boolean close() {
+//        try {
+//            outStream.close();
+//            socket.close();
+//            return true;
+//        } catch (IOException e) {
+//            return false;
+//        }
+//    }
 }

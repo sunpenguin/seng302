@@ -15,7 +15,7 @@ public class PlayerControllerReader implements Runnable {
     private int id;
     private Receiver receiver;
     private MessageInterpreter interpreter;
-    boolean open = true;
+    private boolean open = true;
 
     public PlayerControllerReader(int id, Receiver receiver, MessageInterpreter interpreter) {
         this.id = id;

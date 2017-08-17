@@ -121,6 +121,26 @@ public class Server extends Observable {
 
 
     /**
+     * Closes any clients with the given id.
+     *
+     * @param id of the client.
+     */
+    public void closeConnection(Integer id) {
+        for (ClientConnection client : clients) {
+            if (client.getId().equals(id)) {
+                boolean isOpen = true;
+                while (isOpen) {
+                    try {
+                        client.close();
+                        isOpen = false;
+                    } catch (IOException e) {}
+                }
+            }
+        }
+    }
+
+
+    /**
      * Closes the server if there are no clients.
      *
      * @param close if there are no clients.
