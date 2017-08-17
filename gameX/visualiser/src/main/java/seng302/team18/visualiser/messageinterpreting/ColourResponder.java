@@ -7,6 +7,7 @@ import seng302.team18.message.ColourMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.send.Sender;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -30,7 +31,10 @@ public class ColourResponder extends MessageInterpreter {
         if (message instanceof AcceptanceMessage) {
             AcceptanceMessage acceptanceMessage = (AcceptanceMessage) message;
             if (!acceptanceMessage.getRequestType().isError()) {
-                sender.send(new ColourMessage(color, acceptanceMessage.getSourceId()));
+                try {
+                    sender.send(new ColourMessage(color, acceptanceMessage.getSourceId()));
+                } catch (IOException e) {
+                }
             }
         }
     }
