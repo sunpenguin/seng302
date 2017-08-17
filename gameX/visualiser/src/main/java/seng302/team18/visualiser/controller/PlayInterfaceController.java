@@ -55,6 +55,8 @@ public class PlayInterfaceController {
     private TextField customHostField;
     @FXML
     private TextField customPortField;
+    @FXML
+    private Label errorText;
 
 
     private List<MessageBody> customisationMessages;
@@ -257,21 +259,33 @@ public class PlayInterfaceController {
     }
 
 
+    /**
+     * Opens a socket and connection on the given host and port number
+     * @param host The host IP address for the socket
+     * @param port The port number used for the socket
+     */
     private void openStream(String host, int port) {
         try {
             Socket socket = SocketFactory.getDefault().createSocket(host, port);
             startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
         } catch (Exception e) {
-            e.printStackTrace();
-            //errorText.setText(String.format("Could not establish connection to stream at: %s:%d", host, port));
+            errorText.setText("Please enter a valid host/port combination");
         }
     }
 
+    /**
+     * sets the RaceMode to race and opens a stream on the specified host and port number
+     */
     public void connectButtonAction(){
         mode = RaceMode.RACE;
-        String host = customHostField.getText();
-        int port = Integer.parseInt(customPortField.getText());
-        openStream(host, port);
+        try {
+            String host = customHostField.getText();
+            int port = Integer.parseInt(customPortField.getText());
+            openStream(host, port);
+        } catch (Exception e){
+           errorText.setText("Please enter a valid host/port combination");
+        }
+
     }
 
 
