@@ -1,6 +1,11 @@
 package seng302.team18.model;
 
 
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.paint.Color;
 import javafx.beans.property.*;
 import seng302.team18.util.GPSCalculations;
 
@@ -28,7 +33,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private boolean isControlled;
     private boolean sailOut;
     private RoundZone roundZone = RoundZone.ZONE1;
-
 
     /**
      * A constructor for the Boat class

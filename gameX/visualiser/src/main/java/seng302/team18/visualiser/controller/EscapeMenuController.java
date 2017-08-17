@@ -21,7 +21,6 @@ public class EscapeMenuController {
 
     @FXML private Pane pane;
 
-    private RaceController raceController;
     private Group group;
     private Label quitLabel;
     private Image quitButtonImage;

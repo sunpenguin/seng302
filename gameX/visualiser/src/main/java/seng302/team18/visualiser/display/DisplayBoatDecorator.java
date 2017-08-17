@@ -190,4 +190,9 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
     public BoatStatus getStatus() {
         return boat.getStatus();
     }
+    @Override
+    public void setColour(Color color) {
+        boat.setColour(color);
+    }
+
 }

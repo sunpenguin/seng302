@@ -48,7 +48,6 @@ import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
-
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -200,38 +199,39 @@ public class RaceController implements Observer {
                                 pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() - 1);
 
 
-                                send = false;
-                                break;
-                            case ESCAPE:
-                                if (group.getChildren().contains(escapeMenuPane)) {
-                                    group.getChildren().remove(escapeMenuPane);
-                                } else {
-                                    openEscapeMenu("");
-                                }
-                                send = false;
-                                break;
-                            case TAB:
-                                toggleTabView();
-                                send = false;
-                                break;
-                            default:
-                                send = false;
+                            send = false;
+                            break;
+                        case ESCAPE:
+                            if (group.getChildren().contains(escapeMenuPane)) {
+                                group.getChildren().remove(escapeMenuPane);
+                            } else {
+                                openEscapeMenu("");
+                            }
+                            send = false;
+                            break;
+                        case TAB:
+                            toggleTabView();
+                            send = false;
+                            break;
+                        default:
+                            send = false;
+                    }
+                    if (send) {
+                        if (race.getMode() == RaceMode.CONTROLS_TUTORIAL){
+                            controlsTutorial.setBoat(getPlayerBoat()); //TODO: get sam to change this seb67 17/8
+                            controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
+                            if (controlsTutorial.checkIfProgressed(keyEvent.getCode())){
+                                controlsTutorial.displayNext();
+                            }
                         }
-                        if (send) {
-                            if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
-                                controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
-                                if (controlsTutorial.checkIfProgressed(keyEvent.getCode())) {
-                                    controlsTutorial.displayNext();
-                                }
-                            }
-                            try {
-                                sender.send(message);
-                            } catch (IOException e) {
-                                openEscapeMenu("You have been disconnected!");
-                            }
+                        try {
+                            sender.send(message);
+                        } catch (IOException e) {
+                           openEscapeMenu("You have been disconnected!");
                         }
                     }
-                };
+                }
+            };
 
         raceViewPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEventHandler);
         raceViewPane.setFocusTraversable(true);
@@ -679,6 +679,9 @@ public class RaceController implements Observer {
     }
 
 
+    /**
+     * Displays the result of the race in table form
+     */
     public void showFinishersList() {
         List<Boat> boats = race.getStartingList();
         boats.sort(Comparator.comparing(Boat::getPlace));
@@ -697,6 +700,9 @@ public class RaceController implements Observer {
     }
 
 
+    /**
+     * Constructs the finishers list to be displayed on the GUIs
+     */
     private void constructList() {
         finisherTable.setItems(sortedList);
         finisherPlace.setCellValueFactory(new PropertyValueFactory<>("place"));
@@ -751,6 +757,9 @@ public class RaceController implements Observer {
     }
 
 
+    /**
+     * Displays the Finishers List on the GUI
+     */
     private void displayList() {
         finisherPane.toFront();
         finisherPane.setVisible(true);

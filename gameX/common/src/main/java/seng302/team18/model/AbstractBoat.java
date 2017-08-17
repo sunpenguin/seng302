@@ -1,5 +1,7 @@
 package seng302.team18.model;
 
+import javafx.scene.paint.Color;
+
 /**
  * Holds information about "boats", as conveyed in the AC35 protocol. Note that boats here means all boats (potentially
  * including marks, umpires and more), rather than just racing yachts.
@@ -10,6 +12,7 @@ public abstract class AbstractBoat {
     private String name;
     private String hullNumber;
     private Integer id;
+    private Color colour = Color.CHOCOLATE;
 
     public AbstractBoat() {
     }
@@ -76,6 +79,14 @@ public abstract class AbstractBoat {
 
 
     public abstract BoatType getType();
+
+    public Color getColour() {
+        return colour;
+    }
+
+    public void setColour(Color colour) {
+        this.colour = colour;
+    }
 }
 
 

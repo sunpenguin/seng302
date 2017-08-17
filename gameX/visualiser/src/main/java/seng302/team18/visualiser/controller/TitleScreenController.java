@@ -3,7 +3,6 @@ package seng302.team18.visualiser.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -19,7 +18,9 @@ import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
 
 import javax.net.SocketFactory;
+import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Controller for when the application first starts up
@@ -57,52 +58,24 @@ public class TitleScreenController {
 
 
     /**
-     * Called when the mock connection button is selected, sets up a connection with the mock feed
+     * Called when users selects "Play" button.
+     * Takes user to PlayInterface.
      */
-    private void openMockStream() {
-        mode = RaceMode.RACE;
-        openStream("127.0.0.1", 5005);
-    }
-
-
-    /**
-     * React to User selecting the Controls Tutorial mode.
-     * Start a race in ControlsTutorial mode.
-     */
-    @FXML
-    private void startControlPractice() {
-        mode = RaceMode.CONTROLS_TUTORIAL;
-        openStream("127.0.0.1", 5005);
-    }
-
-
-    @FXML
-    private void openCustomStream() {
-        String host = customHostField.getText();
-        String portString = customPortField.getText();
-
-        if (host.isEmpty() || portString.isEmpty()) {
-            errorText.setText("Please enter a custom host and port");
-            return;
-        }
-
+    private void toPlayScreen() {
+        Stage stage = (Stage) errorText.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PlayInterface.fxml"));
+        Parent root = null;
         try {
-            int port = Integer.parseInt(portString);
-            openStream(host, port);
-        } catch (NumberFormatException e) {
-            errorText.setText("Please enter a valid port number");
-            return;
+            root = loader.load();
+        } catch (IOException e) {
+            System.err.println("Error occurred loading play interface screen");
         }
-    }
-
-
-    private void openStream(String host, int port) {
-        try {
-            Socket socket = SocketFactory.getDefault().createSocket(host, port);
-            startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
-        } catch (Exception e) {
-            errorText.setText(String.format("Could not establish connection to stream at: %s:%d", host, port));
-        }
+        PlayInterfaceController controller = loader.getController();
+        controller.setStage(stage);
+        stage.setTitle("High Seas");
+        pane.getScene().setRoot(root);
+        stage.setMaximized(true);
+        stage.show();
     }
 
 
@@ -128,7 +101,7 @@ public class TitleScreenController {
         hostButtonImage = new Image("/images/title_screen/play_button.png");
         hostLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) hostButtonImage.getWidth(), 2)));
         hostLabel.setLayoutY((600 / 2) + 100);
-        hostLabel.setOnMouseClicked(event -> openMockStream());
+        hostLabel.setOnMouseClicked(event -> toPlayScreen());
     }
 
 
@@ -199,25 +172,26 @@ public class TitleScreenController {
     }
 
 
-    /**
-     * Creates a controller manager object and begins an instance of the program.
-     *
-     * @throws Exception A connection error
-     */
-    private void startConnection(Receiver receiver, Sender sender) throws Exception {
-        Stage stage = (Stage) errorText.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
-        Parent root = loader.load();
-        PreRaceController controller = loader.getController();
-        controller.setStage(stage);
-        stage.setTitle("High Seas");
-        pane.getScene().setRoot(root);
-        stage.show();
-
-        Race race = new Race();
-        race.setMode(mode);
-        controller.setUp(race, receiver, sender);
-    }
+//    /**
+//     * Creates a controller manager object and begins an instance of the program.
+//     *
+//     * @throws Exception A connection error
+//     */
+//    private void startConnection(Receiver receiver, Sender sender) throws Exception {
+//        Stage stage = (Stage) errorText.getScene().getWindow();
+//        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
+//        Parent root = loader.load();
+//        PreRaceController controller = loader.getController();
+//        controller.setStage(stage);
+//        stage.setTitle("High Seas");
+//        pane.getScene().setRoot(root);
+//        stage.show();
+//
+//        Race race = new Race();
+//        race.setMode(mode);
+//        controller.setUp(race, receiver, sender);
+//        controller.initConnection(new ArrayList<>());
+//    }
 
 
     /**

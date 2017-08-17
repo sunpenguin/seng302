@@ -31,18 +31,8 @@ public class PlayerControllerReader implements Runnable {
     public void run() {
         while (open) {
             try {
-                MessageBody message = receiver.nextMessage();
-
-                // For future extension of this, we should generify player sent messages so we can have access to the id
-                // without having to cast to a specific message e.g. BoatActionMessage / ChatMessage
-                if (message instanceof BoatActionMessage) {
-                    BoatActionMessage boatAction = (BoatActionMessage) message;
-
-                    if (boatAction.getId() == id) {
-                        interpreter.interpret(message);
-                    }
-                }
-//                Thread.sleep(1000L);
+                MessageBody message = receiver.nextMessage(); // io exception
+                interpreter.interpret(message);
             } catch (IOException e) {
                 close();
             }
