@@ -28,27 +28,27 @@ To run the program the file visualiser-5.1.jar must be run through the command l
  
 On Linux use
 ```
-java -jar visualiser-5.1.jar
+java -jar visualiser-6.0.jar
 ```
 On Windows use
 ```
-java -jar visualiser-5.1.jar
+java -jar visualiser-6.0.jar
 ```
 On Mac OS use
 ```
-java -jar visualiser-5.1.jar
+java -jar visualiser-6.0.jar
 ```
 
 #### Configurations
-In the same directory, there must also exist a file called "config.txt". 
 
-This must contain the following:  
-START_WAIT_TIME=15  
-WARNING_WAIT_TIME=2  
-PREP_WAIT_TIME=0  
-MAX_PLAYERS=20  
+In sprint 6 we implemented the ability to not have to launch the racemodel (server) independently of the visualiser.
+Currently the config file allowing this can be seen at the root of our git repo. After running "mvn package" when working within our IDE,
+it will no longer be required to run the racemodel separately.
 
-where the user can define the numbers to be any value (except MAX_PLAYERS, which is 1 <= MAX_PLAYERS <= 20).
+However, to get this working when using the jars downloaded via "Builds", a copy of the config file "visualiser-config.txt" must be obtained and 
+placed in the same directory as "visualiser-6.0.jar" then also have the correct relative or full path to "racemodel-6.0.jar".
+
+We aim to get everything packaged correctly in the next sprint (7) so that this is not necessary and just "works".
 
 ## Using the Application
 The user is presented with an interface with three buttons. This is the home screen.
@@ -57,7 +57,7 @@ The user can select either "Play", "View Controls" or "Quit".
 The "Play" option will open up the boat customisation screen with the buttons "Host New Game", 
 "Tutorial" and "Back". The user can change the colour of their boat 
 with the arrow buttons on the screen. The user can then use the boat displayed on the screen.
-The "Host New Game" option will let the user create a race (startup a server) and connect to it. The "Tutorial"
+The "Host New Game" option will let the user create a race (startup a server if configured correctly) and connect to it. The "Tutorial"
 option will take the user to the tutorial of the game, teaching the user the controls.
 The "Back" button takes the user back to the home screen.  
 
