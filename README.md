@@ -39,7 +39,7 @@ On Mac OS use
 java -jar visualiser-6.0.jar
 ```
 
-#### Configurations
+## Configurations
 
 In sprint 6 we implemented the ability to not have to launch the racemodel (server) independently of the visualiser.
 Currently the config file allowing this can be seen at the root of our git repo. After running "mvn package" when working within our IDE,
