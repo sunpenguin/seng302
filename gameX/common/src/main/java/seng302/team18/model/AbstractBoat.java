@@ -2,11 +2,13 @@ package seng302.team18.model;
 
 import javafx.scene.paint.Color;
 
+import java.util.Observable;
+
 /**
  * Holds information about "boats", as conveyed in the AC35 protocol. Note that boats here means all boats (potentially
  * including marks, umpires and more), rather than just racing yachts.
  */
-public abstract class AbstractBoat {
+public abstract class AbstractBoat extends Observable {
     private String nameShort;
     private String nameStowe;
     private String name;
@@ -80,9 +82,11 @@ public abstract class AbstractBoat {
 
     public abstract BoatType getType();
 
+
     public Color getColour() {
         return colour;
     }
+
 
     public void setColour(Color colour) {
         this.colour = colour;

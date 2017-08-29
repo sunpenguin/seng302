@@ -56,7 +56,7 @@ public class BoundaryDetection {
 
     @When("^the player stays inside the boundary$")
     public void the_player_stays_inside_the_boundary() throws Throwable {
-        race.updateBoats(1);
+        race.update(1);
     }
 
     @Then("^the players status will stay the same$")
@@ -69,7 +69,7 @@ public class BoundaryDetection {
     public void the_player_moves_outside_the_boundary() throws Throwable {
         boat.setSailOut(false);
         boat.setSpeed(100000);
-        race.updateBoats(999999999);
+        race.update(999999999);
     }
 
     @Then("^the players status will be set to disqualified\\.$")

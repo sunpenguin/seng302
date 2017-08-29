@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.paint.Color;
 import javafx.beans.property.*;
 import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.SpeedConverter;
 
 import java.util.List;
 
@@ -33,6 +34,8 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private boolean isControlled;
     private boolean sailOut;
     private RoundZone roundZone = RoundZone.ZONE1;
+    private PowerUp powerUp = new SpeedPowerUp(this);
+    private boolean isPowerActive = true;
 
     /**
      * A constructor for the Boat class
@@ -369,7 +372,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         ZONE1,
         ZONE2,
         ZONE3,
-        ZONE4;
+        ZONE4
     }
 
 
@@ -384,5 +387,46 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
     public StringProperty statusStringProperty() {
         return statusStringProperty;
+    }
+
+
+    public void setPowerUp(PowerUp powerUp) {
+        this.powerUp = powerUp;
+    }
+
+    public void activatePowerUp() {
+        this.isPowerActive = true;
+        setChanged();
+        notifyObservers(powerUp);
+    }
+
+
+    /**
+     * Updates the boats coordinates to move closer to the boats destination.
+     * Amount moved is proportional to the time passed
+     *
+     * @param time that has passed
+     */
+    public void update(double time) {
+        double speed = getSpeed(); // knots
+        if (isSailOut()) {
+            speed = 0;
+        }
+
+        GPSCalculations gps = new GPSCalculations();
+        double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
+        double secondsTime = time / 1000.0d;
+        double distanceTravelled = mpsSpeed * secondsTime;
+
+        // set next position based on current coordinate, distance travelled, and heading.
+        setCoordinate(gps.toCoordinate(getCoordinate(), getHeading(), distanceTravelled));
+
+        if (isPowerActive) {
+            powerUp.update(time);
+            if (powerUp.isTerminated()) {
+                isPowerActive = false;
+                powerUp = null;
+            }
+        }
     }
 }

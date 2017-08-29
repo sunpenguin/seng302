@@ -1,7 +1,6 @@
 package seng302.team18.model;
 
 import seng302.team18.util.GPSCalculations;
-import seng302.team18.util.SpeedConverter;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -229,30 +228,49 @@ public class Race extends Observable {
 
 
     /**
-     * Updates the position and heading of every boat in the race.
+     * Updates the race by the given amount of time.
      *
      * @param time the time in seconds
      */
-    public void updateBoats(double time) { // time in seconds
+    public void update(double time) { // time in seconds
         for (Boat boat : startingList) {
-            updateBoat(boat, time);
+            collisionStuff(boat);
+            boat.update(time);
+            roundingStuff(boat);
+            boundaryStuff(boat);
         }
     }
 
-    private void updateBoat(Boat boat, double time) {
+
+    /**
+     * Disqualifies boat if outside boundary.
+     *
+     * @param boat to check
+     */
+    private void boundaryStuff(Boat boat) {
+        if (isOutSide(boat)) {
+            boat.setStatus(BoatStatus.DSQ);
+            setChanged();
+            notifyObservers(boat);
+        }
+    }
+
+
+    /**
+     * Check if a boat is outside the boundary
+     *
+     * @param boat to check
+     * @return if the boat is outside.
+     */
+    private boolean isOutSide(Boat boat) {
         GPSCalculations calculator = new GPSCalculations();
-
-        updatePosition(boat, time);
-
         List<Coordinate> boundaries = course.getCourseLimits();
-        if (boundaries.size() > 0) {
-            if (!calculator.contains(boat.getCoordinate(), boundaries) && !(boat.getStatus().equals(BoatStatus.DSQ))) {
-                boat.setStatus(BoatStatus.DSQ);
-                setChanged();
-                notifyObservers(boat);
-            }
-        }
+
+        return boundaries.size() > 2
+                && !calculator.contains(boat.getCoordinate(), boundaries)
+                && !(boat.getStatus().equals(BoatStatus.DSQ));
     }
+
 
 
     /**
@@ -296,19 +314,11 @@ public class Race extends Observable {
 
 
     /**
-     * Updates the boats coordinates to move closer to the boats destination.
-     * Amount moved is proportional to the time passed
      * Detects if there has been a collision between the boat and another abstract boat after updating the position
      *
-     * @param boat to be moved
-     * @param time that has passed
+     * @param boat to be collision stuffed
      */
-    private void updatePosition(Boat boat, double time) {
-        double speed = boat.getSpeed(); // knots
-        if (boat.isSailOut()) {
-            speed = 0;
-        }
-
+    private void collisionStuff(Boat boat) {
         List<AbstractBoat> obstacles = new ArrayList<>(startingList);
         obstacles.addAll(course.getMarks());
         AbstractBoat obstacle = null;
@@ -323,15 +333,17 @@ public class Race extends Observable {
 
         if (obstacle != null) {
             handleCollision(boat, obstacle);
-        } else {
-            double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
-            double secondsTime = time / 1000.0d;
-            double distanceTravelled = mpsSpeed * secondsTime;
-
-            // set next position based on current coordinate, distance travelled, and heading.
-            boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
         }
 
+    }
+
+
+    /**
+     * Detects roundings and updates boat status.
+     *
+     * @param boat to update.
+     */
+    public void roundingStuff(Boat boat) {
         if (!mode.equals(RaceMode.CONTROLS_TUTORIAL)) {
             if (boat.getStatus().equals(BoatStatus.RACING) && detector.hasPassedDestination(boat, course)) {
                 setNextLeg(boat, boat.getLegNumber() + 1);
@@ -345,6 +357,7 @@ public class Race extends Observable {
             }
         }
     }
+
 
 
     /**
