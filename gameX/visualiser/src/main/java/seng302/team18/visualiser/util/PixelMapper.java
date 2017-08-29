@@ -10,7 +10,6 @@ import seng302.team18.util.XYPair;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.List;
 
 /**
  * Class for mapping coordinates on to a pane.
@@ -36,14 +35,13 @@ public class PixelMapper {
     private final double MAP_SCALE_CORRECTION = 0.95;
 
 
-
     /**
      * Constructor for PixelMapper.
      *
      * @param northWest corner
      * @param southEast corner
-     * @param center center of the map
-     * @param pane to map to
+     * @param center    center of the map
+     * @param pane      to map to
      */
     public PixelMapper(Coordinate northWest, Coordinate southEast, Coordinate center, Pane pane) {
         this.pane = pane;
@@ -117,16 +115,31 @@ public class PixelMapper {
         }
         mappingScale *= MAP_SCALE_CORRECTION * getZoomFactor();
 
-        XYPair worldCoordinates = coordinateToPlane(coord);
-        XYPair viewCenter = coordinateToPlane(viewPortCenter);
-
-        double dX = worldCoordinates.getX() - viewCenter.getX();
-        double dY = worldCoordinates.getY() - viewCenter.getY();
+        double dX = distanceAlongCircleOfLatitude(viewPortCenter, coord.getLongitude());
+        double dY = distanceAlongMeridian(viewPortCenter, coord.getLatitude());
 
         double x = (dX * mappingScale) + (paneWidth / 2);
         double y = (dY * mappingScale) + (paneHeight / 2);
 
         return new XYPair(x, y);
+    }
+
+
+    private double distanceAlongMeridian(Coordinate reference, double latitude) {
+        double distance = gpsCalculations.distance(reference, new Coordinate(latitude, reference.getLongitude()));
+        boolean latitudeAboveReference = latitude > reference.getLatitude();
+        return latitudeAboveReference ? distance : distance * -1;
+    }
+
+
+    private double distanceAlongCircleOfLatitude(Coordinate reference, double longitude) {
+        boolean isRefMinLat = reference.getLongitude() < longitude;
+        double degreesEastFromLongToRef = reference.getLongitude() - longitude;
+        boolean crossesAntiMeridian = Math.abs(degreesEastFromLongToRef) > 180;
+
+        boolean longEastOfRef = false;
+
+        return 0;
     }
 
 
@@ -151,68 +164,32 @@ public class PixelMapper {
     /**
      * Calculates the width of the course
      *
-     * @return the width of the course using Web Mercator cartesian coordinates
+     * @return the width of the course (m)
      */
     private double calcCourseWidth() {
-        Coordinate west = new Coordinate(center.getLongitude(), northWest.getLongitude());
-        Coordinate east = new Coordinate(center.getLongitude(), southEast.getLongitude());
+        Coordinate west = new Coordinate(center.getLatitude(), northWest.getLongitude());
+        Coordinate east = new Coordinate(center.getLatitude(), southEast.getLongitude());
 
         double dWest = gpsCalculations.distance(west, center);
         double dEast = gpsCalculations.distance(center, east);
 
-        Coordinate furthest = (dWest > dEast) ? west : east;
-        return Math.abs(coordinateToPlane(center).getX() - coordinateToPlane(furthest).getX()) * 2;
+        return Math.max(dEast, dWest) * 2;
     }
 
 
     /**
      * Calculates the height of the course
      *
-     * @return the width of the course using Web Mercator cartesian coordinates
+     * @return the width of the course (m)
      */
     private double calcCourseHeight() {
-        Coordinate north = new Coordinate(northWest.getLatitude(), center.getLatitude());
-        Coordinate south = new Coordinate(southEast.getLatitude(), center.getLatitude());
+        Coordinate north = new Coordinate(northWest.getLatitude(), center.getLongitude());
+        Coordinate south = new Coordinate(southEast.getLatitude(), center.getLongitude());
 
         double dNorth = gpsCalculations.distance(north, center);
         double dSouth = gpsCalculations.distance(south, center);
 
-        Coordinate furthest = (dNorth > dSouth) ? north : south;
-        return Math.abs(coordinateToPlane(center).getY() - coordinateToPlane(furthest).getY()) * 2;
-    }
-
-
-    /**
-     * Converts the given longitude to a value in [0, 256 * 2 ^ zoomLevel]
-     *
-     * @param longitude longitude to convert
-     * @return longitude in Web Mercator scale
-     */
-    private double webMercatorLongitude(double longitude) {
-        return 128 * (longitude + Math.PI) / Math.PI;
-    }
-
-
-    /**
-     * Converts the given latitude to a value in [0, 256 * 2 ^ zoomLevel]
-     *
-     * @param latitude Latitude to convert
-     * @return latitude in Web Mercator scale
-     */
-    private double webMercatorLatitude(double latitude) {
-        return 128 * (Math.PI - Math.log(Math.tan((Math.PI / 4) + (latitude / 2)))) / Math.PI;
-    }
-
-
-    /**
-     * Converts a coordinate from GPS coordinates to cartesian coordinates in the range [0, 256 * 2 ^ zoomLevel] for
-     * both x and y
-     *
-     * @param point Coordinate to convert
-     * @return converted coordinate
-     */
-    private XYPair coordinateToPlane(Coordinate point) {
-        return new XYPair(webMercatorLongitude(point.getLongitude()), webMercatorLatitude(point.getLatitude()));
+        return Math.max(dNorth, dSouth) * 2;
     }
 
 
