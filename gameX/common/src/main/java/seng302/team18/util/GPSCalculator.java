@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
  * Class for making GPS calculations.
  */
 
-public class GPSCalculations {
+public class GPSCalculator {
 
     /**
-     * Constructor for GPSCalculations.
+     * Constructor for GPSCalculator.
      */
-    public GPSCalculations() {
+    public GPSCalculator() {
     }
 
     /**
@@ -297,6 +297,44 @@ public class GPSCalculations {
 
         return isInside;
     }
+
+
+
+
+
+
+
+//    // Precondition: R contains all non-convex points of polygon
+//    private boolean isEar(Coordinate a, Coordinate b, Coordinate c) {
+//        if (concaveVertices.isEmpty) {
+//            return false;
+//        }
+//        if (isConvex(b)) {
+//            return InsideAreaOfTriangle(a, b, c) contains no point of concaveVertices;
+//        }
+//        return false;
+//    }
+//
+//    // Preconditions:
+//    // Q contains all points/vertices of the polygon
+//    private void triangulate(List<Coordinate> polygon) {
+//        polygon = new ArrayList<>(polygon);
+//        List<Triangle> triangles = new ArrayList<>();
+//        int i = 1;
+//        while (polygon.size() > 3) {
+//            Coordinate a = polygon.get(i - 1);
+//            Coordinate b = polygon.get(i);
+//            Coordinate c = polygon.get(i + 1);
+//            if (isEar(a, b, c)) {
+//                triangles.add(new Triangle(a, b, c));       // e.g. to a list
+//                polygon.remove(i);
+//                --i;
+//            } else {
+//                ++i;
+//            }
+//        }
+//    }
+
 
 
 }

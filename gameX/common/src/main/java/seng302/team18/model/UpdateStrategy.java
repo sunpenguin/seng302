@@ -3,7 +3,7 @@ package seng302.team18.model;
 /**
  * Created by dhl25 on 29/08/17.
  */
-public abstract class PowerUp {
+public abstract class UpdateStrategy {
 
 
     private Coordinate location;
@@ -11,7 +11,7 @@ public abstract class PowerUp {
     private double timeOut = Double.POSITIVE_INFINITY;
 
 
-    public PowerUp() {}
+    public UpdateStrategy() {}
 
 
     /**
@@ -33,9 +33,9 @@ public abstract class PowerUp {
 
 
     /**
-     * returns if the power up has timed out.
+     * returns if the power up is terminated.
      *
-     * @return the power up has timed out
+     * @return the power up has terminated
      */
     public boolean isTerminated() {
         return timeSinceActivation > timeOut;

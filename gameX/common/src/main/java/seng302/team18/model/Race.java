@@ -1,6 +1,6 @@
 package seng302.team18.model;
 
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * A class to represent an individual race.
  */
 public class Race extends Observable {
-    private final GPSCalculations gps = new GPSCalculations();
+    private final GPSCalculator gps = new GPSCalculator();
     private final RoundingDetector detector = new RoundingDetector();
     private int id;
     private RaceStatus status;
@@ -62,19 +62,12 @@ public class Race extends Observable {
         this.status = RaceStatus.NOT_ACTIVE;
         this.raceType = raceType;
         setCourseForBoats();
-        setInitialSpeed();
+        initPowerUps(3);
     }
 
 
-    /**
-     * Sets the speed of the boats at the start line
-     */
-    private void setInitialSpeed() {
-        double speed = 100;
-        for (Boat boat : startingList) {
-            boat.setSpeed(speed); // knots
-            speed -= 10;
-        }
+    private void initPowerUps(int powerUps) {
+
     }
 
 
@@ -263,7 +256,7 @@ public class Race extends Observable {
      * @return if the boat is outside.
      */
     private boolean isOutSide(Boat boat) {
-        GPSCalculations calculator = new GPSCalculations();
+        GPSCalculator calculator = new GPSCalculator();
         List<Coordinate> boundaries = course.getCourseLimits();
 
         return boundaries.size() > 2
@@ -384,7 +377,7 @@ public class Race extends Observable {
      * @param obstacle obstacle the boat collided with
      */
     private void handleCollision(Boat boat, AbstractBoat obstacle) {
-        GPSCalculations calculator = new GPSCalculations();
+        GPSCalculator calculator = new GPSCalculator();
         double bearingOfCollision = calculator.getBearing(obstacle.getCoordinate(), boat.getCoordinate());
         Coordinate newBoatCoordinate = calculator.toCoordinate(boat.getCoordinate(), bearingOfCollision, boat.getLength());
         boat.setCoordinate(newBoatCoordinate);

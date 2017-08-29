@@ -4,20 +4,19 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
 
 import java.util.Arrays;
 
 /**
  * Created by jth102 on 17/03/17.
  */
-public class GPSCalculationsTest {
+public class GPSCalculatorTest {
 
-    private GPSCalculations gps;
+    private GPSCalculator gps;
 
     @Before
     public void setUp() {
-        gps = new GPSCalculations();
+        gps = new GPSCalculator();
     }
 
 

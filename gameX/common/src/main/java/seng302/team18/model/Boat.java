@@ -5,10 +5,8 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.paint.Color;
 import javafx.beans.property.*;
-import seng302.team18.util.GPSCalculations;
-import seng302.team18.util.SpeedConverter;
+import seng302.team18.util.GPSCalculator;
 
 import java.util.List;
 
@@ -34,8 +32,9 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private boolean isControlled;
     private boolean sailOut;
     private RoundZone roundZone = RoundZone.ZONE1;
-    private PowerUp powerUp = new SpeedPowerUp(this);
+    private UpdateStrategy powerUp = new SpeedPowerUp(this);
     private boolean isPowerActive = true;
+    private UpdateStrategy updater = new BoatUpdate(this);
 
     /**
      * A constructor for the Boat class
@@ -289,7 +288,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      */
     public AbstractBoat hasCollided(List<AbstractBoat> obstacles){
         AbstractBoat collidedWith = null;
-        GPSCalculations calculator = new GPSCalculations();
+        GPSCalculator calculator = new GPSCalculator();
         double collisionZone;
         double distanceBetween;
         for(AbstractBoat obstacle : obstacles) {
@@ -390,7 +389,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     }
 
 
-    public void setPowerUp(PowerUp powerUp) {
+    public void setPowerUp(UpdateStrategy powerUp) {
         this.powerUp = powerUp;
     }
 
@@ -408,25 +407,14 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param time that has passed
      */
     public void update(double time) {
-        double speed = getSpeed(); // knots
-        if (isSailOut()) {
-            speed = 0;
-        }
-
-        GPSCalculations gps = new GPSCalculations();
-        double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
-        double secondsTime = time / 1000.0d;
-        double distanceTravelled = mpsSpeed * secondsTime;
-
-        // set next position based on current coordinate, distance travelled, and heading.
-        setCoordinate(gps.toCoordinate(getCoordinate(), getHeading(), distanceTravelled));
-
         if (isPowerActive) {
             powerUp.update(time);
             if (powerUp.isTerminated()) {
                 isPowerActive = false;
                 powerUp = null;
             }
+        } else {
+            updater.update(time);
         }
     }
 }
