@@ -7,7 +7,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import seng302.team18.model.Coordinate;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -106,7 +106,7 @@ public class DisplaySail extends DisplayBoatDecorator {
      * @return the sails rotation.
      */
     private double getSailAngle(double sailAngle, double maxDeviation) {
-        GPSCalculations gps = new GPSCalculations();
+        GPSCalculator gps = new GPSCalculator();
         double headingPlus = (heading + maxDeviation) % 360;
         double headingMinus = (heading - maxDeviation + 360) % 360;
         if (gps.isBetween(sailAngle, headingPlus, headingMinus)) {

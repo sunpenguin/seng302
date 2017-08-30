@@ -43,7 +43,7 @@ import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.send.Sender;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
@@ -558,7 +558,7 @@ public class RaceController implements Observer {
         this.sender = sender;
         this.race = race;
 
-        GPSCalculations gps = new GPSCalculations();
+        GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
         pixelMapper = new PixelMapper(bounds.get(0), bounds.get(1), race.getCourse().getCentralCoordinate(), raceViewPane);
         pixelMapper.setMaxZoom(16d);

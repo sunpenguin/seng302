@@ -4,20 +4,19 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
 
 import java.util.Arrays;
 
 /**
  * Created by jth102 on 17/03/17.
  */
-public class GPSCalculationsTest {
+public class GPSCalculatorTest {
 
-    private GPSCalculations gps;
+    private GPSCalculator gps;
 
     @Before
     public void setUp() {
-        gps = new GPSCalculations();
+        gps = new GPSCalculator();
     }
 
 
@@ -82,7 +81,7 @@ public class GPSCalculationsTest {
 
     @Test
     public void notContainsTest() {
-        boolean doesContain = gps.contains(new Coordinate(0, 0),
+        boolean doesContain = gps.isInside(new Coordinate(0, 0),
                 Arrays.asList(
                         new Coordinate(100, 100),
                         new Coordinate(101, 101),
@@ -94,7 +93,7 @@ public class GPSCalculationsTest {
 
     @Test
     public void containsTest() {
-        boolean doesContain = gps.contains(new Coordinate(32.3547,-89.3985),
+        boolean doesContain = gps.isInside(new Coordinate(32.3547,-89.3985),
                 Arrays.asList(
                         new Coordinate(25.767368,-80.18930),
                         new Coordinate(34.088808,-118.40612),
