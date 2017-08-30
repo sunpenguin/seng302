@@ -6,7 +6,7 @@ import seng302.team18.util.SpeedConverter;
 /**
  * Created by dhl25 on 29/08/17.
  */
-public class BoatUpdate extends UpdateStrategy {
+public class BoatUpdate extends PowerUp {
 
     private Boat boat;
 

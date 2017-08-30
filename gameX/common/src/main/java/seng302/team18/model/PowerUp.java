@@ -3,15 +3,19 @@ package seng302.team18.model;
 /**
  * Created by dhl25 on 29/08/17.
  */
-public abstract class UpdateStrategy {
+public abstract class PowerUp {
 
 
     private Coordinate location;
     private double timeSinceActivation = 0d;
     private double timeOut = Double.POSITIVE_INFINITY;
+    private BodyMass bodyMass;
 
 
-    public UpdateStrategy() {}
+    public PowerUp() {
+        bodyMass = new BodyMass();
+        bodyMass.setWeight(0);
+    }
 
 
     /**
@@ -52,4 +56,11 @@ public abstract class UpdateStrategy {
     }
 
 
+    public BodyMass getBodyMass() {
+        return bodyMass;
+    }
+
+    public void setBodyMass(BodyMass bodyMass) {
+        this.bodyMass = bodyMass;
+    }
 }

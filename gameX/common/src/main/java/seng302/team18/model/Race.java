@@ -330,22 +330,42 @@ public class Race extends Observable {
      * @param boat to be collision stuffed
      */
     private void collisionStuff(Boat boat) {
-        List<AbstractBoat> obstacles = new ArrayList<>(startingList);
-        obstacles.addAll(course.getMarks());
-        AbstractBoat obstacle = null;
-        if (mode != RaceMode.CONTROLS_TUTORIAL) {
-            obstacle = boat.hasCollided(obstacles);
-        }
-        if (obstacle instanceof Boat && ((Boat) obstacle).getStatus().equals(BoatStatus.FINISHED)) {
-            obstacle = null;
-        } else if (boat.getStatus().equals(BoatStatus.FINISHED)){
-            obstacle = null;
+        List<BodyMass> objects = new ArrayList<>();
+        for (Boat b : startingList) {
+            if (!b.getId().equals(boat.getId())) {
+                objects.add(b.getBodyMass());
+            }
         }
 
-        if (obstacle != null) {
-            handleCollision(boat, obstacle);
+        for (Mark mark : course.getMarks()) {
+            objects.add(mark.getBodyMass());
         }
+        for (BodyMass object: objects) {
+            if (boat.hasCollided(object)) {
+                handleCollision(boat.getBodyMass(), object);
+            }
+        }
+    }
 
+
+    /**
+     * Handles the collision when one is detected by printing to the console
+     * NOTE: Bumper car edition currently in play
+     *
+     * @param object   boat collision was detected from
+     * @param obstacle obstacle the boat collided with
+     */
+    private void handleCollision(BodyMass object, BodyMass obstacle) {
+        final double totalPushBack = 25; // meters
+        GPSCalculator calculator = new GPSCalculator();
+        double bearingOfCollision = calculator.getBearing(obstacle.getLocation(), object.getLocation());
+        double ratio = object.getWeight() + obstacle.getWeight();
+        double obstacleBackUpDistance = totalPushBack * (object.getWeight() / ratio);
+        double objectBackUpDistance = totalPushBack * (obstacle.getWeight() / ratio);
+        Coordinate newBoatCoordinate = calculator.toCoordinate(object.getLocation(), bearingOfCollision, objectBackUpDistance);
+        object.setLocation(newBoatCoordinate);
+        Coordinate newObstacleCoordinate = calculator.toCoordinate(obstacle.getLocation(), bearingOfCollision, -obstacleBackUpDistance);
+        obstacle.setLocation(newObstacleCoordinate);
     }
 
 
@@ -370,7 +390,6 @@ public class Race extends Observable {
     }
 
 
-
     /**
      * Sets the boat to appropriate conditions when a boat has an OCS status.
      *
@@ -386,24 +405,6 @@ public class Race extends Observable {
         boat.setSailOut(true);
     }
 
-
-    /**
-     * Handles the collision when one is detected by printing to the console
-     * NOTE: Bumper car edition currently in play
-     *
-     * @param boat     boat collision was detected from
-     * @param obstacle obstacle the boat collided with
-     */
-    private void handleCollision(Boat boat, AbstractBoat obstacle) {
-        GPSCalculator calculator = new GPSCalculator();
-        double bearingOfCollision = calculator.getBearing(obstacle.getCoordinate(), boat.getCoordinate());
-        Coordinate newBoatCoordinate = calculator.toCoordinate(boat.getCoordinate(), bearingOfCollision, boat.getLength());
-        boat.setCoordinate(newBoatCoordinate);
-        if (obstacle instanceof Boat) {
-            Coordinate newObstacleCoordinate = calculator.toCoordinate(obstacle.getCoordinate(), bearingOfCollision, -obstacle.getLength());
-            ((Boat) obstacle).setCoordinate(newObstacleCoordinate);
-        }
-    }
 
 
     public boolean isFinished() {

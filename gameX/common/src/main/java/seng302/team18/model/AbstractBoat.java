@@ -16,6 +16,7 @@ public abstract class AbstractBoat extends Observable {
     private String hullNumber;
     private Integer id;
     private Color colour = Color.CHOCOLATE;
+    private BodyMass bodyMass = new BodyMass();
 
     public AbstractBoat() {
         Random random = new Random();
@@ -38,9 +39,15 @@ public abstract class AbstractBoat extends Observable {
         colour = Color.hsb(hue, saturation, luminance);
     }
 
-    public abstract Coordinate getCoordinate();
 
-    public abstract double getLength();
+    public void setLength(double length) {
+        bodyMass.setRadius(length / 2);
+    }
+
+
+    public double getLength() {
+        return bodyMass.getRadius() * 2;
+    }
 
     public String getShortName() {
         return nameShort;
@@ -104,6 +111,35 @@ public abstract class AbstractBoat extends Observable {
         if (colour != null) {
             this.colour = colour;
         }
+    }
+
+    public BodyMass getBodyMass() {
+        return bodyMass;
+    }
+
+
+    public void setBodyMass(BodyMass bodyMass) {
+        this.bodyMass = bodyMass;
+    }
+
+
+    public void setCoordinate(Coordinate coordinate) {
+        bodyMass.setLocation(coordinate);
+    }
+
+
+    public Coordinate getCoordinate() {
+        return bodyMass.getLocation();
+    }
+
+
+    public double getWeight() {
+        return bodyMass.getWeight();
+    }
+
+
+    public void setWeight(double weight) {
+        bodyMass.setWeight(weight);
     }
 }
 

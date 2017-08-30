@@ -19,9 +19,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty legNumber = new SimpleIntegerProperty(0);
-    private double boatLength;
     private double heading;
-    private Coordinate coordinate;
     private Coordinate previousCoordinate;
     private IntegerProperty place;
     private Long timeTilNextMark;
@@ -32,20 +30,20 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private boolean isControlled;
     private boolean sailOut;
     private RoundZone roundZone = RoundZone.ZONE1;
-    private UpdateStrategy powerUp = new SpeedPowerUp(this);
+    private PowerUp powerUp = new SpeedPowerUp(this);
     private boolean isPowerActive = true;
-    private UpdateStrategy updater = new BoatUpdate(this);
+    private PowerUp updater = new BoatUpdate(this);
 
     /**
      * A constructor for the Boat class
      *
-     * @param boatName  The name of the boat
+     * @param name  The name of the boat
      * @param shortName The name of the team the boat belongs to
      * @param id        The id of the boat
      */
-    public Boat(String boatName, String shortName, int id, double boatLength) {
-        super(id, boatName, shortName);
-        this.boatLength = boatLength;
+    public Boat(String name, String shortName, int id, double length) {
+        super(id, name, shortName);
+        setLength(length);
         speed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty(1);
         timeTilNextMark = 0L;
@@ -54,6 +52,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         isControlled = true;
         sailOut = true; // Starts with luffing
         status = BoatStatus.UNDEFINED;
+        setWeight(10);
     }
 
 
@@ -123,14 +122,10 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     }
 
 
-    public Coordinate getCoordinate() {
-        return coordinate;
-    }
-
 
     public void setCoordinate(Coordinate coordinate) {
-        previousCoordinate = this.coordinate;
-        this.coordinate = coordinate;
+        previousCoordinate = getCoordinate();
+        super.setCoordinate(coordinate);
     }
 
 
@@ -158,10 +153,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         this.timeTilNextMark = timeTilNextMark;
     }
 
-    @Override
-    public double getLength() {
-        return boatLength;
-    }
 
     public Long getTimeSinceLastMark() {
         return timeSinceLastMark;
@@ -202,7 +193,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
                 ", leg=" + legNumber +
                 ", id=" + getId() +
                 ", heading=" + heading +
-                ", coordinate=" + coordinate +
+                ", coordinate=" + getCoordinate() +
                 ", place=" + place +
                 ", timeTilNextMark=" + timeTilNextMark +
                 ", timeSinceLastMark=" + timeSinceLastMark +
@@ -279,34 +270,41 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         return trueWindAngle;
     }
 
-    /**
-     * Method to check if boat has collided with another boat
-     * TODO: jth102, sbe67 25/07, handle collisions with more than one obstacle
-     *
-     * @param obstacles  list of Abstract Boats to check if boat has collied
-     * @return the obstacle the boat has collided, null is not collision
-     */
-    public AbstractBoat hasCollided(List<AbstractBoat> obstacles) {
-        AbstractBoat collidedWith = null;
+//    /**
+//     * Method to check if boat has collided with another boat
+//     * TODO: jth102, sbe67 25/07, handle collisions with more than one obstacle
+//     *
+//     * @param obstacles  list of Abstract Boats to check if boat has collied
+//     * @return the obstacle the boat has collided, null is not collision
+//     */
+//    public AbstractBoat hasCollided(List<AbstractBoat> obstacles) {
+//        AbstractBoat collidedWith = null;
+//        GPSCalculator calculator = new GPSCalculator();
+//        double collisionZone;
+//        double distanceBetween;
+//        for (AbstractBoat obstacle : obstacles) {
+//            if (!obstacle.equals(this)) {
+//                collisionZone = (obstacle.getLength()) + (boatLength / 2);
+//
+//                if (obstacle instanceof Mark) {
+//                    collisionZone *= 1.3;
+//                }
+//
+//                distanceBetween = calculator.distance(coordinate, obstacle.getCoordinate());
+//
+//                if (distanceBetween < collisionZone) {
+//                    collidedWith = obstacle;
+//                }
+//            }
+//        }
+//        return collidedWith;
+//    }
+
+
+    public boolean hasCollided(BodyMass bodyMass) {
         GPSCalculator calculator = new GPSCalculator();
-        double collisionZone;
-        double distanceBetween;
-        for(AbstractBoat obstacle : obstacles) {
-            if (!obstacle.equals(this)) {
-                collisionZone = (obstacle.getLength()) + (boatLength/2);
-
-                if (obstacle instanceof Mark) {
-                    collisionZone *= 1.3;
-                }
-
-                distanceBetween = calculator.distance(coordinate, (obstacle).getCoordinate());
-
-                if (distanceBetween < collisionZone) {
-                    collidedWith = obstacle;
-                }
-            }
-        }
-        return collidedWith;
+        double collisionZone = getBodyMass().getRadius() + bodyMass.getRadius();
+        return calculator.distance(getCoordinate(), bodyMass.getLocation()) < collisionZone;
     }
 
 
@@ -389,7 +387,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     }
 
 
-    public void setPowerUp(UpdateStrategy powerUp) {
+    public void setPowerUp(PowerUp powerUp) {
         this.powerUp = powerUp;
     }
 

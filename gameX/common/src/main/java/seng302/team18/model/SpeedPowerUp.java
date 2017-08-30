@@ -3,7 +3,7 @@ package seng302.team18.model;
 /**
  * Created by dhl25 on 29/08/17.
  */
-public class SpeedPowerUp extends UpdateStrategy {
+public class SpeedPowerUp extends PowerUp {
 
     private BoatUpdate boatUpdate;
 
