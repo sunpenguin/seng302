@@ -286,7 +286,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param obstacles  list of Abstract Boats to check if boat has collied
      * @return the obstacle the boat has collided, null is not collision
      */
-    public AbstractBoat hasCollided(List<AbstractBoat> obstacles){
+    public AbstractBoat hasCollided(List<AbstractBoat> obstacles) {
         AbstractBoat collidedWith = null;
         GPSCalculator calculator = new GPSCalculator();
         double collisionZone;

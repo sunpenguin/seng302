@@ -62,12 +62,20 @@ public class Race extends Observable {
         this.status = RaceStatus.NOT_ACTIVE;
         this.raceType = raceType;
         setCourseForBoats();
-        initPowerUps(3);
     }
 
 
-    private void initPowerUps(int powerUps) {
-
+    /**
+     * Randomly places power ups.
+     * @param powerUps number of power ups to place
+     */
+    public void addPowerUps(int powerUps) {
+        GPSCalculator calculator = new GPSCalculator();
+        List<Coordinate> corners = gps.findMinMaxPoints(course);
+        for (int i = 0; i < powerUps; i++) {
+            Coordinate randomPoint = calculator.randomPoint(course.getCourseLimits());
+            course.getCompoundMarks().add(new CompoundMark("a", Arrays.asList(new Mark(i * 3 + 2, randomPoint)), i * 2 + 3));
+        }
     }
 
 
@@ -231,7 +239,17 @@ public class Race extends Observable {
             boat.update(time);
             roundingStuff(boat);
             boundaryStuff(boat);
+            powerUpStuff(boat);
         }
+    }
+
+
+    /**
+     * Determines if a boat picked up a power up.
+     * @param boat
+     */
+    private void powerUpStuff(Boat boat) {
+
     }
 
 
@@ -260,7 +278,7 @@ public class Race extends Observable {
         List<Coordinate> boundaries = course.getCourseLimits();
 
         return boundaries.size() > 2
-                && !calculator.contains(boat.getCoordinate(), boundaries)
+                && !calculator.isInside(boat.getCoordinate(), boundaries)
                 && !(boat.getStatus().equals(BoatStatus.DSQ));
     }
 
@@ -321,7 +339,7 @@ public class Race extends Observable {
         if (obstacle instanceof Boat && ((Boat) obstacle).getStatus().equals(BoatStatus.FINISHED)) {
             obstacle = null;
         } else if (boat.getStatus().equals(BoatStatus.FINISHED)){
-            obstacle =null;
+            obstacle = null;
         }
 
         if (obstacle != null) {

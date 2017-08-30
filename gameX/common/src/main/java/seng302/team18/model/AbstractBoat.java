@@ -3,6 +3,7 @@ package seng302.team18.model;
 import javafx.scene.paint.Color;
 
 import java.util.Observable;
+import java.util.Random;
 
 /**
  * Holds information about "boats", as conveyed in the AC35 protocol. Note that boats here means all boats (potentially
@@ -17,6 +18,11 @@ public abstract class AbstractBoat extends Observable {
     private Color colour = Color.CHOCOLATE;
 
     public AbstractBoat() {
+        Random random = new Random();
+        final float hue = random.nextFloat();
+        final float saturation = (random.nextInt(2000) + 1000) / 10000f;
+        final float luminance = 0.9f;
+        colour = Color.hsb(hue, saturation, luminance);
     }
 
 
@@ -24,6 +30,12 @@ public abstract class AbstractBoat extends Observable {
         this.id = id;
         this.name = boatName;
         this.nameShort = shortName;
+
+        Random random = new Random();
+        final float hue = random.nextFloat();
+        final float saturation = (random.nextInt(2000) + 1000) / 10000f;
+        final float luminance = 0.9f;
+        colour = Color.hsb(hue, saturation, luminance);
     }
 
     public abstract Coordinate getCoordinate();
@@ -89,7 +101,9 @@ public abstract class AbstractBoat extends Observable {
 
 
     public void setColour(Color colour) {
-        this.colour = colour;
+        if (colour != null) {
+            this.colour = colour;
+        }
     }
 }
 

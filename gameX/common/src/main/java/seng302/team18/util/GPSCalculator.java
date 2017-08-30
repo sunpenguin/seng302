@@ -6,6 +6,7 @@ import seng302.team18.model.Mark;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -175,6 +176,7 @@ public class GPSCalculator {
         return new Coordinate(centralLatitude * 180 / Math.PI, centralLongitude * 180 / Math.PI);
     }
 
+
     /**
      * Calculate the coordinates of the upper-left and lower-right coordinates of a bounding box of a
      * given list of coordinates
@@ -214,6 +216,7 @@ public class GPSCalculator {
         return result;
     }
 
+
     /**
      * Calculate the coordinates of the upper-left and lower-right coordinates of a bounding box of a
      * given course
@@ -247,35 +250,30 @@ public class GPSCalculator {
         return bearing <= finish;
     }
 
+
     /**
      * Detects whether or not a certain coordinate is located inside a polygon of coordinate points
      * @param location The location point you are checking is inside the polygon
      * @param boundary The polygon
      * @return True if the location is inside the polygon, false if it is outside
      */
-    public boolean contains(Coordinate location, List<Coordinate> boundary)
-    {
+    public boolean isInside(Coordinate location, List<Coordinate> boundary) {
         Coordinate lastPoint = boundary.get(boundary.size() - 1);
         Boolean isInside = false;
         double x = location.getLongitude();
-        for (Coordinate point : boundary)
-        {
+        for (Coordinate point : boundary) {
             double x1 = lastPoint.getLongitude();
             double x2 = point.getLongitude();
             double dx = x2 - x1;
 
-            if (Math.abs(dx) > 180.0)
-            {
+            if (Math.abs(dx) > 180.0) {
                 // we have, most likely, just jumped the dateline (could do further validation to this effect if needed).  normalise the numbers.
-                if (x > 0)
-                {
+                if (x > 0) {
                     while (x1 < 0)
                         x1 += 360;
                     while (x2 < 0)
                         x2 += 360;
-                }
-                else
-                {
+                } else {
                     while (x1 > 0)
                         x1 -= 360;
                     while (x2 > 0)
@@ -284,13 +282,13 @@ public class GPSCalculator {
                 dx = x2 - x1;
             }
 
-            if ((x1 <= x && x2 > x) || (x1 >= x && x2 < x))
-            {
+            if ((x1 <= x && x2 > x) || (x1 >= x && x2 < x)) {
                 double grad = (point.getLatitude() - lastPoint.getLatitude()) / dx;
                 double intersectAtLat = lastPoint.getLatitude() + ((x - x1) * grad);
 
-                if (intersectAtLat > location.getLatitude())
+                if (intersectAtLat > location.getLatitude()) {
                     isInside = !isInside;
+                }
             }
             lastPoint = point;
         }
@@ -299,41 +297,39 @@ public class GPSCalculator {
     }
 
 
+    /**
+     * Randomly generate a point inside the given boundary.
+     * @param bounds course boundary
+     * @return a random point inside the given boundary
+     */
+    public Coordinate randomPoint(List<Coordinate> bounds) {
+        List<Coordinate> corners = findMinMaxPoints(bounds);
+        Coordinate topLeft = corners.get(0);
+        Coordinate bottomRight = corners.get(1);
+        return randomPoint(bounds, topLeft, bottomRight);
+    }
 
 
+    /**
+     * Randomly generate a point inside the racing area.
+     * @param bounds course boundary
+     * @param topLeft top left corner
+     * @param bottomRight bottom right corner
+     * @return a random point inside the racing area
+     */
+    private Coordinate randomPoint(List<Coordinate> bounds, Coordinate topLeft, Coordinate bottomRight) {
+        Random random = new Random();
+        double randY = random.nextDouble();
+        double randX = random.nextDouble();
+        double newX = (topLeft.getLatitude() - bottomRight.getLatitude()) * randX + bottomRight.getLatitude();
+        double newY = (bottomRight.getLongitude() - topLeft.getLongitude()) * randY + topLeft.getLongitude();
+        Coordinate randomPoint = new Coordinate(newX, newY);
+        if (isInside(randomPoint, bounds)) {
+            return randomPoint;
+        }
+        return randomPoint(bounds, topLeft, bottomRight);
+    }
 
-
-
-//    // Precondition: R contains all non-convex points of polygon
-//    private boolean isEar(Coordinate a, Coordinate b, Coordinate c) {
-//        if (concaveVertices.isEmpty) {
-//            return false;
-//        }
-//        if (isConvex(b)) {
-//            return InsideAreaOfTriangle(a, b, c) contains no point of concaveVertices;
-//        }
-//        return false;
-//    }
-//
-//    // Preconditions:
-//    // Q contains all points/vertices of the polygon
-//    private void triangulate(List<Coordinate> polygon) {
-//        polygon = new ArrayList<>(polygon);
-//        List<Triangle> triangles = new ArrayList<>();
-//        int i = 1;
-//        while (polygon.size() > 3) {
-//            Coordinate a = polygon.get(i - 1);
-//            Coordinate b = polygon.get(i);
-//            Coordinate c = polygon.get(i + 1);
-//            if (isEar(a, b, c)) {
-//                triangles.add(new Triangle(a, b, c));       // e.g. to a list
-//                polygon.remove(i);
-//                --i;
-//            } else {
-//                ++i;
-//            }
-//        }
-//    }
 
 
 

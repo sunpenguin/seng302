@@ -81,7 +81,7 @@ public class GPSCalculatorTest {
 
     @Test
     public void notContainsTest() {
-        boolean doesContain = gps.contains(new Coordinate(0, 0),
+        boolean doesContain = gps.isInside(new Coordinate(0, 0),
                 Arrays.asList(
                         new Coordinate(100, 100),
                         new Coordinate(101, 101),
@@ -93,7 +93,7 @@ public class GPSCalculatorTest {
 
     @Test
     public void containsTest() {
-        boolean doesContain = gps.contains(new Coordinate(32.3547,-89.3985),
+        boolean doesContain = gps.isInside(new Coordinate(32.3547,-89.3985),
                 Arrays.asList(
                         new Coordinate(25.767368,-80.18930),
                         new Coordinate(34.088808,-118.40612),
