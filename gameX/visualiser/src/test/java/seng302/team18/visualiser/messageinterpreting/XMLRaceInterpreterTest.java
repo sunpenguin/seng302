@@ -8,6 +8,7 @@ import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.*;
+import seng302.team18.visualiser.display.DisplayRace;
 
 import java.util.*;
 
@@ -16,7 +17,7 @@ import java.util.*;
  */
 public class XMLRaceInterpreterTest {
 
-    private Race race;
+    private DisplayRace race;
     private MessageInterpreter interpreter;
     private List<AbstractBoat> boats;
     private List<CompoundMark> compoundMarks;
@@ -28,7 +29,7 @@ public class XMLRaceInterpreterTest {
         Boat boat = new Boat("test", "t", 0, 1);
         boats = new ArrayList<>();
         boats.add(boat);
-        race = new Race();
+        race = new DisplayRace();
         interpreter = new XMLRaceInterpreter(race);
 
         // boundaries

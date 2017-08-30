@@ -110,7 +110,7 @@ public class RaceController implements Observer {
     private boolean onImportant;
     private boolean sailIn = false;
 
-    private Race race;
+    private DisplayRace race;
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
@@ -563,7 +563,7 @@ public class RaceController implements Observer {
      * @param sender      the sender
      * @param interpreter the interpreter
      */
-    public void setUp(Race race, Interpreter interpreter, Sender sender) {
+    public void setUp(DisplayRace race, Interpreter interpreter, Sender sender) {
         this.sender = sender;
         this.race = race;
 

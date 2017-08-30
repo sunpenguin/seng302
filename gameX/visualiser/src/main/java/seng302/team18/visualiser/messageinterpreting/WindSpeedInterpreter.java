@@ -3,17 +3,17 @@ package seng302.team18.visualiser.messageinterpreting;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Race;
 import seng302.team18.util.SpeedConverter;
+import seng302.team18.visualiser.display.DisplayRace;
 
 /**
  * Created by csl62 on 28/06/17.
  */
 public class WindSpeedInterpreter extends MessageInterpreter {
 
-    private Race race;
+    private DisplayRace race;
 
-    public WindSpeedInterpreter(Race race) {
+    public WindSpeedInterpreter(DisplayRace race) {
         this.race = race;
     }
 

@@ -5,6 +5,7 @@ import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Course;
 import seng302.team18.model.Race;
+import seng302.team18.visualiser.display.DisplayRace;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,14 +16,14 @@ import java.util.ArrayList;
  */
 public class XMLRaceInterpreter extends MessageInterpreter {
 
-    private Race race;
+    private DisplayRace race;
 
     /**
      * Constructor for XMLRaceInterpreter. Takes a Race as a parameter which it updates every time a
      * AC35XMLBoatMessage is interpreted.
      * @param race to be updated.
      */
-    public XMLRaceInterpreter(Race race) {
+    public XMLRaceInterpreter(DisplayRace race) {
         this.race = race;
     }
 

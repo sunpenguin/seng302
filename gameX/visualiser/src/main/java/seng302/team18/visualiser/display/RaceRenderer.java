@@ -13,7 +13,7 @@ import java.util.*;
 public class RaceRenderer {
 
     private Group group;
-    private Race race;
+    private DisplayRace race;
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private Map<String, Double> headingMap;
@@ -51,7 +51,7 @@ public class RaceRenderer {
      * @param race        the race containing the displayBoats to be drawn
      * @param group       the group to be drawn on
      */
-    public RaceRenderer(PixelMapper pixelMapper, Race race, Group group) {
+    public RaceRenderer(PixelMapper pixelMapper, DisplayRace race, Group group) {
         this.race = race;
         this.group = group;
         this.pixelMapper = pixelMapper;

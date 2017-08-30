@@ -2,7 +2,6 @@ package seng302.team18.visualiser.display;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
-import seng302.team18.model.Race;
 
 import java.time.format.DateTimeFormatter;
 
@@ -15,7 +14,7 @@ public class PreRaceTimes extends AnimationTimer {
     private Label timeZoneLabel;
     private Label currentTimeLabel;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-    private Race race;
+    private DisplayRace race;
 
 
     /**
@@ -26,7 +25,7 @@ public class PreRaceTimes extends AnimationTimer {
      * @param currentTimeLabel the label which will hold the current time text of a race.
      * @param race the race to be observed.
      */
-    public PreRaceTimes(Label startLabel, Label timeZoneLabel, Label currentTimeLabel, Race race) {
+    public PreRaceTimes(Label startLabel, Label timeZoneLabel, Label currentTimeLabel, DisplayRace race) {
         this.startLabel = startLabel;
         this.timeZoneLabel = timeZoneLabel;
         this.currentTimeLabel = currentTimeLabel;

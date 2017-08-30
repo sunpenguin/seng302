@@ -3,21 +3,20 @@ package seng302.team18.visualiser.display;
 import javafx.animation.AnimationTimer;
 import javafx.scene.control.Label;
 import javafx.scene.shape.Polygon;
-import seng302.team18.model.Race;
 
 /**
  * The class that manages the wind direction
  */
 public class WindDisplay extends AnimationTimer {
 
-    private Race race;
+    private DisplayRace race;
     private Polygon arrow;
     private Label speedLabel;
     private double direction;
     private double speed;
     private double scaleY = 40;
 
-    public WindDisplay(Race race, Polygon arrow, Label speedLabel) {
+    public WindDisplay(DisplayRace race, Polygon arrow, Label speedLabel) {
         this.race = race;
         this.arrow = arrow;
         this.speedLabel = speedLabel;

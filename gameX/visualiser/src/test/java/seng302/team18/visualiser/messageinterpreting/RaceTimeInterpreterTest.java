@@ -8,8 +8,8 @@ import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Course;
-import seng302.team18.model.Race;
 import seng302.team18.model.RaceStatus;
+import seng302.team18.visualiser.display.DisplayRace;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class RaceTimeInterpreterTest {
 
-    private Race race;
+    private DisplayRace race;
     private MessageInterpreter raceTimeInterpreter;
     private Boat boat;
     private MessageBody message;
@@ -32,7 +32,7 @@ public class RaceTimeInterpreterTest {
         boat.setTimeAtLastMark(3000L);
         List<Boat> boats = new ArrayList<>();
         boats.add(boat);
-        race = new Race();
+        race = new DisplayRace();
         race.setStartingList(boats);
         raceTimeInterpreter = new RaceTimeInterpreter(race);
         message = new AC35RaceStatusMessage(13000, 0, 2000, 0, 0, new ArrayList<>());

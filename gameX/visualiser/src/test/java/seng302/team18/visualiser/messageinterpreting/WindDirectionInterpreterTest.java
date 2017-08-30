@@ -8,8 +8,8 @@ import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Course;
-import seng302.team18.model.Race;
 import seng302.team18.model.RaceStatus;
+import seng302.team18.visualiser.display.DisplayRace;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class WindDirectionInterpreterTest {
 
-    private Race race;
+    private DisplayRace race;
     private MessageInterpreter interpreter;
     private Boat boat;
     private double windDirection = 35.4;
@@ -33,7 +33,7 @@ public class WindDirectionInterpreterTest {
         boat = new Boat("test", "t", 0, 1);
         List<Boat> boats = new ArrayList<>();
         boats.add(boat);
-        race = new Race();
+        race = new DisplayRace();
         race.setStartingList(boats);
         interpreter = new WindDirectionInterpreter(race);
         MessageBody message = new AC35RaceStatusMessage(0, 0, 0, windDirection, windSpeed, new ArrayList<>());

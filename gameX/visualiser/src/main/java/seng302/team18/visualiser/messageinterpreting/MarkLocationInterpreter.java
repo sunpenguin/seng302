@@ -4,7 +4,7 @@ import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatLocationMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Mark;
-import seng302.team18.model.Race;
+import seng302.team18.visualiser.display.DisplayRace;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
  * @see MessageInterpreter
  */
 public class MarkLocationInterpreter extends MessageInterpreter {
-    private Race race;
+    private DisplayRace race;
 
     /**
      * Constructor for MarkLocationInterpreter.
      *
      * @param race the race to be updated.
      */
-    public MarkLocationInterpreter(Race race) {
+    public MarkLocationInterpreter(DisplayRace race) {
         this.race = race;
     }
 

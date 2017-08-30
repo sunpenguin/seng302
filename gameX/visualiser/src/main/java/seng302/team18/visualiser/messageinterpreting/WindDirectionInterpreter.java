@@ -3,7 +3,7 @@ package seng302.team18.visualiser.messageinterpreting;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Race;
+import seng302.team18.visualiser.display.DisplayRace;
 
 import static java.lang.Math.abs;
 
@@ -12,14 +12,14 @@ import static java.lang.Math.abs;
  */
 public class WindDirectionInterpreter extends MessageInterpreter {
 
-    private Race race;
+    private DisplayRace race;
 
     /**
      * Constructor for WindDirectionInterpreter. Takes a Race as a parameter which it updates every time a
      * AC35RaceStatusMessage is interpreted.
      * @param race to be updated.
      */
-    public WindDirectionInterpreter(Race race) {
+    public WindDirectionInterpreter(DisplayRace race) {
         this.race = race;
     }
 

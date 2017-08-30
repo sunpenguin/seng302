@@ -8,6 +8,7 @@ import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.AC35XMLRegattaMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.*;
+import seng302.team18.visualiser.display.DisplayRace;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -20,7 +21,7 @@ import java.util.List;
  */
 public class XMLRegattaInterpreterTest {
 
-    private Race race;
+    private DisplayRace race;
     private MessageInterpreter interpreter;
     private List<AbstractBoat> boats;
     private String utcOffset = "+1";
@@ -30,7 +31,7 @@ public class XMLRegattaInterpreterTest {
         Boat boat = new Boat("test", "t", 0, 1);
         boats = new ArrayList<>();
         boats.add(boat);
-        race = new Race();
+        race = new DisplayRace();
         interpreter = new XMLRegattaInterpreter(race);
 
         MessageBody message = new AC35XMLRegattaMessage(12, "The Best Race", "The Best Course", 0, 0, utcOffset);

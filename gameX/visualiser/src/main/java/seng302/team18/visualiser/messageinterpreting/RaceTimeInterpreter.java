@@ -4,7 +4,7 @@ import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
-import seng302.team18.model.Race;
+import seng302.team18.visualiser.display.DisplayRace;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -15,14 +15,14 @@ import java.time.ZonedDateTime;
  */
 public class RaceTimeInterpreter extends MessageInterpreter {
 
-    private Race race;
+    private DisplayRace race;
 
     /**
      * Constructor for RaceTimeInterpreter. Takes a Race as a parameter which it updates every time a
      * AC35RaceStatusMessage is interpreted.
      * @param race to be updated.
      */
-    public RaceTimeInterpreter(Race race) {
+    public RaceTimeInterpreter(DisplayRace race) {
         this.race = race;
     }
 

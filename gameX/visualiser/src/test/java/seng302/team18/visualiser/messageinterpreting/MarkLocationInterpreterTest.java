@@ -7,6 +7,7 @@ import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatLocationMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.*;
+import seng302.team18.visualiser.display.DisplayRace;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,14 +18,14 @@ import java.util.stream.Collectors;
  * Test class for MarkLocationInterpreter
  */
 public class MarkLocationInterpreterTest {
-    private Race race;
+    private DisplayRace race;
     private MessageInterpreter interpreter;
     private MessageBody message;
     private Double delta = 0.001;
 
     @Before
     public void setUp() throws Exception {
-        race = new Race();
+        race = new DisplayRace();
         List<Mark> compoundMarks1 = new ArrayList<>(Arrays.asList(
                 new Mark(1, new Coordinate(10, 10)),
                 new Mark(2, new Coordinate(-10, -10))

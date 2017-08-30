@@ -17,6 +17,7 @@ import seng302.team18.message.*;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
+import seng302.team18.visualiser.display.DisplayRace;
 import seng302.team18.visualiser.display.PreRaceTimes;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
@@ -48,7 +49,7 @@ public class PreRaceController {
 
     private Interpreter interpreter;
     private Sender sender;
-    private Race race;
+    private DisplayRace race;
 
     private boolean hasChanged = false;
 
@@ -67,7 +68,7 @@ public class PreRaceController {
      * @param receiver the receiver
      * @param sender   the sender
      */
-    public void setUp(Race race, Receiver receiver, Sender sender) {
+    public void setUp(DisplayRace race, Receiver receiver, Sender sender) {
         this.sender = sender;
         this.race = race;
         raceNameText.setText(race.getRegatta().getName());
