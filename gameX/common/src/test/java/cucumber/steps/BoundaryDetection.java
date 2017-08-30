@@ -15,8 +15,8 @@ public class BoundaryDetection {
 
     private Boat boat;
     private Race race;
-    private BoatStatus oldStatus = BoatStatus.RACING;
-    private BoatStatus newStatus = BoatStatus.RACING;
+    private BoatStatus oldStatus = BoatStatus.PRE_START;
+    private BoatStatus newStatus = BoatStatus.PRE_START;
     private boolean hasChanged = false;
     private Observer observer = new Observer() {
         @Override
