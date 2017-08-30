@@ -25,7 +25,6 @@ public class RaceClock extends AnimationTimer {
     public RaceClock(Label timeLabel) {
         this.timeLabel = timeLabel;
         time = 0L;
-        //timeLabel.setTextFill(Color.BLACK);
         timeLabel.setStyle("-fx-font-size: 2em;");
         timeLabel.setText("");
     }
@@ -49,7 +48,7 @@ public class RaceClock extends AnimationTimer {
         if (time < 0) {
             timeLabel.setTextFill(Color.RED);
         } else {
-            timeLabel.setTextFill(Color.LIGHTGREEN);
+            timeLabel.setTextFill(Color.BLACK);
         }
         timeLabel.setText(secondsToString(time.doubleValue()));
     }

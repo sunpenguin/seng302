@@ -1,0 +1,15 @@
+@font-face {
+    src: url("/font/Munro.ttf");
+}
+
+.label {
+    -fx-font-size: 30;
+    -fx-font-family: "Munro";
+}
+
+.timeBox {
+    -fx-background-color: white;
+    -fx-padding: 5px;
+    -fx-border-color: black;
+    -fx-border-width: 3px 3px 3px 3px;
+}
