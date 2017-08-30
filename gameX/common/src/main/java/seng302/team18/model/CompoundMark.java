@@ -1,6 +1,6 @@
 package seng302.team18.model;
 
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,7 +32,7 @@ public class CompoundMark implements GeographicLocation {
      */
     public Coordinate getCoordinate() {
         if (marks.size() == GATE_SIZE) {
-            GPSCalculations gps = new GPSCalculations();
+            GPSCalculator gps = new GPSCalculator();
             return gps.midPoint(marks.get(0).getCoordinate(), marks.get(1).getCoordinate());
         } else if (marks.size() == MARK_SIZE) {
             return marks.get(0).getCoordinate();

@@ -1,6 +1,6 @@
 package seng302.team18.model;
 
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -128,7 +128,7 @@ public class Course {
 
 
     public Coordinate getCentralCoordinate() {
-        GPSCalculations calculator = new GPSCalculations();
+        GPSCalculator calculator = new GPSCalculator();
         List<Coordinate> coordinates = calculator.findMinMaxPoints(this);
         return calculator.getCentralCoordinate(coordinates);
     }
@@ -173,7 +173,7 @@ public class Course {
 
 
     private void setMarkRoundingAngle(MarkRounding previous, MarkRounding current, MarkRounding future) {
-        GPSCalculations calculator = new GPSCalculations();
+        GPSCalculator calculator = new GPSCalculator();
 
         double previousAngle = calculator.getBearing(previous.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
         double futureAngle = calculator.getBearing(future.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
@@ -197,7 +197,7 @@ public class Course {
 
         } else {
 
-            GPSCalculations calculator = new GPSCalculations();
+            GPSCalculator calculator = new GPSCalculator();
 
             Mark mark1 = rounding.getCompoundMark().getMarks().get(0);
             Mark mark2 = rounding.getCompoundMark().getMarks().get(1);
