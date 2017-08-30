@@ -31,7 +31,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private boolean sailOut;
     private RoundZone roundZone = RoundZone.ZONE1;
     private PowerUp powerUp = new SpeedPowerUp(this);
-    private boolean isPowerActive = true;
+    private boolean isPowerActive = false; //Changed for merging into dev branch
     private PowerUp updater = new BoatUpdate(this);
 
     /**
