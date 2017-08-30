@@ -90,17 +90,6 @@ public class RaceController implements Observer {
     @FXML
     private AnchorPane tabView;
 
-    @FXML
-    private AnchorPane finisherPane;
-    @FXML
-    private TableView<Boat> finisherTable;
-    @FXML
-    private TableColumn<Boat, Integer> finisherPlace;
-    @FXML
-    private TableColumn<Boat, String> finisherColour;
-    @FXML
-    private TableColumn<Boat, String> finisherName;
-
     private SortedList<Boat> sortedList;
 
     private Pane escapeMenuPane;
@@ -599,8 +588,6 @@ public class RaceController implements Observer {
 
         loadEscapeMenu();
 
-        int id = race.getPlayerId();
-
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
     }
 
@@ -613,7 +600,7 @@ public class RaceController implements Observer {
         timeBox = new HBox(timeLabel);
         timeBox.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/raceview.css").toExternalForm());
         timeBox.getStyleClass().add("timeBox");
-        timeLabel.setPrefWidth(70);
+        timeLabel.setPrefWidth(80);
         timeBox.setPrefWidth(120);
         timeBox.setAlignment(Pos.CENTER);
         raceClock = new RaceClock(timeLabel);
