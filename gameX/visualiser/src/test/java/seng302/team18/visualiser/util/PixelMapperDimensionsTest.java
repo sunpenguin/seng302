@@ -5,8 +5,10 @@ import org.junit.After;
 import org.junit.Test;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.XYPair;
 
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 
 public class PixelMapperDimensionsTest {
 
@@ -26,8 +28,9 @@ public class PixelMapperDimensionsTest {
 
         pane = new Pane();
         pane.setMaxSize(paneWidth, paneHeight);
-        pane.setMinSize(paneWidth, paneHeight);
         pane.setPrefSize(paneWidth, paneHeight);
+        pane.setMinSize(paneWidth, paneHeight);
+        pane.resize(paneWidth, paneHeight);
 
         centre = new Coordinate(latitude, longitude);
         north = GPS.toCoordinate(centre, 0, dNorth);
@@ -81,6 +84,13 @@ public class PixelMapperDimensionsTest {
     }
 
 
+    private void setMediumSquarePaneMediumSquareEquatorialCourse() throws Exception {
+        setUp(750, 750,
+                0, 0,
+                500, 500, 500, 500);
+    }
+
+
     // ============================= Small Courses =========================================================
 
     @Test
@@ -123,9 +133,7 @@ public class PixelMapperDimensionsTest {
 
     @Test
     public void mediumSquarePaneMediumSquareEquatorialCourse() throws Exception {
-        setUp(750, 750,
-                0, 0,
-                500, 500, 500, 500);
+        setMediumSquarePaneMediumSquareEquatorialCourse();
         checkRatios("Medium square pane, medium square equatorial course");
     }
 
@@ -271,5 +279,96 @@ public class PixelMapperDimensionsTest {
                 0, 0,
                 250, 1000, 250, 500);
         checkRatios("Wide pane, wide equatorial course");
+    }
+
+
+    // ============================= Sanity check pixel values ==================================================
+    // Catches reflection and rotation
+
+    @Test
+    public void centreHorizontalPositionTest() throws Exception {
+        setMediumSquarePaneMediumSquareEquatorialCourse();
+        XYPair point = pixelMapper.coordToPixel(centre);
+        assertEquals("centre point not centred horizontally", pane.getWidth() / 2, point.getX(), 1);
+    }
+
+
+    @Test
+    public void centreVerticalPositionTest() throws Exception {
+        setMediumSquarePaneMediumSquareEquatorialCourse();
+        XYPair point = pixelMapper.coordToPixel(centre);
+        assertEquals("centre point not centred vertically", pane.getHeight() / 2, point.getY(), 1);
+    }
+
+
+    @Test
+    public void northHorizontalPositionTest() throws Exception {
+        setMediumSquarePaneMediumSquareEquatorialCourse();
+
+        XYPair point = pixelMapper.coordToPixel(north);
+        assertEquals("northern point horizontal position wrong", (pane.getWidth() / 2), point.getX(), 1);
+    }
+
+
+    @Test
+    public void northVerticalPositionTest() throws Exception {
+        setMediumSquarePaneMediumSquareEquatorialCourse();
+
+        XYPair point = pixelMapper.coordToPixel(north);
+        assertTrue("northern point vertical position wrong", point.getY() < (pane.getHeight() / 2));
+    }
+
+
+    @Test
+    public void southHorizontalPositionTest() throws Exception {
+        setMediumSquarePaneMediumSquareEquatorialCourse();
+
+        XYPair point = pixelMapper.coordToPixel(south);
+        assertEquals("southern point horizontal position wrong", (pane.getWidth() / 2), point.getX(), 1);
+    }
+
+
+    @Test
+    public void southVerticalPositionTest() throws Exception {
+        setMediumSquarePaneMediumSquareEquatorialCourse();
+
+        XYPair point = pixelMapper.coordToPixel(south);
+        assertTrue("southern point vertical position wrong", point.getY() > (pane.getHeight() / 2));
+    }
+
+
+    @Test
+    public void eastHorizontalPositionTest() throws Exception {
+        setMediumSquarePaneMediumSquareEquatorialCourse();
+
+        XYPair point = pixelMapper.coordToPixel(east);
+        assertTrue("eastern point horizontal position wrong", point.getX() > (pane.getWidth() / 2));
+    }
+
+
+    @Test
+    public void eastVerticalPositionTest() throws Exception {
+        setMediumSquarePaneMediumSquareEquatorialCourse();
+
+        XYPair point = pixelMapper.coordToPixel(east);
+        assertEquals("eastern point vertical position wrong", (pane.getHeight() / 2), point.getY(), 1);
+    }
+
+
+    @Test
+    public void westHorizontalPositionTest() throws Exception {
+        setMediumSquarePaneMediumSquareEquatorialCourse();
+
+        XYPair point = pixelMapper.coordToPixel(west);
+        assertTrue("western point horizontal position wrong", point.getX() < (pane.getWidth() / 2));
+    }
+
+
+    @Test
+    public void westVerticalPositionTest() throws Exception {
+        setMediumSquarePaneMediumSquareEquatorialCourse();
+
+        XYPair point = pixelMapper.coordToPixel(west);
+        assertEquals("western point vertical position wrong", (pane.getHeight() / 2), point.getY(), 1);
     }
 }
