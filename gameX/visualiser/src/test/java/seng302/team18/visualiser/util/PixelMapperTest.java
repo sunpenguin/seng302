@@ -1,10 +1,7 @@
 package seng302.team18.visualiser.util;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.layout.Pane;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import seng302.team18.model.CompoundMark;
 import seng302.team18.model.Coordinate;
@@ -14,20 +11,17 @@ import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.XYPair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 
-/**
- * Created by David-chan on 13/05/17.
- */
+
 public class PixelMapperTest {
 
     private PixelMapper mapper;
     private Course course;
     private Pane pane;
+
 
     @After
     public void tearDown() {
@@ -37,7 +31,6 @@ public class PixelMapperTest {
     }
 
 
-    @Ignore
     @Test
     public void mappingRatioOnNormalCourseTest() {
         //Make course
@@ -92,7 +85,6 @@ public class PixelMapperTest {
     }
 
 
-    @Ignore
     @Test
     public void mappingRatioOnLargeCourseTest() {
         //Make course
@@ -147,7 +139,6 @@ public class PixelMapperTest {
     }
 
 
-    @Ignore
     @Test
     public void mappingRatioOnTinyCourseTest() {
         //Test for when 1 k above centre is outside of course
@@ -199,168 +190,6 @@ public class PixelMapperTest {
 
                 assertEquals(geoDistance, xyDistance / mappingRatio, 200);
             }
-        }
-    }
-
-
-    /**
-     * Test method for manual testing and investigation of pixel mapper behaviour
-     */
-    @Ignore
-    @Test
-    public void testDummy() {
-
-        // Copy of pixel mapper for manipulation in manual testing
-        // Has private methods exposed
-        class TestPixelMapper {
-            private final Course course;
-            private final Pane pane;
-            private Coordinate viewPortCenter;
-            private final IntegerProperty zoomLevel = new SimpleIntegerProperty(0);
-            public List<Coordinate> bounds; // 2 coordinates: NW bound, SE bound
-            private GPSCalculations gpsCalculations;
-            public final int NW_BOUND_INDEX = 0; // Used in bounds
-            public final int SE_BOUND_INDEX = 1; // Used in bounds
-            private final double MAP_SCALE_CORRECTION = 1;
-
-            public TestPixelMapper(Course course, Pane pane) {
-                this.course = course;
-                this.pane = pane;
-                gpsCalculations = new GPSCalculations();
-                bounds = gpsCalculations.findMinMaxPoints(course);
-                viewPortCenter = course.getCentralCoordinate();
-            }
-
-            public double getZoomFactor() {
-                return Math.pow(2, zoomLevel.intValue());
-            }
-
-            public XYPair coordToPixel(Coordinate coord) {
-                bounds = gpsCalculations.findMinMaxPoints(course);
-
-                double courseWidth = calcCourseWidth();
-                double courseHeight = calcCourseHeight();
-                double paneWidth = pane.getWidth();
-                double paneHeight = pane.getHeight();
-                if (paneHeight <= 0 || paneWidth <= 0) {
-                    paneWidth = pane.getPrefWidth();
-                    paneHeight = pane.getPrefHeight();
-                }
-
-                double mappingScale;
-                if (courseWidth / courseHeight > paneWidth / paneHeight) {
-                    mappingScale = paneWidth / courseWidth;
-                } else {
-                    mappingScale = paneHeight / courseHeight;
-                }
-                mappingScale *= MAP_SCALE_CORRECTION * getZoomFactor();
-
-                XYPair worldCoordinates = coordinateToPlane(coord);
-                XYPair viewCenter = coordinateToPlane(viewPortCenter);
-
-                double dX = worldCoordinates.getX() - viewCenter.getX();
-                double dY = worldCoordinates.getY() - viewCenter.getY();
-
-                double x = (dX * mappingScale) + (paneWidth / 2);
-                double y = (dY * mappingScale) + (paneHeight / 2);
-
-                return new XYPair(x, y);
-            }
-
-            private double calcCourseWidth() {
-                Coordinate west = new Coordinate(course.getCentralCoordinate().getLongitude(), bounds.get(NW_BOUND_INDEX).getLongitude());
-                Coordinate east = new Coordinate(course.getCentralCoordinate().getLongitude(), bounds.get(SE_BOUND_INDEX).getLongitude());
-
-                double dWest = gpsCalculations.distance(west, course.getCentralCoordinate());
-                double dEast = gpsCalculations.distance(course.getCentralCoordinate(), east);
-
-                Coordinate furthest = (dWest > dEast) ? west : east;
-                return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getX() - coordinateToPlane(furthest).getX()) * 2;
-            }
-
-            private double calcCourseHeight() {
-                Coordinate north = new Coordinate(bounds.get(NW_BOUND_INDEX).getLatitude(), course.getCentralCoordinate().getLatitude());
-                Coordinate south = new Coordinate(bounds.get(SE_BOUND_INDEX).getLatitude(), course.getCentralCoordinate().getLatitude());
-
-                double dNorth = gpsCalculations.distance(north, course.getCentralCoordinate());
-                double dSouth = gpsCalculations.distance(south, course.getCentralCoordinate());
-
-                Coordinate furthest = (dNorth > dSouth) ? north : south;
-                return Math.abs(coordinateToPlane(course.getCentralCoordinate()).getY() - coordinateToPlane(furthest).getY()) * 2;
-            }
-
-            private double webMercatorLongitude(double longitude) {
-                return 128 * (longitude + Math.PI) / Math.PI;
-            }
-
-            private double webMercatorLatitude(double latitude) {
-                double correctiveFactor = 1 / Math.cos(Math.toRadians(latitude));
-//            double correctiveFactor = 1;
-                return 128 * correctiveFactor * (Math.PI - Math.log(Math.tan((Math.PI / 4) + (latitude / 2)))) / Math.PI;
-            }
-
-            private XYPair coordinateToPlane(Coordinate point) {
-                return new XYPair(webMercatorLongitude(point.getLongitude()), webMercatorLatitude(point.getLatitude()));
-            }
-        }
-
-
-        GPSCalculations gps = new GPSCalculations();
-        double[] distances = {10, 100, 500, 1000, 2500, 5000, 10000, 20000};
-        for (double distance : distances) {
-            Coordinate centre = new Coordinate(51.58072, -3.98796);
-            Coordinate n =  gps.toCoordinate(centre, 0, distance);
-            Coordinate e =  gps.toCoordinate(centre, 90, distance);
-            Coordinate s =  gps.toCoordinate(centre, 180, distance);
-            Coordinate w =  gps.toCoordinate(centre, 270, distance);
-
-            Course course = new Course(
-                    Collections.emptyList(),
-                    Arrays.asList(n, e, s, w),
-                    Collections.emptyList()
-            );
-
-
-//            0.0,
-//                    0.0,
-//                    ZoneId.ofOffset("UTC", ZoneOffset.ofHours(-4)),
-
-            course.setCentralCoordinate(centre);
-
-            Pane pane = new Pane();
-            pane.setMinSize(400, 400);
-            pane.setPrefSize(400, 400);
-            pane.setMaxSize(400, 400);
-
-            TestPixelMapper pixelMapper = new TestPixelMapper(course, pane);
-
-            XYPair middle = pixelMapper.coordToPixel(centre);
-            XYPair t = pixelMapper.coordToPixel(n);
-            XYPair r = pixelMapper.coordToPixel(e);
-            XYPair b = pixelMapper.coordToPixel(s);
-            XYPair l = pixelMapper.coordToPixel(w);
-
-//            System.out.println("up   : " + (middle.getY() - t.getY()));
-//            System.out.println("right: " + (r.getX() - middle.getX()));
-//            System.out.println("down : " + (b.getY() - middle.getY()));
-//            System.out.println("left : " + (middle.getX() - l.getX()));
-            System.out.println("" + distance + ":");
-            //           System.out.println("" + centre.getLatitude() + ", " + centre.getLongitude());
-            //           course.getBoundaries().stream().map(BoundaryMark::getCoordinate).forEach(coordinate -> System.out.println("" + coordinate.getLatitude() + ", " + coordinate.getLongitude()));
-            //           System.out.println();
-            System.out.println("    height: " + pixelMapper.calcCourseHeight());
-            System.out.println("    width : " + pixelMapper.calcCourseWidth());
-            System.out.println("    NW   : " + pixelMapper.coordToPixel(pixelMapper.bounds.get(pixelMapper.NW_BOUND_INDEX)));
-            System.out.println("    SE   : " + pixelMapper.coordToPixel(pixelMapper.bounds.get(pixelMapper.SE_BOUND_INDEX)));
-            System.out.println("    mid  : " + middle + "    " + pixelMapper.coordinateToPlane(centre));
-            System.out.println("    up   : " + t + "    " + pixelMapper.coordinateToPlane(n));
-            System.out.println("    right: " + r + "    " + pixelMapper.coordinateToPlane(e));
-            System.out.println("    down : " + b + "    " + pixelMapper.coordinateToPlane(s));
-            System.out.println("    left : " + l + "    " + pixelMapper.coordinateToPlane(w));
-            System.out.println("    dN: " + (pixelMapper.coordinateToPlane(centre).getY() - pixelMapper.coordinateToPlane(n).getY()));
-            System.out.println("    dE: " + (pixelMapper.coordinateToPlane(e).getX() - pixelMapper.coordinateToPlane(centre).getX()));
-            System.out.println("    dS: " + (pixelMapper.coordinateToPlane(s).getY() - pixelMapper.coordinateToPlane(centre).getY()));
-            System.out.println("    dW: " + (pixelMapper.coordinateToPlane(centre).getX() - pixelMapper.coordinateToPlane(w).getX()));
         }
     }
 }
