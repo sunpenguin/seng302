@@ -2,6 +2,7 @@ package seng302.team18.visualiser.util;
 
 import javafx.scene.layout.Pane;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.GPSCalculations;
@@ -10,6 +11,7 @@ import seng302.team18.util.XYPair;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
+@Ignore
 public class PixelMapperDimensionsTest {
 
     private static final GPSCalculations GPS = new GPSCalculations();
