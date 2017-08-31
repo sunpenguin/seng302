@@ -32,7 +32,6 @@ public class PixelMapper {
     private boolean isTracking = false;
 
     private final double ZOOM_CORRECTION = 4; // corrects zoom level to sensible values ie setZoom 4 magnifies by 4
-    private final double MAP_SCALE_CORRECTION = 0.95;
 
 
     /**
@@ -58,6 +57,7 @@ public class PixelMapper {
     }
 
 
+    @SuppressWarnings("unused")
     public void removeViewCenterListener(PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener("viewPortCenter", listener);
     }
@@ -96,7 +96,6 @@ public class PixelMapper {
         if (isTracking) {
             setViewPortCenter(object.getCoordinate());
         }
-//        bounds = gpsCalculations.findMinMaxPoints(course);
 
         double courseWidth = calcCourseWidth();
         double courseHeight = calcCourseHeight();
@@ -113,6 +112,8 @@ public class PixelMapper {
         } else {
             mappingScale = paneHeight / courseHeight;
         }
+
+        final double MAP_SCALE_CORRECTION = 0.95;
         mappingScale *= MAP_SCALE_CORRECTION * getZoomFactor();
 
         double dX = distanceAlongCircleOfLatitude(viewPortCenter, coord.getLongitude());
@@ -125,21 +126,46 @@ public class PixelMapper {
     }
 
 
+    /**
+     * Along the the meridian that passes through the reference point, calculates the length of the arc from the
+     * reference point to the given latitude. If the given latitude is north of the reference point the returned value
+     * is positive, and if it is south it is negative.
+     *
+     * @param reference specifies the longitude (meridian) and the starting latitude
+     * @param latitude  specifies the other latitude value
+     * @return the displacement of the given latitude from the reference latitude along the given meridian
+     */
     private double distanceAlongMeridian(Coordinate reference, double latitude) {
         double distance = gpsCalculations.distance(reference, new Coordinate(latitude, reference.getLongitude()));
         boolean latitudeAboveReference = latitude > reference.getLatitude();
-        return latitudeAboveReference ? distance : distance * -1;
+        return latitudeAboveReference ? -distance : distance;
     }
 
 
+    /**
+     * Along the circle of latitude that passes through the reference point, calculates the length of the arc from
+     * the reference point to the given longitude. If the given longitude is to the east (within 180 degrees) of the
+     * reference point, the returned value is positive, and if it is to the west it is negative.
+     *
+     * @param reference specifies the latitude (circle of latitude) and the starting longitude
+     * @param longitude specifies the other longitude value
+     * @return the displacement of the given longitude from the reference longitude along the given meridian (m)
+     */
     private double distanceAlongCircleOfLatitude(Coordinate reference, double longitude) {
-        boolean isRefMinLat = reference.getLongitude() < longitude;
         double degreesEastFromLongToRef = reference.getLongitude() - longitude;
-        boolean crossesAntiMeridian = Math.abs(degreesEastFromLongToRef) > 180;
 
-        boolean longEastOfRef = false;
+        if (degreesEastFromLongToRef < -180) {
+            degreesEastFromLongToRef += 360;
+        } else if (degreesEastFromLongToRef > 180) {
+            degreesEastFromLongToRef -= 360;
+        }
 
-        return 0;
+        Coordinate refPrime = new Coordinate(reference.getLatitude(), 0);
+        Coordinate point = new Coordinate(reference.getLatitude(), degreesEastFromLongToRef);
+        double distance = gpsCalculations.distance(refPrime, point);
+
+        boolean longToEastOfRef = degreesEastFromLongToRef <= 0;
+        return longToEastOfRef ? distance : -distance;
     }
 
 
@@ -166,6 +192,7 @@ public class PixelMapper {
      *
      * @return the width of the course (m)
      */
+    @SuppressWarnings("Duplicates")
     private double calcCourseWidth() {
         Coordinate west = new Coordinate(center.getLatitude(), northWest.getLongitude());
         Coordinate east = new Coordinate(center.getLatitude(), southEast.getLongitude());
@@ -182,6 +209,7 @@ public class PixelMapper {
      *
      * @return the width of the course (m)
      */
+    @SuppressWarnings("Duplicates")
     private double calcCourseHeight() {
         Coordinate north = new Coordinate(northWest.getLatitude(), center.getLongitude());
         Coordinate south = new Coordinate(southEast.getLatitude(), center.getLongitude());
