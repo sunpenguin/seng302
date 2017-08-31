@@ -3,6 +3,7 @@ package seng302.team18.visualiser.util;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.layout.Pane;
+import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
 import seng302.team18.model.CompoundMark;
@@ -12,8 +13,6 @@ import seng302.team18.model.MarkRounding;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.XYPair;
 
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,6 +28,13 @@ public class PixelMapperTest {
     private PixelMapper mapper;
     private Course course;
     private Pane pane;
+
+    @After
+    public void tearDown() {
+        mapper = null;
+        course = null;
+        pane = null;
+    }
 
 
     @Ignore
