@@ -78,6 +78,24 @@ public class TitleScreenController {
         stage.show();
     }
 
+    private void toGameModeSelection(){
+        Stage stage = (Stage) errorText.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GameModeSelectionController.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            System.err.println("Error occurred loading play interface screen");
+        }
+        GameSelectionController controller = loader.getController();
+        controller.setStage(stage);
+        stage.setTitle("High Seas");
+        pane.getScene().setRoot(root);
+        stage.setMaximized(true);
+        stage.show();
+    }
+
+
 
     /**
      * Register any necessary listeners.
@@ -101,7 +119,7 @@ public class TitleScreenController {
         hostButtonImage = new Image("/images/title_screen/play_button.png");
         hostLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) hostButtonImage.getWidth(), 2)));
         hostLabel.setLayoutY((600 / 2) + 100);
-        hostLabel.setOnMouseClicked(event -> toPlayScreen());
+        hostLabel.setOnMouseClicked(event -> toGameModeSelection());
     }
 
 
@@ -172,26 +190,6 @@ public class TitleScreenController {
     }
 
 
-//    /**
-//     * Creates a controller manager object and begins an instance of the program.
-//     *
-//     * @throws Exception A connection error
-//     */
-//    private void startConnection(Receiver receiver, Sender sender) throws Exception {
-//        Stage stage = (Stage) errorText.getScene().getWindow();
-//        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
-//        Parent root = loader.load();
-//        PreRaceController controller = loader.getController();
-//        controller.setStage(stage);
-//        stage.setTitle("High Seas");
-//        pane.getScene().setRoot(root);
-//        stage.show();
-//
-//        Race race = new Race();
-//        race.setMode(mode);
-//        controller.setUp(race, receiver, sender);
-//        controller.initConnection(new ArrayList<>());
-//    }
 
 
     /**
