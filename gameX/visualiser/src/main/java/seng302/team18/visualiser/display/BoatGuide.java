@@ -4,7 +4,6 @@ import javafx.scene.Group;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.GPSCalculations;
 import seng302.team18.util.XYPair;
@@ -38,7 +37,7 @@ public class BoatGuide extends DisplayBoatDecorator {
     }
 
     public void setCoordinate(Coordinate coordinate) {
-        XYPair pixels = mapper.coordToPixel(coordinate);
+        XYPair pixels = mapper.mapToPane(coordinate);
 
         this.location = coordinate;
         arrow.setLayoutX(pixels.getX());

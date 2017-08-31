@@ -47,7 +47,7 @@ public class DisplaySail extends DisplayBoatDecorator {
     }
 
     public void setCoordinate(Coordinate coordinate) {
-        XYPair pixels = pixelMapper.coordToPixel(coordinate);
+        XYPair pixels = pixelMapper.mapToPane(coordinate);
         sail.setLayoutX(pixels.getX());
         sail.setLayoutY(pixels.getY());
         super.setCoordinate(coordinate);

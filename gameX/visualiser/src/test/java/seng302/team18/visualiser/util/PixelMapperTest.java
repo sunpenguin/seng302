@@ -72,9 +72,9 @@ public class PixelMapperTest {
             for (int j = 0; j < boundaries.size(); j++) {
 
                 Coordinate boundaryMark1 = boundaries.get(i);
-                XYPair xy1 = mapper.coordToPixel(boundaryMark1);
+                XYPair xy1 = mapper.mapToPane(boundaryMark1);
                 Coordinate boundaryMark2 = boundaries.get(j);
-                XYPair xy2 = mapper.coordToPixel(boundaryMark2);
+                XYPair xy2 = mapper.mapToPane(boundaryMark2);
 
                 double geoDistance = geoCalculator.distance(boundaryMark1, boundaryMark2);
                 double xyDistance = xy1.calculateDistance(xy2);
@@ -126,9 +126,9 @@ public class PixelMapperTest {
             for (int j = 0; j < boundaries.size(); j++) {
 
                 Coordinate boundaryMark1 = boundaries.get(i);
-                XYPair xy1 = mapper.coordToPixel(boundaryMark1);
+                XYPair xy1 = mapper.mapToPane(boundaryMark1);
                 Coordinate boundaryMark2 = boundaries.get(j);
-                XYPair xy2 = mapper.coordToPixel(boundaryMark2);
+                XYPair xy2 = mapper.mapToPane(boundaryMark2);
 
                 double geoDistance = geoCalculator.distance(boundaryMark1, boundaryMark2);
                 double xyDistance = xy1.calculateDistance(xy2);
@@ -181,9 +181,9 @@ public class PixelMapperTest {
             for (int j = 0; j < boundaries.size(); j++) {
 
                 Coordinate boundaryMark1 = boundaries.get(i);
-                XYPair xy1 = mapper.coordToPixel(boundaryMark1);
+                XYPair xy1 = mapper.mapToPane(boundaryMark1);
                 Coordinate boundaryMark2 = boundaries.get(j);
-                XYPair xy2 = mapper.coordToPixel(boundaryMark2);
+                XYPair xy2 = mapper.mapToPane(boundaryMark2);
 
                 double geoDistance = geoCalculator.distance(boundaryMark1, boundaryMark2);
                 double xyDistance = xy1.calculateDistance(xy2);

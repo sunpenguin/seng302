@@ -27,6 +27,7 @@ public class PixelMapper {
     private Coordinate viewPortCenter;
     private final DoubleProperty zoomLevel = new SimpleDoubleProperty(0);
     private double maxZoom = Double.POSITIVE_INFINITY;
+    private double mappingScale;
 
     private GPSCalculations gpsCalculations;
     private boolean isTracking = false;
@@ -49,6 +50,7 @@ public class PixelMapper {
         this.southEast = southEast;
         this.center = center;
         viewPortCenter = center;
+        prePass();
     }
 
 
@@ -85,14 +87,7 @@ public class PixelMapper {
     }
 
 
-    /**
-     * Maps a coordinate to a pixel value relative to the current resolution and zoom of the race view pane
-     * NOTE: Origin is at the top left corner (X and Y increase to the right and downwards respectively)
-     *
-     * @param coord Coordinate to map
-     * @return XYPair containing the x and y pixel values
-     */
-    public XYPair coordToPixel(Coordinate coord) {
+    public void prePass() {
         if (isTracking) {
             setViewPortCenter(object.getCoordinate());
         }
@@ -106,7 +101,6 @@ public class PixelMapper {
             paneHeight = pane.getPrefHeight();
         }
 
-        double mappingScale;
         if (courseWidth / courseHeight > paneWidth / paneHeight) {
             mappingScale = paneWidth / courseWidth;
         } else {
@@ -115,12 +109,22 @@ public class PixelMapper {
 
         final double MAP_SCALE_CORRECTION = 0.95;
         mappingScale *= MAP_SCALE_CORRECTION * getZoomFactor();
+    }
 
-        double dX = distanceAlongCircleOfLatitude(viewPortCenter, coord.getLongitude());
-        double dY = distanceAlongMeridian(viewPortCenter, coord.getLatitude());
 
-        double x = (dX * mappingScale) + (paneWidth / 2);
-        double y = (dY * mappingScale) + (paneHeight / 2);
+    /**
+     * Maps a coordinate to a pixel value relative to the current resolution and zoom of the race view pane
+     * NOTE: Origin is at the top left corner (X and Y increase to the right and downwards respectively)
+     *
+     * @param coordinate Coordinate to map
+     * @return XYPair containing the x and y pixel values
+     */
+    public XYPair mapToPane(Coordinate coordinate) {
+        double dX = distanceAlongCircleOfLatitude(viewPortCenter, coordinate.getLongitude());
+        double dY = distanceAlongMeridian(viewPortCenter, coordinate.getLatitude());
+
+        double x = (dX * mappingScale) + (pane.getWidth() / 2);
+        double y = (dY * mappingScale) + (pane.getHeight() / 2);
 
         return new XYPair(x, y);
     }
@@ -178,8 +182,9 @@ public class PixelMapper {
         GPSCalculations gpsCalculator = new GPSCalculations();
         Coordinate oneKNorthOfCentre = gpsCalculator.toCoordinate(center, 0, 1000);
 
-        XYPair XYCenter = coordToPixel(center);
-        XYPair XYKNorthOfCenter = coordToPixel(oneKNorthOfCentre);
+        prePass();
+        XYPair XYCenter = mapToPane(center);
+        XYPair XYKNorthOfCenter = mapToPane(oneKNorthOfCentre);
 
         double distanceBetweenK = XYCenter.calculateDistance(XYKNorthOfCenter);
 

@@ -48,6 +48,7 @@ import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -571,6 +572,7 @@ public class RaceController implements Observer {
         List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
         pixelMapper = new PixelMapper(bounds.get(0), bounds.get(1), race.getCourse().getCentralCoordinate(), raceViewPane);
         pixelMapper.setMaxZoom(16d);
+        pixelMapper.prePass();
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         colours = raceRenderer.boatColors();
@@ -579,7 +581,7 @@ public class RaceController implements Observer {
         raceClock = new RaceClock(timerLabel);
         raceClock.start();
 
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel));
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper);
         raceLoop.start();
 
         registerListeners();
@@ -672,6 +674,7 @@ public class RaceController implements Observer {
      * (For example, when zooming in, the course features are required to change)
      */
     public void redrawFeatures() {
+        pixelMapper.prePass();
         background.renderBackground();
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
