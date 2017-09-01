@@ -85,11 +85,7 @@ public class CourseBuilderPractice extends AbstractCourseBuilder {
 
     @Override
     protected List<Coordinate> getBoundaryMarks() {
-        return Arrays.asList(
-                new Coordinate(32.30419, -64.85787),
-                new Coordinate(32.30419, -64.85342),
-                new Coordinate(32.30159, -64.85342),
-                new Coordinate(32.30159, -64.85787));
+        return Arrays.asList();
     }
 
 

@@ -10,10 +10,7 @@
       <AnchorPane fx:id="paneInner" maxHeight="600.0" maxWidth="600.0" minHeight="600.0" minWidth="600.0" prefHeight="600.0" prefWidth="600.0" styleClass="background" stylesheets="@stylesheets/titleScreen.css">
          <children>
             <Text fx:id="errorText" fill="RED" layoutX="-66.0" layoutY="356.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="332.7294921875" x="200.0" y="200.0" />
-            <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #327D91;" styleClass="background2">
-               <children>
-                  <Button layoutX="518.0" layoutY="14.0" mnemonicParsing="false" text="practice" />
-               </children></Pane>
+            <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #327D91;" styleClass="background2"/>
          </children>
       </AnchorPane>
    </children>

@@ -9,11 +9,9 @@ import seng302.team18.model.CompoundMark;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 import seng302.team18.model.MarkRounding;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.XYPair;
 
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -60,14 +58,14 @@ public class PixelMapperTest {
         pane.setMinSize(500, 500);
 
         //Make mapper
-        GPSCalculations gps = new GPSCalculations();
+        GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(course);
         mapper = new PixelMapper(bounds.get(0), bounds.get(1), course.getCentralCoordinate(), pane);
 
         //get mapping ratio
         double mappingRatio = mapper.mappingRatio();
 
-        GPSCalculations geoCalculator = new GPSCalculations();
+        GPSCalculator geoCalculator = new GPSCalculator();
 
         for (int i = 0; i < boundaries.size(); i++) {
             for (int j = 0; j < boundaries.size(); j++) {
@@ -115,14 +113,14 @@ public class PixelMapperTest {
         pane.setMinSize(500, 500);
 
         //Make mapper
-        GPSCalculations gps = new GPSCalculations();
+        GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(course);
         mapper = new PixelMapper(bounds.get(0), bounds.get(1), course.getCentralCoordinate(), pane);
 
         //get mapping ratio
         double mappingRatio = mapper.mappingRatio();
 
-        GPSCalculations geoCalculator = new GPSCalculations();
+        GPSCalculator geoCalculator = new GPSCalculator();
 
         for (int i = 0; i < boundaries.size(); i++) {
             for (int j = 0; j < boundaries.size(); j++) {
@@ -171,14 +169,14 @@ public class PixelMapperTest {
         pane.setMinSize(500, 500);
 
         //Make mapper
-        GPSCalculations gps = new GPSCalculations();
+        GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(course);
         mapper = new PixelMapper(bounds.get(0), bounds.get(1), course.getCentralCoordinate(), pane);
 
         //get mapping ratio
         double mappingRatio = mapper.mappingRatio();
 
-        GPSCalculations geoCalculator = new GPSCalculations();
+        GPSCalculator geoCalculator = new GPSCalculator();
 
         for (int i = 0; i < boundaries.size(); i++) {
             for (int j = 0; j < boundaries.size(); j++) {
@@ -212,7 +210,7 @@ public class PixelMapperTest {
             private Coordinate viewPortCenter;
             private final IntegerProperty zoomLevel = new SimpleIntegerProperty(0);
             public List<Coordinate> bounds; // 2 coordinates: NW bound, SE bound
-            private GPSCalculations gpsCalculations;
+            private GPSCalculator gpsCalculations;
             public final int NW_BOUND_INDEX = 0; // Used in bounds
             public final int SE_BOUND_INDEX = 1; // Used in bounds
             private final double MAP_SCALE_CORRECTION = 1;
@@ -220,7 +218,7 @@ public class PixelMapperTest {
             public TestPixelMapper(Course course, Pane pane) {
                 this.course = course;
                 this.pane = pane;
-                gpsCalculations = new GPSCalculations();
+                gpsCalculations = new GPSCalculator();
                 bounds = gpsCalculations.findMinMaxPoints(course);
                 viewPortCenter = course.getCentralCoordinate();
             }
@@ -299,7 +297,7 @@ public class PixelMapperTest {
         }
 
 
-        GPSCalculations gps = new GPSCalculations();
+        GPSCalculator gps = new GPSCalculator();
         double[] distances = {10, 100, 500, 1000, 2500, 5000, 10000, 20000};
         for (double distance : distances) {
             Coordinate centre = new Coordinate(51.58072, -3.98796);

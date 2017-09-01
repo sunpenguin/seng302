@@ -281,7 +281,13 @@ public class DisplayBoat implements GeographicLocation {
 
 
     public void setBoatStatus(BoatStatus status) {
-        this.status = status;
+        if (!(status.equals(this.status))) {
+            switch (status) {
+                case FINISHED:
+                    boatPoly.setOpacity(0.5);
+            }
+            this.status = status;
+        }
     }
 
 

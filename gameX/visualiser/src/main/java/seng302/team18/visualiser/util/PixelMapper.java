@@ -5,12 +5,11 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.layout.Pane;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.GeographicLocation;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.XYPair;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.List;
 
 /**
  * Class for mapping coordinates on to a pane.
@@ -29,7 +28,7 @@ public class PixelMapper {
     private final DoubleProperty zoomLevel = new SimpleDoubleProperty(0);
     private double maxZoom = Double.POSITIVE_INFINITY;
 
-    private GPSCalculations gpsCalculations;
+    private GPSCalculator gpsCalculator;
     private boolean isTracking = false;
 
     private final double ZOOM_CORRECTION = 4; // corrects zoom level to sensible values ie setZoom 4 magnifies by 4
@@ -47,7 +46,7 @@ public class PixelMapper {
      */
     public PixelMapper(Coordinate northWest, Coordinate southEast, Coordinate center, Pane pane) {
         this.pane = pane;
-        gpsCalculations = new GPSCalculations();
+        gpsCalculator = new GPSCalculator();
         this.northWest = northWest;
         this.southEast = southEast;
         this.center = center;
@@ -98,7 +97,7 @@ public class PixelMapper {
         if (isTracking) {
             setViewPortCenter(object.getCoordinate());
         }
-//        bounds = gpsCalculations.findMinMaxPoints(course);
+//        bounds = gpsCalculator.findMinMaxPoints(course);
 
         double courseWidth = calcCourseWidth();
         double courseHeight = calcCourseHeight();
@@ -136,7 +135,7 @@ public class PixelMapper {
      * @return double, The ratio value (number of pixels : meter)
      */
     public double mappingRatio() {
-        GPSCalculations gpsCalculator = new GPSCalculations();
+        GPSCalculator gpsCalculator = new GPSCalculator();
         Coordinate oneKNorthOfCentre = gpsCalculator.toCoordinate(center, 0, 1000);
 
         XYPair XYCenter = coordToPixel(center);
@@ -157,8 +156,8 @@ public class PixelMapper {
         Coordinate west = new Coordinate(center.getLongitude(), northWest.getLongitude());
         Coordinate east = new Coordinate(center.getLongitude(), southEast.getLongitude());
 
-        double dWest = gpsCalculations.distance(west, center);
-        double dEast = gpsCalculations.distance(center, east);
+        double dWest = gpsCalculator.distance(west, center);
+        double dEast = gpsCalculator.distance(center, east);
 
         Coordinate furthest = (dWest > dEast) ? west : east;
         return Math.abs(coordinateToPlane(center).getX() - coordinateToPlane(furthest).getX()) * 2;
@@ -174,8 +173,8 @@ public class PixelMapper {
         Coordinate north = new Coordinate(northWest.getLatitude(), center.getLatitude());
         Coordinate south = new Coordinate(southEast.getLatitude(), center.getLatitude());
 
-        double dNorth = gpsCalculations.distance(north, center);
-        double dSouth = gpsCalculations.distance(south, center);
+        double dNorth = gpsCalculator.distance(north, center);
+        double dSouth = gpsCalculator.distance(south, center);
 
         Coordinate furthest = (dNorth > dSouth) ? north : south;
         return Math.abs(coordinateToPlane(center).getY() - coordinateToPlane(furthest).getY()) * 2;
