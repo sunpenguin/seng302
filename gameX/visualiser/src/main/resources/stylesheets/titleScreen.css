@@ -31,6 +31,42 @@
     -fx-graphic: url('/images/title_screen/view_controls_button.png');
 }
 
+.raceImage {
+    -fx-graphic: url('/images/raceWhite.png');
+}
+
+.arcadeImage {
+    -fx-graphic: url('/images/Arcade_Race_White.png');
+}
+
+.spyroImage {
+    -fx-graphic: url('/images/SpyroWhite.png');
+}
+
+.bumperBoatsImage {
+    -fx-graphic: url('/images/bumper-boatsWhite.png');
+}
+
+.raceImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/raceOrange.png');
+}
+
+.arcadeImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/Arcade_race_Orange.png');
+}
+
+.spyroImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/SpyroOrange.png');
+}
+
+.bumperBoatsImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/bumper-boatsOrange.png');
+}
+
 .controlsImage:hover {
     -fx-label-padding: 2;
     -fx-graphic: url('/images/title_screen/view_controls_button_alt.png');

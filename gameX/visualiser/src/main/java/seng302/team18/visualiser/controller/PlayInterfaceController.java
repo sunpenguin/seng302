@@ -3,21 +3,13 @@ package seng302.team18.visualiser.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.TriangleMesh;
-import javafx.scene.shape.VertexFormat;
 import javafx.stage.Stage;
-import seng302.team18.message.ColourMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
@@ -233,14 +225,19 @@ public class PlayInterfaceController {
      * Act on user pressing the host new game button.
      */
     private void hostButtonAction() {
-        createModel();
+//        createModel();
+//        try {
+//            Thread.sleep(400);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        mode = RaceMode.RACE;
+//        openStream("127.0.0.1", 5005);
         try {
-            Thread.sleep(400);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            toGameModeSelection();
+        } catch (IOException e){
+
         }
-        mode = RaceMode.RACE;
-        openStream("127.0.0.1", 5005);
     }
 
 
@@ -308,6 +305,18 @@ public class PlayInterfaceController {
         race.setMode(mode);
         controller.setUp(race, receiver, sender);
         controller.initConnection(boatColours.get(colourIndex));
+    }
+
+
+    public void toGameModeSelection() throws IOException{
+        Stage stage = (Stage) innerPane.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ModeSelection.fxml"));
+        Parent root = loader.load();
+        GameSelectionController controller = loader.getController();
+        controller.setStage(stage);
+        stage.setTitle("High Seas");
+        outerPane.getScene().setRoot(root);
+        stage.show();
     }
 
 

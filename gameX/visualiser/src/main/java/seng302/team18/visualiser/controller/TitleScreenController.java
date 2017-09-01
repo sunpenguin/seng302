@@ -78,23 +78,6 @@ public class TitleScreenController {
         stage.show();
     }
 
-    private void toGameModeSelection(){
-        Stage stage = (Stage) errorText.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("GameModeSelectionController.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            System.err.println("Error occurred loading play interface screen");
-        }
-        GameSelectionController controller = loader.getController();
-        controller.setStage(stage);
-        stage.setTitle("High Seas");
-        pane.getScene().setRoot(root);
-        stage.setMaximized(true);
-        stage.show();
-    }
-
 
 
     /**
@@ -119,7 +102,7 @@ public class TitleScreenController {
         hostButtonImage = new Image("/images/title_screen/play_button.png");
         hostLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) hostButtonImage.getWidth(), 2)));
         hostLabel.setLayoutY((600 / 2) + 100);
-        hostLabel.setOnMouseClicked(event -> toGameModeSelection());
+        hostLabel.setOnMouseClicked(event -> toPlayScreen());
     }
 
 
