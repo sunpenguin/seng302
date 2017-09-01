@@ -18,6 +18,7 @@ public class Course {
     private List<CompoundMark> compoundMarks = new ArrayList<>();
     private List<MarkRounding> markSequence = new ArrayList<>();
     private List<Coordinate> courseLimits = new ArrayList<>();
+    private List<PickUp> pickUps = new ArrayList<>();
 
     private double windDirection = 0d;
     private double windSpeed = 0d;
@@ -230,6 +231,26 @@ public class Course {
 
     public String getName() {
         return name;
+    }
+
+
+    public void addPickUp(PickUp pickUp) {
+        pickUps.add(pickUp);
+    }
+
+
+    public void removePickUp(PickUp pickUp) {
+        pickUps.remove(pickUp);
+    }
+
+
+    public List<PickUp> getPickUps() {
+        return new ArrayList<>(pickUps);
+    }
+
+
+    public void setPickUps(List<PickUp> pickUps) {
+        this.pickUps = pickUps;
     }
 }
 

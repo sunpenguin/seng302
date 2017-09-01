@@ -6,18 +6,15 @@ import seng302.team18.util.SpeedConverter;
 /**
  * Created by dhl25 on 29/08/17.
  */
-public class BoatUpdate extends PowerUp {
+public class BoatUpdater extends PowerUp {
 
-    private Boat boat;
-
-    public BoatUpdate(Boat boat) {
+    public BoatUpdater() {
         super();
-        this.boat = boat;
     }
 
     @Override
-    public void update(double time) {
-        super.update(time);
+    public void update(Boat boat, double time) {
+        super.update(boat, time);
         double speed = boat.getSpeed(); // knots
         if (boat.isSailOut()) {
             speed = 0;

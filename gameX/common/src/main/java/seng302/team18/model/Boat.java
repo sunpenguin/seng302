@@ -8,8 +8,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.*;
 import seng302.team18.util.GPSCalculator;
 
-import java.util.List;
-
 /**
  * A class which stores information about a boat.
  */
@@ -30,14 +28,14 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private boolean isControlled;
     private boolean sailOut;
     private RoundZone roundZone = RoundZone.ZONE1;
-    private PowerUp powerUp = new SpeedPowerUp(this);
-    private boolean isPowerActive = false; //Changed for merging into dev branch
-    private PowerUp updater = new BoatUpdate(this);
+    private PowerUp powerUp;// = new SpeedPowerUp(this);
+    private boolean isPowerActive = true; //Changed for merging into dev branch
+    private PowerUp updater = new BoatUpdater();
 
     /**
      * A constructor for the Boat class
      *
-     * @param name  The name of the boat
+     * @param name      The name of the boat
      * @param shortName The name of the team the boat belongs to
      * @param id        The id of the boat
      */
@@ -405,14 +403,19 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param time that has passed
      */
     public void update(double time) {
-        if (isPowerActive) {
-            powerUp.update(time);
-            if (powerUp.isTerminated()) {
-                isPowerActive = false;
-                powerUp = null;
-            }
+//        if (isPowerActive) {
+//            powerUp.update(time);
+//            if (powerUp.isTerminated()) {
+//                isPowerActive = false;
+//                powerUp = null;
+//            }
+//        } else {
+//            updater.update(time);
+//        }
+        if (null != powerUp) {
+            powerUp.update(this, time);
         } else {
-            updater.update(time);
+            updater.update(this, time);
         }
     }
 }

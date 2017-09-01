@@ -5,17 +5,11 @@ package seng302.team18.model;
  */
 public abstract class PowerUp {
 
-
-    private Coordinate location;
     private double timeSinceActivation = 0d;
     private double timeOut = Double.POSITIVE_INFINITY;
-    private BodyMass bodyMass;
 
 
-    public PowerUp() {
-        bodyMass = new BodyMass();
-        bodyMass.setWeight(0);
-    }
+    public PowerUp() {}
 
 
     /**
@@ -31,7 +25,7 @@ public abstract class PowerUp {
      * Updates the power up and increments time since activation.
      * time in seconds.
      */
-    public void update(double time) {
+    public void update(Boat boat, double time) {
         timeSinceActivation += time;
     }
 
@@ -46,21 +40,4 @@ public abstract class PowerUp {
     }
 
 
-    public Coordinate getLocation() {
-        return location;
-    }
-
-
-    public void setLocation(Coordinate location) {
-        this.location = location;
-    }
-
-
-    public BodyMass getBodyMass() {
-        return bodyMass;
-    }
-
-    public void setBodyMass(BodyMass bodyMass) {
-        this.bodyMass = bodyMass;
-    }
 }

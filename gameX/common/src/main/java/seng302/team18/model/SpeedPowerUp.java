@@ -5,18 +5,16 @@ package seng302.team18.model;
  */
 public class SpeedPowerUp extends PowerUp {
 
-    private BoatUpdate boatUpdate;
+    private BoatUpdater updater = new BoatUpdater();
 
-
-    public SpeedPowerUp(Boat boat) {
+    public SpeedPowerUp() {
         super();
-        this.boatUpdate = new BoatUpdate(boat);
     }
 
 
     @Override
-    public void update(double time) {
-        super.update(time);
-        boatUpdate.update(time * 3);
+    public void update(Boat boat, double time) {
+        super.update(boat, time);
+        updater.update(boat, time * 3);
     }
 }

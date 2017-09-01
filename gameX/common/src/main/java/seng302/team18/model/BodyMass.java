@@ -6,7 +6,7 @@ package seng302.team18.model;
 public class BodyMass {
 
     private double weight;
-    private Coordinate location = new Coordinate(0, 0);
+    private Coordinate location;
     private double radius;
 
     public BodyMass() {}
