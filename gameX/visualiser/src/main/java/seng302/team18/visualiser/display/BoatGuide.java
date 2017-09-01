@@ -5,7 +5,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import seng302.team18.model.Coordinate;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -20,7 +20,7 @@ public class BoatGuide extends DisplayBoatDecorator {
     private Coordinate location;
     private PixelMapper mapper;
 
-    private final static GPSCalculations GPS = new GPSCalculations();
+    private final static GPSCalculator GPS = new GPSCalculator();
 
 
     public BoatGuide(PixelMapper mapper, DisplayBoat boat) {

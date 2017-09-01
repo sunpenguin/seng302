@@ -4,7 +4,7 @@ import seng302.team18.model.CompoundMark;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 import seng302.team18.model.MarkRounding;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 
 import java.time.ZoneId;
 import java.util.List;
@@ -30,9 +30,9 @@ public abstract class AbstractCourseBuilder {
     public Course buildCourse() {
         Course course = new Course(compoundMarks, getBoundaryMarks(), getMarkRoundings());
 
-        GPSCalculations gpsCalculations = new GPSCalculations();
-        List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(course);
-        Coordinate center = gpsCalculations.midPoint(extremes.get(0), extremes.get(1));
+        GPSCalculator gpsCalculator = new GPSCalculator();
+        List<Coordinate> extremes = gpsCalculator.findMinMaxPoints(course);
+        Coordinate center = gpsCalculator.midPoint(extremes.get(0), extremes.get(1));
         course.setCentralCoordinate(center);
         course.setWindDirection(getWindDirection());
         course.setWindSpeed(getWindSpeed());
