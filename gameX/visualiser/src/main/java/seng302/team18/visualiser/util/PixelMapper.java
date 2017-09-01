@@ -2,7 +2,7 @@ package seng302.team18.visualiser.util;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.layout.Pane;
+import javafx.beans.value.ObservableDoubleValue;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.GeographicLocation;
 import seng302.team18.util.GPSCalculations;
@@ -12,8 +12,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
- * Class for mapping coordinates on to a pane.
- * Conversions from GPS to cartesian coordinates done using the Web Mercator system.
+ * Used to map coordinates to pixel values on a pane.
  */
 public class PixelMapper {
 
@@ -23,7 +22,9 @@ public class PixelMapper {
     private Coordinate northWest;
     private Coordinate southEast;
     private GeographicLocation object;
-    private final Pane pane;
+    //    private final Pane pane;
+    private final ObservableDoubleValue paneHeightProp;
+    private final ObservableDoubleValue paneWidthProp;
     private Coordinate viewPortCenter;
     private final DoubleProperty zoomLevel = new SimpleDoubleProperty(0);
     private double maxZoom = Double.POSITIVE_INFINITY;
@@ -38,17 +39,21 @@ public class PixelMapper {
     /**
      * Constructor for PixelMapper.
      *
-     * @param northWest corner
-     * @param southEast corner
-     * @param center    center of the map
-     * @param pane      to map to
+     * @param northWest      a geographic coordinate expressing the northern and western limits of the mapped area
+     * @param southEast      a geographic coordinate expressing the southern and eastern limits of the mapped area
+     * @param center         a geographic coordinate expressing centre point of the mapped area
+     * @param paneHeightProp the height of the pane to map to
+     * @param paneWidthProp  the width of the pane to map to
      */
-    public PixelMapper(Coordinate northWest, Coordinate southEast, Coordinate center, Pane pane) {
-        this.pane = pane;
+    public PixelMapper(Coordinate northWest, Coordinate southEast, Coordinate center,
+                       ObservableDoubleValue paneHeightProp, ObservableDoubleValue paneWidthProp) {
+//        this.pane = pane;
         gpsCalculations = new GPSCalculations();
         this.northWest = northWest;
         this.southEast = southEast;
         this.center = center;
+        this.paneHeightProp = paneHeightProp;
+        this.paneWidthProp = paneWidthProp;
         viewPortCenter = center;
         calculateMappingScale();
     }
@@ -101,12 +106,8 @@ public class PixelMapper {
 
         double courseWidth = calcCourseWidth();
         double courseHeight = calcCourseHeight();
-        double paneWidth = pane.getWidth();
-        double paneHeight = pane.getHeight();
-        if (paneHeight <= 0 || paneWidth <= 0) {
-            paneWidth = pane.getPrefWidth();
-            paneHeight = pane.getPrefHeight();
-        }
+        double paneWidth = paneWidthProp.get();
+        double paneHeight = paneHeightProp.get();
 
         if (courseWidth / courseHeight > paneWidth / paneHeight) {
             mappingScale = paneWidth / courseWidth;
@@ -134,8 +135,8 @@ public class PixelMapper {
         double dX = distanceAlongCircleOfLatitude(viewPortCenter, coordinate.getLongitude());
         double dY = distanceAlongMeridian(viewPortCenter, coordinate.getLatitude());
 
-        double x = (dX * mappingScale) + (pane.getWidth() / 2);
-        double y = (dY * mappingScale) + (pane.getHeight() / 2);
+        double x = (dX * mappingScale) + (paneWidthProp.get() / 2);
+        double y = (dY * mappingScale) + (paneHeightProp.get() / 2);
 
         return new XYPair(x, y);
     }

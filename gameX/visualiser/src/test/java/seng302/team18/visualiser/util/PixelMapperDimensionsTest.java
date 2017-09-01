@@ -1,8 +1,8 @@
 package seng302.team18.visualiser.util;
 
-import javafx.scene.layout.Pane;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.GPSCalculations;
@@ -11,12 +11,12 @@ import seng302.team18.util.XYPair;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
-@Ignore
 public class PixelMapperDimensionsTest {
 
     private static final GPSCalculations GPS = new GPSCalculations();
     private PixelMapper pixelMapper;
-    private Pane pane;
+    private DoubleProperty paneWidthProp;
+    private DoubleProperty paneHeightProp;
     private Coordinate centre;
     private Coordinate north;
     private Coordinate south;
@@ -28,11 +28,8 @@ public class PixelMapperDimensionsTest {
                       double latitude, double longitude,
                       double dNorth, double dEast, double dSouth, double dWest) {
 
-        pane = new Pane();
-        pane.setMaxSize(paneWidth, paneHeight);
-        pane.setPrefSize(paneWidth, paneHeight);
-        pane.setMinSize(paneWidth, paneHeight);
-        pane.resize(paneWidth, paneHeight);
+        paneWidthProp = new SimpleDoubleProperty(paneWidth);
+        paneHeightProp = new SimpleDoubleProperty(paneHeight);
 
         centre = new Coordinate(latitude, longitude);
         north = GPS.toCoordinate(centre, 0, dNorth);
@@ -44,7 +41,7 @@ public class PixelMapperDimensionsTest {
                 new Coordinate(north.getLatitude(), west.getLongitude()),
                 new Coordinate(south.getLatitude(), east.getLongitude()),
                 centre,
-                pane
+                paneHeightProp, paneWidthProp
         );
     }
 
@@ -52,12 +49,13 @@ public class PixelMapperDimensionsTest {
     @After
     public void tearDown() throws Exception {
         pixelMapper = null;
-        pane = null;
         centre = null;
         north = null;
         south = null;
         west = null;
         east = null;
+        paneWidthProp = null;
+        paneHeightProp = null;
     }
 
 
@@ -291,7 +289,7 @@ public class PixelMapperDimensionsTest {
     public void centreHorizontalPositionTest() throws Exception {
         setMediumSquarePaneMediumSquareEquatorialCourse();
         XYPair point = pixelMapper.mapToPane(centre);
-        assertEquals("centre point not centred horizontally", pane.getWidth() / 2, point.getX(), 1);
+        assertEquals("centre point not centred horizontally", paneWidthProp.get() / 2, point.getX(), 1);
     }
 
 
@@ -299,7 +297,7 @@ public class PixelMapperDimensionsTest {
     public void centreVerticalPositionTest() throws Exception {
         setMediumSquarePaneMediumSquareEquatorialCourse();
         XYPair point = pixelMapper.mapToPane(centre);
-        assertEquals("centre point not centred vertically", pane.getHeight() / 2, point.getY(), 1);
+        assertEquals("centre point not centred vertically", paneHeightProp.get() / 2, point.getY(), 1);
     }
 
 
@@ -308,7 +306,7 @@ public class PixelMapperDimensionsTest {
         setMediumSquarePaneMediumSquareEquatorialCourse();
 
         XYPair point = pixelMapper.mapToPane(north);
-        assertEquals("northern point horizontal position wrong", (pane.getWidth() / 2), point.getX(), 1);
+        assertEquals("northern point horizontal position wrong", (paneWidthProp.get() / 2), point.getX(), 1);
     }
 
 
@@ -317,7 +315,7 @@ public class PixelMapperDimensionsTest {
         setMediumSquarePaneMediumSquareEquatorialCourse();
 
         XYPair point = pixelMapper.mapToPane(north);
-        assertTrue("northern point vertical position wrong", point.getY() < (pane.getHeight() / 2));
+        assertTrue("northern point vertical position wrong", point.getY() < (paneHeightProp.get() / 2));
     }
 
 
@@ -326,7 +324,7 @@ public class PixelMapperDimensionsTest {
         setMediumSquarePaneMediumSquareEquatorialCourse();
 
         XYPair point = pixelMapper.mapToPane(south);
-        assertEquals("southern point horizontal position wrong", (pane.getWidth() / 2), point.getX(), 1);
+        assertEquals("southern point horizontal position wrong", (paneWidthProp.get() / 2), point.getX(), 1);
     }
 
 
@@ -335,7 +333,7 @@ public class PixelMapperDimensionsTest {
         setMediumSquarePaneMediumSquareEquatorialCourse();
 
         XYPair point = pixelMapper.mapToPane(south);
-        assertTrue("southern point vertical position wrong", point.getY() > (pane.getHeight() / 2));
+        assertTrue("southern point vertical position wrong", point.getY() > (paneHeightProp.get() / 2));
     }
 
 
@@ -344,7 +342,7 @@ public class PixelMapperDimensionsTest {
         setMediumSquarePaneMediumSquareEquatorialCourse();
 
         XYPair point = pixelMapper.mapToPane(east);
-        assertTrue("eastern point horizontal position wrong", point.getX() > (pane.getWidth() / 2));
+        assertTrue("eastern point horizontal position wrong", point.getX() > (paneWidthProp.get() / 2));
     }
 
 
@@ -353,7 +351,7 @@ public class PixelMapperDimensionsTest {
         setMediumSquarePaneMediumSquareEquatorialCourse();
 
         XYPair point = pixelMapper.mapToPane(east);
-        assertEquals("eastern point vertical position wrong", (pane.getHeight() / 2), point.getY(), 1);
+        assertEquals("eastern point vertical position wrong", (paneHeightProp.get() / 2), point.getY(), 1);
     }
 
 
@@ -362,7 +360,7 @@ public class PixelMapperDimensionsTest {
         setMediumSquarePaneMediumSquareEquatorialCourse();
 
         XYPair point = pixelMapper.mapToPane(west);
-        assertTrue("western point horizontal position wrong", point.getX() < (pane.getWidth() / 2));
+        assertTrue("western point horizontal position wrong", point.getX() < (paneWidthProp.get() / 2));
     }
 
 
@@ -371,6 +369,6 @@ public class PixelMapperDimensionsTest {
         setMediumSquarePaneMediumSquareEquatorialCourse();
 
         XYPair point = pixelMapper.mapToPane(west);
-        assertEquals("western point vertical position wrong", (pane.getHeight() / 2), point.getY(), 1);
+        assertEquals("western point vertical position wrong", (paneHeightProp.get() / 2), point.getY(), 1);
     }
 }

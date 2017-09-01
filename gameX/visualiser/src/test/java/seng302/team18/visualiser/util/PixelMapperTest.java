@@ -1,8 +1,6 @@
 package seng302.team18.visualiser.util;
 
-import javafx.scene.layout.Pane;
-import org.junit.After;
-import org.junit.Ignore;
+import javafx.beans.property.SimpleDoubleProperty;
 import org.junit.Test;
 import seng302.team18.model.CompoundMark;
 import seng302.team18.model.Coordinate;
@@ -16,21 +14,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 
-@Ignore
 public class PixelMapperTest {
-
-    private PixelMapper mapper;
-    private Course course;
-    private Pane pane;
-
-
-    @After
-    public void tearDown() {
-        mapper = null;
-        course = null;
-        pane = null;
-    }
-
 
     @Test
     public void mappingRatioOnNormalCourseTest() {
@@ -49,20 +33,17 @@ public class PixelMapperTest {
         List<CompoundMark> marks = new ArrayList<>();
         List<MarkRounding> markRoundings = new ArrayList<>();
 
-        course = new Course(marks, boundaries, markRoundings);
+        Course course = new Course(marks, boundaries, markRoundings);
 
         course.setCentralCoordinate(new Coordinate(-43.630318, 172.675192));
-
-        //Make pane
-        pane = new Pane();
-        pane.setMaxSize(500, 500);
-        pane.setPrefSize(500, 500);
-        pane.setMinSize(500, 500);
 
         //Make mapper
         GPSCalculations gps = new GPSCalculations();
         List<Coordinate> bounds = gps.findMinMaxPoints(course);
-        mapper = new PixelMapper(bounds.get(0), bounds.get(1), course.getCentralCoordinate(), pane);
+        PixelMapper mapper = new PixelMapper(
+                bounds.get(0), bounds.get(1), course.getCentralCoordinate(),
+                new SimpleDoubleProperty(500), new SimpleDoubleProperty(500)
+        );
 
         //get mapping ratio
         double mappingRatio = mapper.mappingRatio();
@@ -103,20 +84,17 @@ public class PixelMapperTest {
         List<CompoundMark> marks = new ArrayList<>();
         List<MarkRounding> markRoundings = new ArrayList<>();
 
-        course = new Course(marks, boundaries, markRoundings);
+        Course course = new Course(marks, boundaries, markRoundings);
 
         course.setCentralCoordinate(new Coordinate(-43.273253, 173.337622));
-
-        //Make pane
-        pane = new Pane();
-        pane.setMaxSize(500, 500);
-        pane.setPrefSize(500, 500);
-        pane.setMinSize(500, 500);
 
         //Make mapper
         GPSCalculations gps = new GPSCalculations();
         List<Coordinate> bounds = gps.findMinMaxPoints(course);
-        mapper = new PixelMapper(bounds.get(0), bounds.get(1), course.getCentralCoordinate(), pane);
+        PixelMapper mapper = new PixelMapper(
+                bounds.get(0), bounds.get(1), course.getCentralCoordinate(),
+                new SimpleDoubleProperty(500), new SimpleDoubleProperty(500)
+        );
 
         //get mapping ratio
         double mappingRatio = mapper.mappingRatio();
@@ -158,20 +136,17 @@ public class PixelMapperTest {
         List<CompoundMark> marks = new ArrayList<>();
         List<MarkRounding> markRoundings = new ArrayList<>();
 
-        course = new Course(marks, boundaries, markRoundings);
+        Course course = new Course(marks, boundaries, markRoundings);
 
         course.setCentralCoordinate(new Coordinate(-43.552622, 172.708628));
-
-        //Make pane
-        pane = new Pane();
-        pane.setMaxSize(500, 500);
-        pane.setPrefSize(500, 500);
-        pane.setMinSize(500, 500);
 
         //Make mapper
         GPSCalculations gps = new GPSCalculations();
         List<Coordinate> bounds = gps.findMinMaxPoints(course);
-        mapper = new PixelMapper(bounds.get(0), bounds.get(1), course.getCentralCoordinate(), pane);
+        PixelMapper mapper = new PixelMapper(
+                bounds.get(0), bounds.get(1), course.getCentralCoordinate(),
+                new SimpleDoubleProperty(500), new SimpleDoubleProperty(500)
+        );
 
         //get mapping ratio
         double mappingRatio = mapper.mappingRatio();
