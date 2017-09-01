@@ -1,5 +1,6 @@
 package seng302.team18.model;
 
+import seng302.team18.model.updaters.*;
 import seng302.team18.util.GPSCalculator;
 
 import java.time.Instant;
@@ -27,10 +28,12 @@ public class Race extends Observable {
     private List<Boat> startingList;
     private ZonedDateTime startTime = ZonedDateTime.now();
     private ZonedDateTime currentTime;
-    private Integer playerId;
     private List<MarkRoundingEvent> markRoundingEvents = new ArrayList<>();
     private List<YachtEvent> yachtEvents = new ArrayList<>();
     private RaceMode mode = RaceMode.RACE;
+    private List<Updater> updaters = new ArrayList<>();
+    private double updateTime;
+
 
     public Race() {
         participantIds = new ArrayList<>();
@@ -41,41 +44,11 @@ public class Race extends Observable {
         currentTime = ZonedDateTime.now(course.getTimeZone());
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         raceType = RaceType.MATCH;
-    }
-
-
-    /**
-     * Race class constructor.
-     *
-     * @param startingList ArrayList holding all entered boats
-     * @param course       Course object
-     * @param raceId       Integer representing the race id
-     * @param raceType     RaceType enum indicating the type of race to create
-     */
-    public Race(List<Boat> startingList, Course course, int raceId, RaceType raceType) {
-        this.startingList = startingList;
-        this.course = course;
-        participantIds = startingList.stream()
-                .map(Boat::getId)
-                .collect(Collectors.toList());
-        this.id = raceId;
-        this.status = RaceStatus.NOT_ACTIVE;
-        this.raceType = raceType;
-        setCourseForBoats();
-    }
-
-
-    /**
-     * Randomly places power ups.
-     * @param powerUps number of power ups to place
-     */
-    public void addPowerUps(int powerUps) {
-        GPSCalculator calculator = new GPSCalculator();
-        List<Coordinate> corners = gps.findMinMaxPoints(course);
-        for (int i = 0; i < powerUps; i++) {
-            Coordinate randomPoint = calculator.randomPoint(course.getCourseLimits());
-            course.getCompoundMarks().add(new CompoundMark("a", Arrays.asList(new Mark(i * 3 + 2, randomPoint)), i * 2 + 3));
-        }
+        updaters.add(new MovementUpdater()); //TODO:Move sbe67 1/9/2017
+        updaters.add(new CollisionUpdater());
+        updaters.add(new OutOfBoundsUpdater());
+        updaters.add(new PowerUpUpdater());
+        updaters.add(new MarkRoundingUpdater());
     }
 
 
@@ -116,7 +89,7 @@ public class Race extends Observable {
      * @param distBehind the distance behind the start line to place the boat (m)
      * @return position for boat to start at
      */
-    private Coordinate getStartPosition(Boat boat, double distBehind) {
+    public Coordinate getStartPosition(Boat boat, double distBehind) {
         MarkRounding startRounding = course.getMarkSequence().get(0);
         Coordinate midPoint = startRounding.getCompoundMark().getCoordinate();
         Coordinate startMark1 = startRounding.getCompoundMark().getMarks().get(0).getCoordinate();
@@ -202,9 +175,6 @@ public class Race extends Observable {
                 }
             }
         }
-        for (Boat boat : this.startingList) {
-            boat.setControlled(playerId != null && playerId.equals(boat.getId()));
-        }
     }
 
 
@@ -234,175 +204,10 @@ public class Race extends Observable {
      * @param time the time in seconds
      */
     public void update(double time) { // time in seconds
-        for (Boat boat : startingList) {
-            collisionStuff(boat);
-            boat.update(time);
-            roundingStuff(boat);
-            boundaryStuff(boat);
-            powerUpStuff(boat);
+        updateTime = time;
+        for (Updater updater : updaters) {
+            updater.update(this);
         }
-    }
-
-
-    /**
-     * Determines if a boat picked up a power up.
-     * @param boat
-     */
-    private void powerUpStuff(Boat boat) {
-
-    }
-
-
-    /**
-     * Disqualifies boat if outside boundary.
-     *
-     * @param boat to check
-     */
-    private void boundaryStuff(Boat boat) {
-        if (isOutSide(boat)) {
-            boat.setStatus(BoatStatus.DSQ);
-            setChanged();
-            notifyObservers(boat);
-        }
-    }
-
-
-    /**
-     * Check if a boat is outside the boundary
-     *
-     * @param boat to check
-     * @return if the boat is outside.
-     */
-    private boolean isOutSide(Boat boat) {
-        GPSCalculator calculator = new GPSCalculator();
-        List<Coordinate> boundaries = course.getCourseLimits();
-
-        return boundaries.size() > 2
-                && !calculator.isInside(boat.getCoordinate(), boundaries)
-                && !(boat.getStatus().equals(BoatStatus.DSQ));
-    }
-
-
-
-    /**
-     * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
-     * and sets the destination to the next marks coordinates.
-     *
-     * @param boat    the boat
-     * @param nextLeg the next leg
-     */
-    public void setNextLeg(Boat boat, int nextLeg) {
-        int currentLeg = boat.getLegNumber();
-
-        if (currentLeg == nextLeg) return;
-
-        final int newPlace = ((Long) startingList.stream().filter(b -> b.getLegNumber() >= nextLeg).count()).intValue() + 1;
-        final int oldPace = boat.getPlace();
-
-        if (oldPace < newPlace) {
-            startingList.stream()
-                    .filter(boat1 -> boat1.getPlace() <= newPlace)
-                    .filter(boat1 -> oldPace < boat1.getPlace())
-                    .forEach(boat1 -> boat1.setPlace(boat1.getPlace() + 1));
-        } else if (newPlace < oldPace) {
-            startingList.stream()
-                    .filter(boat1 -> boat1.getPlace() < oldPace)
-                    .filter(boat1 -> newPlace <= boat1.getPlace())
-                    .forEach(boat1 -> boat1.setPlace(boat1.getPlace() + 1));
-        }
-
-        boat.setPlace(newPlace);
-        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getMarkSequence().get(currentLeg)));
-
-        if (nextLeg == course.getMarkSequence().size()) {
-            boat.setStatus(BoatStatus.FINISHED);
-            boat.setSpeed(0);
-            boat.setSailOut(true);
-        }
-
-        boat.setLegNumber(nextLeg);
-    }
-
-
-    /**
-     * Detects if there has been a collision between the boat and another abstract boat after updating the position
-     *
-     * @param boat to be collision stuffed
-     */
-    private void collisionStuff(Boat boat) {
-        List<BodyMass> objects = new ArrayList<>();
-        for (Boat b : startingList) {
-            if (!b.getId().equals(boat.getId())) {
-                objects.add(b.getBodyMass());
-            }
-        }
-
-        for (Mark mark : course.getMarks()) {
-            objects.add(mark.getBodyMass());
-        }
-        for (BodyMass object: objects) {
-            if (boat.hasCollided(object)) {
-                handleCollision(boat.getBodyMass(), object);
-            }
-        }
-    }
-
-
-    /**
-     * Handles the collision when one is detected by printing to the console
-     * NOTE: Bumper car edition currently in play
-     *
-     * @param object   boat collision was detected from
-     * @param obstacle obstacle the boat collided with
-     */
-    private void handleCollision(BodyMass object, BodyMass obstacle) {
-        final double totalPushBack = 25; // meters
-        GPSCalculator calculator = new GPSCalculator();
-        double bearingOfCollision = calculator.getBearing(obstacle.getLocation(), object.getLocation());
-        double ratio = object.getWeight() + obstacle.getWeight();
-        double obstacleBackUpDistance = totalPushBack * (object.getWeight() / ratio);
-        double objectBackUpDistance = totalPushBack * (obstacle.getWeight() / ratio);
-        Coordinate newBoatCoordinate = calculator.toCoordinate(object.getLocation(), bearingOfCollision, objectBackUpDistance);
-        object.setLocation(newBoatCoordinate);
-        Coordinate newObstacleCoordinate = calculator.toCoordinate(obstacle.getLocation(), bearingOfCollision, -obstacleBackUpDistance);
-        obstacle.setLocation(newObstacleCoordinate);
-    }
-
-
-    /**
-     * Detects roundings and updates boat status.
-     *
-     * @param boat to update.
-     */
-    public void roundingStuff(Boat boat) {
-        if (!mode.equals(RaceMode.CONTROLS_TUTORIAL)) {
-            if (boat.getStatus().equals(BoatStatus.RACING) && detector.hasPassedDestination(boat, course)) {
-                setNextLeg(boat, boat.getLegNumber() + 1);
-            } else if (boat.getStatus().equals(BoatStatus.PRE_START) && boat.getLegNumber() == 0
-                    && detector.hasPassedDestination(boat, course)) {
-                statusOSCPenalty(boat);
-            } else if (boat.getStatus().equals(BoatStatus.OCS) && currentTime.isAfter(startTime.plusSeconds(5))) {
-                yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OCS_PENALTY_COMPLETE));
-                boat.setStatus(BoatStatus.RACING);
-                boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
-            }
-        }
-    }
-
-
-    /**
-     * Sets the boat to appropriate conditions when a boat has an OCS status.
-     *
-     * @param boat the boat which has the OCS status
-     */
-    private void statusOSCPenalty(Boat boat) {
-        yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OVER_START_LINE_EARLY));
-        boat.setStatus(BoatStatus.OCS);
-
-        boat.setCoordinate(getStartPosition(boat, boat.getLength() * 6));
-
-        boat.setSpeed(0);
-        boat.setSailOut(true);
     }
 
 
@@ -484,18 +289,13 @@ public class Race extends Observable {
         return events;
     }
 
-
-    public int getPlayerId() {
-        return playerId;
+    public void addYachtEvent(YachtEvent yachtEvent) {
+        yachtEvents.add(yachtEvent);
     }
 
-
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
-
-        startingList.forEach(boat -> boat.setControlled(boat.getId().equals(playerId)));
+    public void addMarkRoundingEvent(MarkRoundingEvent MarkRoundingEvent) {
+        markRoundingEvents.add(MarkRoundingEvent);
     }
-
 
     public RaceType getRaceType() {
         return raceType;
@@ -517,23 +317,6 @@ public class Race extends Observable {
     }
 
 
-    /**
-     * Gets a boat from the race given an ID.
-     *
-     * @param id the ID of the boat.
-     * @return the boat with the specified ID, null otherwise.
-     */
-    public Boat getBoat(int id) {
-        for (Boat boat : startingList) {
-            if (boat.getId() == id) {
-                return boat;
-            }
-        }
-
-        return null;
-    }
-
-
     public RaceMode getMode() {
         return mode;
     }
@@ -541,5 +324,17 @@ public class Race extends Observable {
 
     public void setMode(RaceMode mode) {
         this.mode = mode;
+    }
+
+    public RoundingDetector getDetector() {
+        return detector;
+    }
+
+    public double getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setChanged(){ //TODO this is probably wrong sbe67 1/8/2017
+        super.setChanged();
     }
 }

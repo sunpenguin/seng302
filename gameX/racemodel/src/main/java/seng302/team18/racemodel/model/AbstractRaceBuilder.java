@@ -26,9 +26,6 @@ public abstract class AbstractRaceBuilder {
         race.setRaceType(getRaceType());
         race.setId(getId());
         race.setMode(mode);
-        if (course.getCourseLimits().size() > 2) {
-            race.addPowerUps(3);
-        }
 
         return race;
     }
