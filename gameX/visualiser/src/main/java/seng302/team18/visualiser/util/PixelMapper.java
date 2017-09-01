@@ -29,7 +29,7 @@ public class PixelMapper {
     private double maxZoom = Double.POSITIVE_INFINITY;
     private double mappingScale = 1;
 
-    private GPSCalculator gpsCalculator;
+    private final static GPSCalculator GPS_CALCULATOR = new GPSCalculator();
     private boolean isTracking = false;
 
     private final double ZOOM_CORRECTION = 4; // corrects zoom level to sensible values ie setZoom 4 magnifies by 4
@@ -46,7 +46,6 @@ public class PixelMapper {
      */
     public PixelMapper(Coordinate northWest, Coordinate southEast, Coordinate center,
                        ObservableDoubleValue paneHeightProp, ObservableDoubleValue paneWidthProp) {
-        gpsCalculator = new GPSCalculator();
         this.northWest = northWest;
         this.southEast = southEast;
         this.center = center;
@@ -150,7 +149,7 @@ public class PixelMapper {
      * @return the displacement of the given latitude from the reference latitude along the given meridian
      */
     private double distanceAlongMeridian(Coordinate reference, double latitude) {
-        double distance = gpsCalculations.distance(reference, new Coordinate(latitude, reference.getLongitude()));
+        double distance = GPS_CALCULATOR.distance(reference, new Coordinate(latitude, reference.getLongitude()));
         boolean latitudeAboveReference = latitude > reference.getLatitude();
         return latitudeAboveReference ? -distance : distance;
     }
@@ -176,7 +175,7 @@ public class PixelMapper {
 
         Coordinate refPrime = new Coordinate(reference.getLatitude(), 0);
         Coordinate point = new Coordinate(reference.getLatitude(), degreesEastFromLongToRef);
-        double distance = gpsCalculations.distance(refPrime, point);
+        double distance = GPS_CALCULATOR.distance(refPrime, point);
 
         boolean longToEastOfRef = degreesEastFromLongToRef <= 0;
         return longToEastOfRef ? distance : -distance;
@@ -212,8 +211,8 @@ public class PixelMapper {
         Coordinate west = new Coordinate(center.getLatitude(), northWest.getLongitude());
         Coordinate east = new Coordinate(center.getLatitude(), southEast.getLongitude());
 
-        double dWest = gpsCalculator.distance(west, center);
-        double dEast = gpsCalculator.distance(center, east);
+        double dWest = GPS_CALCULATOR.distance(west, center);
+        double dEast = GPS_CALCULATOR.distance(center, east);
 
         return Math.max(dEast, dWest) * 2;
     }
@@ -229,8 +228,8 @@ public class PixelMapper {
         Coordinate north = new Coordinate(northWest.getLatitude(), center.getLongitude());
         Coordinate south = new Coordinate(southEast.getLatitude(), center.getLongitude());
 
-        double dNorth = gpsCalculator.distance(north, center);
-        double dSouth = gpsCalculator.distance(south, center);
+        double dNorth = GPS_CALCULATOR.distance(north, center);
+        double dSouth = GPS_CALCULATOR.distance(south, center);
 
         return Math.max(dNorth, dSouth) * 2;
     }

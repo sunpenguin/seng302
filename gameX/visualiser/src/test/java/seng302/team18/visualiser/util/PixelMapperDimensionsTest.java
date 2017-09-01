@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import org.junit.After;
 import org.junit.Test;
 import seng302.team18.model.Coordinate;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.XYPair;
 
 import static junit.framework.TestCase.assertEquals;
@@ -13,7 +13,7 @@ import static junit.framework.TestCase.assertTrue;
 
 public class PixelMapperDimensionsTest {
 
-    private static final GPSCalculations GPS = new GPSCalculations();
+    private static final GPSCalculator GPS = new GPSCalculator();
     private PixelMapper pixelMapper;
     private DoubleProperty paneWidthProp;
     private DoubleProperty paneHeightProp;
