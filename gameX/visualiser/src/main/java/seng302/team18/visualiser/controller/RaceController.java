@@ -572,7 +572,7 @@ public class RaceController implements Observer {
         List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
         pixelMapper = new PixelMapper(bounds.get(0), bounds.get(1), race.getCourse().getCentralCoordinate(), raceViewPane);
         pixelMapper.setMaxZoom(16d);
-        pixelMapper.prePass();
+        pixelMapper.calculateMappingScale();
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         colours = raceRenderer.boatColors();
@@ -674,7 +674,7 @@ public class RaceController implements Observer {
      * (For example, when zooming in, the course features are required to change)
      */
     public void redrawFeatures() {
-        pixelMapper.prePass();
+        pixelMapper.calculateMappingScale();
         background.renderBackground();
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();

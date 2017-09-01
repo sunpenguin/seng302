@@ -27,7 +27,7 @@ public class PixelMapper {
     private Coordinate viewPortCenter;
     private final DoubleProperty zoomLevel = new SimpleDoubleProperty(0);
     private double maxZoom = Double.POSITIVE_INFINITY;
-    private double mappingScale;
+    private double mappingScale = 1;
 
     private GPSCalculations gpsCalculations;
     private boolean isTracking = false;
@@ -50,7 +50,7 @@ public class PixelMapper {
         this.southEast = southEast;
         this.center = center;
         viewPortCenter = center;
-        prePass();
+        calculateMappingScale();
     }
 
 
@@ -87,7 +87,14 @@ public class PixelMapper {
     }
 
 
-    public void prePass() {
+    /**
+     * Calculates the mapping scale to be used when mapping geographic coordinates to the display pane.
+     * This must be called before any calls to {@link PixelMapper#mapToPane(Coordinate)} if the tracking state,
+     * zoom level, pane size or the course width/height have changed since the last call to this method.
+     * <p>
+     * It is recommended for this method to be called at the start of each rendering loop.
+     */
+    public void calculateMappingScale() {
         if (isTracking) {
             setViewPortCenter(object.getCoordinate());
         }
@@ -115,6 +122,10 @@ public class PixelMapper {
     /**
      * Maps a coordinate to a pixel value relative to the current resolution and zoom of the race view pane
      * NOTE: Origin is at the top left corner (X and Y increase to the right and downwards respectively)
+     * <p>
+     * Precondition: Neither the tracking state, zoom level, pane size nor the course width/height
+     * have changed since the last call to {@link PixelMapper#calculateMappingScale()} was made.
+     * It is recommended that that call is made at the start of each rendering loop.
      *
      * @param coordinate Coordinate to map
      * @return XYPair containing the x and y pixel values
@@ -182,7 +193,7 @@ public class PixelMapper {
         GPSCalculations gpsCalculator = new GPSCalculations();
         Coordinate oneKNorthOfCentre = gpsCalculator.toCoordinate(center, 0, 1000);
 
-        prePass();
+        calculateMappingScale();
         XYPair XYCenter = mapToPane(center);
         XYPair XYKNorthOfCenter = mapToPane(oneKNorthOfCentre);
 

@@ -46,7 +46,7 @@ public class RaceLoop extends AnimationTimer {
      * Call each renderer and update the display of the race.
      */
     private void updateView() {
-        pixelMapper.prePass();
+        pixelMapper.calculateMappingScale();
         renderer.renderBoats();
         courseRenderer.renderCourse();
         renderer.drawTrails();
