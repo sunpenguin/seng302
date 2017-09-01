@@ -44,7 +44,7 @@ public class BoatHighlight extends DisplayBoatDecorator {
 
 
     public void setCoordinate(Coordinate coordinate) {
-        XYPair pixel = pixelMapper.coordToPixel(coordinate);
+        XYPair pixel = pixelMapper.mapToPane(coordinate);
         highlight.setLayoutX(pixel.getX());
         highlight.setLayoutY(pixel.getY());
         super.setCoordinate(coordinate);

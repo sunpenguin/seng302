@@ -63,7 +63,7 @@ public class DisplayWake extends DisplayBoatDecorator {
 
 
     public void setCoordinate(Coordinate coordinate) {
-        XYPair pixels = pixelMapper.coordToPixel(coordinate);
+        XYPair pixels = pixelMapper.mapToPane(coordinate);
         wake.setLayoutX(pixels.getX());
         wake.setLayoutY(pixels.getY());
         super.setCoordinate(coordinate);

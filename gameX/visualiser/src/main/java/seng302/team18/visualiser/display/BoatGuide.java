@@ -37,7 +37,7 @@ public class BoatGuide extends DisplayBoatDecorator {
     }
 
     public void setCoordinate(Coordinate coordinate) {
-        XYPair pixels = mapper.coordToPixel(coordinate);
+        XYPair pixels = mapper.mapToPane(coordinate);
 
         this.location = coordinate;
         arrow.setLayoutX(pixels.getX());
