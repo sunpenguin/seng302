@@ -73,21 +73,31 @@ public class Race extends Observable {
         GPSCalculator calculator = new GPSCalculator();
         for (int i = 0; i < powerUps; i++) {
             Coordinate randomPoint = calculator.randomPoint(course.getCourseLimits());
-            BodyMass mass = new BodyMass();
-            mass.setLocation(randomPoint);
-            mass.setWeight(0);
-            mass.setRadius(14);
-            PickUp pickUp = new PickUp();
-            pickUp.setBodyMass(mass);
-            pickUp.setPower(getRandomPower());
+            PickUp pickUp = makePickUp(randomPoint);
             course.addPickUp(pickUp);
         }
     }
 
 
+    private PickUp makePickUp(Coordinate randomPoint) {
+        final double TEN_SECONDS_IN_MILLISECONDS = 10000;
+
+        BodyMass mass = new BodyMass();
+        mass.setLocation(randomPoint);
+        mass.setWeight(0);
+        mass.setRadius(14);
+
+        PickUp pickUp = new PickUp();
+        pickUp.setBodyMass(mass);
+        pickUp.setTimeout(TEN_SECONDS_IN_MILLISECONDS);
+        pickUp.setPower(getRandomPower());
+        return pickUp;
+    }
+
+
     private PowerUp getRandomPower() {
         PowerUp powerUp = new SpeedPowerUp();
-        powerUp.setTimeOut(5d);
+        powerUp.setDuration(5d);
         return powerUp;
     }
 
@@ -259,7 +269,7 @@ public class Race extends Observable {
 
     /**
      * Determines if a boat picked up a power up.
-     * @param boat
+     * @param boat not null
      */
     private void powerUpStuff(Boat boat) {
         List<PickUp> pickUps = new ArrayList<>();
@@ -488,6 +498,7 @@ public class Race extends Observable {
 
 
     public void setStatus(RaceStatus status) {
+        System.out.println(status);
         this.status = status;
     }
 

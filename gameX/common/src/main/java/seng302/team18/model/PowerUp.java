@@ -6,7 +6,7 @@ package seng302.team18.model;
 public abstract class PowerUp {
 
     private double timeSinceActivation = 0d;
-    private double timeOut = Double.POSITIVE_INFINITY;
+    private double duration = Double.POSITIVE_INFINITY;
 
 
     public PowerUp() {}
@@ -14,10 +14,10 @@ public abstract class PowerUp {
 
     /**
      * sets how long the power up will last after activation / first use.
-     * @param timeOut
+     * @param duration in milliseconds
      */
-    public void setTimeOut(double timeOut) {
-        this.timeOut = timeOut;
+    public void setDuration(double duration) {
+        this.duration = duration;
     }
 
 
@@ -36,7 +36,7 @@ public abstract class PowerUp {
      * @return the power up has terminated
      */
     public boolean isTerminated() {
-        return timeSinceActivation > timeOut;
+        return timeSinceActivation > duration;
     }
 
 

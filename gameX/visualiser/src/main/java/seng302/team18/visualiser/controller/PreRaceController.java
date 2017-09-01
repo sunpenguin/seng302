@@ -52,11 +52,7 @@ public class PreRaceController {
 
     private boolean hasChanged = false;
 
-    private Stage stage;
-
-
-    public void initialize() {
-    }
+    public void initialize() {}
 
 
     /**
@@ -198,10 +194,6 @@ public class PreRaceController {
         listView.setItems(FXCollections.observableList(race.getStartingList()));
     }
 
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
 
     private void showNetWorkInfo() {
         Socket socket = interpreter.getSocket();

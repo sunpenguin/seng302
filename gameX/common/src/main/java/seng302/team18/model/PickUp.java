@@ -1,16 +1,16 @@
 package seng302.team18.model;
 
 /**
- * Created by dhl25 on 1/09/17.
+ * The physical power up object that can be picked up by a boat.
  */
 public class PickUp {
 
     private BodyMass bodyMass;
     private PowerUp powerUp;
+    private double timeout; // milliseconds
 
-    public PickUp() {
+    public PickUp() {}
 
-    }
 
     public Coordinate getLocation() {
         return bodyMass.getLocation();
@@ -41,4 +41,13 @@ public class PickUp {
         return powerUp;
     }
 
+
+    public double getTimeout() {
+        return timeout;
+    }
+
+
+    public void setTimeout(double timeout) {
+        this.timeout = timeout;
+    }
 }

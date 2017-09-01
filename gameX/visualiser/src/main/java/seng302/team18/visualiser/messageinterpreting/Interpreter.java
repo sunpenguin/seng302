@@ -46,7 +46,7 @@ public class Interpreter extends Observable {
                      try {
                          messageBody = receiver.nextMessage();
                      } catch (IOException e1) {
-                         this.close();
+                         close();
                      } catch (Exception e2){
                          System.err.println("e2 interpreter start method");
                      }
