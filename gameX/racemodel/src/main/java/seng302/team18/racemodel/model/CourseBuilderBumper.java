@@ -33,13 +33,13 @@ public class CourseBuilderBumper extends AbstractCourseBuilder {
     @Override
     protected List<CompoundMark> buildCompoundMarks() {
         // Start Line
-        Mark start1 = new Mark(231, new Coordinate(5.00125, -3.99850));
+        Mark start1 = new Mark(231, new Coordinate(5.00100, -3.99975));
         start1.setHullNumber("LC21");
         start1.setStoweName("PRO");
         start1.setShortName("S1");
         start1.setBoatName("Start Line 1");
 
-        Mark start2 = new Mark(232, new Coordinate(5.00175, -3.99850));
+        Mark start2 = new Mark(232, new Coordinate(5.00200, -3.99975));
         start2.setHullNumber("LC22");
         start2.setStoweName("PIN");
         start2.setShortName("S2");
@@ -48,13 +48,13 @@ public class CourseBuilderBumper extends AbstractCourseBuilder {
         CompoundMark startGate = new CompoundMark("Start Line", Arrays.asList(start1, start2), 11);
 
         // Finish Line
-        Mark finish1 = new Mark(238, new Coordinate(5.00125, -4.00300));
+        Mark finish1 = new Mark(238, new Coordinate(5.00100, -4.00125));
         finish1.setHullNumber("LC28");
         finish1.setStoweName("PRO");
         finish1.setShortName("F1");
         finish1.setBoatName("Finish Line 1");
 
-        Mark finish2 = new Mark(239, new Coordinate(5.00175, -4.00300));
+        Mark finish2 = new Mark(239, new Coordinate(5.00200, -4.00125));
         finish2.setHullNumber("LC29");
         finish2.setStoweName("PIN");
         finish2.setShortName("F2");
@@ -68,16 +68,15 @@ public class CourseBuilderBumper extends AbstractCourseBuilder {
 
     @Override
     protected List<Coordinate> getBoundaryMarks() {
-        double distortion = 0.00500;
         return Arrays.asList(
-                new Coordinate(5.00000, -3.99975 + distortion / 2),
-                new Coordinate(5.00000, -4.00125 - distortion / 2),
-                new Coordinate(5.00100, -4.00200 - distortion),
-                new Coordinate(5.00200, -4.00200 - distortion),
-                new Coordinate(5.00300, -4.00125 - distortion / 2),
-                new Coordinate(5.00300, -3.99975 + distortion / 2),
-                new Coordinate(5.00200, -3.99900 + distortion),
-                new Coordinate(5.00100, -3.99900 + distortion)
+                new Coordinate(5.00000, -3.99975),
+                new Coordinate(5.00000, -4.00125),
+                new Coordinate(5.00100, -4.00200),
+                new Coordinate(5.00200, -4.00200),
+                new Coordinate(5.00300, -4.00125),
+                new Coordinate(5.00300, -3.99975),
+                new Coordinate(5.00200, -3.99900),
+                new Coordinate(5.00100, -3.99900)
         );
     }
 

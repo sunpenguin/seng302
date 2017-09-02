@@ -277,7 +277,7 @@ public class PlayInterfaceController {
      * sets the RaceMode to race and opens a stream on the specified host and port number
      */
     public void connectButtonAction(){
-        mode = RaceMode.RACE;
+        mode = RaceMode.BUMPER_BOATS;
         try {
             String host = customHostField.getText();
             int port = Integer.parseInt(customPortField.getText());
