@@ -25,7 +25,8 @@ public class CollisionUpdater implements Updater {
     private void detectCollision(Boat boat, Race race) {
         List<BodyMass> objects = new ArrayList<>();
         for (Boat b : race.getStartingList()) {
-            if (!b.getId().equals(boat.getId())) {
+            if (!b.getId().equals(boat.getId()) &&
+                    !(b.getStatus() == BoatStatus.FINISHED || boat.getStatus() == BoatStatus.FINISHED )) {
                 objects.add(b.getBodyMass());
             }
         }
