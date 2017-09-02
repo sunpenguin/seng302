@@ -1,11 +1,8 @@
-
-
 package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.XYPair;
@@ -21,10 +18,8 @@ public class DisplaySail extends DisplayBoatDecorator {
     private double heading;
     private PixelMapper pixelMapper;
     private final Rotate rotation = new Rotate(0, 0, 0);
-    private final Scale zoom = new Scale(1, 1, 0, 0);
-    private final double SAIL_LENGTH = 20;
-    private double sailLength;
-    private final double poweredUpAngle = 60;
+    private final static double POWERED_UP_ANGLE = 60;
+    private final double strokeWidth;
 
 
     /**
@@ -32,20 +27,32 @@ public class DisplaySail extends DisplayBoatDecorator {
      *
      * @param boat the display boat being decorated
      */
-    public DisplaySail(PixelMapper mapper, DisplayBoat boat) {
+    DisplaySail(PixelMapper mapper, DisplayBoat boat) {
         super(boat);
         this.pixelMapper = mapper;
         sail = new Polyline();
-        sailLength = SAIL_LENGTH * pixelMapper.mappingRatio();
-        Double[] SAIL_OUT = new Double[]{
-                0.0, 0.0,
-                0.0, sailLength / 2
-        };
-        sail.getPoints().addAll(SAIL_OUT);
-        sail.getTransforms().addAll(rotation, zoom);
+        strokeWidth = sail.getStrokeWidth();
+        setUpShape(mapper.mappingRatio());
+        sail.getTransforms().addAll(rotation);
         sail.toFront();
     }
 
+
+    private void setUpShape(double mappingRatio) {
+        double pixelLength = getBoatLength() * mappingRatio / 2;
+
+        Double[] shape = new Double[]{
+                0.0, 0.0,
+                0.0, pixelLength
+        };
+
+        sail.getPoints().clear();
+        sail.setStrokeWidth(strokeWidth * mappingRatio);
+        sail.getPoints().addAll(shape);
+    }
+
+
+    @Override
     public void setCoordinate(Coordinate coordinate) {
         XYPair pixels = pixelMapper.mapToPane(coordinate);
         sail.setLayoutX(pixels.getX());
@@ -54,32 +61,40 @@ public class DisplaySail extends DisplayBoatDecorator {
     }
 
 
+    @Override
     public void setScale(double scaleFactor) {
-        zoom.setX(scaleFactor);
-        zoom.setY(scaleFactor);
+        setUpShape(scaleFactor);
         super.setScale(scaleFactor);
     }
 
 
-    public void addToGroup(Group group){
+    @Override
+    public void addToGroup(Group group) {
         group.getChildren().add(sail);
         super.addToGroup(group);
         sail.toFront();
     }
 
 
+    @Override
+    public void removeFrom(Group group) {
+        group.getChildren().remove(sail);
+        super.removeFrom(group);
+    }
+
+
+    @Override
     public void setHeading(double heading) {
         this.heading = heading;
         super.setHeading(heading);
     }
 
 
-
+    @Override
     public void setApparentWindDirection(double apparentWind) {
         this.windDirection = apparentWind;
         super.setApparentWindDirection(apparentWind);
     }
-
 
 
     @Override
@@ -89,9 +104,9 @@ public class DisplaySail extends DisplayBoatDecorator {
         if (sailOut) {
             sailAngle = getSailAngle(windDirection, MAX_DEVIATION);
         } else if ((windDirection - heading + 360) % 360 > 180) {
-            sailAngle = getSailAngle(windDirection + poweredUpAngle, MAX_DEVIATION);
+            sailAngle = getSailAngle(windDirection + POWERED_UP_ANGLE, MAX_DEVIATION);
         } else {
-            sailAngle = getSailAngle(windDirection - poweredUpAngle, MAX_DEVIATION);
+            sailAngle = getSailAngle(windDirection - POWERED_UP_ANGLE, MAX_DEVIATION);
         }
         rotation.setAngle(sailAngle);
         super.setSailOut(sailOut);
@@ -101,7 +116,7 @@ public class DisplaySail extends DisplayBoatDecorator {
     /**
      * Determines what the angle of the sail should be given the maximum allowed deviation from the boats heading.
      *
-     * @param sailAngle angle of the sail.
+     * @param sailAngle    angle of the sail.
      * @param maxDeviation max angle from directly .
      * @return the sails rotation.
      */

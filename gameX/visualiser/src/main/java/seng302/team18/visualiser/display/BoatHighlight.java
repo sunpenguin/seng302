@@ -3,9 +3,6 @@ package seng302.team18.visualiser.display;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Translate;
 import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.XYPair;
@@ -18,31 +15,28 @@ public class BoatHighlight extends DisplayBoatDecorator {
 
     private PixelMapper pixelMapper;
     private Circle highlight;
-    private Scale zoom = new Scale(0, 0);
-    private final Rotate rotation = new Rotate(0, 0, 0);
     private final static Color defaultColour = Color.YELLOW;
     private final static Color frozenColour = Color.RED;
+
 
     /**
      * Creates a new instance of DisplayBoat
      *
-     * @param boat the display boat being decorated
+     * @param boat        the display boat being decorated
      * @param pixelMapper The PixelMapper used to find where to map the highlight
      */
-    public BoatHighlight(PixelMapper pixelMapper, DisplayBoat boat) {
+    BoatHighlight(PixelMapper pixelMapper, DisplayBoat boat) {
         super(boat);
 
-        final Translate translate = new Translate(0, 1);
-
         this.pixelMapper = pixelMapper;
-        highlight = new Circle(11);
+        highlight = new Circle(getBoatLength() * pixelMapper.mappingRatio() * 0.5);
         highlight.setFill(defaultColour);
-        highlight.getTransforms().addAll(zoom, rotation, translate);
         highlight.toBack();
         highlight.setOpacity(0.5);
     }
 
 
+    @Override
     public void setCoordinate(Coordinate coordinate) {
         XYPair pixel = pixelMapper.mapToPane(coordinate);
         highlight.setLayoutX(pixel.getX());
@@ -51,19 +45,14 @@ public class BoatHighlight extends DisplayBoatDecorator {
     }
 
 
+    @Override
     public void setScale(double scaleFactor) {
-        zoom.setX(scaleFactor);
-        zoom.setY(scaleFactor);
+        highlight.setRadius(getBoatLength() * pixelMapper.mappingRatio() * 0.5);
         super.setScale(scaleFactor);
     }
 
 
-    public void setHeading(double heading) {
-        rotation.setAngle(heading);
-        super.setHeading(heading);
-    }
-
-
+    @Override
     public void addToGroup(Group group) {
         group.getChildren().add(highlight);
         super.addToGroup(group);
@@ -71,6 +60,7 @@ public class BoatHighlight extends DisplayBoatDecorator {
     }
 
 
+    @Override
     public void removeFrom(Group group) {
         group.getChildren().remove(highlight);
         super.removeFrom(group);
