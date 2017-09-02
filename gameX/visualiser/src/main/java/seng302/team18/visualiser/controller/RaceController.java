@@ -16,6 +16,7 @@ import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.chart.CategoryAxis;
@@ -24,6 +25,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -41,13 +43,14 @@ import seng302.team18.model.Coordinate;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.send.Sender;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
 import seng302.team18.visualiser.util.SparklineDataPoint;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -59,8 +62,6 @@ import java.util.stream.Collectors;
 public class RaceController implements Observer {
     @FXML
     private Group group;
-    @FXML
-    private Label timerLabel;
     @FXML
     private Label fpsLabel;
     @FXML
@@ -90,17 +91,6 @@ public class RaceController implements Observer {
     @FXML
     private AnchorPane tabView;
 
-    @FXML
-    private AnchorPane finisherPane;
-    @FXML
-    private TableView<Boat> finisherTable;
-    @FXML
-    private TableColumn<Boat, Integer> finisherPlace;
-    @FXML
-    private TableColumn<Boat, String> finisherColour;
-    @FXML
-    private TableColumn<Boat, String> finisherName;
-
     private SortedList<Boat> sortedList;
 
     private Pane escapeMenuPane;
@@ -114,19 +104,22 @@ public class RaceController implements Observer {
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
-    private RaceClock raceClock;
     private WindDisplay windDisplay;
     private PixelMapper pixelMapper;
     private Map<AnnotationType, Boolean> importantAnnotations;
-
     private Sender sender;
+
     private Interpreter interpreter;
-
     private RaceBackground background;
-    private FadeTransition fadeIn = new FadeTransition(Duration.millis(150));
 
+    private FadeTransition fadeIn = new FadeTransition(Duration.millis(150));
     private Map<String, Color> colours;
+
     private ControlsTutorial controlsTutorial;
+
+    private RaceClock raceClock;
+    private HBox timeBox;
+    private Label timeLabel;
 
 
     @FXML
@@ -140,7 +133,6 @@ public class RaceController implements Observer {
             importantAnnotations.put(type, false);
         }
         group.setManaged(false);
-        new ControlSchemeDisplay(raceViewPane);
         background = new RaceBackground(raceViewPane, "/images/water.gif");
         tabView.setVisible(false);
         initialiseFadeTransition();
@@ -199,39 +191,39 @@ public class RaceController implements Observer {
                                 pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() - 1);
 
 
-                            send = false;
-                            break;
-                        case ESCAPE:
-                            if (group.getChildren().contains(escapeMenuPane)) {
-                                group.getChildren().remove(escapeMenuPane);
-                            } else {
-                                openEscapeMenu("");
+                                send = false;
+                                break;
+                            case ESCAPE:
+                                if (group.getChildren().contains(escapeMenuPane)) {
+                                    group.getChildren().remove(escapeMenuPane);
+                                } else {
+                                    openEscapeMenu("");
+                                }
+                                send = false;
+                                break;
+                            case TAB:
+                                toggleTabView();
+                                send = false;
+                                break;
+                            default:
+                                send = false;
+                        }
+                        if (send) {
+                            if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
+                                controlsTutorial.setBoat(getPlayerBoat()); //TODO: get sam to change this seb67 17/8
+                                controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
+                                if (controlsTutorial.checkIfProgressed(keyEvent.getCode())) {
+                                    controlsTutorial.displayNext();
+                                }
                             }
-                            send = false;
-                            break;
-                        case TAB:
-                            toggleTabView();
-                            send = false;
-                            break;
-                        default:
-                            send = false;
-                    }
-                    if (send) {
-                        if (race.getMode() == RaceMode.CONTROLS_TUTORIAL){
-                            controlsTutorial.setBoat(getPlayerBoat()); //TODO: get sam to change this seb67 17/8
-                            controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
-                            if (controlsTutorial.checkIfProgressed(keyEvent.getCode())){
-                                controlsTutorial.displayNext();
+                            try {
+                                sender.send(message);
+                            } catch (IOException e) {
+                                openEscapeMenu("You have been disconnected!");
                             }
                         }
-                        try {
-                            sender.send(message);
-                        } catch (IOException e) {
-                           openEscapeMenu("You have been disconnected!");
-                        }
                     }
-                }
-            };
+                };
 
         raceViewPane.addEventFilter(KeyEvent.KEY_PRESSED, keyEventHandler);
         raceViewPane.setFocusTraversable(true);
@@ -567,19 +559,31 @@ public class RaceController implements Observer {
         this.sender = sender;
         this.race = race;
 
-        GPSCalculations gps = new GPSCalculations();
+        GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
-        pixelMapper = new PixelMapper(bounds.get(0), bounds.get(1), race.getCourse().getCentralCoordinate(), raceViewPane);
+
+        // Force a resize of the pane to ensure that pixel mapper gets correct width/height while display objects are
+        // being initialized
+        raceViewPane.resize(raceViewPane.getPrefWidth(), raceViewPane.getPrefHeight());
+
+        pixelMapper = new PixelMapper(
+                bounds.get(0), bounds.get(1), race.getCourse().getCentralCoordinate(),
+                raceViewPane.heightProperty(), raceViewPane.widthProperty()
+        );
+
         pixelMapper.setMaxZoom(16d);
+        pixelMapper.calculateMappingScale();
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
 
-        raceClock = new RaceClock(timerLabel);
-        raceClock.start();
+        setupRaceTimer();
+        startRaceTimer();
 
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel));
+        new ControlSchemeDisplay(raceViewPane);
+
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper);
         raceLoop.start();
 
         registerListeners();
@@ -595,9 +599,40 @@ public class RaceController implements Observer {
 
         loadEscapeMenu();
 
-        int id = race.getPlayerId();
-
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
+    }
+
+
+    /**
+     * Set up the container and label for the race clock. Text is displayed in the center of the container.
+     */
+    private void setupRaceTimer() {
+        timeLabel = new Label();
+        timeBox = new HBox(timeLabel);
+        timeBox.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/raceview.css").toExternalForm());
+        timeBox.getStyleClass().add("timeBox");
+        timeLabel.setPrefWidth(80);
+        timeBox.setPrefWidth(120);
+        timeBox.setAlignment(Pos.CENTER);
+        raceClock = new RaceClock(timeLabel);
+        raceViewPane.getChildren().add(timeBox);
+    }
+
+
+    /**
+     * Start the race clock by invoking start() on the RaceClock's AnimationTimer.
+     */
+    private void startRaceTimer() {
+        raceClock.start();
+    }
+
+
+    /**
+     * Set the layout of the race clock to the top-center of the race view pane.
+     */
+    private void redrawTimeLabel() {
+        timeBox.setLayoutX((raceViewPane.getWidth()) / 2.0 - (timeBox.getPrefWidth() / 2.0));
+        timeBox.setLayoutY(10.0);
     }
 
 
@@ -668,14 +703,16 @@ public class RaceController implements Observer {
     }
 
     /**
-     * To call when course features need redrawing.
+     * To call when GUI features need redrawing.
      * (For example, when zooming in, the course features are required to change)
      */
     public void redrawFeatures() {
+        pixelMapper.calculateMappingScale();
         background.renderBackground();
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
         raceRenderer.reDrawTrails();
+        redrawTimeLabel();
     }
 
 
@@ -697,72 +734,6 @@ public class RaceController implements Observer {
         raceViewPane.getChildren().add(resultBox);
         resultBox.setLayoutX(50);
         resultBox.setLayoutY(200);
-    }
-
-
-    /**
-     * Constructs the finishers list to be displayed on the GUIs
-     */
-    private void constructList() {
-        finisherTable.setItems(sortedList);
-        finisherPlace.setCellValueFactory(new PropertyValueFactory<>("place"));
-        finisherName.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        colours = raceRenderer.boatColors();
-        finisherColour.setCellFactory(column -> new TableCell<Boat, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem("", empty);
-
-                Boat boat = (Boat) getTableRow().getItem();
-                if (boat != null) {
-                    Color colour = colours.get(boat.getShortName());
-                    if (colour != null) {
-                        setStyle(String.format("-fx-background-color: #%02x%02x%02x", (int) (colour.getRed() * 255), (int) (colour.getGreen() * 255), (int) (colour.getBlue() * 255)));
-                    }
-                }
-            }
-        });
-
-        Collection<TableColumn<Boat, ?>> columns = new ArrayList<>();
-        columns.add(finisherPlace);
-        columns.add(finisherColour);
-        columns.add(finisherName);
-
-        for (TableColumn<Boat, ?> column : columns) {
-            column.setResizable(false);
-            column.setSortable(false);
-        }
-
-        finisherTable.getColumns().setAll(columns);
-
-        // Resets the columns to the original order whenever the user tries to change them
-        finisherTable.getColumns().addListener(new ListChangeListener<TableColumn<Boat, ?>>() {
-            public boolean suspended;
-
-            @Override
-            public void onChanged(ListChangeListener.Change change) {
-                change.next();
-                if (change.wasReplaced() && !suspended) {
-                    this.suspended = true;
-                    finisherTable.getColumns().setAll(columns);
-                    this.suspended = false;
-                }
-            }
-        });
-
-        // TODO: Sunguin 16/08/17 The centering of this is off by alot and I'm not sure why
-        finisherPane.setLayoutX(raceViewPane.getPrefWidth() / 2 - (Math.floorDiv((int) finisherTable.getWidth(), 2)));
-        finisherPane.setLayoutY(raceViewPane.getPrefHeight() / 2 - (Math.floorDiv((int) finisherTable.getHeight(), 2)));
-    }
-
-
-    /**
-     * Displays the Finishers List on the GUI
-     */
-    private void displayList() {
-        finisherPane.toFront();
-        finisherPane.setVisible(true);
     }
 
 

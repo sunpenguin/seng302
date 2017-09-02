@@ -217,7 +217,7 @@ public class TestMock implements Observer {
      * @param timeLast The time (milliseconds) from the previous loop in runSimulation.
      */
     private void runRace(long timeCurr, long timeLast) {
-        race.updateBoats((timeCurr - timeLast));
+        race.update((timeCurr - timeLast));
     }
 
 

@@ -6,18 +6,19 @@ import seng302.team18.model.Mark;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
  * Class for making GPS calculations.
  */
 
-public class GPSCalculations {
+public class GPSCalculator {
 
     /**
-     * Constructor for GPSCalculations.
+     * Constructor for GPSCalculator.
      */
-    public GPSCalculations() {
+    public GPSCalculator() {
     }
 
     /**
@@ -59,7 +60,7 @@ public class GPSCalculations {
      *
      * @param initialCoord the initial coordinate
      * @param bearing      the bearing from the initial coordinate to the destination coordinate
-     * @param distance     the distance (in kilometers) from the initial coordinate to the destination coordinate
+     * @param distance     the distance (in meters) from the initial coordinate to the destination coordinate
      * @return the destination coordinate
      */
     public Coordinate toCoordinate(Coordinate initialCoord, double bearing, double distance) {
@@ -175,6 +176,7 @@ public class GPSCalculations {
         return new Coordinate(centralLatitude * 180 / Math.PI, centralLongitude * 180 / Math.PI);
     }
 
+
     /**
      * Calculate the coordinates of the upper-left and lower-right coordinates of a bounding box of a
      * given list of coordinates
@@ -214,6 +216,7 @@ public class GPSCalculations {
         return result;
     }
 
+
     /**
      * Calculate the coordinates of the upper-left and lower-right coordinates of a bounding box of a
      * given course
@@ -247,35 +250,30 @@ public class GPSCalculations {
         return bearing <= finish;
     }
 
+
     /**
      * Detects whether or not a certain coordinate is located inside a polygon of coordinate points
      * @param location The location point you are checking is inside the polygon
      * @param boundary The polygon
      * @return True if the location is inside the polygon, false if it is outside
      */
-    public boolean contains(Coordinate location, List<Coordinate> boundary)
-    {
+    public boolean isInside(Coordinate location, List<Coordinate> boundary) {
         Coordinate lastPoint = boundary.get(boundary.size() - 1);
         Boolean isInside = false;
         double x = location.getLongitude();
-        for (Coordinate point : boundary)
-        {
+        for (Coordinate point : boundary) {
             double x1 = lastPoint.getLongitude();
             double x2 = point.getLongitude();
             double dx = x2 - x1;
 
-            if (Math.abs(dx) > 180.0)
-            {
+            if (Math.abs(dx) > 180.0) {
                 // we have, most likely, just jumped the dateline (could do further validation to this effect if needed).  normalise the numbers.
-                if (x > 0)
-                {
+                if (x > 0) {
                     while (x1 < 0)
                         x1 += 360;
                     while (x2 < 0)
                         x2 += 360;
-                }
-                else
-                {
+                } else {
                     while (x1 > 0)
                         x1 -= 360;
                     while (x2 > 0)
@@ -284,19 +282,55 @@ public class GPSCalculations {
                 dx = x2 - x1;
             }
 
-            if ((x1 <= x && x2 > x) || (x1 >= x && x2 < x))
-            {
+            if ((x1 <= x && x2 > x) || (x1 >= x && x2 < x)) {
                 double grad = (point.getLatitude() - lastPoint.getLatitude()) / dx;
                 double intersectAtLat = lastPoint.getLatitude() + ((x - x1) * grad);
 
-                if (intersectAtLat > location.getLatitude())
+                if (intersectAtLat > location.getLatitude()) {
                     isInside = !isInside;
+                }
             }
             lastPoint = point;
         }
 
         return isInside;
     }
+
+
+    /**
+     * Randomly generate a point inside the given boundary.
+     * @param bounds course boundary
+     * @return a random point inside the given boundary
+     */
+    public Coordinate randomPoint(List<Coordinate> bounds) {
+        List<Coordinate> corners = findMinMaxPoints(bounds);
+        Coordinate topLeft = corners.get(0);
+        Coordinate bottomRight = corners.get(1);
+        return randomPoint(bounds, topLeft, bottomRight);
+    }
+
+
+    /**
+     * Randomly generate a point inside the racing area.
+     * @param bounds course boundary
+     * @param topLeft top left corner
+     * @param bottomRight bottom right corner
+     * @return a random point inside the racing area
+     */
+    private Coordinate randomPoint(List<Coordinate> bounds, Coordinate topLeft, Coordinate bottomRight) {
+        Random random = new Random();
+        double randY = random.nextDouble();
+        double randX = random.nextDouble();
+        double newX = (topLeft.getLatitude() - bottomRight.getLatitude()) * randX + bottomRight.getLatitude();
+        double newY = (bottomRight.getLongitude() - topLeft.getLongitude()) * randY + topLeft.getLongitude();
+        Coordinate randomPoint = new Coordinate(newX, newY);
+        if (isInside(randomPoint, bounds)) {
+            return randomPoint;
+        }
+        return randomPoint(bounds, topLeft, bottomRight);
+    }
+
+
 
 
 }

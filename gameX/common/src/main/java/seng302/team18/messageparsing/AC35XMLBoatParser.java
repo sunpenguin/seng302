@@ -109,15 +109,9 @@ public class AC35XMLBoatParser implements MessageBodyParser {
             String boatName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_BOAT.toString());
             String boatShortName = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_SHORT.toString());
             String colourString = boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_COLOUR.toString());
-            Color colour;
+            Color colour = null;
             if (!colourString.isEmpty()) {
                 colour = Color.web(colourString);
-            } else {
-                Random random = new Random();
-                final float hue = random.nextFloat();
-                final float saturation = (random.nextInt(2000) + 1000) / 10000f;
-                final float luminance = 0.9f;
-                colour = Color.hsb(hue, saturation, luminance);
             }
             int boatId = Integer.parseInt(boatElement.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_SOURCE_ID.toString()));
             double boatLength = Double.parseDouble(boatDimensionsNode.getAttribute(Ac35XmlBoatComponents.ATTRIBUTE_BOAT_LENGTH.toString()));
