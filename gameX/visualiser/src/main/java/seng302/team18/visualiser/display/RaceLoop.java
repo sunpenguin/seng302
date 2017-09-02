@@ -1,6 +1,7 @@
 package seng302.team18.visualiser.display;
 
 import javafx.animation.AnimationTimer;
+import seng302.team18.visualiser.util.PixelMapper;
 
 
 /**
@@ -13,6 +14,7 @@ public class RaceLoop extends AnimationTimer {
     private RaceRenderer renderer;
     private CourseRenderer courseRenderer;
     private FPSReporter fpsReporter;
+    private PixelMapper pixelMapper;
 
     /**
      * Constructor for the RaceLoop class.
@@ -21,10 +23,11 @@ public class RaceLoop extends AnimationTimer {
      * @param courseRenderer thing that renders the course
      * @param fpsReporter thing that updates fps
      */
-    public RaceLoop(RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter) {
+    public RaceLoop(RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter, PixelMapper pixelMapper) {
         this.renderer = renderer;
         this.fpsReporter = fpsReporter;
         this.courseRenderer = courseRenderer;
+        this.pixelMapper = pixelMapper;
     }
 
     @Override
@@ -43,6 +46,7 @@ public class RaceLoop extends AnimationTimer {
      * Call each renderer and update the display of the race.
      */
     private void updateView() {
+        pixelMapper.calculateMappingScale();
         renderer.renderBoats();
         courseRenderer.renderCourse();
         renderer.drawTrails();

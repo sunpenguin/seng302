@@ -48,7 +48,7 @@ public class DisplayTrail {
         }
 
         this.heading = heading;
-        XYPair pixel = pixelMapper.coordToPixel(coordinate);
+        XYPair pixel = pixelMapper.mapToPane(coordinate);
         polyline.getPoints().addAll(pixel.getX(), pixel.getY());
         coordinates.add(coordinate);
 
@@ -69,7 +69,7 @@ public class DisplayTrail {
         List<Double> updatedTrailPoints = new ArrayList<>();
 
         for (Coordinate coordinate : coordinates) {
-            XYPair newPixels = pixelMapper.coordToPixel(coordinate);
+            XYPair newPixels = pixelMapper.mapToPane(coordinate);
             updatedTrailPoints.add(newPixels.getX());
             updatedTrailPoints.add(newPixels.getY());
         }

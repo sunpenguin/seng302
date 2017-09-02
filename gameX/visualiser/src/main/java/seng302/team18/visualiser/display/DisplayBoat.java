@@ -1,16 +1,13 @@
 package seng302.team18.visualiser.display;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
-import seng302.team18.model.Boat;
 import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.GeographicLocation;
@@ -106,7 +103,7 @@ public class DisplayBoat implements GeographicLocation {
 
     public void setCoordinate(Coordinate coordinate) {
         location = coordinate;
-        XYPair pixels = pixelMapper.coordToPixel(coordinate);
+        XYPair pixels = pixelMapper.mapToPane(coordinate);
         boatPoly.setLayoutX(pixels.getX());
         boatPoly.setLayoutY(pixels.getY());
         updateAnnotationText();
