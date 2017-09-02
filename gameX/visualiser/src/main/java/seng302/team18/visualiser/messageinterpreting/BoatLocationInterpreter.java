@@ -4,7 +4,7 @@ import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatLocationMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
-import seng302.team18.visualiser.display.DisplayRace;
+import seng302.team18.visualiser.ClientRace;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,16 +15,18 @@ import java.util.List;
  * @see MessageInterpreter
  */
 public class BoatLocationInterpreter extends MessageInterpreter {
-    private DisplayRace race;
+    private ClientRace race;
+
 
     /**
      * Constructor for BoatLocationInterpreter.
      *
      * @param race the race to be updated.
      */
-    public BoatLocationInterpreter(DisplayRace race) {
+    public BoatLocationInterpreter(ClientRace race) {
         this.race = race;
     }
+
 
     /**
      * Interpret method for BoatLocationInterpreter. Gets the boat speed, heading and coordinate from the message.

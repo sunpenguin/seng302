@@ -7,15 +7,17 @@ import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MarkRoundingMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
-import seng302.team18.visualiser.display.DisplayRace;
+import seng302.team18.visualiser.ClientRace;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Test class for MarkRoundingInterpreter
  */
 public class MarkRoundingInterpreterTest {
-    private DisplayRace race;
+    private ClientRace race;
     private List<Boat> startingList;
     private MessageInterpreter interpreter;
     private MessageBody message;
@@ -23,7 +25,7 @@ public class MarkRoundingInterpreterTest {
 
     @Before
     public void setUp() throws Exception {
-        race = new DisplayRace();
+        race = new ClientRace();
         Boat boat1 = new Boat("Big Boat", "BB", 420, 1);
         Boat boat2 = new Boat("Medium Boat", "MB", 100, 1);
         Boat boat3 = new Boat("Small Boat", "SB", 69, 1);

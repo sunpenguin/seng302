@@ -1,4 +1,4 @@
-package seng302.team18.visualiser.display;
+package seng302.team18.visualiser;
 
 import seng302.team18.model.*;
 
@@ -10,12 +10,13 @@ import java.util.List;
 /**
  * Class to hold race data for visualiser
  */
-public class DisplayRace {
+public class ClientRace {
 
     private int id;
     private RaceStatus status;
     private RaceType raceType;
-    private Regatta regatta = new Regatta();private Course course;
+    private Regatta regatta = new Regatta();
+    private Course course;
     private List<Integer> participantIds;
     private List<Boat> startingList;
     private ZonedDateTime startTime = ZonedDateTime.now();
@@ -23,7 +24,8 @@ public class DisplayRace {
     private Integer playerId;
     private RaceMode mode = RaceMode.RACE;
 
-    public DisplayRace() {
+
+    public ClientRace() {
         participantIds = new ArrayList<>();
         startingList = new ArrayList<>();
         course = new Course();
@@ -33,6 +35,7 @@ public class DisplayRace {
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         raceType = RaceType.MATCH;
     }
+
 
     /**
      * Starting list setter.
@@ -55,24 +58,28 @@ public class DisplayRace {
         }
     }
 
+
     public void addParticipant(Boat boat) {
         // check that it is alright to add a boat at this point
         startingList.add(boat);
         participantIds.add(boat.getId());
     }
 
+
     /**
      * Removes a participant from the race
+     *
      * @param boatID id for the participant to be removed
      */
-    public void removeParticipant (int boatID) {
+    public void removeParticipant(int boatID) {
         for (Boat boat : startingList) {
-            if(boat.getId().equals(boatID)){
+            if (boat.getId().equals(boatID)) {
                 startingList.remove(boat);
                 participantIds.remove(boatID);
             }
         }
     }
+
 
     public int getPlayerId() {
         return playerId;
@@ -85,6 +92,7 @@ public class DisplayRace {
         startingList.forEach(boat -> boat.setControlled(boat.getId().equals(playerId)));
     }
 
+
     public RaceMode getMode() {
         return mode;
     }
@@ -93,6 +101,7 @@ public class DisplayRace {
     public void setMode(RaceMode mode) {
         this.mode = mode;
     }
+
 
     /**
      * Gets a boat from the race given an ID.
@@ -110,6 +119,7 @@ public class DisplayRace {
         return null;
     }
 
+
     /**
      * Course getter.
      *
@@ -123,69 +133,86 @@ public class DisplayRace {
         return id;
     }
 
+
     public void setId(int id) {
         this.id = id;
     }
+
 
     public RaceStatus getStatus() {
         return status;
     }
 
+
     public void setStatus(RaceStatus status) {
         this.status = status;
     }
+
 
     public RaceType getRaceType() {
         return raceType;
     }
 
+
     public void setRaceType(RaceType raceType) {
         this.raceType = raceType;
     }
+
 
     public Regatta getRegatta() {
         return regatta;
     }
 
+
     public void setRegatta(Regatta regatta) {
         this.regatta = regatta;
     }
+
 
     public void setCourse(Course course) {
         this.course = course;
     }
 
+
     public List<Integer> getParticipantIds() {
         return participantIds;
     }
+
 
     public void setParticipantIds(List<Integer> participantIds) {
         this.participantIds = participantIds;
     }
 
+
     public List<Boat> getStartingList() {
         return startingList;
     }
+
 
     public ZonedDateTime getStartTime() {
         return startTime;
     }
 
+
     public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
     }
+
 
     public ZonedDateTime getCurrentTime() {
         return currentTime;
     }
 
+
     public void setCurrentTime(ZonedDateTime currentTime) {
         this.currentTime = currentTime;
     }
 
+
     public void setPlayerId(Integer playerId) {
         this.playerId = playerId;
     }
+
 
     /**
      * Sets the next Leg of the boat, updates the mark to show the boat has passed it,

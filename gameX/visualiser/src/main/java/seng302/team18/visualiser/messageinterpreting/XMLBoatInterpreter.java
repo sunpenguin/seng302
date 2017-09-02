@@ -3,22 +3,23 @@ package seng302.team18.visualiser.messageinterpreting;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Race;
-import seng302.team18.visualiser.display.DisplayRace;
+import seng302.team18.visualiser.ClientRace;
 
 /**
  * A MessageInterpreter that takes a AC35XMLBoatMessage and updates the boats of a Race.
  */
 public class XMLBoatInterpreter extends MessageInterpreter {
 
-    private DisplayRace race;
+    private ClientRace race;
+
 
     /**
      * Constructor for XMLBoatInterpreter. Takes a Race as a parameter which it updates every time a
      * AC35XMLBoatMessage is interpreted.
+     *
      * @param race to be updated.
      */
-    public XMLBoatInterpreter(DisplayRace race) {
+    public XMLBoatInterpreter(ClientRace race) {
         this.race = race;
     }
 

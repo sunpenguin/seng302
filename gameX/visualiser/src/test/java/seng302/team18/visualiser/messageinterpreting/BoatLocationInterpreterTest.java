@@ -7,7 +7,7 @@ import seng302.team18.message.AC35BoatLocationMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
-import seng302.team18.visualiser.display.DisplayRace;
+import seng302.team18.visualiser.ClientRace;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class BoatLocationInterpreterTest {
 
-    private DisplayRace race;
+    private ClientRace race;
     private List<Boat> startingList;
     private BoatLocationInterpreter interpreter;
     private MessageBody message;
@@ -27,7 +27,7 @@ public class BoatLocationInterpreterTest {
 
     @Before
     public void setUp() {
-        race = new DisplayRace();
+        race = new ClientRace();
         Boat boat1 = new Boat("Big Boat", "BB", 420, 1);
         Boat boat2 = new Boat("Medium Boat", "MB", 100, 1);
         Boat boat3 = new Boat("Small Boat", "SB", 69, 1);

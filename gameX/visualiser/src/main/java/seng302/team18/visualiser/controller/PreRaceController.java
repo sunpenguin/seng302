@@ -13,14 +13,15 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.interpreting.CompositeMessageInterpreter;
 import seng302.team18.interpreting.MessageInterpreter;
-import seng302.team18.message.*;
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
-import seng302.team18.model.Race;
-import seng302.team18.visualiser.display.DisplayRace;
+import seng302.team18.send.Sender;
+import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.PreRaceTimes;
 import seng302.team18.visualiser.messageinterpreting.*;
-import seng302.team18.send.Sender;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -49,7 +50,7 @@ public class PreRaceController {
 
     private Interpreter interpreter;
     private Sender sender;
-    private DisplayRace race;
+    private ClientRace race;
 
     private boolean hasChanged = false;
 
@@ -68,7 +69,7 @@ public class PreRaceController {
      * @param receiver the receiver
      * @param sender   the sender
      */
-    public void setUp(DisplayRace race, Receiver receiver, Sender sender) {
+    public void setUp(ClientRace race, Receiver receiver, Sender sender) {
         this.sender = sender;
         this.race = race;
         raceNameText.setText(race.getRegatta().getName());

@@ -10,7 +10,7 @@ public class MovementUpdater implements Updater {
 
     @Override
     public void update(Race race) {
-        for (Boat boat : race.getStartingList()){
+        for (Boat boat : race.getStartingList()) {
             boat.update(race.getUpdateTime());
         }
     }

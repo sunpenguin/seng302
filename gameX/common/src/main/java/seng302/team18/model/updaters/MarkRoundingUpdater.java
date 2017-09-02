@@ -9,7 +9,7 @@ public class MarkRoundingUpdater implements Updater {
 
     @Override
     public void update(Race race) {
-        for(Boat boat : race.getStartingList()) {
+        for (Boat boat : race.getStartingList()) {
             checkForRounding(boat, race);
         }
     }
@@ -32,6 +32,7 @@ public class MarkRoundingUpdater implements Updater {
             boat.setSpeed(boat.getBoatTWS(race.getCourse().getWindSpeed(), race.getCourse().getWindDirection()));
         }
     }
+
 
     /**
      * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
@@ -71,6 +72,7 @@ public class MarkRoundingUpdater implements Updater {
 
         boat.setLegNumber(nextLeg);
     }
+
 
     /**
      * Sets the boat to appropriate conditions when a boat has an OCS status.

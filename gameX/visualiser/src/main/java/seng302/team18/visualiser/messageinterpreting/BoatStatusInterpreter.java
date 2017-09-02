@@ -3,10 +3,10 @@ package seng302.team18.visualiser.messageinterpreting;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
-import seng302.team18.model.BoatStatus;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
-import seng302.team18.visualiser.display.DisplayRace;
+import seng302.team18.model.BoatStatus;
+import seng302.team18.visualiser.ClientRace;
 
 import java.util.List;
 
@@ -14,11 +14,13 @@ import java.util.List;
  * Interpreter to interpret AC35RaceStatusMessages for a boat status
  */
 public class BoatStatusInterpreter extends MessageInterpreter {
-    private DisplayRace race;
+    private ClientRace race;
 
-    public BoatStatusInterpreter(DisplayRace race) {
+
+    public BoatStatusInterpreter(ClientRace race) {
         this.race = race;
     }
+
 
     @Override
     public void interpret(MessageBody message) {

@@ -4,7 +4,7 @@ import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.visualiser.display.DisplayRace;
+import seng302.team18.visualiser.ClientRace;
 
 import java.util.List;
 
@@ -14,16 +14,18 @@ import java.util.List;
  * @see MessageInterpreter
  */
 public class EstimatedTimeInterpreter extends MessageInterpreter {
-    private DisplayRace race;
+    private ClientRace race;
+
 
     /**
      * The constructor for EstimatedTimeInterpreter.
      *
      * @param race the race to be changed.
      */
-    public EstimatedTimeInterpreter(DisplayRace race) {
+    public EstimatedTimeInterpreter(ClientRace race) {
         this.race = race;
     }
+
 
     /**
      * Interpret method for EstimatedTimeInterpreter. Gets the time till next mark for each boat in the race.

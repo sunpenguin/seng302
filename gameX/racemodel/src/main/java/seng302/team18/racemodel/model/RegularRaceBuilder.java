@@ -27,8 +27,9 @@ public class RegularRaceBuilder extends AbstractRaceBuilder {
         return RaceType.MATCH;
     }
 
+
     @Override
-    protected List<Updater> getUpdaters(){
+    protected List<Updater> getUpdaters() {
         List<Updater> updaters = new ArrayList<>();
         updaters.add(new MovementUpdater());
         updaters.add(new CollisionUpdater());
@@ -38,8 +39,9 @@ public class RegularRaceBuilder extends AbstractRaceBuilder {
         return updaters;
     }
 
+
     @Override
-    protected RaceMode getRaceMode(){
+    protected RaceMode getRaceMode() {
         return RaceMode.RACE;
     }
 }

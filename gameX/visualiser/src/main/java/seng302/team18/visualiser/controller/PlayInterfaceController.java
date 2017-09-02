@@ -16,16 +16,17 @@ import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.RaceMode;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
-import seng302.team18.visualiser.display.DisplayRace;
+import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.util.ConfigReader;
 
 import javax.net.SocketFactory;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.util.*;
-
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -296,7 +297,7 @@ public class PlayInterfaceController {
         outerPane.getScene().setRoot(root);
         stage.show();
 
-        DisplayRace race = new DisplayRace();
+        ClientRace race = new ClientRace();
         race.setMode(mode);
         controller.setUp(race, receiver, sender);
         controller.initConnection(boatColours.get(colourIndex));

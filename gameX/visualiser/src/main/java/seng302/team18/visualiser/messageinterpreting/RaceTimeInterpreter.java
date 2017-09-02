@@ -4,7 +4,7 @@ import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
-import seng302.team18.visualiser.display.DisplayRace;
+import seng302.team18.visualiser.ClientRace;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -15,16 +15,19 @@ import java.time.ZonedDateTime;
  */
 public class RaceTimeInterpreter extends MessageInterpreter {
 
-    private DisplayRace race;
+    private ClientRace race;
+
 
     /**
      * Constructor for RaceTimeInterpreter. Takes a Race as a parameter which it updates every time a
      * AC35RaceStatusMessage is interpreted.
+     *
      * @param race to be updated.
      */
-    public RaceTimeInterpreter(DisplayRace race) {
+    public RaceTimeInterpreter(ClientRace race) {
         this.race = race;
     }
+
 
     @Override
     public void interpret(MessageBody message) {
@@ -42,10 +45,12 @@ public class RaceTimeInterpreter extends MessageInterpreter {
         }
     }
 
+
     /**
      * Updates the time elapsed since passing last mark for all given boats.
+     *
      * @param boats to be updated.
-     * @param time elapsed since passing last mark.
+     * @param time  elapsed since passing last mark.
      */
     private void updateBoatMarkTimes(Iterable<Boat> boats, long time) {
         for (Boat boat : boats) {

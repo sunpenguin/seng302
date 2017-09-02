@@ -15,8 +15,8 @@ public class OutOfBoundsUpdater implements Updater {
 
     @Override
     public void update(Race race) {
-        for(Boat boat : race.getStartingList()){
-            checkForBoundryDSQ(boat, race);
+        for (Boat boat : race.getStartingList()) {
+            checkForBoundaryDSQ(boat, race);
         }
     }
 
@@ -26,13 +26,14 @@ public class OutOfBoundsUpdater implements Updater {
      *
      * @param boat to check
      */
-    private void checkForBoundryDSQ(Boat boat, Race race) {
+    private void checkForBoundaryDSQ(Boat boat, Race race) {
         if (isOutSide(boat, race)) {
             boat.setStatus(BoatStatus.DSQ);
             race.setChanged();
             race.notifyObservers(boat);
         }
     }
+
 
     /**
      * Check if a boat is outside the boundary
@@ -48,5 +49,4 @@ public class OutOfBoundsUpdater implements Updater {
                 && !calculator.isInside(boat.getCoordinate(), boundaries)
                 && !(boat.getStatus().equals(BoatStatus.DSQ));
     }
-
 }

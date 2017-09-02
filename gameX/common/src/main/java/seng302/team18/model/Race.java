@@ -1,15 +1,11 @@
 package seng302.team18.model;
 
-import seng302.team18.model.updaters.*;
+import seng302.team18.model.updaters.Updater;
 import seng302.team18.util.GPSCalculator;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -118,11 +114,12 @@ public class Race extends Observable {
 
     /**
      * Removes a participant from the race
+     *
      * @param boatID id for the participant to be removed
      */
-    public void removeParticipant (int boatID) {
+    public void removeParticipant(int boatID) {
         for (Boat boat : startingList) {
-            if(boat.getId().equals(boatID)){
+            if (boat.getId().equals(boatID)) {
                 startingList.remove(boat);
                 participantIds.remove(boatID);
             }
@@ -204,7 +201,6 @@ public class Race extends Observable {
             updater.update(this);
         }
     }
-
 
 
     public boolean isFinished() {
@@ -331,7 +327,7 @@ public class Race extends Observable {
     }
 
 
-    public void setChanged(){ //TODO this is probably wrong sbe67 1/8/2017
+    public void setChanged() { //TODO this is probably wrong sbe67 1/8/2017
         super.setChanged();
     }
 

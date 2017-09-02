@@ -13,10 +13,12 @@ public class CollisionUpdater implements Updater {
 
     @Override
     public void update(Race race) {
-        for(Boat boat : race.getStartingList()){
+        for (Boat boat : race.getStartingList()) {
             detectCollision(boat, race);
         }
     }
+
+
     /**
      * Detects if there has been a collision between the boat and another abstract boat after updating the position
      *
@@ -26,7 +28,7 @@ public class CollisionUpdater implements Updater {
         List<BodyMass> objects = new ArrayList<>();
         for (Boat b : race.getStartingList()) {
             if (!b.getId().equals(boat.getId()) &&
-                    !(b.getStatus() == BoatStatus.FINISHED || boat.getStatus() == BoatStatus.FINISHED )) {
+                    !(b.getStatus() == BoatStatus.FINISHED || boat.getStatus() == BoatStatus.FINISHED)) {
                 objects.add(b.getBodyMass());
             }
         }
@@ -34,12 +36,13 @@ public class CollisionUpdater implements Updater {
         for (Mark mark : race.getCourse().getMarks()) {
             objects.add(mark.getBodyMass());
         }
-        for (BodyMass object: objects) {
+        for (BodyMass object : objects) {
             if (boat.hasCollided(object)) {
                 handleCollision(boat.getBodyMass(), object);
             }
         }
     }
+
 
     /**
      * Handles the collision when one is detected by printing to the console
