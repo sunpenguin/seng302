@@ -108,7 +108,7 @@ public class ConnectionListener extends Observable implements Observer {
                             setChanged();
                             notifyObservers(this);
                             race.setCourseForBoats();
-                        case RACING:
+                        default:
                             addPlayer(receiver, sourceID);
                             sendMessage(client, sourceID, requestType);
                             break;
