@@ -68,7 +68,7 @@ public abstract class AbstractCourseBuilder {
     /**
      * @return the boundary marks to initialise the course with
      */
-    protected abstract List<Coordinate> getBoundaryMarks();
+    public abstract List<Coordinate> getBoundaryMarks();
 
 
     /**

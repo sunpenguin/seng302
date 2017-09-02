@@ -78,7 +78,7 @@ public class MockDataStream {
         Race race = RACE_BUILDER.buildRace(new Race(), REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse(), mode);
         Server server = new Server(SERVER_PORT, MAX_PLAYERS);
         ConnectionListener listener = new ConnectionListener(race, PARTICIPANTS_BUILDER.getIdPool(), new AC35MessageParserFactory());
-        TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool());
+        TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool(), COURSE_BUILDER);
 
 
         server.setCloseOnEmpty(true);

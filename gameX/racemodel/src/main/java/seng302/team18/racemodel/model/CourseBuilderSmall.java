@@ -51,7 +51,7 @@ public class CourseBuilderSmall extends AbstractCourseBuilder {
     }
 
     @Override
-    protected List<Coordinate> getBoundaryMarks() {
+    public List<Coordinate> getBoundaryMarks() {
         return new ArrayList<>();
     }
 

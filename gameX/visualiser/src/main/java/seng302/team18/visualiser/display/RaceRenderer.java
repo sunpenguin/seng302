@@ -144,6 +144,7 @@ public class RaceRenderer {
                 trailMap.put(boat.getShortName(), trail);
                 trail.addToGroup(group);
             }
+
             if (trail != null) {
                 trail.addPoint(boat.getCoordinate(), boat.getHeading(), pixelMapper);
             }

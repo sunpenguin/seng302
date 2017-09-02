@@ -16,9 +16,11 @@ import java.util.*;
  */
 public class CourseBuilderChallenge extends AbstractCourseBuilder {
 
-    private List<Coordinate> boundaryMarks = new ArrayList<>();
+    private List<Coordinate> boundaryMarks;
     private List<CompoundMark> compoundMarks = new ArrayList<>();
     private List<MarkRounding> markRoundings = new ArrayList<>();
+    private int count = 1;
+    private Coordinate origin = new Coordinate(38.21748,-106.52344);
 
 
     @Override
@@ -39,7 +41,7 @@ public class CourseBuilderChallenge extends AbstractCourseBuilder {
      * @return a list of compoundmarks
      */
     @Override
-    protected List<CompoundMark> buildCompoundMarks() {
+    public List<CompoundMark> buildCompoundMarks() {
         final double MARK_WIDTH = 65;
         final double ESTIMATED_NUM_GATES = 10;
         Random random = new Random();
@@ -56,7 +58,7 @@ public class CourseBuilderChallenge extends AbstractCourseBuilder {
             Coordinate right;
 
             while (true) {
-                double bearing = i == 0? 45 : random.nextDouble() * (450 - 270) + 270;
+                double bearing = i == 0? 45 : random.nextDouble() * (425 - 295) + 295;
                 double distance = i == 0? 130 : random.nextDouble() * (150 - (1500 / (ESTIMATED_NUM_GATES))) + (1500 / (ESTIMATED_NUM_GATES));
 
                 left = calculator.toCoordinate(previous, bearing, distance);
@@ -102,18 +104,21 @@ public class CourseBuilderChallenge extends AbstractCourseBuilder {
      * @return a list boundary marks
      */
     @Override
-    protected List<Coordinate> getBoundaryMarks() {
+    public List<Coordinate> getBoundaryMarks() {
+        boundaryMarks = new ArrayList<>();
         GPSCalculator calculator = new GPSCalculator();
 
-        Coordinate bottomLeft = new Coordinate(38.21748,-106.52344);
+        Coordinate bottomLeft = calculator.toCoordinate(origin,0, count/2.0);
         Coordinate bottomRight = calculator.toCoordinate(bottomLeft, 90, 300);
-        Coordinate topRight = calculator.toCoordinate(bottomRight, 0, 1500);
+        Coordinate topRight = calculator.toCoordinate(bottomRight, 0, 1500-count/2.0);
         Coordinate topLeft = calculator.toCoordinate(topRight, 270, 300);
 
         boundaryMarks.add(bottomLeft);
         boundaryMarks.add(bottomRight);
         boundaryMarks.add(topRight);
         boundaryMarks.add(topLeft);
+
+        count++;
 
         return boundaryMarks;
     }
