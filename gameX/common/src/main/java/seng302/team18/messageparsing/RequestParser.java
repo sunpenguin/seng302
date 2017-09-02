@@ -42,6 +42,7 @@ public class RequestParser implements MessageBodyParser {
         final int FIELD_LENGTH = 1;
 
         RequestType field = RequestType.from(ByteCheck.byteToInt(bytes, FIELD_INDEX, FIELD_LENGTH));
+        System.out.println(field.code());
 
         return new RequestMessage(field);
     }

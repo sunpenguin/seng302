@@ -239,7 +239,7 @@ public class PlayInterfaceController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        mode = RaceMode.RACE;
+        mode = RaceMode.CHALLENGE_MODE;
         openStream("127.0.0.1", 5005);
     }
 
