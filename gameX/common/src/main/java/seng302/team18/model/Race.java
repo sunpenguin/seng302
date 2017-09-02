@@ -44,11 +44,6 @@ public class Race extends Observable {
         currentTime = ZonedDateTime.now(course.getTimeZone());
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         raceType = RaceType.MATCH;
-        updaters.add(new MovementUpdater()); //TODO:Move sbe67 1/9/2017
-        updaters.add(new CollisionUpdater());
-        updaters.add(new OutOfBoundsUpdater());
-        updaters.add(new PowerUpUpdater());
-        updaters.add(new MarkRoundingUpdater());
     }
 
 
@@ -330,11 +325,18 @@ public class Race extends Observable {
         return detector;
     }
 
+
     public double getUpdateTime() {
         return updateTime;
     }
 
+
     public void setChanged(){ //TODO this is probably wrong sbe67 1/8/2017
         super.setChanged();
+    }
+
+
+    public void setUpdaters(List<Updater> updaters) {
+        this.updaters = updaters;
     }
 }
