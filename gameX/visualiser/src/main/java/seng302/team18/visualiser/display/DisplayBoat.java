@@ -1,16 +1,12 @@
 package seng302.team18.visualiser.display;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
-import seng302.team18.model.Boat;
 import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.GeographicLocation;
@@ -35,40 +31,35 @@ public class DisplayBoat implements GeographicLocation {
     private Long timeTilNextMark;
     private Long timeSinceLastMark = 0L;
     private Long timeAtLastMark;
-    private boolean sailOut;
     private boolean isControlled;
-    private double apparentWindDirection;
-    private double pixelLength;
-    private Coordinate destination;
     private BoatStatus status = BoatStatus.UNDEFINED;
 
     private PixelMapper pixelMapper;
     private Polyline boatPoly;
     private Color boatColor;
-    private double boatHeight;
-    private double boatWidth;
-    private Double[] boatShape;
+    private double boatLength;
 
     private final Rotate rotation = new Rotate(0, 0, 0);
-    private final Scale boatZoom = new Scale(1, 1, 0, 0);
 
     private Text annotation;
     private Long estimatedTime = 0L;
-    private final int decimalPlaces = 1; // for speed annotation
+    private final static int DECIMAL_PLACES = 1; // for speed annotation
     private Map<AnnotationType, Boolean> visibleAnnotations;
-    private final int ANNOTATION_OFFSET_X = 10;
+    private final static int ANNOTATION_OFFSET_X = 10;
 
-    protected DisplayBoat() {
+
+    DisplayBoat() {
     }
 
-    public DisplayBoat(PixelMapper pixelMapper, String name, Color boatColor, double pixelLength) {
+
+    DisplayBoat(PixelMapper pixelMapper, String name, Color boatColor, double boatLength) {
         this.pixelMapper = pixelMapper;
         this.shortName = name;
         this.boatColor = boatColor;
-        this.pixelLength = pixelLength;
+        this.boatLength = boatLength;
+
         boatPoly = new Polyline();
-        setUpBoatShape();
-        boatPoly.getPoints().addAll(boatShape);
+        setUpBoatShape(pixelMapper.mappingRatio());
         boatPoly.setFill(boatColor);
         boatPoly.setOnMouseClicked(event -> {
             if (location != null) {
@@ -78,19 +69,23 @@ public class DisplayBoat implements GeographicLocation {
                 pixelMapper.setViewPortCenter(location);
             }
         });
-        boatPoly.getTransforms().addAll(rotation, boatZoom);
+        boatPoly.getTransforms().add(rotation);
+
         setUpAnnotations();
     }
 
-    private void setUpBoatShape(){
-        boatHeight = pixelLength + 2;
-        boatWidth = pixelLength - 2;
-        boatShape = new Double[]{
-                0.0, boatHeight / -2,
-                boatWidth / -2, boatHeight / 2,
-                boatWidth / 2, boatHeight / 2,
-                0.0, boatHeight / -2
+    private void setUpBoatShape(double mappingRatio) {
+        double pixelLength = boatLength * mappingRatio / 2;
+
+        Double[] boatShape = new Double[]{
+                0.0, -pixelLength,
+                -pixelLength * 0.6667, pixelLength * 0.7454,
+                pixelLength * 0.6667, pixelLength * 0.7454,
+                0.0, -pixelLength
         };
+
+        boatPoly.getPoints().clear();
+        boatPoly.getPoints().addAll(boatShape);
     }
 
 
@@ -106,7 +101,7 @@ public class DisplayBoat implements GeographicLocation {
 
     public void setCoordinate(Coordinate coordinate) {
         location = coordinate;
-        XYPair pixels = pixelMapper.coordToPixel(coordinate);
+        XYPair pixels = pixelMapper.mapToPane(coordinate);
         boatPoly.setLayoutX(pixels.getX());
         boatPoly.setLayoutY(pixels.getY());
         updateAnnotationText();
@@ -125,8 +120,7 @@ public class DisplayBoat implements GeographicLocation {
 
 
     public void setScale(double scaleFactor) {
-        boatZoom.setX(scaleFactor);
-        boatZoom.setY(scaleFactor);
+        setUpBoatShape(scaleFactor);
     }
 
 
@@ -169,7 +163,7 @@ public class DisplayBoat implements GeographicLocation {
                     annotationText.append(shortName)
                             .append("\n");
                 } else if (AnnotationType.SPEED.equals(entry.getKey())) {
-                    String formatSpecSpeed = "%." + decimalPlaces + "f";
+                    String formatSpecSpeed = "%." + DECIMAL_PLACES + "f";
                     annotationText.append(String.format(formatSpecSpeed, speed.get()))
                             .append(" knots\n");
                 } else if (AnnotationType.ESTIMATED_TIME_NEXT_MARK.equals(entry.getKey()) && estimatedTime > 0) {
@@ -267,16 +261,14 @@ public class DisplayBoat implements GeographicLocation {
 
 
     public void setSailOut(boolean sailOut) {
-        this.sailOut = sailOut;
     }
 
 
     public void setApparentWindDirection(double apparentWind) {
-        this.apparentWindDirection = apparentWind;
     }
 
+
     public void setDestination(Coordinate destination) {
-        this.destination = destination;
     }
 
 
@@ -295,7 +287,13 @@ public class DisplayBoat implements GeographicLocation {
         return status;
     }
 
+
     public void setColour(Color boatColor) {
         this.boatColor = boatColor;
+    }
+
+
+    public double getBoatLength() {
+        return boatLength;
     }
 }
