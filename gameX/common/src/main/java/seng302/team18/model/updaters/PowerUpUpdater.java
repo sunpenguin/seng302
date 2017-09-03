@@ -3,7 +3,9 @@ package seng302.team18.model.updaters;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class to update boats on power ups
@@ -18,7 +20,7 @@ public class PowerUpUpdater implements Updater {
     @Override
     public void update(Race race) {
         for (Boat boat : race.getStartingList()) {
-            powerUpStuff(boat);
+            powerUpStuff(race, boat);
         }
     }
 
@@ -26,9 +28,17 @@ public class PowerUpUpdater implements Updater {
     /**
      * Determines if a boat picked up a power up.
      *
-     * @param boat
+     * @param boat not null
      */
-    private void powerUpStuff(Boat boat) {
-
+    private void powerUpStuff(Race race, Boat boat) {
+        List<PickUp> pickUps = new ArrayList<>();
+        for (PickUp pickUp : race.getPickUps()) {
+            if (boat.hasCollided(pickUp.getBodyMass())) {
+                boat.setPowerUp(pickUp.getPower());
+            } else {
+                pickUps.add(pickUp);
+            }
+        }
+        race.getCourse().setPickUps(pickUps);
     }
 }

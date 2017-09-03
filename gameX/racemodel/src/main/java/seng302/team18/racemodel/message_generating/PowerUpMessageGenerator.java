@@ -36,7 +36,7 @@ public class PowerUpMessageGenerator extends MessageGenerator {
         short radius = (short) ( pickUp.getRadius() * 1000 );
         byte[] radiusBytes = ByteCheck.shortToByteArray(radius);
         byte[] timeout = ByteCheck.longTo6ByteArray((long) pickUp.getTimeout());
-        byte[] type = { (byte) pickUp.getType() };
+        byte[] type = { (byte) pickUp.getType().getCode() };
         byte[] duration = ByteCheck.intToByteArray((int) pickUp.getPowerDuration());
 
         outStream.write(sourceID);

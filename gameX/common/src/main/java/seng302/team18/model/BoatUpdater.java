@@ -1,5 +1,6 @@
 package seng302.team18.model;
 
+import seng302.team18.message.PowerType;
 import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.SpeedConverter;
 
@@ -36,8 +37,8 @@ public class BoatUpdater extends PowerUp {
 
 
     @Override
-    public int getType() {
-        return -1;
+    public PowerType getType() {
+        return null;
     }
 
 }

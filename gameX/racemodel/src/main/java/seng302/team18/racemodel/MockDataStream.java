@@ -19,7 +19,7 @@ import java.util.Properties;
 public class MockDataStream {
 
     // Change concrete builders here to change the preset of race/regatta/course
-    private static final AbstractRaceBuilder RACE_BUILDER = new RegularRaceBuilder();
+    private static final AbstractRaceBuilder RACE_BUILDER = new ArcadeRaceBuilder();
     private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderRealistic();
     private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilderRealistic();
     private static final AbstractParticipantsBuilder PARTICIPANTS_BUILDER = new ParticipantsBuilderSize20();

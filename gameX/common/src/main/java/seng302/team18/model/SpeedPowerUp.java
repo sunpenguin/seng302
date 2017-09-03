@@ -21,7 +21,7 @@ public class SpeedPowerUp extends PowerUp {
     }
 
     @Override
-    public int getType() {
-        return PowerType.SPEED.getCode();
+    public PowerType getType() {
+        return PowerType.SPEED;
     }
 }

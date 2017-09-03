@@ -1,5 +1,7 @@
 package seng302.team18.model;
 
+import seng302.team18.message.PowerType;
+
 /**
  * The physical power up object that can be picked up by a boat.
  */
@@ -60,7 +62,7 @@ public class PickUp {
     }
 
 
-    public int getType() {
+    public PowerType getType() {
         return powerUp.getType();
     }
 

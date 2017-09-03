@@ -107,6 +107,7 @@ public class PreRaceController {
         try {
             sender.send(new RequestMessage(requestType));
         } catch (IOException e) {
+            e.printStackTrace();
             // TODO Callum / David 9 August show error (has been disconnected)
         }
 

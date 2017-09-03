@@ -43,8 +43,6 @@ public class TitleScreenController {
     private ImageView controlsImageView;
     private boolean controlsVisible = false;
 
-    private RaceMode mode;
-
     private Stage stage;
 
 
@@ -170,28 +168,6 @@ public class TitleScreenController {
             paneInner.setLayoutY((stage.getHeight() / 2) - (300));
         }
     }
-
-
-//    /**
-//     * Creates a controller manager object and begins an instance of the program.
-//     *
-//     * @throws Exception A connection error
-//     */
-//    private void startConnection(Receiver receiver, Sender sender) throws Exception {
-//        Stage stage = (Stage) errorText.getScene().getWindow();
-//        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
-//        Parent root = loader.load();
-//        PreRaceController controller = loader.getController();
-//        controller.setStage(stage);
-//        stage.setTitle("High Seas");
-//        pane.getScene().setRoot(root);
-//        stage.show();
-//
-//        Race race = new Race();
-//        race.setMode(mode);
-//        controller.setUp(race, receiver, sender);
-//        controller.initConnection(new ArrayList<>());
-//    }
 
 
     /**

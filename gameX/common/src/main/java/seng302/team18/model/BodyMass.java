@@ -12,25 +12,37 @@ public class BodyMass {
     public BodyMass() {}
 
 
+    public BodyMass(Coordinate location, double radius, double weight) {
+        this.weight = weight;
+        this.location = location;
+        this.radius = radius;
+    }
+
+
     public double getWeight() {
         return weight;
     }
+
 
     public void setWeight(double weight) {
         this.weight = weight;
     }
 
+
     public Coordinate getLocation() {
         return location;
     }
+
 
     public void setLocation(Coordinate location) {
         this.location = location;
     }
 
+
     public double getRadius() {
         return radius;
     }
+
 
     public void setRadius(double radius) {
         this.radius = radius;

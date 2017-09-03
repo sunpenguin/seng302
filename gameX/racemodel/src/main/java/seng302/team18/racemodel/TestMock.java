@@ -1,5 +1,6 @@
 package seng302.team18.racemodel;
 
+
 import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
@@ -14,11 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-
 
 /**
  * Class to handle a mock race
@@ -74,7 +70,7 @@ public class TestMock implements Observer {
         } else if (arg instanceof AcceptanceMessage) {
             AcceptanceMessage message = (AcceptanceMessage) arg;
             if (message.getRequestType() == RequestType.FAILURE_CLIENT_TYPE) {
-                System.out.println("Remove " + message.getSourceId() + " from the race");
+                System.out.println("Remove " + message.getSourceId() + " From the race");
                 race.removeParticipant(message.getSourceId());
                 System.out.println(race.getStartingList());
                 generateXMLs();
@@ -119,54 +115,70 @@ public class TestMock implements Observer {
      * @param startWaitTime    Number of seconds between the preparation phase and the start time
      * @param warningWaitTime  Number of seconds between the time the method is executed and warning phase
      * @param prepWaitTime     Number of seconds between the warning phase and the preparation phase
-     * @param cutOffDifference Number of seconds before entering the warning phase for not allowing new connections
+     * @param cutoffDifference Number of seconds before entering the warning phase for not allowing new connections
      */
-    public void runSimulation(int startWaitTime, int warningWaitTime, int prepWaitTime, int cutOffDifference) {
-        // TODO David, Sanguine 01/09/2017 Check tutorial mode and make methods
-        ScheduledExecutorService executor = Executors.newScheduledThreadPool(5);
+    public void runSimulation(int startWaitTime, int warningWaitTime, int prepWaitTime, int cutoffDifference) {
+        final int LOOP_FREQUENCY = 60;
+
+        long timeCurr = System.currentTimeMillis();
+        long timeLast;
 
         scheduledMessages.add(new RaceMessageGenerator(race));
         scheduledMessages.add(new HeartBeatMessageGenerator());
-        race.setStartTime(ZonedDateTime.now().plusSeconds(warningWaitTime + prepWaitTime + startWaitTime));
 
-        long cutOffDelay = warningWaitTime - cutOffDifference;
-        executor.schedule(server::stopAcceptingConnections, cutOffDelay, TimeUnit.SECONDS);
+        // Set race time
+        ZonedDateTime initialTime = ZonedDateTime.now();
+        ZonedDateTime warningTime = initialTime.plusSeconds(warningWaitTime);
+        ZonedDateTime prepTime = warningTime.plusSeconds(prepWaitTime);
+        ZonedDateTime connectionCutOff = warningTime.minusSeconds(cutoffDifference);
+        race.setStartTime(prepTime.plusSeconds(startWaitTime));
 
-        executor.schedule(() -> race.setStatus(RaceStatus.WARNING), warningWaitTime, TimeUnit.SECONDS);
+        race.setStatus(RaceStatus.PRESTART);
 
-        long prepDelay = warningWaitTime + prepWaitTime;
-        executor.schedule(() -> {
-            generateXMLs();
-            sendXmlBoatRace();
-            switchToPrep();
-        }, prepDelay, TimeUnit.SECONDS);
 
-        long startDelay = startWaitTime + warningWaitTime + prepWaitTime;
-        executor.schedule(this::switchToStarted, startDelay, TimeUnit.SECONDS);
-
-        executor.scheduleWithFixedDelay(new Runnable() {
-            long timeCurr = System.currentTimeMillis();
-            long timeLast;
-            @Override
-            public void run() {
-                timeLast = timeCurr;
-                timeCurr = System.currentTimeMillis();
-                updateRace(timeCurr, timeLast);
+        do {
+            if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
+                generateXMLs();
+                sendXmlBoatRace();
+                switchToPrep();
             }
-        }, 0, 16, TimeUnit.MILLISECONDS);
 
-    }
+            timeLast = timeCurr;
+            timeCurr = System.currentTimeMillis();
 
+            if (ZonedDateTime.now().isAfter(connectionCutOff)) {
+                server.stopAcceptingConnections();
+            }
 
-    private void updateRace(long timeCurr, long timeLast) {
-        if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
-            generateXMLs();
-            sendXmlBoatRace();
-            switchToPrep();
-        }
-        race.setCurrentTime(ZonedDateTime.now());
-        race.update(timeCurr - timeLast);
-        updateClients(timeCurr);
+            race.setCurrentTime(ZonedDateTime.now());
+
+            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(warningTime)) {
+                race.setStatus(RaceStatus.WARNING);
+
+            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(prepTime)) {
+                generateXMLs();
+                sendXmlBoatRace();
+                switchToPrep();
+            } else {
+                switchToStarted();
+            }
+
+            runRace(timeCurr, timeLast);
+            updateClients(timeCurr);
+
+            // Sleep
+            try {
+                Thread.sleep(1000 / LOOP_FREQUENCY);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        } while (!race.isFinished() && open);
+
+        // Sends final message
+        race.setStatus(RaceStatus.FINISHED);
+        ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
+        server.broadcast(raceMessageGenerator.getMessage());
     }
 
 
@@ -176,22 +188,38 @@ public class TestMock implements Observer {
      */
     private void switchToPrep() {
         race.setStatus(RaceStatus.PREPARATORY);
-        for (Boat boat : race.getStartingList()) {
-            scheduledMessages.add(new BoatMessageGenerator(boat));
+        server.stopAcceptingConnections();
+
+        for (Boat b : race.getStartingList()) {
+            scheduledMessages.add(new BoatMessageGenerator(b));
         }
     }
 
 
     /**
-     * Switch the RaceStatus to STARTED.
+     * If at the necessary time, switch the RaceStatus to STARTED.
      */
     private void switchToStarted() {
-        race.setStatus(RaceStatus.STARTED);
-        race.getStartingList().stream()
-                .filter(boat -> boat.getStatus().equals(BoatStatus.PRE_START))
-                .forEach(boat -> boat.setStatus(BoatStatus.RACING));
+        if ((race.getStatus() == RaceStatus.PREPARATORY) && ZonedDateTime.now().isAfter(race.getStartTime())) {
+            race.setStatus(RaceStatus.STARTED);
+            race.getStartingList().stream()
+                    .filter(boat -> boat.getStatus().equals(BoatStatus.PRE_START))
+                    .forEach(boat -> boat.setStatus(BoatStatus.RACING));
+
+        }
     }
 
+
+    /**
+     * Run the race.
+     * Updates the position of boats
+     *
+     * @param timeCurr The current time (milliseconds)
+     * @param timeLast The time (milliseconds) from the previous loop in runSimulation.
+     */
+    private void runRace(long timeCurr, long timeLast) {
+        race.update((timeCurr - timeLast));
+    }
 
 
     /**
@@ -216,7 +244,7 @@ public class TestMock implements Observer {
         }
 
         for (PickUp pickUp : race.getPickUps()) {
-            server.broadcast((new PowerUpMessageGenerator(pickUp)).getMessage());
+            server.broadcast(new PowerUpMessageGenerator(pickUp).getMessage());
         }
     }
 }
