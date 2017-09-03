@@ -1,7 +1,7 @@
 package seng302.team18.racemodel;
 
-import seng302.team18.interpreting.CompositeMessageInterpreter;
-import seng302.team18.interpreting.MessageInterpreter;
+import seng302.team18.interpret.CompositeMessageInterpreter;
+import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.*;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;

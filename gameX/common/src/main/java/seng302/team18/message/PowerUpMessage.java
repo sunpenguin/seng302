@@ -4,6 +4,7 @@ package seng302.team18.message;
  * Created by dhl25 on 3/09/17.
  */
 public class PowerUpMessage implements MessageBody {
+    private int id;
     private double latitude;
     private double longitude;
     private double radius; // metres
@@ -14,14 +15,21 @@ public class PowerUpMessage implements MessageBody {
     public PowerUpMessage() {}
 
 
-    public PowerUpMessage(double latitude, double longitude, double radius, long timeout,
+    public PowerUpMessage(int id, double latitude, double longitude, double radius, long timeout,
                           PowerType power, double duration) {
+        this.id = id;
         this.latitude = latitude;
         this.longitude = longitude;
         this.radius = radius;
         this.timeout = timeout;
         this.power = power;
         this.duration = duration;
+    }
+
+
+    @Override
+    public int getType() {
+        return AC35MessageType.POWER_UP.getCode();
     }
 
 
@@ -84,8 +92,13 @@ public class PowerUpMessage implements MessageBody {
         this.duration = duration;
     }
 
-    @Override
-    public int getType() {
-        return AC35MessageType.POWER_UP.getCode();
+
+    public int getId() {
+        return id;
+    }
+
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

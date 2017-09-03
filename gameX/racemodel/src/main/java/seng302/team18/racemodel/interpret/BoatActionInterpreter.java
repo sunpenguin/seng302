@@ -1,6 +1,6 @@
 package seng302.team18.racemodel.interpret;
 
-import seng302.team18.interpreting.MessageInterpreter;
+import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.BoatActionStatus;
 import seng302.team18.message.MessageBody;

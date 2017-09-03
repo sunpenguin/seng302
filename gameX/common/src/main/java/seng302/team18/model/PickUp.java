@@ -8,8 +8,11 @@ public class PickUp {
     private BodyMass bodyMass;
     private PowerUp powerUp;
     private double timeout; // milliseconds
+    private int id;
 
-    public PickUp() {}
+    public PickUp(int id) {
+        this.id = id;
+    }
 
 
     public Coordinate getLocation() {
@@ -64,5 +67,10 @@ public class PickUp {
 
     public double getPowerDuration() {
         return powerUp.getDuration();
+    }
+
+
+    public int getId() {
+        return id;
     }
 }

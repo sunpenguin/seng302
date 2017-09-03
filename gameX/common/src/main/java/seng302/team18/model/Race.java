@@ -73,13 +73,13 @@ public class Race extends Observable {
         GPSCalculator calculator = new GPSCalculator();
         for (int i = 0; i < powerUps; i++) {
             Coordinate randomPoint = calculator.randomPoint(course.getCourseLimits());
-            PickUp pickUp = makePickUp(randomPoint);
+            PickUp pickUp = makePickUp(i, randomPoint);
             course.addPickUp(pickUp);
         }
     }
 
 
-    private PickUp makePickUp(Coordinate randomPoint) {
+    private PickUp makePickUp(int id, Coordinate randomPoint) {
         final double TEN_SECONDS_IN_MILLISECONDS = 10000;
 
         BodyMass mass = new BodyMass();
@@ -87,7 +87,7 @@ public class Race extends Observable {
         mass.setWeight(0);
         mass.setRadius(14);
 
-        PickUp pickUp = new PickUp();
+        PickUp pickUp = new PickUp(id);
         pickUp.setBodyMass(mass);
         pickUp.setTimeout(TEN_SECONDS_IN_MILLISECONDS);
         pickUp.setPower(getRandomPower());

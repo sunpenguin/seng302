@@ -4,13 +4,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import seng302.team18.send.Sender;
-import seng302.team18.visualiser.messageinterpreting.Interpreter;
+import seng302.team18.visualiser.interpret.Interpreter;
 
 import java.io.IOException;
 

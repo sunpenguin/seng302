@@ -22,22 +22,22 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <CheckBox fx:id="boatNameCheckbox" mnemonicParsing="false" text="Boat Name" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <CheckBox fx:boatId="boatNameCheckbox" mnemonicParsing="false" text="Boat Name" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets left="40.0" />
                </GridPane.margin>
             </CheckBox>
-            <CheckBox fx:id="boatSpeedCheckbox" mnemonicParsing="false" text="Boat Speed" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+            <CheckBox fx:boatId="boatSpeedCheckbox" mnemonicParsing="false" text="Boat Speed" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets left="40.0" />
                </GridPane.margin>
             </CheckBox>
-            <CheckBox fx:id="estTimeToNextCheckbox" mnemonicParsing="false" text="Time to Next Mark" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
+            <CheckBox fx:boatId="estTimeToNextCheckbox" mnemonicParsing="false" text="Time to Next Mark" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets left="40.0" />
                </GridPane.margin>
             </CheckBox>
-            <CheckBox fx:id="timeSinceLastCheckbox" mnemonicParsing="false" text="Time Since Last Mark" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+            <CheckBox fx:boatId="timeSinceLastCheckbox" mnemonicParsing="false" text="Time Since Last Mark" GridPane.columnSpan="2" GridPane.halignment="LEFT" GridPane.rowIndex="4" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets left="40.0" />
                </GridPane.margin>
@@ -47,7 +47,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button fx:id="doneButton" mnemonicParsing="false" onAction="#doneButtonPressed" text="Done" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+            <Button fx:boatId="doneButton" mnemonicParsing="false" onAction="#doneButtonPressed" text="Done" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
    </children>

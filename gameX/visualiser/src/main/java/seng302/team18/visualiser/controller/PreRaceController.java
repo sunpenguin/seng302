@@ -11,14 +11,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import seng302.team18.interpreting.CompositeMessageInterpreter;
-import seng302.team18.interpreting.MessageInterpreter;
+import seng302.team18.interpret.CompositeMessageInterpreter;
+import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.*;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.visualiser.display.PreRaceTimes;
-import seng302.team18.visualiser.messageinterpreting.*;
+import seng302.team18.visualiser.interpret.*;
 import seng302.team18.send.Sender;
 
 import java.io.IOException;

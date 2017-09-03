@@ -23,22 +23,26 @@ public class PowerUpParser implements MessageBodyParser {
         }
     }
 
+
     @Override
     public MessageBody parse(byte[] bytes) {
         final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
-        final int LAT_INDEX = 0;
+        final int ID_INDEX = 0;
+        final int ID_LENGTH = 4;
+        final int LAT_INDEX = 4;
         final int LAT_LENGTH = 4;
-        final int LONG_INDEX = 4;
+        final int LONG_INDEX = 8;
         final int LONG_LENGTH = 4;
-        final int RADIUS_INDEX = 8;
+        final int RADIUS_INDEX = 12;
         final int RADIUS_LENGTH = 2;
-        final int TIMEOUT_INDEX = 10;
+        final int TIMEOUT_INDEX = 14;
         final int TIMEOUT_LENGTH = 6;
-        final int TYPE_INDEX = 16;
+        final int TYPE_INDEX = 20;
         // final int TYPE_LENGTH = 1;
-        final int DURATION_INDEX = 17;
+        final int DURATION_INDEX = 21;
         final int DURATION_LENGTH = 4;
 
+        int sourceID = ByteCheck.byteToInt(bytes, ID_INDEX, ID_LENGTH);
         double lat = ByteCheck.byteToInt(bytes, LAT_INDEX, LAT_LENGTH) * BYTE_COORDINATE_TO_DOUBLE;
         double lon = ByteCheck.byteToInt(bytes, LONG_INDEX, LONG_LENGTH) * BYTE_COORDINATE_TO_DOUBLE;
         double radius = ByteCheck.byteToShort(bytes, RADIUS_INDEX, RADIUS_LENGTH) / 1000d;
@@ -46,7 +50,7 @@ public class PowerUpParser implements MessageBodyParser {
         PowerType type = PowerType.from((int) bytes[TYPE_INDEX]);
         double duration = ByteCheck.byteToInt(bytes, DURATION_INDEX, DURATION_LENGTH) * 1000d;
 
-        return new PowerUpMessage(lat, lon, radius, timeout, type, duration);
+        return new PowerUpMessage(sourceID, lat, lon, radius, timeout, type, duration);
     }
 
 }

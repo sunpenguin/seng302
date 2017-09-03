@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="578.0" prefWidth="777.0" styleClass="background" stylesheets="@stylesheets/titleScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.PreRaceController">
+<AnchorPane fx:boatId="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="578.0" prefWidth="777.0" styleClass="background" stylesheets="@stylesheets/titleScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.PreRaceController">
    <children>
       <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <columnConstraints>
@@ -60,7 +60,7 @@
                               <DropShadow />
                            </effect>
                         </Text>
-                        <Label fx:id="startTimeLabel" layoutX="268.0" layoutY="23.0" prefHeight="71.0" prefWidth="171.0" style="-fx-font-size: 2em;" text="Start time" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label fx:boatId="startTimeLabel" layoutX="268.0" layoutY="23.0" prefHeight="71.0" prefWidth="171.0" style="-fx-font-size: 2em;" text="Start time" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets left="25.0" />
                            </GridPane.margin>
@@ -79,7 +79,7 @@
                               <DropShadow />
                            </effect>
                         </Text>
-                        <Label fx:id="timeLabel" layoutX="268.0" layoutY="118.0" prefHeight="28.0" prefWidth="171.0" style="-fx-font-size: 2em;" text="Local time" textFill="WHITE" AnchorPane.rightAnchor="58.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <Label fx:boatId="timeLabel" layoutX="268.0" layoutY="118.0" prefHeight="28.0" prefWidth="171.0" style="-fx-font-size: 2em;" text="Local time" textFill="WHITE" AnchorPane.rightAnchor="58.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets left="25.0" />
                            </GridPane.margin>
@@ -87,7 +87,7 @@
                               <DropShadow />
                            </effect>
                         </Label>
-                        <Label fx:id="timeZoneLabel" layoutX="268.0" layoutY="146.0" prefHeight="30.0" prefWidth="195.0" text="Timezone" textFill="WHITE" AnchorPane.rightAnchor="129.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <Label fx:boatId="timeZoneLabel" layoutX="268.0" layoutY="146.0" prefHeight="30.0" prefWidth="195.0" text="Timezone" textFill="WHITE" AnchorPane.rightAnchor="129.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets left="25.0" />
                            </GridPane.margin>
@@ -95,7 +95,7 @@
                               <DropShadow />
                            </effect>
                         </Label>
-                        <Text fx:id="raceNameText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Race Name" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+                        <Text fx:boatId="raceNameText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Race Name" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -125,7 +125,7 @@
                               <Insets right="25.0" />
                            </GridPane.margin>
                         </Text>
-                        <Label fx:id="ipLabel" prefHeight="30.0" prefWidth="195.0" text="IP" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                        <Label fx:boatId="ipLabel" prefHeight="30.0" prefWidth="195.0" text="IP" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4">
                            <effect>
                               <DropShadow />
                            </effect>
@@ -133,7 +133,7 @@
                               <Insets left="25.0" />
                            </GridPane.margin>
                         </Label>
-                        <Label fx:id="portLabel" prefHeight="30.0" prefWidth="195.0" text="Port" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                        <Label fx:boatId="portLabel" prefHeight="30.0" prefWidth="195.0" text="Port" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="5">
                            <effect>
                               <DropShadow />
                            </effect>
@@ -153,7 +153,7 @@
                   <DropShadow height="30.0" radius="14.5" width="30.0" />
                </effect>
             </Text>
-            <ListView fx:id="listView" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <ListView fx:boatId="listView" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
          </children>
       </GridPane>
    </children>

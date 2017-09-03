@@ -26,6 +26,7 @@ public class PowerUpMessageGenerator extends MessageGenerator {
         final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
+        byte[] sourceID = ByteCheck.intToByteArray(pickUp.getId());
         Double latitude = (pickUp.getLocation().getLatitude() / BYTE_COORDINATE_TO_DOUBLE);
         int latInt = latitude.intValue();
         Double longitude = (pickUp.getLocation().getLongitude() / BYTE_COORDINATE_TO_DOUBLE);
@@ -38,6 +39,7 @@ public class PowerUpMessageGenerator extends MessageGenerator {
         byte[] type = { (byte) pickUp.getType() };
         byte[] duration = ByteCheck.intToByteArray((int) pickUp.getPowerDuration());
 
+        outStream.write(sourceID);
         outStream.write(latitudeBytes);
         outStream.write(longitudeBytes);
         outStream.write(radiusBytes);
