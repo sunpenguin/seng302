@@ -148,7 +148,7 @@ public class TestMock implements Observer {
 
 
         do {
-            if (race.getMode() == RaceMode.CHALLENGE_MODE) {
+            if (race.getMode() == RaceMode.CHALLENGE_MODE && race.getStatus().equals(RaceStatus.STARTED)) {
                 if (ZonedDateTime.now().isAfter(timeToUpdateChallengeCourse)) {
                     timeToUpdateChallengeCourse = ZonedDateTime.now().plusNanos(50*1000000);
                     race.getCourse().setCourseLimits(courseBuilder.getBoundaryMarks());
