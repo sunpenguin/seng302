@@ -1,7 +1,7 @@
 package seng302.team18.visualiser.util;
 
 import seng302.team18.model.Boat;
-import seng302.team18.model.Race;
+import seng302.team18.visualiser.ClientRace;
 
 import java.util.Queue;
 
@@ -10,19 +10,21 @@ import java.util.Queue;
  */
 public class SparklineDataGetter {
 
-    private Race race;
+    private ClientRace race;
     private Queue<SparklineDataPoint> dataQueue;
+
 
     /**
      * Constructor
      *
-     * @param race the race
+     * @param race      the race
      * @param dataQueue queue to add boat position data to.
      */
-    public SparklineDataGetter(Queue<SparklineDataPoint> dataQueue, Race race) {
+    public SparklineDataGetter(Queue<SparklineDataPoint> dataQueue, ClientRace race) {
         this.race = race;
         this.dataQueue = dataQueue;
     }
+
 
     /**
      * Listen to the changes of the boats leg number
@@ -33,10 +35,11 @@ public class SparklineDataGetter {
         }
     }
 
+
     /**
      * Adds data to the dataQueue
      *
-     * @param boat to be added to dataQueue
+     * @param boat           to be added to dataQueue
      * @param legJustRounded the number of the leg that the boat just completed
      */
     private void addData(Boat boat, int legJustRounded) {

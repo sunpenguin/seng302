@@ -231,5 +231,10 @@ public class Course {
     public String getName() {
         return name;
     }
+
+
+    public MarkRounding getMarkRounding(int sequenceNumber) {
+        return markSequence.get(sequenceNumber);
+    }
 }
 

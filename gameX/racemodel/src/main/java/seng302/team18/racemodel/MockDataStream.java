@@ -1,6 +1,5 @@
 package seng302.team18.racemodel;
 
-import javafx.scene.paint.Color;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
@@ -61,7 +60,6 @@ public class MockDataStream {
      * Main setup method for the application.
      */
     private static void runMock() {
-        RaceMode mode = RaceMode.RACE;
 
         final int CUTOFF_DIFFERENCE = 0;
         final int SERVER_PORT = 5005;
@@ -75,7 +73,7 @@ public class MockDataStream {
                     "Use a value between 1 and 20");
         }
 
-        Race race = RACE_BUILDER.buildRace(new Race(), REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse(), mode);
+        Race race = RACE_BUILDER.buildRace(new Race(), REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse());
         Server server = new Server(SERVER_PORT, MAX_PLAYERS);
         ConnectionListener listener = new ConnectionListener(race, PARTICIPANTS_BUILDER.getIdPool(), new AC35MessageParserFactory());
         TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool(), COURSE_BUILDER);
