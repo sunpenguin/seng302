@@ -4,7 +4,7 @@ import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35BoatLocationMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
-import seng302.team18.model.Race;
+import seng302.team18.visualiser.ClientRace;
 
 import java.util.Iterator;
 import java.util.List;
@@ -13,13 +13,15 @@ import java.util.List;
  * The BoatSailInterpreter that sets boat's sail status.
  */
 public class BoatSailInterpreter extends MessageInterpreter {
-    private Race race;
+    private ClientRace race;
+
 
     /**
      * Constructor for  BoatSailInterpreter.
+     *
      * @param race Race, race
      */
-    public BoatSailInterpreter(Race race) {
+    public BoatSailInterpreter(ClientRace race) {
         this.race = race;
     }
 

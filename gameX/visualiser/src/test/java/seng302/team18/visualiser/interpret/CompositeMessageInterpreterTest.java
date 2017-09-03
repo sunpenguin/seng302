@@ -5,13 +5,13 @@ import org.junit.Test;
 import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
-import seng302.team18.model.Race;
+import seng302.team18.visualiser.ClientRace;
 
 /**
  * Test class for CompositeMessageInterpreter.
  */
 public class CompositeMessageInterpreterTest {
-    private Race race;
+    private ClientRace race;
     private MessageInterpreter messageInterpreter;
     private MessageInterpreter boatLocationInterpreter;
     private MessageInterpreter markRoundingInterpreter;
@@ -19,7 +19,7 @@ public class CompositeMessageInterpreterTest {
 
     @Before
     public void setUp() {
-        race = new Race();
+        race = new ClientRace();
         messageInterpreter = new CompositeMessageInterpreter();
         boatLocationInterpreter = new BoatLocationInterpreter(race);
         markRoundingInterpreter = new MarkRoundingInterpreter(race);

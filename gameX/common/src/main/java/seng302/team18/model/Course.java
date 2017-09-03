@@ -239,11 +239,6 @@ public class Course {
     }
 
 
-    public void removePickUp(PickUp pickUp) {
-        pickUps.remove(pickUp);
-    }
-
-
     public List<PickUp> getPickUps() {
         return new ArrayList<>(pickUps);
     }
@@ -251,6 +246,11 @@ public class Course {
 
     public void setPickUps(List<PickUp> pickUps) {
         this.pickUps = pickUps;
+    }
+
+
+    public MarkRounding getMarkRounding(int sequenceNumber) {
+        return markSequence.get(sequenceNumber);
     }
 }
 

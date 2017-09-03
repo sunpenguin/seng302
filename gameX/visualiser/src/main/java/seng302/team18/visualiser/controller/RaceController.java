@@ -40,10 +40,10 @@ import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
-import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.send.Sender;
 import seng302.team18.util.GPSCalculator;
+import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.interpret.*;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
@@ -100,7 +100,7 @@ public class RaceController implements Observer {
     private boolean onImportant;
     private boolean sailIn = false;
 
-    private Race race;
+    private ClientRace race;
     private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
@@ -555,7 +555,7 @@ public class RaceController implements Observer {
      * @param sender      the sender
      * @param interpreter the interpreter
      */
-    public void setUp(Race race, Interpreter interpreter, Sender sender) {
+    public void setUp(ClientRace race, Interpreter interpreter, Sender sender) {
         this.sender = sender;
         this.race = race;
 

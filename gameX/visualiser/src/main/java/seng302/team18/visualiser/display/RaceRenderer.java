@@ -2,10 +2,16 @@ package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import seng302.team18.model.*;
+import seng302.team18.model.Boat;
+import seng302.team18.model.BoatStatus;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.RaceMode;
+import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.util.PixelMapper;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +20,7 @@ import java.util.Map;
 public class RaceRenderer {
 
     private Group group;
-    private Race race;
+    private ClientRace race;
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private PixelMapper pixelMapper;
@@ -27,7 +33,7 @@ public class RaceRenderer {
      * @param race        the race containing the displayBoats to be drawn
      * @param group       the group to be drawn on
      */
-    public RaceRenderer(PixelMapper pixelMapper, Race race, Group group) {
+    public RaceRenderer(PixelMapper pixelMapper, ClientRace race, Group group) {
         this.race = race;
         this.group = group;
         this.pixelMapper = pixelMapper;
@@ -87,7 +93,7 @@ public class RaceRenderer {
     /**
      * Draws all the boats trails.
      */
-    void drawTrails() {
+    public void drawTrails() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();

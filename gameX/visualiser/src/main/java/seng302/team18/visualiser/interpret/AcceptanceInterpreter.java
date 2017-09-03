@@ -4,7 +4,7 @@ import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestType;
-import seng302.team18.model.Race;
+import seng302.team18.visualiser.ClientRace;
 
 /**
  * The MarkLocationInterpreter that sets the client's player id
@@ -13,10 +13,10 @@ import seng302.team18.model.Race;
  */
 public class AcceptanceInterpreter extends MessageInterpreter {
 
-    private Race race;
+    private ClientRace race;
 
 
-    public AcceptanceInterpreter(Race race) {
+    public AcceptanceInterpreter(ClientRace race) {
         this.race = race;
     }
 

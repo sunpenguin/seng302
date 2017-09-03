@@ -3,7 +3,7 @@ package seng302.team18.visualiser.interpret;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35RaceStatusMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Race;
+import seng302.team18.visualiser.ClientRace;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -13,16 +13,18 @@ import java.time.ZonedDateTime;
  */
 public class PreRaceTimeInterpreter extends MessageInterpreter {
 
-    private Race race;
+    private ClientRace race;
+
 
     /**
      * Constructor for PreRaceTimeInterpreter.
      *
      * @param race to be updated.
      */
-    public PreRaceTimeInterpreter(Race race) {
+    public PreRaceTimeInterpreter(ClientRace race) {
         this.race = race;
     }
+
 
     @Override
     public void interpret(MessageBody message) {
