@@ -1,5 +1,7 @@
 package seng302.team18.model;
 
+import seng302.team18.message.PowerType;
+
 /**
  * Created by dhl25 on 29/08/17.
  */
@@ -16,5 +18,10 @@ public class SpeedPowerUp extends PowerUp {
     public void update(Boat boat, double time) {
         super.update(boat, time);
         updater.update(boat, time * 3);
+    }
+
+    @Override
+    public int getType() {
+        return PowerType.SPEED.getCode();
     }
 }

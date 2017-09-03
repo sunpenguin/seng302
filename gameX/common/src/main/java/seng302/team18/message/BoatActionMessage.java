@@ -5,7 +5,7 @@ import seng302.team18.model.Boat;
 /**
  * MessageBody that contains information about a boats actions.
  */
-public class BoatActionMessage implements MessageBody{
+public class BoatActionMessage implements MessageBody {
     private byte action;
     private int id = 420;
 

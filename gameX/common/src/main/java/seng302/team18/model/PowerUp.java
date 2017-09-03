@@ -21,6 +21,11 @@ public abstract class PowerUp {
     }
 
 
+    public double getDuration() {
+        return duration;
+    }
+
+
     /**
      * Updates the power up and increments time since activation.
      * time in seconds.
@@ -39,5 +44,7 @@ public abstract class PowerUp {
         return timeSinceActivation > duration;
     }
 
+
+    public abstract int getType();
 
 }

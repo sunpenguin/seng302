@@ -4,7 +4,10 @@ import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
-import seng302.team18.racemodel.connection.*;
+import seng302.team18.racemodel.connection.ClientConnection;
+import seng302.team18.racemodel.connection.Server;
+import seng302.team18.racemodel.connection.ServerState;
+import seng302.team18.racemodel.message_generating.*;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -71,7 +74,7 @@ public class TestMock implements Observer {
         } else if (arg instanceof AcceptanceMessage) {
             AcceptanceMessage message = (AcceptanceMessage) arg;
             if (message.getRequestType() == RequestType.FAILURE_CLIENT_TYPE) {
-                System.out.println("Remove " + message.getSourceId() + " From the race");
+                System.out.println("Remove " + message.getSourceId() + " from the race");
                 race.removeParticipant(message.getSourceId());
                 System.out.println(race.getStartingList());
                 generateXMLs();
@@ -119,7 +122,7 @@ public class TestMock implements Observer {
      * @param cutOffDifference Number of seconds before entering the warning phase for not allowing new connections
      */
     public void runSimulation(int startWaitTime, int warningWaitTime, int prepWaitTime, int cutOffDifference) {
-        // TODO David, Sunguin 01/09/2017 Check tutorial mode
+        // TODO David, Sanguine 01/09/2017 Check tutorial mode and make methods
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(5);
 
         scheduledMessages.add(new RaceMessageGenerator(race));
@@ -173,8 +176,8 @@ public class TestMock implements Observer {
      */
     private void switchToPrep() {
         race.setStatus(RaceStatus.PREPARATORY);
-        for (Boat b : race.getStartingList()) {
-            scheduledMessages.add(new BoatMessageGenerator(b));
+        for (Boat boat : race.getStartingList()) {
+            scheduledMessages.add(new BoatMessageGenerator(boat));
         }
     }
 
@@ -210,6 +213,10 @@ public class TestMock implements Observer {
 
         for (YachtEvent event : race.popYachtEvents()) {
             server.broadcast((new YachtEventCodeMessageGenerator(event, race.getId())).getMessage());
+        }
+
+        for (PickUp pickUp : race.getPickUps()) {
+            server.broadcast((new PowerUpMessageGenerator(pickUp)).getMessage());
         }
     }
 }

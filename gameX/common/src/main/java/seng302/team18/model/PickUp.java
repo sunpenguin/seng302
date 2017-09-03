@@ -50,4 +50,19 @@ public class PickUp {
     public void setTimeout(double timeout) {
         this.timeout = timeout;
     }
+
+
+    public double getRadius() {
+        return bodyMass.getRadius();
+    }
+
+
+    public int getType() {
+        return powerUp.getType();
+    }
+
+
+    public double getPowerDuration() {
+        return powerUp.getDuration();
+    }
 }

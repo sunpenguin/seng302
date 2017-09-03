@@ -1,7 +1,8 @@
-package seng302.team18.racemodel.connection;
+package seng302.team18.racemodel.message_generating;
 
 import org.junit.Before;
 import org.junit.Test;
+import seng302.team18.racemodel.message_generating.HeaderGenerator;
 import seng302.team18.util.ByteCheck;
 
 import java.io.IOException;

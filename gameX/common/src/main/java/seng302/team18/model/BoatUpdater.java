@@ -34,4 +34,10 @@ public class BoatUpdater extends PowerUp {
         return false;
     }
 
+
+    @Override
+    public int getType() {
+        return -1;
+    }
+
 }

@@ -1,4 +1,4 @@
-package seng302.team18.racemodel.connection;
+package seng302.team18.racemodel.message_generating;
 
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.RequestType;
@@ -34,7 +34,7 @@ public class AcceptanceMessageGenerator extends MessageGenerator {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
         byte[] sourceIDBytes = ByteCheck.intToByteArray(sourceID);
-        byte statusByte = (byte) status.code();
+        byte statusByte = (byte) status.getCode();
 
         outStream.write(sourceIDBytes);
         outStream.write(statusByte);

@@ -10,6 +10,7 @@ import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 import seng302.team18.racemodel.interpret.ColourInterpreter;
+import seng302.team18.racemodel.message_generating.AcceptanceMessageGenerator;
 import seng302.team18.racemodel.model.*;
 
 import java.io.IOException;
@@ -92,7 +93,7 @@ public class ConnectionListener extends Observable implements Observer {
 
                     RequestType requestType = request.getAction();
 
-                    if (!players.isEmpty() && requestType.code() != race.getMode().getCode()){
+                    if (!players.isEmpty() && requestType.getCode() != race.getMode().getCode()){
                         //If a player connects to an already opened server that cannot accept acceptance type
                         sendMessage(client, sourceID, RequestType.FAILURE_CLIENT_TYPE);
                         AcceptanceMessage failMessage = new AcceptanceMessage(sourceID,RequestType.FAILURE_CLIENT_TYPE);

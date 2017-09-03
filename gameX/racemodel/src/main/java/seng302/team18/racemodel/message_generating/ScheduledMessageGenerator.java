@@ -1,4 +1,4 @@
-package seng302.team18.racemodel.connection;
+package seng302.team18.racemodel.message_generating;
 
 /**
  * Abstract base class to generate messages to be sent on a regular schedule.

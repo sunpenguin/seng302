@@ -5,9 +5,9 @@ package seng302.team18.model;
  */
 public class BodyMass {
 
-    private double weight;
+    private double weight; // kg
     private Coordinate location;
-    private double radius;
+    private double radius; // meters
 
     public BodyMass() {}
 

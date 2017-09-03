@@ -6,10 +6,10 @@ import seng302.team18.message.RequestType;
  * Enum for the different modes.
  */
 public enum RaceMode {
-    SPECTATION(RequestType.VIEWING.code()),
-    RACE(RequestType.RACING.code()),
-    CONTROLS_TUTORIAL(RequestType.CONTROLS_TUTORIAL.code()),
-    GHOST(RequestType.GHOST.code()),
+    SPECTATION(RequestType.VIEWING.getCode()),
+    RACE(RequestType.RACING.getCode()),
+    CONTROLS_TUTORIAL(RequestType.CONTROLS_TUTORIAL.getCode()),
+    GHOST(RequestType.GHOST.getCode()),
     RACE_TUTORIAL(4),
     START_TUTORIAL(5);
 
@@ -23,9 +23,9 @@ public enum RaceMode {
 
 
     /**
-     * Getter for the code of the race mode.
+     * Getter for the getCode of the race mode.
      *
-     * @return the code of the race mode.
+     * @return the getCode of the race mode.
      */
     public int getCode() {
         return this.code;

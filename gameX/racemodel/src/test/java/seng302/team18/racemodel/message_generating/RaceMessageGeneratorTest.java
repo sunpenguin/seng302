@@ -1,10 +1,11 @@
-package seng302.team18.racemodel.connection;
+package seng302.team18.racemodel.message_generating;
 
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
+import seng302.team18.racemodel.message_generating.RaceMessageGenerator;
 import seng302.team18.racemodel.model.*;
 import seng302.team18.util.ByteCheck;
 import seng302.team18.util.SpeedConverter;

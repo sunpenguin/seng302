@@ -1,9 +1,10 @@
-package seng302.team18.racemodel.connection;
+package seng302.team18.racemodel.message_generating;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.message.RequestType;
+import seng302.team18.racemodel.message_generating.AcceptanceMessageGenerator;
 
 import java.io.IOException;
 

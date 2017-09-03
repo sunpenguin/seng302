@@ -1,8 +1,9 @@
-package seng302.team18.racemodel.connection;
+package seng302.team18.racemodel.message_generating;
 
 import org.junit.Test;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.model.*;
+import seng302.team18.racemodel.message_generating.MarkRoundingMessageGenerator;
 import seng302.team18.util.ByteCheck;
 
 import java.util.Arrays;

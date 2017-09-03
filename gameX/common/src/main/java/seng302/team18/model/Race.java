@@ -574,4 +574,9 @@ public class Race extends Observable {
     public void setMode(RaceMode mode) {
         this.mode = mode;
     }
+
+
+    public List<PickUp> getPickUps() {
+        return course.getPickUps();
+    }
 }

@@ -1,4 +1,4 @@
-package seng302.team18.racemodel.connection;
+package seng302.team18.racemodel.message_generating;
 
 import seng302.team18.util.CRCGenerator;
 
