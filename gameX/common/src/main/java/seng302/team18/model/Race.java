@@ -98,8 +98,8 @@ public class Race extends Observable {
             boat.setLegNumber(0);
             boat.setCoordinate(getStartPosition(boat, boat.getLength() * 3));
             boat.setHeading(gps.getBearing(
-                    course.getMarkSequence().get(0).getCompoundMark().getCoordinate(),
-                    course.getMarkSequence().get(1).getCompoundMark().getCoordinate()
+                    boat.getCoordinate(),
+                    course.getMarkSequence().get(0).getCompoundMark().getCoordinate()
             ));
             boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
             boat.setRoundZone(Boat.RoundZone.ZONE1);
