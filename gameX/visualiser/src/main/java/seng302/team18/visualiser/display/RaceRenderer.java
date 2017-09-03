@@ -55,6 +55,26 @@ public class RaceRenderer {
         this.race = race;
         this.group = group;
         this.pixelMapper = pixelMapper;
+        setChallengeModeCourse();
+    }
+
+
+    /**
+     * If the current race mode is challenge mode, the zoom level will be set to min zoom level.
+     *
+     * The player's boat will be tracked.
+     *
+     */
+    private void setChallengeModeCourse() {
+        if (race.getMode() == RaceMode.CHALLENGE_MODE) {
+            Boat boat = race.getBoat(race.getPlayerId());
+            if (boat.getId() == race.getPlayerId()) {
+                pixelMapper.setZoomLevel(6);
+                pixelMapper.setMinZoom(6);
+                pixelMapper.track(boat);
+                pixelMapper.setTracking(true);
+            }
+        }
     }
 
     /**

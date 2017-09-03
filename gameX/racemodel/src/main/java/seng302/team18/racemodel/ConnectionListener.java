@@ -108,6 +108,7 @@ public class ConnectionListener extends Observable implements Observer {
                             setChanged();
                             notifyObservers(this);
                             race.setCourseForBoats();
+                            break;
                         case CHALLENGE_MODE:
                             race.setMode(RaceMode.CHALLENGE_MODE);
                             break;

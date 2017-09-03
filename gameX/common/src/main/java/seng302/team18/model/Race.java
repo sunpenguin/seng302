@@ -72,10 +72,10 @@ public class Race extends Observable {
     public void addPowerUps(int powerUps) {
         GPSCalculator calculator = new GPSCalculator();
         List<Coordinate> corners = gps.findMinMaxPoints(course);
-        for (int i = 0; i < powerUps; i++) {
-            Coordinate randomPoint = calculator.randomPoint(course.getCourseLimits());
-            course.getCompoundMarks().add(new CompoundMark("a", Arrays.asList(new Mark(i * 3 + 2, randomPoint)), i * 2 + 3));
-        }
+//        for (int i = 0; i < powerUps; i++) {
+//            Coordinate randomPoint = calculator.randomPoint(course.getCourseLimits());
+//            course.getCompoundMarks().add(new CompoundMark("a", Arrays.asList(new Mark(i * 3 + 2, randomPoint)), i * 2 + 3));
+//        }
     }
 
 
