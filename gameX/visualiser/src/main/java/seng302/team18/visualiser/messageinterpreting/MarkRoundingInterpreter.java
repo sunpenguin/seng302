@@ -4,7 +4,7 @@ import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35MarkRoundingMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
-import seng302.team18.model.Race;
+import seng302.team18.visualiser.ClientRace;
 
 import java.util.List;
 
@@ -14,14 +14,15 @@ import java.util.List;
  * @see MessageInterpreter
  */
 public class MarkRoundingInterpreter extends MessageInterpreter {
-    private Race race;
+    private ClientRace race;
+
 
     /**
      * Constructor for MarkRoundingInterpreter.
      *
      * @param race the race to be updated.
      */
-    public MarkRoundingInterpreter(Race race) {
+    public MarkRoundingInterpreter(ClientRace race) {
         this.race = race;
     }
 

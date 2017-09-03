@@ -3,37 +3,30 @@ package seng302.team18.visualiser.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.TriangleMesh;
-import javafx.scene.shape.VertexFormat;
 import javafx.stage.Stage;
-import seng302.team18.message.ColourMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
-import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
+import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.util.ConfigReader;
 
 import javax.net.SocketFactory;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
-import java.util.*;
-
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -304,7 +297,7 @@ public class PlayInterfaceController {
         outerPane.getScene().setRoot(root);
         stage.show();
 
-        Race race = new Race();
+        ClientRace race = new ClientRace();
         race.setMode(mode);
         controller.setUp(race, receiver, sender);
         controller.initConnection(boatColours.get(colourIndex));
