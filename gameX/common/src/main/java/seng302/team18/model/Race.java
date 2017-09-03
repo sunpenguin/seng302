@@ -42,6 +42,19 @@ public class Race extends Observable {
         raceType = RaceType.MATCH;
     }
 
+    /**
+     * Randomly places power ups.
+     *
+     * @param powerUps number of power ups to place
+     */
+    public void addPowerUps(int powerUps) {
+        GPSCalculator calculator = new GPSCalculator();
+        for (int i = 0; i < powerUps; i++) {
+            Coordinate randomPoint = calculator.randomPoint(course.getCourseLimits());
+            course.getCompoundMarks().add(new CompoundMark("a", Arrays.asList(new Mark(i * 3 + 2, randomPoint)), i * 2 + 3));
+        }
+    }
+
 
     /**
      * Called in Race constructor.
@@ -334,5 +347,10 @@ public class Race extends Observable {
 
     public void setUpdaters(List<Updater> updaters) {
         this.updaters = updaters;
+    }
+
+
+    public MarkRounding getMarkRounding(int sequenceNumber) {
+        return course.getMarkRounding(sequenceNumber);
     }
 }

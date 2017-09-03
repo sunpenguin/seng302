@@ -226,7 +226,7 @@ public class ClientRace {
 
         if (currentLeg == nextLeg) return;
 
-        final int newPlace = ((Long) startingList.stream().filter(b -> b.getLegNumber() >= nextLeg).count()).intValue() + 1;
+        final int newPlace = (int) startingList.stream().filter(b -> b.getLegNumber() >= nextLeg).count() + 1;
         final int oldPace = boat.getPlace();
 
         if (oldPace < newPlace) {
@@ -242,12 +242,6 @@ public class ClientRace {
         }
 
         boat.setPlace(newPlace);
-
-
-        if (nextLeg == course.getMarkSequence().size()) {
-            boat.setStatus(BoatStatus.FINISHED);
-        }
-
         boat.setLegNumber(nextLeg);
     }
 

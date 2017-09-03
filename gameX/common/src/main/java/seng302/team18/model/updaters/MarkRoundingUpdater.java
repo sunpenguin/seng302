@@ -20,7 +20,7 @@ public class MarkRoundingUpdater implements Updater {
      *
      * @param boat to update.
      */
-    public void checkForRounding(Boat boat, Race race) {
+    private void checkForRounding(Boat boat, Race race) {
         if (boat.getStatus().equals(BoatStatus.RACING) && race.getDetector().hasPassedDestination(boat, race.getCourse())) {
             setNextLeg(boat, boat.getLegNumber() + 1, race);
         } else if (boat.getStatus().equals(BoatStatus.PRE_START) && boat.getLegNumber() == 0
@@ -41,28 +41,12 @@ public class MarkRoundingUpdater implements Updater {
      * @param boat    the boat
      * @param nextLeg the next leg
      */
-    public void setNextLeg(Boat boat, int nextLeg, Race race) {
+    private void setNextLeg(Boat boat, int nextLeg, Race race) {
         int currentLeg = boat.getLegNumber();
 
         if (currentLeg == nextLeg) return;
 
-        final int newPlace = ((Long) race.getStartingList().stream().filter(b -> b.getLegNumber() >= nextLeg).count()).intValue() + 1;
-        final int oldPace = boat.getPlace();
-
-        if (oldPace < newPlace) {
-            race.getStartingList().stream()
-                    .filter(boat1 -> boat1.getPlace() <= newPlace)
-                    .filter(boat1 -> oldPace < boat1.getPlace())
-                    .forEach(boat1 -> boat1.setPlace(boat1.getPlace() + 1));
-        } else if (newPlace < oldPace) {
-            race.getStartingList().stream()
-                    .filter(boat1 -> boat1.getPlace() < oldPace)
-                    .filter(boat1 -> newPlace <= boat1.getPlace())
-                    .forEach(boat1 -> boat1.setPlace(boat1.getPlace() + 1));
-        }
-
-        boat.setPlace(newPlace);
-        race.addMarkRoundingEvent(new MarkRoundingEvent(System.currentTimeMillis(), boat, race.getCourse().getMarkSequence().get(currentLeg)));
+        race.addMarkRoundingEvent(new MarkRoundingEvent(System.currentTimeMillis(), boat, race.getMarkRounding(currentLeg)));
 
         if (nextLeg == race.getCourse().getMarkSequence().size()) {
             boat.setStatus(BoatStatus.FINISHED);
