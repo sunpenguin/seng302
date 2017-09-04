@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
@@ -13,9 +14,16 @@ import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
+import seng302.team18.visualiser.util.ConfigReader;
 
 import javax.net.SocketFactory;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Controller For the game type selection screen
@@ -29,7 +37,11 @@ public class GameSelectionController {
 
     private Label raceLabel;
     private Image raceButtonImage;
+    private RaceMode mode;
 
+    private int colourIndex = 0;
+    private List<Color> boatColours = Arrays.asList(Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
+            Color.CYAN, Color.BLUE, Color.PURPLE, Color.MAGENTA);
 
     public void initialize() {
         initialiseRaceButton();
@@ -72,7 +84,7 @@ public class GameSelectionController {
         raceButtonImage = new Image("/images/RaceWhite.png");
         raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
         raceLabel.setLayoutY((600 / 2));
-        raceLabel.setOnMouseClicked(event -> startBumperBoats());
+        raceLabel.setOnMouseClicked(event -> hostRace());
     }
 
 
@@ -146,6 +158,29 @@ public class GameSelectionController {
         }
         mode = RaceMode.RACE;
         openStream("127.0.0.1", 5005);
+    }
+
+    /**
+     * Creates the model in a new process.
+     * Reads in the file path to the model jar from the config file "visualiser-config.txt" (from the same directory).
+     */
+    private void createModel() {
+        final String CONFIG_FILE_NAME = "visualiser-config.txt";
+        final List<String> tokens = Collections.singletonList("MODEL_PATH");
+        ConfigReader reader = new ConfigReader(tokens);
+        InputStream configStream = null;
+        try {
+            configStream = new FileInputStream("/Users/cslaven/Desktop/Uni/302/team-18/visualiser-config.txt");
+            String filePath = reader.parseConfig(configStream).get("MODEL_PATH");
+            System.out.println(filePath);
+            Runtime.getRuntime().exec("java -jar " + filePath);
+        } catch (IOException e) {
+            if (null == configStream) {
+                System.out.println("You don't have a config file"); // TODO August 12 DHL25 / HQI19 have to show error but title screen incomplete
+            } else {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void startBumperBoats(){
