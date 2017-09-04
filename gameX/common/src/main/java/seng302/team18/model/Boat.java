@@ -33,6 +33,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private PowerUp powerUp = new SpeedPowerUp(this);
     private boolean isPowerActive = false; //Changed for merging into dev branch
     private PowerUp updater = new BoatUpdate(this);
+    private double health;
 
     /**
      * A constructor for the Boat class
@@ -53,6 +54,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         sailOut = true; // Starts with luffing
         status = BoatStatus.UNDEFINED;
         setWeight(10);
+        health = 100;
     }
 
 
@@ -270,35 +272,18 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         return trueWindAngle;
     }
 
-//    /**
-//     * Method to check if boat has collided with another boat
-//     * TODO: jth102, sbe67 25/07, handle collisions with more than one obstacle
-//     *
-//     * @param obstacles  list of Abstract Boats to check if boat has collied
-//     * @return the obstacle the boat has collided, null is not collision
-//     */
-//    public AbstractBoat hasCollided(List<AbstractBoat> obstacles) {
-//        AbstractBoat collidedWith = null;
-//        GPSCalculator calculator = new GPSCalculator();
-//        double collisionZone;
-//        double distanceBetween;
-//        for (AbstractBoat obstacle : obstacles) {
-//            if (!obstacle.equals(this)) {
-//                collisionZone = (obstacle.getLength()) + (boatLength / 2);
-//
-//                if (obstacle instanceof Mark) {
-//                    collisionZone *= 1.3;
-//                }
-//
-//                distanceBetween = calculator.distance(coordinate, obstacle.getCoordinate());
-//
-//                if (distanceBetween < collisionZone) {
-//                    collidedWith = obstacle;
-//                }
-//            }
-//        }
-//        return collidedWith;
-//    }
+
+    /**
+     * Method to decrease a players health
+     * @param healthLost, amount of health lost
+     */
+    public void decreaseHealth(double healthLost) {
+        health = health - healthLost;
+    }
+
+    public double getHealth(){
+        return health;
+    }
 
 
     public boolean hasCollided(BodyMass bodyMass) {
