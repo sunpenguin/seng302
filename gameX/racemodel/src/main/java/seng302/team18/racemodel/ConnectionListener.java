@@ -93,7 +93,7 @@ public class ConnectionListener extends Observable implements Observer {
 
                     RequestType requestType = request.getAction();
 
-                    if (!players.isEmpty() && requestType.getCode() != race.getMode().getCode()){
+                    if (!players.isEmpty() && requestType.getCode() != race.getMode().getCode()) {
                         //If a player connects to an already opened server that cannot accept acceptance type
                         sendMessage(client, sourceID, RequestType.FAILURE_CLIENT_TYPE);
                         AcceptanceMessage failMessage = new AcceptanceMessage(sourceID,RequestType.FAILURE_CLIENT_TYPE);
@@ -109,7 +109,7 @@ public class ConnectionListener extends Observable implements Observer {
                             setChanged();
                             notifyObservers(this);
                             race.setCourseForBoats();
-                        case RACING:
+                        default:
                             addPlayer(receiver, sourceID);
                             sendMessage(client, sourceID, requestType);
                             break;

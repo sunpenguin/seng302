@@ -103,6 +103,17 @@ public class Race extends Observable {
 
 
     /**
+     * Gets the last PickUp in the List.
+     *
+     * @return the last PickUp
+     */
+    public PickUp getNewPickUp() {
+        List<PickUp> pickUps = course.getPickUps();
+        return pickUps.get(pickUps.size() - 1);
+    }
+
+
+    /**
      * Called in Race constructor.
      * Set up the course CompoundMarks for each boat in the race as well as set the
      * current(starting CompoundMark) and next CompoundMark.
