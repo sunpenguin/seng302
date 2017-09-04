@@ -43,6 +43,7 @@ public class GameSelectionController {
     private List<Color> boatColours = Arrays.asList(Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
             Color.CYAN, Color.BLUE, Color.PURPLE, Color.MAGENTA);
 
+    @FXML
     public void initialize() {
         initialiseRaceButton();
         initialiseArcadeButton();
@@ -50,6 +51,7 @@ public class GameSelectionController {
         initialiseBumperBoatsButton();
         registerListeners();
     }
+
 
     /**
      * Register any necessary listeners.
@@ -160,6 +162,7 @@ public class GameSelectionController {
         openStream("127.0.0.1", 5005);
     }
 
+
     /**
      * Creates the model in a new process.
      * Reads in the file path to the model jar from the config file "visualiser-config.txt" (from the same directory).
@@ -170,9 +173,8 @@ public class GameSelectionController {
         ConfigReader reader = new ConfigReader(tokens);
         InputStream configStream = null;
         try {
-            configStream = new FileInputStream("/Users/cslaven/Desktop/Uni/302/team-18/visualiser-config.txt");
+            configStream = new FileInputStream(CONFIG_FILE_NAME);
             String filePath = reader.parseConfig(configStream).get("MODEL_PATH");
-            System.out.println(filePath);
             Runtime.getRuntime().exec("java -jar " + filePath);
         } catch (IOException e) {
             if (null == configStream) {
@@ -182,6 +184,7 @@ public class GameSelectionController {
             }
         }
     }
+
 
     private void startBumperBoats(){
         System.out.println("BumperBoats");
