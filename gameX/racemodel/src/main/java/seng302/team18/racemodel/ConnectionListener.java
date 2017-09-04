@@ -108,11 +108,12 @@ public class ConnectionListener extends Observable implements Observer {
                             setChanged();
                             notifyObservers(this);
                             race.setCourseForBoats();
-                        default:
-                            addPlayer(receiver, sourceID);
-                            sendMessage(client, sourceID, requestType);
+                        case BUMPER_BOAT:
+                            race.setMode(RaceMode.BUMPER_BOATS);
                             break;
                     }
+                    addPlayer(receiver, sourceID);
+                    sendMessage(client, sourceID, requestType);
                 }
             });
         } catch (Exception e) {
