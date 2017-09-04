@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.interpret;
 
+import javafx.application.Platform;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.MessageBody;
@@ -25,7 +26,7 @@ public class BoatListInterpreter extends MessageInterpreter {
     @Override
     public void interpret(MessageBody message) {
         if (message instanceof AC35XMLBoatMessage) {
-            controller.updateBoatList();
+            Platform.runLater(() -> controller.updateBoatList());
         }
     }
 

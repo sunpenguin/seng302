@@ -97,7 +97,7 @@ public class Race extends Observable {
 
     private PowerUp getRandomPower() {
         PowerUp powerUp = new SpeedPowerUp();
-        powerUp.setDuration(5d);
+        powerUp.setDuration(5000d);
         return powerUp;
     }
 

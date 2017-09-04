@@ -8,6 +8,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.*;
 import seng302.team18.util.GPSCalculator;
 
+import java.time.ZonedDateTime;
+
 /**
  * A class which stores information about a boat.
  */
@@ -30,6 +32,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private RoundZone roundZone = RoundZone.ZONE1;
     private PowerUp powerUp;// = new SpeedPowerUp(this);
     private boolean isPowerActive = true; //Changed for merging into dev branch
+    private ZonedDateTime powerDurationEnd;
     private PowerUp updater = new BoatUpdater();
 
     /**
@@ -391,6 +394,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
     public void activatePowerUp() {
         this.isPowerActive = true;
+        powerDurationEnd = ZonedDateTime.now().plusSeconds((long) powerUp.getDuration() / 1000);
         setChanged();
         notifyObservers(powerUp);
     }
@@ -403,17 +407,14 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param time that has passed
      */
     public void update(double time) {
-//        if (isPowerActive) {
-//            powerUp.update(time);
-//            if (powerUp.isTerminated()) {
-//                isPowerActive = false;
-//                powerUp = null;
-//            }
-//        } else {
-//            updater.update(time);
-//        }
         if (null != powerUp) {
-            powerUp.update(this, time);
+            if (isPowerActive) {
+                powerUp.update(this, time);
+                if (ZonedDateTime.now().isAfter(powerDurationEnd)) {
+                    isPowerActive = false;
+                    powerUp = null;
+                }
+            }
         } else {
             updater.update(this, time);
         }
