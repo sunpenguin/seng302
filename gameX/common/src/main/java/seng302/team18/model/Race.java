@@ -26,6 +26,7 @@ public class Race extends Observable {
     private ZonedDateTime currentTime;
     private List<MarkRoundingEvent> markRoundingEvents = new ArrayList<>();
     private List<YachtEvent> yachtEvents = new ArrayList<>();
+    private List<PowerUpEvent> powerEvents = new ArrayList<>();
     private RaceMode mode = RaceMode.RACE;
     private List<Updater> updaters = new ArrayList<>();
     private double updateTime;
@@ -46,7 +47,7 @@ public class Race extends Observable {
     /**
      * Race class constructor.
      *
-     * @param startingList ArrayList holding all entered boats
+     * @param startingList List holding all entered boats
      * @param course       Course object
      * @param raceId       Integer representing the race id
      * @param raceType     RaceType enum indicating the type of race to create
@@ -89,7 +90,7 @@ public class Race extends Observable {
 
         PickUp pickUp = new PickUp(id);
         pickUp.setBodyMass(mass);
-        pickUp.setTimeout(TEN_SECONDS_IN_MILLISECONDS);
+        pickUp.setTimeout(System.currentTimeMillis() + TEN_SECONDS_IN_MILLISECONDS);
         pickUp.setPower(getRandomPower());
         return pickUp;
     }
@@ -339,13 +340,23 @@ public class Race extends Observable {
         return events;
     }
 
+
+    public List<PowerUpEvent> popPowerUpEvents() {
+        List<PowerUpEvent> events = powerEvents;
+        powerEvents = new ArrayList<>();
+        return events;
+    }
+
+
     public void addYachtEvent(YachtEvent yachtEvent) {
         yachtEvents.add(yachtEvent);
     }
 
+
     public void addMarkRoundingEvent(MarkRoundingEvent MarkRoundingEvent) {
         markRoundingEvents.add(MarkRoundingEvent);
     }
+
 
     public RaceType getRaceType() {
         return raceType;
@@ -376,6 +387,7 @@ public class Race extends Observable {
         this.mode = mode;
     }
 
+
     public RoundingDetector getDetector() {
         return detector;
     }
@@ -403,5 +415,25 @@ public class Race extends Observable {
 
     public List<PickUp> getPickUps() {
         return course.getPickUps();
+    }
+
+
+    public void setPickUps(List<PickUp> pickUps) {
+        course.setPickUps(pickUps);
+    }
+
+
+    /**
+     * Consumes a power up.
+     *
+     * @param boat that picked up the pick up
+     * @param pickUp that was picked up
+     */
+    public void consumePowerUp(Boat boat, PickUp pickUp) {
+        boat.setPowerUp(pickUp.getPower());
+        List<PickUp> pickUps = course.getPickUps();
+        pickUps.remove(pickUp);
+        course.setPickUps(pickUps);
+        powerEvents.add(new PowerUpEvent(boat.getId(), pickUp));
     }
 }

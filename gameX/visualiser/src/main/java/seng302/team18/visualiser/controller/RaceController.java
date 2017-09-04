@@ -697,6 +697,7 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(raceClock));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishRaceInterpreter(this));
         interpreter.add(AC35MessageType.POWER_UP.getCode(), new PowerUpInterpreter(race));
+        interpreter.add(AC35MessageType.POWER_TAKEN.getCode(), new PowerTakenInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
 
         return interpreter;

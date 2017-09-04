@@ -64,6 +64,7 @@ public class AC35BoatLocationParser implements MessageBodyParser {
         return new AC35BoatLocationMessage(sourceID, new Coordinate(lat, longitude), heading, speed, sail);
     }
 
+
     /**
      * Converts the sail field (former drift field) into a boolean variable
      *
@@ -73,10 +74,7 @@ public class AC35BoatLocationParser implements MessageBodyParser {
      * @return The boolean variable representing if the sail is in / out on a boat.
      */
     private boolean sails(byte[] bytes, int sailIndex, int sailLength) {
-        if (ByteCheck.byteToShort(bytes, sailIndex, sailLength) == 0) {
-            return false;
-        }
-        return true;
+        return ByteCheck.byteToShort(bytes, sailIndex, sailLength) != 0;
     }
 
 }

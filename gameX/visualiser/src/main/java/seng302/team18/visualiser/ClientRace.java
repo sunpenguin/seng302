@@ -245,4 +245,8 @@ public class ClientRace {
         boat.setLegNumber(nextLeg);
     }
 
+
+    public void removePickUp(int id) {
+        course.removePickUp(id);
+    }
 }

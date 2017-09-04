@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * A class which renders the given course on the group so it can be displayed to the user.
@@ -225,8 +226,28 @@ public class CourseRenderer {
 
 
     private void renderPickUps() {
+        removeTakenPowers();
         for (PickUp pickUp : course.getPickUps()) {
             renderPickUp(pickUp);
+        }
+    }
+
+
+    private void removeTakenPowers() {
+        List<Integer> pickUpIds = course
+                .getPickUps()
+                .stream()
+                .map(PickUp::getId)
+                .collect(Collectors.toList());
+        List<Integer> removed = new ArrayList<>();
+        for (Integer id : pickUps.keySet()) {
+            if (!pickUpIds.contains(id)) {
+                removed.add(id);
+            }
+        }
+        for (Integer id : removed) {
+            group.getChildren().remove(pickUps.get(id));
+            pickUps.remove(id);
         }
     }
 

@@ -9,7 +9,7 @@ public class PickUp {
 
     private BodyMass bodyMass;
     private PowerUp powerUp;
-    private double timeout; // milliseconds
+    private double timeout; // epoch milliseconds
     private int id;
 
     public PickUp(int id) {
@@ -75,4 +75,12 @@ public class PickUp {
     public int getId() {
         return id;
     }
+
+
+    public boolean hasExpired() {
+        return System.currentTimeMillis() > timeout;
+    }
+
+
+
 }

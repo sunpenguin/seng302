@@ -1,4 +1,4 @@
-package seng302.team18.racemodel;
+package seng302.team18.racemodel.connection;
 
 import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;

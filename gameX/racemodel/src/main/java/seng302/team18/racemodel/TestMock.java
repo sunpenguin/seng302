@@ -6,6 +6,7 @@ import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
 import seng302.team18.racemodel.connection.ClientConnection;
+import seng302.team18.racemodel.connection.ConnectionListener;
 import seng302.team18.racemodel.connection.Server;
 import seng302.team18.racemodel.connection.ServerState;
 import seng302.team18.racemodel.message_generating.*;
@@ -46,28 +47,29 @@ public class TestMock implements Observer {
     }
 
     /**
-     * Called by server, race, and connection listener
-     * @param o
-     * @param arg
+     * Called by server, and connection listener
+     *
+     * @param o object that has updated
+     * @param arg given by the object o
      */
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof ClientConnection) {
+        if (arg instanceof ClientConnection) { // Server ?
             ClientConnection client = (ClientConnection) arg;
             race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
             client.setId(boats.get(race.getStartingList().size()).getId());
             generateXMLs();
             sendXmlRegatta(client);
             sendXmlBoatRace();
-        } else if (arg instanceof ServerState) {
+        } else if (arg instanceof ServerState) { // Server
             open = !ServerState.CLOSED.equals(arg);
-        } else if (arg instanceof Integer) {
+        } else if (arg instanceof Integer) { // Server
             Integer id = (Integer) arg;
             race.setBoatStatus(id, BoatStatus.DNF);
-        } else if (arg instanceof ConnectionListener) {
+        } else if (arg instanceof ConnectionListener) { // ConnectionListener
             generateXMLs();
             sendXmlBoatRace();
-        } else if (arg instanceof AcceptanceMessage) {
+        } else if (arg instanceof AcceptanceMessage) { // ConnectionListener
             AcceptanceMessage message = (AcceptanceMessage) arg;
             if (message.getRequestType() == RequestType.FAILURE_CLIENT_TYPE) {
                 System.out.println("Remove " + message.getSourceId() + " From the race");
@@ -245,6 +247,11 @@ public class TestMock implements Observer {
 
         for (PickUp pickUp : race.getPickUps()) {
             server.broadcast(new PowerUpMessageGenerator(pickUp).getMessage());
+        }
+
+        for (PowerUpEvent event : race.popPowerUpEvents()) {
+            System.out.println("Hi");
+            server.broadcast((new PowerTakenGenerator(event.getBoatId(), event.getPickUp()).getMessage()));
         }
     }
 }

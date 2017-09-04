@@ -239,6 +239,11 @@ public class Course {
     }
 
 
+    public void removePickUp(int id) {
+        pickUps.removeIf(pickUp -> pickUp.getId() == id);
+    }
+
+
     public List<PickUp> getPickUps() {
         return new ArrayList<>(pickUps);
     }

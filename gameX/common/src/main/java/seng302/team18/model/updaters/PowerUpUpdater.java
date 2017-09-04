@@ -19,6 +19,8 @@ public class PowerUpUpdater implements Updater {
      */
     @Override
     public void update(Race race) {
+//        removeOldPickUps(race);
+
         for (Boat boat : race.getStartingList()) {
             powerUpStuff(race, boat);
         }
@@ -31,14 +33,26 @@ public class PowerUpUpdater implements Updater {
      * @param boat not null
      */
     private void powerUpStuff(Race race, Boat boat) {
-        List<PickUp> pickUps = new ArrayList<>();
         for (PickUp pickUp : race.getPickUps()) {
             if (boat.hasCollided(pickUp.getBodyMass())) {
-                boat.setPowerUp(pickUp.getPower());
-            } else {
+                race.consumePowerUp(boat, pickUp);
+            }
+        }
+    }
+
+
+    /**
+     * Removes all expired power ups from the given race.
+     *
+     * @param race not null.
+     */
+    private void removeOldPickUps(Race race) {
+        List<PickUp> pickUps = new ArrayList<>();
+        for (PickUp pickUp : race.getPickUps()) {
+            if (!pickUp.hasExpired()) {
                 pickUps.add(pickUp);
             }
         }
-        race.getCourse().setPickUps(pickUps);
+        race.setPickUps(pickUps);
     }
 }
