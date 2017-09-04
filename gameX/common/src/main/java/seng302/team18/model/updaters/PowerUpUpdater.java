@@ -36,6 +36,8 @@ public class PowerUpUpdater implements Updater {
         for (PickUp pickUp : race.getPickUps()) {
             if (boat.hasCollided(pickUp.getBodyMass())) {
                 race.consumePowerUp(boat, pickUp);
+                boat.activatePowerUp(); // Remove when keypress
+                race.addPowerUps(1);
             }
         }
     }

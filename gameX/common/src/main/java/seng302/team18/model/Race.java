@@ -30,6 +30,7 @@ public class Race extends Observable {
     private RaceMode mode = RaceMode.RACE;
     private List<Updater> updaters = new ArrayList<>();
     private double updateTime;
+    private int powerId = 0;
 
 
     public Race() {
@@ -72,10 +73,12 @@ public class Race extends Observable {
      */
     public void addPowerUps(int powerUps) {
         GPSCalculator calculator = new GPSCalculator();
-        for (int i = 0; i < powerUps; i++) {
+        int maxId = powerId + powerUps;
+        while (powerId < maxId) {
             Coordinate randomPoint = calculator.randomPoint(course.getCourseLimits());
-            PickUp pickUp = makePickUp(i, randomPoint);
+            PickUp pickUp = makePickUp(powerId, randomPoint);
             course.addPickUp(pickUp);
+            powerId += 1;
         }
     }
 
@@ -98,8 +101,19 @@ public class Race extends Observable {
 
     private PowerUp getRandomPower() {
         PowerUp powerUp = new SpeedPowerUp();
-        powerUp.setDuration(5d);
+        powerUp.setDuration(5000d);
         return powerUp;
+    }
+
+
+    /**
+     * Gets the last PickUp in the List.
+     *
+     * @return the last PickUp
+     */
+    public PickUp getNewPickUp() {
+        List<PickUp> pickUps = course.getPickUps();
+        return pickUps.get(pickUps.size() - 1);
     }
 
 

@@ -12,6 +12,7 @@ public enum RequestType {
     RACING(1),
     CONTROLS_TUTORIAL(2),
     GHOST(3),
+    ARCADE(5),
     FAILURE_CLIENT_TYPE(18);
 
 

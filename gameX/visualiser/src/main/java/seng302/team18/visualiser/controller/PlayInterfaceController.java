@@ -232,7 +232,7 @@ public class PlayInterfaceController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        mode = RaceMode.RACE;
+        mode = RaceMode.ARCADE; // CHANGE MODE HERE
         openStream("127.0.0.1", 5005);
     }
 

@@ -11,8 +11,8 @@ public enum RaceMode {
     CONTROLS_TUTORIAL(RequestType.CONTROLS_TUTORIAL.getCode()),
     GHOST(RequestType.GHOST.getCode()),
     RACE_TUTORIAL(4),
-    START_TUTORIAL(5),
-    ARCADE(5);
+    START_TUTORIAL(10),
+    ARCADE(RequestType.ARCADE.getCode());
 
 
     private int code;
