@@ -33,7 +33,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private PowerUp powerUp = new SpeedPowerUp(this);
     private boolean isPowerActive = false; //Changed for merging into dev branch
     private PowerUp updater = new BoatUpdate(this);
-    private double health;
+    private int lives;
 
     /**
      * A constructor for the Boat class
@@ -54,7 +54,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         sailOut = true; // Starts with luffing
         status = BoatStatus.UNDEFINED;
         setWeight(10);
-        health = 100;
+        lives = 3;
     }
 
 
@@ -275,14 +275,13 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
     /**
      * Method to decrease a players health
-     * @param healthLost, amount of health lost
      */
-    public void decreaseHealth(double healthLost) {
-        health = health - healthLost;
+    public void loseLife() {
+        lives -= 1;
     }
 
-    public double getHealth(){
-        return health;
+    public int getLives(){
+        return lives;
     }
 
 

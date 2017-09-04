@@ -11,15 +11,20 @@ import java.util.List;
 /**
  * Updates a players health when they leave the bounds of the course
  */
-public class BumperBoatHealthUpdater implements Updater{
+public class BumperBoatHealthUpdater implements Updater {
 
     @Override
     public void update(Race race) {
         for (Boat boat : race.getStartingList()) {
             if (isOutSide(boat, race)) {
-                boat.decreaseHealth(33);
-//                race.setChanged();
-//                race.notifyObservers();
+                boat.loseLife();
+                boat.setCoordinate(race.getStartPosition(boat, 3 * boat.getLength()));
+
+                if (boat.getLives() < 1) {
+                    boat.setStatus(BoatStatus.DSQ);
+                    race.setChanged();
+                    race.notifyObservers(boat);
+                }
             }
         }
     }
