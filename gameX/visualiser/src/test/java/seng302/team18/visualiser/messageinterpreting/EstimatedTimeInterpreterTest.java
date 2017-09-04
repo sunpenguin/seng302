@@ -6,26 +6,28 @@ import org.junit.Test;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35BoatStatusMessage;
 import seng302.team18.message.AC35RaceStatusMessage;
-import seng302.team18.model.BoatStatus;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
-import seng302.team18.model.Race;
+import seng302.team18.model.BoatStatus;
+import seng302.team18.visualiser.ClientRace;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Test class for EstimatedTimeInterpreter.
  */
 public class EstimatedTimeInterpreterTest {
 
-    private Race race;
+    private ClientRace race;
     private List<Boat> startingList;
     private MessageInterpreter interpreter;
     private MessageBody message;
 
     @Before
     public void setUp() {
-        race = new Race();
+        race = new ClientRace();
         Boat boat1 = new Boat("Big Boat", "BB", 420, 1);
         Boat boat2 = new Boat("Medium Boat", "MB", 100, 1);
         Boat boat3 = new Boat("Small Boat", "SB", 69, 1);

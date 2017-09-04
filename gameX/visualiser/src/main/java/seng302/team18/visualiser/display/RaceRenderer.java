@@ -2,10 +2,17 @@ package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import seng302.team18.model.*;
+import seng302.team18.model.Boat;
+import seng302.team18.model.BoatStatus;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.RaceMode;
+import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.util.PixelMapper;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class that takes a Race and a Group and draws the Race on the Group.
@@ -13,34 +20,9 @@ import java.util.*;
 public class RaceRenderer {
 
     private Group group;
-    private Race race;
+    private ClientRace race;
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
-    private Map<String, Double> headingMap;
-    private int numBoats;
-    //TODO: remove these colours sbe67 17/8
-    private final List<Color> BOAT_COLOURS = Arrays.asList(
-            Color.VIOLET,
-            Color.DARKVIOLET,
-            Color.GREEN,
-            Color.TOMATO,
-            Color.YELLOWGREEN,
-            Color.BROWN,
-            Color.CHOCOLATE,
-            Color.DARKGREEN,
-            Color.GOLDENROD,
-            Color.DARKORCHID,
-            Color.DARKRED,
-            Color.INDIANRED,
-            Color.MEDIUMAQUAMARINE,
-            Color.MEDIUMSPRINGGREEN,
-            Color.SEAGREEN,
-            Color.YELLOW,
-            Color.ORANGERED,
-            Color.OLIVEDRAB,
-            Color.LAWNGREEN,
-            Color.KHAKI
-    );
     private PixelMapper pixelMapper;
 
 
@@ -51,11 +33,12 @@ public class RaceRenderer {
      * @param race        the race containing the displayBoats to be drawn
      * @param group       the group to be drawn on
      */
-    public RaceRenderer(PixelMapper pixelMapper, Race race, Group group) {
+    public RaceRenderer(PixelMapper pixelMapper, ClientRace race, Group group) {
         this.race = race;
         this.group = group;
         this.pixelMapper = pixelMapper;
     }
+
 
     /**
      * Draws displayBoats in the Race on the Group as well as the visible annotations including the BoatSails in both
@@ -63,48 +46,45 @@ public class RaceRenderer {
      */
     public void renderBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
-                Boat boat = race.getStartingList().get(i);
-                DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
+            Boat boat = race.getStartingList().get(i);
+            DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
 
-                if (displayBoat == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
-                    double boatPixelLength = boat.getLength() * pixelMapper.mappingRatio();
-
-                    //Wake
-                    displayBoat = new DisplayWake(pixelMapper,
-                            new DisplayBoat(pixelMapper, boat.getShortName(), boat.getColour(), boatPixelLength));
-                    //Highlight
-                    if (boat.isControlled() && race.getMode() != RaceMode.CONTROLS_TUTORIAL) {
-                        displayBoat = new BoatHighlight(pixelMapper, displayBoat);
-                        displayBoat = new BoatGuide(pixelMapper, displayBoat);
-                    }
-                    displayBoat = new DisplaySail(pixelMapper, displayBoat);
-                    displayBoat.addToGroup(group);
-                    displayBoats.put(boat.getShortName(), displayBoat);
+            if (displayBoat == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
+                //Wake
+                displayBoat = new DisplayWake(pixelMapper, new DisplayBoat(pixelMapper, boat.getShortName(), boat.getColour(), boat.getLength()));
+                //Highlight
+                if (boat.isControlled() && race.getMode() != RaceMode.CONTROLS_TUTORIAL) {
+                    displayBoat = new BoatHighlight(pixelMapper, displayBoat);
+                    displayBoat = new BoatGuide(pixelMapper, displayBoat);
                 }
+                displayBoat = new DisplaySail(pixelMapper, displayBoat);
+                displayBoat.addToGroup(group);
+                displayBoats.put(boat.getShortName(), displayBoat);
+            }
 
-                if (displayBoat != null && BoatStatus.DSQ.equals(boat.getStatus())) {
-                    displayBoat.removeFrom(group);
-                    displayBoats.remove(boat.getShortName());
-                    DisplayTrail trail = trailMap.remove(boat.getShortName());
-                    trail.removeFrom(group);
+            if (displayBoat != null && BoatStatus.DSQ.equals(boat.getStatus())) {
+                displayBoat.removeFrom(group);
+                displayBoats.remove(boat.getShortName());
+                DisplayTrail trail = trailMap.remove(boat.getShortName());
+                trail.removeFrom(group);
 
-                } else if (displayBoat != null && boat.getCoordinate() != null) {
-                    displayBoat.setCoordinate(boat.getCoordinate());
-                    displayBoat.setSpeed(boat.getSpeed());
-                    displayBoat.setHeading(boat.getHeading());
-                    displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
-                    displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
-                    displayBoat.setScale(pixelMapper.mappingRatio());
-                    displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
-                    displayBoat.setSailOut(boat.isSailOut());
-                    displayBoat.setBoatStatus(boat.getStatus());
-                    displayBoat.setColour(boat.getColour());
-                    if (boat.getLegNumber() < race.getCourse().getMarkSequence().size()) {
-                        displayBoat.setDestination(race.getCourse().getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getCoordinate());
-                    } else {
-                        displayBoat.setDestination(null);
-                    }
+            } else if (displayBoat != null && boat.getCoordinate() != null) {
+                displayBoat.setCoordinate(boat.getCoordinate());
+                displayBoat.setSpeed(boat.getSpeed());
+                displayBoat.setHeading(boat.getHeading());
+                displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
+                displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
+                displayBoat.setScale(pixelMapper.mappingRatio());
+                displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
+                displayBoat.setSailOut(boat.isSailOut());
+                displayBoat.setBoatStatus(boat.getStatus());
+                displayBoat.setColour(boat.getColour());
+                if (boat.getLegNumber() < race.getCourse().getMarkSequence().size()) {
+                    displayBoat.setDestination(race.getCourse().getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getCoordinate());
+                } else {
+                    displayBoat.setDestination(null);
                 }
+            }
         }
 
     }
@@ -131,9 +111,9 @@ public class RaceRenderer {
      * @param pixelMapper used to map a coordinate to a point on the screen.
      */
     private void drawTrail(Boat boat, PixelMapper pixelMapper) {
-        if(boat.getStatus().equals(BoatStatus.DSQ)){
-            group.getChildren().remove(trailMap.get(boat.getShortName()));
-        }else {
+        if (boat.getStatus().equals(BoatStatus.DSQ)) {
+            trailMap.get(boat.getShortName()).removeFrom(group);
+        } else {
             final double MAX_HEADING_DIFFERENCE = 0.5d; // smaller => smoother trail, higher => more fps
             DisplayTrail trail = trailMap.get(boat.getShortName());
 
@@ -164,6 +144,7 @@ public class RaceRenderer {
         }
     }
 
+
     public Group getGroup() {
         return group;
     }
@@ -180,6 +161,7 @@ public class RaceRenderer {
             boat.setAnnotationVisible(type, isVisible);
         }
     }
+
 
     /**
      * @return a map from boat short names to colors.

@@ -5,6 +5,9 @@ import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.model.RaceType;
 import seng302.team18.model.Regatta;
+import seng302.team18.model.updaters.Updater;
+
+import java.util.List;
 
 /**
  * Base implementation class for race builders
@@ -20,15 +23,13 @@ public abstract class AbstractRaceBuilder {
      * @param course  the course the race follows
      * @return the constructed race
      */
-    public Race buildRace(Race race, Regatta regatta, Course course, RaceMode mode) {
+    public Race buildRace(Race race, Regatta regatta, Course course) {
         race.setCourse(course);
         race.setRegatta(regatta);
         race.setRaceType(getRaceType());
         race.setId(getId());
-        race.setMode(mode);
-        if (course.getCourseLimits().size() > 2) {
-            race.addPowerUps(3);
-        }
+        race.setMode(getRaceMode());
+        race.setUpdaters(getUpdaters());
 
         return race;
     }
@@ -44,4 +45,16 @@ public abstract class AbstractRaceBuilder {
      * @return the type of the race
      */
     protected abstract RaceType getRaceType();
+
+    /**
+     * @return the updaters for the race
+     */
+    protected abstract List<Updater> getUpdaters();
+
+
+    /**
+     * @return the mode for the race
+     */
+    protected abstract RaceMode getRaceMode();
+
 }

@@ -5,7 +5,7 @@ import seng302.team18.message.AC35XMLRegattaMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
-import seng302.team18.model.Race;
+import seng302.team18.visualiser.ClientRace;
 
 import java.time.ZoneId;
 
@@ -14,16 +14,19 @@ import java.time.ZoneId;
  */
 public class XMLRegattaInterpreter extends MessageInterpreter {
 
-    private Race race;
+    private ClientRace race;
+
 
     /**
      * Constructor for XMLRegattaInterpreter. Takes a Race as a parameter which it updates every time a
      * AC35XMLRegattaMessage is interpreted.
+     *
      * @param race to be updated.
      */
-    public XMLRegattaInterpreter(Race race) {
+    public XMLRegattaInterpreter(ClientRace race) {
         this.race = race;
     }
+
 
     /**
      * Interprets the XMLRegatta message
@@ -42,7 +45,7 @@ public class XMLRegattaInterpreter extends MessageInterpreter {
             } else {
                 course.setTimeZone(ZoneId.of("UTC+" + utcOffset));
             }
-             course.setCentralCoordinate(new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong()));
+            course.setCentralCoordinate(new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong()));
         }
     }
 }

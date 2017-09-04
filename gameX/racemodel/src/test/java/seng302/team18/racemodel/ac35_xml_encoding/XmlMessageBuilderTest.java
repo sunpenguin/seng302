@@ -37,9 +37,9 @@ public class XmlMessageBuilderTest {
     @Before
     public void setUp() throws Exception {
         AbstractCourseBuilder courseBuilder = new CourseBuilder1();
-        AbstractRaceBuilder raceBuilder = new RaceBuilder1();
+        AbstractRaceBuilder raceBuilder = new RegularRaceBuilder();
         AbstractRegattaBuilder regattaBuilder = new RegattaBuilder1();
-        race = raceBuilder.buildRace(new Race(), regattaBuilder.buildRegatta(), courseBuilder.buildCourse(), RaceMode.RACE);
+        race = raceBuilder.buildRace(new Race(), regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
         BOATS.forEach(boat -> race.addParticipant(boat));
 
         XmlMessageBuilder messageBuilder = new XmlMessageBuilder(boatsXmlDefaults, raceXmlDefaults);

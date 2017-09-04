@@ -29,7 +29,7 @@ public class ConnectionListener extends Observable implements Observer {
     private ExecutorService executor;
     private Long timeout;
 
-    private static final AbstractRaceBuilder RACE_BUILDER = new RaceBuilder1();
+    private AbstractRaceBuilder raceBuilder;
     private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderPractice();
     private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
 
@@ -103,8 +103,8 @@ public class ConnectionListener extends Observable implements Observer {
 
                     switch (requestType) {
                         case CONTROLS_TUTORIAL:
-                            race = RACE_BUILDER.buildRace(race, REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse(),
-                                    RaceMode.CONTROLS_TUTORIAL);
+                            raceBuilder = new TutorialRaceBuilder();
+                            race = raceBuilder.buildRace(race, REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse());
                             setChanged();
                             notifyObservers(this);
                             race.setCourseForBoats();
