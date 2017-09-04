@@ -19,6 +19,7 @@ public class BumperBoatHealthUpdater implements Updater {
             if (isOutSide(boat, race)) {
                 boat.loseLife();
                 boat.setCoordinate(race.getStartPosition(boat, 3 * boat.getLength()));
+                boat.setSailOut(true);
 
                 if (boat.getLives() < 1) {
                     boat.setStatus(BoatStatus.DSQ);

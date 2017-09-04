@@ -180,7 +180,12 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         return sailOut;
     }
 
-
+    /**
+     * Sets the sails
+     * True = sails out = luffing
+     * False = sails in = powered up
+     * @param sailOut
+     */
     public void setSailOut(boolean sailOut) {
         this.sailOut = sailOut;
     }
