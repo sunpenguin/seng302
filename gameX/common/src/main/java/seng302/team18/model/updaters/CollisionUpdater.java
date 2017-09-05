@@ -3,8 +3,8 @@ package seng302.team18.model.updaters;
 import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculator;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Class to handle collisions
@@ -25,20 +25,18 @@ public class CollisionUpdater implements Updater {
      * @param boat to be collision stuffed
      */
     private void detectCollision(Boat boat, Race race) {
-        List<BodyMass> objects = new ArrayList<>();
-        for (Boat b : race.getStartingList()) {
-            if (!b.getId().equals(boat.getId()) &&
-                    !(b.getStatus() == BoatStatus.FINISHED || boat.getStatus() == BoatStatus.FINISHED)) {
-                objects.add(b.getBodyMass());
-            }
-        }
+        if (boat.getStatus().equals(BoatStatus.FINISHED)) return;
 
-        for (Mark mark : race.getCourse().getMarks()) {
-            objects.add(mark.getBodyMass());
-        }
-        for (BodyMass object : objects) {
-            if (boat.hasCollided(object)) {
-                handleCollision(boat.getBodyMass(), object);
+        List<AbstractBoat> objects = race.getStartingList().stream()
+                .filter(b -> !b.getId().equals(boat.getId()))
+                .filter(b -> !b.getStatus().equals(BoatStatus.FINISHED))
+                .collect(Collectors.toList());
+        objects.addAll(race.getCourse().getMarks());
+
+        for (AbstractBoat object : objects) {
+            if (boat.hasCollided(object.getBodyMass())) {
+                handleCollision(boat.getBodyMass(), object.getBodyMass());
+                notifyCollision(race, boat, object);
             }
         }
     }
@@ -62,6 +60,25 @@ public class CollisionUpdater implements Updater {
         object.setLocation(newBoatCoordinate);
         Coordinate newObstacleCoordinate = calculator.toCoordinate(obstacle.getLocation(), bearingOfCollision, -obstacleBackUpDistance);
         obstacle.setLocation(newObstacleCoordinate);
+    }
+
+
+    /**
+     * Registers a yacht event for the collision with the race.
+     *
+     * @param race   the race in which the collision occurred
+     * @param party1 the first party in the collision
+     * @param party2 the second party in the collision
+     */
+    private void notifyCollision(Race race, AbstractBoat party1, AbstractBoat party2) {
+        long time = System.currentTimeMillis();
+
+        if (party2.getType().equals(BoatType.YACHT)) {
+            race.addYachtEvent(new YachtEvent(time, party1.getId(), YachtEventCode.BOAT_IN_COLLISION));
+            race.addYachtEvent(new YachtEvent(time, party2.getId(), YachtEventCode.BOAT_IN_COLLISION));
+        } else if (party2.getType().equals(BoatType.MARK)) {
+            race.addYachtEvent(new YachtEvent(time, party1.getId(), YachtEventCode.BOAT_COLLIDE_WITH_MARK));
+        }
     }
 
 }
