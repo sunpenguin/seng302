@@ -13,6 +13,13 @@ import java.util.List;
  */
 public class BumperBoatHealthUpdater implements Updater {
 
+    /**
+     * Checks if any boats are outside of the course boundary in a race.
+     * If outside, the player loses a life.
+     * If a player loses their last life they are disqualified.
+     *
+     * @param race the race
+     */
     @Override
     public void update(Race race) {
         for (Boat boat : race.getStartingList()) {
