@@ -10,10 +10,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
-import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
+import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.util.ConfigReader;
 
 import javax.net.SocketFactory;
@@ -150,7 +150,7 @@ public class GameSelectionController {
         outerPane.getScene().setRoot(root);
         stage.show();
 
-        Race race = new Race();
+        ClientRace race = new ClientRace();
         race.setMode(mode);
         controller.setUp(race, receiver, sender);
         controller.initConnection(boatColours.get(colourIndex));
