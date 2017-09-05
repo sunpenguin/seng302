@@ -112,6 +112,7 @@ public class ConnectionListener extends Observable implements Observer {
                             break;
                         case BUMPER_BOATS:
                             raceBuilder = new BumperBoatsRaceBuilder();
+                            courseBuilder = new CourseBuilderBumper();
                             race = raceBuilder.buildRace(race, REGATTA_BUILDER.buildRegatta(), courseBuilder.buildCourse());
                             race.setMode(RaceMode.BUMPER_BOATS);
                             setChanged();
