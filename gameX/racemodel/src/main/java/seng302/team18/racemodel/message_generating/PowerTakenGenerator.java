@@ -12,19 +12,22 @@ import java.io.IOException;
  */
 public class PowerTakenGenerator extends MessageGenerator {
 
-    private PickUp pickUp;
+    private int powerId;
+    private double duration;
     private int boatId;
 
     /**
      * Creates a PowerTakenMessage that signals when a power has been taken and by who.
      *
      * @param boatId of the boat that picked the power.
-     * @param pickUp that was taken.
+     * @param powerId of the power up.
+     * @param duration of the power up.
      */
-    public PowerTakenGenerator(int boatId, PickUp pickUp) {
+    public PowerTakenGenerator(int boatId, int powerId, double duration) {
         super(AC35MessageType.POWER_TAKEN.getCode());
         this.boatId = boatId;
-        this.pickUp = pickUp;
+        this.powerId = powerId;
+        this.duration = duration;
     }
 
 
@@ -32,9 +35,9 @@ public class PowerTakenGenerator extends MessageGenerator {
     protected byte[] getPayload() throws IOException {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
-        byte[] powerId = ByteCheck.intToByteArray(pickUp.getId());
+        byte[] powerId = ByteCheck.intToByteArray(this.powerId);
         byte[] boatIdd = ByteCheck.intToByteArray(boatId);
-        byte[] duration = ByteCheck.intToByteArray((int) pickUp.getPowerDuration());
+        byte[] duration = ByteCheck.intToByteArray((int) this.duration);
 
         outStream.write(boatIdd);
         outStream.write(powerId);

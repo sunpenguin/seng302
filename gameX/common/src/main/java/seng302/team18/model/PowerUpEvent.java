@@ -24,4 +24,9 @@ public class PowerUpEvent {
     }
 
 
+    public int getPowerId() { return pickUp.getId(); }
+
+
+    public double getPowerDuration() { return pickUp.getPowerDuration(); }
+
 }

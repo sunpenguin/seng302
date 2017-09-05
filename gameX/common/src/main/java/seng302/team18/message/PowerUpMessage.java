@@ -106,4 +106,49 @@ public class PowerUpMessage implements MessageBody {
     public Coordinate getLocation() {
         return location;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PowerUpMessage that = (PowerUpMessage) o;
+
+        if (id != that.id) return false;
+        if (Double.compare(that.radius, radius) != 0) return false;
+        if (timeout != that.timeout) return false;
+        if (Double.compare(that.duration, duration) != 0) return false;
+        if (location != null ? !location.equals(that.location) : that.location != null) return false;
+        return power == that.power;
+    }
+
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = id;
+        result = 31 * result + (location != null ? location.hashCode() : 0);
+        temp = Double.doubleToLongBits(radius);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (int) (timeout ^ (timeout >>> 32));
+        result = 31 * result + (power != null ? power.hashCode() : 0);
+        temp = Double.doubleToLongBits(duration);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+
+    @Override
+    public String toString() {
+        return "PowerUpMessage{" +
+                "id=" + id +
+                ", location=" + location +
+                ", radius=" + radius +
+                ", timeout=" + timeout +
+                ", power=" + power +
+                ", duration=" + duration +
+                '}';
+    }
 }

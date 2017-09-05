@@ -202,6 +202,7 @@ public class CourseRenderer {
     }
 
 
+
     /**
      * Gets LINE_WEIGHT, scaling it to the current zoom.
      *

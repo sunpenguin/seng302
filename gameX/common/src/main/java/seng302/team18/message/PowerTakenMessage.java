@@ -56,4 +56,37 @@ public class PowerTakenMessage implements MessageBody {
     }
 
 
+    @Override
+    public String toString() {
+        return "PowerTakenMessage{" +
+                "boatId=" + boatId +
+                ", powerId=" + powerId +
+                ", duration=" + duration +
+                '}';
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PowerTakenMessage that = (PowerTakenMessage) o;
+
+        if (boatId != that.boatId) return false;
+        if (powerId != that.powerId) return false;
+        return Double.compare(that.duration, duration) == 0;
+    }
+
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = boatId;
+        result = 31 * result + powerId;
+        temp = Double.doubleToLongBits(duration);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }
