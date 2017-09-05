@@ -12,6 +12,7 @@ public enum RaceMode {
     GHOST(RequestType.GHOST.code()),
     RACE_TUTORIAL(4),
     START_TUTORIAL(5),
+    BUMPER_BOATS(RequestType.BUMPER_BOATS.code()),
     ARCADE(5);
 
 
