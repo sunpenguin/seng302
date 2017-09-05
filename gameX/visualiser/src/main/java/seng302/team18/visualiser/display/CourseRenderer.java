@@ -50,7 +50,7 @@ public class CourseRenderer {
      * Called if the course needs to be re-rendered due to the window being resized.
      */
     public void renderCourse() {
-        if (mode != RaceMode.CONTROLS_TUTORIAL) {
+        if (mode != RaceMode.CONTROLS_TUTORIAL && mode !=  RaceMode.BUMPER_BOATS) {
             markSize = MARK_SIZE * pixelMapper.mappingRatio();
             List<CompoundMark> compoundMarks = course.getCompoundMarks();
             // Renders CompoundMarks
@@ -64,8 +64,8 @@ public class CourseRenderer {
                     renderCompoundMark(compoundMark);
                 }
             }
-            renderBoundaries();
         }
+        renderBoundaries();
     }
 
     /**
