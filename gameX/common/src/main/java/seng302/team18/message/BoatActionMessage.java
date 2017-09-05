@@ -55,6 +55,11 @@ public class BoatActionMessage implements MessageBody {
     }
 
 
+    public void setConsume() {
+        action = BoatActionStatus.POWER_UP.action();
+    }
+
+
     /**
      * Return the action status of the message.
      *

@@ -45,7 +45,6 @@ public class PowerUpUpdater implements Updater {
             if (boat.hasCollided(pickUp.getBodyMass())) {
                 final double duration = (pickUp.getTimeout() - System.currentTimeMillis());
                 race.consumePowerUp(boat, pickUp);
-                boat.activatePowerUp(); // Remove when keypress
                 race.addPickUps(1, prototype, duration);
             }
         }

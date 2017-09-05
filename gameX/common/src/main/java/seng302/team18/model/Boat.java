@@ -31,7 +31,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private boolean sailOut;
     private RoundZone roundZone = RoundZone.ZONE1;
     private PowerUp powerUp;// = new SpeedPowerUp(this);
-    private boolean isPowerActive = true; //Changed for merging into dev branch
+    private boolean isPowerActive = false; //Changed for merging into dev branch
     private ZonedDateTime powerDurationEnd;
     private PowerUp updater = new BoatUpdater();
 
@@ -407,13 +407,11 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param time that has passed
      */
     public void update(double time) {
-        if (null != powerUp) {
-            if (isPowerActive) {
-                powerUp.update(this, time);
-                if (ZonedDateTime.now().isAfter(powerDurationEnd)) {
-                    isPowerActive = false;
-                    powerUp = null;
-                }
+        if (isPowerActive) {
+            powerUp.update(this, time);
+            if (ZonedDateTime.now().isAfter(powerDurationEnd)) {
+                isPowerActive = false;
+                powerUp = null;
             }
         } else {
             updater.update(this, time);

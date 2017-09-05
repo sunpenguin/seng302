@@ -205,6 +205,9 @@ public class RaceController implements Observer {
                                 toggleTabView();
                                 send = false;
                                 break;
+                            case S:
+                                message.setConsume();
+                                break;
                             default:
                                 send = false;
                         }
