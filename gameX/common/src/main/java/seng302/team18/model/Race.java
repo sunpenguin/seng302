@@ -71,30 +71,25 @@ public class Race extends Observable {
      *
      * @param powerUps number of power ups to place
      */
-    public void addPowerUps(int powerUps) {
+    public void addPickUps(int powerUps, PickUp prototype, double duration) {
         GPSCalculator calculator = new GPSCalculator();
         int maxId = powerId + powerUps;
         while (powerId < maxId) {
             Coordinate randomPoint = calculator.randomPoint(course.getCourseLimits());
-            PickUp pickUp = makePickUp(powerId, randomPoint);
+            PickUp pickUp = makePickUp(powerId, randomPoint, prototype, duration);
             course.addPickUp(pickUp);
             powerId += 1;
         }
     }
 
 
-    private PickUp makePickUp(int id, Coordinate randomPoint) {
-        final double TEN_SECONDS_IN_MILLISECONDS = 10000;
-
-        BodyMass mass = new BodyMass();
-        mass.setLocation(randomPoint);
-        mass.setWeight(0);
-        mass.setRadius(14);
-
-        PickUp pickUp = new PickUp(id);
-        pickUp.setBodyMass(mass);
-        pickUp.setTimeout(System.currentTimeMillis() + TEN_SECONDS_IN_MILLISECONDS);
+    private PickUp makePickUp(int id, Coordinate randomPoint, PickUp prototype, double duration) {
+        final double timeout =  System.currentTimeMillis() + duration;
+        PickUp pickUp = prototype.clone();
+        pickUp.setId(id);
+        pickUp.setTimeout(timeout);
         pickUp.setPower(getRandomPower());
+        pickUp.setLocation(randomPoint);
         return pickUp;
     }
 
@@ -103,17 +98,6 @@ public class Race extends Observable {
         PowerUp powerUp = new SpeedPowerUp();
         powerUp.setDuration(5000d);
         return powerUp;
-    }
-
-
-    /**
-     * Gets the last PickUp in the List.
-     *
-     * @return the last PickUp
-     */
-    public PickUp getNewPickUp() {
-        List<PickUp> pickUps = course.getPickUps();
-        return pickUps.get(pickUps.size() - 1);
     }
 
 
@@ -449,5 +433,10 @@ public class Race extends Observable {
         pickUps.remove(pickUp);
         course.setPickUps(pickUps);
         powerEvents.add(new PowerUpEvent(boat.getId(), pickUp));
+    }
+
+
+    public void removeOldPickUps() {
+        course.removeOldPickUps();
     }
 }

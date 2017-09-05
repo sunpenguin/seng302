@@ -1,12 +1,13 @@
 package seng302.team18.message;
 
+import seng302.team18.model.Coordinate;
+
 /**
  * Created by dhl25 on 3/09/17.
  */
 public class PowerUpMessage implements MessageBody {
     private int id;
-    private double latitude;
-    private double longitude;
+    private Coordinate location = new Coordinate(0, 0);
     private double radius; // metres
     private long timeout; // epoch millis
     private PowerType power;
@@ -18,8 +19,7 @@ public class PowerUpMessage implements MessageBody {
     public PowerUpMessage(int id, double latitude, double longitude, double radius, long timeout,
                           PowerType power, double duration) {
         this.id = id;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.location = new Coordinate(latitude, longitude);
         this.radius = radius;
         this.timeout = timeout;
         this.power = power;
@@ -34,22 +34,22 @@ public class PowerUpMessage implements MessageBody {
 
 
     public double getLatitude() {
-        return latitude;
+        return location.getLatitude();
     }
 
 
     public void setLatitude(double latitude) {
-        this.latitude = latitude;
+        location.setLatitude(latitude);
     }
 
 
     public double getLongitude() {
-        return longitude;
+        return location.getLongitude();
     }
 
 
     public void setLongitude(double longitude) {
-        this.longitude = longitude;
+        location.setLongitude(longitude);
     }
 
 
@@ -100,5 +100,10 @@ public class PowerUpMessage implements MessageBody {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+
+    public Coordinate getLocation() {
+        return location;
     }
 }

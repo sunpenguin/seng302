@@ -62,6 +62,11 @@ public class PickUp {
     }
 
 
+    public void setRadius(double radius) {
+        bodyMass.setRadius(radius);
+    }
+
+
     public PowerType getType() {
         return powerUp.getType();
     }
@@ -82,5 +87,26 @@ public class PickUp {
     }
 
 
+    public void setId(int id) {
+        this.id = id;
+    }
 
+
+    /**
+     * Create a clone of itself.
+     * WARNING SHALLOW COPIES powerUp AND location.
+     *
+     * @return a clone
+     */
+    public PickUp clone() {
+        PickUp pickUp = new PickUp(id);
+        BodyMass bodyMass = new BodyMass();
+        bodyMass.setLocation(getLocation());
+        bodyMass.setRadius(getRadius());
+        bodyMass.setWeight(this.bodyMass.getWeight());
+        pickUp.setBodyMass(bodyMass);
+        pickUp.setPower(powerUp);
+        pickUp.setTimeout(timeout);
+        return pickUp;
+    }
 }

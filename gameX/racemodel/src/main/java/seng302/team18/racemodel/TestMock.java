@@ -250,7 +250,6 @@ public class TestMock implements Observer {
         }
 
         for (PowerUpEvent event : race.popPowerUpEvents()) {
-            System.out.println("Hi");
             server.broadcast((new PowerTakenGenerator(event.getBoatId(), event.getPickUp()).getMessage()));
         }
     }

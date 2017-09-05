@@ -244,8 +244,39 @@ public class Course {
     }
 
 
+    /**
+     * Removes pick ups that have expired.
+     */
+    public void removeOldPickUps() {
+        List<PickUp> remaining = new ArrayList<>();
+        for (PickUp pickUp: pickUps) {
+            if (!pickUp.hasExpired()) {
+                remaining.add(pickUp);
+            }
+        }
+        setPickUps(remaining);
+    }
+
+
     public List<PickUp> getPickUps() {
         return new ArrayList<>(pickUps);
+    }
+
+
+    /**
+     * Returns pick up with specified id.
+     * null if not exists
+     *
+     * @param id of the pick up
+     * @return the pick up with the given id.
+     */
+    public PickUp getPickUp(int id) {
+        for (PickUp pickUp : pickUps) {
+            if (pickUp.getId() == id) {
+                return pickUp;
+            }
+        }
+        return null;
     }
 
 

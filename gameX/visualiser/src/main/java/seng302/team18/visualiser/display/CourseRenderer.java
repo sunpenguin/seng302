@@ -201,18 +201,6 @@ public class CourseRenderer {
         line.setEndY(endPoints.get(1).getY());
     }
 
-    public Group getGroup() {
-        return group;
-    }
-
-    /**
-     * Gets MARK_SIZE, scaling it to the current zoom.
-     *
-     * @return scaled mark size
-     */
-    private double getScaledMarkSize() {
-        return markSize * pixelMapper.getZoomFactor();
-    }
 
     /**
      * Gets LINE_WEIGHT, scaling it to the current zoom.
@@ -225,15 +213,22 @@ public class CourseRenderer {
     }
 
 
+    /**
+     * Renders all pickups in the course.
+     */
     private void renderPickUps() {
-        removeTakenPowers();
+        removePowers();
         for (PickUp pickUp : course.getPickUps()) {
             renderPickUp(pickUp);
         }
     }
 
 
-    private void removeTakenPowers() {
+    /**
+     * Removes any pick ups taken by other players.
+     */
+    private void removePowers() {
+        course.removeOldPickUps();
         List<Integer> pickUpIds = course
                 .getPickUps()
                 .stream()
@@ -252,10 +247,18 @@ public class CourseRenderer {
     }
 
 
+
+
+
+    /**
+     * Creates a pick up if there isn't one and updates it if it exists.
+     *
+     * @param pickUp not null.
+     */
     private void renderPickUp(PickUp pickUp) {
         switch (pickUp.getType()) {
             case SPEED:
-                renderSpeedPickUp(pickUp);
+                renderPickUp(pickUp, Color.GREEN);
                 break;
             default:
                 System.out.println("PowerUpInterpreter::makePowerUp has gone horribly wrong (ask Sunguin for help)");
@@ -264,19 +267,25 @@ public class CourseRenderer {
     }
 
 
-    private void renderSpeedPickUp(PickUp pickUp) {
+    /**
+     * Creates a pick up if there isn't one and updates it if it exists.
+     *
+     * @param pickUp not null.
+     * @param color of the pickup.
+     */
+    private void renderPickUp(PickUp pickUp, Color color) {
         Circle pickUpVisual = pickUps.get(pickUp.getId());
+        double pickUpSize = pixelMapper.mappingRatio() * pickUp.getRadius();
         if (pickUpVisual == null) {
-            pickUpVisual = new Circle(markSize, Color.GREEN);
+            pickUpVisual = new Circle(pickUpSize, color);
             pickUpVisual.setOnMouseClicked((event) -> {
                 pixelMapper.setZoomLevel(4);
                 pixelMapper.setViewPortCenter(pickUp.getLocation());
             });
             group.getChildren().addAll(pickUpVisual);
-//            pickUpVisual.toBack();
             pickUps.put(pickUp.getId(), pickUpVisual);
         }
-        pickUpVisual.setRadius(markSize); // change to radius specified
+        pickUpVisual.setRadius(pickUpSize);
         Coordinate coordinate = pickUp.getLocation();
         XYPair pixelCoordinates = pixelMapper.mapToPane(coordinate);
         pickUpVisual.setCenterX(pixelCoordinates.getX());

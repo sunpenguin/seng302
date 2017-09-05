@@ -51,9 +51,9 @@ public class RaceRenderer {
                 displayBoat = makeBoat(boat);
             }
 
-            if (BoatStatus.DSQ.equals(boat.getStatus())) {
+            if (displayBoat != null && BoatStatus.DSQ.equals(boat.getStatus())) {
                 remove(displayBoat);
-            } else if (boat.getCoordinate() != null) {
+            } else if (displayBoat != null && boat.getCoordinate() != null) {
                 synchronise(displayBoat, boat);
             }
         }

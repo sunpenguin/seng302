@@ -6,6 +6,9 @@ import seng302.team18.message.PowerUpMessage;
 import seng302.team18.model.*;
 import seng302.team18.visualiser.ClientRace;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Created by dhl25 on 3/09/17.
  */
@@ -21,11 +24,36 @@ public class PowerUpInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof PowerUpMessage) {
             PowerUpMessage powerMessage = (PowerUpMessage) message;
-            PickUp pickUp = makePickUp(powerMessage);
-            PowerUp powerUp = makePowerUp(powerMessage);
-            pickUp.setPower(powerUp);
-            race.getCourse().addPickUp(pickUp);
+            if (isNew(powerMessage)) {
+                PickUp pickUp = makePickUp(powerMessage);
+                PowerUp powerUp = makePowerUp(powerMessage);
+                pickUp.setPower(powerUp);
+                race.getCourse().addPickUp(pickUp);
+            } else {
+                PickUp pickUp = race.getPickUp(powerMessage.getId());
+                BodyMass bodyMass = new BodyMass();
+                bodyMass.setLocation(powerMessage.getLocation());
+                bodyMass.setRadius(powerMessage.getRadius());
+                pickUp.setBodyMass(bodyMass);
+                pickUp.setTimeout(powerMessage.getTimeout());
+                pickUp.setPower(makePowerUp(powerMessage));
+            }
         }
+    }
+
+
+    /**
+     * Determines if a power up is new or old.
+     *
+     * @param message not null
+     * @return the answer.
+     */
+    private boolean isNew(PowerUpMessage message) {
+        List<Integer> ids = race.getPickUps()
+                .stream()
+                .map(PickUp::getId)
+                .collect(Collectors.toList());
+        return !ids.contains(message.getId());
     }
 
 

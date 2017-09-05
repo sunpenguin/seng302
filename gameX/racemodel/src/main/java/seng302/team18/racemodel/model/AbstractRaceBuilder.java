@@ -30,7 +30,6 @@ public abstract class AbstractRaceBuilder {
         race.setId(getId());
         race.setMode(getRaceMode());
         race.setUpdaters(getUpdaters());
-        race.addPowerUps(4); // TODO Move DAVID + SUNGUIN 3 SEPT
 
         return race;
     }
