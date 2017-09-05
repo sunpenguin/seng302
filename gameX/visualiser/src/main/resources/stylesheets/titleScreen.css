@@ -31,6 +31,7 @@
     -fx-graphic: url('/images/title_screen/view_controls_button.png');
 }
 
+
 .controlsImage:hover {
     -fx-label-padding: 2;
     -fx-graphic: url('/images/title_screen/view_controls_button_alt.png');
