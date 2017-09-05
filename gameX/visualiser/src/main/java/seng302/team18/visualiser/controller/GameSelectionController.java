@@ -10,7 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
-import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
@@ -101,7 +100,7 @@ public class GameSelectionController {
         raceButtonImage = new Image("/images/Arcade_Race_White.png");
         raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
         raceLabel.setLayoutY((600 / 2) + 50);
-        raceLabel.setOnMouseClicked(event -> startBumperBoats());
+        raceLabel.setOnMouseClicked(event -> startMode());
     }
 
 
@@ -114,7 +113,7 @@ public class GameSelectionController {
         raceButtonImage = new Image("/images/SpyroWhite.png");
         raceLabel.setLayoutX((600 / 2) - 150);
         raceLabel.setLayoutY((600 / 2) + 100);
-        raceLabel.setOnMouseClicked(event -> startBumperBoats());
+        raceLabel.setOnMouseClicked(event -> startMode());
     }
 
     private void initialiseBumperBoatsButton() {
@@ -217,8 +216,19 @@ public class GameSelectionController {
     }
 
 
+    private void startMode(){
+        System.out.println("unready mode");
+    }
+
     private void startBumperBoats(){
-        System.out.println("BumperBoats");
+        createModel();
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mode = RaceMode.BUMPER_BOATS;
+        openStream("127.0.0.1", 5005);
     }
 
     public Stage getStage() {

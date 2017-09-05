@@ -30,7 +30,7 @@ public class ConnectionListener extends Observable implements Observer {
     private Long timeout;
 
     private AbstractRaceBuilder raceBuilder;
-    private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderPractice();
+    private AbstractCourseBuilder courseBuilder = new CourseBuilderRealistic();
     private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
 
     /**
@@ -104,15 +104,23 @@ public class ConnectionListener extends Observable implements Observer {
                     switch (requestType) {
                         case CONTROLS_TUTORIAL:
                             raceBuilder = new TutorialRaceBuilder();
-                            race = raceBuilder.buildRace(race, REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse());
+                            courseBuilder = new CourseBuilderPractice();
+                            race = raceBuilder.buildRace(race, REGATTA_BUILDER.buildRegatta(), courseBuilder.buildCourse());
                             setChanged();
                             notifyObservers(this);
                             race.setCourseForBoats();
-                        case RACING:
-                            addPlayer(receiver, sourceID);
-                            sendMessage(client, sourceID, requestType);
+                            break;
+                        case BUMPER_BOATS:
+                            raceBuilder = new BumperBoatsRaceBuilder();
+                            race = raceBuilder.buildRace(race, REGATTA_BUILDER.buildRegatta(), courseBuilder.buildCourse());
+                            race.setMode(RaceMode.BUMPER_BOATS);
+                            setChanged();
+                            notifyObservers(this);
+                            race.setCourseForBoats();
                             break;
                     }
+                    addPlayer(receiver, sourceID);
+                    sendMessage(client, sourceID, requestType);
                 }
             });
         } catch (Exception e) {

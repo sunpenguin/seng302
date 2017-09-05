@@ -106,9 +106,13 @@ public class PreRaceController {
             case CONTROLS_TUTORIAL:
                 requestType = RequestType.CONTROLS_TUTORIAL;
                 break;
+            case BUMPER_BOATS:
+                requestType = RequestType.BUMPER_BOATS;
+                break;
             default:
                 requestType = RequestType.RACING;
         }
+
         try {
             sender.send(new RequestMessage(requestType));
         } catch (IOException e) {
