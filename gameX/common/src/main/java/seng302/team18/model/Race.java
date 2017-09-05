@@ -69,7 +69,9 @@ public class Race extends Observable {
     /**
      * Randomly places power ups.
      *
-     * @param powerUps number of power ups to place
+     * @param powerUps number of power ups to place.
+     * @param prototype the base PickUp.
+     * @param duration how long the PickUp will last in milliseconds.
      */
     public void addPickUps(int powerUps, PickUp prototype, double duration) {
         GPSCalculator calculator = new GPSCalculator();
@@ -83,6 +85,15 @@ public class Race extends Observable {
     }
 
 
+    /**
+     * Creates a single PickUp.
+     *
+     * @param id of the new PickUp.
+     * @param randomPoint location of the new PickUp.
+     * @param prototype the base PickUp.
+     * @param duration how long the PickUp will last in milliseconds.
+     * @return the new PickUp.
+     */
     private PickUp makePickUp(int id, Coordinate randomPoint, PickUp prototype, double duration) {
         final double timeout =  System.currentTimeMillis() + duration;
         PickUp pickUp = prototype.clone();
@@ -94,6 +105,11 @@ public class Race extends Observable {
     }
 
 
+    /**
+     * Generates a random PowerUp to put in the PickUp.
+     *
+     * @return a random PowerUp.
+     */
     private PowerUp getRandomPower() {
         PowerUp powerUp = new SpeedPowerUp();
         powerUp.setDuration(5000d);

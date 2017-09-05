@@ -239,13 +239,18 @@ public class Course {
     }
 
 
+    /**
+     * Removes a single PickUp given an id.
+     *
+     * @param id of the PickUp.
+     */
     public void removePickUp(int id) {
         pickUps.removeIf(pickUp -> pickUp.getId() == id);
     }
 
 
     /**
-     * Removes pick ups that have expired.
+     * Removes PickUp that have expired.
      */
     public void removeOldPickUps() {
         List<PickUp> remaining = new ArrayList<>();
