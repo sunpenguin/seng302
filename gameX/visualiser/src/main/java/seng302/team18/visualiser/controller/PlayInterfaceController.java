@@ -225,18 +225,9 @@ public class PlayInterfaceController {
      * Act on user pressing the host new game button.
      */
     private void hostButtonAction() {
-//        createModel();
-//        try {
-//            Thread.sleep(400);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        mode = RaceMode.RACE;
-//        openStream("127.0.0.1", 5005);
         try {
             toGameModeSelection();
         } catch (IOException e){
-
         }
     }
 
@@ -313,6 +304,7 @@ public class PlayInterfaceController {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ModeSelection.fxml"));
         Parent root = loader.load();
         GameSelectionController controller = loader.getController();
+        controller.reDraw();
         controller.setStage(stage);
         stage.setTitle("High Seas");
         outerPane.getScene().setRoot(root);

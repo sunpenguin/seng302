@@ -49,6 +49,7 @@ public class GameSelectionController {
         initialiseArcadeButton();
         initialiseSpyroButton();
         initialiseBumperBoatsButton();
+        initialiseBackButton();
         registerListeners();
     }
 
@@ -72,14 +73,14 @@ public class GameSelectionController {
         }
 
         else if (stage != null) {
-            innerPane.setLayoutX((stage.getWidth() / 2) - (400));
-            innerPane.setLayoutY((stage.getHeight() / 2) - (400));
+            innerPane.setLayoutX((stage.getWidth() / 2) - (innerPane.getPrefWidth()/2));
+            innerPane.setLayoutY((stage.getHeight() / 2) - (innerPane.getPrefHeight()/2));
         }
     }
 
     private void initialiseRaceButton() {
         raceLabel = new Label();
-        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
+        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         raceLabel.getStyleClass().add("raceImage");
         innerPane.getChildren().add(raceLabel);
 
@@ -92,7 +93,7 @@ public class GameSelectionController {
 
     private void initialiseArcadeButton() {
         raceLabel = new Label();
-        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
+        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         raceLabel.getStyleClass().add("arcadeImage");
         innerPane.getChildren().add(raceLabel);
 
@@ -105,19 +106,19 @@ public class GameSelectionController {
 
     private void initialiseSpyroButton() {
         raceLabel = new Label();
-        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
+        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         raceLabel.getStyleClass().add("spyroImage");
         innerPane.getChildren().add(raceLabel);
 
         raceButtonImage = new Image("/images/SpyroWhite.png");
-        raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
+        raceLabel.setLayoutX((600 / 2) - 150);
         raceLabel.setLayoutY((600 / 2) + 100);
         raceLabel.setOnMouseClicked(event -> startBumperBoats());
     }
 
     private void initialiseBumperBoatsButton() {
         raceLabel = new Label();
-        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
+        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         raceLabel.getStyleClass().add("bumperBoatsImage");
         innerPane.getChildren().add(raceLabel);
 
@@ -125,6 +126,18 @@ public class GameSelectionController {
         raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
         raceLabel.setLayoutY((600 / 2) + 150);
         raceLabel.setOnMouseClicked(event -> startBumperBoats());
+    }
+
+    private void initialiseBackButton() {
+        raceLabel = new Label();
+        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        raceLabel.getStyleClass().add("backButtonImage");
+        innerPane.getChildren().add(raceLabel);
+
+        raceButtonImage = new Image("/images/back_button.gif");
+        raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
+        raceLabel.setLayoutY((600 / 2) + 200);
+        raceLabel.setOnMouseClicked(event -> backButtonAction());
     }
 
     private void startConnection(Receiver receiver, Sender sender) throws Exception {
@@ -178,11 +191,28 @@ public class GameSelectionController {
             Runtime.getRuntime().exec("java -jar " + filePath);
         } catch (IOException e) {
             if (null == configStream) {
-                System.out.println("You don't have a config file"); // TODO August 12 DHL25 / HQI19 have to show error but title screen incomplete
+                System.out.println("You don't have a config file"); // TODO August 12 csl62 have to show error but title screen incomplete
             } else {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void backButtonAction(){
+        Stage stage = (Stage) innerPane.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PlayInterface.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            System.err.println("Error occurred loading play interface screen");
+        }
+        PlayInterfaceController controller = loader.getController();
+        controller.setStage(stage);
+        stage.setTitle("High Seas");
+        outerPane.getScene().setRoot(root);
+        stage.setMaximized(true);
+        stage.show();
     }
 
 
