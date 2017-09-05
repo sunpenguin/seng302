@@ -112,7 +112,7 @@ public class CourseBuilderBumper extends AbstractCourseBuilder {
 
     @Override
     protected double getWindSpeed() {
-        return 30;
+        return 100;
     }
 
 
