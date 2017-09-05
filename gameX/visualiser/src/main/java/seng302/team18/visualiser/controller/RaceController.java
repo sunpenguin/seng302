@@ -599,6 +599,8 @@ public class RaceController implements Observer {
 
         loadEscapeMenu();
 
+        VisualHealth visualHealth = new VisualHealth(raceViewPane);
+
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
     }
 
