@@ -599,7 +599,7 @@ public class RaceController implements Observer {
 
         loadEscapeMenu();
 
-        VisualHealth visualHealth = new VisualHealth(raceViewPane);
+        VisualHealth visualHealth = new VisualHealth(raceViewPane, getPlayerBoat().getLives());
 
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
     }
@@ -700,6 +700,7 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishRaceInterpreter(this));
 
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
+        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLivesInterpreter(race));
 
         return interpreter;
     }

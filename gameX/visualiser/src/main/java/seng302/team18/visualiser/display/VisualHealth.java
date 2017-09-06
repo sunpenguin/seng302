@@ -17,17 +17,19 @@ public class VisualHealth {
     private ImageView heartView2;
     private ImageView heartView3;
 
-    public VisualHealth(Pane pane) {
+    public VisualHealth(Pane pane, int numLives) {
         this.pane = pane;
-        setup();
+        display(numLives);
     }
 
-    private void setup() {
+    private void display(int numLives) {
         heartImage = new Image("/images/race_view/heart.png");
-        heartView1 = new ImageView(heartImage);
-        heartView2 = new ImageView(heartImage);
-        heartView3 = new ImageView(heartImage);
-        heartBox = new HBox(heartView1, heartView2, heartView3);
+
+        heartBox = new HBox();
+        for(int i = 0; i < numLives; i++) {
+            heartView1 = new ImageView(heartImage);
+            heartBox.getChildren().add(heartView1);
+        }
 
         pane.getChildren().add(heartBox);
         heartBox.setLayoutX(100);

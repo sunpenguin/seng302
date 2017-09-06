@@ -52,6 +52,8 @@ public class AC35BoatLocationParser implements MessageBodyParser {
         final int SPEED_LENGTH = 2;
         final int SAIL_INDEX = 50;
         final int SAIL_LENGTH = 2;
+        final int LIVES_INDEX = 30;
+        final int LIVES_LENGTH = 2;
 
         int sourceID = ByteCheck.byteToInt(bytes, SOURCE_ID_INDEX, SOURCE_ID_LENGTH);
         double lat = ByteCheck.byteToInt(bytes, LAT_INDEX, LAT_LENGTH) * BYTE_COORDINATE_TO_DOUBLE;
@@ -60,8 +62,9 @@ public class AC35BoatLocationParser implements MessageBodyParser {
         double speed = ByteCheck.byteToInt(bytes, SPEED_INDEX, SPEED_LENGTH);
         speed = new SpeedConverter().mmsToKnots(speed);
         boolean sail = sails(bytes, SAIL_INDEX, SAIL_LENGTH);
+        int lives = ByteCheck.byteToInt(bytes, LIVES_INDEX, LIVES_LENGTH);
 
-        return new AC35BoatLocationMessage(sourceID, new Coordinate(lat, longitude), heading, speed, sail);
+        return new AC35BoatLocationMessage(sourceID, new Coordinate(lat, longitude), heading, speed, sail, lives);
     }
 
     /**
