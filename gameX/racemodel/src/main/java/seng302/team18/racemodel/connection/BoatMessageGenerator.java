@@ -48,7 +48,10 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
         Double heading = (boat.getHeading() / BYTE_HEADING_TO_DOUBLE);
         short headingShort = heading.shortValue();
         byte[] headingBytes = ByteCheck.shortToByteArray(headingShort);
-        byte[] pitch = ByteBuffer.allocate(2).array();
+        //Pitch is now boat lives
+        Integer boatLivesInt = boat.getLives();
+        short boatLivesShort = boatLivesInt.shortValue();
+        byte[] boatLives = ByteCheck.shortToByteArray(boatLivesShort);
         byte[] roll = ByteBuffer.allocate(2).array();
         byte[] speedBytes = ByteBuffer.allocate(2).array();
         byte[] cog = ByteBuffer.allocate(2).array();
@@ -70,7 +73,7 @@ public class BoatMessageGenerator extends ScheduledMessageGenerator {
         outStream.write(longitudeBytes);
         outStream.write(altitude);
         outStream.write(headingBytes);
-        outStream.write(pitch);
+        outStream.write(boatLives);
         outStream.write(roll);
         outStream.write(speedBytes);
         outStream.write(cog);

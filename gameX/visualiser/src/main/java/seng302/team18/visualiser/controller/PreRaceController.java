@@ -107,7 +107,7 @@ public class PreRaceController {
                 requestType = RequestType.CONTROLS_TUTORIAL;
                 break;
             case BUMPER_BOATS:
-                requestType = RequestType.BUMPER_BOATS;
+                requestType = RequestType.BUMPER_BOAT;
                 break;
             default:
                 requestType = RequestType.RACING;
