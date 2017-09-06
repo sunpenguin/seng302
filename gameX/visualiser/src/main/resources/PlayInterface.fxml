@@ -11,7 +11,7 @@
          <children>
             <TextField fx:id="customHostField" layoutX="241.0" layoutY="448.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="133.0" promptText="hostname/ip" />
             <TextField fx:id="customPortField" layoutX="384.0" layoutY="449.0" maxWidth="75.0" promptText="port" />
-            <Button fx:id="connectButton" layoutX="476.0" layoutY="449.0" mnemonicParsing="false" onAction="#connectButtonAction" text="Connect!" />
+            <Button fx:id="connectButton" layoutX="476.0" layoutY="449.0" mnemonicParsing="false" onAction="#toGameModeSelection" text="Connect!" />
             <Label fx:id="errorText" layoutX="243.0" layoutY="630.0" prefHeight="109.0" prefWidth="358.0" textFill="RED">
                <font>
                   <Font size="16.0" />
