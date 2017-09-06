@@ -163,7 +163,6 @@ public class GameSelectionController {
         ClientRace race = new ClientRace();
         race.setMode(mode);
         controller.setUp(race, receiver, sender);
-        System.out.println(boatColours.get(colourIndex));
         controller.initConnection(boatColours.get(colourIndex));
     }
 
