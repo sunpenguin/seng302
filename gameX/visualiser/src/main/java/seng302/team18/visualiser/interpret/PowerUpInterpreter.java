@@ -80,9 +80,14 @@ public class PowerUpInterpreter extends MessageInterpreter {
      * @return a power up
      */
     private PowerUp makePowerUp(PowerUpMessage message) {
+        PowerUp powerUp = null;
         switch (message.getPower()) {
             case SPEED:
-                PowerUp powerUp = new SpeedPowerUp();
+                powerUp = new SpeedPowerUp();
+                powerUp.setDuration(message.getDuration());
+                return powerUp;
+            case SHARK:
+                powerUp = new SharkPowerUp();
                 powerUp.setDuration(message.getDuration());
                 return powerUp;
             default:

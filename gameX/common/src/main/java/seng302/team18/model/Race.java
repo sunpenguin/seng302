@@ -6,6 +6,7 @@ import seng302.team18.util.GPSCalculator;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 
@@ -111,7 +112,16 @@ public class Race extends Observable {
      * @return a random PowerUp.
      */
     private PowerUp getRandomPower() {
-        PowerUp powerUp = new SpeedPowerUp();
+        int max = 1;
+        PowerUp powerUp = null;
+
+        int randomNum = ThreadLocalRandom.current().nextInt(0, max + 1);
+        if (randomNum == 0) {
+            powerUp = new SpeedPowerUp();
+        } else if (randomNum == 1) {
+            powerUp = new SharkPowerUp();
+        }
+
         powerUp.setDuration(5000d);
         return powerUp;
     }
