@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.*;
 import seng302.team18.util.GPSCalculator;
 
-import java.util.List;
+import java.time.ZonedDateTime;
 
 /**
  * A class which stores information about a boat.
@@ -30,15 +30,16 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private boolean isControlled;
     private boolean sailOut;
     private RoundZone roundZone = RoundZone.ZONE1;
-    private PowerUp powerUp = new SpeedPowerUp(this);
+    private PowerUp powerUp;// = new SpeedPowerUp(this);
     private boolean isPowerActive = false; //Changed for merging into dev branch
-    private PowerUp updater = new BoatUpdate(this);
+    private ZonedDateTime powerDurationEnd;
+    private PowerUp updater = new BoatUpdater();
     private int lives;
 
     /**
      * A constructor for the Boat class
      *
-     * @param name  The name of the boat
+     * @param name      The name of the boat
      * @param shortName The name of the team the boat belongs to
      * @param id        The id of the boat
      */
@@ -380,10 +381,20 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         this.powerUp = powerUp;
     }
 
+
     public void activatePowerUp() {
-        this.isPowerActive = true;
+        isPowerActive = true;
+        powerDurationEnd = ZonedDateTime.now().plusSeconds((long) powerUp.getDuration() / 1000);
         setChanged();
         notifyObservers(powerUp);
+    }
+
+
+    public boolean canActivatePower() {
+        if (null != powerUp && !isPowerActive) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -394,14 +405,14 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param time that has passed
      */
     public void update(double time) {
-        if (isPowerActive) {
-            powerUp.update(time);
-            if (powerUp.isTerminated()) {
+        if (isPowerActive && null != powerUp) {
+            powerUp.update(this, time);
+            if (ZonedDateTime.now().isAfter(powerDurationEnd)) {
                 isPowerActive = false;
                 powerUp = null;
             }
         } else {
-            updater.update(time);
+            updater.update(this, time);
         }
     }
 }

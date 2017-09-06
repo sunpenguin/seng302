@@ -245,4 +245,18 @@ public class ClientRace {
         boat.setLegNumber(nextLeg);
     }
 
+
+    public void removePickUp(int id) {
+        course.removePickUp(id);
+    }
+
+
+    public List<PickUp> getPickUps() {
+        return course.getPickUps();
+    }
+
+
+    public PickUp getPickUp(int id) {
+        return course.getPickUp(id);
+    }
 }

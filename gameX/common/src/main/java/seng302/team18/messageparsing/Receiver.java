@@ -5,9 +5,7 @@ import seng302.team18.message.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.Socket;
-import java.util.Arrays;
 
 /**
  * Sets up a client socket to read from the AC35 messageparsing stream.
@@ -67,6 +65,8 @@ public class Receiver {
         inStream.read(bodyBytes);
         inStream.read(checkBytes);
         if (detector.isValid(checkBytes, bodyBytes, headerBytes) && bodyParser != null) {
+//            System.out.println("Receiver::nextMessage");
+//            System.out.println(AC35MessageType.from(head.getType()));
             return bodyParser.parse(bodyBytes);
         }
         return null;

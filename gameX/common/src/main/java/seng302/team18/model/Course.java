@@ -18,6 +18,7 @@ public class Course {
     private List<CompoundMark> compoundMarks = new ArrayList<>();
     private List<MarkRounding> markSequence = new ArrayList<>();
     private List<Coordinate> courseLimits = new ArrayList<>();
+    private List<PickUp> pickUps = new ArrayList<>();
 
     private double windDirection = 0d;
     private double windSpeed = 0d;
@@ -230,6 +231,62 @@ public class Course {
 
     public String getName() {
         return name;
+    }
+
+
+    public void addPickUp(PickUp pickUp) {
+        pickUps.add(pickUp);
+    }
+
+
+    /**
+     * Removes a single PickUp given an id.
+     *
+     * @param id of the PickUp.
+     */
+    public void removePickUp(int id) {
+        pickUps.removeIf(pickUp -> pickUp.getId() == id);
+    }
+
+
+    /**
+     * Removes PickUp that have expired.
+     */
+    public void removeOldPickUps() {
+        List<PickUp> remaining = new ArrayList<>();
+        for (PickUp pickUp: pickUps) {
+            if (!pickUp.hasExpired()) {
+                remaining.add(pickUp);
+            }
+        }
+        setPickUps(remaining);
+    }
+
+
+    public List<PickUp> getPickUps() {
+        return new ArrayList<>(pickUps);
+    }
+
+
+    /**
+     * Returns pick up with specified id.
+     * null if not exists
+     *
+     * @param id of the pick up
+     * @return the pick up with the given id.
+     */
+    public PickUp getPickUp(int id) {
+        for (PickUp pickUp : pickUps) {
+            if (pickUp.getId() == id) {
+                return pickUp;
+            }
+        }
+        return null;
+    }
+
+
+    public void setPickUps(List<PickUp> pickUps) {
+        this.pickUps = pickUps;
     }
 
 

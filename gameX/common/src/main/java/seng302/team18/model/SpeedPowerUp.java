@@ -1,22 +1,27 @@
 package seng302.team18.model;
 
+import seng302.team18.message.PowerType;
+
 /**
  * Created by dhl25 on 29/08/17.
  */
 public class SpeedPowerUp extends PowerUp {
 
-    private BoatUpdate boatUpdate;
+    private BoatUpdater updater = new BoatUpdater();
 
-
-    public SpeedPowerUp(Boat boat) {
+    public SpeedPowerUp() {
         super();
-        this.boatUpdate = new BoatUpdate(boat);
     }
 
 
     @Override
-    public void update(double time) {
-        super.update(time);
-        boatUpdate.update(time * 3);
+    public void update(Boat boat, double time) {
+        super.update(boat, time);
+        updater.update(boat, time * 3);
+    }
+
+    @Override
+    public PowerType getType() {
+        return PowerType.SPEED;
     }
 }

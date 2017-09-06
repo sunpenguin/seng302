@@ -25,26 +25,12 @@ public class BoatActionEncoder extends MessageEncoder {
         if (message instanceof BoatActionMessage) {
             BoatActionMessage boatAction = (BoatActionMessage) message;
             byte[] id = ByteCheck.intToByteArray(boatAction.getId());
-            byte action = generateAction(boatAction);
+            byte action = boatAction.getAction();
             outputSteam.write(id);
             outputSteam.write(action);
         }
 
         return outputSteam.toByteArray();
-    }
-
-
-    /**
-     * Sets the byte to the appropriate number according to the BoatActionMessage.
-     *
-     * @param boatAction message to be used.
-     * @return encoded byte of the action.
-     */
-    private byte generateAction(BoatActionMessage boatAction) {
-        byte action;
-        action = boatAction.getAction();
-
-        return action;
     }
 
 
