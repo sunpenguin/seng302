@@ -80,6 +80,10 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Set up the button for starting a race.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
     private void initialiseRaceButton() {
         raceLabel = new Label();
         raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -93,6 +97,10 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Set up the button for starting an arcade race.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
     private void initialiseArcadeButton() {
         raceLabel = new Label();
         raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -106,6 +114,10 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Set up the button for starting a challenge mode game.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
     private void initialiseSpyroButton() {
         raceLabel = new Label();
         raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -119,6 +131,10 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Set up the button for starting a bumper boats game.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
     private void initialiseBumperBoatsButton() {
         raceLabel = new Label();
         raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -132,6 +148,10 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Set up the button for getting back to the title screen.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
     private void initialiseBackButton() {
         raceLabel = new Label();
         raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -181,21 +201,6 @@ public class GameSelectionController {
     }
 
 
-    /**
-     * Act on user pressing the host new game button.
-     * Starts game mode
-     */
-    public void hostRace(){
-                createModel();
-        try {
-            Thread.sleep(400);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        mode = RaceMode.RACE;
-        openStream("127.0.0.1", 5005);
-    }
-
 
     /**
      * Creates the model in a new process.
@@ -221,6 +226,9 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * returns the player to the playInterface
+     */
     @SuppressWarnings("Duplicates")
     public void backButtonAction(){
         Stage stage = (Stage) innerPane.getScene().getWindow();
@@ -240,11 +248,35 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Act on user pressing the host new game button.
+     * Starts a bumper boats game
+     */
     private void startBumperBoats(){
         System.out.println("BumperBoats");
     }
 
 
+    /**
+     * Act on user pressing the host new game button.
+     * Starts game mode
+     */
+    public void hostRace(){
+        createModel();
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mode = RaceMode.RACE;
+        openStream("127.0.0.1", 5005);
+    }
+
+
+    /**
+     * Act on user pressing the host new game button.
+     * Starts and arcade game
+     */
     private void startArcade() {
         createModel();
         try {
