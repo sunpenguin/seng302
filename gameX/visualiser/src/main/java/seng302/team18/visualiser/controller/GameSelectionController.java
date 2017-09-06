@@ -43,6 +43,7 @@ public class GameSelectionController {
     private List<Color> boatColours = Arrays.asList(Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
             Color.CYAN, Color.BLUE, Color.PURPLE, Color.MAGENTA);
 
+
     @FXML
     public void initialize() {
         initialiseRaceButton();
@@ -100,7 +101,7 @@ public class GameSelectionController {
         raceButtonImage = new Image("/images/Arcade_Race_White.png");
         raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
         raceLabel.setLayoutY((600 / 2) + 50);
-        raceLabel.setOnMouseClicked(event -> startBumperBoats());
+        raceLabel.setOnMouseClicked(event -> startArcade());
     }
 
 
@@ -116,6 +117,7 @@ public class GameSelectionController {
         raceLabel.setOnMouseClicked(event -> startBumperBoats());
     }
 
+
     private void initialiseBumperBoatsButton() {
         raceLabel = new Label();
         raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -127,6 +129,7 @@ public class GameSelectionController {
         raceLabel.setLayoutY((600 / 2) + 150);
         raceLabel.setOnMouseClicked(event -> startBumperBoats());
     }
+
 
     private void initialiseBackButton() {
         raceLabel = new Label();
@@ -140,12 +143,12 @@ public class GameSelectionController {
         raceLabel.setOnMouseClicked(event -> backButtonAction());
     }
 
+
     private void startConnection(Receiver receiver, Sender sender) throws Exception {
         Stage stage = (Stage) innerPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
         Parent root = loader.load();
         PreRaceController controller = loader.getController();
-        controller.setStage(stage);
         stage.setTitle("High Seas");
         outerPane.getScene().setRoot(root);
         stage.show();
@@ -156,6 +159,7 @@ public class GameSelectionController {
         controller.initConnection(boatColours.get(colourIndex));
     }
 
+
     private void openStream(String host, int port) {
         try {
             Socket socket = SocketFactory.getDefault().createSocket(host, port);
@@ -164,8 +168,9 @@ public class GameSelectionController {
             System.out.println();        }
     }
 
-    public void hostRace(){
-                createModel();
+
+    public void hostRace() {
+        createModel();
         try {
             Thread.sleep(400);
         } catch (InterruptedException e) {
@@ -198,6 +203,7 @@ public class GameSelectionController {
         }
     }
 
+
     public void backButtonAction(){
         Stage stage = (Stage) innerPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PlayInterface.fxml"));
@@ -220,9 +226,23 @@ public class GameSelectionController {
         System.out.println("BumperBoats");
     }
 
+
+    private void startArcade() {
+        createModel();
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mode = RaceMode.ARCADE;
+        openStream("127.0.0.1", 5005);
+    }
+
+
     public Stage getStage() {
         return stage;
     }
+
 
     public void setStage(Stage stage) {
         this.stage = stage;

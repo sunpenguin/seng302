@@ -10,10 +10,11 @@ public enum RaceMode {
     RACE(RequestType.RACING.getCode()),
     CONTROLS_TUTORIAL(RequestType.CONTROLS_TUTORIAL.getCode()),
     GHOST(RequestType.GHOST.getCode()),
-    RACE_TUTORIAL(4),
-    START_TUTORIAL(10),
-    BUMPER_BOATS(RequestType.BUMPER_BOATS.code()),
-    ARCADE(5);
+    ARCADE(RequestType.ARCADE.getCode()),
+    BUMPER_BOATS(RequestType.BUMPER_BOATS.getCode()),
+    CHALLENGE_MODE(RequestType.CHALLENGE_MODE.getCode()),
+    RACE_TUTORIAL(7),
+    START_TUTORIAL(8);
 
 
     private int code;

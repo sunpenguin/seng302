@@ -78,7 +78,10 @@ public class BoatActionInterpreter extends MessageInterpreter {
         } else if (action == BoatActionStatus.TACK_GYBE.action()) {
             boatRotater.setTackGybe(race.getCourse().getWindDirection(), boat);
         } else if (action == BoatActionStatus.POWER_UP.action()) {
-            boat.activatePowerUp();
+            if (boat.canActivatePower()) {
+                boat.activatePowerUp();
+            }
+
         }
     }
 
