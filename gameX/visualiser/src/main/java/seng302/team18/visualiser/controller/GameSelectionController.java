@@ -79,6 +79,7 @@ public class GameSelectionController {
         }
     }
 
+
     private void initialiseRaceButton() {
         raceLabel = new Label();
         raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -144,6 +145,12 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Creates a controller manager object and begins an instance of the program.
+     *
+     * @throws Exception A connection error
+     */
+    @SuppressWarnings("Duplicates")
     private void startConnection(Receiver receiver, Sender sender) throws Exception {
         Stage stage = (Stage) innerPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
@@ -156,10 +163,15 @@ public class GameSelectionController {
         ClientRace race = new ClientRace();
         race.setMode(mode);
         controller.setUp(race, receiver, sender);
+        System.out.println(boatColours.get(colourIndex));
         controller.initConnection(boatColours.get(colourIndex));
     }
 
-
+    /**
+     * Opens a socket and connection on the given host and port number
+     * @param host The host IP address for the socket
+     * @param port The port number used for the socket
+     */
     private void openStream(String host, int port) {
         try {
             Socket socket = SocketFactory.getDefault().createSocket(host, port);
@@ -169,8 +181,12 @@ public class GameSelectionController {
     }
 
 
-    public void hostRace() {
-        createModel();
+    /**
+     * Act on user pressing the host new game button.
+     * Starts game mode
+     */
+    public void hostRace(){
+                createModel();
         try {
             Thread.sleep(400);
         } catch (InterruptedException e) {
@@ -185,6 +201,7 @@ public class GameSelectionController {
      * Creates the model in a new process.
      * Reads in the file path to the model jar from the config file "visualiser-config.txt" (from the same directory).
      */
+    @SuppressWarnings("Duplicates")
     private void createModel() {
         final String CONFIG_FILE_NAME = "visualiser-config.txt";
         final List<String> tokens = Collections.singletonList("MODEL_PATH");
@@ -204,6 +221,7 @@ public class GameSelectionController {
     }
 
 
+    @SuppressWarnings("Duplicates")
     public void backButtonAction(){
         Stage stage = (Stage) innerPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PlayInterface.fxml"));
@@ -246,5 +264,13 @@ public class GameSelectionController {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public int getColourIndex() {
+        return colourIndex;
+    }
+
+    public void setColourIndex(int colourIndex) {
+        this.colourIndex = colourIndex;
     }
 }
