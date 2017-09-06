@@ -226,14 +226,12 @@ public class PlayInterfaceController {
      * Act on user pressing the host new game button.
      */
     private void hostButtonAction() {
-        createModel();
         try {
-            Thread.sleep(400);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            toGameModeSelection();
+        } catch (IOException e){
         }
-        mode = RaceMode.ARCADE; // CHANGE MODE HERE
-        openStream("127.0.0.1", 5005);
+//        mode = RaceMode.ARCADE; // CHANGE MODE HERE
+//        openStream("127.0.0.1", 5005);
     }
 
 
@@ -300,6 +298,19 @@ public class PlayInterfaceController {
         race.setMode(mode);
         controller.setUp(race, receiver, sender);
         controller.initConnection(boatColours.get(colourIndex));
+    }
+
+
+    public void toGameModeSelection() throws IOException{
+        Stage stage = (Stage) innerPane.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ModeSelection.fxml"));
+        Parent root = loader.load();
+        GameSelectionController controller = loader.getController();
+        controller.reDraw();
+        controller.setStage(stage);
+        stage.setTitle("High Seas");
+        outerPane.getScene().setRoot(root);
+        stage.show();
     }
 
 
