@@ -12,7 +12,9 @@ public enum RequestType {
     RACING(1),
     CONTROLS_TUTORIAL(2),
     GHOST(3),
-
+    ARCADE(4),
+    BUMPER_BOATS(5),
+    CHALLENGE_MODE(6),
     FAILURE_CLIENT_TYPE(18);
 
 
@@ -30,7 +32,7 @@ public enum RequestType {
      *
      * @return the code of the request type.
      */
-    public int code() {
+    public int getCode() {
         return this.code;
     }
 
@@ -64,7 +66,7 @@ public enum RequestType {
     private static Map<Integer, RequestType> initializeMapping() {
         Map<Integer, RequestType> requestMap = new HashMap<>();
         for (RequestType request : RequestType.values()) {
-            requestMap.put(request.code(), request);
+            requestMap.put(request.getCode(), request);
         }
         return requestMap;
     }

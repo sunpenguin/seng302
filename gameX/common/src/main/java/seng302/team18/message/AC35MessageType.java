@@ -28,7 +28,9 @@ public enum AC35MessageType {
     ACCEPTANCE(56),
     BOAT_ACTION(100),
     COLOUR(105),
-    NAME(106);
+    NAME(106),
+    POWER_UP(112),
+    POWER_TAKEN(113);
 
     private int code;
     private static final Map<Integer, AC35MessageType> CODE_MAP = Collections.unmodifiableMap(initializeMapping());
@@ -37,26 +39,26 @@ public enum AC35MessageType {
     /**
      * sets the type of the message
      *
-     * @param code the value the code will be set to
+     * @param code the value the getCode will be set to
      */
     AC35MessageType(int code) {
         this.code = code;
     }
 
     /**
-     * Returns the AC35MessageType associated with a code. If none exists then it returns null.
+     * Returns the AC35MessageType associated with a getCode. If none exists then it returns null.
      *
      * @param code representing the AC35MessageType.
-     * @return the AC35MessageType associated with a code.
+     * @return the AC35MessageType associated with a getCode.
      */
     public static AC35MessageType from(int code) {
         return CODE_MAP.get(code);
     }
 
     /**
-     * Getter for the code of the message type.
+     * Getter for the getCode of the message type.
      *
-     * @return the code of the message type.
+     * @return the getCode of the message type.
      */
     public int getCode() {
         return code;

@@ -9,12 +9,16 @@ public enum BoatActionStatus {
     SAIL_OUT((byte) 3),
     TACK_GYBE((byte) 4),
     UPWIND((byte) 5),
-    DOWNWIND((byte) 6);
+    DOWNWIND((byte) 6),
+    POWER_UP((byte) 7);
 
     private byte action;
+
+
     BoatActionStatus(byte action) {
         this.action = action;
     }
+
 
     public byte action() {
         return action;

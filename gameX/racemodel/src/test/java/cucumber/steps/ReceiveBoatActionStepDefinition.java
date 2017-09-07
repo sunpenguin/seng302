@@ -10,13 +10,12 @@ import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.racemodel.ConnectionListener;
+import seng302.team18.racemodel.connection.ConnectionListener;
 import seng302.team18.racemodel.connection.Server;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
 
 import javax.net.SocketFactory;
-import java.io.IOException;
 import java.net.Socket;
 import java.util.Collections;
 

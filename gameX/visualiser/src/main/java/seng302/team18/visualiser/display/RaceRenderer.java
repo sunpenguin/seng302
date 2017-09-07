@@ -48,48 +48,83 @@ public class RaceRenderer {
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
 
             if (displayBoat == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
-                //Wake
-                displayBoat = new DisplayWake(pixelMapper, new DisplayBoat(pixelMapper, boat.getShortName(), boat.getColour(), boat.getLength()));
-                //Highlight
-                if (boat.isControlled() && race.getMode() != RaceMode.CONTROLS_TUTORIAL) {
-                    displayBoat = new BoatHighlight(pixelMapper, displayBoat);
-                    displayBoat = new BoatGuide(pixelMapper, displayBoat);
-                }
-                displayBoat = new DisplaySail(pixelMapper, displayBoat);
-                displayBoat = new DisplayCollision(pixelMapper, displayBoat);
-                displayBoat.addToGroup(group);
-                displayBoats.put(boat.getShortName(), displayBoat);
+                displayBoat = makeBoat(boat);
             }
 
             if (displayBoat != null && BoatStatus.DSQ.equals(boat.getStatus())) {
-                displayBoat.removeFrom(group);
-                displayBoats.remove(boat.getShortName());
-                DisplayTrail trail = trailMap.remove(boat.getShortName());
-                trail.removeFrom(group);
-
+                remove(displayBoat);
             } else if (displayBoat != null && boat.getCoordinate() != null) {
-                displayBoat.setCoordinate(boat.getCoordinate());
-                displayBoat.setSpeed(boat.getSpeed());
-                displayBoat.setHeading(boat.getHeading());
-                displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
-                displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
-                displayBoat.setScale(pixelMapper.mappingRatio());
-                displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
-                displayBoat.setSailOut(boat.isSailOut());
-                displayBoat.setBoatStatus(boat.getStatus());
-                displayBoat.setColour(boat.getColour());
-                if (boat.getLegNumber() < race.getCourse().getMarkSequence().size()) {
-                    displayBoat.setDestination(race.getCourse().getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getCoordinate());
-                } else {
-                    displayBoat.setDestination(null);
-                }
-                if (boat.getHasCollided()) {
-                    displayBoat.setHasCollided(true);
-                    boat.setHasCollided(false);
+                synchronise(displayBoat, boat);
+            }
+        }
+    }
+
+
+    /**
+     * Creates a new display boat corresponding to the given boat.
+     *
+     * @param boat to mirror
+     * @return visual representation of the given boat.
+     */
+    private DisplayBoat makeBoat(Boat boat) {
+        //Wake
+        DisplayBoat displayBoat = new DisplayWake(pixelMapper, new DisplayBoat(pixelMapper, boat.getShortName(), boat.getColour(), boat.getLength()));
+        //Highlight
+        if (boat.isControlled()) {
+            if (race.getMode() != RaceMode.CONTROLS_TUTORIAL) {
+                displayBoat = new BoatHighlight(pixelMapper, displayBoat);
+                if (race.getMode() != RaceMode.BUMPER_BOATS) {
+                    displayBoat = new BoatGuide(pixelMapper, displayBoat);
                 }
             }
         }
+        displayBoat = new DisplaySail(pixelMapper, displayBoat);
+        displayBoat = new DisplayCollision(pixelMapper, displayBoat);
+        displayBoat.addToGroup(group);
+        displayBoats.put(boat.getShortName(), displayBoat);
+        return displayBoat;
+    }
 
+
+    /**
+     * Removes a display boat from the screen.
+     *
+     * @param displayBoat to remove
+     */
+    private void remove(DisplayBoat displayBoat) {
+        displayBoat.removeFrom(group);
+        displayBoats.remove(displayBoat.getShortName());
+        DisplayTrail trail = trailMap.remove(displayBoat.getShortName());
+        trail.removeFrom(group);
+    }
+
+
+    /**
+     * Makes a given display boat consistent with the boat
+     *
+     * @param displayBoat to update.
+     * @param boat containing updated information.
+     */
+    private void synchronise(DisplayBoat displayBoat, Boat boat) {
+        displayBoat.setCoordinate(boat.getCoordinate());
+        displayBoat.setSpeed(boat.getSpeed());
+        displayBoat.setHeading(boat.getHeading());
+        displayBoat.setEstimatedTime(boat.getTimeTilNextMark());
+        displayBoat.setTimeSinceLastMark(boat.getTimeSinceLastMark());
+        displayBoat.setScale(pixelMapper.mappingRatio());
+        displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
+        displayBoat.setSailOut(boat.isSailOut());
+        displayBoat.setBoatStatus(boat.getStatus());
+        displayBoat.setColour(boat.getColour());
+        if (boat.getLegNumber() < race.getCourse().getMarkSequence().size()) {
+            displayBoat.setDestination(race.getCourse().getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getCoordinate());
+        } else {
+            displayBoat.setDestination(null);
+        }
+        if (boat.getHasCollided()) {
+            displayBoat.setHasCollided(true);
+            boat.setHasCollided(false);
+        }
     }
 
 

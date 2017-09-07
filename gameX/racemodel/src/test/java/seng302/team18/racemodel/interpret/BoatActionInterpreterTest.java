@@ -3,7 +3,7 @@ package seng302.team18.racemodel.interpret;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import seng302.team18.interpreting.MessageInterpreter;
+import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;

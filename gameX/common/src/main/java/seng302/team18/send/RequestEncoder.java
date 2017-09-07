@@ -31,7 +31,7 @@ public class RequestEncoder extends MessageEncoder {
             RequestMessage requestMessage = (RequestMessage) message;
 
             byte[] value = new byte[1];
-            value[0] = (byte) requestMessage.getAction().code();
+            value[0] = (byte) requestMessage.getAction().getCode();
             return value;
         }
         return null;
@@ -51,8 +51,7 @@ public class RequestEncoder extends MessageEncoder {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         outStream.write(head);
         outStream.write(body);
-        byte[] crc = CRCGenerator.generateCRC(outStream.toByteArray());
-        return crc;
+        return CRCGenerator.generateCRC(outStream.toByteArray());
     }
 
 

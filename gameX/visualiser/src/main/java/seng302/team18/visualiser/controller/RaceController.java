@@ -34,8 +34,8 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
-import seng302.team18.interpreting.CompositeMessageInterpreter;
-import seng302.team18.interpreting.MessageInterpreter;
+import seng302.team18.interpret.CompositeMessageInterpreter;
+import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.model.Boat;
@@ -45,7 +45,7 @@ import seng302.team18.send.Sender;
 import seng302.team18.util.GPSCalculator;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.*;
-import seng302.team18.visualiser.messageinterpreting.*;
+import seng302.team18.visualiser.interpret.*;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
@@ -120,6 +120,7 @@ public class RaceController implements Observer {
     private RaceClock raceClock;
     private HBox timeBox;
     private Label timeLabel;
+    private VisualHealth visualHealth;
 
 
     @FXML
@@ -204,6 +205,9 @@ public class RaceController implements Observer {
                             case TAB:
                                 toggleTabView();
                                 send = false;
+                                break;
+                            case S:
+                                message.setConsume();
                                 break;
                             default:
                                 send = false;
@@ -577,13 +581,14 @@ public class RaceController implements Observer {
         raceRenderer.renderBoats();
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
+        visualHealth = new VisualHealth(raceViewPane, getPlayerBoat());
 
         setupRaceTimer();
         startRaceTimer();
 
         new ControlSchemeDisplay(raceViewPane);
 
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper);
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper, visualHealth);
         raceLoop.start();
 
         registerListeners();
@@ -598,6 +603,7 @@ public class RaceController implements Observer {
         interpreter.addObserver(this);
 
         loadEscapeMenu();
+
 
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
     }
@@ -702,8 +708,10 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(raceClock));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishRaceInterpreter(this));
-
+        interpreter.add(AC35MessageType.POWER_UP.getCode(), new PowerUpInterpreter(race));
+        interpreter.add(AC35MessageType.POWER_TAKEN.getCode(), new PowerTakenInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
+        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLivesInterpreter(race));
 
         return interpreter;
     }
