@@ -127,7 +127,7 @@ public class GameSelectionController {
         raceButtonImage = new Image("/images/SpyroWhite.png");
         raceLabel.setLayoutX((600 / 2) - 150);
         raceLabel.setLayoutY((600 / 2) + 100);
-        raceLabel.setOnMouseClicked(event -> startMode());
+        raceLabel.setOnMouseClicked(event -> System.out.println("unhandled mode challenge"));
     }
 
 

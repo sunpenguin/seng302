@@ -84,6 +84,7 @@ public class BoatMessageGeneratorTest {
             double expectedLong = (generator.getBoat().getCoordinate().getLongitude());
             double expectedHeading = generator.getBoat().getHeading();
             double expectedSpeed = generator.getBoat().getSpeed();
+            int expectedLives = generator.getBoat().getLives();
 
             int actualVersionNum = ByteCheck.byteToInt(generatedBytes,
                     VERSIONNUM_I, VERSIONNUM_L);
