@@ -258,6 +258,9 @@ public class GPSCalculator {
      * @return True if the location is inside the polygon, false if it is outside
      */
     public boolean isInside(Coordinate location, List<Coordinate> boundary) {
+        if (boundary.size() < 3) {
+            return true;
+        }
         Coordinate lastPoint = boundary.get(boundary.size() - 1);
         Boolean isInside = false;
         double x = location.getLongitude();

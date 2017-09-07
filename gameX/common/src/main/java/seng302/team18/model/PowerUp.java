@@ -1,29 +1,30 @@
 package seng302.team18.model;
 
+import seng302.team18.message.PowerType;
+
 /**
  * Created by dhl25 on 29/08/17.
  */
 public abstract class PowerUp {
 
-
-    private Coordinate location;
     private double timeSinceActivation = 0d;
-    private double timeOut = Double.POSITIVE_INFINITY;
-    private BodyMass bodyMass;
+    private double duration = Double.POSITIVE_INFINITY;
 
 
-    public PowerUp() {
-        bodyMass = new BodyMass();
-        bodyMass.setWeight(0);
-    }
+    public PowerUp() {}
 
 
     /**
      * sets how long the power up will last after activation / first use.
-     * @param timeOut
+     * @param duration in milliseconds
      */
-    public void setTimeOut(double timeOut) {
-        this.timeOut = timeOut;
+    public void setDuration(double duration) {
+        this.duration = duration;
+    }
+
+
+    public double getDuration() {
+        return duration;
     }
 
 
@@ -31,7 +32,7 @@ public abstract class PowerUp {
      * Updates the power up and increments time since activation.
      * time in seconds.
      */
-    public void update(double time) {
+    public void update(Boat boat, double time) {
         timeSinceActivation += time;
     }
 
@@ -42,25 +43,10 @@ public abstract class PowerUp {
      * @return the power up has terminated
      */
     public boolean isTerminated() {
-        return timeSinceActivation > timeOut;
+        return timeSinceActivation > duration;
     }
 
 
-    public Coordinate getLocation() {
-        return location;
-    }
+    public abstract PowerType getType();
 
-
-    public void setLocation(Coordinate location) {
-        this.location = location;
-    }
-
-
-    public BodyMass getBodyMass() {
-        return bodyMass;
-    }
-
-    public void setBodyMass(BodyMass bodyMass) {
-        this.bodyMass = bodyMass;
-    }
 }

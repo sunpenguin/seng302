@@ -48,11 +48,11 @@ public class DisplayBoat implements GeographicLocation {
     private final static int ANNOTATION_OFFSET_X = 10;
 
 
-    DisplayBoat() {
+    public DisplayBoat() {
     }
 
 
-    DisplayBoat(PixelMapper pixelMapper, String name, Color boatColor, double boatLength) {
+    public DisplayBoat(PixelMapper pixelMapper, String name, Color boatColor, double boatLength) {
         this.pixelMapper = pixelMapper;
         this.shortName = name;
         this.boatColor = boatColor;

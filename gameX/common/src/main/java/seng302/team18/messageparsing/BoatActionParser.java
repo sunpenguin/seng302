@@ -52,6 +52,9 @@ public class BoatActionParser implements MessageBodyParser {
             case 6:
                 message.setDownwind();
                 break;
+            case 7:
+                message.setConsume();
+                break;
         }
 
         return message;

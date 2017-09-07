@@ -11,17 +11,16 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import seng302.team18.interpreting.CompositeMessageInterpreter;
-import seng302.team18.interpreting.MessageInterpreter;
-import seng302.team18.message.AC35MessageType;
-import seng302.team18.message.RequestMessage;
-import seng302.team18.message.RequestType;
+import seng302.team18.interpret.CompositeMessageInterpreter;
+import seng302.team18.interpret.MessageInterpreter;
+import seng302.team18.message.*;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.send.Sender;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.PreRaceTimes;
-import seng302.team18.visualiser.messageinterpreting.*;
+import seng302.team18.visualiser.interpret.*;
+import seng302.team18.send.Sender;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -54,11 +53,7 @@ public class PreRaceController {
 
     private boolean hasChanged = false;
 
-    private Stage stage;
-
-
-    public void initialize() {
-    }
+    public void initialize() {}
 
 
     /**
@@ -121,6 +116,7 @@ public class PreRaceController {
         try {
             sender.send(new RequestMessage(requestType));
         } catch (IOException e) {
+            e.printStackTrace();
             // TODO Callum / David 9 August show error (has been disconnected)
         }
 
@@ -209,10 +205,6 @@ public class PreRaceController {
         listView.setItems(FXCollections.observableList(race.getStartingList()));
     }
 
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
 
     private void showNetWorkInfo() {
         Socket socket = interpreter.getSocket();

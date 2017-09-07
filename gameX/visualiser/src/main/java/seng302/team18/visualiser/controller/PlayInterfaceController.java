@@ -34,6 +34,8 @@ import java.util.List;
  */
 public class PlayInterfaceController {
 
+
+    //noinspection Duplicates
     @FXML private Pane innerPane;
     @FXML private Pane outerPane;
     private Stage stage;
@@ -230,6 +232,8 @@ public class PlayInterfaceController {
             toGameModeSelection();
         } catch (IOException e){
         }
+//        mode = RaceMode.ARCADE; // CHANGE MODE HERE
+//        openStream("127.0.0.1", 5005);
     }
 
 
@@ -283,12 +287,12 @@ public class PlayInterfaceController {
      *
      * @throws Exception A connection error
      */
+    @SuppressWarnings("Duplicates")
     private void startConnection(Receiver receiver, Sender sender) throws Exception {
         Stage stage = (Stage) innerPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
         Parent root = loader.load();
         PreRaceController controller = loader.getController();
-        controller.setStage(stage);
         stage.setTitle("High Seas");
         outerPane.getScene().setRoot(root);
         stage.show();
@@ -300,11 +304,16 @@ public class PlayInterfaceController {
     }
 
 
+    /**
+     * Takes the player to the screen where the game mode to be hosted can be selected
+     * @throws IOException Thrown if there is an issue opening the fxml and loading the controller
+     */
     public void toGameModeSelection() throws IOException{
         Stage stage = (Stage) innerPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ModeSelection.fxml"));
         Parent root = loader.load();
         GameSelectionController controller = loader.getController();
+        controller.setColourIndex(colourIndex);
         controller.reDraw();
         controller.setStage(stage);
         stage.setTitle("High Seas");
@@ -358,6 +367,7 @@ public class PlayInterfaceController {
      * Creates the model in a new process.
      * Reads in the file path to the model jar from the config file "visualiser-config.txt" (from the same directory).
      */
+    @SuppressWarnings("Duplicates")
     private void createModel() {
         final String CONFIG_FILE_NAME = "visualiser-config.txt";
         final List<String> tokens = Collections.singletonList("MODEL_PATH");
