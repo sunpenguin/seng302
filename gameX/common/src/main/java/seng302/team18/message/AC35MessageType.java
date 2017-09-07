@@ -32,7 +32,7 @@ public enum AC35MessageType {
     POWER_UP(112),
     POWER_TAKEN(113),
     PROJECTILE_LOCATION(115),
-    PROJECTILE_REMOVED(116);
+    PROJECTILE_GONE(116);
 
     private int code;
     private static final Map<Integer, AC35MessageType> CODE_MAP = Collections.unmodifiableMap(initializeMapping());

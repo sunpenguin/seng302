@@ -268,7 +268,19 @@ public class ClientRace {
                 projectile.setLocation(location);
                 projectile.setHeading(heading);
                 projectile.setSpeed(speed);
+                break;
             }
         }
+    }
+
+
+    public void removeProjectile(int id) {
+        List<Projectile> remaining = new ArrayList<>();
+        for (Projectile projectile : projectiles) {
+            if (projectile.getId() != id) {
+                remaining.add(projectile);
+            }
+        }
+        projectiles = remaining;
     }
 }
