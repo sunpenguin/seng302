@@ -30,8 +30,6 @@ public class BumperBoatHealthUpdater implements Updater {
 
                 if (boat.getLives() < 1) {
                     boat.setStatus(BoatStatus.DSQ);
-                    race.setChanged();
-                    race.notifyObservers(boat);
                 }
             }
         }

@@ -1,6 +1,5 @@
 package seng302.team18.racemodel.model;
 
-import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
 import seng302.team18.model.RaceType;
 import seng302.team18.model.updaters.*;
@@ -31,7 +30,7 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
     protected List<Updater> getUpdaters() {
         List<Updater> updaters = new ArrayList<>();
         updaters.add(new MovementUpdater());
-        updaters.add(new CollisionUpdater());
+        updaters.add(new BoatCollisionUpdater());
         updaters.add(new BumperBoatHealthUpdater());
 
         return updaters;

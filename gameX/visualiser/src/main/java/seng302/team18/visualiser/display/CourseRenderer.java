@@ -46,7 +46,7 @@ public class CourseRenderer {
      * Called if the course needs to be re-rendered due to the window being resized.
      */
     public void renderCourse() {
-        if (mode != RaceMode.CONTROLS_TUTORIAL) {
+        if (mode != RaceMode.CONTROLS_TUTORIAL && mode !=  RaceMode.BUMPER_BOATS) {
             double MARK_SIZE = 10;
             markSize = MARK_SIZE * pixelMapper.mappingRatio();
             List<CompoundMark> compoundMarks = course.getCompoundMarks();
@@ -61,9 +61,9 @@ public class CourseRenderer {
                     renderCompoundMark(compoundMark);
                 }
             }
-            renderBoundaries();
-            renderPickUps();
         }
+        renderBoundaries();
+        renderPickUps();
     }
 
     /**
@@ -171,8 +171,6 @@ public class CourseRenderer {
         renderGateConnection(endPoints, compoundMark);
 
     }
-
-
 
 
     /**

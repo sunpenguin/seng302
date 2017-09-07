@@ -86,7 +86,6 @@ public class MockDataStream {
         server.addObserver(listener);
         server.addObserver(testMock);
         listener.addObserver(testMock);
-        race.addObserver(testMock);
         server.openServer();
         listener.setTimeout(System.currentTimeMillis() + ((WARNING_WAIT_TIME - CUTOFF_DIFFERENCE) * 1000));
         testMock.runSimulation(START_WAIT_TIME, WARNING_WAIT_TIME, PREP_WAIT_TIME, CUTOFF_DIFFERENCE);

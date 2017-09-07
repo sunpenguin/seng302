@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Class to handle collisions
  */
-public class CollisionUpdater implements Updater {
+public class BoatCollisionUpdater implements Updater {
 
     @Override
     public void update(Race race) {
@@ -20,7 +20,7 @@ public class CollisionUpdater implements Updater {
 
 
     /**
-     * Detects if there has been a collision between the boat and another abstract boat after updating the position
+     * Detects if there has been a collision between the boat and another boat
      *
      * @param boat to be collision stuffed
      */
@@ -33,9 +33,6 @@ public class CollisionUpdater implements Updater {
             }
         }
 
-        for (Mark mark : race.getCourse().getMarks()) {
-            objects.add(mark.getBodyMass());
-        }
         for (BodyMass object : objects) {
             if (boat.hasCollided(object)) {
                 handleCollision(boat.getBodyMass(), object);
@@ -45,7 +42,7 @@ public class CollisionUpdater implements Updater {
 
 
     /**
-     * Handles the collision when one is detected by printing to the console
+     * Handles the collision when one is detected
      * NOTE: Bumper car edition currently in play
      *
      * @param object   boat collision was detected from
