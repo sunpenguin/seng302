@@ -82,7 +82,7 @@ public class PowerUpInterpreter extends MessageInterpreter {
     private PowerUp makePowerUp(PowerUpMessage message) {
         switch (message.getPower()) {
             case SPEED:
-                PowerUp powerUp = new SpeedPowerUp();
+                PowerUp powerUp = new SpeedPowerUp(3);
                 powerUp.setDuration(message.getDuration());
                 return powerUp;
             default:

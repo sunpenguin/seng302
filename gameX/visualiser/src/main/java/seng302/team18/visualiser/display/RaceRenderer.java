@@ -135,8 +135,8 @@ public class RaceRenderer {
         displayBoat.setSailOut(boat.isSailOut());
         displayBoat.setBoatStatus(boat.getStatus());
         displayBoat.setColour(boat.getColour());
-        if (boat.getLegNumber() < race.getCourse().getMarkSequence().size()) {
-            displayBoat.setDestination(race.getCourse().getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getCoordinate());
+        if (boat.getLegNumber() < race.numSequences()) {
+            displayBoat.setDestination(race.getDestination(boat.getLegNumber()));
         } else {
             displayBoat.setDestination(null);
         }

@@ -23,7 +23,7 @@ public class PowerUpUpdater implements Updater {
      * @param race not null
      */
     @Override
-    public void update(Race race) {
+    public void update(Race race, double time) {
         race.removeOldPickUps();
         if (race.getStatus().equals(RaceStatus.STARTED)) {
             addPowerUps(race);

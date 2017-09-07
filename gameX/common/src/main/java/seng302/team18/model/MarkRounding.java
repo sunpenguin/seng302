@@ -141,6 +141,7 @@ public class MarkRounding {
         return passAngle;
     }
 
+
     public void setPassAngle(double passAngle) {
         this.passAngle = passAngle;
     }
@@ -150,7 +151,18 @@ public class MarkRounding {
         return gateType;
     }
 
+
     public void setGateType(GateType gateType) {
         this.gateType = gateType;
+    }
+
+
+    public Coordinate getDestination() {
+        return compoundMark.getCoordinate();
+    }
+
+
+    public int getMarkId() {
+        return compoundMark.getId();
     }
 }

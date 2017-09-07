@@ -293,5 +293,20 @@ public class Course {
     public MarkRounding getMarkRounding(int sequenceNumber) {
         return markSequence.get(sequenceNumber);
     }
+
+
+    public Coordinate getDestination(int legNumber) {
+        return markSequence.get(legNumber).getDestination();
+    }
+
+
+    public int getStartLineId() {
+        return markSequence.get(0).getMarkId();
+    }
+
+
+    public int getFinshLineId() {
+        return markSequence.get(markSequence.size() - 1).getMarkId();
+    }
 }
 
