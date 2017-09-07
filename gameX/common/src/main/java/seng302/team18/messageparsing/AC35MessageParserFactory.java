@@ -52,6 +52,7 @@ public class AC35MessageParserFactory implements MessageParserFactory {
         parserMap.put(AC35MessageType.COLOUR, new ColourParser());
         parserMap.put(AC35MessageType.POWER_UP, new PowerUpParser());
         parserMap.put(AC35MessageType.POWER_TAKEN, new PowerTakenParser());
+        parserMap.put(AC35MessageType.PROJECTILE_LOCATION, new ProjectileParser());
 
         return parserMap;
     }

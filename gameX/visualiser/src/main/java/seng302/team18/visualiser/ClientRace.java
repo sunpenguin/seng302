@@ -23,6 +23,7 @@ public class ClientRace {
     private ZonedDateTime currentTime;
     private Integer playerId;
     private RaceMode mode = RaceMode.RACE;
+    private List<Projectile> projectiles = new ArrayList<>();
 
 
     public ClientRace() {
@@ -258,5 +259,16 @@ public class ClientRace {
 
     public PickUp getPickUp(int id) {
         return course.getPickUp(id);
+    }
+
+
+    public void updateProjectile(int id, Coordinate location, double heading, double speed) {
+        for (Projectile projectile : projectiles) {
+            if (projectile.getId() == id) {
+                projectile.setLocation(location);
+                projectile.setHeading(heading);
+                projectile.setSpeed(speed);
+            }
+        }
     }
 }
