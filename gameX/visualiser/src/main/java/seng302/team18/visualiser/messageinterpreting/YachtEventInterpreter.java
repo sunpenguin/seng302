@@ -3,7 +3,6 @@ package seng302.team18.visualiser.messageinterpreting;
 import seng302.team18.interpreting.MessageInterpreter;
 import seng302.team18.message.AC35YachtEventMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.YachtEventCode;
 import seng302.team18.visualiser.ClientRace;
 
 /**
@@ -29,7 +28,7 @@ public class YachtEventInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof AC35YachtEventMessage) {
             AC35YachtEventMessage eventMessage = (AC35YachtEventMessage) message;
-            switch (YachtEventCode.ofCode((byte) eventMessage.getType())) {
+            switch (eventMessage.getEventCode()) {
                 case BOAT_IN_COLLISION:
                 case BOAT_COLLIDE_WITH_MARK:
                     race.getBoat(eventMessage.getBoatId()).setHasCollided(true);
