@@ -35,7 +35,9 @@ public class RaceRenderer {
         this.race = race;
         this.group = group;
         this.pixelMapper = pixelMapper;
-        setChallengeModeCourse();
+        if (race.getMode() == RaceMode.CHALLENGE_MODE) {
+            setChallengeModeCourse();
+        }
     }
 
 
@@ -46,14 +48,12 @@ public class RaceRenderer {
      *
      */
     private void setChallengeModeCourse() {
-        if (race.getMode() == RaceMode.CHALLENGE_MODE) {
-            Boat boat = race.getBoat(race.getPlayerId());
-            if (boat.getId() == race.getPlayerId()) {
-                pixelMapper.setZoomLevel(6);
-                pixelMapper.setMinZoom(6);
-                pixelMapper.track(boat);
-                pixelMapper.setTracking(true);
-            }
+        Boat boat = race.getBoat(race.getPlayerId());
+        if (boat.getId() == race.getPlayerId()) {
+            pixelMapper.setZoomLevel(6);
+            pixelMapper.setMinZoom(6);
+            pixelMapper.track(boat);
+            pixelMapper.setTracking(true);
         }
     }
 

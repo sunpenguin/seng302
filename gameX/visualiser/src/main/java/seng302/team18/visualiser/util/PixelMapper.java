@@ -98,7 +98,7 @@ public class PixelMapper {
      * It is recommended for this method to be called at the start of each rendering loop.
      */
     public void calculateMappingScale() {
-        if (isTracking) {
+        if (isTracking && object.getCoordinate() != null) {
             setViewPortCenter(object.getCoordinate());
         }
 
@@ -296,9 +296,11 @@ public class PixelMapper {
         this.maxZoom = maxZoom;
     }
 
+
     public double getMinZoom() {
         return minZoom;
     }
+
 
     public void setMinZoom(double minZoom) {
         this.minZoom = minZoom;

@@ -68,7 +68,7 @@ public class TestMock implements Observer {
             sendRaceXml();
             sendBoatsXml();
         } else if (arg instanceof ServerState) {
-            open = !((ServerState) arg).equals(ServerState.CLOSED);
+            open = !ServerState.CLOSED.equals(arg);
         } else if (arg instanceof Integer) {
             Integer id = (Integer) arg;
             race.setBoatStatus(id, BoatStatus.DNF);

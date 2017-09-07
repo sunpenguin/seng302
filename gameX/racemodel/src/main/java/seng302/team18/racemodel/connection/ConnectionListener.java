@@ -3,10 +3,10 @@ package seng302.team18.racemodel.connection;
 import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.*;
+import seng302.team18.message.RequestMessage;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
-import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 import seng302.team18.racemodel.interpret.ColourInterpreter;
 import seng302.team18.racemodel.message_generating.AcceptanceMessageGenerator;
@@ -22,12 +22,12 @@ import java.util.concurrent.Executors;
  */
 public class ConnectionListener extends Observable implements Observer {
 
-    private List<PlayerControllerReader> players;
+    private List<PlayerControllerReader> players = new ArrayList<>();
     private Race race;
     private List<Integer> ids;
     private MessageParserFactory factory;
-    private ExecutorService executor;
-    private Long timeout;
+    private ExecutorService executor = Executors.newCachedThreadPool();
+    private Long timeout = Long.MAX_VALUE;
 
     private AbstractRaceBuilder raceBuilder;
     private AbstractCourseBuilder courseBuilder = new CourseBuilderRealistic();
@@ -44,9 +44,6 @@ public class ConnectionListener extends Observable implements Observer {
         this.race = race;
         this.ids = participantIds;
         this.factory = factory;
-        players = new ArrayList<>();
-        executor = Executors.newCachedThreadPool();
-        timeout = Long.MAX_VALUE;
     }
 
 
@@ -85,40 +82,13 @@ public class ConnectionListener extends Observable implements Observer {
                 while (message == null && System.currentTimeMillis() < timeout) {
                     try {
                         message = receiver.nextMessage();
-                    } catch (IOException e) {}
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+
                 if (message instanceof RequestMessage) {
-                    RequestMessage request = (RequestMessage) message;
-
-                    RequestType requestType = request.getAction();
-
-                    if (!players.isEmpty() && requestType.getCode() != race.getMode().getCode()) {
-                        //If a player connects to an already opened server that cannot accept acceptance type
-                        sendMessage(client, sourceID, RequestType.FAILURE_CLIENT_TYPE);
-                        AcceptanceMessage failMessage = new AcceptanceMessage(sourceID,RequestType.FAILURE_CLIENT_TYPE);
-                        setChanged();
-                        notifyObservers(failMessage);
-                        return;
-                    }
-
-                    switch (requestType) {
-                        case CONTROLS_TUTORIAL:
-                            raceBuilder = new TutorialRaceBuilder();
-                            courseBuilder = new CourseBuilderPractice();
-                            constructRace();
-                            break;
-                        case ARCADE:
-                            raceBuilder = new ArcadeRaceBuilder();
-                            constructRace();
-                            break;
-                        case BUMPER_BOATS:
-                            raceBuilder = new BumperBoatsRaceBuilder();
-                            courseBuilder = new CourseBuilderBumper();
-                            constructRace();
-                            break;
-                    }
-                    addPlayer(receiver, sourceID);
-                    sendMessage(client, sourceID, requestType);
+                    respond(sourceID, (RequestMessage) message, client, receiver);
                 }
             });
         } catch (Exception e) {
@@ -132,9 +102,9 @@ public class ConnectionListener extends Observable implements Observer {
      */
     private void constructRace() {
         race = raceBuilder.buildRace(race, regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
+        race.setCourseForBoats();
         setChanged();
         notifyObservers(this);
-        race.setCourseForBoats();
     }
 
 
@@ -193,5 +163,83 @@ public class ConnectionListener extends Observable implements Observer {
             player.close();
         }
         executor.shutdownNow();
+    }
+
+
+    /**
+     * Responds to a request message
+     * @param id
+     * @param request
+     * @param client
+     */
+    public void respond(int id, RequestMessage request, ClientConnection client, Receiver receiver) {
+        RequestType requestType = request.getAction();
+
+        if (!isValidMode(requestType)) {
+            sendFailureMessage(client, id);
+            return;
+        }
+
+        setRaceMode(requestType);
+        constructRace();
+
+        addPlayer(receiver, id);
+        sendMessage(client, id, requestType);
+    }
+
+
+    /**
+     * Checks that the given mode is the same as the current race OR there race is empty.
+     *
+     * @param type of request
+     * @return if correct mode
+     */
+    private boolean isValidMode(RequestType type) {
+        return players.isEmpty() || type.getCode() == race.getMode().getCode();
+    }
+
+
+    /**
+     * Sends a failure message to a client.
+     *
+     * @param client to send to.
+     * @param id of the client.
+     */
+    private void sendFailureMessage(ClientConnection client, int id) {
+        sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
+        AcceptanceMessage failMessage = new AcceptanceMessage(id, RequestType.FAILURE_CLIENT_TYPE);
+        setChanged();
+        notifyObservers(failMessage);
+    }
+
+
+    /**
+     * Sets the race mode to the correct type.
+     *
+     * @param type of the race.
+     */
+    private void setRaceMode(RequestType type) {
+        switch (type) {
+            case CONTROLS_TUTORIAL:
+                raceBuilder = new TutorialRaceBuilder();
+                courseBuilder = new CourseBuilderPractice();
+                break;
+            case ARCADE:
+                raceBuilder = new ArcadeRaceBuilder();
+                courseBuilder = new CourseBuilderRealistic();
+                break;
+            case BUMPER_BOATS:
+                raceBuilder = new BumperBoatsRaceBuilder();
+                courseBuilder = new CourseBuilderBumper();
+                break;
+            case RACING:
+                raceBuilder = new RegularRaceBuilder();
+                courseBuilder = new CourseBuilderRealistic();
+                break;
+            case CHALLENGE_MODE:
+                raceBuilder = new ChallengeRaceBuilder();
+                courseBuilder = new CourseBuilderChallenge();
+                break;
+        }
     }
 }
