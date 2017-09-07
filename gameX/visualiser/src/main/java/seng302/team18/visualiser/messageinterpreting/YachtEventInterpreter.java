@@ -1,6 +1,7 @@
 package seng302.team18.visualiser.messageinterpreting;
 
-import seng302.team18.interpreting.MessageInterpreter;
+
+import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35YachtEventMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.visualiser.ClientRace;

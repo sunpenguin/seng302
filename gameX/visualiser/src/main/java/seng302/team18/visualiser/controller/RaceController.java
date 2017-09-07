@@ -46,6 +46,7 @@ import seng302.team18.util.GPSCalculator;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.interpret.*;
+import seng302.team18.visualiser.messageinterpreting.YachtEventInterpreter;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
