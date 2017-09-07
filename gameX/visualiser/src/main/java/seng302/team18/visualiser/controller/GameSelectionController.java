@@ -43,6 +43,7 @@ public class GameSelectionController {
     private List<Color> boatColours = Arrays.asList(Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
             Color.CYAN, Color.BLUE, Color.PURPLE, Color.MAGENTA);
 
+
     @FXML
     public void initialize() {
         initialiseRaceButton();
@@ -79,6 +80,10 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Set up the button for starting a race.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
     private void initialiseRaceButton() {
         raceLabel = new Label();
         raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -92,6 +97,10 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Set up the button for starting an arcade race.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
     private void initialiseArcadeButton() {
         raceLabel = new Label();
         raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -101,10 +110,14 @@ public class GameSelectionController {
         raceButtonImage = new Image("/images/Arcade_Race_White.png");
         raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
         raceLabel.setLayoutY((600 / 2) + 50);
-        raceLabel.setOnMouseClicked(event -> startMode());
+        raceLabel.setOnMouseClicked(event -> startArcade());
     }
 
 
+    /**
+     * Set up the button for starting a challenge mode game.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
     private void initialiseSpyroButton() {
         raceLabel = new Label();
         raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -118,6 +131,10 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Set up the button for starting a bumper boats game.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
     private void initialiseBumperBoatsButton() {
         raceLabel = new Label();
         raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -131,6 +148,10 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Set up the button for getting back to the title screen.
+     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     */
     private void initialiseBackButton() {
         raceLabel = new Label();
         raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -155,7 +176,6 @@ public class GameSelectionController {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
         Parent root = loader.load();
         PreRaceController controller = loader.getController();
-        controller.setStage(stage);
         stage.setTitle("High Seas");
         outerPane.getScene().setRoot(root);
         stage.show();
@@ -179,21 +199,6 @@ public class GameSelectionController {
             System.out.println();        }
     }
 
-
-    /**
-     * Act on user pressing the host new game button.
-     * Starts game mode
-     */
-    public void hostRace(){
-                createModel();
-        try {
-            Thread.sleep(400);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        mode = RaceMode.RACE;
-        openStream("127.0.0.1", 5005);
-    }
 
 
     /**
@@ -220,7 +225,9 @@ public class GameSelectionController {
     }
 
 
-
+    /**
+     * returns the player to the playInterface
+     */
     @SuppressWarnings("Duplicates")
     public void backButtonAction(){
         Stage stage = (Stage) innerPane.getScene().getWindow();
@@ -240,10 +247,10 @@ public class GameSelectionController {
     }
 
 
-    private void startMode(){
-        System.out.println("unready mode");
-    }
-
+    /**
+     * Act on user pressing the host new game button.
+     * Starts a bumper boats game
+     */
     private void startBumperBoats(){
         createModel();
         try {
@@ -255,9 +262,43 @@ public class GameSelectionController {
         openStream("127.0.0.1", 5005);
     }
 
+
+    /**
+     * Act on user pressing the host new game button.
+     * Starts game mode
+     */
+    public void hostRace(){
+        createModel();
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mode = RaceMode.RACE;
+        openStream("127.0.0.1", 5005);
+    }
+
+
+    /**
+     * Act on user pressing the host new game button.
+     * Starts and arcade game
+     */
+    private void startArcade() {
+        createModel();
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mode = RaceMode.ARCADE;
+        openStream("127.0.0.1", 5005);
+    }
+
+
     public Stage getStage() {
         return stage;
     }
+
 
     public void setStage(Stage stage) {
         this.stage = stage;

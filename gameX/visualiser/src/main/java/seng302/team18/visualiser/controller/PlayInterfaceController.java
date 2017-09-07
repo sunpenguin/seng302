@@ -232,6 +232,8 @@ public class PlayInterfaceController {
             toGameModeSelection();
         } catch (IOException e){
         }
+//        mode = RaceMode.ARCADE; // CHANGE MODE HERE
+//        openStream("127.0.0.1", 5005);
     }
 
 
@@ -291,7 +293,6 @@ public class PlayInterfaceController {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
         Parent root = loader.load();
         PreRaceController controller = loader.getController();
-        controller.setStage(stage);
         stage.setTitle("High Seas");
         outerPane.getScene().setRoot(root);
         stage.show();

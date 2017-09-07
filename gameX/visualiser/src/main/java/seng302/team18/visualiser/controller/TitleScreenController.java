@@ -43,8 +43,6 @@ public class TitleScreenController {
     private ImageView controlsImageView;
     private boolean controlsVisible = false;
 
-    private RaceMode mode;
-
     private Stage stage;
 
 
@@ -171,8 +169,6 @@ public class TitleScreenController {
             paneInner.setLayoutY((stage.getHeight() / 2) - (300));
         }
     }
-
-
 
 
     /**

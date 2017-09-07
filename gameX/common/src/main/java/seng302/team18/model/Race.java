@@ -26,9 +26,11 @@ public class Race {
     private ZonedDateTime currentTime;
     private List<MarkRoundingEvent> markRoundingEvents = new ArrayList<>();
     private List<YachtEvent> yachtEvents = new ArrayList<>();
+    private List<PowerUpEvent> powerEvents = new ArrayList<>();
     private RaceMode mode = RaceMode.RACE;
     private List<Updater> updaters = new ArrayList<>();
     private double updateTime;
+    private int powerId = 0;
 
 
     public Race() {
@@ -42,17 +44,76 @@ public class Race {
         raceType = RaceType.MATCH;
     }
 
+
+    /**
+     * Race class constructor.
+     *
+     * @param startingList List holding all entered boats
+     * @param course       Course object
+     * @param raceId       Integer representing the race id
+     * @param raceType     RaceType enum indicating the type of race to create
+     */
+    public Race(List<Boat> startingList, Course course, int raceId, RaceType raceType) {
+        this.startingList = startingList;
+        this.course = course;
+        participantIds = startingList.stream()
+                .map(Boat::getId)
+                .collect(Collectors.toList());
+        this.id = raceId;
+        this.status = RaceStatus.NOT_ACTIVE;
+        this.raceType = raceType;
+        setCourseForBoats();
+    }
+
+
     /**
      * Randomly places power ups.
      *
-     * @param powerUps number of power ups to place
+     * @param powerUps number of power ups to place.
+     * @param prototype the base PickUp.
+     * @param duration how long the PickUp will last in milliseconds.
      */
-    public void addPowerUps(int powerUps) {
+    public void addPickUps(int powerUps, PickUp prototype, double duration) {
         GPSCalculator calculator = new GPSCalculator();
-        for (int i = 0; i < powerUps; i++) {
+        int maxId = powerId + powerUps;
+        while (powerId < maxId) {
             Coordinate randomPoint = calculator.randomPoint(course.getCourseLimits());
-            course.getCompoundMarks().add(new CompoundMark("a", Arrays.asList(new Mark(i * 3 + 2, randomPoint)), i * 2 + 3));
+            PickUp pickUp = makePickUp(powerId, randomPoint, prototype, duration);
+            course.addPickUp(pickUp);
+            powerId += 1;
         }
+    }
+
+
+    /**
+     * Creates a single PickUp.
+     *
+     * @param id of the new PickUp.
+     * @param randomPoint location of the new PickUp.
+     * @param prototype the base PickUp.
+     * @param duration how long the PickUp will last in milliseconds.
+     * @return the new PickUp.
+     */
+    private PickUp makePickUp(int id, Coordinate randomPoint, PickUp prototype, double duration) {
+        final double timeout =  System.currentTimeMillis() + duration;
+        PickUp pickUp = prototype.clone();
+        pickUp.setId(id);
+        pickUp.setTimeout(timeout);
+        pickUp.setPower(getRandomPower());
+        pickUp.setLocation(randomPoint);
+        return pickUp;
+    }
+
+
+    /**
+     * Generates a random PowerUp to put in the PickUp.
+     *
+     * @return a random PowerUp.
+     */
+    private PowerUp getRandomPower() {
+        PowerUp powerUp = new SpeedPowerUp();
+        powerUp.setDuration(5000d);
+        return powerUp;
     }
 
 
@@ -293,13 +354,23 @@ public class Race {
         return events;
     }
 
+
+    public List<PowerUpEvent> popPowerUpEvents() {
+        List<PowerUpEvent> events = powerEvents;
+        powerEvents = new ArrayList<>();
+        return events;
+    }
+
+
     public void addYachtEvent(YachtEvent yachtEvent) {
         yachtEvents.add(yachtEvent);
     }
 
+
     public void addMarkRoundingEvent(MarkRoundingEvent MarkRoundingEvent) {
         markRoundingEvents.add(MarkRoundingEvent);
     }
+
 
     public RaceType getRaceType() {
         return raceType;
@@ -330,6 +401,7 @@ public class Race {
         this.mode = mode;
     }
 
+
     public RoundingDetector getDetector() {
         return detector;
     }
@@ -347,5 +419,35 @@ public class Race {
 
     public MarkRounding getMarkRounding(int sequenceNumber) {
         return course.getMarkRounding(sequenceNumber);
+    }
+
+
+    public List<PickUp> getPickUps() {
+        return course.getPickUps();
+    }
+
+
+    public void setPickUps(List<PickUp> pickUps) {
+        course.setPickUps(pickUps);
+    }
+
+
+    /**
+     * Consumes a power up.
+     *
+     * @param boat that picked up the pick up
+     * @param pickUp that was picked up
+     */
+    public void consumePowerUp(Boat boat, PickUp pickUp) {
+        boat.setPowerUp(pickUp.getPower());
+        List<PickUp> pickUps = course.getPickUps();
+        pickUps.remove(pickUp);
+        course.setPickUps(pickUps);
+        powerEvents.add(new PowerUpEvent(boat.getId(), pickUp));
+    }
+
+
+    public void removeOldPickUps() {
+        course.removeOldPickUps();
     }
 }

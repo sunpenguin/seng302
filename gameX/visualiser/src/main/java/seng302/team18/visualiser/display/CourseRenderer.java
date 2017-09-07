@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * A class which renders the given course on the group so it can be displayed to the user.
@@ -22,17 +23,13 @@ public class CourseRenderer {
 
     private final Color MARK_COLOR = Color.GREY;
     private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
-    private final double BOUNDARY_OPACITY = 0.3;
-    private final double MARK_SIZE = 10;
     private double markSize;
-    private final double LINE_WEIGHT = 1.0;
-    private final double PADDING = 20.0;
     private Polyline border = new Polyline();
     private Map<Integer, Circle> marks = new HashMap<>();
     private Map<String, Line> gates = new HashMap<>();
+    private Map<Integer, Circle> pickUps = new HashMap<>();
     private Course course;
     private Group group;
-    private Pane pane;
     private PixelMapper pixelMapper;
     private RaceMode mode;
 
@@ -40,7 +37,6 @@ public class CourseRenderer {
     public CourseRenderer(PixelMapper pixelMapper, Course course, Group group, Pane pane, RaceMode mode) {
         this.course = course;
         this.group = group;
-        this.pane = pane;
         this.pixelMapper = pixelMapper;
         this.mode = mode;
     }
@@ -51,6 +47,7 @@ public class CourseRenderer {
      */
     public void renderCourse() {
         if (mode != RaceMode.CONTROLS_TUTORIAL && mode !=  RaceMode.BUMPER_BOATS) {
+            double MARK_SIZE = 10;
             markSize = MARK_SIZE * pixelMapper.mappingRatio();
             List<CompoundMark> compoundMarks = course.getCompoundMarks();
             // Renders CompoundMarks
@@ -66,6 +63,7 @@ public class CourseRenderer {
             }
         }
         renderBoundaries();
+        renderPickUps();
     }
 
     /**
@@ -86,6 +84,7 @@ public class CourseRenderer {
         }
 
         border.setFill(BOUNDARY_FILL_COLOR);
+        double BOUNDARY_OPACITY = 0.3;
         border.setOpacity(BOUNDARY_OPACITY);
         border.toBack();
     }
@@ -107,29 +106,37 @@ public class CourseRenderer {
      * Reset a point for a mark due to resizing
      *
      * @param mark Mark to reset
+     * @return the circle on screen
      */
-    private void renderMark(Mark mark) {
+    private Circle renderMark(Mark mark) {
 //        double scaledMarSize = getScaledMarkSize();
         Circle circle = marks.get(mark.getId());
         if (circle == null) {
-            circle = new Circle(markSize, MARK_COLOR);
-
-            circle.setOnMouseClicked((event) -> {
-                pixelMapper.setZoomLevel(4);
-                pixelMapper.setViewPortCenter(mark.getCoordinate());
-            });
-
-            marks.put(mark.getId(), circle);
-            group.getChildren().addAll(circle);
-            circle.toBack();
+            circle = makeMark(mark);
         }
 
         circle.setRadius(markSize);
-
         Coordinate coordinate = mark.getCoordinate();
         XYPair pixelCoordinates = pixelMapper.mapToPane(coordinate);
         circle.setCenterX(pixelCoordinates.getX());
         circle.setCenterY(pixelCoordinates.getY());
+
+        return circle;
+    }
+
+    private Circle makeMark(Mark mark) {
+        Circle circle = new Circle(markSize, MARK_COLOR);
+
+        circle.setOnMouseClicked((event) -> {
+            pixelMapper.setZoomLevel(4);
+            pixelMapper.setViewPortCenter(mark.getCoordinate());
+        });
+
+        marks.put(mark.getId(), circle);
+        group.getChildren().addAll(circle);
+        circle.toBack();
+
+        return circle;
     }
 
 
@@ -157,26 +164,8 @@ public class CourseRenderer {
         List<XYPair> endPoints = new ArrayList<>();
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
-            Circle circle = marks.get(mark.getId());
-            if (circle == null) {
-                circle = new Circle(markSize, MARK_COLOR);
-
-                circle.setOnMouseClicked(event -> {
-                    pixelMapper.setZoomLevel(4);
-                    pixelMapper.setViewPortCenter(mark.getCoordinate());
-                });
-
-                marks.put(mark.getId(), circle);
-                group.getChildren().addAll(circle);
-                circle.toBack();
-            }
-
-            circle.setRadius(markSize);
-
-            Coordinate coordinate = mark.getCoordinate();
-            XYPair pixelCoordinates = pixelMapper.mapToPane(coordinate);
-            circle.setCenterX(pixelCoordinates.getX());
-            circle.setCenterY(pixelCoordinates.getY());
+            Circle circle = renderMark(mark);
+            XYPair pixelCoordinates = new XYPair(circle.getCenterX(), circle.getCenterY());
             endPoints.add(pixelCoordinates);
         }
         renderGateConnection(endPoints, compoundMark);
@@ -210,18 +199,7 @@ public class CourseRenderer {
         line.setEndY(endPoints.get(1).getY());
     }
 
-    public Group getGroup() {
-        return group;
-    }
 
-    /**
-     * Gets MARK_SIZE, scaling it to the current zoom.
-     *
-     * @return scaled mark size
-     */
-    private double getScaledMarkSize() {
-        return markSize * pixelMapper.getZoomFactor();
-    }
 
     /**
      * Gets LINE_WEIGHT, scaling it to the current zoom.
@@ -229,6 +207,91 @@ public class CourseRenderer {
      * @return scaled line weight
      */
     private double geScaledLineWeight() {
+        double LINE_WEIGHT = 1.0;
         return LINE_WEIGHT * pixelMapper.getZoomFactor();
     }
+
+
+    /**
+     * Renders all pickups in the course.
+     */
+    private void renderPickUps() {
+        removePowers();
+        for (PickUp pickUp : course.getPickUps()) {
+            renderPickUp(pickUp);
+        }
+    }
+
+
+    /**
+     * Removes any pick ups taken by other players.
+     */
+    private void removePowers() {
+        course.removeOldPickUps();
+        List<Integer> pickUpIds = course
+                .getPickUps()
+                .stream()
+                .map(PickUp::getId)
+                .collect(Collectors.toList());
+        List<Integer> removed = new ArrayList<>();
+        for (Integer id : pickUps.keySet()) {
+            if (!pickUpIds.contains(id)) {
+                removed.add(id);
+            }
+        }
+        for (Integer id : removed) {
+            group.getChildren().remove(pickUps.get(id));
+            pickUps.remove(id);
+        }
+    }
+
+
+
+
+
+    /**
+     * Creates a pick up if there isn't one and updates it if it exists.
+     *
+     * @param pickUp not null.
+     */
+    private void renderPickUp(PickUp pickUp) {
+        switch (pickUp.getType()) {
+            case SPEED:
+                renderPickUp(pickUp, Color.GREEN);
+                break;
+            default:
+                System.out.println("PowerUpInterpreter::makePowerUp has gone horribly wrong (ask Sunguin for help)");
+                return;
+        }
+    }
+
+
+    /**
+     * Creates a pick up if there isn't one and updates it if it exists.
+     *
+     * @param pickUp not null.
+     * @param color of the pickup.
+     */
+    private void renderPickUp(PickUp pickUp, Color color) {
+        Circle pickUpVisual = pickUps.get(pickUp.getId());
+        double pickUpSize = pixelMapper.mappingRatio() * pickUp.getRadius();
+        if (pickUpVisual == null) {
+            pickUpVisual = new Circle(pickUpSize, color);
+            pickUpVisual.setOnMouseClicked((event) -> {
+                pixelMapper.setZoomLevel(4);
+                pixelMapper.setViewPortCenter(pickUp.getLocation());
+            });
+            group.getChildren().addAll(pickUpVisual);
+            pickUps.put(pickUp.getId(), pickUpVisual);
+        }
+        pickUpVisual.setRadius(pickUpSize);
+        Coordinate coordinate = pickUp.getLocation();
+        XYPair pixelCoordinates = pixelMapper.mapToPane(coordinate);
+        pickUpVisual.setCenterX(pixelCoordinates.getX());
+        pickUpVisual.setCenterY(pixelCoordinates.getY());
+    }
+
+
+
+
 }

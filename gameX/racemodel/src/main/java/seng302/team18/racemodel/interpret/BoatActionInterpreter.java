@@ -1,6 +1,6 @@
 package seng302.team18.racemodel.interpret;
 
-import seng302.team18.interpreting.MessageInterpreter;
+import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.BoatActionStatus;
 import seng302.team18.message.MessageBody;
@@ -47,7 +47,6 @@ public class BoatActionInterpreter extends MessageInterpreter {
         if (message instanceof BoatActionMessage) {
             BoatActionMessage actionMessage = (BoatActionMessage) message;
             for (Boat boat : boats) {
-//                if (!boat.getStatus().equals(BoatStatus.OCS && actionMessage.getId() == id) || !boat.getStatus().equals(BoatStatus.FINISHED)) {
                 if (!UNCONTROLLABLE_STATUSES.contains(boat.getStatus()) && actionMessage.getId() == id) {
                     applyActions(boat, actionMessage);
                 } else {
@@ -78,6 +77,11 @@ public class BoatActionInterpreter extends MessageInterpreter {
             boat.setSailOut(true);
         } else if (action == BoatActionStatus.TACK_GYBE.action()) {
             boatRotater.setTackGybe(race.getCourse().getWindDirection(), boat);
+        } else if (action == BoatActionStatus.POWER_UP.action()) {
+            if (boat.canActivatePower()) {
+                boat.activatePowerUp();
+            }
+
         }
     }
 
