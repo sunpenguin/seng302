@@ -114,7 +114,7 @@ public class ConnectionListener extends Observable implements Observer {
                         case BUMPER_BOATS:
                             raceBuilder = new BumperBoatsRaceBuilder();
                             courseBuilder = new CourseBuilderBumper();
-                            constructRace(RaceMode.CONTROLS_TUTORIAL);
+                            constructRace(RaceMode.BUMPER_BOATS);
                             break;
                     }
 

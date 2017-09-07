@@ -120,6 +120,7 @@ public class RaceController implements Observer {
     private RaceClock raceClock;
     private HBox timeBox;
     private Label timeLabel;
+    private VisualHealth visualHealth;
 
 
     @FXML
@@ -580,6 +581,7 @@ public class RaceController implements Observer {
         raceRenderer.renderBoats();
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
+        visualHealth = new VisualHealth(raceViewPane, getPlayerBoat().getLives());
 
         setupRaceTimer();
         startRaceTimer();
@@ -602,7 +604,6 @@ public class RaceController implements Observer {
 
         loadEscapeMenu();
 
-        VisualHealth visualHealth = new VisualHealth(raceViewPane, getPlayerBoat().getLives());
 
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
     }
