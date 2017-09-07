@@ -1,11 +1,16 @@
 package seng302.team18.racemodel;
 
+
+
 import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
+import seng302.team18.racemodel.connection.ClientConnection;
+import seng302.team18.racemodel.connection.ConnectionListener;
+import seng302.team18.racemodel.connection.Server;
+import seng302.team18.racemodel.connection.ServerState;
 import seng302.team18.racemodel.message_generating.*;
-import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.model.AbstractCourseBuilder;
 
 import java.time.ZonedDateTime;
