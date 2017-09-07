@@ -581,14 +581,14 @@ public class RaceController implements Observer {
         raceRenderer.renderBoats();
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
-        visualHealth = new VisualHealth(raceViewPane, getPlayerBoat().getLives());
+        visualHealth = new VisualHealth(raceViewPane, getPlayerBoat());
 
         setupRaceTimer();
         startRaceTimer();
 
         new ControlSchemeDisplay(raceViewPane);
 
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper);
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper, visualHealth);
         raceLoop.start();
 
         registerListeners();
