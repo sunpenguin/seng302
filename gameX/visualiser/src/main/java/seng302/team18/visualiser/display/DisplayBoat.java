@@ -296,4 +296,8 @@ public class DisplayBoat implements GeographicLocation {
     public double getBoatLength() {
         return boatLength;
     }
+
+
+    public void setHasCollided(boolean hasCollided) {
+    }
 }

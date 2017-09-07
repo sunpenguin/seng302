@@ -203,4 +203,10 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
     public double getBoatLength() {
         return boat.getBoatLength();
     }
+
+
+    @Override
+    public void setHasCollided(boolean hasCollided) {
+        boat.setHasCollided(hasCollided);
+    }
 }

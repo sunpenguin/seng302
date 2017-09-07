@@ -643,16 +643,21 @@ public class RaceController implements Observer {
         InvalidationListener listenerWidth = observable -> {
             redrawFeatures();
             updateControlsTutorial();
+            raceRenderer.clearAllCollisions();
         };
         raceViewPane.widthProperty().addListener(listenerWidth);
 
         InvalidationListener listenerHeight = observable -> {
             redrawFeatures();
             updateControlsTutorial();
+            raceRenderer.clearAllCollisions();
         };
         raceViewPane.heightProperty().addListener(listenerHeight);
 
-        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
+        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> {
+            redrawFeatures();
+            raceRenderer.clearAllCollisions();
+        });
         pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
     }
 

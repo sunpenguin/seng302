@@ -9,9 +9,7 @@ import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.util.PixelMapper;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,6 +56,7 @@ public class RaceRenderer {
                     displayBoat = new BoatGuide(pixelMapper, displayBoat);
                 }
                 displayBoat = new DisplaySail(pixelMapper, displayBoat);
+                displayBoat = new DisplayCollision(pixelMapper, displayBoat);
                 displayBoat.addToGroup(group);
                 displayBoats.put(boat.getShortName(), displayBoat);
             }
@@ -83,6 +82,10 @@ public class RaceRenderer {
                     displayBoat.setDestination(race.getCourse().getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getCoordinate());
                 } else {
                     displayBoat.setDestination(null);
+                }
+                if (boat.getHasCollided()) {
+                    displayBoat.setHasCollided(true);
+                    boat.setHasCollided(false);
                 }
             }
         }
@@ -173,5 +176,10 @@ public class RaceRenderer {
         }
 
         return boatColors;
+    }
+
+
+    public void clearAllCollisions() {
+        displayBoats.values().forEach(displayBoat -> displayBoat.setHasCollided(false));
     }
 }
