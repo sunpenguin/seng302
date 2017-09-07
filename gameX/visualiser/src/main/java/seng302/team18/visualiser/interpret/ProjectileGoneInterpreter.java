@@ -6,16 +6,22 @@ import seng302.team18.message.ProjectileGoneMessage;
 import seng302.team18.visualiser.ClientRace;
 
 /**
- * Created by csl62 on 7/09/17.
+ * Interprets ProjectileGoneMessages.
  */
-public class ProjectileGoneInterpreter extends MessageInterpreter{
-
+public class ProjectileGoneInterpreter extends MessageInterpreter {
 
     ClientRace race;
 
+
+    /**
+     * Constructor for ProjectileGoneInterpreter.
+     *
+     * @param race to check.
+     */
     public ProjectileGoneInterpreter(ClientRace race) {
         this.race = race;
     }
+
 
     @Override
     public void interpret(MessageBody message) {

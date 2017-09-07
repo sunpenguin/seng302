@@ -1,21 +1,29 @@
 package seng302.team18.racemodel.message_generating;
 
+import seng302.team18.message.AC35MessageType;
 import seng302.team18.util.ByteCheck;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Created by csl62 on 7/09/17.
+ * Generates ProjectileGone messages.
  */
 public class ProjectileGoneGenerator extends MessageGenerator {
 
     private int id;
 
-    public ProjectileGoneGenerator(int type, int id) {
-        super(type);
+
+    /**
+     * Constructor for ProjectileGoneGenerator.
+     *
+     * @param id of the projectile.
+     */
+    public ProjectileGoneGenerator(int id) {
+        super(AC35MessageType.PROJECTILE_GONE.getCode());
         this.id = id;
     }
+
 
     @Override
     protected byte[] getPayload() throws IOException {

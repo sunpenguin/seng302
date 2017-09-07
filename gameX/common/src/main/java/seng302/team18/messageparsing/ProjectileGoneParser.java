@@ -9,10 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by csl62 on 7/09/17.
+ * Parser for ProjectileGone messages.
  */
 public class ProjectileGoneParser implements MessageBodyParser {
-
 
 
     @Override
@@ -23,6 +22,7 @@ public class ProjectileGoneParser implements MessageBodyParser {
             return null;
         }
     }
+
 
     @Override
     public MessageBody parse(byte[] bytes) {

@@ -1,21 +1,13 @@
 package seng302.team18.messageparsing;
 
-import com.google.common.io.ByteStreams;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import seng302.team18.message.MessageBody;
 import seng302.team18.message.PowerType;
 import seng302.team18.message.PowerUpMessage;
-import seng302.team18.model.*;
-import seng302.team18.util.ByteCheck;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
 
 /**
- * Created by dhl25 on 5/09/17.
+ * Test class for PowerUpParser.
  */
 public class PowerUpParserTest {
 
