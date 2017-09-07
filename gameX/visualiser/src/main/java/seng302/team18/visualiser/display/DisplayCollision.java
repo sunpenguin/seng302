@@ -9,7 +9,10 @@ import javafx.util.Duration;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
+import java.io.InputStream;
 import java.util.*;
 
 
@@ -93,7 +96,22 @@ public class DisplayCollision extends DisplayBoatDecorator {
         super.setHasCollided(hasCollided);
 
         if (hasCollided) {
-            playCollisionEffect();
+            playCollisionAnimation();
+            playCollisionSound();
+        }
+    }
+
+
+    /**
+     * Plays a collision sound
+     */
+    private void playCollisionSound() {
+        try {
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("collision.wav");
+            AudioStream audioStream = new AudioStream(inputStream);
+            AudioPlayer.player.start(audioStream);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -101,7 +119,7 @@ public class DisplayCollision extends DisplayBoatDecorator {
     /**
      * Plays a collision effect
      */
-    private void playCollisionEffect() {
+    private void playCollisionAnimation() {
         int numShapes = MIN_SHAPES + random.nextInt(MAX_SHAPES - MIN_SHAPES);
 
         for (int i = 0; i < numShapes; i++) {
@@ -143,7 +161,7 @@ public class DisplayCollision extends DisplayBoatDecorator {
         rotateTransition.setByAngle(360 * random.nextDouble() * ((random.nextBoolean()) ? 1 : -1));
         rotateTransition.setCycleCount(1);
 
-        double scale = random.nextGaussian();
+        double scale = Math.min(Math.max(random.nextGaussian(), -2), 3);
         ScaleTransition scaleTransition = new ScaleTransition(duration, shape);
         scaleTransition.setToX(scale);
         scaleTransition.setToY(scale);
