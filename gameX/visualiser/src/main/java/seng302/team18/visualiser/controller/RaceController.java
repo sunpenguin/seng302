@@ -121,6 +121,7 @@ public class RaceController implements Observer {
     private RaceClock raceClock;
     private HBox timeBox;
     private Label timeLabel;
+    private VisualHealth visualHealth;
 
 
     @FXML
@@ -586,13 +587,14 @@ public class RaceController implements Observer {
         raceRenderer.renderBoats();
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
+        visualHealth = new VisualHealth(raceViewPane, getPlayerBoat());
 
         setupRaceTimer();
         startRaceTimer();
 
         new ControlSchemeDisplay(raceViewPane);
 
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper);
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper, visualHealth);
         raceLoop.start();
 
         registerListeners();
@@ -607,6 +609,7 @@ public class RaceController implements Observer {
         interpreter.addObserver(this);
 
         loadEscapeMenu();
+
 
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
     }
@@ -708,6 +711,7 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.POWER_UP.getCode(), new PowerUpInterpreter(race));
         interpreter.add(AC35MessageType.POWER_TAKEN.getCode(), new PowerTakenInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
+        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLivesInterpreter(race));
 
         return interpreter;
     }

@@ -20,16 +20,6 @@ public class BoundaryDetection {
     private Race race;
     private BoatStatus oldStatus = BoatStatus.PRE_START;
     private BoatStatus newStatus = BoatStatus.PRE_START;
-    private boolean hasChanged = false;
-    private Observer observer = new Observer() {
-        @Override
-        public void update(Observable o, Object arg) {
-            if (arg instanceof Boat) {
-                Boat boat =  (Boat) arg;
-                newStatus = boat.getStatus();
-            }
-        }
-    };
 
     @Given("^a course$")
     public void a_course() throws Throwable {
@@ -50,7 +40,6 @@ public class BoundaryDetection {
         race.setUpdaters(updaters);
         Course course = new Course(getCompoundMarks(), boundaries, getRoundings());
         race.setCourse(course);
-        race.addObserver(observer);
     }
 
     @Given("^a boat inside the courses bounds$")
@@ -69,7 +58,6 @@ public class BoundaryDetection {
     @Then("^the players status will stay the same$")
     public void the_players_status_will_stay_the_same() throws Throwable {
         Assert.assertEquals(oldStatus, boat.getStatus());
-        Assert.assertEquals(oldStatus, newStatus);
     }
 
     @When("^the player moves outside the boundary$")
@@ -82,7 +70,6 @@ public class BoundaryDetection {
     @Then("^the players status will be set to disqualified\\.$")
     public void the_players_status_will_be_set_to_disqualified() throws Throwable {
         Assert.assertEquals(BoatStatus.DSQ, boat.getStatus());
-        Assert.assertEquals(BoatStatus.DSQ, newStatus);
     }
 
 

@@ -41,8 +41,8 @@ public class BoatMessageGeneratorTest {
     private final int ALTITUDE_L = 4;
     private final int HEADING_I = 28;
     private final int HEADING_L = 2;
-    private final int PITCH_I = 30;
-    private final int PITCH_L = 2;
+    private final int LIVES_I = 30;
+    private final int LIVES_L = 2;
     private final int ROLL_I = 32;
     private final int ROLL_L = 2;
     private final int SPEED_I = 34;
@@ -68,9 +68,12 @@ public class BoatMessageGeneratorTest {
         AbstractCourseBuilder courseBuilder = new CourseBuilder1();
 
         final Race testRace = raceBuilder.buildRace(new Race(), regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
+        testRace.addParticipant(new Boat("SAD", "DS0", 111, 14));
         byte[] generatedBytes;
+        testRace.update(10);
         List<BoatMessageGenerator> messages = new ArrayList<>();
         for (Boat boat : testRace.getStartingList()) {
+            boat.setSailOut(false);
             messages.add(new BoatMessageGenerator(boat));
         }
         for (BoatMessageGenerator generator : messages) {
@@ -81,6 +84,7 @@ public class BoatMessageGeneratorTest {
             double expectedLong = (generator.getBoat().getCoordinate().getLongitude());
             double expectedHeading = generator.getBoat().getHeading();
             double expectedSpeed = generator.getBoat().getSpeed();
+            int expectedLives = generator.getBoat().getLives();
 
             int actualVersionNum = ByteCheck.byteToInt(generatedBytes,
                     VERSIONNUM_I, VERSIONNUM_L);
@@ -94,6 +98,7 @@ public class BoatMessageGeneratorTest {
                     HEADING_I, HEADING_L) * BYTE_HEADING_TO_DOUBLE;
             double actualSpeed = new SpeedConverter().mmsToKnots(ByteCheck.byteToInt(generatedBytes,
                     SOG_I, SOG_L));
+            int actualLives = ByteCheck.byteToInt(generatedBytes, LIVES_I, LIVES_L);
 
             assertEquals(expectedVersionNum, actualVersionNum);
             assertEquals(expectedSourceID, actualSourceID);
@@ -101,6 +106,7 @@ public class BoatMessageGeneratorTest {
             assertEquals(expectedLong, actualLong, 0.01);
             assertEquals(expectedHeading, actualHeading, 0.01);
             assertEquals(expectedSpeed, actualSpeed, 0.01);
+            assertEquals(expectedLives, actualLives, 0.01);
         }
 
     }

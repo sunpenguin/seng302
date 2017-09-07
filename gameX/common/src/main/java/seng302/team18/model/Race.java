@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * A class to represent an individual race.
  */
-public class Race extends Observable {
+public class Race {
     private final GPSCalculator gps = new GPSCalculator();
     private final RoundingDetector detector = new RoundingDetector();
     private int id;
@@ -409,11 +409,6 @@ public class Race extends Observable {
 
     public double getUpdateTime() {
         return updateTime;
-    }
-
-
-    public void setChanged() { //TODO this is probably wrong sbe67 1/8/2017
-        super.setChanged();
     }
 
 

@@ -161,13 +161,6 @@ public class TestMock implements Observer {
                 }
             }
 
-            if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
-                generateXMLs();
-                sendRaceXml();
-                sendBoatsXml();
-                switchToPrep();
-            }
-
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
 

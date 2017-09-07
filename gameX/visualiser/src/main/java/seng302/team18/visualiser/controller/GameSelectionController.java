@@ -127,7 +127,7 @@ public class GameSelectionController {
         raceButtonImage = new Image("/images/SpyroWhite.png");
         raceLabel.setLayoutX((600 / 2) - 150);
         raceLabel.setLayoutY((600 / 2) + 100);
-        raceLabel.setOnMouseClicked(event -> startBumperBoats());
+        raceLabel.setOnMouseClicked(event -> System.out.println("unhandled mode challenge"));
     }
 
 
@@ -183,7 +183,6 @@ public class GameSelectionController {
         ClientRace race = new ClientRace();
         race.setMode(mode);
         controller.setUp(race, receiver, sender);
-        System.out.println(boatColours.get(colourIndex));
         controller.initConnection(boatColours.get(colourIndex));
     }
 
@@ -253,7 +252,14 @@ public class GameSelectionController {
      * Starts a bumper boats game
      */
     private void startBumperBoats(){
-        System.out.println("BumperBoats");
+        createModel();
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mode = RaceMode.BUMPER_BOATS;
+        openStream("127.0.0.1", 5005);
     }
 
 
