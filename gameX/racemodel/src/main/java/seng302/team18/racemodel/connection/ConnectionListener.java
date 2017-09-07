@@ -105,19 +105,18 @@ public class ConnectionListener extends Observable implements Observer {
                         case CONTROLS_TUTORIAL:
                             raceBuilder = new TutorialRaceBuilder();
                             courseBuilder = new CourseBuilderPractice();
-                            constructRace(RaceMode.CONTROLS_TUTORIAL);
+                            constructRace();
                             break;
                         case ARCADE:
                             raceBuilder = new ArcadeRaceBuilder();
-                            constructRace(RaceMode.ARCADE);
+                            constructRace();
                             break;
                         case BUMPER_BOATS:
                             raceBuilder = new BumperBoatsRaceBuilder();
                             courseBuilder = new CourseBuilderBumper();
-                            constructRace(RaceMode.BUMPER_BOATS);
+                            constructRace();
                             break;
                     }
-
                     addPlayer(receiver, sourceID);
                     sendMessage(client, sourceID, requestType);
                 }
@@ -130,12 +129,9 @@ public class ConnectionListener extends Observable implements Observer {
 
     /**
      * Constructs a race with the given builders and sets the mode. Notify TestMock to regenerate XMLs.
-     *
-     * @param raceMode mode to set the race.
      */
-    private void constructRace(RaceMode raceMode) {
+    private void constructRace() {
         race = raceBuilder.buildRace(race, regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
-        race.setMode(raceMode);
         setChanged();
         notifyObservers(this);
         race.setCourseForBoats();
