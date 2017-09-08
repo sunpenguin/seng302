@@ -9,28 +9,32 @@ import seng302.team18.util.GPSCalculator;
 import java.util.List;
 
 /**
- * Class to update boats on bound attributes
+ * Updates a players health when they leave the bounds of the course
  */
-public class OutOfBoundsUpdater implements Updater {
+public class BumperBoatHealthUpdater implements Updater {
 
+    /**
+     * Checks if any boats are outside of the course boundary in a race.
+     * If outside, the player loses a life.
+     * If a player loses their last life they are disqualified.
+     *
+     * @param race the race
+     */
     @Override
     public void update(Race race) {
         for (Boat boat : race.getStartingList()) {
-            checkForBoundaryDSQ(boat, race);
+            if (isOutSide(boat, race)) {
+                boat.loseLife();
+                boat.setCoordinate(race.getStartPosition(boat, 3 * boat.getLength()));
+                boat.setSailOut(true);
+
+                if (boat.getLives() < 1) {
+                    boat.setStatus(BoatStatus.DSQ);
+                }
+            }
         }
     }
 
-
-    /**
-     * Disqualifies boat if outside boundary.
-     *
-     * @param boat to check
-     */
-    private void checkForBoundaryDSQ(Boat boat, Race race) {
-        if (isOutSide(boat, race)) {
-            boat.setStatus(BoatStatus.DSQ);
-        }
-    }
 
 
     /**

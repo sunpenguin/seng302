@@ -70,11 +70,16 @@ public class RaceRenderer {
         //Wake
         DisplayBoat displayBoat = new DisplayWake(pixelMapper, new DisplayBoat(pixelMapper, boat.getShortName(), boat.getColour(), boat.getLength()));
         //Highlight
-        if (boat.isControlled() && race.getMode() != RaceMode.CONTROLS_TUTORIAL) {
-            displayBoat = new BoatHighlight(pixelMapper, displayBoat);
-            displayBoat = new BoatGuide(pixelMapper, displayBoat);
+        if (boat.isControlled()) {
+            if (race.getMode() != RaceMode.CONTROLS_TUTORIAL) {
+                displayBoat = new BoatHighlight(pixelMapper, displayBoat);
+                if (race.getMode() != RaceMode.BUMPER_BOATS) {
+                    displayBoat = new BoatGuide(pixelMapper, displayBoat);
+                }
+            }
         }
         displayBoat = new DisplaySail(pixelMapper, displayBoat);
+        displayBoat = new DisplayCollision(pixelMapper, displayBoat);
         displayBoat.addToGroup(group);
         displayBoats.put(boat.getShortName(), displayBoat);
         return displayBoat;
@@ -115,6 +120,10 @@ public class RaceRenderer {
             displayBoat.setDestination(race.getCourse().getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getCoordinate());
         } else {
             displayBoat.setDestination(null);
+        }
+        if (boat.getHasCollided()) {
+            displayBoat.setHasCollided(true);
+            boat.setHasCollided(false);
         }
     }
 
@@ -202,5 +211,10 @@ public class RaceRenderer {
         }
 
         return boatColors;
+    }
+
+
+    public void clearCollisions() {
+        displayBoats.values().forEach(displayBoat -> displayBoat.setHasCollided(false));
     }
 }

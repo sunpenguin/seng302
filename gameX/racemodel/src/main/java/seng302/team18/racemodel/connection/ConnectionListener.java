@@ -7,7 +7,6 @@ import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
 import seng302.team18.model.RaceMode;
-import seng302.team18.racemodel.connection.*;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 import seng302.team18.racemodel.interpret.ColourInterpreter;
 import seng302.team18.racemodel.message_generating.AcceptanceMessageGenerator;
@@ -31,8 +30,8 @@ public class ConnectionListener extends Observable implements Observer {
     private Long timeout;
 
     private AbstractRaceBuilder raceBuilder;
-    private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderPractice();
-    private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilder1();
+    private AbstractCourseBuilder courseBuilder = new CourseBuilderRealistic();
+    private AbstractRegattaBuilder regattaBuilder = new RegattaBuilder1();
 
     /**
      * Constructs a new ConnectionListener.
@@ -105,20 +104,37 @@ public class ConnectionListener extends Observable implements Observer {
                     switch (requestType) {
                         case CONTROLS_TUTORIAL:
                             raceBuilder = new TutorialRaceBuilder();
-                            race = raceBuilder.buildRace(race, REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse());
-                            setChanged();
-                            notifyObservers(this);
-                            race.setCourseForBoats();
-                        default:
-                            addPlayer(receiver, sourceID);
-                            sendMessage(client, sourceID, requestType);
+                            courseBuilder = new CourseBuilderPractice();
+                            constructRace();
+                            break;
+                        case ARCADE:
+                            raceBuilder = new ArcadeRaceBuilder();
+                            constructRace();
+                            break;
+                        case BUMPER_BOATS:
+                            raceBuilder = new BumperBoatsRaceBuilder();
+                            courseBuilder = new CourseBuilderBumper();
+                            constructRace();
                             break;
                     }
+                    addPlayer(receiver, sourceID);
+                    sendMessage(client, sourceID, requestType);
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    /**
+     * Constructs a race with the given builders and sets the mode. Notify TestMock to regenerate XMLs.
+     */
+    private void constructRace() {
+        race = raceBuilder.buildRace(race, regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
+        setChanged();
+        notifyObservers(this);
+        race.setCourseForBoats();
     }
 
 
