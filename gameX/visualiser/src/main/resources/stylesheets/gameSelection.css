@@ -11,7 +11,7 @@
 }
 
 .bumperBoatsImage {
-    -fx-graphic: url('/images/bumper-boatsWhite.png');
+    -fx-graphic: url('/images/bumperBoatsWhite.png');
 }
 
 .raceImage:hover {
@@ -36,7 +36,7 @@
 
 .bumperBoatsImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/bumper-boatsOrange.png');
+    -fx-graphic: url('/images/bumperBoatsOrange.png');
 }
 
 .backButtonImage:hover {
