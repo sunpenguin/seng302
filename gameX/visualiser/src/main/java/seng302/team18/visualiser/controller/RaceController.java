@@ -12,7 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
-import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,6 +45,7 @@ import seng302.team18.util.GPSCalculator;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.interpret.*;
+import seng302.team18.visualiser.messageinterpreting.YachtEventInterpreter;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
@@ -432,8 +432,7 @@ public class RaceController implements Observer {
             escapeMenuPane = loader.load();
             escapeMenuController = loader.getController();
             escapeMenuController.setup(group, interpreter, sender);
-        } catch (IOException e) {
-        }
+        } catch (IOException e) {}
     }
 
 
@@ -441,9 +440,7 @@ public class RaceController implements Observer {
      * Opens the escapeMenu by adding to the group and placing it in the middle of the race view.
      */
     private void openEscapeMenu(String message) {
-        if (group.getChildren().contains(escapeMenuPane)) {
-            return;
-        } else {
+        if (!group.getChildren().contains(escapeMenuPane)) {
             Label label = new Label(message);
             label.setStyle("-fx-text-fill: red");
             escapeMenuPane.getChildren().add(label);
@@ -649,16 +646,21 @@ public class RaceController implements Observer {
         InvalidationListener listenerWidth = observable -> {
             redrawFeatures();
             updateControlsTutorial();
+            raceRenderer.clearCollisions();
         };
         raceViewPane.widthProperty().addListener(listenerWidth);
 
         InvalidationListener listenerHeight = observable -> {
             redrawFeatures();
             updateControlsTutorial();
+            raceRenderer.clearCollisions();
         };
         raceViewPane.heightProperty().addListener(listenerHeight);
 
-        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> redrawFeatures());
+        pixelMapper.zoomLevelProperty().addListener((observable, oldValue, newValue) -> {
+            redrawFeatures();
+            raceRenderer.clearCollisions();
+        });
         pixelMapper.addViewCenterListener(propertyChangeEvent -> redrawFeatures());
     }
 
@@ -699,6 +701,7 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLocationInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
+        interpreter.add(AC35MessageType.YACHT_EVENT.getCode(), new YachtEventInterpreter(race));
         interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(raceClock));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishRaceInterpreter(this));
@@ -767,43 +770,12 @@ public class RaceController implements Observer {
                 setToImportantAnnotationLevel();
             }
         } else if (arg instanceof Boolean) {
-
-            Task<Void> task = new Task<Void>() {
-
-                @Override
-                protected Void call() throws Exception {
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            openEscapeMenu("CONNECTION TO SERVER LOST");
-
-                        }
-                    });
-                    return null;
-                }
-            };
-
-            task.run();
-            task.cancel();
+            Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST"));
         } else if (arg instanceof Boat) {
-            Task<Void> task = new Task<Void>() {
-
-                @Override
-                protected Void call() throws Exception {
-
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES");
-                            sender.close();
-                        }
-                    });
-                    return null;
-                }
-            };
-            task.run();
-            task.cancel();
+            Platform.runLater(() -> {
+                openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES");
+                sender.close();
+            });
         }
     }
 }
