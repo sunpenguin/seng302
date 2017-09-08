@@ -117,7 +117,7 @@ public class RaceController implements Observer {
 
     private ControlsTutorial controlsTutorial;
 
-    private RaceClock raceClock;
+    private Clock clock;
     private HBox timeBox;
     private Label timeLabel;
     private VisualHealth visualHealth;
@@ -620,16 +620,16 @@ public class RaceController implements Observer {
         timeLabel.setPrefWidth(80);
         timeBox.setPrefWidth(120);
         timeBox.setAlignment(Pos.CENTER);
-        raceClock = new RaceClock(timeLabel);
+        clock = race.getMode().equals(RaceMode.BUMPER_BOATS)? new TimerClock(timeLabel) : new StopWatchClock(timeLabel);
         raceViewPane.getChildren().add(timeBox);
     }
 
 
     /**
-     * Start the race clock by invoking start() on the RaceClock's AnimationTimer.
+     * Start the race clock by invoking start() on the StopWatchClock's AnimationTimer.
      */
     private void startRaceTimer() {
-        raceClock.start();
+        clock.start();
     }
 
 
@@ -700,7 +700,7 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
         interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(raceClock));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(clock));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishRaceInterpreter(this));
         interpreter.add(AC35MessageType.POWER_UP.getCode(), new PowerUpInterpreter(race));
         interpreter.add(AC35MessageType.POWER_TAKEN.getCode(), new PowerTakenInterpreter(race));
@@ -795,7 +795,11 @@ public class RaceController implements Observer {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES");
+                            if (race.getMode().equals(RaceMode.CHALLENGE_MODE) || race.getMode().equals(RaceMode.BUMPER_BOATS)) {
+                                openEscapeMenu("GAME OVER");
+                            } else {
+                                openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES");
+                            }
                             sender.close();
                         }
                     });
