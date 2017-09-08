@@ -34,6 +34,9 @@ public class VisualHealth {
     }
 
     public void display() {
+//        System.out.println("VisualHealth::display");
+//        System.out.println("boatlives =  " + boat.getLives());
+//        System.out.println("num children = " + heartBox.getChildren().size());
         if (boat.getLives() != heartBox.getChildren().size()) {
             heartBox.getChildren().clear();
             try {

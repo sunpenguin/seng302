@@ -172,10 +172,7 @@ public class TestMock implements Observer {
 
         } while (!race.isFinished() && open);
 
-        // Sends final message
-        race.setStatus(RaceStatus.FINISHED);
-        ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
-        server.broadcast(raceMessageGenerator.getMessage());
+        sendFinalMessages();
     }
 
 
@@ -226,9 +223,9 @@ public class TestMock implements Observer {
      * @param timeCurr The current time (milliseconds)
      */
     private void updateClients(long timeCurr) {
-        for (ScheduledMessageGenerator sendable : scheduledMessages) {
-            if (sendable.isTimeToSend(timeCurr)) {
-                server.broadcast(sendable.getMessage());
+        for (ScheduledMessageGenerator generator : scheduledMessages) {
+            if (generator.isTimeToSend(timeCurr)) {
+                server.broadcast(generator.getMessage());
             }
         }
 
@@ -248,4 +245,26 @@ public class TestMock implements Observer {
             server.broadcast((new PowerTakenGenerator(event.getBoatId(), event.getPowerId(), event.getPowerDuration()).getMessage()));
         }
     }
+
+
+    /**
+     * Send the final messages and set race status to Finished.
+     */
+    private void sendFinalMessages() {
+        race.setStatus(RaceStatus.FINISHED);
+        ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
+        server.broadcast(raceMessageGenerator.getMessage());
+        for (ScheduledMessageGenerator generator : scheduledMessages) {
+            server.broadcast(generator.getMessage());
+        }
+    }
+
+
+
+
+
+
+
+
+
 }
