@@ -6,6 +6,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.*;
+import seng302.team18.message.PowerType;
 import seng302.team18.util.GPSCalculator;
 
 import java.time.ZonedDateTime;
@@ -390,13 +391,16 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
     public void setPowerUp(PowerUp powerUp) {
         this.powerUp = powerUp;
+        isPowerActive = false;
     }
 
     public void activatePowerUp() {
-        this.isPowerActive = true;
-        powerDurationEnd = ZonedDateTime.now().plusSeconds((long) powerUp.getDuration() / 1000);
-        setChanged();
-        notifyObservers(powerUp);
+        if(powerUp != null) {
+            this.isPowerActive = true;
+            powerDurationEnd = ZonedDateTime.now().plusSeconds((long) powerUp.getDuration() / 1000);
+            setChanged();
+            notifyObservers(powerUp);
+        }
     }
 
 
@@ -407,7 +411,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param time that has passed
      */
     public void update(double time) {
-        if (isPowerActive) {
+        if (isPowerActive && powerUp.getType().equals(PowerType.SPEED)) {
             powerUp.update(this, time);
             if (ZonedDateTime.now().isAfter(powerDurationEnd)) {
                 isPowerActive = false;
@@ -416,5 +420,17 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         } else {
             updater.update(this, time);
         }
+    }
+
+    public PowerUp getPowerUp() {
+        return powerUp;
+    }
+
+    public boolean isPowerActive() {
+        return isPowerActive;
+    }
+
+    public void setPowerActive(boolean powerActive) {
+        isPowerActive = powerActive;
     }
 }

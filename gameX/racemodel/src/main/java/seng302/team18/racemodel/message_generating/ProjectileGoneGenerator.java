@@ -35,4 +35,5 @@ public class ProjectileGoneGenerator extends MessageGenerator {
 
         return outStream.toByteArray();
     }
+
 }

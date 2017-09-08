@@ -17,7 +17,7 @@ public abstract class Projectile {
         this.speed = speed;
     }
 
-    public abstract void update();
+    public abstract void update(double time);
 
 
 

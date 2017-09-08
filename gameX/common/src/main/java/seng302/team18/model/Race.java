@@ -1,5 +1,6 @@
 package seng302.team18.model;
 
+import seng302.team18.message.PowerType;
 import seng302.team18.model.updaters.Updater;
 import seng302.team18.util.GPSCalculator;
 
@@ -30,8 +31,11 @@ public class Race extends Observable {
     private List<PowerUpEvent> powerEvents = new ArrayList<>();
     private RaceMode mode = RaceMode.RACE;
     private List<Updater> updaters = new ArrayList<>();
+    private List<Projectile> projectiles= new ArrayList<>();
     private double updateTime;
     private int powerId = 0;
+    private int nextProjectileId = 300;
+    private final int PROJECTILE_SPEED = 50;
 
 
     public Race() {
@@ -372,6 +376,8 @@ public class Race extends Observable {
     }
 
 
+
+
     public void addYachtEvent(YachtEvent yachtEvent) {
         yachtEvents.add(yachtEvent);
     }
@@ -464,5 +470,37 @@ public class Race extends Observable {
 
     public void removeOldPickUps() {
         course.removeOldPickUps();
+    }
+
+
+    /**
+     * Method to add a projectile to the race
+     * Projectiles collected in powerUps
+     *
+     * @param heading the heading of the projectile
+     * @param type the type of power up used
+     */
+    public void addProjectile(double heading, Coordinate location, PowerType type) {
+        Projectile sharky = new TigerShark(nextProjectileId, location, heading, PROJECTILE_SPEED);
+        projectiles.add(sharky);
+        nextProjectileId += 1;
+    }
+
+    public List<Projectile> getProjectiles() {
+        return projectiles;
+    }
+
+    /**
+     * Method to remove a projectile from the race
+     *
+     * @param projectile_id the id of the projectile to be removed
+     */
+    public void removeProjectile(int projectile_id) {
+        for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
+            Projectile projectile = it.next();
+            if (projectile.getId() == projectile_id) {
+                it.remove();
+            }
+        }
     }
 }

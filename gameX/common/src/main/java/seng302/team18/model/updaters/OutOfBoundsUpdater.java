@@ -1,9 +1,6 @@
 package seng302.team18.model.updaters;
 
-import seng302.team18.model.Boat;
-import seng302.team18.model.BoatStatus;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.Race;
+import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculator;
 
 import java.util.List;
@@ -17,6 +14,15 @@ public class OutOfBoundsUpdater implements Updater {
     public void update(Race race) {
         for (Boat boat : race.getStartingList()) {
             checkForBoundaryDSQ(boat, race);
+        }
+        for (Projectile projectile : race.getProjectiles()){
+            GPSCalculator calculator = new GPSCalculator();
+            List<Coordinate> boundaries = race.getCourse().getCourseLimits();
+
+            if (!calculator.isInside(projectile.getLocation(), boundaries)) {
+                race.removeProjectile(projectile.getId());
+                break;
+            }
         }
     }
 

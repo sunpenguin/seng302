@@ -31,7 +31,7 @@ public class RegularRaceBuilder extends AbstractRaceBuilder {
     @Override
     protected List<Updater> getUpdaters() {
         List<Updater> updaters = new ArrayList<>();
-        updaters.add(new MovementUpdater());
+        updaters.add(new BoatUpdater());
         updaters.add(new CollisionUpdater());
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());

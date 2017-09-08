@@ -32,7 +32,7 @@ public class TutorialRaceBuilder extends AbstractRaceBuilder {
     @Override
     protected List<Updater> getUpdaters(){
         List<Updater> updaters = new ArrayList<>();
-        updaters.add(new MovementUpdater());
+        updaters.add(new BoatUpdater());
 
         return updaters;
     }
