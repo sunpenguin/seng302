@@ -71,12 +71,6 @@ public class DisplayCollision extends DisplayBoatDecorator {
 
 
     @Override
-    public void setCoordinate(Coordinate coordinate) {
-        super.setCoordinate(coordinate);
-    }
-
-
-    @Override
     public void addToGroup(Group group) {
         this.group = group;
         super.addToGroup(group);

@@ -214,7 +214,7 @@ public class RaceRenderer {
     }
 
 
-    public void clearAllCollisions() {
+    public void clearCollisions() {
         displayBoats.values().forEach(displayBoat -> displayBoat.setHasCollided(false));
     }
 }
