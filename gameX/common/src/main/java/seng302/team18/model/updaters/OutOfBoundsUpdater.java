@@ -35,8 +35,6 @@ public class OutOfBoundsUpdater implements Updater {
     private void checkForBoundaryDSQ(Boat boat, Race race) {
         if (isOutSide(boat, race)) {
             boat.setStatus(BoatStatus.DSQ);
-            race.setChanged();
-            race.notifyObservers(boat);
         }
     }
 

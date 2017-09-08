@@ -2,7 +2,6 @@ package seng302.team18.racemodel.model;
 
 import seng302.team18.model.*;
 import seng302.team18.model.updaters.*;
-import seng302.team18.model.updaters.BoatUpdater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,8 @@ public class ArcadeRaceBuilder extends AbstractRaceBuilder {
     protected List<Updater> getUpdaters() {
         List<Updater> updaters = new ArrayList<>();
         updaters.add(new BoatUpdater());
-        updaters.add(new CollisionUpdater());
+        updaters.add(new BoatCollisionUpdater());
+        updaters.add(new MarkCollisionUpdater());
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());
         updaters.add(new PowerUpUpdater(makePickUp(), 4));

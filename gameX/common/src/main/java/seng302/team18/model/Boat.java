@@ -1,10 +1,6 @@
 package seng302.team18.model;
 
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.*;
 import seng302.team18.message.PowerType;
 import seng302.team18.util.GPSCalculator;
@@ -35,6 +31,8 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private boolean isPowerActive = false; //Changed for merging into dev branch
     private ZonedDateTime powerDurationEnd;
     private PowerUp updater = new BoatUpdater();
+    private int lives;
+    private boolean hasCollided = false;
 
     /**
      * A constructor for the Boat class
@@ -55,6 +53,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         sailOut = true; // Starts with luffing
         status = BoatStatus.UNDEFINED;
         setWeight(10);
+        lives = 3;
     }
 
 
@@ -180,7 +179,12 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         return sailOut;
     }
 
-
+    /**
+     * Sets the sails
+     * True = sails out = luffing
+     * False = sails in = powered up
+     * @param sailOut
+     */
     public void setSailOut(boolean sailOut) {
         this.sailOut = sailOut;
     }
@@ -272,35 +276,17 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         return trueWindAngle;
     }
 
-//    /**
-//     * Method to check if boat has collided with another boat
-//     * TODO: jth102, sbe67 25/07, handle collisions with more than one obstacle
-//     *
-//     * @param obstacles  list of Abstract Boats to check if boat has collied
-//     * @return the obstacle the boat has collided, null is not collision
-//     */
-//    public AbstractBoat hasCollided(List<AbstractBoat> obstacles) {
-//        AbstractBoat collidedWith = null;
-//        GPSCalculator calculator = new GPSCalculator();
-//        double collisionZone;
-//        double distanceBetween;
-//        for (AbstractBoat obstacle : obstacles) {
-//            if (!obstacle.equals(this)) {
-//                collisionZone = (obstacle.getLength()) + (boatLength / 2);
-//
-//                if (obstacle instanceof Mark) {
-//                    collisionZone *= 1.3;
-//                }
-//
-//                distanceBetween = calculator.distance(coordinate, obstacle.getCoordinate());
-//
-//                if (distanceBetween < collisionZone) {
-//                    collidedWith = obstacle;
-//                }
-//            }
-//        }
-//        return collidedWith;
-//    }
+
+    /**
+     * Method to decrease a players health
+     */
+    public void loseLife() {
+        lives -= 1;
+    }
+
+    public int getLives(){
+        return lives;
+    }
 
 
     public boolean hasCollided(BodyMass bodyMass) {
@@ -394,6 +380,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         isPowerActive = false;
     }
 
+
     public void activatePowerUp() {
         if(powerUp != null) {
             this.isPowerActive = true;
@@ -401,6 +388,14 @@ public class Boat extends AbstractBoat implements GeographicLocation {
             setChanged();
             notifyObservers(powerUp);
         }
+    }
+
+
+    public boolean canActivatePower() {
+        if (null != powerUp && !isPowerActive) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -420,6 +415,16 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         } else {
             updater.update(this, time);
         }
+    }
+
+
+    public boolean getHasCollided() {
+        return hasCollided;
+    }
+
+
+    public void setHasCollided(boolean hasCollided) {
+        this.hasCollided = hasCollided;
     }
 
     public PowerUp getPowerUp() {

@@ -22,7 +22,7 @@ import java.util.Properties;
 public class MockDataStream {
 
     // Change concrete builders here to change the preset of race/regatta/course
-    private static final AbstractRaceBuilder RACE_BUILDER = new ArcadeRaceBuilder();
+    private static final AbstractRaceBuilder RACE_BUILDER = new RegularRaceBuilder();
     private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderRealistic();
     private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilderRealistic();
     private static final AbstractParticipantsBuilder PARTICIPANTS_BUILDER = new ParticipantsBuilderSize20();
@@ -86,7 +86,6 @@ public class MockDataStream {
         server.addObserver(listener);
         server.addObserver(testMock);
         listener.addObserver(testMock);
-        race.addObserver(testMock);
         server.openServer();
         listener.setTimeout(System.currentTimeMillis() + ((WARNING_WAIT_TIME - CUTOFF_DIFFERENCE) * 1000));
         testMock.runSimulation(START_WAIT_TIME, WARNING_WAIT_TIME, PREP_WAIT_TIME, CUTOFF_DIFFERENCE);
@@ -103,13 +102,16 @@ public class MockDataStream {
         return START_WAIT_TIME;
     }
 
+
     public static int getWarningWaitTime() {
         return WARNING_WAIT_TIME;
     }
 
+
     public static int getPrepWaitTime() {
         return PREP_WAIT_TIME;
     }
+
 
     public static int getMaxPlayers() {
         return MAX_PLAYERS;

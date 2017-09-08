@@ -1,10 +1,12 @@
 package cucumber.steps;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 import seng302.team18.model.*;
+import seng302.team18.model.updaters.BumperBoatHealthUpdater;
 import seng302.team18.model.updaters.MovementUpdater;
 import seng302.team18.model.updaters.OutOfBoundsUpdater;
 import seng302.team18.model.updaters.Updater;
@@ -12,18 +14,19 @@ import seng302.team18.model.updaters.Updater;
 import java.util.*;
 
 /**
- * Created by dhl25 on 10/08/17.
+ * Created by sbe67 on 4/09/17.
  */
-public class BoundaryDetection {
+public class BumperBoatLosesLife {
 
     private Boat boat;
     private Race race;
-    private BoatStatus oldStatus = BoatStatus.PRE_START;
-    private BoatStatus newStatus = BoatStatus.PRE_START;
+    private BoatStatus oldStatus = BoatStatus.RACING;
+    private BoatStatus newStatus = BoatStatus.RACING;
+    private int oldBoatLives;
 
-    @Given("^a course$")
-    public void a_course() throws Throwable {
-        Coordinate boundary1 = new Coordinate(32.30502, -64.85857);
+    @Given("^a bumperBoat race$")
+    public void a_bumperBoat_race() throws Throwable {
+    Coordinate boundary1 = new Coordinate(32.30502, -64.85857);
         Coordinate boundary2 = new Coordinate(32.30502, -64.85235);
         Coordinate boundary3 = new Coordinate(32.29925, -64.85235);
         Coordinate boundary4 = new Coordinate(32.29925, -64.85857);
@@ -36,43 +39,59 @@ public class BoundaryDetection {
         race = new Race();
         List<Updater> updaters = new ArrayList<>();
         updaters.add(new MovementUpdater());
-        updaters.add(new OutOfBoundsUpdater());
+        updaters.add(new BumperBoatHealthUpdater());
         race.setUpdaters(updaters);
         Course course = new Course(getCompoundMarks(), boundaries, getRoundings());
-        race.setCourse(course);
-    }
-
-    @Given("^a boat inside the courses bounds$")
-    public void a_boat_inside_the_courses_bounds() throws Throwable {
-        boat = new Boat("name", "shortName", 1, 1);
+        race.setCourse(course);        boat = new Boat("name", "shortName", 1, 1);
         boat.setCoordinate(new Coordinate(32.30463, -64.85245));
         boat.setStatus(oldStatus);
+        oldBoatLives = boat.getLives();
         race.addParticipant(boat);
     }
 
-    @When("^the player stays inside the boundary$")
-    public void the_player_stays_inside_the_boundary() throws Throwable {
+    @Given("^a boat inside the courses bumperBoat race bounds$")
+    public void a_boat_inside_the_courses_bumperBoat_race_bounds() throws Throwable {
+        boat = new Boat("name", "shortName", 1, 1);
+        boat.setCoordinate(new Coordinate(32.30463, -64.85245));
+        boat.setStatus(oldStatus);
+        oldBoatLives = boat.getLives();
+        race.addParticipant(boat);
+    }
+
+
+    @When("^the player stays inside the bumperBoat boundary$")
+    public void the_player_stays_inside_the_bumperBoat_boundary() throws Throwable {
         race.update(1);
     }
 
-    @Then("^the players status will stay the same$")
-    public void the_players_status_will_stay_the_same() throws Throwable {
-        Assert.assertEquals(oldStatus, boat.getStatus());
+    @Then("^the players lives will stay the same$")
+    public void the_players_lives_will_stay_the_same() throws Throwable {
+        Assert.assertEquals(oldBoatLives, boat.getLives());
     }
 
-    @When("^the player moves outside the boundary$")
-    public void the_player_moves_outside_the_boundary() throws Throwable {
+    @Then("^the player will have (\\d+) lives$")
+    public void the_player_will_have_lives(int lives) throws Throwable {
+        Assert.assertEquals(lives, boat.getLives());
+    }
+
+    @When("^the player has (\\d+) lives$")
+    public void the_player_has_lives(int lives) throws Throwable {
+        while(boat.getLives() > lives) {
+            boat.loseLife();
+        }
+    }
+
+    @When("^the player moves outside the the bumperBoat boundary$")
+    public void the_player_moves_outside_the_the_bumperBoat_boundary() throws Throwable {
         boat.setSailOut(false);
         boat.setSpeed(100000);
         race.update(999999999);
     }
 
-    @Then("^the players status will be set to disqualified\\.$")
-    public void the_players_status_will_be_set_to_disqualified() throws Throwable {
+    @Then("^the players bumperBoat status will be set to disqualified\\.$")
+    public void the_players_bumperBoat_status_will_be_set_to_disqualified() throws Throwable {
         Assert.assertEquals(BoatStatus.DSQ, boat.getStatus());
     }
-
-
 
     private List<CompoundMark> getCompoundMarks() {
         List<CompoundMark> compoundMarks = new ArrayList<>();
@@ -147,4 +166,5 @@ public class BoundaryDetection {
 
         return markRoundings;
     }
+
 }

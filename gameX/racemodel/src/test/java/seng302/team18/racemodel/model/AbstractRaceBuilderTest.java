@@ -69,7 +69,8 @@ public class AbstractRaceBuilderTest {
         protected List<Updater> getUpdaters(){
             List<Updater> updaters = new ArrayList<>();
             updaters.add(new BoatUpdater());
-            updaters.add(new CollisionUpdater());
+            updaters.add(new BoatCollisionUpdater());
+            updaters.add(new MarkCollisionUpdater());
             updaters.add(new OutOfBoundsUpdater());
             updaters.add(new MarkRoundingUpdater());
 
