@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 public enum YachtEventCode {
     OVER_START_LINE_EARLY((byte) 0x03),
     CLEAR_BEHIND_START_AFTER_EARLY((byte) 0x04),
-    OCS_PENALTY_COMPLETE((byte) 0x22);
+    OCS_PENALTY_COMPLETE((byte) 0x22),
+    BOAT_IN_COLLISION(((byte) 0x21)),
+    BOAT_COLLIDE_WITH_MARK(((byte) 0x23));
 
     private final byte code;
 
