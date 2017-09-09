@@ -14,7 +14,6 @@ public class StunPowerUp extends PowerUp {
     @Override
     public void update(Boat boat, double time) {
         super.update(boat, time);
-//        boat.setSpeed(0);
 
     }
 
