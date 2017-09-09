@@ -11,7 +11,6 @@ import seng302.team18.model.Boat;
  */
 public class VisualHealth {
 
-    private Pane pane;
     private Image heartImage;
     private HBox heartBox;
     private ImageView heartView1;
@@ -19,8 +18,14 @@ public class VisualHealth {
     private ImageView heartView3;
     private Boat boat;
 
+
+    /**
+     * Construct a VisualHealth for displaying hearts to represent player health in certain game modes.
+     *
+     * @param pane Pane to draw hearts on.
+     * @param boat Player's boat to represent lives for.
+     */
     public VisualHealth(Pane pane, Boat boat) {
-        this.pane = pane;
         this.boat = boat;
         heartImage = new Image("/images/race_view/heart.png");
         heartBox = new HBox();
@@ -30,9 +35,13 @@ public class VisualHealth {
         heartView2 = new ImageView(heartImage);
         heartView3 = new ImageView(heartImage);
         pane.getChildren().add(heartBox);
-
     }
 
+
+    /**
+     * Display a number of hearts according to how many lives the player has.
+     * Only re-draws the hearts if the current number displayed does not match the player's lives.
+     */
     public void display() {
         if (boat.getLives() != heartBox.getChildren().size()) {
             heartBox.getChildren().clear();

@@ -16,10 +16,10 @@ import java.util.List;
  */
 public abstract class AbstractCourseBuilder {
 
-    /**
-     * The compound marks in the course
-     */
-    private List<CompoundMark> compoundMarks = buildCompoundMarks();
+
+    private List<Coordinate> boundaryMarks;
+    private List<CompoundMark> compoundMarks;
+    private List<MarkRounding> markRoundings;
 
 
     /**
@@ -28,7 +28,11 @@ public abstract class AbstractCourseBuilder {
      * @return the constructed course
      */
     public Course buildCourse() {
-        Course course = new Course(compoundMarks, getBoundaryMarks(), getMarkRoundings());
+        boundaryMarks = getBoundaryMarks();
+        compoundMarks = buildCompoundMarks();
+        markRoundings = getMarkRoundings();
+
+        Course course = new Course(compoundMarks, boundaryMarks, markRoundings);
 
         GPSCalculator gpsCalculator = new GPSCalculator();
         List<Coordinate> extremes = gpsCalculator.findMinMaxPoints(course);
@@ -64,7 +68,7 @@ public abstract class AbstractCourseBuilder {
     /**
      * @return the boundary marks to initialise the course with
      */
-    protected abstract List<Coordinate> getBoundaryMarks();
+    public abstract List<Coordinate> getBoundaryMarks();
 
 
     /**

@@ -101,6 +101,9 @@ public class PreRaceController {
             case CONTROLS_TUTORIAL:
                 requestType = RequestType.CONTROLS_TUTORIAL;
                 break;
+            case CHALLENGE_MODE:
+                requestType = RequestType.CHALLENGE_MODE;
+                break;
             case ARCADE:
                 requestType = RequestType.ARCADE;
                 break;

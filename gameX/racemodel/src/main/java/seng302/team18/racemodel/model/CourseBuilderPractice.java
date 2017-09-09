@@ -84,7 +84,7 @@ public class CourseBuilderPractice extends AbstractCourseBuilder {
 
 
     @Override
-    protected List<Coordinate> getBoundaryMarks() {
+    public List<Coordinate> getBoundaryMarks() {
         return Arrays.asList();
     }
 

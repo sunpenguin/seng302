@@ -21,7 +21,7 @@ public class BumperBoatHealthUpdater implements Updater {
      * @param race the race
      */
     @Override
-    public void update(Race race) {
+    public void update(Race race, double time) {
         for (Boat boat : race.getStartingList()) {
             if (isOutSide(boat, race)) {
                 boat.loseLife();

@@ -259,4 +259,13 @@ public class ClientRace {
     public PickUp getPickUp(int id) {
         return course.getPickUp(id);
     }
+
+
+    public Coordinate getDestination(int legNumber) {
+        return course.getDestination(legNumber);
+    }
+
+    public int numSequences() {
+        return course.getMarkSequence().size();
+    }
 }

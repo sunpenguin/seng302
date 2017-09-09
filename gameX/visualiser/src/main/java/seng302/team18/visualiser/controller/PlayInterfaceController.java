@@ -311,7 +311,6 @@ public class PlayInterfaceController {
      */
     public void toGameModeSelection() throws IOException{
         Stage stage = (Stage) innerPane.getScene().getWindow();
-        System.out.println("yea");
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ModeSelection.fxml"));
         Parent root = loader.load();
         GameSelectionController controller = loader.getController();
