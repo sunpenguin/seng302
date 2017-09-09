@@ -92,7 +92,7 @@ public class CourseBuilderBumper extends AbstractCourseBuilder {
 
 
     @Override
-    protected List<Coordinate> getBoundaryMarks() {
+    public List<Coordinate> getBoundaryMarks() {
         // The course can shrink, just need to update like spyro type
         List<Coordinate> boundaryMarks = new ArrayList<>();
         GPSCalculator calculator = new GPSCalculator();
