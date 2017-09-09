@@ -41,10 +41,12 @@ public class PlayInterfaceController {
     private Stage stage;
     private Label hostLabel;
     private Label tutorialLabel;
+    private Label spectatorLabel;
     private Label backLabel;
     private Image hostImage;
     private Image tutorialImage;
     private Image backImage;
+    private Image spectatorImage;
 
     @FXML
     private TextField customHostField;
@@ -77,12 +79,13 @@ public class PlayInterfaceController {
         initialiseHostButton();
         initialiseBackButton();
         initialiseBoatPicker();
+        initialiseSpectatorButton();
     }
 
 
     /**
      * Set up the button for hosting a new game.
-     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     * Image used will changed when hovered over as defined in the playInterface css.
      */
     private void initialiseHostButton() {
         hostLabel = new Label();
@@ -99,7 +102,7 @@ public class PlayInterfaceController {
 
     /**
      * Set up the button for getting back to the title screen.
-     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     * Image used will changed when hovered over as defined in the playInterface css.
      */
     private void initialiseBackButton() {
         backLabel = new Label();
@@ -109,14 +112,14 @@ public class PlayInterfaceController {
 
         backImage= new Image("/images/back_button.gif");
         backLabel.setLayoutX((innerPane.getPrefWidth() / 2) - (Math.floorDiv((int) backImage.getWidth(), 2)));
-        backLabel.setLayoutY((innerPane.getPrefHeight() / 2) + 200);
+        backLabel.setLayoutY((innerPane.getPrefHeight() / 2) + 250);
         backLabel.setOnMouseClicked(event -> backButtonAction());
     }
 
 
     /**
      * Set up the button for hosting a new game.
-     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     * Image used will changed when hovered over as defined in the playInterface css.
      */
     private void initialiseTutorialButton() {
         tutorialLabel = new Label();
@@ -128,6 +131,23 @@ public class PlayInterfaceController {
         tutorialLabel.setLayoutX((innerPane.getPrefWidth() / 2) - (Math.floorDiv((int) tutorialImage.getWidth(), 2)));
         tutorialLabel.setLayoutY((innerPane.getPrefHeight() / 2) + 150);
         tutorialLabel.setOnMouseClicked(event -> tutorialButtonAction());
+    }
+
+
+    /**
+     * Sets up the button for spectating an existing game,
+     * Image used will changed when hovered over as defined in the playInterface css.
+     */
+    private void initialiseSpectatorButton() {
+        spectatorLabel = new Label();
+        spectatorLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/playInterface.css").toExternalForm());
+        spectatorLabel.getStyleClass().add("spectatorImage");
+        innerPane.getChildren().add(spectatorLabel);
+
+        spectatorImage= new Image("/images/playInterface/spectator_button.png");
+        spectatorLabel.setLayoutX((innerPane.getPrefWidth() / 2) - (Math.floorDiv((int) spectatorImage.getWidth(), 2)));
+        spectatorLabel.setLayoutY((innerPane.getPrefHeight() / 2) + 200);
+        spectatorLabel.setOnMouseClicked(event -> spectatorButtonAction());
     }
 
 
@@ -239,7 +259,7 @@ public class PlayInterfaceController {
 
 
     /**
-     * Act on user pressing the host new game button.
+     * Act on user pressing the tutorial game button.
      */
     private void tutorialButtonAction() {
         createModel();
@@ -253,8 +273,10 @@ public class PlayInterfaceController {
     }
 
 
-    @FXML
-    private void startViewing() {
+    /**
+     * Act on user pressing the spectator game button.
+     */
+    private void spectatorButtonAction() {
         createModel();
         try {
             Thread.sleep(400);
@@ -262,10 +284,10 @@ public class PlayInterfaceController {
             e.printStackTrace();
         }
         mode = RaceMode.SPECTATION;
-        if (customHostField.getText().isEmpty() || customPortField.getText().isEmpty()) {
+        if (customHostField.getText().isEmpty() || customPortField.getText().isEmpty()) { // For testing purposes.
             openStream("127.0.0.1", 5005);
         } else {
-            openStream(customHostField.getText(), Integer.parseInt(customPortField.getText()));
+            openStream(customHostField.getText(), Integer.parseInt(customPortField.getText())); // May need better way
         }
     }
 
