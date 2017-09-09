@@ -31,10 +31,11 @@ public class BumperCourseShrinker implements Updater {
      * @param interval between updates (ms)
      * @param speed the boundary marks move towards the origin (m / ms)
      */
-    public BumperCourseShrinker(Coordinate origin, double interval, double speed) {
+    public BumperCourseShrinker(Coordinate origin, double initialDistance, double interval, double speed) {
         this.interval = interval;
         this.origin = origin;
         this.speed = speed;
+        boundaryDistance = initialDistance;
     }
 
 
@@ -51,7 +52,7 @@ public class BumperCourseShrinker implements Updater {
         timeSinceUpdate += time;
         totalTime += time;
         if (timeSinceUpdate >= interval) {
-            boundaryDistance = totalTime * speed;
+            boundaryDistance -= totalTime * speed;
             repositionBoundaries(race.getCourse());
             timeSinceUpdate = 0;
         }

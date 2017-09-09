@@ -29,9 +29,10 @@ public class RegularStatusUpdater implements Updater {
      * Updates the race status throughout the race.
      *
      * @param race to update.
+     * @param time to update the race by.
      */
     @Override
-    public void update(Race race) {
+    public void update(Race race, double time) {
         if (isFinished(race)) {
             race.setStatus(RaceStatus.FINISHED);
         } else if (ZonedDateTime.now().isAfter(race.getStartTime())) {
