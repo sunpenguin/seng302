@@ -253,6 +253,23 @@ public class PlayInterfaceController {
     }
 
 
+    @FXML
+    private void startViewing() {
+        createModel();
+        try {
+            Thread.sleep(400);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mode = RaceMode.SPECTATION;
+        if (customHostField.getText().isEmpty() || customPortField.getText().isEmpty()) {
+            openStream("127.0.0.1", 5005);
+        } else {
+            openStream(customHostField.getText(), Integer.parseInt(customPortField.getText()));
+        }
+    }
+
+
     /**
      * Opens a socket and connection on the given host and port number
      * @param host The host IP address for the socket

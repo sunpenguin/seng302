@@ -78,9 +78,10 @@ public class ConnectionListener extends Observable implements Observer {
     private void addClient(ClientConnection client) {
         try {
             Receiver receiver = new Receiver(client.getSocket(), factory);
-            int sourceID = ids.get(players.size());
+
             executor.submit(() -> {
                 MessageBody message = null;
+                int sourceID = ids.get(players.size());
 
                 while (message == null && System.currentTimeMillis() < timeout) {
                     try {
@@ -99,6 +100,8 @@ public class ConnectionListener extends Observable implements Observer {
                         setChanged();
                         notifyObservers(failMessage);
                         return;
+                    } else if (!players.isEmpty() && requestType.getCode() == RaceMode.SPECTATION.getCode()) {
+                        sourceID = 9000;
                     }
 
                     switch (requestType) {
@@ -116,8 +119,13 @@ public class ConnectionListener extends Observable implements Observer {
                             courseBuilder = new CourseBuilderBumper();
                             constructRace();
                             break;
+                        case VIEWING:
+                            raceBuilder = new RegularRaceBuilder();
                     }
-                    addPlayer(receiver, sourceID);
+
+                    if (requestType.getCode() != RaceMode.SPECTATION.getCode()) {
+                        addPlayer(receiver, sourceID);
+                    }
                     sendMessage(client, sourceID, requestType);
                 }
             });
