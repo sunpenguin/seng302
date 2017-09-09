@@ -24,29 +24,46 @@ public class BumperCourseShrinker implements Updater {
     private double speed;
 
 
+    /**
+     * Constructor for BumperCourseShrinker.
+     *
+     * @param origin center of the course.
+     * @param interval between updates (ms)
+     * @param speed the boundary marks move towards the origin (m / ms)
+     */
     public BumperCourseShrinker(Coordinate origin, double interval, double speed) {
         this.interval = interval;
         this.origin = origin;
         this.speed = speed;
     }
 
+
+    /**
+     *
+     * @param race
+     * @param time
+     */
     @Override
-    public void update(Race race) {
-//        if (!RaceStatus.STARTED.equals(race.getStatus())) {
-//            return;
-//        }
-//        timeSinceUpdate += time;
-//        totalTime += time;
-//        if (timeSinceUpdate >= interval) {
-//            speed = totalTime * multiplier;
-//            boundaryDistance = totalTime * speed;
-//            repositionBoundaries(race.getCourse());
-//            timeSinceUpdate = 0;
-//        }
+    public void update(Race race, double time) {
+        if (!RaceStatus.STARTED.equals(race.getStatus())) {
+            return;
+        }
+        timeSinceUpdate += time;
+        totalTime += time;
+        if (timeSinceUpdate >= interval) {
+            boundaryDistance = totalTime * speed;
+            repositionBoundaries(race.getCourse());
+            timeSinceUpdate = 0;
+        }
     }
 
 
-
+    /**
+     * Position the boundaries of the course.
+     * Each boundary mark is positioned boundaryDistance meters from the origin.
+     *
+     * @param course course to position boundaries for.
+     */
     private void repositionBoundaries(Course course) {
         boundaryMarks.clear();
 
@@ -67,5 +84,7 @@ public class BumperCourseShrinker implements Updater {
         boundaryMarks.add(bottomLeft);
         boundaryMarks.add(left);
         boundaryMarks.add(topLeft);
+
+        course.setCourseLimits(boundaryMarks);
     }
 }
