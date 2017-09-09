@@ -16,7 +16,7 @@ public class Race {
     private final GPSCalculator gps = new GPSCalculator();
     private final RoundingDetector detector = new RoundingDetector();
     private int id;
-    private RaceStatus status;
+    private RaceStatus status = RaceStatus.PRESTART;
     private RaceType raceType;
     private Regatta regatta = new Regatta();
     private Course course;
@@ -282,11 +282,7 @@ public class Race {
 
 
     public boolean isFinished() {
-        Collection<BoatStatus> finishedStatuses = Arrays.asList(BoatStatus.DNF, BoatStatus.DNS, BoatStatus.FINISHED, BoatStatus.DSQ);
-        int numFinished = (int) startingList.stream()
-                .filter(boat -> finishedStatuses.contains(boat.getStatus()))
-                .count();
-        return startingList.size() == numFinished && startingList.size() != 0;
+        return status.equals(RaceStatus.FINISHED);
     }
 
 
