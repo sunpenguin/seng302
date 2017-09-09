@@ -32,6 +32,7 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new MovementUpdater());
         updaters.add(new BoatCollisionUpdater());
         updaters.add(new BumperBoatHealthUpdater());
+//        updaters.add();
 
         return updaters;
     }

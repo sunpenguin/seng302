@@ -118,8 +118,6 @@ public class CourseBuilderBumper extends AbstractCourseBuilder {
         boundaryMarks.add(left);
         boundaryMarks.add(topLeft);
 
-//        count += 2;
-
         return boundaryMarks;
     }
 
