@@ -59,6 +59,10 @@ public class BoatActionInterpreter extends MessageInterpreter {
     }
 
 
+    /**
+     * Updates the starting list continuously.
+     *
+     */
     private void updateList() {
         boats = race.getStartingList()
                 .stream()

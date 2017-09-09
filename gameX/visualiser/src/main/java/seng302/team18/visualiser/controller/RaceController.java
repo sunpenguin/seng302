@@ -143,6 +143,9 @@ public class RaceController implements Observer {
     /**
      * Register key presses to certain methods.
      * Handles boat control, zooming.
+     *
+     * Allow boat control only to actual racing player (client in spectrator mode can only view the race instead of playing).
+     *
      */
     private void installKeyHandler() {
         EventHandler<KeyEvent> keyEventHandler =
