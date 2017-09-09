@@ -117,7 +117,7 @@ public class RaceController implements Observer {
 
     private ControlsTutorial controlsTutorial;
 
-    private RaceClock raceClock;
+    private Clock clock;
     private HBox timeBox;
     private Label timeLabel;
     private VisualHealth visualHealth;
@@ -617,7 +617,7 @@ public class RaceController implements Observer {
         timeLabel.setPrefWidth(80);
         timeBox.setPrefWidth(120);
         timeBox.setAlignment(Pos.CENTER);
-        raceClock = new RaceClock(timeLabel);
+        clock = new StopWatchClock(timeLabel);
         raceViewPane.getChildren().add(timeBox);
     }
 
@@ -626,7 +626,7 @@ public class RaceController implements Observer {
      * Start the race clock by invoking start() on the RaceClock's AnimationTimer.
      */
     private void startRaceTimer() {
-        raceClock.start();
+        clock.start();
     }
 
 
