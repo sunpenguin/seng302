@@ -55,4 +55,27 @@ public class ProjectileLocationMessage implements MessageBody {
     public void setSpeed(double speed) {
         this.speed = speed;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProjectileLocationMessage that = (ProjectileLocationMessage) o;
+
+        if (id != that.id) return false;
+        if (Double.compare(that.heading, heading) != 0) return false;
+        if (location != null ? !location.equals(that.location) : that.location != null) return false;
+        return (Double.compare(that.speed, speed) != 0);
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectileLocationMessage{" +
+                "id=" + id +
+                ", heading=" + heading +
+                ", location=" + location +
+                ", speed=" + speed +
+                '}';
+    }
 }
