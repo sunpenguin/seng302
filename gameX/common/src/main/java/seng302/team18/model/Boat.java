@@ -1,10 +1,6 @@
 package seng302.team18.model;
 
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.*;
 import seng302.team18.util.GPSCalculator;
 
@@ -35,6 +31,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private ZonedDateTime powerDurationEnd;
     private PowerUp updater = new BoatUpdater();
     private int lives;
+    private boolean hasCollided = false;
 
     /**
      * A constructor for the Boat class
@@ -414,5 +411,15 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         } else {
             updater.update(this, time);
         }
+    }
+
+
+    public boolean getHasCollided() {
+        return hasCollided;
+    }
+
+
+    public void setHasCollided(boolean hasCollided) {
+        this.hasCollided = hasCollided;
     }
 }
