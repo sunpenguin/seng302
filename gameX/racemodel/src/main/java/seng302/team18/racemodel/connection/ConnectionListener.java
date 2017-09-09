@@ -121,12 +121,14 @@ public class ConnectionListener extends Observable implements Observer {
                             break;
                         case VIEWING:
                             raceBuilder = new RegularRaceBuilder();
-                            race = raceBuilder.buildRace(race, regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
+                            constructRace();
                             break;
                     }
 
                     if (requestType.getCode() != RaceMode.SPECTATION.getCode()) {
                         addPlayer(receiver, sourceID);
+                        setChanged();
+                        notifyObservers(client);
                     }
                     sendMessage(client, sourceID, requestType);
                 }
@@ -165,6 +167,12 @@ public class ConnectionListener extends Observable implements Observer {
                 e.printStackTrace();
             }
             return;
+        }
+
+        if (sourceID == 9000) {
+            player.setSpectating(true);
+        } else {
+            player.setSpectating(false);
         }
         player.setId(sourceID);
     }

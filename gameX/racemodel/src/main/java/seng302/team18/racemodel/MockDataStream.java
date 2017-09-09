@@ -84,7 +84,6 @@ public class MockDataStream {
 
         server.setCloseOnEmpty(true);
         server.addObserver(listener);
-        server.addObserver(testMock);
         listener.addObserver(testMock);
         server.openServer();
         listener.setTimeout(System.currentTimeMillis() + ((WARNING_WAIT_TIME - CUTOFF_DIFFERENCE) * 1000));

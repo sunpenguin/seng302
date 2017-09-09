@@ -150,39 +150,49 @@ public class RaceController implements Observer {
                     if (keyEvent.getCode() != null) {
                         BoatActionMessage message = new BoatActionMessage(race.getPlayerId());
                         boolean send = true;
+
+                        if (race.getMode() != RaceMode.SPECTATION) {
+                            switch (keyEvent.getCode()) {
+                                case SPACE:
+                                    message.setAutoPilot();
+                                    break;
+                                case ENTER:
+                                    message.setTackGybe();
+                                    break;
+                                case PAGE_UP:
+                                case UP:
+                                    message.setUpwind();
+                                    break;
+                                case PAGE_DOWN:
+                                case DOWN:
+                                    message.setDownwind();
+                                    break;
+                                case SHIFT:
+                                    sailIn = getPlayerBoat().isSailOut();
+                                    if (sailIn) {
+                                        message.setSailIn();
+                                    } else {
+                                        message.setSailOut();
+                                    }
+                                    break;
+                                case S:
+                                    message.setConsume();
+                                    break;
+                                default:
+                                    send = false;
+                            }
+                        }
+
                         switch (keyEvent.getCode()) {
-                            case SPACE:
-                                message.setAutoPilot();
-                                break;
-                            case ENTER:
-                                message.setTackGybe();
-                                break;
-                            case PAGE_UP:
-                            case UP:
-                                message.setUpwind();
-                                break;
-                            case PAGE_DOWN:
-                            case DOWN:
-                                message.setDownwind();
-                                break;
-                            case SHIFT:
-                                sailIn = getPlayerBoat().isSailOut();
-                                if (sailIn) {
-                                    message.setSailIn();
-                                } else {
-                                    message.setSailOut();
-                                }
-                                break;
                             case Z:
                                 if (pixelMapper.getZoomLevel() > 0) {
                                     pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() + 1);
                                 } else {
-                                    Boat boat = race.getBoat(race.getPlayerId());
+                                    Boat boat = race.getBoat(race.getStartingList().get(0).getId());
                                     pixelMapper.setZoomLevel(1);
                                     pixelMapper.track(boat);
                                     pixelMapper.setTracking(true);
                                 }
-                                send = false;
                                 break;
                             case X:
                                 if (pixelMapper.getZoomLevel() - 1 <= 0) {
@@ -191,8 +201,6 @@ public class RaceController implements Observer {
                                 }
                                 pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() - 1);
 
-
-                                send = false;
                                 break;
                             case ESCAPE:
                                 if (group.getChildren().contains(escapeMenuPane)) {
@@ -200,18 +208,12 @@ public class RaceController implements Observer {
                                 } else {
                                     openEscapeMenu("");
                                 }
-                                send = false;
                                 break;
                             case TAB:
                                 toggleTabView();
-                                send = false;
                                 break;
-                            case S:
-                                message.setConsume();
-                                break;
-                            default:
-                                send = false;
                         }
+
                         if (send) {
                             if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
                                 controlsTutorial.setBoat(getPlayerBoat()); //TODO: get sam to change this seb67 17/8
@@ -353,7 +355,9 @@ public class RaceController implements Observer {
 
 
     /**
-     * Sets the annotation level to be none (no annotations showing)
+     * Sets the annotation level to be none (no annotations showing)case S:
+                                message.setConsume();
+                                break;
      */
     @FXML
     public void setNoneAnnotationLevel() {

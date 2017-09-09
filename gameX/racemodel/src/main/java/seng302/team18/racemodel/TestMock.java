@@ -56,7 +56,9 @@ public class TestMock implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) { // Server ?
             ClientConnection client = (ClientConnection) arg;
-            race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
+            if (client.isSpectaing() == false) { // not in spectating mode
+                race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
+            }
             client.setId(boats.get(race.getStartingList().size()).getId());
             generateXMLs();
             sendXmlRegatta(client);
