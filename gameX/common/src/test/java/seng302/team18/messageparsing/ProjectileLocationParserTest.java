@@ -22,15 +22,19 @@ public class ProjectileLocationParserTest {
         @Before
         public void setUp() {
             parser = new ProjectileParser();
-            this.message = new byte[] { 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -24, 3, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0 };
-            expected = new ProjectileLocationMessage(1, 5, 5, 5, 5);
+            this.message = new byte[] { 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0 };
+            expected = new ProjectileLocationMessage(5, 0, 0, 0.010986328125, 0);
         }
 
 
         @Test
         public void parseTest() {
             ProjectileLocationMessage actual = (ProjectileLocationMessage) parser.parse(message);
-            Assert.assertEquals(expected, actual);
+            Assert.assertEquals(expected.getId(), actual.getId());
+            Assert.assertEquals(expected.getHeading(), actual.getHeading(), 0);
+            Assert.assertEquals(expected.getLocation(), actual.getLocation());
+            Assert.assertEquals(expected.getSpeed(), actual.getSpeed(), 0);
+            Assert.assertEquals(expected.getType(), actual.getType());
         }
 
 
