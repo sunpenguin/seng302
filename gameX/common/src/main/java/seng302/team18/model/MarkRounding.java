@@ -165,4 +165,17 @@ public class MarkRounding {
     public int getMarkId() {
         return compoundMark.getId();
     }
+
+
+    @Override
+    public String toString() {
+        return "MarkRounding{" +
+                "sequenceNumber=" + sequenceNumber +
+                ", compoundMark=" + compoundMark +
+                ", roundingDirection=" + roundingDirection +
+                ", zoneSize=" + zoneSize +
+                ", passAngle=" + passAngle +
+                ", gateType=" + gateType +
+                '}';
+    }
 }

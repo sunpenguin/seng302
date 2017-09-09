@@ -35,6 +35,7 @@ public class TestMock implements Observer {
     private MessageGenerator generatorXmlRace;
 
     private AbstractCourseBuilder courseBuilder;
+    private boolean shouldSendXML = false;
 
 
     /**
@@ -152,13 +153,9 @@ public class TestMock implements Observer {
 
 
         do {
-            if (race.getMode() == RaceMode.CHALLENGE_MODE && race.getStatus().equals(RaceStatus.STARTED)) {
-                if (ZonedDateTime.now().isAfter(timeToUpdateChallengeCourse)) {
-                    timeToUpdateChallengeCourse = ZonedDateTime.now().plusNanos(50*1000000);
-                    race.getCourse().setCourseLimits(courseBuilder.getBoundaryMarks());
-                    generateXMLs();
-                    sendRaceXml();
-                }
+            if (shouldSendXML) {
+                generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
+                sendRaceXml();
             }
 
             timeLast = timeCurr;
@@ -269,5 +266,10 @@ public class TestMock implements Observer {
         for (PowerUpEvent event : race.popPowerUpEvents()) {
             server.broadcast((new PowerTakenGenerator(event.getBoatId(), event.getPowerId(), event.getPowerDuration()).getMessage()));
         }
+    }
+
+
+    public void setSendRaceXML(boolean send) {
+        shouldSendXML = send;
     }
 }

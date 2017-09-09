@@ -1,16 +1,13 @@
 package seng302.team18.racemodel.model;
 
-import seng302.team18.model.BodyMass;
-import seng302.team18.model.PickUp;
-import seng302.team18.model.RaceMode;
-import seng302.team18.model.RaceType;
+import seng302.team18.model.*;
 import seng302.team18.model.updaters.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dhl25 on 7/09/17.
+ * RaceBuilder for the challenge mode.
  */
 public class ChallengeRaceBuilder extends AbstractRaceBuilder {
 
@@ -34,7 +31,8 @@ public class ChallengeRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new MarkCollisionUpdater());
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());
-        updaters.add(new SpeedUpdater(10 * 1000, 1));
+        updaters.add(new SpeedUpdater(34, 0.00025, 1));
+        updaters.add(new ChallengeCourseShrinker(new Coordinate(38.21748,-106.52344), 34, 0.00000075, 0.025));
         return updaters;
     }
 

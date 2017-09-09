@@ -27,7 +27,7 @@ public class Course {
     private ZoneId timeZone = ZoneId.systemDefault();
 
 
-    public Course(Collection<CompoundMark> marks, Collection<Coordinate> boundaries, double windDirection, double windSpeed,
+    public Course(Collection<CompoundMark> marks, List<Coordinate> boundaries, double windDirection, double windSpeed,
                   ZoneId timeZone, List<MarkRounding> markSequence) {
         this.compoundMarks.addAll(marks);
         this.courseLimits.addAll(boundaries);
@@ -40,7 +40,7 @@ public class Course {
         initializeCourse();
     }
 
-    public Course(Collection<CompoundMark> marks, Collection<Coordinate> boundaries, List<MarkRounding> markSequence) {
+    public Course(Collection<CompoundMark> marks, List<Coordinate> boundaries, List<MarkRounding> markSequence) {
         this.compoundMarks.addAll(marks);
         this.courseLimits.addAll(boundaries);
         this.markSequence.addAll(markSequence);
@@ -66,12 +66,12 @@ public class Course {
     }
 
 
-    public List<MarkRounding> getMarkSequence() {
+    public synchronized List<MarkRounding> getMarkSequence() {
         return markSequence;
     }
 
 
-    public void setMarkSequence(Collection<MarkRounding> markSequence) {
+    public synchronized void setMarkSequence(List<MarkRounding> markSequence) {
         this.markSequence.clear();
         this.markSequence.addAll(markSequence);
         initializeCourse();
@@ -112,7 +112,7 @@ public class Course {
     }
 
 
-    public void setCourseLimits(Collection<Coordinate> boundaries) {
+    public void setCourseLimits(List<Coordinate> boundaries) {
         this.courseLimits.clear();
         this.courseLimits.addAll(boundaries);
     }
@@ -290,22 +290,29 @@ public class Course {
     }
 
 
-    public MarkRounding getMarkRounding(int sequenceNumber) {
+    public synchronized MarkRounding getMarkRounding(int sequenceNumber) {
         return markSequence.get(sequenceNumber);
     }
 
 
-    public Coordinate getDestination(int legNumber) {
+    public synchronized Coordinate getDestination(int legNumber) {
         return markSequence.get(legNumber).getDestination();
     }
 
 
-    public int getStartLineId() {
-        return markSequence.get(0).getMarkId();
+    public synchronized int getStartLineId() {
+        try {
+            return markSequence.get(0).getMarkId();
+        } catch (Exception e) {
+            for (MarkRounding mark : markSequence) {
+                System.out.println(mark);
+            }
+            throw e;
+        }
     }
 
 
-    public int getFinshLineId() {
+    public synchronized int getFinishLineId() {
         return markSequence.get(markSequence.size() - 1).getMarkId();
     }
 }

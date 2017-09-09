@@ -9,52 +9,59 @@ public class SpeedUpdater implements Updater {
 
 
     private final double interval;
-    private final double modifier;
-    private double accumulatedTime = 0;
-    private double accumulatedSpeed = 0;
+    private final double multiplier;
+    private final double initialSpeed;
+    private long totalTime = 0;
+    private long timeSinceUpdate = 0;
+    private double speed = 0;
 
 
     /**
-     * Increases the speed of all boats in a race at the
-     * given interval by the given modifier.
+     * Construct a new SpeedUpdater.
      *
-     * Given an interval of 10 seconds and modifier of 3
-     * after 10 seconds the boat will move 3 times faster
-     * and after 20 seconds the boat will move 6 times faster.
+     * speed is calculated every interval milliseconds to be
+     * totalTimePassed (milliseconds) * multiplier + initalSpeed.
      *
-     * @param interval that speed increase is updated in milliseconds.
-     * @param modifier to increase speed by.
+     * @param interval time to wait between updates (milliseconds).
+     * @param multiplier amount to increase speed by.
+     * @param initialSpeed of the boats.
      */
-    public SpeedUpdater(double interval, double modifier) {
+    public SpeedUpdater(double interval, double multiplier, double initialSpeed) {
         this.interval = interval;
-        this.modifier = modifier;
+        this.multiplier = multiplier;
+        this.initialSpeed = initialSpeed;
     }
 
 
+    /**
+     * Update the speed of the boat if time since last update exceeds interval (milliseconds).
+     *
+     * @param race to update
+     * @param time to update by (in milliseconds)
+     */
     @Override
     public void update(Race race, double time) {
         if (!RaceStatus.STARTED.equals(race.getStatus())) {
             return;
         }
-        accumulatedTime += time;
-        if (accumulatedTime >= interval) {
-            accumulatedSpeed += modifier;
-            increaseSpeed(race, accumulatedSpeed);
-            accumulatedTime = 0;
+        totalTime += time;
+        timeSinceUpdate += time;
+        if (timeSinceUpdate >= interval) {
+            speed = totalTime * multiplier + initialSpeed;
+            increaseSpeed(race);
+            timeSinceUpdate = 0;
         }
     }
 
 
     /**
-     * Increases the speed of all boats in a race by the given multiplier.
-     * This is done using speed power ups.
+     * Increase speed of all boats in the race by applying a speed power up to each boat.
      *
-     * @param race to get boats from.
-     * @param multiplier for speed.
+     * @param race to apply speed power ups to it's participants.
      */
-    private void increaseSpeed(Race race, double multiplier) {
+    private void increaseSpeed(Race race) {
         for (Boat boat : race.getStartingList()) {
-            PowerUp powerUp = new SpeedPowerUp(multiplier);
+            PowerUp powerUp = new SpeedPowerUp(speed);
             powerUp.setDuration(interval);
             boat.setPowerUp(powerUp);
             boat.activatePowerUp();
