@@ -1,6 +1,7 @@
 package seng302.team18.visualiser;
 
 import seng302.team18.model.*;
+import seng302.team18.util.GPSCalculator;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -23,6 +24,7 @@ public class ClientRace {
     private ZonedDateTime currentTime;
     private Integer playerId;
     private RaceMode mode = RaceMode.RACE;
+    private Boat spectatorBoat = new Boat("Spectator boat", "Spec boat", 9000, 0);
 
 
     public ClientRace() {
@@ -34,6 +36,8 @@ public class ClientRace {
         currentTime = ZonedDateTime.now(course.getTimeZone());
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         raceType = RaceType.MATCH;
+        GPSCalculator gps = new GPSCalculator();
+        spectatorBoat.setCoordinate(gps.getCentralCoordinate(course.getCourseLimits()));
     }
 
 
@@ -258,5 +262,13 @@ public class ClientRace {
 
     public PickUp getPickUp(int id) {
         return course.getPickUp(id);
+    }
+
+    public Boat getSpectatorBoat() {
+        return spectatorBoat;
+    }
+
+    public void setSpectatorBoat(Boat spectatorBoat) {
+        this.spectatorBoat = spectatorBoat;
     }
 }

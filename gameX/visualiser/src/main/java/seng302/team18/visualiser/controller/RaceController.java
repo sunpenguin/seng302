@@ -246,7 +246,11 @@ public class RaceController implements Observer {
                 .stream()
                 .filter(boat -> boat.getId() == race.getPlayerId())
                 .collect(Collectors.toList());
-        return (Boat) playerBoatList.get(0);
+        if (!playerBoatList.isEmpty()) {
+            return (Boat) playerBoatList.get(0);
+        } else {
+            return race.getSpectatorBoat();
+        }
     }
 
 

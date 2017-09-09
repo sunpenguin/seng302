@@ -93,15 +93,15 @@ public class ConnectionListener extends Observable implements Observer {
 
                     RequestType requestType = request.getAction();
 
-                    if (!players.isEmpty() && requestType.getCode() != race.getMode().getCode()) {
+                    if (!players.isEmpty() && requestType.getCode() == RaceMode.SPECTATION.getCode()) {
+                        sourceID = 9000;
+                    } else if (!players.isEmpty() && requestType.getCode() != race.getMode().getCode()) {
                         //If a player connects to an already opened server that cannot accept acceptance type
                         sendMessage(client, sourceID, RequestType.FAILURE_CLIENT_TYPE);
                         AcceptanceMessage failMessage = new AcceptanceMessage(sourceID,RequestType.FAILURE_CLIENT_TYPE);
                         setChanged();
                         notifyObservers(failMessage);
                         return;
-                    } else if (!players.isEmpty() && requestType.getCode() == RaceMode.SPECTATION.getCode()) {
-                        sourceID = 9000;
                     }
 
                     switch (requestType) {
@@ -121,6 +121,8 @@ public class ConnectionListener extends Observable implements Observer {
                             break;
                         case VIEWING:
                             raceBuilder = new RegularRaceBuilder();
+                            race = raceBuilder.buildRace(race, regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
+                            break;
                     }
 
                     if (requestType.getCode() != RaceMode.SPECTATION.getCode()) {
