@@ -4,6 +4,7 @@ import seng302.team18.model.RaceMode;
 import seng302.team18.model.RaceType;
 import seng302.team18.model.updaters.*;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class RegularRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new MarkCollisionUpdater());
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());
+        updaters.add(new RegularStatusUpdater(ZonedDateTime.now(), 2, 2));
 
         return updaters;
     }

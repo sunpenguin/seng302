@@ -146,11 +146,10 @@ public class TestMock implements Observer {
         ZonedDateTime warningTime = initialTime.plusSeconds(warningWaitTime);
         ZonedDateTime prepTime = warningTime.plusSeconds(prepWaitTime);
         ZonedDateTime connectionCutOff = warningTime.minusSeconds(cutoffDifference);
-        ZonedDateTime timeToUpdateChallengeCourse = ZonedDateTime.now().plusNanos(50*1000000);
         race.setStartTime(prepTime.plusSeconds(startWaitTime));
-
-        race.setStatus(RaceStatus.PRESTART);
-
+        for (Boat b : race.getStartingList()) {
+            scheduledMessages.add(new BoatMessageGenerator(b));
+        }
 
         do {
             if (shouldSendXML) {
@@ -167,18 +166,6 @@ public class TestMock implements Observer {
 
             race.setCurrentTime(ZonedDateTime.now());
 
-            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(warningTime)) {
-                race.setStatus(RaceStatus.WARNING);
-
-            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(prepTime)) {
-                generateXMLs();
-                sendRaceXml();
-                sendBoatsXml();
-                switchToPrep();
-            } else {
-                switchToStarted();
-            }
-
             runRace(timeCurr, timeLast);
             updateClients(timeCurr);
 
@@ -192,34 +179,6 @@ public class TestMock implements Observer {
         } while (!race.isFinished() && open);
 
         sendFinalMessages();
-    }
-
-
-    /**
-     * Switch into the preparatory stage.
-     * At this time, also stop accepting new connections and set up a BoatMessageGenerator for each boat.
-     */
-    private void switchToPrep() {
-        race.setStatus(RaceStatus.PREPARATORY);
-        server.stopAcceptingConnections();
-
-        for (Boat b : race.getStartingList()) {
-            scheduledMessages.add(new BoatMessageGenerator(b));
-        }
-    }
-
-
-    /**
-     * If at the necessary time, switch the RaceStatus to STARTED.
-     */
-    private void switchToStarted() {
-        if ((race.getStatus() == RaceStatus.PREPARATORY) && ZonedDateTime.now().isAfter(race.getStartTime())) {
-            race.setStatus(RaceStatus.STARTED);
-            race.getStartingList().stream()
-                    .filter(boat -> boat.getStatus().equals(BoatStatus.PRE_START))
-                    .forEach(boat -> boat.setStatus(BoatStatus.RACING));
-
-        }
     }
 
 

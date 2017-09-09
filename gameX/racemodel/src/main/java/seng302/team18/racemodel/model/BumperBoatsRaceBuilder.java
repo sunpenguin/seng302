@@ -5,6 +5,7 @@ import seng302.team18.model.RaceMode;
 import seng302.team18.model.RaceType;
 import seng302.team18.model.updaters.*;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new BoatCollisionUpdater());
         updaters.add(new BumperBoatHealthUpdater());
         updaters.add(new BumperCourseShrinker(new Coordinate(5.00150, 4.0005), 200, 34, 0.000005));
+        updaters.add(new RegularStatusUpdater(ZonedDateTime.now(), 2, 2));
 
         return updaters;
     }

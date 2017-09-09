@@ -53,7 +53,8 @@ public class CourseRenderer {
             // Renders CompoundMarks
             for (int i = 0; i < compoundMarks.size(); i++) {
                 CompoundMark compoundMark = compoundMarks.get(i);
-                if (compoundMark.isGate() && (
+                if (compoundMark != null &&
+                        compoundMark.isGate() && (
                         compoundMark.getId().equals(course.getStartLineId()) ||
                         compoundMark.getId().equals(course.getFinishLineId()))) { // draw a line between the gate if its a start or finish
                     renderGate(compoundMark);

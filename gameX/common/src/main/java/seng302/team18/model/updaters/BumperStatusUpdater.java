@@ -13,13 +13,13 @@ import java.util.List;
 /**
  * Created by dhl25 on 9/09/17.
  */
-public class RegularStatusUpdater implements Updater {
+public class BumperStatusUpdater implements Updater {
 
     private ZonedDateTime warningTime;
     private ZonedDateTime prepTime;
 
 
-    public RegularStatusUpdater(ZonedDateTime initialTime, long warningTimeSeconds, long prepTimeSeconds) {
+    public BumperStatusUpdater(ZonedDateTime initialTime, long warningTimeSeconds, long prepTimeSeconds) {
         this.warningTime = initialTime.plusSeconds(warningTimeSeconds);
         this.prepTime = initialTime.plusSeconds(warningTimeSeconds + prepTimeSeconds);
     }
@@ -61,6 +61,15 @@ public class RegularStatusUpdater implements Updater {
                 .stream()
                 .filter(boat -> finishedStatuses.contains(boat.getStatus()))
                 .count();
-        return startingList.size() == numFinished && startingList.size() != 0;
+        if (startingList.size() == numFinished - 1 && startingList.size() != 0) {
+            for (Boat boat : startingList) {
+                if (!finishedStatuses.contains(boat.getStatus())) {
+                    boat.setStatus(BoatStatus.FINISHED);
+                }
+            }
+            return true;
+        }
+        return false;
     }
+
 }
