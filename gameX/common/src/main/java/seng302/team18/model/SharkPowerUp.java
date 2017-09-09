@@ -7,7 +7,7 @@ import seng302.team18.message.PowerType;
  */
 public class SharkPowerUp extends PowerUp {
 
-    private BoatUpdater updater = new BoatUpdater();
+    private BoatPowerUpUpdater updater = new BoatPowerUpUpdater();
 
 
     public SharkPowerUp() {

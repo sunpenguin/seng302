@@ -6,13 +6,13 @@ package seng302.team18.model;
 public abstract class Projectile {
 
     private int id;
-    private Coordinate location;
+    private BodyMass bodyMass  = new BodyMass();
     private double heading;
     private double speed;
 
-    public Projectile(int id, Coordinate location, double heading, double speed) {
+    public Projectile(int id, double radius, double weight, Coordinate location, double heading, double speed) {
         this.id = id;
-        this.location = location;
+        this.bodyMass = new BodyMass(location,radius,weight);
         this.heading = heading;
         this.speed = speed;
     }
@@ -30,11 +30,15 @@ public abstract class Projectile {
     }
 
     public Coordinate getLocation() {
-        return location;
+        return bodyMass.getLocation();
     }
 
     public void setLocation(Coordinate location) {
-        this.location = location;
+        bodyMass.setLocation(location);
+    }
+
+    public BodyMass getBodyMass() {
+        return bodyMass;
     }
 
     public double getHeading() {

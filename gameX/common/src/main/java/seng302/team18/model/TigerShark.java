@@ -11,8 +11,8 @@ public class TigerShark extends Projectile{
 
 
 
-    public TigerShark(int source_id, Coordinate location, double heading, double speed) {
-        super(source_id, location, heading, speed);
+    public TigerShark(int source_id, double radius, double weight, Coordinate location, double heading, double speed) {
+        super(source_id, radius, weight, location, heading, speed);
     }
 
     @Override

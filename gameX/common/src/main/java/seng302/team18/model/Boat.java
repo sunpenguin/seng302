@@ -30,7 +30,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private PowerUp powerUp;// = new SpeedPowerUp(this);
     private boolean isPowerActive = false; //Changed for merging into dev branch
     private ZonedDateTime powerDurationEnd;
-    private PowerUp updater = new BoatUpdater();
+    private PowerUp updater = new BoatPowerUpUpdater();
     private int lives;
     private boolean hasCollided = false;
 
@@ -406,7 +406,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param time that has passed
      */
     public void update(double time) {
-        if (isPowerActive && powerUp.getType().equals(PowerType.SPEED)) {
+        if (isPowerActive) {
             powerUp.update(this, time);
             if (ZonedDateTime.now().isAfter(powerDurationEnd)) {
                 isPowerActive = false;
