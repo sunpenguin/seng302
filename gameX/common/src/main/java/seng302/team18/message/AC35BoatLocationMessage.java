@@ -21,6 +21,7 @@ public class AC35BoatLocationMessage implements MessageBody {
      * @param heading    of the boat.
      * @param speed      of the boat in knots.
      * @param sailsOut   true if the boat has its sails out
+     * @param lives      number of lives a boat has
      */
     public AC35BoatLocationMessage(int sourceId, Coordinate coordinate, double heading, double speed, boolean sailsOut, int lives) {
         this.sourceId = sourceId;
