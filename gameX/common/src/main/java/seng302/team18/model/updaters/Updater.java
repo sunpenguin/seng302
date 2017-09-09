@@ -7,5 +7,11 @@ import seng302.team18.model.Race;
  */
 public interface Updater {
 
-    void update(Race race);
+    /**
+     * Updates the given race by the given amount of time.
+     *
+     * @param race to update
+     * @param time to update by (in milliseconds)
+     */
+    void update(Race race, double time);
 }

@@ -77,11 +77,13 @@ public class CompoundMark implements GeographicLocation {
     }
 
 
-    public List<Mark> getMarks() {
+    public synchronized List<Mark> getMarks() {
         return marks;
     }
 
 
-
+    public boolean isGate() {
+        return marks.size() == 2;
+    }
 
 }

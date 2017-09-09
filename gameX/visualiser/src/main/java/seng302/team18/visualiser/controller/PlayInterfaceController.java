@@ -231,6 +231,7 @@ public class PlayInterfaceController {
         try {
             toGameModeSelection();
         } catch (IOException e){
+            e.printStackTrace();
         }
 //        mode = RaceMode.ARCADE; // CHANGE MODE HERE
 //        openStream("127.0.0.1", 5005);

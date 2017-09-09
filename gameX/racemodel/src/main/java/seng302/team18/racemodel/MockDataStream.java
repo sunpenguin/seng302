@@ -22,8 +22,8 @@ import java.util.Properties;
 public class MockDataStream {
 
     // Change concrete builders here to change the preset of race/regatta/course
-    private static final AbstractRaceBuilder RACE_BUILDER = new RegularRaceBuilder();
-    private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderRealistic();
+    private static final AbstractRaceBuilder RACE_BUILDER = new ChallengeRaceBuilder();
+    private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderChallenge();
     private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilderRealistic();
     private static final AbstractParticipantsBuilder PARTICIPANTS_BUILDER = new ParticipantsBuilderSize20();
 
@@ -79,7 +79,8 @@ public class MockDataStream {
         Race race = RACE_BUILDER.buildRace(new Race(), REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse());
         Server server = new Server(SERVER_PORT, MAX_PLAYERS);
         ConnectionListener listener = new ConnectionListener(race, PARTICIPANTS_BUILDER.getIdPool(), new AC35MessageParserFactory());
-        TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool());
+        TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool(), COURSE_BUILDER);
+        testMock.setSendRaceXML(true);
 
 
         server.setCloseOnEmpty(true);

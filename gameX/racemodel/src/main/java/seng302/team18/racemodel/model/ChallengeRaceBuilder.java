@@ -1,7 +1,6 @@
 package seng302.team18.racemodel.model;
 
-import seng302.team18.model.RaceMode;
-import seng302.team18.model.RaceType;
+import seng302.team18.model.*;
 import seng302.team18.model.updaters.*;
 
 import java.time.ZonedDateTime;
@@ -9,17 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Builds a preset race.
- * <p>
- * Concrete implementation of AbstractRaceBuilder.
- *
- * @see seng302.team18.racemodel.model.AbstractRaceBuilder
+ * RaceBuilder for the challenge mode.
  */
-public class RegularRaceBuilder extends AbstractRaceBuilder {
+public class ChallengeRaceBuilder extends AbstractRaceBuilder {
 
     @Override
     protected int getId() {
-        return 11080703;
+        return 11082705;
     }
 
 
@@ -37,6 +32,8 @@ public class RegularRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new MarkCollisionUpdater());
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());
+        updaters.add(new SpeedUpdater(34, 0.00025, 1));
+        updaters.add(new ChallengeCourseShrinker(new Coordinate(38.21748,-106.52344), 34, 0.00000075, 0.025));
         updaters.add(new RegularStatusUpdater(ZonedDateTime.now(), 2, 2));
 
         return updaters;
@@ -45,6 +42,8 @@ public class RegularRaceBuilder extends AbstractRaceBuilder {
 
     @Override
     protected RaceMode getRaceMode() {
-        return RaceMode.RACE;
-    }
+            return RaceMode.CHALLENGE_MODE;
+        }
+
+
 }

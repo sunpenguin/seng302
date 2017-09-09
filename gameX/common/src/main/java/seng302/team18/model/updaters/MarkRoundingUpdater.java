@@ -8,7 +8,7 @@ import seng302.team18.model.*;
 public class MarkRoundingUpdater implements Updater {
 
     @Override
-    public void update(Race race) {
+    public void update(Race race, double time) {
         for (Boat boat : race.getStartingList()) {
             checkForRounding(boat, race);
         }

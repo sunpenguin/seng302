@@ -16,7 +16,7 @@ public class Race {
     private final GPSCalculator gps = new GPSCalculator();
     private final RoundingDetector detector = new RoundingDetector();
     private int id;
-    private RaceStatus status;
+    private RaceStatus status = RaceStatus.PRESTART;
     private RaceType raceType;
     private Regatta regatta = new Regatta();
     private Course course;
@@ -29,7 +29,6 @@ public class Race {
     private List<PowerUpEvent> powerEvents = new ArrayList<>();
     private RaceMode mode = RaceMode.RACE;
     private List<Updater> updaters = new ArrayList<>();
-    private double updateTime;
     private int powerId = 0;
 
 
@@ -111,7 +110,7 @@ public class Race {
      * @return a random PowerUp.
      */
     private PowerUp getRandomPower() {
-        PowerUp powerUp = new SpeedPowerUp();
+        PowerUp powerUp = new SpeedPowerUp(3);
         powerUp.setDuration(5000d);
         return powerUp;
     }
@@ -134,10 +133,13 @@ public class Race {
     private void setCourseForBoat(Boat boat) {
         if (course.getMarkSequence().size() > 1) {
             boat.setLegNumber(0);
-            boat.setCoordinate(getStartPosition(boat, boat.getLength() * 6));
+            boat.setCoordinate(getStartPosition(boat, boat.getLength() * 3));
+//            boat.setCoordinate(getStartPosition(boat, boat.getLength() * 6));
             boat.setHeading(gps.getBearing(
                     boat.getCoordinate(),
-                    course.getCentralCoordinate()
+                    course.getMarkSequence().get(0).getCompoundMark().getCoordinate()
+//                    boat.getCoordinate(),
+//                    course.getCentralCoordinate()
             ));
             boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
             boat.setRoundZone(Boat.RoundZone.ZONE1);
@@ -274,19 +276,14 @@ public class Race {
      * @param time the time in seconds
      */
     public void update(double time) { // time in seconds
-        updateTime = time;
         for (Updater updater : updaters) {
-            updater.update(this);
+            updater.update(this, time);
         }
     }
 
 
     public boolean isFinished() {
-        Collection<BoatStatus> finishedStatuses = Arrays.asList(BoatStatus.DNF, BoatStatus.DNS, BoatStatus.FINISHED, BoatStatus.DSQ);
-        int numFinished = (int) startingList.stream()
-                .filter(boat -> finishedStatuses.contains(boat.getStatus()))
-                .count();
-        return startingList.size() == numFinished && startingList.size() != 0;
+        return status.equals(RaceStatus.FINISHED);
     }
 
 
@@ -408,11 +405,6 @@ public class Race {
 
     public RoundingDetector getDetector() {
         return detector;
-    }
-
-
-    public double getUpdateTime() {
-        return updateTime;
     }
 
 

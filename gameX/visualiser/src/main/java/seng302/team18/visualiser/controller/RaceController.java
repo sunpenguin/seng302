@@ -15,6 +15,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -442,10 +443,15 @@ public class RaceController implements Observer {
     private void openEscapeMenu(String message) {
         if (!group.getChildren().contains(escapeMenuPane)) {
             Label label = new Label(message);
-            label.setStyle("-fx-text-fill: red");
-            escapeMenuPane.getChildren().add(label);
-            label.setLayoutX(escapeMenuPane.getWidth() / 2 - label.getWidth() / 2);
-            label.setLayoutY(label.getHeight());
+            label.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/style.css").toExternalForm());
+            label.getStyleClass().add("message");
+            HBox box = new HBox(label);
+            box.setAlignment(Pos.TOP_CENTER);
+            box.setPadding(new Insets(6, 6, 6, 6));
+            box.setPrefWidth(escapeMenuPane.getMinWidth());
+            label.setMaxWidth(box.getPrefWidth());
+            label.setWrapText(true);
+            escapeMenuPane.getChildren().add(box);
             group.getChildren().add(escapeMenuPane);
             escapeMenuPane.toFront();
             escapeMenuPane.setLayoutX((raceViewPane.getWidth() / 2) - escapeMenuPane.getMinWidth() / 2);
@@ -617,13 +623,13 @@ public class RaceController implements Observer {
         timeLabel.setPrefWidth(80);
         timeBox.setPrefWidth(120);
         timeBox.setAlignment(Pos.CENTER);
-        clock = race.getMode().equals(RaceMode.BUMPER_BOATS)? new TimerClock(timeLabel) : new StopWatchClock(timeLabel);
+        clock = new StopWatchClock(timeLabel);
         raceViewPane.getChildren().add(timeBox);
     }
 
 
     /**
-     * Start the race clock by invoking start() on the StopWatchClock's AnimationTimer.
+     * Start the race clock by invoking start() on the RaceClock's AnimationTimer.
      */
     private void startRaceTimer() {
         clock.start();
@@ -733,11 +739,11 @@ public class RaceController implements Observer {
     public void showFinishersList() {
         List<Boat> boats = race.getStartingList();
         boats.sort(Comparator.comparing(Boat::getPlace));
-        String result = "FINAL PLACINGS\n\n\n";
+        String result = "FINAL PLACINGS\n\n";
         for (Boat b : boats) {
-            result += b.getPlace() + ": " + b.getShortName() + " " + b.getStatus().name() + "\n\n";
+            result += b.getPlace() + ": " + b.getShortName() + " " + b.getStatus().name() + "\n";
         }
-        result = result.substring(0, result.length() - 2);
+        result = result.substring(0, result.length() - 1);
         Label resultLabel = new Label(result);
         VBox resultBox = new VBox(resultLabel);
         resultBox.getStylesheets().addAll(RaceController.class.getResource("/stylesheets/style.css").toExternalForm());
@@ -773,6 +779,7 @@ public class RaceController implements Observer {
             Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST"));
         } else if (arg instanceof Boat) {
             Platform.runLater(() -> {
+
                 if (race.getMode().equals(RaceMode.CHALLENGE_MODE) || race.getMode().equals(RaceMode.BUMPER_BOATS)) {
                     openEscapeMenu("GAME OVER");
                 } else {

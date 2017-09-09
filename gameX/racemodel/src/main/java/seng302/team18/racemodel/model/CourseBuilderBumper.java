@@ -92,7 +92,7 @@ public class CourseBuilderBumper extends AbstractCourseBuilder {
 
 
     @Override
-    protected List<Coordinate> getBoundaryMarks() {
+    public List<Coordinate> getBoundaryMarks() {
         // The course can shrink, just need to update like spyro type
         List<Coordinate> boundaryMarks = new ArrayList<>();
         GPSCalculator calculator = new GPSCalculator();
@@ -117,8 +117,6 @@ public class CourseBuilderBumper extends AbstractCourseBuilder {
         boundaryMarks.add(bottomLeft);
         boundaryMarks.add(left);
         boundaryMarks.add(topLeft);
-
-//        count += 2;
 
         return boundaryMarks;
     }
