@@ -231,6 +231,7 @@ public class PlayInterfaceController {
         try {
             toGameModeSelection();
         } catch (IOException e){
+            e.printStackTrace();
         }
 //        mode = RaceMode.ARCADE; // CHANGE MODE HERE
 //        openStream("127.0.0.1", 5005);
@@ -310,6 +311,7 @@ public class PlayInterfaceController {
      */
     public void toGameModeSelection() throws IOException{
         Stage stage = (Stage) innerPane.getScene().getWindow();
+        System.out.println("yea");
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ModeSelection.fxml"));
         Parent root = loader.load();
         GameSelectionController controller = loader.getController();

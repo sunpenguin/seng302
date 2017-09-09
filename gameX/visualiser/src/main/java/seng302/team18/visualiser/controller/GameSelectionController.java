@@ -141,7 +141,7 @@ public class GameSelectionController {
         raceLabel.getStyleClass().add("bumperBoatsImage");
         innerPane.getChildren().add(raceLabel);
 
-        raceButtonImage = new Image("/images/bumper-boatsWhite.png");
+        raceButtonImage = new Image("/images/bumperBoatsWhite.png");
         raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
         raceLabel.setLayoutY((600 / 2) + 150);
         raceLabel.setOnMouseClicked(event -> startBumperBoats());
