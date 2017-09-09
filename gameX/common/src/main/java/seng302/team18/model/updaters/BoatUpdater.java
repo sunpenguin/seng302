@@ -5,7 +5,7 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
 
 /**
- * Class to update boats position & powerup usages
+ * Class to update boats position and powerup usages
  */
 public class BoatUpdater implements Updater {
 
