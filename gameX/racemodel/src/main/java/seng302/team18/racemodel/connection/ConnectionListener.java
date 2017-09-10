@@ -27,7 +27,7 @@ public class ConnectionListener extends Observable implements Observer {
     private List<Integer> ids;
     private MessageParserFactory factory;
     private ExecutorService executor = Executors.newCachedThreadPool();
-    private Long timeout = Long.MAX_VALUE;
+    private boolean firstPlayer = true;
 
     private AbstractRaceBuilder raceBuilder;
     private AbstractCourseBuilder courseBuilder;
@@ -66,7 +66,7 @@ public class ConnectionListener extends Observable implements Observer {
 
     /**
      * Add a new client.
-     * If the registration is for a tutorial, update the race accordingly and the TestMock will send out the updated
+     * Re create the race and course according to the request and the TestMock will send out the updated
      * XML files.
      * When the registration is received, send the client their source ID.
      *
@@ -76,6 +76,9 @@ public class ConnectionListener extends Observable implements Observer {
         try {
             Receiver receiver = new Receiver(client.getSocket(), factory);
             int sourceID = ids.get(players.size());
+            long initalTime = System.currentTimeMillis();
+            long timeout = initalTime + 5000;
+
             executor.submit(() -> {
                 MessageBody message = null;
 
@@ -148,15 +151,8 @@ public class ConnectionListener extends Observable implements Observer {
 
 
     /**
-     * sets timeout
-     *
-     * @param timeout Time at which the ConnectionListener will stop listening for requests (Epoch milli)
+     * Close the PlayerControllerReader for each player, and shutdown the executor
      */
-    public void setTimeout(long timeout) {
-        this.timeout = timeout;
-    }
-
-
     private void close() {
         for (PlayerControllerReader player: players) {
             player.close();
@@ -179,7 +175,10 @@ public class ConnectionListener extends Observable implements Observer {
             return;
         }
 
-        setRaceMode(requestType);
+        if (firstPlayer) {
+            setRaceMode(requestType);
+            firstPlayer = false;
+        }
         constructRace();
 
         addPlayer(receiver, id);

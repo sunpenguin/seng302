@@ -21,6 +21,15 @@ public class RegularStatusUpdater implements Updater {
     private ZonedDateTime startTime;
 
 
+    /**
+     * Construct a new RegularStatusUpdater.
+     * Used for updating a normal race. Race is deemed finished when ALL players are in a finished state.
+     *
+     * @param initialTime Time of construction.
+     * @param warningTimeSeconds until we switch to WARNING.
+     * @param prepTimeSeconds until we switch from WARNING to PREPARATORY.
+     * @param startTimeSeconds until we switch from PREPARATORY to STARTED.
+     */
     public RegularStatusUpdater(ZonedDateTime initialTime, long warningTimeSeconds, long prepTimeSeconds, long startTimeSeconds) {
         this.warningTime = initialTime.plusSeconds(warningTimeSeconds);
         this.prepTime = initialTime.plusSeconds(warningTimeSeconds + prepTimeSeconds);
@@ -37,7 +46,6 @@ public class RegularStatusUpdater implements Updater {
     @Override
     public void update(Race race, double time) {
         race.setStartTime(startTime);
-        System.out.println(race.getStatus());
 
         if (isFinished(race)) {
             race.setStatus(RaceStatus.FINISHED);

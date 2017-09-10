@@ -184,7 +184,7 @@ public class GPSCalculator {
      * @param points list of coordinates
      * @return The list of coordinates where index 0 is the upper left and index 1 is the lower right
      */
-    public List<Coordinate> findMinMaxPoints(List<Coordinate> points) {
+    public synchronized List<Coordinate> findMinMaxPoints(List<Coordinate> points) {
         // TODO write test
         List<Coordinate> result = new ArrayList<>();
         double minLong = 180;

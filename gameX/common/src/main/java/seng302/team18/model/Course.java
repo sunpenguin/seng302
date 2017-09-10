@@ -55,7 +55,7 @@ public class Course {
     }
 
 
-    public List<CompoundMark> getCompoundMarks() {
+    public synchronized List<CompoundMark> getCompoundMarks() {
         return compoundMarks;
     }
 
@@ -107,7 +107,7 @@ public class Course {
     }
 
 
-    public List<Coordinate> getCourseLimits() {
+    public synchronized List<Coordinate> getCourseLimits() {
         return new ArrayList<>(courseLimits);
     }
 

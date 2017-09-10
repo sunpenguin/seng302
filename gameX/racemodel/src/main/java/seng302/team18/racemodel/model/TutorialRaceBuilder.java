@@ -4,6 +4,7 @@ import seng302.team18.model.RaceMode;
 import seng302.team18.model.RaceType;
 import seng302.team18.model.updaters.*;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class TutorialRaceBuilder extends AbstractRaceBuilder {
     protected List<Updater> getUpdaters(){
         List<Updater> updaters = new ArrayList<>();
         updaters.add(new MovementUpdater());
+        updaters.add(new RegularStatusUpdater(ZonedDateTime.now(), 1, 0, 0));
 
         return updaters;
     }

@@ -64,7 +64,9 @@ public class TestMock implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) { // Server ?
             ClientConnection client = (ClientConnection) arg;
-            race.addParticipant(boats.get(race.getStartingList().size())); // TODO: Justin 10/09 This should not be done here. We should wait until they register.
+            Boat b = boats.get(race.getStartingList().size());
+            race.addParticipant(b); // TODO: Justin 10/09 This should not be done here. We should wait until they register.
+            scheduledMessages.add(new BoatMessageGenerator(b));
             client.setId(boats.get(race.getStartingList().size()).getId());
 
             generatorXmlRegatta = new XmlMessageGeneratorRegatta(xmlMessageBuilder.buildRegattaMessage(race));
@@ -205,10 +207,6 @@ public class TestMock implements Observer {
 
                 scheduledMessages.add(new RaceMessageGenerator(race));
                 scheduledMessages.add(new HeartBeatMessageGenerator());
-
-                for (Boat b : race.getStartingList()) {
-                    scheduledMessages.add(new BoatMessageGenerator(b));
-                }
 
                 do {
 
