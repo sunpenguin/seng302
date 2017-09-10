@@ -183,7 +183,7 @@ public class ConnectionListener extends Observable implements Observer {
         RequestType requestType = request.getAction();
 
         if (!players.isEmpty() && requestType.getCode() == RaceMode.SPECTATION.getCode()) {
-            sourceID = 9000;
+            id = 9000;
         } else if (!isValidMode(requestType)) {
             sendFailureMessage(client, id);
             return;
