@@ -9,9 +9,9 @@ import seng302.team18.model.Race;
 public class ProjectileUpdater implements Updater  {
 
     @Override
-    public void update(Race race) {
+    public void update(Race race, double time) {
         for(Projectile projectile : race.getProjectiles()) {
-            projectile.update(race.getUpdateTime());
+            projectile.update(time);
         }
     }
 }
