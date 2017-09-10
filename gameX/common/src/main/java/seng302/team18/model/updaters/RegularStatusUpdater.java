@@ -11,7 +11,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by dhl25 on 9/09/17.
+ * Class for handling of switching the race into the correct status (warning, started, finished etc) at the
+ * appropriate times.
  */
 public class RegularStatusUpdater implements Updater {
 
@@ -36,6 +37,7 @@ public class RegularStatusUpdater implements Updater {
     @Override
     public void update(Race race, double time) {
         race.setStartTime(startTime);
+        System.out.println(race.getStatus());
 
         if (isFinished(race)) {
             race.setStatus(RaceStatus.FINISHED);
@@ -48,6 +50,8 @@ public class RegularStatusUpdater implements Updater {
             race.setStatus(RaceStatus.PREPARATORY);
         } else if (ZonedDateTime.now().isAfter(warningTime)) {
             race.setStatus(RaceStatus.WARNING);
+        } else {
+            race.setStatus(RaceStatus.PRESTART);
         }
     }
 
