@@ -248,15 +248,14 @@ public class RaceController implements Observer {
      * @return the boat controlled by the user.
      */
     private Boat getPlayerBoat() {
-        List playerBoatList = race.getStartingList()
+        List<Boat> playerBoatList = race.getStartingList()
                 .stream()
                 .filter(boat -> boat.getId() == race.getPlayerId())
                 .collect(Collectors.toList());
         if (!playerBoatList.isEmpty()) {
-            return (Boat) playerBoatList.get(0);
-        } else {
-            return race.getSpectatorBoat();
+            return playerBoatList.get(0);
         }
+        return null;
     }
 
 
@@ -595,7 +594,9 @@ public class RaceController implements Observer {
         raceRenderer.renderBoats();
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
-        visualHealth = new VisualHealth(raceViewPane, getPlayerBoat());
+        if (getPlayerBoat() != null) {
+            visualHealth = new VisualHealth(raceViewPane, getPlayerBoat());
+        }
 
         setupRaceTimer();
         startRaceTimer();

@@ -24,7 +24,7 @@ public class ClientRace {
     private ZonedDateTime currentTime;
     private Integer playerId;
     private RaceMode mode = RaceMode.RACE;
-    private Boat spectatorBoat = new Boat("Spectator boat", "Spec boat", 9000, 0);
+//    private Boat spectatorBoat = new Boat("Spectator boat", "Spec boat", 9000, 0);
 
 
     public ClientRace() {
@@ -37,7 +37,7 @@ public class ClientRace {
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         raceType = RaceType.MATCH;
         GPSCalculator gps = new GPSCalculator();
-        spectatorBoat.setCoordinate(gps.getCentralCoordinate(course.getCourseLimits()));
+//        spectatorBoat.setCoordinate(gps.getCentralCoordinate(course.getCourseLimits()));
     }
 
 
@@ -271,13 +271,5 @@ public class ClientRace {
 
     public int numSequences() {
         return course.getMarkSequence().size();
-    }
-
-    public Boat getSpectatorBoat() {
-        return spectatorBoat;
-    }
-
-    public void setSpectatorBoat(Boat spectatorBoat) {
-        this.spectatorBoat = spectatorBoat;
     }
 }

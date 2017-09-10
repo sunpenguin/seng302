@@ -255,9 +255,6 @@ public class ConnectionListener extends Observable implements Observer {
                 raceBuilder = new ChallengeRaceBuilder();
                 courseBuilder = new CourseBuilderChallenge();
                 break;
-            case VIEWING:
-                raceBuilder = new RegularRaceBuilder();
-                break;
         }
     }
 }

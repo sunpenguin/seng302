@@ -30,7 +30,7 @@ public class Race {
     private RaceMode mode = RaceMode.RACE;
     private List<Updater> updaters = new ArrayList<>();
     private int powerId = 0;
-    private Boat spectatorBoat = new Boat("Spectator boat", "Spec boat", 9000, 0);
+//    private Boat spectatorBoat = new Boat("Spectator boat", "Spec boat", 9000, 0);
 
 
     public Race() {
@@ -443,13 +443,5 @@ public class Race {
 
     public void removeOldPickUps() {
         course.removeOldPickUps();
-    }
-
-    public Boat getSpectatorBoat() {
-        return spectatorBoat;
-    }
-
-    public void setSpectatorBoat(Boat spectatorBoat) {
-        this.spectatorBoat = spectatorBoat;
     }
 }

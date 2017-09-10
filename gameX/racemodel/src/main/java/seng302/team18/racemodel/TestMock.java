@@ -148,7 +148,6 @@ public class TestMock implements Observer {
         ZonedDateTime warningTime = initialTime.plusSeconds(warningWaitTime);
         ZonedDateTime prepTime = warningTime.plusSeconds(prepWaitTime);
         ZonedDateTime connectionCutOff = warningTime.minusSeconds(cutoffDifference);
-        ZonedDateTime timeToUpdateChallengeCourse = ZonedDateTime.now().plusNanos(50*1000000);
         race.setStartTime(prepTime.plusSeconds(startWaitTime));
 
         race.setStatus(RaceStatus.PRESTART);
