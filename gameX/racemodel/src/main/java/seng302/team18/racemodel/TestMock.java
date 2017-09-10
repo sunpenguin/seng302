@@ -1,6 +1,7 @@
 package seng302.team18.racemodel;
 
 
+
 import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
@@ -10,6 +11,7 @@ import seng302.team18.racemodel.connection.ConnectionListener;
 import seng302.team18.racemodel.connection.Server;
 import seng302.team18.racemodel.connection.ServerState;
 import seng302.team18.racemodel.message_generating.*;
+import seng302.team18.racemodel.model.AbstractCourseBuilder;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -32,6 +34,9 @@ public class TestMock implements Observer {
     private MessageGenerator generatorXmlBoats;
     private MessageGenerator generatorXmlRace;
 
+    private AbstractCourseBuilder courseBuilder;
+    private boolean shouldSendXML = false;
+
 
     /**
      * The messages to be sent on a schedule during race simulation
@@ -39,11 +44,12 @@ public class TestMock implements Observer {
     private List<ScheduledMessageGenerator> scheduledMessages = new ArrayList<>();
 
 
-    public TestMock(Server server, XmlMessageBuilder messageBuilder, Race race, List<Boat> boats) {
+    public TestMock(Server server, XmlMessageBuilder messageBuilder, Race race, List<Boat> boats, AbstractCourseBuilder courseBuilder) {
         this.server = server;
         this.xmlMessageBuilder = messageBuilder;
         this.race = race;
         this.boats = boats;
+        this.courseBuilder = courseBuilder;
     }
 
     /**
@@ -60,23 +66,26 @@ public class TestMock implements Observer {
             client.setId(boats.get(race.getStartingList().size()).getId());
             generateXMLs();
             sendXmlRegatta(client);
-            sendXmlBoatRace();
-        } else if (arg instanceof ServerState) { // Server
+            sendRaceXml();
+            sendBoatsXml();
+        } else if (arg instanceof ServerState) {
             open = !ServerState.CLOSED.equals(arg);
-        } else if (arg instanceof Integer) { // Server
+        } else if (arg instanceof Integer) {
             Integer id = (Integer) arg;
             race.setBoatStatus(id, BoatStatus.DNF);
         } else if (arg instanceof ConnectionListener) { // ConnectionListener
             generateXMLs();
-            sendXmlBoatRace();
-        } else if (arg instanceof AcceptanceMessage) { // ConnectionListener
+            sendRaceXml();
+            sendBoatsXml();
+        } else if (arg instanceof AcceptanceMessage) {
             AcceptanceMessage message = (AcceptanceMessage) arg;
             if (message.getRequestType() == RequestType.FAILURE_CLIENT_TYPE) {
                 System.out.println("Remove " + message.getSourceId() + " From the race");
                 race.removeParticipant(message.getSourceId());
                 System.out.println(race.getStartingList());
                 generateXMLs();
-                sendXmlBoatRace();
+                sendRaceXml();
+                sendBoatsXml();
             }
         }
     }
@@ -95,8 +104,12 @@ public class TestMock implements Observer {
     /**
      * Broadcast the race and boat XML files to all clients.
      */
-    private void sendXmlBoatRace() {
+    private void sendRaceXml() {
         server.broadcast(generatorXmlRace.getMessage());
+    }
+
+
+    private void sendBoatsXml() {
         server.broadcast(generatorXmlBoats.getMessage());
     }
 
@@ -133,12 +146,17 @@ public class TestMock implements Observer {
         ZonedDateTime warningTime = initialTime.plusSeconds(warningWaitTime);
         ZonedDateTime prepTime = warningTime.plusSeconds(prepWaitTime);
         ZonedDateTime connectionCutOff = warningTime.minusSeconds(cutoffDifference);
+        ZonedDateTime timeToUpdateChallengeCourse = ZonedDateTime.now().plusNanos(50*1000000);
         race.setStartTime(prepTime.plusSeconds(startWaitTime));
 
         race.setStatus(RaceStatus.PRESTART);
 
 
         do {
+            if (shouldSendXML) {
+                generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
+                sendRaceXml();
+            }
 
             timeLast = timeCurr;
             timeCurr = System.currentTimeMillis();
@@ -154,7 +172,8 @@ public class TestMock implements Observer {
 
             } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(prepTime)) {
                 generateXMLs();
-                sendXmlBoatRace();
+                sendRaceXml();
+                sendBoatsXml();
                 switchToPrep();
             } else {
                 switchToStarted();
@@ -249,5 +268,10 @@ public class TestMock implements Observer {
         }
 
 
+    }
+
+
+    public void setSendRaceXML(boolean send) {
+        shouldSendXML = send;
     }
 }

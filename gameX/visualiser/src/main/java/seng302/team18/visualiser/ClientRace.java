@@ -262,6 +262,15 @@ public class ClientRace {
     }
 
 
+    public Coordinate getDestination(int legNumber) {
+        return course.getDestination(legNumber);
+    }
+
+    public int numSequences() {
+        return course.getMarkSequence().size();
+    }
+
+
     public void updateProjectile(int id, Coordinate location, double heading, double speed) {
         for (Projectile projectile : projectiles) {
             if (projectile.getId() == id) {

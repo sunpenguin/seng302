@@ -8,16 +8,18 @@ import seng302.team18.message.PowerType;
 public class SpeedPowerUp extends PowerUp {
 
     private BoatPowerUpUpdater updater = new BoatPowerUpUpdater();
+    private double multiplier;
 
-    public SpeedPowerUp() {
+    public SpeedPowerUp(double multiplier) {
         super();
+        this.multiplier = multiplier;
     }
 
 
     @Override
     public void update(Boat boat, double time) {
         super.update(boat, time);
-        updater.update(boat, time * 3);
+        updater.update(boat, time * multiplier);
     }
 
     @Override

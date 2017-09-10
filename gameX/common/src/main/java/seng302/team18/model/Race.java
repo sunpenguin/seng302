@@ -32,7 +32,6 @@ public class Race {
     private RaceMode mode = RaceMode.RACE;
     private List<Updater> updaters = new ArrayList<>();
     private List<Projectile> projectiles= new ArrayList<>();
-    private double updateTime;
     private int powerId = 0;
     private int nextProjectileId = 300;
     private final int PROJECTILE_SPEED = 50;
@@ -123,7 +122,7 @@ public class Race {
 
         int randomNum = ThreadLocalRandom.current().nextInt(0, max + 1);
         if (randomNum == 0) {
-            powerUp = new SpeedPowerUp();
+            powerUp = new SpeedPowerUp(3);
         } else if (randomNum == 1) {
             powerUp = new SharkPowerUp();
         }
@@ -152,8 +151,8 @@ public class Race {
             boat.setLegNumber(0);
             boat.setCoordinate(getStartPosition(boat, boat.getLength() * 3));
             boat.setHeading(gps.getBearing(
-                    course.getMarkSequence().get(0).getCompoundMark().getCoordinate(),
-                    course.getMarkSequence().get(1).getCompoundMark().getCoordinate()
+                    boat.getCoordinate(),
+                    course.getMarkSequence().get(0).getCompoundMark().getCoordinate()
             ));
             boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
             boat.setRoundZone(Boat.RoundZone.ZONE1);
@@ -286,9 +285,8 @@ public class Race {
      * @param time the time in seconds
      */
     public void update(double time) { // time in seconds
-        updateTime = time;
         for (Updater updater : updaters) {
-            updater.update(this);
+            updater.update(this, time);
         }
     }
 
@@ -422,11 +420,6 @@ public class Race {
 
     public RoundingDetector getDetector() {
         return detector;
-    }
-
-
-    public double getUpdateTime() {
-        return updateTime;
     }
 
 

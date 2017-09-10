@@ -27,6 +27,7 @@ public class PixelMapper {
     private Coordinate viewPortCenter;
     private final DoubleProperty zoomLevel = new SimpleDoubleProperty(0);
     private double maxZoom = Double.POSITIVE_INFINITY;
+    private double minZoom = Double.NEGATIVE_INFINITY;
     private double mappingScale = 1;
 
     private final static GPSCalculator GPS_CALCULATOR = new GPSCalculator();
@@ -97,7 +98,7 @@ public class PixelMapper {
      * It is recommended for this method to be called at the start of each rendering loop.
      */
     public void calculateMappingScale() {
-        if (isTracking) {
+        if (isTracking && object.getCoordinate() != null) {
             setViewPortCenter(object.getCoordinate());
         }
 
@@ -247,7 +248,7 @@ public class PixelMapper {
 
     /**
      * Sets the zoom level for the pixel mapper.
-     * Does not zoom in beyond the max value or below 0.
+     * Does not zoom in beyond the max value or below min value/0 if no minimum level.
      *
      * @param level The value the zoom level will be set to
      */
@@ -256,8 +257,12 @@ public class PixelMapper {
             zoomLevel.set(0);
         } else if (level < maxZoom) {
             zoomLevel.set(level / ZOOM_CORRECTION);
-        } else {
+        }else {
             zoomLevel.set(maxZoom / ZOOM_CORRECTION);
+        }
+
+        if (level < minZoom) {
+            zoomLevel.set(minZoom / ZOOM_CORRECTION);
         }
     }
 
@@ -289,5 +294,15 @@ public class PixelMapper {
 
     public void setMaxZoom(double maxZoom) {
         this.maxZoom = maxZoom;
+    }
+
+
+    public double getMinZoom() {
+        return minZoom;
+    }
+
+
+    public void setMinZoom(double minZoom) {
+        this.minZoom = minZoom;
     }
 }

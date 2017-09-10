@@ -11,7 +11,7 @@ import java.util.List;
 public class OutOfBoundsUpdater implements Updater {
 
     @Override
-    public void update(Race race) {
+    public void update(Race race, double time) {
         for (Boat boat : race.getStartingList()) {
             checkForBoundaryDSQ(boat, race);
         }

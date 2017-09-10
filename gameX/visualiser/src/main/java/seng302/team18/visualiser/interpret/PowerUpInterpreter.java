@@ -83,6 +83,7 @@ public class PowerUpInterpreter extends MessageInterpreter {
         PowerUp powerUp = null;
         switch (message.getPower()) {
             case SPEED:
+                PowerUp powerUp = new SpeedPowerUp(3);
                 powerUp = new SpeedPowerUp();
                 powerUp.setDuration(message.getDuration());
                 return powerUp;

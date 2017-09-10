@@ -35,6 +35,26 @@ public class RaceRenderer {
         this.race = race;
         this.group = group;
         this.pixelMapper = pixelMapper;
+        if (race.getMode() == RaceMode.CHALLENGE_MODE) {
+            setChallengeModeCourse();
+        }
+    }
+
+
+    /**
+     * If the current race mode is challenge mode, the zoom level will be set to min zoom level.
+     *
+     * The player's boat will be tracked.
+     *
+     */
+    private void setChallengeModeCourse() {
+        Boat boat = race.getBoat(race.getPlayerId());
+        if (boat.getId() == race.getPlayerId()) {
+            pixelMapper.setZoomLevel(6);
+            pixelMapper.setMinZoom(6);
+            pixelMapper.track(boat);
+            pixelMapper.setTracking(true);
+        }
     }
 
 
@@ -116,8 +136,8 @@ public class RaceRenderer {
         displayBoat.setSailOut(boat.isSailOut());
         displayBoat.setBoatStatus(boat.getStatus());
         displayBoat.setColour(boat.getColour());
-        if (boat.getLegNumber() < race.getCourse().getMarkSequence().size()) {
-            displayBoat.setDestination(race.getCourse().getMarkSequence().get(boat.getLegNumber()).getCompoundMark().getCoordinate());
+        if (boat.getLegNumber() < race.numSequences()) {
+            displayBoat.setDestination(race.getDestination(boat.getLegNumber()));
         } else {
             displayBoat.setDestination(null);
         }
@@ -162,6 +182,7 @@ public class RaceRenderer {
                 trailMap.put(boat.getShortName(), trail);
                 trail.addToGroup(group);
             }
+
             if (trail != null) {
                 trail.addPoint(boat.getCoordinate(), boat.getHeading(), pixelMapper);
             }
