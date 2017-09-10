@@ -197,7 +197,7 @@ public class AbstractCourseBuilderTest {
         }
 
         @Override
-        protected List<Coordinate> getBoundaryMarks() {
+        public List<Coordinate> getBoundaryMarks() {
             return boundaryMarks;
         }
 

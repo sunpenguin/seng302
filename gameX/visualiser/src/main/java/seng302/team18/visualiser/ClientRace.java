@@ -264,6 +264,15 @@ public class ClientRace {
         return course.getPickUp(id);
     }
 
+
+    public Coordinate getDestination(int legNumber) {
+        return course.getDestination(legNumber);
+    }
+
+    public int numSequences() {
+        return course.getMarkSequence().size();
+    }
+
     public Boat getSpectatorBoat() {
         return spectatorBoat;
     }

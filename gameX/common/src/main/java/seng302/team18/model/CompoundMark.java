@@ -82,6 +82,8 @@ public class CompoundMark implements GeographicLocation {
     }
 
 
-
+    public boolean isGate() {
+        return marks.size() == 2;
+    }
 
 }
