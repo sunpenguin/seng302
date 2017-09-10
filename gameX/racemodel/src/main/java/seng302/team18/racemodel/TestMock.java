@@ -37,6 +37,8 @@ public class TestMock implements Observer {
     private AbstractCourseBuilder courseBuilder;
     private boolean shouldSendXML = false;
 
+    private SimulationLoop simulationLoop = null;
+
 
     /**
      * The messages to be sent on a schedule during race simulation
@@ -62,12 +64,11 @@ public class TestMock implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) { // Server ?
             ClientConnection client = (ClientConnection) arg;
-            race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
+            race.addParticipant(boats.get(race.getStartingList().size())); // TODO: Justin 10/09 This should not be done here. We should wait until they register.
             client.setId(boats.get(race.getStartingList().size()).getId());
-            generateXMLs();
-            sendXmlRegatta(client);
-            sendRaceXml();
-            sendBoatsXml();
+
+            generatorXmlRegatta = new XmlMessageGeneratorRegatta(xmlMessageBuilder.buildRegattaMessage(race));
+            sendRegattaXml(client);
         } else if (arg instanceof ServerState) {
             open = !ServerState.CLOSED.equals(arg);
         } else if (arg instanceof Integer) {
@@ -77,12 +78,17 @@ public class TestMock implements Observer {
             generateXMLs();
             sendRaceXml();
             sendBoatsXml();
+
+            if (simulationLoop == null) {
+                simulationLoop = new SimulationLoop();
+                Thread t = new Thread(simulationLoop);
+                t.start();
+            }
         } else if (arg instanceof AcceptanceMessage) {
             AcceptanceMessage message = (AcceptanceMessage) arg;
             if (message.getRequestType() == RequestType.FAILURE_CLIENT_TYPE) {
                 System.out.println("Remove " + message.getSourceId() + " From the race");
                 race.removeParticipant(message.getSourceId());
-                System.out.println(race.getStartingList());
                 generateXMLs();
                 sendRaceXml();
                 sendBoatsXml();
@@ -102,13 +108,16 @@ public class TestMock implements Observer {
 
 
     /**
-     * Broadcast the race and boat XML files to all clients.
+     * Broadcast the race xml to all clients.
      */
     private void sendRaceXml() {
         server.broadcast(generatorXmlRace.getMessage());
     }
 
 
+    /**
+     * Broadcast the boats xml to all clients.
+     */
     private void sendBoatsXml() {
         server.broadcast(generatorXmlBoats.getMessage());
     }
@@ -119,66 +128,8 @@ public class TestMock implements Observer {
      *
      * @param newPlayer ClientConnection used to send message through.
      */
-    private void sendXmlRegatta(ClientConnection newPlayer) {
+    private void sendRegattaXml(ClientConnection newPlayer) {
         newPlayer.sendMessage(generatorXmlRegatta.getMessage());
-    }
-
-
-    /**
-     * Simulate the race while sending the scheduled messages
-     *
-     * @param startWaitTime    Number of seconds between the preparation phase and the start time
-     * @param warningWaitTime  Number of seconds between the time the method is executed and warning phase
-     * @param prepWaitTime     Number of seconds between the warning phase and the preparation phase
-     * @param cutoffDifference Number of seconds before entering the warning phase for not allowing new connections
-     */
-    public void runSimulation(int startWaitTime, int warningWaitTime, int prepWaitTime, int cutoffDifference) {
-        final int LOOP_FREQUENCY = 60;
-
-        long timeCurr = System.currentTimeMillis();
-        long timeLast;
-
-        scheduledMessages.add(new RaceMessageGenerator(race));
-        scheduledMessages.add(new HeartBeatMessageGenerator());
-
-        // Set race time
-        ZonedDateTime initialTime = ZonedDateTime.now();
-        ZonedDateTime warningTime = initialTime.plusSeconds(warningWaitTime);
-        ZonedDateTime prepTime = warningTime.plusSeconds(prepWaitTime);
-        ZonedDateTime connectionCutOff = warningTime.minusSeconds(cutoffDifference);
-        race.setStartTime(prepTime.plusSeconds(startWaitTime));
-        for (Boat b : race.getStartingList()) {
-            scheduledMessages.add(new BoatMessageGenerator(b));
-        }
-
-        do {
-            if (shouldSendXML) {
-                generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
-                sendRaceXml();
-            }
-
-            timeLast = timeCurr;
-            timeCurr = System.currentTimeMillis();
-
-            if (ZonedDateTime.now().isAfter(connectionCutOff)) {
-                server.stopAcceptingConnections();
-            }
-
-            race.setCurrentTime(ZonedDateTime.now());
-
-            runRace(timeCurr, timeLast);
-            updateClients(timeCurr);
-
-            // Sleep
-            try {
-                Thread.sleep(1000 / LOOP_FREQUENCY);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        } while (!race.isFinished() && open);
-
-        sendFinalMessages();
     }
 
 
@@ -243,11 +194,53 @@ public class TestMock implements Observer {
     }
 
 
+    private class SimulationLoop implements Runnable {
 
+        @Override
+        public void run() {
+                final int LOOP_FREQUENCY = 60;
 
+                long timeCurr = System.currentTimeMillis();
+                long timeLast;
 
+                scheduledMessages.add(new RaceMessageGenerator(race));
+                scheduledMessages.add(new HeartBeatMessageGenerator());
 
+                for (Boat b : race.getStartingList()) {
+                    scheduledMessages.add(new BoatMessageGenerator(b));
+                }
 
+                do {
 
+                    if (shouldSendXML) {
+                        generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
+                        sendRaceXml();
+                    }
 
+                    timeLast = timeCurr;
+                    timeCurr = System.currentTimeMillis();
+
+//                    if (ZonedDateTime.now().isAfter(connectionCutOff)) {
+//                        server.stopAcceptingConnections();
+//                    }
+//                    stopAcceptingConnections if time after race.closed() or something??
+
+                    race.setCurrentTime(ZonedDateTime.now());
+
+                    runRace(timeCurr, timeLast);
+                    updateClients(timeCurr);
+
+                    // Sleep
+                    try {
+                        Thread.sleep(1000 / LOOP_FREQUENCY);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                } while (!race.isFinished() && open);
+
+                sendFinalMessages();
+                server.close();
+        }
+    }
 }

@@ -30,7 +30,7 @@ public class ConnectionListener extends Observable implements Observer {
     private Long timeout = Long.MAX_VALUE;
 
     private AbstractRaceBuilder raceBuilder;
-    private AbstractCourseBuilder courseBuilder = new CourseBuilderRealistic();
+    private AbstractCourseBuilder courseBuilder;
     private AbstractRegattaBuilder regattaBuilder = new RegattaBuilder1();
 
     /**
@@ -106,7 +106,6 @@ public class ConnectionListener extends Observable implements Observer {
         setChanged();
         notifyObservers(this);
     }
-
 
 
     /**

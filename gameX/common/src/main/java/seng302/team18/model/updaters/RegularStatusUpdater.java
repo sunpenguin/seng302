@@ -17,11 +17,13 @@ public class RegularStatusUpdater implements Updater {
 
     private ZonedDateTime warningTime;
     private ZonedDateTime prepTime;
+    private ZonedDateTime startTime;
 
 
-    public RegularStatusUpdater(ZonedDateTime initialTime, long warningTimeSeconds, long prepTimeSeconds) {
+    public RegularStatusUpdater(ZonedDateTime initialTime, long warningTimeSeconds, long prepTimeSeconds, long startTimeSeconds) {
         this.warningTime = initialTime.plusSeconds(warningTimeSeconds);
         this.prepTime = initialTime.plusSeconds(warningTimeSeconds + prepTimeSeconds);
+        this.startTime = initialTime.plusSeconds(warningTimeSeconds + prepTimeSeconds + startTimeSeconds);
     }
 
 
@@ -33,6 +35,8 @@ public class RegularStatusUpdater implements Updater {
      */
     @Override
     public void update(Race race, double time) {
+        race.setStartTime(startTime);
+
         if (isFinished(race)) {
             race.setStatus(RaceStatus.FINISHED);
         } else if (ZonedDateTime.now().isAfter(race.getStartTime())) {

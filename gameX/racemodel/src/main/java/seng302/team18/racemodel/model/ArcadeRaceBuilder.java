@@ -3,6 +3,7 @@ package seng302.team18.racemodel.model;
 import seng302.team18.model.*;
 import seng302.team18.model.updaters.*;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,7 @@ public class ArcadeRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());
         updaters.add(new PowerUpUpdater(makePickUp(), 4));
+        updaters.add(new RegularStatusUpdater(ZonedDateTime.now(), 2, 2, 5));
 
         return updaters;
     }
