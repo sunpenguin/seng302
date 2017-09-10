@@ -497,7 +497,6 @@ public class Race {
         for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
             Projectile projectile = it.next();
             if (projectile.getId() == projectile_id) {
-                System.out.println(projectile_id);
                 it.remove();
             }
         }
