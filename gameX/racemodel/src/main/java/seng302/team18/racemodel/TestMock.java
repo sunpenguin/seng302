@@ -265,6 +265,7 @@ public class TestMock implements Observer {
         }
 
         for (Projectile projectile : race.popNewProjectileIds()) {
+            server.broadcast((new ProjectileCreationMessageGenerator(projectile.getId()).getMessage()));
             ScheduledMessageGenerator newProMessageGen = new ProjectileMessageGenerator(0x73, projectile);
             scheduledMessages.add(newProMessageGen);
         }
@@ -275,6 +276,7 @@ public class TestMock implements Observer {
                 if(sched instanceof ProjectileMessageGenerator){
                     ProjectileMessageGenerator projectleMessageGenerator = (ProjectileMessageGenerator) sched;
                     if(projectleMessageGenerator.getProjectileId() == projectile.getId()){
+                        server.broadcast((new ProjectileGoneGenerator(projectile.getId()).getMessage()));
                         it.remove();
                     }
                 }

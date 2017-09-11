@@ -22,8 +22,6 @@ public class ProjectileMessageGenerator extends ScheduledMessageGenerator{
 
     @Override
     protected byte[] getPayload() throws IOException {
-
-        System.out.println("creating message");
         final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
         final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
 
