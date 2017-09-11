@@ -1,22 +1,22 @@
 .raceImage {
-    -fx-graphic: url('/images/RaceWhite.png');
+    -fx-graphic: url('/images/game_selection/RaceWhite.png');
 }
 
 .arcadeImage {
-    -fx-graphic: url('/images/Arcade_Race_White.png');
+    -fx-graphic: url('/images/game_selection/Arcade_Race_White.png');
 }
 
 .spyroImage {
-    -fx-graphic: url('/images/SpyroWhite.png');
+    -fx-graphic: url('/images/game_selection/SpyroWhite.png');
 }
 
 .bumperBoatsImage {
-    -fx-graphic: url('/images/bumperBoatsWhite.png');
+    -fx-graphic: url('/images/game_selection/bumperBoatsWhite.png');
 }
 
 .raceImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/RaceOrange.png');
+    -fx-graphic: url('/images/game_selection/RaceOrange.png');
 }
 
 .backButtonImage {
@@ -26,17 +26,17 @@
 
 .arcadeImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/Arcade_race_Orange.png');
+    -fx-graphic: url('/images/game_selection/Arcade_race_Orange.png');
 }
 
 .spyroImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/SpyroOrange.png');
+    -fx-graphic: url('/images/game_selection/SpyroOrange.png');
 }
 
 .bumperBoatsImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/bumperBoatsOrange.png');
+    -fx-graphic: url('/images/game_selection/bumperBoatsOrange.png');
 }
 
 .backButtonImage:hover {
@@ -44,3 +44,61 @@
     -fx-graphic: url('/images/back_button_alt.gif');
 }
 
+.spectatorImage {
+    -fx-graphic: url('/images/game_selection/spectator_button.png');
+}
+
+.spectatorImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/game_selection/spectator_button_alt.png');
+}
+
+.localHost {
+    -fx-graphic: url('/images/game_selection/host_button.gif');
+}
+
+.localHost:hover {
+    -fx-graphic: url('/images/game_selection/host_button_alt.gif');
+}
+
+.localHost:selected {
+    -fx-graphic: url('/images/game_selection/host_button_blue.gif');
+}
+
+.remoteHost {
+    -fx-graphic: url('/images/game_selection/connect_button.gif');
+}
+
+.remoteHost:hover {
+    -fx-graphic: url('/images/game_selection/connect_button_orange.gif');
+}
+
+.remoteHost:selected {
+    -fx-graphic: url('/images/game_selection/connect_button_blue.gif');
+}
+
+.radio-button > .radio {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0px;
+    -fx-padding: 0.0em; /* 4 8 4 8 */
+}
+
+.radio-button:selected > .radio > .dot {
+    -fx-background-color: transparent;
+}
+
+@font-face {
+    src: url("/font/Munro.ttf");
+}
+
+.addressInput {
+    -fx-font-family: "Munro";
+    -fx-font-size: 14;
+}
+
+.errorText {
+    -fx-font-family: "Munro";
+    -fx-font-size: 14;
+    -fx-text-fill: red;
+}

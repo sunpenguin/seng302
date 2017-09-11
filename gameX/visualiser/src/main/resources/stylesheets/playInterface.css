@@ -1,10 +1,10 @@
-.hostImage {
-    -fx-graphic: url('/images/playInterface/host_button.gif');
+.playImage {
+    -fx-graphic: url('/images/play_button.png');
 }
 
-.hostImage:hover {
+.playImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/playInterface/host_button_alt.gif');
+    -fx-graphic: url('/images/play_button_alt.png');
 }
 
 
@@ -40,15 +40,4 @@
 
 .borderImage {
     -fx-graphic: url('/images/playInterface/border.png');
-}
-
-
-.spectatorImage {
-    -fx-graphic: url('/images/playInterface/spectator_button.png');
-}
-
-
-.spectatorImage:hover {
-    -fx-label-padding: 2;
-    -fx-graphic: url('/images/playInterface/spectator_button_alt.png');
 }

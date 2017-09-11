@@ -10,17 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import seng302.team18.messageparsing.AC35MessageParserFactory;
-import seng302.team18.messageparsing.Receiver;
-import seng302.team18.model.Race;
-import seng302.team18.model.RaceMode;
-import seng302.team18.send.ControllerMessageFactory;
-import seng302.team18.send.Sender;
 
-import javax.net.SocketFactory;
 import java.io.IOException;
-import java.net.Socket;
-import java.util.ArrayList;
 
 /**
  * Controller for when the application first starts up
@@ -97,7 +88,7 @@ public class TitleScreenController {
         hostLabel.getStyleClass().add("hostImage");
         paneInner.getChildren().add(hostLabel);
 
-        hostButtonImage = new Image("/images/title_screen/play_button.png");
+        hostButtonImage = new Image("/images/play_button.png");
         hostLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) hostButtonImage.getWidth(), 2)));
         hostLabel.setLayoutY((600 / 2) + 100);
         hostLabel.setOnMouseClicked(event -> toPlayScreen());

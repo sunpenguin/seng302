@@ -4,29 +4,23 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
-import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.RaceMode;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
 import seng302.team18.visualiser.ClientRace;
-import seng302.team18.visualiser.util.ConfigReader;
+import seng302.team18.visualiser.util.ModelLoader;
 
 import javax.net.SocketFactory;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -34,52 +28,45 @@ import java.util.List;
  */
 public class PlayInterfaceController {
 
-
-    //noinspection Duplicates
-    @FXML private Pane innerPane;
-    @FXML private Pane outerPane;
+    @FXML
+    private Pane innerPane;
+    @FXML
+    private Pane outerPane;
     private Stage stage;
-    private Label hostLabel;
-    private Label tutorialLabel;
-    private Label spectatorLabel;
-    private Label backLabel;
-    private Image hostImage;
+    private Image playImage;
     private Image tutorialImage;
-    private Image backImage;
-    private Image spectatorImage;
 
-    @FXML
-    private TextField customHostField;
-    @FXML
-    private TextField customPortField;
     @FXML
     private Label errorText;
 
-
-    private List<MessageBody> customisationMessages;
-
-    private Image leftImage;
-    private Image rightImage;
-    private Label leftLabel;
-    private Label rightLabel;
     private RaceMode mode;
 
     private Polyline boat;
 
     private int colourIndex = 0;
     private List<Color> boatColours = Arrays.asList(Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
-                                                    Color.CYAN, Color.BLUE, Color.PURPLE, Color.MAGENTA);
+            Color.CYAN, Color.BLUE, Color.PURPLE, Color.MAGENTA);
 
 
     @FXML
     public void initialize() {
-        customisationMessages = new ArrayList<>();
         registerListeners();
+        initialiseHostPort();
+        initialiseHostChoice();
         initialiseTutorialButton();
-        initialiseHostButton();
+        initialisePlayButton();
         initialiseBackButton();
         initialiseBoatPicker();
-        initialiseSpectatorButton();
+    }
+
+
+    private void initialiseHostPort() {
+
+    }
+
+
+    private void initialiseHostChoice() {
+
     }
 
 
@@ -87,16 +74,16 @@ public class PlayInterfaceController {
      * Set up the button for hosting a new game.
      * Image used will changed when hovered over as defined in the playInterface css.
      */
-    private void initialiseHostButton() {
-        hostLabel = new Label();
-        hostLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/playInterface.css").toExternalForm());
-        hostLabel.getStyleClass().add("hostImage");
-        innerPane.getChildren().add(hostLabel);
+    private void initialisePlayButton() {
+        Label playLabel = new Label();
+        playLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/playInterface.css").toExternalForm());
+        playLabel.getStyleClass().add("playImage");
+        innerPane.getChildren().add(playLabel);
 
-        hostImage = new Image("/images/playInterface/host_button.gif");
-        hostLabel.setLayoutX((innerPane.getPrefWidth() / 2) - (Math.floorDiv((int) hostImage.getWidth(), 2)));
-        hostLabel.setLayoutY((innerPane.getPrefHeight() / 2) + 100);
-        hostLabel.setOnMouseClicked(event -> hostButtonAction());
+        playImage = new Image("/images/play_button.png");
+        playLabel.setLayoutX((innerPane.getPrefWidth() / 2) - (Math.floorDiv((int) playImage.getWidth(), 2)));
+        playLabel.setLayoutY((innerPane.getPrefHeight() / 2 + 100));
+        playLabel.setOnMouseClicked(event -> playButtonAction());
     }
 
 
@@ -105,14 +92,14 @@ public class PlayInterfaceController {
      * Image used will changed when hovered over as defined in the playInterface css.
      */
     private void initialiseBackButton() {
-        backLabel = new Label();
+        Label backLabel = new Label();
         backLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/style.css").toExternalForm());
         backLabel.getStyleClass().add("backImage");
         innerPane.getChildren().add(backLabel);
 
-        backImage= new Image("/images/back_button.gif");
+        Image backImage = new Image("/images/back_button.gif");
         backLabel.setLayoutX((innerPane.getPrefWidth() / 2) - (Math.floorDiv((int) backImage.getWidth(), 2)));
-        backLabel.setLayoutY((innerPane.getPrefHeight() / 2) + 250);
+        backLabel.setLayoutY((innerPane.getPrefHeight() / 2) + 225);
         backLabel.setOnMouseClicked(event -> backButtonAction());
     }
 
@@ -122,12 +109,12 @@ public class PlayInterfaceController {
      * Image used will changed when hovered over as defined in the playInterface css.
      */
     private void initialiseTutorialButton() {
-        tutorialLabel = new Label();
+        Label tutorialLabel = new Label();
         tutorialLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/playInterface.css").toExternalForm());
         tutorialLabel.getStyleClass().add("tutorialImage");
         innerPane.getChildren().add(tutorialLabel);
 
-        tutorialImage= new Image("/images/playInterface/tutorial_button.gif");
+        tutorialImage = new Image("/images/playInterface/tutorial_button.gif");
         tutorialLabel.setLayoutX((innerPane.getPrefWidth() / 2) - (Math.floorDiv((int) tutorialImage.getWidth(), 2)));
         tutorialLabel.setLayoutY((innerPane.getPrefHeight() / 2) + 150);
         tutorialLabel.setOnMouseClicked(event -> tutorialButtonAction());
@@ -135,43 +122,26 @@ public class PlayInterfaceController {
 
 
     /**
-     * Sets up the button for spectating an existing game,
-     * Image used will changed when hovered over as defined in the playInterface css.
-     */
-    private void initialiseSpectatorButton() {
-        spectatorLabel = new Label();
-        spectatorLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/playInterface.css").toExternalForm());
-        spectatorLabel.getStyleClass().add("spectatorImage");
-        innerPane.getChildren().add(spectatorLabel);
-
-        spectatorImage= new Image("/images/playInterface/spectator_button.png");
-        spectatorLabel.setLayoutX((innerPane.getPrefWidth() / 2) - (Math.floorDiv((int) spectatorImage.getWidth(), 2)));
-        spectatorLabel.setLayoutY((innerPane.getPrefHeight() / 2) + 200);
-        spectatorLabel.setOnMouseClicked(event -> spectatorButtonAction());
-    }
-
-
-    /**
      * Creates buttons for left and right selection and sets up a preview of the boat with the current colour.
      */
     private void initialiseBoatPicker() {
-        rightLabel = new Label();
+        Label rightLabel = new Label();
         rightLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/playInterface.css").toExternalForm());
         rightLabel.getStyleClass().add("rightImage");
         innerPane.getChildren().add(rightLabel);
 
-        rightImage= new Image("/images/playInterface/tutorial_button.gif");
+        new Image("/images/playInterface/tutorial_button.gif");
         rightLabel.setLayoutX((innerPane.getPrefWidth() / 2) + 50);
         rightLabel.setLayoutY((innerPane.getPrefHeight() / 2) - 80);
         rightLabel.setOnMouseClicked(event -> rightButtonAction());
 
 
-        leftLabel = new Label();
+        Label leftLabel = new Label();
         leftLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/playInterface.css").toExternalForm());
         leftLabel.getStyleClass().add("leftImage");
         innerPane.getChildren().add(leftLabel);
 
-        leftImage = new Image("/images/playInterface/tutorial_button.gif");
+        new Image("/images/playInterface/tutorial_button.gif");
         leftLabel.setLayoutX((innerPane.getPrefWidth() / 2) - 150);
         leftLabel.setLayoutY((innerPane.getPrefHeight() / 2) - 80);
         leftLabel.setOnMouseClicked(event -> leftButtonAction());
@@ -185,8 +155,8 @@ public class PlayInterfaceController {
         boatView.setLayoutX((innerPane.getPrefWidth() / 2) - (Math.floorDiv((int) tutorialImage.getWidth(), 2)));
         boatView.setLayoutY(0);
 
-        double boatHeight = hostImage.getWidth() / 2.0;
-        double boatWidth = hostImage.getWidth() / 2.0;
+        double boatHeight = playImage.getWidth() / 2.0;
+        double boatWidth = playImage.getWidth() / 2.0;
 
         Double[] boatShape = new Double[]{
                 0.0, boatHeight / -2,
@@ -219,7 +189,7 @@ public class PlayInterfaceController {
      * Display the previous boat colour option.
      */
     private void leftButtonAction() {
-        colourIndex =  Math.floorMod((colourIndex - 1), boatColours.size());
+        colourIndex = Math.floorMod((colourIndex - 1), boatColours.size());
         boat.setFill(boatColours.get(colourIndex));
     }
 
@@ -247,10 +217,10 @@ public class PlayInterfaceController {
     /**
      * Act on user pressing the host new game button.
      */
-    private void hostButtonAction() {
+    private void playButtonAction() {
         try {
             toGameModeSelection();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -260,64 +230,24 @@ public class PlayInterfaceController {
      * Act on user pressing the tutorial game button.
      */
     private void tutorialButtonAction() {
-        createModel();
+        final String host = "127.0.0.1";
+        final int port = 5010;
+
+        createModel(port);
         try {
             Thread.sleep(400);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         mode = RaceMode.CONTROLS_TUTORIAL;
-        openStream("127.0.0.1", 5005);
-    }
 
-
-    /**
-     * Act on user pressing the spectator game button.
-     */
-    private void spectatorButtonAction() {
-        createModel();
-        try {
-            Thread.sleep(400);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        mode = RaceMode.SPECTATION;
-        if (customHostField.getText().isEmpty() || customPortField.getText().isEmpty()) { // For testing purposes.
-            openStream("127.0.0.1", 5005);
-        } else {
-            openStream(customHostField.getText(), Integer.parseInt(customPortField.getText())); // May need better way
-        }
-    }
-
-
-    /**
-     * Opens a socket and connection on the given host and port number
-     * @param host The host IP address for the socket
-     * @param port The port number used for the socket
-     */
-    private void openStream(String host, int port) {
         try {
             Socket socket = SocketFactory.getDefault().createSocket(host, port);
             startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
         } catch (Exception e) {
-            errorText.setText("Please enter a valid host/port combination");
+            errorText.setText("Unable to connect to server on port " + port + '\n' +
+                    "Please ensure this port is free for the server to bind to");
         }
-    }
-
-
-    /**
-     * sets the RaceMode to race and opens a stream on the specified host and port number
-     */
-    public void connectButtonAction(){
-        mode = RaceMode.RACE;
-        try {
-            String host = customHostField.getText();
-            int port = Integer.parseInt(customPortField.getText());
-            openStream(host, port);
-        } catch (Exception e){
-           errorText.setText("Please enter a valid host/port combination");
-        }
-
     }
 
 
@@ -345,9 +275,10 @@ public class PlayInterfaceController {
 
     /**
      * Takes the player to the screen where the game mode to be hosted can be selected
+     *
      * @throws IOException Thrown if there is an issue opening the fxml and loading the controller
      */
-    public void toGameModeSelection() throws IOException{
+    private void toGameModeSelection() throws IOException {
         Stage stage = (Stage) innerPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ModeSelection.fxml"));
         Parent root = loader.load();
@@ -373,58 +304,30 @@ public class PlayInterfaceController {
     /**
      * Re draw the the pane which holds elements of the play interface to be in the middle of the window.
      */
-    public void reDraw() {
+    private void reDraw() {
         if (!(innerPane.getWidth() == 0)) {
             innerPane.setLayoutX((outerPane.getScene().getWidth() / 2) - (innerPane.getWidth() / 2));
             innerPane.setLayoutY((innerPane.getScene().getHeight() / 2) - (innerPane.getHeight() / 2));
-        }
-
-        else if (stage != null) {
+        } else if (stage != null) {
             innerPane.setLayoutX((stage.getWidth() / 2) - (400));
             innerPane.setLayoutY((stage.getHeight() / 2) - (400));
         }
     }
 
 
-    public void setStage(Stage stage) {
+    void setStage(Stage stage) {
         this.stage = stage;
-    }
-
-
-    //@FXML
-    private void setColor() { //TODO FINSIH SAM DAVID 16 AUG
-//        customisationMessages.add(new ColourMessage());
-    }
-
-    //@FXML
-    private void setName() { //TODO FINSIH SAM DAVID 16 AUG
-//        customisationMessages.add(new NameMessage());
     }
 
 
     /**
      * Creates the model in a new process.
-     * Reads in the file path to the model jar from the config file "visualiser-config.txt" (from the same directory).
      */
-    @SuppressWarnings("Duplicates")
-    private void createModel() {
-        final String CONFIG_FILE_NAME = "visualiser-config.txt";
-        final List<String> tokens = Collections.singletonList("MODEL_PATH");
-        ConfigReader reader = new ConfigReader(tokens);
-        InputStream configStream = null;
+    private void createModel(int port) {
         try {
-            configStream = new FileInputStream(CONFIG_FILE_NAME);
-            String filePath = reader.parseConfig(configStream).get("MODEL_PATH");
-            Runtime.getRuntime().exec("java -jar " + filePath);
+            (new ModelLoader()).startModel(port);
         } catch (IOException e) {
-            if (null == configStream) {
-                System.out.println("You don't have a config file"); // TODO August 12 DHL25 / HQI19 have to show error but title screen incomplete
-            } else {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
         }
     }
-
-
-
 }

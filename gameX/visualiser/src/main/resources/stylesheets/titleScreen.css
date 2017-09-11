@@ -19,12 +19,12 @@
 }
 
 .hostImage {
-    -fx-graphic: url('/images/title_screen/play_button.png');
+    -fx-graphic: url('/images/play_button.png');
 }
 
 .hostImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/title_screen/play_button_alt.png');
+    -fx-graphic: url('/images/play_button_alt.png');
 }
 
 .controlsImage {
