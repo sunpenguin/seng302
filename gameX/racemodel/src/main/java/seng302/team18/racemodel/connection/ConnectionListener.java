@@ -198,8 +198,6 @@ public class ConnectionListener extends Observable implements Observer {
             notifyObservers(client);
         }
         sendMessage(client, id, requestType);
-
-
     }
 
 
