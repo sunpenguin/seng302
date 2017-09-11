@@ -188,7 +188,7 @@ public class RaceController implements Observer {
                             case X:
                                 if (pixelMapper.getZoomLevel() - 1 <= 0) {
                                     pixelMapper.setTracking(false);
-                                    pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
+                                    pixelMapper.setViewPortCenter(race.getCourse().getCenter());
                                 }
                                 pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() - 1);
 
@@ -574,7 +574,7 @@ public class RaceController implements Observer {
         raceViewPane.resize(raceViewPane.getPrefWidth(), raceViewPane.getPrefHeight());
 
         pixelMapper = new PixelMapper(
-                bounds.get(0), bounds.get(1), race.getCourse().getCentralCoordinate(),
+                bounds.get(0), bounds.get(1), race.getCourse().getCenter(),
                 raceViewPane.heightProperty(), raceViewPane.widthProperty()
         );
 

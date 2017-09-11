@@ -65,4 +65,10 @@ public class ArcadeRaceBuilder extends AbstractRaceBuilder {
     protected RaceMode getRaceMode() {
         return RaceMode.ARCADE;
     }
+
+
+    @Override
+    protected StartPositionSetter getPositionSetter() {
+        return new StartLineSetter(20);
+    }
 }

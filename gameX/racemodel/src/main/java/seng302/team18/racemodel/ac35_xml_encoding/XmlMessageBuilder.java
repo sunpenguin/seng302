@@ -119,7 +119,7 @@ public class XmlMessageBuilder {
      */
     public AC35XMLRegattaMessage buildRegattaMessage(Race race) {
         Regatta regatta = race.getRegatta();
-        Coordinate centre = race.getCourse().getCentralCoordinate();
+        Coordinate centre = race.getCourse().getCenter();
         ZoneOffset utcOffset = LocalDateTime.now().atZone(race.getCourse().getTimeZone()).getOffset();
 
         return new AC35XMLRegattaMessage(

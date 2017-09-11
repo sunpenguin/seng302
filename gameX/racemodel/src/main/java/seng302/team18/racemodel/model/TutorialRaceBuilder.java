@@ -2,6 +2,8 @@ package seng302.team18.racemodel.model;
 
 import seng302.team18.model.RaceMode;
 import seng302.team18.model.RaceType;
+import seng302.team18.model.StartLineSetter;
+import seng302.team18.model.StartPositionSetter;
 import seng302.team18.model.updaters.*;
 
 import java.time.ZonedDateTime;
@@ -43,5 +45,11 @@ public class TutorialRaceBuilder extends AbstractRaceBuilder {
     @Override
     protected RaceMode getRaceMode(){
         return RaceMode.CONTROLS_TUTORIAL;
+    }
+
+
+    @Override
+    protected StartPositionSetter getPositionSetter() {
+        return new StartLineSetter(20);
     }
 }

@@ -1,10 +1,6 @@
 package seng302.team18.racemodel.model;
 
-import seng302.team18.model.Course;
-import seng302.team18.model.Race;
-import seng302.team18.model.RaceMode;
-import seng302.team18.model.RaceType;
-import seng302.team18.model.Regatta;
+import seng302.team18.model.*;
 import seng302.team18.model.updaters.Updater;
 
 import java.util.List;
@@ -30,7 +26,7 @@ public abstract class AbstractRaceBuilder {
         race.setId(getId());
         race.setMode(getRaceMode());
         race.setUpdaters(getUpdaters());
-
+        race.setPositionSetter(getPositionSetter());
         return race;
     }
 
@@ -56,5 +52,11 @@ public abstract class AbstractRaceBuilder {
      * @return the mode for the race
      */
     protected abstract RaceMode getRaceMode();
+
+
+    /**
+     * @return the position setter.
+     */
+    protected abstract StartPositionSetter getPositionSetter();
 
 }

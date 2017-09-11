@@ -53,4 +53,9 @@ public class ChallengeRaceBuilder extends AbstractRaceBuilder {
         }
 
 
+    @Override
+    protected StartPositionSetter getPositionSetter() {
+        return new StartLineSetter(20);
+    }
+
 }
