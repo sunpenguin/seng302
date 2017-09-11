@@ -7,6 +7,7 @@ import seng302.team18.message.RequestMessage;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 import seng302.team18.racemodel.interpret.ColourInterpreter;
 import seng302.team18.racemodel.message_generating.AcceptanceMessageGenerator;
@@ -75,9 +76,9 @@ public class ConnectionListener extends Observable implements Observer {
     private void addClient(ClientConnection client) {
         try {
             Receiver receiver = new Receiver(client.getSocket(), factory);
-            int sourceID = ids.get(players.size());
             executor.submit(() -> {
                 MessageBody message = null;
+                int sourceID = ids.get(players.size());
 
                 while (message == null && System.currentTimeMillis() < timeout) {
                     try {
@@ -125,6 +126,12 @@ public class ConnectionListener extends Observable implements Observer {
                 e.printStackTrace();
             }
             return;
+        }
+
+        if (sourceID == 9000) {
+            player.setSpectating(true);
+        } else {
+            player.setSpectating(false);
         }
         player.setId(sourceID);
     }
@@ -175,7 +182,9 @@ public class ConnectionListener extends Observable implements Observer {
     public void respond(int id, RequestMessage request, ClientConnection client, Receiver receiver) {
         RequestType requestType = request.getAction();
 
-        if (!isValidMode(requestType)) {
+        if (!players.isEmpty() && requestType.getCode() == RaceMode.SPECTATION.getCode()) {
+            id = 9000;
+        } else if (!isValidMode(requestType)) {
             sendFailureMessage(client, id);
             return;
         }
@@ -183,7 +192,11 @@ public class ConnectionListener extends Observable implements Observer {
         setRaceMode(requestType);
         constructRace();
 
-        addPlayer(receiver, id);
+        if (requestType.getCode() != RaceMode.SPECTATION.getCode()) {
+            addPlayer(receiver, id);
+            setChanged();
+            notifyObservers(client);
+        }
         sendMessage(client, id, requestType);
     }
 

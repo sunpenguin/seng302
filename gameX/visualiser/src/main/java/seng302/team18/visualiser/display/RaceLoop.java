@@ -42,7 +42,6 @@ public class RaceLoop extends AnimationTimer {
         previousTime = currentTime;
         updateFps(secondsElapsed);
         updateView();
-        healthDisplay.display();
     }
 
     /**
@@ -53,6 +52,9 @@ public class RaceLoop extends AnimationTimer {
         renderer.renderBoats();
         courseRenderer.renderCourse();
         renderer.drawTrails();
+        if (null != healthDisplay) {
+            healthDisplay.display();
+        }
     }
 
     /**
