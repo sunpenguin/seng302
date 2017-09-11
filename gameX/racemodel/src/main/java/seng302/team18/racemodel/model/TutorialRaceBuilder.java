@@ -34,7 +34,7 @@ public class TutorialRaceBuilder extends AbstractRaceBuilder {
     protected List<Updater> getUpdaters(){
         List<Updater> updaters = new ArrayList<>();
         updaters.add(new MovementUpdater());
-        updaters.add(new RegularStatusUpdater(ZonedDateTime.now(), 1, 0, 0));
+        updaters.add(new RegularStatusUpdater(ZonedDateTime.now(), 0, 1, 1));
 
         return updaters;
     }
