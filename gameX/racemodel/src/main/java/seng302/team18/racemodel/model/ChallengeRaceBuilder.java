@@ -11,6 +11,8 @@ import java.util.List;
  * RaceBuilder for the challenge mode.
  */
 public class ChallengeRaceBuilder extends AbstractRaceBuilder {
+    RegularStatusUpdater regularStatusUpdater = null;
+
 
     @Override
     protected int getId() {
@@ -34,7 +36,12 @@ public class ChallengeRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new MarkRoundingUpdater());
         updaters.add(new SpeedUpdater(34, 0.00025, 1));
         updaters.add(new ChallengeCourseShrinker(new Coordinate(38.21748,-106.52344), 34, 0.00000075, 0.025));
-        updaters.add(new RegularStatusUpdater(ZonedDateTime.now(), 2, 2, 5));
+
+        if (regularStatusUpdater == null) {
+            regularStatusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 5);
+        }
+
+        updaters.add(regularStatusUpdater);
 
         return updaters;
     }

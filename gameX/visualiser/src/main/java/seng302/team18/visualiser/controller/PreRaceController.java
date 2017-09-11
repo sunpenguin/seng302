@@ -120,7 +120,6 @@ public class PreRaceController {
             // TODO Callum / David 9 August show error (has been disconnected)
         }
 
-        System.out.println("PreRaceController::initConnection Color -> " + color);
         MessageInterpreter acceptanceResponse = new ColourResponder(color, sender);
         interpreter.getInterpreter().add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
     }

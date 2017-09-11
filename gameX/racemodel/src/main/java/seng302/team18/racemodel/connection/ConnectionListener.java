@@ -104,7 +104,6 @@ public class ConnectionListener extends Observable implements Observer {
      * Constructs a race with the given builders and sets the mode. Notify TestMock to regenerate XMLs.
      */
     private void constructRace() {
-        race = raceBuilder.buildRace(race, regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
         race.setCourseForBoats();
         setChanged();
         notifyObservers(this);
@@ -177,6 +176,7 @@ public class ConnectionListener extends Observable implements Observer {
 
         if (firstPlayer) {
             setRaceMode(requestType);
+            race = raceBuilder.buildRace(race, regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
             firstPlayer = false;
         }
         constructRace();
