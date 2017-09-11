@@ -21,6 +21,7 @@ public class RaceRenderer {
     private ClientRace race;
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
+    private Map<Integer, DisplayProjectile> projectiles = new HashMap<>();
     private PixelMapper pixelMapper;
 
 
@@ -187,6 +188,12 @@ public class RaceRenderer {
                 trail.addPoint(boat.getCoordinate(), boat.getHeading(), pixelMapper);
             }
         }
+    }
+
+
+    public void drawShark(Boat boat, PixelMapper mapper){
+
+
     }
 
 
