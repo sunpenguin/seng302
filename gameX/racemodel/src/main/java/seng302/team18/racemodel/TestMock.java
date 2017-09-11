@@ -2,6 +2,7 @@ package seng302.team18.racemodel;
 
 
 
+import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
@@ -266,7 +267,7 @@ public class TestMock implements Observer {
 
         for (Projectile projectile : race.popNewProjectileIds()) {
             server.broadcast((new ProjectileCreationMessageGenerator(projectile.getId()).getMessage()));
-            ScheduledMessageGenerator newProMessageGen = new ProjectileMessageGenerator(0x73, projectile);
+            ScheduledMessageGenerator newProMessageGen = new ProjectileMessageGenerator(AC35MessageType.PROJECTILE_LOCATION.getCode(), projectile);
             scheduledMessages.add(newProMessageGen);
         }
 
