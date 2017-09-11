@@ -28,10 +28,10 @@ public class VisualPowerUp {
     public VisualPowerUp(Pane pane, Boat boat) {
         this.boat = boat;
         powerImage = new Image("/images/race_view/Arrow2.gif");
-        sharkImage1 = new Image("/images/race_view/heart.png");
+        sharkImage1 = new Image("/images/race_view/heart.png"); // TODO Change to proper shark image hqi19 11/09/17
         powerBox = new HBox();
-        powerBox.setLayoutX(200);
-        powerBox.setLayoutY(200);
+        powerBox.setLayoutX(135);
+        powerBox.setLayoutY(80);
         speedView = new ImageView(powerImage);
         sharkView1 = new ImageView(sharkImage1);
         pane.getChildren().add(powerBox);
