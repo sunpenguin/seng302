@@ -13,6 +13,7 @@ import seng302.team18.visualiser.ClientRace;
  */
 public class AcceptanceInterpreter extends MessageInterpreter {
 
+
     private ClientRace race;
 
 
@@ -30,8 +31,6 @@ public class AcceptanceInterpreter extends MessageInterpreter {
                 //TODO Return user to title screen sbe67 15/8/2017
             }
             race.setPlayerId(sourceId);
-
         }
     }
-
 }

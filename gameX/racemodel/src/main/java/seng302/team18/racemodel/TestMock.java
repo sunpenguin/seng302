@@ -62,10 +62,13 @@ public class TestMock implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) { // Server ?
             ClientConnection client = (ClientConnection) arg;
-            if (client.isSpectaing() == false) { // not in spectating mode
+            if (!client.isSpectaing()) { // not in spectating mode
                 race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
+                client.setId(boats.get(race.getStartingList().size()).getId());
+            } else {
+                client.setId(9000);
             }
-            client.setId(boats.get(race.getStartingList().size()).getId());
+
             generateXMLs();
             sendXmlRegatta(client);
             sendRaceXml();
@@ -84,7 +87,6 @@ public class TestMock implements Observer {
             if (message.getRequestType() == RequestType.FAILURE_CLIENT_TYPE) {
                 System.out.println("Remove " + message.getSourceId() + " From the race");
                 race.removeParticipant(message.getSourceId());
-                System.out.println(race.getStartingList());
                 generateXMLs();
                 sendRaceXml();
                 sendBoatsXml();

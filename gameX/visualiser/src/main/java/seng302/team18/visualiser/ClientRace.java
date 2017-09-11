@@ -269,6 +269,7 @@ public class ClientRace {
         return course.getDestination(legNumber);
     }
 
+
     public int numSequences() {
         return course.getMarkSequence().size();
     }

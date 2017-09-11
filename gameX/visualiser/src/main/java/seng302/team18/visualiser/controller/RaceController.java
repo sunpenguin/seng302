@@ -152,10 +152,11 @@ public class RaceController implements Observer {
         EventHandler<KeyEvent> keyEventHandler =
                 keyEvent -> {
                     if (keyEvent.getCode() != null) {
-                        BoatActionMessage message = new BoatActionMessage(race.getPlayerId());
+                        BoatActionMessage message = null;
                         boolean send = true;
 
                         if (race.getMode() != RaceMode.SPECTATION) {
+                            message = new BoatActionMessage(race.getPlayerId());
                             switch (keyEvent.getCode()) {
                                 case SPACE:
                                     message.setAutoPilot();
@@ -218,7 +219,7 @@ public class RaceController implements Observer {
                                 break;
                         }
 
-                        if (send) {
+                        if (send && message != null) {
                             if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
                                 controlsTutorial.setBoat(getPlayerBoat()); //TODO: get sam to change this seb67 17/8
                                 controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
