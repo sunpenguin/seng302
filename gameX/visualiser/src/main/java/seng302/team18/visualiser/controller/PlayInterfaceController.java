@@ -253,8 +253,6 @@ public class PlayInterfaceController {
         } catch (IOException e){
             e.printStackTrace();
         }
-//        mode = RaceMode.ARCADE; // CHANGE MODE HERE
-//        openStream("127.0.0.1", 5005);
     }
 
 
@@ -305,6 +303,7 @@ public class PlayInterfaceController {
             errorText.setText("Please enter a valid host/port combination");
         }
     }
+
 
     /**
      * sets the RaceMode to race and opens a stream on the specified host and port number

@@ -100,6 +100,7 @@ public class RaceController implements Observer {
     private boolean fpsOn;
     private boolean onImportant;
     private boolean sailIn = false;
+    private boolean send = true;
 
     private ClientRace race;
     private RaceLoop raceLoop;
@@ -123,6 +124,8 @@ public class RaceController implements Observer {
     private Label timeLabel;
     private VisualHealth visualHealth;
 
+    private BoatActionMessage message = null;
+
 
     @FXML
     public void initialize() {
@@ -142,8 +145,89 @@ public class RaceController implements Observer {
 
 
     /**
+     * Handles all boat controls.
+     *
+     * @param keyEvent event for a particular key press
+     */
+    private void installPlayerKey(KeyEvent keyEvent) {
+        if (race.getMode() != RaceMode.SPECTATION) {
+            message = new BoatActionMessage(race.getPlayerId());
+            switch (keyEvent.getCode()) {
+                case SPACE:
+                    message.setAutoPilot();
+                    break;
+                case ENTER:
+                    message.setTackGybe();
+                    break;
+                case PAGE_UP:
+                case UP:
+                    message.setUpwind();
+                    break;
+                case PAGE_DOWN:
+                case DOWN:
+                    message.setDownwind();
+                    break;
+                case SHIFT:
+                    sailIn = getPlayerBoat().isSailOut();
+                    if (sailIn) {
+                        message.setSailIn();
+                    } else {
+                        message.setSailOut();
+                    }
+                    break;
+                case S:
+                    message.setConsume();
+                    break;
+                default:
+                    send = false;
+            }
+        }
+    }
+
+
+    /**
+     * Handles zooming, escape and viewing annotations.
+     *
+     * @param keyEvent event for a particular key press
+     */
+    private void installBasicKey(KeyEvent keyEvent) {
+        switch (keyEvent.getCode()) {
+            case Z:
+                if (pixelMapper.getZoomLevel() > 0) {
+                    pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() + 1);
+                } else {
+                    Boat boat = race.getBoat(race.getStartingList().get(0).getId());
+                    pixelMapper.setZoomLevel(1);
+                    pixelMapper.track(boat);
+                    pixelMapper.setTracking(true);
+                }
+                break;
+            case X:
+                if (pixelMapper.getZoomLevel() - 1 <= 0) {
+                    pixelMapper.setTracking(false);
+                    pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
+                }
+                pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() - 1);
+
+                break;
+            case ESCAPE:
+                if (group.getChildren().contains(escapeMenuPane)) {
+                    group.getChildren().remove(escapeMenuPane);
+                } else {
+                    openEscapeMenu("");
+                }
+                break;
+            case TAB:
+                toggleTabView();
+                break;
+            default:
+                send = true;
+        }
+    }
+
+
+    /**
      * Register key presses to certain methods.
-     * Handles boat control, zooming.
      *
      * Allow boat control only to actual racing player (client in spectrator mode can only view the race instead of playing).
      *
@@ -152,72 +236,11 @@ public class RaceController implements Observer {
         EventHandler<KeyEvent> keyEventHandler =
                 keyEvent -> {
                     if (keyEvent.getCode() != null) {
-                        BoatActionMessage message = null;
-                        boolean send = true;
+//                        BoatActionMessage message = null;
 
-                        if (race.getMode() != RaceMode.SPECTATION) {
-                            message = new BoatActionMessage(race.getPlayerId());
-                            switch (keyEvent.getCode()) {
-                                case SPACE:
-                                    message.setAutoPilot();
-                                    break;
-                                case ENTER:
-                                    message.setTackGybe();
-                                    break;
-                                case PAGE_UP:
-                                case UP:
-                                    message.setUpwind();
-                                    break;
-                                case PAGE_DOWN:
-                                case DOWN:
-                                    message.setDownwind();
-                                    break;
-                                case SHIFT:
-                                    sailIn = getPlayerBoat().isSailOut();
-                                    if (sailIn) {
-                                        message.setSailIn();
-                                    } else {
-                                        message.setSailOut();
-                                    }
-                                    break;
-                                case S:
-                                    message.setConsume();
-                                    break;
-                                default:
-                                    send = false;
-                            }
-                        }
+                        installPlayerKey(keyEvent);
 
-                        switch (keyEvent.getCode()) {
-                            case Z:
-                                if (pixelMapper.getZoomLevel() > 0) {
-                                    pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() + 1);
-                                } else {
-                                    Boat boat = race.getBoat(race.getStartingList().get(0).getId());
-                                    pixelMapper.setZoomLevel(1);
-                                    pixelMapper.track(boat);
-                                    pixelMapper.setTracking(true);
-                                }
-                                break;
-                            case X:
-                                if (pixelMapper.getZoomLevel() - 1 <= 0) {
-                                    pixelMapper.setTracking(false);
-                                    pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
-                                }
-                                pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() - 1);
-
-                                break;
-                            case ESCAPE:
-                                if (group.getChildren().contains(escapeMenuPane)) {
-                                    group.getChildren().remove(escapeMenuPane);
-                                } else {
-                                    openEscapeMenu("");
-                                }
-                                break;
-                            case TAB:
-                                toggleTabView();
-                                break;
-                        }
+                        installBasicKey(keyEvent);
 
                         if (send && message != null) {
                             if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
@@ -743,6 +766,8 @@ public class RaceController implements Observer {
         raceRenderer.renderBoats();
         raceRenderer.reDrawTrails();
         redrawTimeLabel();
+//        mode = RaceMode.ARCADE; // CHANGE MODE HERE
+//        openStream("127.0.0.1", 5005);
     }
 
 
