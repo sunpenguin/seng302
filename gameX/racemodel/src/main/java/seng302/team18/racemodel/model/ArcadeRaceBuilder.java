@@ -15,6 +15,7 @@ import java.util.List;
  * @see seng302.team18.racemodel.model.AbstractRaceBuilder
  */
 public class ArcadeRaceBuilder extends AbstractRaceBuilder {
+    private StatusUpdater statusUpdater  = null;
 
     @Override
     protected int getId() {
@@ -37,7 +38,12 @@ public class ArcadeRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());
         updaters.add(new PowerUpUpdater(makePickUp(), 4));
-        updaters.add(new RegularStatusUpdater(ZonedDateTime.now(), 2, 2, 5));
+
+        if (statusUpdater == null) {
+            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 5);
+        }
+
+        updaters.add(statusUpdater);
 
         return updaters;
     }

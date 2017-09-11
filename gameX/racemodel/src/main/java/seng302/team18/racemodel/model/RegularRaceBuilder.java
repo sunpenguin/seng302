@@ -16,7 +16,7 @@ import java.util.List;
  * @see seng302.team18.racemodel.model.AbstractRaceBuilder
  */
 public class RegularRaceBuilder extends AbstractRaceBuilder {
-    RegularStatusUpdater regularStatusUpdater = null;
+    StatusUpdater statusUpdater = null;
 
     @Override
     protected int getId() {
@@ -39,11 +39,11 @@ public class RegularRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());
 
-        if (regularStatusUpdater == null) {
-            regularStatusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 5);
+        if (statusUpdater == null) {
+            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 5);
         }
 
-        updaters.add(regularStatusUpdater);
+        updaters.add(statusUpdater);
 
         return updaters;
     }

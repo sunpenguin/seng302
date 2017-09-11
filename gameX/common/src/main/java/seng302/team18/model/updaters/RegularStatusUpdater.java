@@ -14,11 +14,8 @@ import java.util.List;
  * Class for handling of switching the race into the correct status (warning, started, finished etc) at the
  * appropriate times.
  */
-public class RegularStatusUpdater implements Updater {
+public class RegularStatusUpdater extends StatusUpdater {
 
-    private ZonedDateTime warningTime;
-    private ZonedDateTime prepTime;
-    private ZonedDateTime startTime;
 
 
     /**
@@ -31,36 +28,7 @@ public class RegularStatusUpdater implements Updater {
      * @param startTimeSeconds until we switch from PREPARATORY to STARTED.
      */
     public RegularStatusUpdater(ZonedDateTime initialTime, long warningTimeSeconds, long prepTimeSeconds, long startTimeSeconds) {
-        this.warningTime = initialTime.plusSeconds(warningTimeSeconds);
-        this.prepTime = initialTime.plusSeconds(warningTimeSeconds + prepTimeSeconds);
-        this.startTime = initialTime.plusSeconds(warningTimeSeconds + prepTimeSeconds + startTimeSeconds);
-    }
-
-
-    /**
-     * Updates the race status throughout the race.
-     *
-     * @param race to update.
-     * @param time to update the race by.
-     */
-    @Override
-    public void update(Race race, double time) {
-        race.setStartTime(startTime);
-
-        if (isFinished(race)) {
-            race.setStatus(RaceStatus.FINISHED);
-        } else if (ZonedDateTime.now().isAfter(race.getStartTime())) {
-            race.setStatus(RaceStatus.STARTED);
-            race.getStartingList().stream()
-                    .filter(boat -> boat.getStatus().equals(BoatStatus.PRE_START))
-                    .forEach(boat -> boat.setStatus(BoatStatus.RACING));
-        } else if (ZonedDateTime.now().isAfter(prepTime)) {
-            race.setStatus(RaceStatus.PREPARATORY);
-        } else if (ZonedDateTime.now().isAfter(warningTime)) {
-            race.setStatus(RaceStatus.WARNING);
-        } else {
-            race.setStatus(RaceStatus.PRESTART);
-        }
+        super(initialTime, warningTimeSeconds, prepTimeSeconds, startTimeSeconds);
     }
 
 
@@ -70,7 +38,7 @@ public class RegularStatusUpdater implements Updater {
      * @param race to check
      * @return if the race is finished.
      */
-    private boolean isFinished(Race race) {
+    protected boolean isFinished(Race race) {
         Collection<BoatStatus> finishedStatuses = Arrays.asList(BoatStatus.DNF, BoatStatus.DNS, BoatStatus.FINISHED, BoatStatus.DSQ);
         List<Boat> startingList = race.getStartingList();
         int numFinished = (int) startingList

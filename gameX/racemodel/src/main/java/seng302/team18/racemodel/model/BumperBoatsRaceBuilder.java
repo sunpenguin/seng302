@@ -17,6 +17,7 @@ import java.util.List;
  * @see seng302.team18.racemodel.model.AbstractRaceBuilder
  */
 public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
+    private StatusUpdater statusUpdater  = null;
 
     @Override
     protected int getId() {
@@ -35,7 +36,13 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new BoatCollisionUpdater());
         updaters.add(new BumperBoatHealthUpdater());
         updaters.add(new BumperCourseShrinker(new Coordinate(5.00150, 4.0005), 200, 34, 0.000005));
-        updaters.add(new RegularStatusUpdater(ZonedDateTime.now(), 2, 2, 5));
+
+        if (statusUpdater == null) {
+            statusUpdater = new BumperStatusUpdater(ZonedDateTime.now(), 2, 1, 5);
+            updaters.add(statusUpdater);
+        }
+
+        updaters.add(statusUpdater);
 
         return updaters;
     }

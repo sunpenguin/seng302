@@ -18,6 +18,9 @@ public class BoatCollisionUpdater extends CollisionUpdater {
         return race.getStartingList().stream()
                 .filter(b -> !b.getId().equals(boat.getId()))
                 .filter(b -> !b.getStatus().equals(BoatStatus.FINISHED))
+                .filter(b -> !b.getStatus().equals(BoatStatus.DNF))
+                .filter(b -> !b.getStatus().equals(BoatStatus.DNS))
+                .filter(b -> !b.getStatus().equals(BoatStatus.DSQ))
                 .collect(Collectors.toList());
     }
 }

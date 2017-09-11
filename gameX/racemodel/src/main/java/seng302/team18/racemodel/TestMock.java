@@ -2,6 +2,7 @@ package seng302.team18.racemodel;
 
 
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
@@ -179,6 +180,7 @@ public class TestMock implements Observer {
      * Send the final messages and set race status to Finished.
      */
     private void sendFinalMessages() {
+        System.out.println("TestMock::sendFinalMessages");
         race.setStatus(RaceStatus.FINISHED);
         ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
         server.broadcast(raceMessageGenerator.getMessage());
@@ -194,48 +196,50 @@ public class TestMock implements Observer {
 
         @Override
         public void run() {
-                final int LOOP_FREQUENCY = 60;
+            final int LOOP_FREQUENCY = 60;
 
-                long timeCurr = System.currentTimeMillis();
-                long timeLast;
+            long timeCurr = System.currentTimeMillis();
+            long timeLast;
 
-                scheduledMessages.add(new RaceMessageGenerator(race));
-                scheduledMessages.add(new HeartBeatMessageGenerator());
+            scheduledMessages.add(new RaceMessageGenerator(race));
+            scheduledMessages.add(new HeartBeatMessageGenerator());
 
-                do {
+            do {
 
-                    if (race.getStatus().equals(RaceStatus.STARTED)) {
-                        generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
-                        sendRaceXml();
-                    }
+                if (race.getStatus().equals(RaceStatus.STARTED)) {
+                    generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
+                    sendRaceXml();
+                }
 
-                    timeLast = timeCurr;
-                    timeCurr = System.currentTimeMillis();
+                timeLast = timeCurr;
+                timeCurr = System.currentTimeMillis();
 
-                    race.setCurrentTime(ZonedDateTime.now());
+                race.setCurrentTime(ZonedDateTime.now());
 
-                    runRace(timeCurr, timeLast);
+                runRace(timeCurr, timeLast);
 
-                    if (firstTime && race.getStatus().equals(RaceStatus.PREPARATORY)) {
-                        generateXMLs();
-                        sendBoatsXml();
-                        sendRaceXml();
-                        firstTime = false;
-                    }
+                if (firstTime && race.getStatus().equals(RaceStatus.PREPARATORY)) {
+                    generateXMLs();
+                    sendBoatsXml();
+                    sendRaceXml();
+                    firstTime = false;
+                }
 
-                    updateClients(timeCurr);
+                updateClients(timeCurr);
 
-                    // Sleep
-                    try {
-                        Thread.sleep(1000 / LOOP_FREQUENCY);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                // Sleep
+                try {
+                    Thread.sleep(1000 / LOOP_FREQUENCY);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("SimulationLoop::run running");
+            } while (!race.isFinished() && open);
 
-                } while (!race.isFinished() && open);
-
-                sendFinalMessages();
-                server.close();
+            System.out.println("SimulationLoop::run isfinished = " + race.isFinished());
+            System.out.println("open = " + open);
+            sendFinalMessages();
+            server.close();
         }
     }
 }
