@@ -34,7 +34,7 @@ public class BumperStatusUpdater extends StatusUpdater {
                 .stream()
                 .filter(boat -> finishedStatuses.contains(boat.getStatus()))
                 .count();
-        return startingList.size() - 1 == numFinished && startingList.size() != 0;
+        return (startingList.size() - 1 == numFinished || startingList.size() == numFinished) && startingList.size() != 0;
     }
 
 }

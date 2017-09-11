@@ -176,15 +176,15 @@ public class RaceRenderer {
             DisplayTrail trail = trailMap.get(boat.getShortName());
 
             if (trail == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
-                final int MAX_TRAIL_LENGTH = 150;
+                final int MAX_TRAIL_LENGTH = 750;
                 DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
-                trail = new DisplayTrail(displayBoat.getColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
+                trail = new DisplayTrail(displayBoat.getColor(), MAX_TRAIL_LENGTH);
                 trailMap.put(boat.getShortName(), trail);
                 trail.addToGroup(group);
             }
 
-            if (trail != null) {
-                trail.addPoint(boat.getCoordinate(), boat.getHeading(), pixelMapper);
+            if (trail != null && boat.getSpeed() > 0.001) {
+                trail.addPoint(boat.getCoordinate(), pixelMapper);
             }
         }
     }
