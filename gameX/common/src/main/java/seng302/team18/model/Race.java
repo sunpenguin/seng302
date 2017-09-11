@@ -32,6 +32,8 @@ public class Race {
     private RaceMode mode = RaceMode.RACE;
     private List<Updater> updaters = new ArrayList<>();
     private List<Projectile> projectiles= new ArrayList<>();
+    private List<Projectile> newProjectileList = new ArrayList<>();
+    private List<Projectile> removedProjectileList = new ArrayList<>();
     private int powerId = 0;
     private int nextProjectileId = 300;
     private final int PROJECTILE_SPEED = 50;
@@ -375,7 +377,17 @@ public class Race {
         return events;
     }
 
+    public List<Projectile> popNewProjectileIds(){
+        List<Projectile> events = newProjectileList;
+        newProjectileList = new ArrayList<>();
+        return events;
+    }
 
+    public List<Projectile> popRemovedProjectiles(){
+        List<Projectile> events = removedProjectileList;
+        removedProjectileList = new ArrayList<>();
+        return events;
+    }
 
 
     public void addYachtEvent(YachtEvent yachtEvent) {
@@ -475,6 +487,7 @@ public class Race {
         Projectile sharky = new TigerShark(nextProjectileId, PROJECTILE_RADIUS, PROJECTILE_WEIGHT, location, boat.getHeading(), PROJECTILE_SPEED);
         projectiles.add(sharky);
         nextProjectileId += 1;
+        newProjectileList.add(sharky);
     }
 
     public List<Projectile> getProjectiles() {
@@ -490,6 +503,7 @@ public class Race {
         for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
             Projectile projectile = it.next();
             if (projectile.getId() == projectile_id) {
+                removedProjectileList.add(projectile);
                 it.remove();
             }
         }

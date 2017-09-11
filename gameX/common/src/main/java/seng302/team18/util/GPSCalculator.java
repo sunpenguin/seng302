@@ -224,7 +224,7 @@ public class GPSCalculator {
      * @param course The course
      * @return The list of coordinates where index 0 is the upper left and index 1 is the lower right
      */
-    public List<Coordinate> findMinMaxPoints(Course course) {
+    public synchronized List<Coordinate> findMinMaxPoints(Course course) {
         List<Coordinate> points = new ArrayList<>();
 
         points.addAll(course.getCourseLimits());

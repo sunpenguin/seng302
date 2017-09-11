@@ -14,10 +14,7 @@ import seng302.team18.racemodel.message_generating.*;
 import seng302.team18.racemodel.model.AbstractCourseBuilder;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 /**
  * Class to handle a mock race
@@ -265,6 +262,22 @@ public class TestMock implements Observer {
 
         for (PowerUpEvent event : race.popPowerUpEvents()) {
             server.broadcast((new PowerTakenGenerator(event.getBoatId(), event.getPowerId(), event.getPowerDuration()).getMessage()));
+        }
+
+        for (Projectile projectile : race.popNewProjectileIds()) {
+            ScheduledMessageGenerator newProMessageGen = new ProjectleMessageGenerator(0x73, projectile);
+            scheduledMessages.add(newProMessageGen);
+        }
+
+        for (Projectile projectile : race.popRemovedProjectiles()) {
+            for(Iterator<ScheduledMessageGenerator> it = scheduledMessages.iterator(); it.hasNext();) {
+                if(it instanceof ProjectleMessageGenerator){
+                    ProjectleMessageGenerator projectleMessageGenerator = (ProjectleMessageGenerator) it.next();
+                    if(projectleMessageGenerator.getProjectileId() == projectile.getId()){
+                        it.remove();
+                    }
+                }
+            }
         }
 
 

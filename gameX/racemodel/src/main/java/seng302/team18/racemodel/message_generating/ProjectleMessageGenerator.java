@@ -11,18 +11,19 @@ import java.io.IOException;
 /**
  * Created by csl62 on 7/09/17.
  */
-public class ProjectleMessageGenerator extends MessageGenerator{
+public class ProjectleMessageGenerator extends ScheduledMessageGenerator{
 
     private Projectile projectile;
 
     public ProjectleMessageGenerator(int type, Projectile projectile) {
-        super(type);
+        super(30, type);
         this.projectile = projectile;
     }
 
     @Override
     protected byte[] getPayload() throws IOException {
 
+        System.out.println("creating message");
         final double BYTE_COORDINATE_TO_DOUBLE = 180.0 / 2147483648.0;
         final double BYTE_HEADING_TO_DOUBLE = 360.0 / 65536.0;
 
@@ -50,5 +51,7 @@ public class ProjectleMessageGenerator extends MessageGenerator{
         return outStream.toByteArray();
     }
 
-
+    public int getProjectileId() {
+        return projectile.getId();
+    }
 }
