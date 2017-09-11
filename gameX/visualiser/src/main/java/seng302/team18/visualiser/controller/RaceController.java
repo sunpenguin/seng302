@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.controller;
 
+import com.google.common.collect.Lists;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
@@ -122,6 +123,8 @@ public class RaceController implements Observer {
     private HBox timeBox;
     private Label timeLabel;
     private VisualHealth visualHealth;
+
+    private VBox finishResultsBox = null;
 
 
     @FXML
@@ -737,20 +740,66 @@ public class RaceController implements Observer {
      * Displays the result of the race in table form
      */
     public void showFinishersList() {
-        List<Boat> boats = race.getStartingList();
+        if (finishResultsBox == null) {
+            String result = "MATCH COMPLETE\n\n";
+
+            List<Boat> boats = race.getStartingList();
+
+            if (race.getMode().equals(RaceMode.BUMPER_BOATS)) {
+                result += bumperFinishList(boats);
+            } else {
+                result += genericFinishList(boats);
+            }
+
+            result = result.substring(0, result.length() - 1);
+            Label resultLabel = new Label(result);
+            finishResultsBox = new VBox(resultLabel);
+            finishResultsBox.getStylesheets().addAll(RaceController.class.getResource("/stylesheets/style.css").toExternalForm());
+            finishResultsBox.getStyleClass().add("finishTable");
+            raceViewPane.getChildren().add(finishResultsBox);
+            finishResultsBox.setLayoutX(50);
+            finishResultsBox.setLayoutY(200);
+        }
+    }
+
+
+    /**
+     * Construct a string with finish information for a generic race.
+     * Displays Placing, name, status(FINISHED, DSQ, etc) for each boat on a newline.
+     *
+     * @param boats to display info for.
+     * @return constructed string
+     */
+    private String genericFinishList(List<Boat> boats) {
         boats.sort(Comparator.comparing(Boat::getPlace));
-        String result = "FINAL PLACINGS\n\n";
+        String result = "";
+
         for (Boat b : boats) {
             result += b.getPlace() + ": " + b.getShortName() + " " + b.getStatus().name() + "\n";
         }
-        result = result.substring(0, result.length() - 1);
-        Label resultLabel = new Label(result);
-        VBox resultBox = new VBox(resultLabel);
-        resultBox.getStylesheets().addAll(RaceController.class.getResource("/stylesheets/style.css").toExternalForm());
-        resultBox.getStyleClass().add("finishTable");
-        raceViewPane.getChildren().add(resultBox);
-        resultBox.setLayoutX(50);
-        resultBox.setLayoutY(200);
+
+        return result;
+    }
+
+
+    /**
+     * Construct a string with finish information for a generic race.
+     * Displays Name, status(WINNER or DEAD) for each boat on a newline.
+     *
+     * @param boats to display info for.
+     * @return constructed string
+     */
+    private String bumperFinishList(List<Boat> boats) {
+        boats.sort(Comparator.comparing(Boat::getLives));
+        boats = Lists.reverse(boats);
+        String result = "";
+
+        for (Boat b : boats) {
+            String state = b.getLives() > 0? "WINNER" : "DEAD";
+            result += b.getShortName() + " "  + state + "\n";
+        }
+
+        return result;
     }
 
 

@@ -48,7 +48,7 @@ public enum RaceStatus {
     }
 
 
-    public static RaceStatus ofCode(int code) {
+    public static RaceStatus from(int code) {
         return CODE_MAP.get(code);
     }
 
