@@ -11,11 +11,11 @@ import java.io.IOException;
 /**
  * Created by csl62 on 7/09/17.
  */
-public class ProjectleMessageGenerator extends ScheduledMessageGenerator{
+public class ProjectileMessageGenerator extends ScheduledMessageGenerator{
 
     private Projectile projectile;
 
-    public ProjectleMessageGenerator(int type, Projectile projectile) {
+    public ProjectileMessageGenerator(int type, Projectile projectile) {
         super(30, type);
         this.projectile = projectile;
     }

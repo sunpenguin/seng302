@@ -265,14 +265,15 @@ public class TestMock implements Observer {
         }
 
         for (Projectile projectile : race.popNewProjectileIds()) {
-            ScheduledMessageGenerator newProMessageGen = new ProjectleMessageGenerator(0x73, projectile);
+            ScheduledMessageGenerator newProMessageGen = new ProjectileMessageGenerator(0x73, projectile);
             scheduledMessages.add(newProMessageGen);
         }
 
         for (Projectile projectile : race.popRemovedProjectiles()) {
             for(Iterator<ScheduledMessageGenerator> it = scheduledMessages.iterator(); it.hasNext();) {
-                if(it instanceof ProjectleMessageGenerator){
-                    ProjectleMessageGenerator projectleMessageGenerator = (ProjectleMessageGenerator) it.next();
+                ScheduledMessageGenerator sched = it.next();
+                if(sched instanceof ProjectileMessageGenerator){
+                    ProjectileMessageGenerator projectleMessageGenerator = (ProjectileMessageGenerator) sched;
                     if(projectleMessageGenerator.getProjectileId() == projectile.getId()){
                         it.remove();
                     }
