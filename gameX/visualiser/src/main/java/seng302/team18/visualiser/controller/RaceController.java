@@ -122,6 +122,7 @@ public class RaceController implements Observer {
     private HBox timeBox;
     private Label timeLabel;
     private VisualHealth visualHealth;
+    private VisualPowerUp visualPowerUp;
 
 
     @FXML
@@ -209,6 +210,7 @@ public class RaceController implements Observer {
                                 break;
                             case S:
                                 message.setConsume();
+                                race.activatePowerUp();
                                 break;
                             default:
                                 send = false;
@@ -585,13 +587,15 @@ public class RaceController implements Observer {
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
         visualHealth = new VisualHealth(raceViewPane, getPlayerBoat());
+        visualPowerUp = new VisualPowerUp(raceViewPane, getPlayerBoat());
 
         setupRaceTimer();
         startRaceTimer();
 
         new ControlSchemeDisplay(raceViewPane);
 
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper, visualHealth);
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper
+                , visualHealth, visualPowerUp);
         raceLoop.start();
 
         registerListeners();
