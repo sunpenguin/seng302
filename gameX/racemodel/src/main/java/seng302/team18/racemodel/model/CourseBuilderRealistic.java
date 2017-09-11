@@ -106,7 +106,7 @@ public class CourseBuilderRealistic extends AbstractCourseBuilder {
 
 
     @Override
-    protected List<Coordinate> getBoundaryMarks() {
+    public List<Coordinate> getBoundaryMarks() {
         return Arrays.asList(
                 new Coordinate(5.27735, -4.42376),
                 new Coordinate(5.27729, -4.42503),

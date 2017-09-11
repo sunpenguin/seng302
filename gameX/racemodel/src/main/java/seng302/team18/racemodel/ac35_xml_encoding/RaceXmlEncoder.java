@@ -129,8 +129,8 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
             elementMark.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_NAME.toString(), mark.getName());
 
             Coordinate coordinate = mark.getCoordinate();
-            elementMark.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_TARGET_LATITUDE.toString(), coordinate.getLatitude().toString());
-            elementMark.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_TARGET_LONGITUDE.toString(), coordinate.getLongitude().toString());
+            elementMark.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_TARGET_LATITUDE.toString(), "" + coordinate.getLatitude());
+            elementMark.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_TARGET_LONGITUDE.toString(), "" + coordinate.getLongitude());
 
             elementMark.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_SOURCE_ID.toString(), mark.getId().toString());
 
@@ -163,8 +163,8 @@ public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
 
             Element limit = doc.createElement(AC35RaceXMLComponents.ELEMENT_LIMIT.toString());
             limit.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_SEQUENCE_ID.toString(), ((Integer) i).toString());
-            limit.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_LATITUDE.toString(), boundaryMark.getLatitude().toString());
-            limit.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_LONGITUDE.toString(), boundaryMark.getLongitude().toString());
+            limit.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_LATITUDE.toString(), "" + boundaryMark.getLatitude());
+            limit.setAttribute(AC35RaceXMLComponents.ATTRIBUTE_LONGITUDE.toString(), "" + boundaryMark.getLongitude());
             courseLimits.appendChild(limit);
         }
 

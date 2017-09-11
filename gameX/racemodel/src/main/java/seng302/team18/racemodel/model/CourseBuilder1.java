@@ -102,7 +102,7 @@ public class CourseBuilder1 extends AbstractCourseBuilder {
 
 
     @Override
-    protected List<Coordinate> getBoundaryMarks() {
+    public List<Coordinate> getBoundaryMarks() {
         List<Coordinate> boundaryMarks = new ArrayList<>();
 
         boundaryMarks.add(new Coordinate(32.31056, -64.84599));

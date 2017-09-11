@@ -93,7 +93,7 @@ public class GameSelectionController {
         raceButtonImage = new Image("/images/RaceWhite.png");
         raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
         raceLabel.setLayoutY((600 / 2));
-        raceLabel.setOnMouseClicked(event -> hostRace());
+        raceLabel.setOnMouseClicked(event -> startGame(RaceMode.RACE));
     }
 
 
@@ -110,7 +110,7 @@ public class GameSelectionController {
         raceButtonImage = new Image("/images/Arcade_Race_White.png");
         raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
         raceLabel.setLayoutY((600 / 2) + 50);
-        raceLabel.setOnMouseClicked(event -> startArcade());
+        raceLabel.setOnMouseClicked(event -> startGame(RaceMode.ARCADE));
     }
 
 
@@ -127,7 +127,7 @@ public class GameSelectionController {
         raceButtonImage = new Image("/images/SpyroWhite.png");
         raceLabel.setLayoutX((600 / 2) - 150);
         raceLabel.setLayoutY((600 / 2) + 100);
-        raceLabel.setOnMouseClicked(event -> System.out.println("unhandled mode challenge"));
+        raceLabel.setOnMouseClicked(event -> startGame(RaceMode.CHALLENGE_MODE));
     }
 
 
@@ -141,10 +141,10 @@ public class GameSelectionController {
         raceLabel.getStyleClass().add("bumperBoatsImage");
         innerPane.getChildren().add(raceLabel);
 
-        raceButtonImage = new Image("/images/bumper-boatsWhite.png");
+        raceButtonImage = new Image("/images/bumperBoatsWhite.png");
         raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
         raceLabel.setLayoutY((600 / 2) + 150);
-        raceLabel.setOnMouseClicked(event -> startBumperBoats());
+        raceLabel.setOnMouseClicked(event -> startGame(RaceMode.BUMPER_BOATS));
     }
 
 
@@ -196,7 +196,8 @@ public class GameSelectionController {
             Socket socket = SocketFactory.getDefault().createSocket(host, port);
             startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
         } catch (Exception e) {
-            System.out.println();        }
+            System.out.println();
+        }
     }
 
 
@@ -229,7 +230,7 @@ public class GameSelectionController {
      * returns the player to the playInterface
      */
     @SuppressWarnings("Duplicates")
-    public void backButtonAction(){
+    public void backButtonAction() {
         Stage stage = (Stage) innerPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PlayInterface.fxml"));
         Parent root = null;
@@ -249,54 +250,17 @@ public class GameSelectionController {
 
     /**
      * Act on user pressing the host new game button.
-     * Starts a bumper boats game
-     */
-    private void startBumperBoats(){
-        createModel();
-        try {
-            Thread.sleep(400);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        mode = RaceMode.BUMPER_BOATS;
-        openStream("127.0.0.1", 5005);
-    }
-
-
-    /**
-     * Act on user pressing the host new game button.
-     * Starts game mode
-     */
-    public void hostRace(){
-        createModel();
-        try {
-            Thread.sleep(400);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        mode = RaceMode.RACE;
-        openStream("127.0.0.1", 5005);
-    }
-
-
-    /**
-     * Act on user pressing the host new game button.
      * Starts and arcade game
      */
-    private void startArcade() {
+    private void startGame(RaceMode raceMode) {
         createModel();
         try {
             Thread.sleep(400);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        mode = RaceMode.ARCADE;
+        mode = raceMode;
         openStream("127.0.0.1", 5005);
-    }
-
-
-    public Stage getStage() {
-        return stage;
     }
 
 
@@ -304,9 +268,6 @@ public class GameSelectionController {
         this.stage = stage;
     }
 
-    public int getColourIndex() {
-        return colourIndex;
-    }
 
     public void setColourIndex(int colourIndex) {
         this.colourIndex = colourIndex;
