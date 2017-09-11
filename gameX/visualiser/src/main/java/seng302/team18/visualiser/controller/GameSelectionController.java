@@ -14,15 +14,12 @@ import seng302.team18.model.RaceMode;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
 import seng302.team18.visualiser.ClientRace;
-import seng302.team18.visualiser.util.ConfigReader;
+import seng302.team18.visualiser.util.ModelLoader;
 
 import javax.net.SocketFactory;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -30,8 +27,10 @@ import java.util.List;
  */
 public class GameSelectionController {
 
-    @FXML private Pane outerPane;
-    @FXML private Pane innerPane;
+    @FXML
+    private Pane outerPane;
+    @FXML
+    private Pane innerPane;
     private Stage stage;
 
 
@@ -71,11 +70,9 @@ public class GameSelectionController {
         if (!(innerPane.getWidth() == 0)) {
             innerPane.setLayoutX((outerPane.getScene().getWidth() / 2) - (innerPane.getWidth() / 2));
             innerPane.setLayoutY((innerPane.getScene().getHeight() / 2) - (innerPane.getHeight() / 2));
-        }
-
-        else if (stage != null) {
-            innerPane.setLayoutX((stage.getWidth() / 2) - (innerPane.getPrefWidth()/2));
-            innerPane.setLayoutY((stage.getHeight() / 2) - (innerPane.getPrefHeight()/2));
+        } else if (stage != null) {
+            innerPane.setLayoutX((stage.getWidth() / 2) - (innerPane.getPrefWidth() / 2));
+            innerPane.setLayoutY((stage.getHeight() / 2) - (innerPane.getPrefHeight() / 2));
         }
     }
 
@@ -188,6 +185,7 @@ public class GameSelectionController {
 
     /**
      * Opens a socket and connection on the given host and port number
+     *
      * @param host The host IP address for the socket
      * @param port The port number used for the socket
      */
@@ -196,10 +194,9 @@ public class GameSelectionController {
             Socket socket = SocketFactory.getDefault().createSocket(host, port);
             startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
         } catch (Exception e) {
-            System.out.println();
+            System.out.println("failed to open stream to " + host + ":" + port);
         }
     }
-
 
 
     /**
@@ -207,21 +204,11 @@ public class GameSelectionController {
      * Reads in the file path to the model jar from the config file "visualiser-config.txt" (from the same directory).
      */
     @SuppressWarnings("Duplicates")
-    private void createModel() {
-        final String CONFIG_FILE_NAME = "visualiser-config.txt";
-        final List<String> tokens = Collections.singletonList("MODEL_PATH");
-        ConfigReader reader = new ConfigReader(tokens);
-        InputStream configStream = null;
+    private void createModel(int port) {
         try {
-            configStream = new FileInputStream(CONFIG_FILE_NAME);
-            String filePath = reader.parseConfig(configStream).get("MODEL_PATH");
-            Runtime.getRuntime().exec("java -jar " + filePath);
+            (new ModelLoader()).startModel(port);
         } catch (IOException e) {
-            if (null == configStream) {
-                System.out.println("You don't have a config file"); // TODO August 12 csl62 have to show error but title screen incomplete
-            } else {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
         }
     }
 
@@ -253,14 +240,15 @@ public class GameSelectionController {
      * Starts and arcade game
      */
     private void startGame(RaceMode raceMode) {
-        createModel();
+        mode = raceMode;
+        int port = 5005;
+        createModel(port);
         try {
             Thread.sleep(400);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        mode = raceMode;
-        openStream("127.0.0.1", 5005);
+        openStream("127.0.0.1", port);
     }
 
 
