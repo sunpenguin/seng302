@@ -47,25 +47,29 @@ public abstract class StatusUpdater implements Updater {
         race.setStartTime(startTime);
         Collection<BoatStatus> finishedStatuses = Arrays.asList(BoatStatus.DNF, BoatStatus.DNS, BoatStatus.FINISHED, BoatStatus.DSQ);
 
-        if (isFinished(race)) {
+        if (ZonedDateTime.now().isAfter(startTime) && isFinished(race)) {
             race.setStatus(RaceStatus.FINISHED);
-            System.out.println("StatusUpdater::update " + race.getStatus());
             for (Boat boat : race.getStartingList()) {
                 if (!finishedStatuses.contains(boat.getStatus())) {
                     boat.setStatus(BoatStatus.FINISHED);
                 }
             }
-        } else if (ZonedDateTime.now().isAfter(race.getStartTime())) {
-            race.setStatus(RaceStatus.STARTED);
-            race.getStartingList().stream()
-                    .filter(boat -> boat.getStatus().equals(BoatStatus.PRE_START))
-                    .forEach(boat -> boat.setStatus(BoatStatus.RACING));
-        } else if (ZonedDateTime.now().isAfter(prepTime)) {
-            race.setStatus(RaceStatus.PREPARATORY);
-        } else if (ZonedDateTime.now().isAfter(warningTime)) {
-            race.setStatus(RaceStatus.WARNING);
-        } else {
-            race.setStatus(RaceStatus.PRESTART);
+            return;
+        }
+
+        if (!race.getStatus().equals(RaceStatus.FINISHED)) {
+            if (ZonedDateTime.now().isAfter(race.getStartTime())) {
+                race.setStatus(RaceStatus.STARTED);
+                race.getStartingList().stream()
+                        .filter(boat -> boat.getStatus().equals(BoatStatus.PRE_START))
+                        .forEach(boat -> boat.setStatus(BoatStatus.RACING));
+            } else if (ZonedDateTime.now().isAfter(prepTime)) {
+                race.setStatus(RaceStatus.PREPARATORY);
+            } else if (ZonedDateTime.now().isAfter(warningTime)) {
+                race.setStatus(RaceStatus.WARNING);
+            } else {
+                race.setStatus(RaceStatus.PRESTART);
+            }
         }
     }
 

@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Created by dhl25 on 9/09/17.
+ * StatusUpdater for Bumper Boats mode. Race finishes when there is still one player in a non finished state remaining.
  */
 public class BumperStatusUpdater extends StatusUpdater {
 
@@ -28,7 +28,6 @@ public class BumperStatusUpdater extends StatusUpdater {
      * @return if the race is finished.
      */
     protected boolean isFinished(Race race) {
-//        System.out.println("BumperStatusUpdater::isFinished");
         Collection<BoatStatus> finishedStatuses = Arrays.asList(BoatStatus.DNF, BoatStatus.DNS, BoatStatus.FINISHED, BoatStatus.DSQ);
         List<Boat> startingList = race.getStartingList();
         int numFinished = (int) startingList

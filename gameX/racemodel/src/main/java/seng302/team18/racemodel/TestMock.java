@@ -180,7 +180,6 @@ public class TestMock implements Observer {
      * Send the final messages and set race status to Finished.
      */
     private void sendFinalMessages() {
-        System.out.println("TestMock::sendFinalMessages");
         race.setStatus(RaceStatus.FINISHED);
         ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
         server.broadcast(raceMessageGenerator.getMessage());
@@ -205,7 +204,6 @@ public class TestMock implements Observer {
             scheduledMessages.add(new HeartBeatMessageGenerator());
 
             do {
-
                 if (race.getStatus().equals(RaceStatus.STARTED)) {
                     generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
                     sendRaceXml();
@@ -233,11 +231,8 @@ public class TestMock implements Observer {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println("SimulationLoop::run running");
             } while (!race.isFinished() && open);
 
-            System.out.println("SimulationLoop::run isfinished = " + race.isFinished());
-            System.out.println("open = " + open);
             sendFinalMessages();
             server.close();
         }
