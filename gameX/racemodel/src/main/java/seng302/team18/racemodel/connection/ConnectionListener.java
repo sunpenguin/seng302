@@ -2,19 +2,23 @@ package seng302.team18.racemodel.connection;
 
 import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
-import seng302.team18.message.*;
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
-import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 import seng302.team18.racemodel.interpret.ColourInterpreter;
 import seng302.team18.racemodel.message_generating.AcceptanceMessageGenerator;
 import seng302.team18.racemodel.model.*;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,9 +41,9 @@ public class ConnectionListener extends Observable implements Observer {
     /**
      * Constructs a new ConnectionListener.
      *
-     * @param race The race
+     * @param race           The race
      * @param participantIds List of participant IDs
-     * @param factory Factory to convert bytes to a RequestMessage.
+     * @param factory        Factory to convert bytes to a RequestMessage.
      */
     public ConnectionListener(Race race, List<Integer> participantIds, MessageParserFactory factory) {
         this.race = race;
@@ -52,7 +56,7 @@ public class ConnectionListener extends Observable implements Observer {
      * Called when server notifies of a new connection.
      * Listens for a request packet to view or participate until either one is received or the timeout.
      *
-     * @param o The observable object
+     * @param o   The observable object
      * @param arg ClientConnection, the socket from which the client is connected.
      */
     @Override
@@ -67,7 +71,7 @@ public class ConnectionListener extends Observable implements Observer {
 
     /**
      * Add a new client.
-     * Re create the race and course according to the request and the TestMock will send out the updated
+     * Recreate the race and course according to the request and the TestMock will send out the updated
      * XML files.
      * When the registration is received, send the client their source ID.
      *
@@ -114,7 +118,7 @@ public class ConnectionListener extends Observable implements Observer {
     /**
      * Sends a ResponseMessage to the player.
      *
-     * @param player the socket to send player messages to.
+     * @param player   the socket to send player messages to.
      * @param sourceID the assigned id of the player's boat.
      */
     private void sendMessage(ClientConnection player, int sourceID, RequestType requestType) {
@@ -154,7 +158,7 @@ public class ConnectionListener extends Observable implements Observer {
      * Close the PlayerControllerReader for each player, and shutdown the executor
      */
     private void close() {
-        for (PlayerControllerReader player: players) {
+        for (PlayerControllerReader player : players) {
             player.close();
         }
         executor.shutdownNow();
@@ -163,9 +167,11 @@ public class ConnectionListener extends Observable implements Observer {
 
     /**
      * Responds to a request message
+     *
      * @param id
      * @param request
      * @param client
+     * @param receiver
      */
     public void respond(int id, RequestMessage request, ClientConnection client, Receiver receiver) {
         RequestType requestType = request.getAction();

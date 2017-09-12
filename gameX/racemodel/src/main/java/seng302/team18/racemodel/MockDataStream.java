@@ -1,7 +1,7 @@
 package seng302.team18.racemodel;
 
 import seng302.team18.messageparsing.AC35MessageParserFactory;
-import seng302.team18.model.*;
+import seng302.team18.model.Race;
 import seng302.team18.racemodel.ac35_xml_encoding.BoatXmlDefaults;
 import seng302.team18.racemodel.ac35_xml_encoding.RaceXmlDefaults;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;

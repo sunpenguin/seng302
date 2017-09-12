@@ -16,7 +16,8 @@ public class StopWatchClock extends Clock {
 
     /**
      * Updates the label to match the time set in setTime.
-     * @param now unused.
+     *
+     * @param now unused
      */
     @Override
     public void handle(long now) {
@@ -31,6 +32,7 @@ public class StopWatchClock extends Clock {
 
     /**
      * Given a double, set the string displayed on the label to in MM:SS format
+     *
      * @param seconds The time to display.
      */
     @Override

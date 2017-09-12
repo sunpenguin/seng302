@@ -10,8 +10,8 @@ public interface Updater {
     /**
      * Updates the given race by the given amount of time.
      *
-     * @param race to update
-     * @param time to update by (in milliseconds)
+     * @param race the race to update
+     * @param time the duration since the last update (ms)
      */
     void update(Race race, double time);
 }

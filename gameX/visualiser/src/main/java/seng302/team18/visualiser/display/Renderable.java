@@ -1,8 +1,6 @@
 package seng302.team18.visualiser.display;
 
-/**
- * Created by dhl25 on 12/09/17.
- */
+
 public interface Renderable {
 
     /**

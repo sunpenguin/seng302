@@ -5,15 +5,17 @@ import seng302.team18.util.GPSCalculator;
 import java.util.List;
 
 /**
- * Created by dhl25 on 11/09/17
+ * Start position setter that places boats in a circle around the centre of the course
  */
 public class CircularPositionSetter implements StartPositionSetter {
 
     private double distance;
 
+
     public CircularPositionSetter(double distance) {
         this.distance = distance;
     }
+
 
     @Override
     public void setBoatPositions(List<Boat> boats, Course course) {

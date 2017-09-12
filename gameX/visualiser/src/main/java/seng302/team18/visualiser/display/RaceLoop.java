@@ -18,6 +18,7 @@ public class RaceLoop extends AnimationTimer {
     private PixelMapper pixelMapper;
     private List<Renderable> renderables = new ArrayList<>();
 
+
     /**
      * Constructor for the RaceLoop class.
      *
@@ -31,6 +32,7 @@ public class RaceLoop extends AnimationTimer {
         this.pixelMapper = pixelMapper;
     }
 
+
     @Override
     public void handle(long currentTime) {
         if (previousTime == 0) {
@@ -43,6 +45,7 @@ public class RaceLoop extends AnimationTimer {
         updateView();
     }
 
+
     /**
      * Call each renderer and update the display of the race.
      */
@@ -53,8 +56,10 @@ public class RaceLoop extends AnimationTimer {
         }
     }
 
+
     /**
      * Update the FPS label showing the current frame rate.
+     *
      * @param secondsElapsed The seconds elapsed since the last update.
      */
     private void updateFps(double secondsElapsed) {

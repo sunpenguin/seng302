@@ -1,7 +1,6 @@
 package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -51,7 +50,7 @@ public class CourseRenderer implements Renderable {
      * Renders the course.
      */
     public void render() {
-        if (mode != RaceMode.CONTROLS_TUTORIAL && mode !=  RaceMode.BUMPER_BOATS) {
+        if (mode != RaceMode.CONTROLS_TUTORIAL && mode != RaceMode.BUMPER_BOATS) {
             double MARK_SIZE = 10;
             markSize = MARK_SIZE * pixelMapper.mappingRatio();
             List<CompoundMark> compoundMarks = course.getCompoundMarks();
@@ -61,7 +60,7 @@ public class CourseRenderer implements Renderable {
                 if (compoundMark != null &&
                         compoundMark.isGate() && (
                         compoundMark.getId().equals(course.getStartLineId()) ||
-                        compoundMark.getId().equals(course.getFinishLineId()))) { // draw a line between the gate if its a start or finish
+                                compoundMark.getId().equals(course.getFinishLineId()))) { // draw a line between the gate if its a start or finish
                     renderGate(compoundMark);
                 } else {
                     renderCompoundMark(compoundMark);
@@ -132,6 +131,7 @@ public class CourseRenderer implements Renderable {
 
         return circle;
     }
+
 
     private Circle makeMark(Mark mark) {
         Circle circle = new Circle(markSize, MARK_COLOR);
@@ -209,7 +209,6 @@ public class CourseRenderer implements Renderable {
     }
 
 
-
     /**
      * Gets LINE_WEIGHT, scaling it to the current zoom.
      *
@@ -255,9 +254,6 @@ public class CourseRenderer implements Renderable {
     }
 
 
-
-
-
     /**
      * Creates a pick up if there isn't one and updates it if it exists.
      *
@@ -279,7 +275,7 @@ public class CourseRenderer implements Renderable {
      * Creates a pick up if there isn't one and updates it if it exists.
      *
      * @param pickUp not null.
-     * @param color of the pickup.
+     * @param color  of the pickup.
      */
     private void renderPickUp(PickUp pickUp, Color color) {
         Circle pickUpVisual = pickUps.get(pickUp.getId());
@@ -299,8 +295,6 @@ public class CourseRenderer implements Renderable {
         pickUpVisual.setCenterX(pixelCoordinates.getX());
         pickUpVisual.setCenterY(pixelCoordinates.getY());
     }
-
-
 
 
 }

@@ -44,9 +44,8 @@ public class RaceRenderer implements Renderable {
 
     /**
      * If the current race mode is challenge mode, the zoom level will be set to min zoom level.
-     *
+     * <p>
      * The player's boat will be tracked.
-     *
      */
     private void setChallengeModeCourse() {
         Boat boat = race.getBoat(race.getPlayerId());
@@ -132,7 +131,7 @@ public class RaceRenderer implements Renderable {
      * Makes a given display boat consistent with the boat
      *
      * @param displayBoat to update.
-     * @param boat containing updated information.
+     * @param boat        containing updated information.
      */
     private void synchronise(DisplayBoat displayBoat, Boat boat) {
         displayBoat.setCoordinate(boat.getCoordinate());
@@ -221,10 +220,10 @@ public class RaceRenderer implements Renderable {
 
 
     /**
-     * Sets the annotation types that are visible.
+     * Sets the visibility of an annotation type
      *
-     * @param type      , AnnotationType, the type of annotiation.
-     * @param isVisible , Boolean, if the type is visible.
+     * @param type      the type of annotation
+     * @param isVisible whether the type is to be visible
      */
     public void setVisibleAnnotations(AnnotationType type, Boolean isVisible) {
         for (DisplayBoat boat : displayBoats.values()) {

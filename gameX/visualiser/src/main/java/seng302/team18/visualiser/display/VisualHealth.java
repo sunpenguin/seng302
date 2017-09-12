@@ -45,7 +45,6 @@ public class VisualHealth implements Renderable {
     public void render() {
         if (boat.getLives() != heartBox.getChildren().size()) {
             heartBox.getChildren().clear();
-//            try {
             switch (boat.getLives()) {
                 case 3:
                     heartBox.getChildren().add(heartView3);
@@ -54,9 +53,6 @@ public class VisualHealth implements Renderable {
                 case 1:
                     heartBox.getChildren().add(heartView1);
             }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
         }
     }
 

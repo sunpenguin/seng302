@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- * Created by jth102 on 11/09/17.
+ * Abstract base class for classes that update the status of a race
  */
 public abstract class StatusUpdater implements Updater {
 
@@ -21,13 +21,10 @@ public abstract class StatusUpdater implements Updater {
 
 
     /**
-     * Construct a new RegularStatusUpdater.
-     * Used for updating a normal race. Race is deemed finished when ALL players are in a finished state.
-     *
-     * @param initialTime Time of construction.
-     * @param warningTimeSeconds until we switch to WARNING.
-     * @param prepTimeSeconds until we switch from WARNING to PREPARATORY.
-     * @param startTimeSeconds until we switch from PREPARATORY to STARTED.
+     * @param initialTime        time of construction
+     * @param warningTimeSeconds the duration until we switch to {@link seng302.team18.model.RaceStatus#WARNING WARNING} (s)
+     * @param prepTimeSeconds    the duration between {@link seng302.team18.model.RaceStatus#WARNING WARNING} and {@link seng302.team18.model.RaceStatus#PREPARATORY PREPARATORY} (s)
+     * @param startTimeSeconds   the duration between {@link seng302.team18.model.RaceStatus#PREPARATORY PREPARATORY} and {@link seng302.team18.model.RaceStatus#STARTED STARTED} (s)
      */
     public StatusUpdater(ZonedDateTime initialTime, long warningTimeSeconds, long prepTimeSeconds, long startTimeSeconds) {
         this.warningTime = initialTime.plusSeconds(warningTimeSeconds);
@@ -36,12 +33,6 @@ public abstract class StatusUpdater implements Updater {
     }
 
 
-    /**
-     * Updates the race status throughout the race.
-     *
-     * @param race to update.
-     * @param time to update the race by.
-     */
     @Override
     public void update(Race race, double time) {
         race.setStartTime(startTime);
@@ -74,6 +65,12 @@ public abstract class StatusUpdater implements Updater {
     }
 
 
+    /**
+     * Checks if a regular race is finished by checking the status of each boat.
+     *
+     * @param race to check
+     * @return if the race is finished.
+     */
     protected abstract boolean isFinished(Race race);
 
 }

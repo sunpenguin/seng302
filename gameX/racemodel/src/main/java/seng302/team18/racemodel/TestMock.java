@@ -1,9 +1,6 @@
 package seng302.team18.racemodel;
 
 
-
-import seng302.team18.message.AcceptanceMessage;
-import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
 import seng302.team18.racemodel.connection.ClientConnection;
@@ -11,7 +8,6 @@ import seng302.team18.racemodel.connection.ConnectionListener;
 import seng302.team18.racemodel.connection.Server;
 import seng302.team18.racemodel.connection.ServerState;
 import seng302.team18.racemodel.message_generating.*;
-import seng302.team18.racemodel.model.AbstractCourseBuilder;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -34,9 +30,7 @@ public class TestMock implements Observer {
     private MessageGenerator generatorXmlBoats;
     private MessageGenerator generatorXmlRace;
 
-
     private SimulationLoop simulationLoop = null;
-
 
     /**
      * The messages to be sent on a schedule during race simulation
@@ -51,10 +45,11 @@ public class TestMock implements Observer {
         this.boats = boats;
     }
 
+
     /**
      * Called by server, and connection listener
      *
-     * @param o object that has updated
+     * @param o   object that has updated
      * @param arg given by the object o
      */
     @Override

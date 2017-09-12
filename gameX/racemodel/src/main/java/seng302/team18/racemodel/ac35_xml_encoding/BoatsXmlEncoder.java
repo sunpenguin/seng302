@@ -6,8 +6,6 @@ import seng302.team18.message.AC35XMLBoatMessage;
 import seng302.team18.message.Ac35XmlBoatComponents;
 import seng302.team18.message.XmlMessage;
 import seng302.team18.model.AbstractBoat;
-import seng302.team18.model.Boat;
-import seng302.team18.model.BoatType;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
@@ -110,8 +108,7 @@ public class BoatsXmlEncoder extends XmlEncoder<AC35XMLBoatMessage> {
 
         Element element = doc.createElement(Ac35XmlBoatComponents.ELEMENT_BOAT.toString());
         element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_SOURCE_ID.toString(), boat.getId().toString());
-        BoatType boatType = boat instanceof Boat ? BoatType.YACHT : BoatType.MARK;
-        element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_TYPE.toString(), boatType.toString());
+        element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_TYPE.toString(), boat.getType().toString());
         element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_HULL_NUMBER.toString(), boat.getHullNumber());
         element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_STOWE.toString(), boat.getStoweName());
         element.setAttribute(Ac35XmlBoatComponents.ATTRIBUTE_NAME_SHORT.toString(), boat.getShortName());

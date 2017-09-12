@@ -5,7 +5,7 @@ import seng302.team18.util.GPSCalculator;
 import java.util.List;
 
 /**
- * Created by dhl25 on 11/09/17.
+ * Start position setter that places boats behind a start line
  */
 public class StartLineSetter implements StartPositionSetter {
 
@@ -17,6 +17,7 @@ public class StartLineSetter implements StartPositionSetter {
         this.distance = distance;
     }
 
+
     @Override
     public void setBoatPositions(List<Boat> boats, Course course) {
         for (Boat boat : boats) {
@@ -24,7 +25,6 @@ public class StartLineSetter implements StartPositionSetter {
             boat.setCoordinate(position);
         }
     }
-
 
 
     @Override

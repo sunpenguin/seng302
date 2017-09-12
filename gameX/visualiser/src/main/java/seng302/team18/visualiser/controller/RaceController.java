@@ -7,8 +7,6 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -224,9 +222,8 @@ public class RaceController implements Observer {
 
     /**
      * Register key presses to certain methods.
-     *
-     * Allow boat control only to actual racing player (client in spectrator mode can only view the race instead of playing).
-     *
+     * <p>
+     * Allow boat control only to actual racing player (client in spectator mode can only view the race instead of playing).
      */
     private void installKeyHandler() {
         EventHandler<KeyEvent> keyEventHandler =
@@ -298,6 +295,7 @@ public class RaceController implements Observer {
 
     }
 
+
     /**
      * Toggles the fps by setting label to be visible / invisible.
      */
@@ -337,28 +335,20 @@ public class RaceController implements Observer {
         });
     }
 
+
     /**
      * Creates a listener so the slider knows when its value has changed and it can update the annotations accordingly
      */
     private void setSliderListener() {
-        slider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
+        slider.valueProperty().addListener((ov, old_val, new_val) -> {
+            if (new_val.doubleValue() == 0d) {
+                setNoneAnnotationLevel();
             }
-        });
-        slider.valueProperty().addListener(new ChangeListener<Number>() {
-            public void changed(ObservableValue<? extends Number> ov,
-                                Number old_val, Number new_val) {
-                if (new_val.doubleValue() == 0d) {
-                    setNoneAnnotationLevel();
-                }
-                if (new_val.doubleValue() == 0.5d) {
-                    setToImportantAnnotationLevel();
-                }
-                if (new_val.doubleValue() == 1d) {
-                    setFullAnnotationLevel();
-                }
+            if (new_val.doubleValue() == 0.5d) {
+                setToImportantAnnotationLevel();
+            }
+            if (new_val.doubleValue() == 1d) {
+                setFullAnnotationLevel();
             }
         });
     }
@@ -378,9 +368,7 @@ public class RaceController implements Observer {
 
 
     /**
-     * Sets the annotation level to be none (no annotations showing)case S:
-                                message.setConsume();
-                                break;
+     * Sets the annotation level to be none (no annotations showing)
      */
     @FXML
     public void setNoneAnnotationLevel() {
@@ -463,7 +451,8 @@ public class RaceController implements Observer {
             escapeMenuPane = loader.load();
             EscapeMenuController escapeMenuController = loader.getController();
             escapeMenuController.setup(group, interpreter, sender);
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
     }
 
 
@@ -828,8 +817,8 @@ public class RaceController implements Observer {
         String result = "";
 
         for (Boat b : boats) {
-            String state = b.getLives() > 0? "WINNER" : "DEAD";
-            result += b.getShortName() + " "  + state + "\n";
+            String state = b.getLives() > 0 ? "WINNER" : "DEAD";
+            result += b.getShortName() + " " + state + "\n";
         }
 
         return result;
@@ -849,7 +838,7 @@ public class RaceController implements Observer {
         String result = "";
 
         for (Boat b : boats) {
-            result += b.getShortName() + " "  + b.getLegNumber() + " GATES CLEARED\n";
+            result += b.getShortName() + " " + b.getLegNumber() + " GATES CLEARED\n";
         }
 
         return result;
