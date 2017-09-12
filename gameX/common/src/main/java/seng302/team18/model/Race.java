@@ -1,6 +1,7 @@
 package seng302.team18.model;
 
 import seng302.team18.message.PowerType;
+import seng302.team18.model.updaters.ProjectileUpdater;
 import seng302.team18.model.updaters.Updater;
 import seng302.team18.util.GPSCalculator;
 
@@ -31,7 +32,7 @@ public class Race {
     private List<PowerUpEvent> powerEvents = new ArrayList<>();
     private RaceMode mode = RaceMode.RACE;
     private List<Updater> updaters = new ArrayList<>();
-    private List<Projectile> projectiles= new ArrayList<>();
+    private List<Projectile> projectiles = new ArrayList<>();
     private List<Projectile> newProjectileList = new ArrayList<>();
     private List<Projectile> removedProjectileList = new ArrayList<>();
     private int powerId = 0;
@@ -486,6 +487,8 @@ public class Race {
         projectiles.add(sharky);
         nextProjectileId += 1;
         newProjectileList.add(sharky);
+        System.out.println("hi");
+        System.out.println(projectiles);
     }
 
     public List<Projectile> getProjectiles() {
@@ -505,5 +508,28 @@ public class Race {
                 it.remove();
             }
         }
+    }
+
+
+
+
+    public void setProjectiles(List<Projectile> projectiles) {
+        this.projectiles = projectiles;
+    }
+
+    public List<Projectile> getNewProjectileList() {
+        return newProjectileList;
+    }
+
+    public void setNewProjectileList(List<Projectile> newProjectileList) {
+        this.newProjectileList = newProjectileList;
+    }
+
+    public List<Projectile> getRemovedProjectileList() {
+        return removedProjectileList;
+    }
+
+    public void setRemovedProjectileList(List<Projectile> removedProjectileList) {
+        this.removedProjectileList = removedProjectileList;
     }
 }

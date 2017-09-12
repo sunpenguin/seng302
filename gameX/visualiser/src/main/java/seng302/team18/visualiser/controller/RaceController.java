@@ -582,6 +582,7 @@ public class RaceController implements Observer {
         pixelMapper.calculateMappingScale();
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
         raceRenderer.renderBoats();
+        raceRenderer.renderShark();
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
         visualHealth = new VisualHealth(raceViewPane, getPlayerBoat());
@@ -732,6 +733,7 @@ public class RaceController implements Observer {
         background.renderBackground();
         courseRenderer.renderCourse();
         raceRenderer.renderBoats();
+        raceRenderer.renderShark();
         raceRenderer.reDrawTrails();
         redrawTimeLabel();
     }

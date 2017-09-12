@@ -275,8 +275,8 @@ public class TestMock implements Observer {
             for(Iterator<ScheduledMessageGenerator> it = scheduledMessages.iterator(); it.hasNext();) {
                 ScheduledMessageGenerator sched = it.next();
                 if(sched instanceof ProjectileMessageGenerator){
-                    ProjectileMessageGenerator projectleMessageGenerator = (ProjectileMessageGenerator) sched;
-                    if(projectleMessageGenerator.getProjectileId() == projectile.getId()){
+                    ProjectileMessageGenerator projectileMessageGenerator = (ProjectileMessageGenerator) sched;
+                    if(projectileMessageGenerator.getProjectileId() == projectile.getId()){
                         server.broadcast((new ProjectileGoneGenerator(projectile.getId()).getMessage()));
                         it.remove();
                     }

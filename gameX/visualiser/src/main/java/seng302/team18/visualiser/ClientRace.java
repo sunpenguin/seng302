@@ -1,6 +1,8 @@
 package seng302.team18.visualiser;
 
+import seng302.team18.message.PowerType;
 import seng302.team18.model.*;
+import seng302.team18.util.GPSCalculator;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -24,6 +26,8 @@ public class ClientRace {
     private Integer playerId;
     private RaceMode mode = RaceMode.RACE;
     private List<Projectile> projectiles = new ArrayList<>();
+    private GPSCalculator gps = new GPSCalculator();
+    private int nextProjectileId = 300;
 
 
     public ClientRace() {
@@ -288,7 +292,6 @@ public class ClientRace {
             }
         }
     }
-
 
     /**
      * Method to remove a projectile from the race

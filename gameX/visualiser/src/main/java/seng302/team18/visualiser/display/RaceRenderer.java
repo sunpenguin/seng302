@@ -19,7 +19,6 @@ public class RaceRenderer {
     private ClientRace race;
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
-    private Map<Integer, DisplayProjectile> projectiles = new HashMap<>();
     private PixelMapper pixelMapper;
 
 
@@ -65,7 +64,6 @@ public class RaceRenderer {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
-
             if (displayBoat == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
                 displayBoat = makeBoat(boat);
             }
@@ -75,6 +73,19 @@ public class RaceRenderer {
             } else if (displayBoat != null && boat.getCoordinate() != null) {
                 synchronise(displayBoat, boat);
             }
+        }
+    }
+
+
+    public void renderShark() {
+        for (int i = 0; i < race.getProjectiles().size(); i++){
+            System.out.println(race.getProjectiles().size());
+            Projectile projectile = race.getProjectiles().get(i);
+            DisplayShark shark = new DisplayShark(projectile, pixelMapper);
+            shark.setScale(pixelMapper.mappingRatio());
+            shark.setCoordinate(projectile.getLocation());
+            shark.setHeading(projectile.getHeading());
+            shark.addToGroup(group);
         }
     }
 
@@ -117,6 +128,11 @@ public class RaceRenderer {
         trail.removeFrom(group);
     }
 
+
+    private void removeProjectile(DisplayShark shark){
+        shark.removeFrom(group);
+        race.getProjectiles().remove(shark);
+    }
 
     /**
      * Makes a given display boat consistent with the boat
@@ -193,17 +209,6 @@ public class RaceRenderer {
         {
             System.out.println(projectile.getId() + " " + projectile.getLocation());
         }
-    }
-
-
-    /**
-     * Method to draw a shark
-     * @param projectile
-     * @param mapper
-     */
-    private void drawShark(DisplayProjectile projectile, PixelMapper mapper){
-
-
     }
 
 
