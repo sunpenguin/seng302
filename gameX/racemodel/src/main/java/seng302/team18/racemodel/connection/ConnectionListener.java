@@ -58,7 +58,7 @@ public class ConnectionListener extends Observable implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) {
-            addClient((ClientConnection) arg);
+            handleClient((ClientConnection) arg);
         } else if (ServerState.CLOSED.equals(arg)) {
             close();
         }
@@ -73,7 +73,7 @@ public class ConnectionListener extends Observable implements Observer {
      *
      * @param client Client who is connecting.
      */
-    private void addClient(ClientConnection client) {
+    private void handleClient(ClientConnection client) {
         try {
             Receiver receiver = new Receiver(client.getSocket(), factory);
             executor.submit(() -> {
@@ -101,7 +101,7 @@ public class ConnectionListener extends Observable implements Observer {
     /**
      * Constructs a race with the given builders and sets the mode. Notify TestMock to regenerate XMLs.
      */
-    private void constructRace() {
+    private void constructRace() { // do we need this???
         race = raceBuilder.buildRace(race, regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
         race.setCourseForBoats();
         setChanged();
@@ -128,11 +128,6 @@ public class ConnectionListener extends Observable implements Observer {
             return;
         }
 
-        if (sourceID == 9000) {
-            player.setSpectating(true);
-        } else {
-            player.setSpectating(false);
-        }
         player.setId(sourceID);
     }
 
@@ -181,18 +176,19 @@ public class ConnectionListener extends Observable implements Observer {
      */
     public void respond(int id, RequestMessage request, ClientConnection client, Receiver receiver) {
         RequestType requestType = request.getAction();
+        final int SPECTATOR_ID = 9000;
 
-        if (!players.isEmpty() && requestType.getCode() == RaceMode.SPECTATION.getCode()) {
-            id = 9000;
+        if (!players.isEmpty() && requestType == RequestType.VIEWING) {
+            id = SPECTATOR_ID;
         } else if (!isValidMode(requestType)) {
-            sendFailureMessage(client, id);
+            sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
             return;
         }
 
         setRaceMode(requestType);
         constructRace();
 
-        if (requestType.getCode() != RaceMode.SPECTATION.getCode()) {
+        if (requestType != RequestType.VIEWING) {
             addPlayer(receiver, id);
             setChanged();
             notifyObservers(client);
@@ -209,20 +205,6 @@ public class ConnectionListener extends Observable implements Observer {
      */
     private boolean isValidMode(RequestType type) {
         return players.isEmpty() || type.getCode() == race.getMode().getCode();
-    }
-
-
-    /**
-     * Sends a failure message to a client.
-     *
-     * @param client to send to.
-     * @param id of the client.
-     */
-    private void sendFailureMessage(ClientConnection client, int id) {
-        sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
-        AcceptanceMessage failMessage = new AcceptanceMessage(id, RequestType.FAILURE_CLIENT_TYPE);
-        setChanged();
-        notifyObservers(failMessage);
     }
 
 
