@@ -30,7 +30,6 @@ public class Race {
     private RaceMode mode = RaceMode.RACE;
     private List<Updater> updaters = new ArrayList<>();
     private int powerId = 0;
-    private StartPositionSetter positionSetter;
 
 
     public Race() {
@@ -123,7 +122,6 @@ public class Race {
      * current(starting CompoundMark) and next CompoundMark.
      */
     public void setCourseForBoats() {
-//        positionSetter.setBoatPositions(startingList, course);
         if (course.getMarkSequence().size() > 1) {
             for (Boat boat : startingList) {
                 setCourseForBoat(boat);
@@ -135,7 +133,6 @@ public class Race {
     private void setCourseForBoat(Boat boat) {
         if (course.getMarkSequence().size() > 1) {
             boat.setLegNumber(0);
-//            boat.setCoordinate(getStartPosition(boat, boat.getLength() * 3));
             boat.setCoordinate(positionSetter.getBoatPosition(boat, course, startingList.size()));
             boat.setHeading(gps.getBearing(
                     boat.getCoordinate(),
@@ -146,42 +143,6 @@ public class Race {
             boat.setStatus(BoatStatus.PRE_START);
         }
     }
-
-
-//    /**
-//     * Method to calculate the starting position for a boat
-//     * Prevents boats from overlapping
-//     *
-//     * @param boat       boat to get starting position for
-//     * @param distBehind the distance behind the start line to place the boat (m)
-//     * @return position for boat to start at
-//     */
-//    public Coordinate getStartPosition(Boat boat, double distBehind) {
-//        if(mode != RaceMode.BUMPER_BOATS) {
-//            MarkRounding startRounding = course.getMarkSequence().get(0);
-//            Coordinate midPoint = startRounding.getCompoundMark().getCoordinate();
-//            Coordinate startMark1 = startRounding.getCompoundMark().getMarks().get(0).getCoordinate();
-//            Coordinate startMark2 = startRounding.getCompoundMark().getMarks().get(1).getCoordinate();
-//
-//            double bearing = gps.getBearing(startMark1, startMark2);
-//
-//            double diff = (startRounding.getRoundingDirection().equals(MarkRounding.Direction.PS)) ? 90 : -90;
-//            double behind = (bearing + diff + 360) % 360;
-//
-//            double offset = startingList.size();
-//
-//            if ((offset % 2) == 0) {
-//                offset /= 2;
-//            } else {
-//                offset = -Math.floor(offset / 2);
-//            }
-//
-//            Coordinate behindMidPoint = gps.toCoordinate(midPoint, behind, distBehind);
-//            return gps.toCoordinate(behindMidPoint, bearing, (boat.getLength() * offset + 10));
-//        } else {
-//            return gps.toCoordinate(course.getCenter(), ((360/startingList.size() * boat.getId() +90) %360), distBehind);
-//        }
-//    }
 
 
     public void addParticipant(Boat boat) {

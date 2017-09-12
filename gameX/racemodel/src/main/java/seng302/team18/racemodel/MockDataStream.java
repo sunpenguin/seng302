@@ -15,8 +15,8 @@ import seng302.team18.racemodel.model.*;
 public class MockDataStream {
 
     // Change concrete builders here to change the preset of race/regatta/course
-    private static final AbstractRaceBuilder RACE_BUILDER = new ChallengeRaceBuilder();
-    private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderChallenge();
+    private static final AbstractRaceBuilder RACE_BUILDER = new RegularRaceBuilder();
+    private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderRealistic();
     private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilderRealistic();
     private static final AbstractParticipantsBuilder PARTICIPANTS_BUILDER = new ParticipantsBuilderSize20();
 
@@ -37,7 +37,6 @@ public class MockDataStream {
 
         server.setCloseOnEmpty(true);
         server.addObserver(listener);
-        server.addObserver(testMock);
         listener.addObserver(testMock);
         server.openServer();
     }

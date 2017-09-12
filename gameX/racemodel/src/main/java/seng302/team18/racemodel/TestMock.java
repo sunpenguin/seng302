@@ -2,7 +2,6 @@ package seng302.team18.racemodel;
 
 
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
@@ -83,15 +82,6 @@ public class TestMock implements Observer {
                 simulationLoop = new SimulationLoop();
                 Thread t = new Thread(simulationLoop);
                 t.start();
-            }
-        } else if (arg instanceof AcceptanceMessage) {
-            AcceptanceMessage message = (AcceptanceMessage) arg;
-            if (message.getRequestType() == RequestType.FAILURE_CLIENT_TYPE) {
-                System.out.println("Remove " + message.getSourceId() + " From the race");
-                race.removeParticipant(message.getSourceId());
-                generateXMLs();
-                sendRaceXml();
-                sendBoatsXml();
             }
         }
     }
