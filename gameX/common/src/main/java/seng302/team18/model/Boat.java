@@ -393,7 +393,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
 
     /**
-     * Checks if a boat iss able to use a PowerUp.
+     * Checks if a boat is able to use a PowerUp.
      *
      * @return true if a boat can use a PowerUp.
      */
@@ -406,7 +406,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
 
     /**
-     * Checks if a PowerUp has expired.
+     * Checks if a PowerUp has expired. If so, deactivate and remove the PowerUp.
      */
     public void expirePowerUp() {
         if (powerUp != null && isPowerActive && ZonedDateTime.now().isAfter(powerDurationEnd)) {

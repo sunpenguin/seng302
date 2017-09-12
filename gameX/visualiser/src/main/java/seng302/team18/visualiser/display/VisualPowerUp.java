@@ -20,10 +20,10 @@ public class VisualPowerUp {
 
 
     /**
-     * Construct a VisualHealth for displaying hearts to represent player health in certain game modes.
+     * Construct a VisualPowerUp for displaying the currently held or currently activated PowerUp.
      *
-     * @param pane Pane to draw hearts on.
-     * @param boat Player's boat to represent lives for.
+     * @param pane to place visual representation of power up on.
+     * @param boat associated with the power
      */
     public VisualPowerUp(Pane pane, Boat boat) {
         this.boat = boat;
