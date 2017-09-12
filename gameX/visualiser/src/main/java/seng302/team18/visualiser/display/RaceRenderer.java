@@ -69,6 +69,7 @@ public class RaceRenderer {
             }
 
             if (displayBoat != null && BoatStatus.DSQ.equals(boat.getStatus())) {
+                System.out.println("removed");
                 remove(displayBoat);
             } else if (displayBoat != null && boat.getCoordinate() != null) {
                 synchronise(displayBoat, boat);
@@ -79,7 +80,7 @@ public class RaceRenderer {
 
     public void renderShark() {
         for (int i = 0; i < race.getProjectiles().size(); i++){
-            System.out.println(race.getProjectiles().size());
+            System.out.println(group.getChildren().size());
             Projectile projectile = race.getProjectiles().get(i);
             DisplayShark shark = new DisplayShark(projectile, pixelMapper);
             shark.setScale(pixelMapper.mappingRatio());
@@ -201,13 +202,6 @@ public class RaceRenderer {
             if (trail != null) {
                 trail.addPoint(boat.getCoordinate(), boat.getHeading(), pixelMapper);
             }
-        }
-    }
-
-    public void drawSharks(){
-        for (Projectile projectile : race.getProjectiles())
-        {
-            System.out.println(projectile.getId() + " " + projectile.getLocation());
         }
     }
 
