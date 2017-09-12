@@ -93,20 +93,15 @@ public class RaceController implements Observer {
     @FXML
     private AnchorPane tabView;
 
-    private SortedList<Boat> sortedList;
-
     private Pane escapeMenuPane;
-    private EscapeMenuController escapeMenuController;
 
     private boolean fpsOn;
     private boolean onImportant;
     private boolean sailIn = false;
 
     private ClientRace race;
-    private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
-    private WindDisplay windDisplay;
     private PixelMapper pixelMapper;
     private Map<AnnotationType, Boolean> importantAnnotations;
     private Sender sender;
@@ -121,8 +116,6 @@ public class RaceController implements Observer {
 
     private Clock clock;
     private HBox timeBox;
-    private Label timeLabel;
-    private VisualHealth visualHealth;
 
     private VBox finishResultsBox = null;
 
@@ -434,7 +427,7 @@ public class RaceController implements Observer {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
-            escapeMenuController = loader.getController();
+            EscapeMenuController escapeMenuController = loader.getController();
             escapeMenuController.setup(group, interpreter, sender);
         } catch (IOException e) {}
     }
@@ -473,7 +466,7 @@ public class RaceController implements Observer {
         ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
         observableList.addAll(race.getStartingList());
 
-        sortedList = new SortedList<>(observableList,
+        SortedList<Boat> sortedList = new SortedList<>(observableList,
                 (Boat boat1, Boat boat2) -> {
                     if (boat1.getPlace() < boat2.getPlace()) {
                         return -1;
@@ -552,7 +545,7 @@ public class RaceController implements Observer {
      * Retrieves the wind direction, scales the size of the arrow and then draws it on the Group
      */
     private void startWindDirection() {
-        windDisplay = new WindDisplay(race, arrow, speedLabel);
+        WindDisplay windDisplay = new WindDisplay(race, arrow, speedLabel);
         windDisplay.start();
     }
 
@@ -584,17 +577,21 @@ public class RaceController implements Observer {
         pixelMapper.setMaxZoom(16d);
         pixelMapper.calculateMappingScale();
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
-        raceRenderer.renderBoats();
+        raceRenderer.render();
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, race.getMode());
-        visualHealth = new VisualHealth(raceViewPane, getPlayerBoat());
+        raceRenderer.setDrawTrails(RaceMode.BUMPER_BOATS != race.getMode());
+        List<Renderable> renderables = new ArrayList<>(Arrays.asList(raceRenderer, courseRenderer));
+        if (race.getMode().hasLives()) {
+            renderables.add(new VisualHealth(raceViewPane, getPlayerBoat()));
+        }
 
         setupRaceTimer();
         startRaceTimer();
 
         new ControlSchemeDisplay(raceViewPane);
 
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper, visualHealth);
+        RaceLoop raceLoop = new RaceLoop(renderables, new FPSReporter(fpsLabel), pixelMapper);
         raceLoop.start();
 
         registerListeners();
@@ -619,7 +616,7 @@ public class RaceController implements Observer {
      * Set up the container and label for the race clock. Text is displayed in the center of the container.
      */
     private void setupRaceTimer() {
-        timeLabel = new Label();
+        Label timeLabel = new Label();
         timeBox = new HBox(timeLabel);
         timeBox.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/raceview.css").toExternalForm());
         timeBox.getStyleClass().add("timeBox");
@@ -729,9 +726,9 @@ public class RaceController implements Observer {
     public void redrawFeatures() {
         pixelMapper.calculateMappingScale();
         background.renderBackground();
-        courseRenderer.renderCourse();
-        raceRenderer.renderBoats();
-        raceRenderer.reDrawTrails();
+        courseRenderer.render();
+        raceRenderer.render();
+        raceRenderer.refresh();
         redrawTimeLabel();
     }
 

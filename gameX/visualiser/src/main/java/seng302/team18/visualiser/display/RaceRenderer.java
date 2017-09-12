@@ -15,13 +15,14 @@ import java.util.Map;
 /**
  * Class that takes a Race and a Group and draws the Race on the Group.
  */
-public class RaceRenderer {
+public class RaceRenderer implements Renderable {
 
     private Group group;
     private ClientRace race;
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private PixelMapper pixelMapper;
+    private boolean drawTrails;
 
 
     /**
@@ -62,7 +63,15 @@ public class RaceRenderer {
      * Draws displayBoats in the Race on the Group as well as the visible annotations including the BoatSails in both
      * the luffing and powered up position
      */
-    public void renderBoats() {
+    public void render() {
+        drawBoats();
+        if (drawTrails) {
+            drawTrails();
+        }
+    }
+
+
+    private void drawBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
@@ -151,7 +160,7 @@ public class RaceRenderer {
     /**
      * Draws all the boats trails.
      */
-    public void drawTrails() {
+    private void drawTrails() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
@@ -194,11 +203,13 @@ public class RaceRenderer {
      * Redraw the the trails behind each boat by looking into the Map of circles and coordinates and
      * resetting the points.
      */
-    public void reDrawTrails() {
-        for (Boat boat : race.getStartingList()) {
-            DisplayTrail trail = trailMap.get(boat.getShortName());
-            if (trail != null) {
-                trail.reDraw(pixelMapper);
+    public void refresh() {
+        if (drawTrails) {
+            for (Boat boat : race.getStartingList()) {
+                DisplayTrail trail = trailMap.get(boat.getShortName());
+                if (trail != null) {
+                    trail.reDraw(pixelMapper);
+                }
             }
         }
     }
@@ -237,5 +248,10 @@ public class RaceRenderer {
 
     public void clearCollisions() {
         displayBoats.values().forEach(displayBoat -> displayBoat.setHasCollided(false));
+    }
+
+
+    public void setDrawTrails(boolean drawTrails) {
+        this.drawTrails = drawTrails;
     }
 }

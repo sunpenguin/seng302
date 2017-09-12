@@ -33,4 +33,9 @@ public enum RaceMode {
     public int getCode() {
         return this.code;
     }
+
+
+    public boolean hasLives() {
+        return this == BUMPER_BOATS;
+    }
 }

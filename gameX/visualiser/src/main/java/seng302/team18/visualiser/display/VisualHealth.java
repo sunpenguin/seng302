@@ -9,7 +9,7 @@ import seng302.team18.model.Boat;
 /**
  * Class to handle the health system client side.
  */
-public class VisualHealth {
+public class VisualHealth implements Renderable {
 
     private Image heartImage;
     private HBox heartBox;
@@ -42,24 +42,30 @@ public class VisualHealth {
      * Display a number of hearts according to how many lives the player has.
      * Only re-draws the hearts if the current number displayed does not match the player's lives.
      */
-    public void display() {
-//        System.out.println("VisualHealth::display");
-//        System.out.println("boatlives =  " + boat.getLives());
-//        System.out.println("num children = " + heartBox.getChildren().size());
+    public void render() {
         if (boat.getLives() != heartBox.getChildren().size()) {
             heartBox.getChildren().clear();
-            try {
-                switch (boat.getLives()) {
-                    case 3:
-                        heartBox.getChildren().add(heartView3);
-                    case 2:
-                        heartBox.getChildren().add(heartView2);
-                    case 1:
-                        heartBox.getChildren().add(heartView1);
-                }
-            } catch (Exception e) {
-                System.out.println(e);
+//            try {
+            switch (boat.getLives()) {
+                case 3:
+                    heartBox.getChildren().add(heartView3);
+                case 2:
+                    heartBox.getChildren().add(heartView2);
+                case 1:
+                    heartBox.getChildren().add(heartView1);
             }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
+    }
+
+
+    public void refresh() {
+        heartBox.getChildren().clear();
+        heartView1 = new ImageView(heartImage);
+        heartView2 = new ImageView(heartImage);
+        heartView3 = new ImageView(heartImage);
+        render();
     }
 }

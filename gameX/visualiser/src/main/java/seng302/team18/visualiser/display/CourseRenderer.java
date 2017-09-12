@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * A class which renders the given course on the group so it can be displayed to the user.
  */
-public class CourseRenderer {
+public class CourseRenderer implements Renderable {
 
     private final Color MARK_COLOR = Color.GREY;
     private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
@@ -42,10 +42,15 @@ public class CourseRenderer {
     }
 
 
+    public void refresh() {
+        render();
+    }
+
+
     /**
-     * Called if the course needs to be re-rendered due to the window being resized.
+     * Renders the course.
      */
-    public void renderCourse() {
+    public void render() {
         if (mode != RaceMode.CONTROLS_TUTORIAL && mode !=  RaceMode.BUMPER_BOATS) {
             double MARK_SIZE = 10;
             markSize = MARK_SIZE * pixelMapper.mappingRatio();
@@ -67,6 +72,7 @@ public class CourseRenderer {
         renderPickUps();
     }
 
+
     /**
      * Renders all of the course boundaries again due to resizing
      */
@@ -76,7 +82,9 @@ public class CourseRenderer {
         border = new Polyline();
 
         for (Coordinate boundaryMark : course.getCourseLimits()) {
-            renderBoundary(border, boundaryMark);
+            if (boundaryMark != null) {
+                renderBoundary(border, boundaryMark);
+            }
         }
 
         if (course.getCourseLimits().size() > 0 && !group.getChildren().contains(border)) {

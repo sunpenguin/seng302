@@ -18,7 +18,7 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
      *
      * @param boat the display boat being decorated
      */
-    DisplayBoatDecorator(DisplayBoat boat) {
+    public DisplayBoatDecorator(DisplayBoat boat) {
         super();
         this.boat = boat;
     }
