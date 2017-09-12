@@ -60,6 +60,41 @@ public class GameSelectionController {
         initialiseSpectatorButton();
         initialiseBackButton();
         registerListeners();
+        initialiseLabels();
+    }
+
+
+    private void initialiseLabels() {
+        int height = 45;
+        int width = 300;
+
+        Label first = new Label("1. Select connection");
+        Label second = new Label("2. Select game mode");
+
+        first.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        first.getStyleClass().add("adddressInput");
+        first.setMaxHeight(height);
+        first.setPrefHeight(height);
+        first.setMinHeight(height);
+        first.setMaxWidth(width);
+        first.setPrefWidth(width);
+        first.setMinWidth(width);
+        innerPane.getChildren().add(first);
+        first.setLayoutX((600 / 2) - (width / 2));
+        first.setLayoutY((600 / 2) - 300);
+
+        second.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        second.getStyleClass().add("adddressInput");
+        second.setMaxHeight(height);
+        second.setPrefHeight(height);
+        second.setMinHeight(height);
+        second.setMaxWidth(width);
+        second.setPrefWidth(width);
+        second.setMinWidth(width);
+        innerPane.getChildren().add(second);
+        second.setLayoutX((600 / 2) - (width / 2));
+        second.setLayoutY((600 / 2) - 50);
+
     }
 
 
@@ -125,7 +160,7 @@ public class GameSelectionController {
 
 
     private void initialiseErrorText() {
-        int height = 95;
+        int height = 45;
         int width = 300;
         errorText = new Label();
         errorText.setWrapText(true);
@@ -165,6 +200,8 @@ public class GameSelectionController {
                 ip.setText("127.0.0.1");
             }
             ip.setEditable(isRemote);
+            ip.setVisible(isRemote);
+            port.setVisible(isRemote);
         });
         hostOption.selectToggle(remoteHost);
     }

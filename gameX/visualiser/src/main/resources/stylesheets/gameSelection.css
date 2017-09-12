@@ -1,3 +1,7 @@
+@font-face {
+    src: url("/font/Munro.ttf");
+}
+
 .raceImage {
     -fx-graphic: url('/images/game_selection/RaceWhite.png');
 }
@@ -88,17 +92,13 @@
     -fx-background-color: transparent;
 }
 
-@font-face {
-    src: url("/font/Munro.ttf");
-}
-
 .addressInput {
     -fx-font-family: "Munro";
-    -fx-font-size: 14;
+    -fx-font-size: 16;
 }
 
 .errorText {
     -fx-font-family: "Munro";
-    -fx-font-size: 14;
+    -fx-font-size: 16;
     -fx-text-fill: red;
 }
