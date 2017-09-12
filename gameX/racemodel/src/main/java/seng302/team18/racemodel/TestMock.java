@@ -66,8 +66,11 @@ public class TestMock implements Observer {
             scheduledMessages.add(new BoatMessageGenerator(b));
             client.setId(boats.get(race.getStartingList().size()).getId());
 
-            generatorXmlRegatta = new XmlMessageGeneratorRegatta(xmlMessageBuilder.buildRegattaMessage(race));
+            generateXMLs();
             sendRegattaXml(client);
+            sendRaceXml();
+            sendBoatsXml();
+
         } else if (arg instanceof ServerState) {
             open = !ServerState.CLOSED.equals(arg);
         } else if (arg instanceof Integer) {
