@@ -16,7 +16,7 @@ public class ProjectileMessageGenerator extends ScheduledMessageGenerator{
     private Projectile projectile;
 
     public ProjectileMessageGenerator(int type, Projectile projectile) {
-        super(30, type);
+        super(120, type);
         this.projectile = projectile;
     }
 

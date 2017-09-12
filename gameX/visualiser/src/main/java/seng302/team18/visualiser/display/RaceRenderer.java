@@ -19,6 +19,7 @@ public class RaceRenderer {
     private ClientRace race;
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
+    private Map<Integer, DisplayShark> sharksMap = new HashMap<>();
     private PixelMapper pixelMapper;
 
 
@@ -69,7 +70,6 @@ public class RaceRenderer {
             }
 
             if (displayBoat != null && BoatStatus.DSQ.equals(boat.getStatus())) {
-                System.out.println("removed");
                 remove(displayBoat);
             } else if (displayBoat != null && boat.getCoordinate() != null) {
                 synchronise(displayBoat, boat);
@@ -82,11 +82,18 @@ public class RaceRenderer {
         for (int i = 0; i < race.getProjectiles().size(); i++){
             System.out.println(group.getChildren().size());
             Projectile projectile = race.getProjectiles().get(i);
-            DisplayShark shark = new DisplayShark(projectile, pixelMapper);
-            shark.setScale(pixelMapper.mappingRatio());
-            shark.setCoordinate(projectile.getLocation());
-            shark.setHeading(projectile.getHeading());
-            shark.addToGroup(group);
+            DisplayShark shark = sharksMap.get(projectile.getId());
+            if (shark == null){
+                shark = new DisplayShark(projectile, pixelMapper);
+                sharksMap.put(projectile.getId(), shark);
+                shark.addToGroup(group);
+
+            } else {
+                shark.setScale(pixelMapper.mappingRatio());
+                shark.setCoordinate(projectile.getLocation());
+                shark.setHeading(projectile.getHeading());
+            }
+
         }
     }
 
