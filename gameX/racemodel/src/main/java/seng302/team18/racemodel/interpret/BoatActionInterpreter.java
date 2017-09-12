@@ -46,6 +46,8 @@ public class BoatActionInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof BoatActionMessage) {
             BoatActionMessage actionMessage = (BoatActionMessage) message;
+            updateList();
+            boatRotater = new BoatRotater(boats, 3d);
             for (Boat boat : boats) {
                 if (!UNCONTROLLABLE_STATUSES.contains(boat.getStatus()) && actionMessage.getId() == id) {
                     applyActions(boat, actionMessage);
@@ -54,6 +56,18 @@ public class BoatActionInterpreter extends MessageInterpreter {
                 }
             }
         }
+    }
+
+
+    /**
+     * Updates the starting list continuously.
+     *
+     */
+    private void updateList() {
+        boats = race.getStartingList()
+                .stream()
+                .filter(boat -> boat.getId().equals(id))
+                .collect(Collectors.toList());
     }
 
 

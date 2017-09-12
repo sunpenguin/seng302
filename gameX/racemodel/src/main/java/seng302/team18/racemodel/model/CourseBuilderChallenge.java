@@ -46,6 +46,7 @@ public class CourseBuilderChallenge extends AbstractCourseBuilder {
      */
     @Override
     public List<CompoundMark> buildCompoundMarks() {
+        compoundMarks.clear();
         final double MARK_WIDTH = 65;
         Random random = new Random();
 

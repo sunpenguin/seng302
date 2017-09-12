@@ -55,8 +55,12 @@ public class RaceLoop extends AnimationTimer {
         renderer.renderBoats();
         courseRenderer.renderCourse();
         renderer.drawTrails();
-        healthDisplay.display();
-        powerUpDisplay.display();
+        if (null != healthDisplay) {
+            healthDisplay.display();
+        }
+        if (null != powerUpDisplay) {
+            powerUpDisplay.display();
+        }
     }
 
     /**
