@@ -80,18 +80,21 @@ public class RaceRenderer {
 
     public void renderShark() {
         for (int i = 0; i < race.getProjectiles().size(); i++){
-            System.out.println(group.getChildren().size());
             Projectile projectile = race.getProjectiles().get(i);
             DisplayShark shark = sharksMap.get(projectile.getId());
+            System.out.println(sharksMap.size());
             if (shark == null){
                 shark = new DisplayShark(projectile, pixelMapper);
                 sharksMap.put(projectile.getId(), shark);
                 shark.addToGroup(group);
 
-            } else {
+            } else if (shark.getProjectile() != null) {
                 shark.setScale(pixelMapper.mappingRatio());
                 shark.setCoordinate(projectile.getLocation());
                 shark.setHeading(projectile.getHeading());
+            } else {
+                shark.removeFrom(group);
+                sharksMap.remove(shark.getProjectile().getId());
             }
 
         }

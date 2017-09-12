@@ -39,7 +39,6 @@ public class ProjectileMessageGenerator extends ScheduledMessageGenerator{
         byte[] headingBytes = ByteCheck.shortToByteArray(headingShort);
         byte[] speed = ByteCheck.intToByteArray(new SpeedConverter().knotsToMms(projectile.getSpeed()).intValue());
 
-
         outStream.write(sourceID);
         outStream.write(latitudeBytes);
         outStream.write(longitudeBytes);

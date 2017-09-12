@@ -76,5 +76,11 @@ public class DisplayShark {
         rotation.setAngle(angle);
     }
 
+    public Projectile getProjectile() {
+        return projectile;
+    }
 
+    public void setProjectile(Projectile projectile) {
+        this.projectile = projectile;
+    }
 }
