@@ -41,3 +41,14 @@
 .borderImage {
     -fx-graphic: url('/images/playInterface/border.png');
 }
+
+
+.spectatorImage {
+    -fx-graphic: url('/images/playInterface/spectator_button.png');
+}
+
+
+.spectatorImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/playInterface/spectator_button_alt.png');
+}

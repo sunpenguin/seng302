@@ -34,7 +34,7 @@ public class PowerTakenParser implements MessageBodyParser {
 
         int boatId = ByteCheck.byteToInt(bytes, BOAT_ID_INDEX, BOAT_ID_LENGTH);
         int powerId = ByteCheck.byteToInt(bytes, POWER_ID_INDEX, POWER_ID_LENGTH);
-        double duration = ByteCheck.byteToInt(bytes, DURATION_INDEX, DURATION_LENGTH) * 1000d;
+        double duration = ByteCheck.byteToInt(bytes, DURATION_INDEX, DURATION_LENGTH);
 
         return new PowerTakenMessage(boatId, powerId, duration);
     }

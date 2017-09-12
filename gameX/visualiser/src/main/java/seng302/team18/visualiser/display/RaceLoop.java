@@ -16,6 +16,7 @@ public class RaceLoop extends AnimationTimer {
     private FPSReporter fpsReporter;
     private PixelMapper pixelMapper;
     private VisualHealth healthDisplay;
+    private VisualPowerUp powerUpDisplay;
 
     /**
      * Constructor for the RaceLoop class.
@@ -24,12 +25,14 @@ public class RaceLoop extends AnimationTimer {
      * @param courseRenderer thing that renders the course
      * @param fpsReporter thing that updates fps
      */
-    public RaceLoop(RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter, PixelMapper pixelMapper, VisualHealth healthDisplay) {
+    public RaceLoop(RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter,
+                    PixelMapper pixelMapper, VisualHealth healthDisplay, VisualPowerUp powerUpDisplay) {
         this.renderer = renderer;
         this.fpsReporter = fpsReporter;
         this.courseRenderer = courseRenderer;
         this.pixelMapper = pixelMapper;
         this.healthDisplay = healthDisplay;
+        this.powerUpDisplay = powerUpDisplay;
     }
 
     @Override
@@ -42,7 +45,6 @@ public class RaceLoop extends AnimationTimer {
         previousTime = currentTime;
         updateFps(secondsElapsed);
         updateView();
-        healthDisplay.display();
     }
 
     /**
@@ -53,6 +55,12 @@ public class RaceLoop extends AnimationTimer {
         renderer.renderBoats();
         courseRenderer.renderCourse();
         renderer.drawTrails();
+        if (null != healthDisplay) {
+            healthDisplay.display();
+        }
+        if (null != powerUpDisplay) {
+            powerUpDisplay.display();
+        }
     }
 
     /**
