@@ -271,6 +271,13 @@ public class ClientRace {
     }
 
 
+    /**
+     * Method to update projectiles data
+     * @param id id of the projectile
+     * @param location location of the projectile
+     * @param heading heading of the projectile
+     * @param speed speed of the projectile
+     */
     public void updateProjectile(int id, Coordinate location, double heading, double speed) {
         for (Projectile projectile : projectiles) {
             if (projectile.getId() == id) {
@@ -283,6 +290,10 @@ public class ClientRace {
     }
 
 
+    /**
+     * Method to remove a projectile from the race
+     * @param id id of the projectile to be removed
+     */
     public void removeProjectile(int id) {
         List<Projectile> remaining = new ArrayList<>();
         for (Projectile projectile : projectiles) {
@@ -291,5 +302,19 @@ public class ClientRace {
             }
         }
         projectiles = remaining;
+    }
+
+
+    /**
+     * Method to add a projectile to the races list of projectiles
+     * @param projectile the projecitle to be added
+     */
+    public void addProjectile(Projectile projectile) {
+        projectiles.add(projectile);
+    }
+
+
+    public List<Projectile> getProjectiles() {
+        return projectiles;
     }
 }

@@ -36,9 +36,6 @@ public class Race {
     private List<Projectile> removedProjectileList = new ArrayList<>();
     private int powerId = 0;
     private int nextProjectileId = 300;
-    private final int PROJECTILE_SPEED = 50;
-    private final int PROJECTILE_RADIUS = 15;
-    private final int PROJECTILE_WEIGHT= 5;
 
 
     public Race() {
@@ -483,8 +480,9 @@ public class Race {
      * @param type the type of power up used
      */
     public void addProjectile(Boat boat, PowerType type) {
-        Coordinate location = gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), (boat.getLength() + PROJECTILE_RADIUS + 5));
-        Projectile sharky = new TigerShark(nextProjectileId, PROJECTILE_RADIUS, PROJECTILE_WEIGHT, location, boat.getHeading(), PROJECTILE_SPEED);
+        Projectile sharky = new TigerShark(nextProjectileId, new Coordinate(0,0), boat.getHeading());
+        Coordinate location = gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), (boat.getLength() + sharky.getBodyMass().getRadius() + 5));
+        sharky.setLocation(location);
         projectiles.add(sharky);
         nextProjectileId += 1;
         newProjectileList.add(sharky);

@@ -9,9 +9,12 @@ import seng302.team18.util.SpeedConverter;
  */
 public class TigerShark extends Projectile{
 
+    private final int TIGER_SHARK_SPEED = 50;
+    private final int TIGER_SHARK_RADIUS = 15;
+    private final int TIGER_SHARK_WEIGHT= 5;
 
-    public TigerShark(int source_id, double radius, double weight, Coordinate location, double heading, double speed) {
-        super(source_id, radius, weight, location, heading, speed);
+    public TigerShark(int source_id, Coordinate location, double heading) {
+        super(source_id, 5, 15, location, heading, 50); // Thing needs to be sent/changed
     }
 
     @Override

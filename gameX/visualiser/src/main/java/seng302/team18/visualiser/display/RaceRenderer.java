@@ -2,14 +2,12 @@ package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import seng302.team18.model.Boat;
-import seng302.team18.model.BoatStatus;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.RaceMode;
+import seng302.team18.model.*;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.util.PixelMapper;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -190,8 +188,20 @@ public class RaceRenderer {
         }
     }
 
+    public void drawSharks(){
+        for (Projectile projectile : race.getProjectiles())
+        {
+            System.out.println(projectile.getId() + " " + projectile.getLocation());
+        }
+    }
 
-    public void drawShark(Boat boat, PixelMapper mapper){
+
+    /**
+     * Method to draw a shark
+     * @param projectile
+     * @param mapper
+     */
+    private void drawShark(DisplayProjectile projectile, PixelMapper mapper){
 
 
     }

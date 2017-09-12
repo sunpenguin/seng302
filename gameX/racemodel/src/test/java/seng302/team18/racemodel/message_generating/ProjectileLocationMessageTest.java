@@ -22,7 +22,7 @@ public class ProjectileLocationMessageTest {
 
     @Before
     public void setUp() {
-        projectile = new TigerShark(1,14,10, (new Coordinate(55,55)), 90, 50);
+        projectile = new TigerShark(1,(new Coordinate(55,55)), 90);
         generator = new ProjectileMessageGenerator(AC35MessageType.PROJECTILE_LOCATION.getCode(), projectile);
         expected = new byte[] {1,0,0,0,  -57,113,28,39,  -57,113,28,39,   0,64,122,100,0,0};
     }
