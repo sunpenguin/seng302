@@ -30,6 +30,7 @@ public class Race {
     private RaceMode mode = RaceMode.RACE;
     private List<Updater> updaters = new ArrayList<>();
     private int powerId = 0;
+    private StartPositionSetter positionSetter;
 
 
     public Race() {

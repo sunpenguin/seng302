@@ -39,6 +39,7 @@ import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.RaceMode;
@@ -142,9 +143,9 @@ public class RaceController implements Observer {
      *
      * @param keyEvent event for a particular key press
      */
-    private void installPlayerKey(KeyEvent keyEvent) {
+    private MessageBody handlePlayerKeyPress(KeyEvent keyEvent) {
         if (race.getMode() != RaceMode.SPECTATION) {
-            message = new BoatActionMessage(race.getPlayerId());
+            BoatActionMessage message = new BoatActionMessage(race.getPlayerId());
             switch (keyEvent.getCode()) {
                 case SPACE:
                     message.setAutoPilot();
@@ -172,9 +173,11 @@ public class RaceController implements Observer {
                     message.setConsume();
                     break;
                 default:
-                    send = false;
+                    return null;
             }
+            return message;
         }
+        return null;
     }
 
 
@@ -183,7 +186,7 @@ public class RaceController implements Observer {
      *
      * @param keyEvent event for a particular key press
      */
-    private void installBasicKey(KeyEvent keyEvent) {
+    private void handleBasicKeyPress(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case Z:
                 if (pixelMapper.getZoomLevel() > 0) {
@@ -198,7 +201,7 @@ public class RaceController implements Observer {
             case X:
                 if (pixelMapper.getZoomLevel() - 1 <= 0) {
                     pixelMapper.setTracking(false);
-                    pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
+                    pixelMapper.setViewPortCenter(race.getCenter());
                 }
                 pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() - 1);
 
@@ -213,8 +216,8 @@ public class RaceController implements Observer {
             case TAB:
                 toggleTabView();
                 break;
-            default:
-                send = true;
+//            default:
+//                send = true;
         }
     }
 
@@ -231,11 +234,11 @@ public class RaceController implements Observer {
                     if (keyEvent.getCode() != null) {
 //                        BoatActionMessage message = null;
 
-                        installPlayerKey(keyEvent);
+                        MessageBody message = handlePlayerKeyPress(keyEvent);
 
-                        installBasicKey(keyEvent);
+                        handleBasicKeyPress(keyEvent);
 
-                        if (send && message != null) {
+                        if (message != null) {
                             if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
                                 controlsTutorial.setBoat(getPlayerBoat()); //TODO: get sam to change this seb67 17/8
                                 controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
@@ -774,11 +777,11 @@ public class RaceController implements Observer {
             List<Boat> boats = race.getStartingList();
 
             if (race.getMode().equals(RaceMode.BUMPER_BOATS)) {
-                result += bumperFinishList(boats);
+                result += bumperFinishInfo(boats);
             } else if (race.getMode().equals(RaceMode.CHALLENGE_MODE)) {
-                result += challengeFinishList(boats);
+                result += challengeFinishInfo(boats);
             } else {
-                result += genericFinishList(boats);
+                result += genericFinishInfo(boats);
             }
 
             result = result.substring(0, result.length() - 1);
@@ -800,7 +803,7 @@ public class RaceController implements Observer {
      * @param boats to display info for.
      * @return constructed string
      */
-    private String genericFinishList(List<Boat> boats) {
+    private String genericFinishInfo(List<Boat> boats) {
         boats.sort(Comparator.comparing(Boat::getPlace));
         String result = "";
 
@@ -819,7 +822,7 @@ public class RaceController implements Observer {
      * @param boats to display info for.
      * @return constructed string
      */
-    private String bumperFinishList(List<Boat> boats) {
+    private String bumperFinishInfo(List<Boat> boats) {
         boats.sort(Comparator.comparing(Boat::getLives));
         boats = Lists.reverse(boats);
         String result = "";
@@ -840,7 +843,7 @@ public class RaceController implements Observer {
      * @param boats to display info for.
      * @return constructed string
      */
-    private String challengeFinishList(List<Boat> boats) {
+    private String challengeFinishInfo(List<Boat> boats) {
         boats.sort(Comparator.comparing(Boat::getPlace));
 
         String result = "";

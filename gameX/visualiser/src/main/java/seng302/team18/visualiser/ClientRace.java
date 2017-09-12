@@ -273,4 +273,9 @@ public class ClientRace {
     public int numSequences() {
         return course.getMarkSequence().size();
     }
+
+
+    public Coordinate getCenter() {
+        return course.getCenter();
+    }
 }
