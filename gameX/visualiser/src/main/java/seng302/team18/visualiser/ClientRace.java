@@ -133,6 +133,7 @@ public class ClientRace {
         return course;
     }
 
+
     public int getId() {
         return id;
     }
@@ -265,6 +266,17 @@ public class ClientRace {
     }
 
 
+    /**
+     * Get the PowerUp associated to the PickUp.
+     *
+     * @param id of the PickUp
+     * @return PowerUp that the PickUp had.
+     */
+    public PowerUp getPowerUp(int id) {
+        return getPickUp(id).getPower();
+    }
+
+
     public Coordinate getDestination(int legNumber) {
         return course.getDestination(legNumber);
     }
@@ -277,5 +289,13 @@ public class ClientRace {
 
     public Coordinate getCenter() {
         return course.getCenter();
+    }
+
+
+    public void activatePowerUp() {
+        Boat boat = getBoat(playerId);
+        if (boat.canActivatePower()) {
+            boat.activatePowerUp();
+        }
     }
 }

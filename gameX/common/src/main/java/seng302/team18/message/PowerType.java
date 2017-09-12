@@ -9,7 +9,9 @@ import java.util.Map;
  */
 public enum PowerType {
     
-    SPEED(0);
+    SPEED(0),
+    SHARK(1),
+    STUN(2);
     
     private int code;
     private static final Map<Integer, PowerType> CODE_MAP = Collections.unmodifiableMap(initializeMapping());
