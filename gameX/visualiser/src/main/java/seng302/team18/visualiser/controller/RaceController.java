@@ -747,6 +747,8 @@ public class RaceController implements Observer {
 
             if (race.getMode().equals(RaceMode.BUMPER_BOATS)) {
                 result += bumperFinishList(boats);
+            } else if (race.getMode().equals(RaceMode.CHALLENGE_MODE)) {
+                result += challengeFinishList(boats);
             } else {
                 result += genericFinishList(boats);
             }
@@ -797,6 +799,26 @@ public class RaceController implements Observer {
         for (Boat b : boats) {
             String state = b.getLives() > 0? "WINNER" : "DEAD";
             result += b.getShortName() + " "  + state + "\n";
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Construct a string with finish information for a generic race.
+     * Displays Name, leg number for each boat on a newline.
+     *
+     * @param boats to display info for.
+     * @return constructed string
+     */
+    private String challengeFinishList(List<Boat> boats) {
+        boats.sort(Comparator.comparing(Boat::getPlace));
+
+        String result = "";
+
+        for (Boat b : boats) {
+            result += b.getShortName() + " "  + b.getLegNumber() + " GATES CLEARED\n";
         }
 
         return result;
