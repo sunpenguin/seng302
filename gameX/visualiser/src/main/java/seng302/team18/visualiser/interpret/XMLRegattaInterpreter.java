@@ -40,11 +40,6 @@ public class XMLRegattaInterpreter extends MessageInterpreter {
             race.getRegatta().setRegattaName(regattaMessage.getRegattaName());
             String utcOffset = regattaMessage.getUtcOffset();
             Course course = race.getCourse();
-            if (utcOffset.startsWith("+") || utcOffset.startsWith("-")) {
-                course.setTimeZone(ZoneId.of("UTC" + utcOffset));
-            } else {
-                course.setTimeZone(ZoneId.of("UTC+" + utcOffset));
-            }
             course.setCentralCoordinate(new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong()));
         }
     }
