@@ -7,7 +7,7 @@ import javafx.scene.layout.Pane;
 import seng302.team18.model.Boat;
 
 /**
- * Created by spe76 on 11/09/17.
+ * Class for displaying an image for the currently held power up
  */
 public class VisualPowerUp {
 
@@ -28,7 +28,7 @@ public class VisualPowerUp {
     public VisualPowerUp(Pane pane, Boat boat) {
         this.boat = boat;
         powerImage = new Image("/images/race_view/Arrow2.gif");
-        sharkImage1 = new Image("/images/race_view/heart.png"); // TODO Change to proper shark image hqi19 11/09/17
+        sharkImage1 = new Image("/images/race_view/reefShark.gif");
         powerBox = new HBox();
         powerBox.setLayoutX(135);
         powerBox.setLayoutY(80);
@@ -39,8 +39,7 @@ public class VisualPowerUp {
 
 
     /**
-     * Display a number of hearts according to how many lives the player has.
-     * Only re-draws the hearts if the current number displayed does not match the player's lives.
+     * Display the current power up.
      */
     public void display() {
         boat.expirePowerUp();
@@ -51,6 +50,8 @@ public class VisualPowerUp {
                     case SPEED:
                         powerBox.getChildren().add(speedView);
                         break;
+                    case SHARK:
+                        powerBox.getChildren().add(sharkView1);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
