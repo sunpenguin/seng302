@@ -7,11 +7,9 @@ import seng302.team18.message.RequestMessage;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
-import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 import seng302.team18.racemodel.interpret.ColourInterpreter;
 import seng302.team18.racemodel.message_generating.AcceptanceMessageGenerator;
-import seng302.team18.racemodel.model.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -96,11 +94,14 @@ public class ConnectionListener extends Observable implements Observer {
             } else if (!isValidMode(request.getAction())) { // invalid
                 sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
                 client.close(); // IOException
-            } else if (System.currentTimeMillis() < timeout) { // a valid player
+            } else if (!race.hasStarted()) { // a valid player before the race starts
                 addPlayer(receiver, id);
                 sendMessage(client, id, request.getAction());
                 setChanged();
                 notifyObservers(client);
+            } else { // a valid player after the race starts
+                sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
+                client.close(); // IOException
             }
         }
 

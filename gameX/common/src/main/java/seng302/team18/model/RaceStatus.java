@@ -6,23 +6,25 @@ import java.util.*;
  * Enum for the different types of race status for the AC35 streaming protocol and their associated codes.
  */
 public enum RaceStatus {
-    NOT_ACTIVE(0),
-    WARNING(1),
-    PREPARATORY(2),
-    STARTED(3),
-    FINISHED(4),
-    RETIRED(5),
-    ABANDONED(6),
-    POSTPONED(7),
-    TERMINATED(8),
-    RACE_START_NOT_SET(9),
-    PRESTART(10);
+    NOT_ACTIVE(0, 0),
+    WARNING(1, 2),
+    PREPARATORY(2, 3),
+    STARTED(3, 4),
+    FINISHED(4, 5),
+    RETIRED(5, 5),
+    ABANDONED(6, 5),
+    POSTPONED(7, 0),
+    TERMINATED(8, 5),
+    RACE_START_NOT_SET(9, 0),
+    PRESTART(10, 1);
 
     private int code;
+    private int order;
     private final static Map<Integer, RaceStatus> CODE_MAP = Collections.unmodifiableMap(initializeMapping());
 
-    RaceStatus(int code) {
+    RaceStatus(int code, int order) {
         this.code = code;
+        this.order = order;
     }
 
     /**
@@ -59,5 +61,15 @@ public enum RaceStatus {
             statusMap.put(status.getCode(), status);
         }
         return statusMap;
+    }
+
+
+    /**
+     * Returns true if the current status is after the given status.
+     * @param status to compare to
+     * @return if the current status is after the given status
+     */
+    public boolean isAfter(RaceStatus status) {
+        return this.order > status.order;
     }
 }
