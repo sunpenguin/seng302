@@ -83,6 +83,30 @@
     -fx-graphic: url('/images/play_button_alt.png');
 }
 
+.boatFrame {
+    -fx-border-width: 5;
+    -fx-border-color: black;
+}
+
+.rightImage {
+    -fx-graphic: url('/images/game_selection/arrow_right_white.png');
+
+}
+
+.rightImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/game_selection/arrow_right_orange.png');
+}
+
+.leftImage {
+    -fx-graphic: url('/images/game_selection/arrow_left_white.png');
+}
+
+.leftImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/game_selection/arrow_left_orange.png');
+}
+
 .addressInput {
     -fx-font-family: "Munro";
     -fx-font-size: 20;

@@ -18,24 +18,7 @@
 }
 
 
-.rightImage {
-    -fx-graphic: url('/images/playInterface/right_arrow.png');
-}
 
-.rightImage:hover {
-    -fx-label-padding: 2;
-    -fx-graphic: url('/images/playInterface/right_arrow_alt.png');
-}
-
-
-.leftImage {
-    -fx-graphic: url('/images/playInterface/left_arrow.png');
-}
-
-.leftImage:hover {
-    -fx-label-padding: 2;
-    -fx-graphic: url('/images/playInterface/left_arrow_alt.png');
-}
 
 
 .borderImage {

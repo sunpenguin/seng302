@@ -4,15 +4,16 @@ import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
@@ -49,6 +50,12 @@ public class GameSelectionController {
     private ImageView trailConnectionMode;
     @FXML
     private ImageView trailGameMode;
+    @FXML
+    private Pane boatView;
+    @FXML
+    private Label arrowLeft;
+    @FXML
+    private Label arrowRight;
 
     private Stage stage;
 
@@ -57,22 +64,19 @@ public class GameSelectionController {
 
     private RaceMode mode;
     private Boolean isHosting;
-    private Color boatColour;
 
+    private final static double Y_POS_BOAT_VIEW = -200;
     private final static double Y_POS_SELECTION_BOX = -250;
     private final static double Y_POS_ERROR_TEXT = -150;
     private final static double Y_POS_BUTTON_BOX = -40;
     private final static double OPTION_BUTTONS_HEIGHT = 50;
+    private final static double ARROW_Y_GAP = 5;
+    private final static double BOAT_SIZE = 100;
 
+    private Polyline boat;
     private int colourIndex = 0;
     private List<Color> boatColours = Arrays.asList(Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
             Color.CYAN, Color.BLUE, Color.PURPLE, Color.MAGENTA);
-
-    private Polyline boat;
-    Label rightLabel;
-    Label leftLabel;
-    Label boatView;
-    VBox pickerBox;
 
     @FXML
     public void initialize() {
@@ -87,7 +91,7 @@ public class GameSelectionController {
 
         new Thread(() -> {
             try {
-                Thread.sleep(35);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -139,17 +143,19 @@ public class GameSelectionController {
             errorLabel.setLayoutY((stage.getHeight() / 2) + Y_POS_ERROR_TEXT);
         }
 
-        if (pickerBox.getWidth() != 0) {
-            pickerBox.setLayoutX((outerPane.getScene().getWidth() / 2) - (300 * 1.75));
-            pickerBox.setLayoutY((outerPane.getScene().getHeight() / 2) - (225));
-            boat.setLayoutX(pickerBox.getLayoutX() + 150);
-            boat.setLayoutY(pickerBox.getLayoutY() + 150);
+        if (boatView.getWidth() != 0) {
+            boatView.setLayoutX((outerPane.getScene().getWidth() / 2) - buttonBox.getWidth() - (0.75 * BOAT_SIZE));
+            boatView.setLayoutY((outerPane.getScene().getHeight() / 2) + Y_POS_BOAT_VIEW);
         } else if (stage != null) {
-            pickerBox.setLayoutX((stage.getWidth() / 2) - (300 * 1.75));
-            pickerBox.setLayoutX((stage.getHeight() / 2) - (225));
-            boat.setLayoutX(pickerBox.getLayoutX() + 150);
-            boat.setLayoutY(pickerBox.getLayoutY() + 150);
+            boatView.setLayoutX((stage.getWidth() / 2) - (300 * 1.75));
+            boatView.setLayoutX((stage.getHeight() / 2) - (225));
         }
+
+        final double arrowWidth = 55;
+        arrowLeft.setLayoutX(boatView.getLayoutX());
+        arrowLeft.setLayoutY(boatView.getLayoutY() + boatView.getHeight() + ARROW_Y_GAP);
+        arrowRight.setLayoutX(boatView.getLayoutX() + boatView.getWidth() - arrowWidth);
+        arrowRight.setLayoutY(boatView.getLayoutY() + boatView.getHeight() + ARROW_Y_GAP);
     }
 
 
@@ -562,65 +568,20 @@ public class GameSelectionController {
      * Creates buttons for left and right selection and sets up a preview of the boat with the current colour.
      */
     private void initialiseBoatPicker() {
-        rightLabel = new Label();
-        rightLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/playInterface.css").toExternalForm());
-        rightLabel.getStyleClass().add("rightImage");
-
-        new Image("/images/playInterface/tutorial_button.gif");
-        rightLabel.setOnMouseClicked(event -> rightButtonAction());
-
-
-        leftLabel = new Label();
-        leftLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/playInterface.css").toExternalForm());
-        leftLabel.getStyleClass().add("leftImage");
-
-        new Image("/images/playInterface/tutorial_button.gif");
-        leftLabel.setOnMouseClicked(event -> leftButtonAction());
-
-
-        boatView = new Label();
-        boatView.getStylesheets().add(this.getClass().getResource("/stylesheets/playInterface.css").toExternalForm());
-        boatView.getStyleClass().add("borderImage");
-        Image borderImage = new Image("/images/playInterface/border.png");
-        boatView.setLayoutX(buttonBox.getLayoutX());
-        boatView.setLayoutY(buttonBox.getLayoutY());
-        boatView.setLayoutY(0);
-
-        double boatHeight = 150;
-        double boatWidth = 150;
-
         Double[] boatShape = new Double[]{
-                0.0, boatHeight / -2,
-                boatWidth / -2, boatHeight / 2,
-                boatWidth / 2, boatHeight / 2,
-                0.0, boatHeight / -2
+                0.0, BOAT_SIZE / -2,
+                BOAT_SIZE / -2, BOAT_SIZE / 2,
+                BOAT_SIZE / 2, BOAT_SIZE / 2,
+                0.0, BOAT_SIZE / -2
         };
 
         boat = new Polyline();
         boat.getPoints().addAll(boatShape);
         boat.setRotate(90);
         boat.setFill(boatColours.get(colourIndex));
-
-
-        HBox arrowButtonBox = new HBox();
-        pickerBox = new VBox(boatView);
-        pickerBox.getChildren().add(arrowButtonBox);
-
-        HBox leftBox = new HBox();
-        HBox rightBox = new HBox();
-        arrowButtonBox.setAlignment(Pos.CENTER);
-        arrowButtonBox.getChildren().add(leftBox);
-        arrowButtonBox.getChildren().add(rightBox);
-
-        leftBox.getChildren().add(leftLabel);
-        rightBox.getChildren().add(rightLabel);
-
-        leftBox.setAlignment(Pos.BOTTOM_LEFT);
-        rightBox.setAlignment(Pos.BOTTOM_RIGHT);
-
-        pickerBox.setPadding(new Insets(0, 0, 50, 0));
-        outerPane.getChildren().add(pickerBox);
-        outerPane.getChildren().add(boat);
+        boat.setStrokeWidth(BOAT_SIZE / 40);
+        boatView.getChildren().add(boat);
+        boatView.setPadding(new Insets(BOAT_SIZE / 8));
         boat.toFront();
     }
 
@@ -628,6 +589,7 @@ public class GameSelectionController {
     /**
      * Display the next boat colour option.
      */
+    @FXML
     private void rightButtonAction() {
         colourIndex = (colourIndex + 1) % boatColours.size();
         boat.setFill(boatColours.get(colourIndex));
@@ -637,6 +599,7 @@ public class GameSelectionController {
     /**
      * Display the previous boat colour option.
      */
+    @FXML
     private void leftButtonAction() {
         colourIndex = Math.floorMod((colourIndex - 1), boatColours.size());
         boat.setFill(boatColours.get(colourIndex));
@@ -649,7 +612,6 @@ public class GameSelectionController {
 
 
     void setColour(Color colour) {
-        this.boatColour = colour;
     }
 
 
