@@ -82,7 +82,6 @@ public class RaceRenderer {
         for (int i = 0; i < race.getProjectiles().size(); i++){
             Projectile projectile = race.getProjectiles().get(i);
             DisplayShark shark = sharksMap.get(projectile.getId());
-            System.out.println(sharksMap.size());
             if (shark == null){
                 shark = new DisplayShark(projectile, pixelMapper);
                 sharksMap.put(projectile.getId(), shark);

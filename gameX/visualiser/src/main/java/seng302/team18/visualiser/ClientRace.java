@@ -25,6 +25,7 @@ public class ClientRace {
     private ZonedDateTime currentTime;
     private Integer playerId;
     private RaceMode mode = RaceMode.RACE;
+    private List<Projectile> projectiles = new ArrayList<>();
 
 
     public ClientRace() {
