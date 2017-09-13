@@ -343,20 +343,12 @@ public class GameSelectionController {
 
 
     private void startGame() {
-        // Check ip
-        if (ipStrProp.get().isEmpty()) {
-            errorLabel.setText("Please enter a valid host address");
-            return;
-        }
+        errorLabel.setText(null);
 
-        // Check port
-        int port;
-        try {
-            port = Integer.parseInt(this.portStrProp.get());
-        } catch (NumberFormatException e) {
-            errorLabel.setText("Please enter a valid port number");
-            return;
-        }
+        // Check ip
+        String hostAddress = getHostAddress();
+        int port = getPort();
+        if (port < 0 || hostAddress == null) return;
 
         if (isHosting) {
             try {
@@ -374,7 +366,33 @@ public class GameSelectionController {
             }
         }
 
-        openStream(ipStrProp.get(), port);
+        openStream(hostAddress, port);
+    }
+
+
+    private String getHostAddress() {
+        if (ipStrProp.get().isEmpty()) {
+            errorLabel.setText(errorLabel.getText() + "\nPlease enter a valid host address");
+            return null;
+        }
+
+        return ipStrProp.get();
+    }
+
+
+    private int getPort() {
+        int port = -1;
+        try {
+            port = Integer.parseInt(this.portStrProp.get());
+            if (port < 1024 || port > 65535) {
+                port = -1;
+                errorLabel.setText(errorLabel.getText() + "\nPlease enter a port number in the range 1025-65534");
+            }
+        } catch (NumberFormatException e) {
+            errorLabel.setText(errorLabel.getText() + "\nPlease enter a valid port number");
+        }
+
+        return port;
     }
 
 
