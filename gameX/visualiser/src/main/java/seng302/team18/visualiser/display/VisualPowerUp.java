@@ -9,7 +9,7 @@ import seng302.team18.model.Boat;
 /**
  * Class for displaying an image for the currently held power up
  */
-public class VisualPowerUp {
+public class VisualPowerUp implements Renderable {
 
     private Image powerImage;
     private Image sharkImage1;
@@ -39,9 +39,10 @@ public class VisualPowerUp {
 
 
     /**
-     * Display the current power up.
+     * If the player is holding a power up, show it on the screen until it is consumed
      */
-    public void display() {
+    @Override
+    public void render() {
         boat.expirePowerUp();
         powerBox.getChildren().clear();
         if (boat.getPowerUp() != null) {
@@ -57,5 +58,11 @@ public class VisualPowerUp {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    @Override
+    public void refresh() {
+
     }
 }

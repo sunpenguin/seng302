@@ -608,7 +608,10 @@ public class RaceController implements Observer {
         List<Renderable> renderables = new ArrayList<>(Arrays.asList(raceRenderer, courseRenderer));
         if (race.getMode().hasLives() && getPlayerBoat() != null) {
             renderables.add(new VisualHealth(raceViewPane, getPlayerBoat()));
-            VisualPowerUp visualPowerUp = new VisualPowerUp(raceViewPane, getPlayerBoat());
+        }
+
+        if (getPlayerBoat() != null) {
+            renderables.add(new VisualPowerUp(raceViewPane, getPlayerBoat()));
         }
 
         setupRaceTimer();
