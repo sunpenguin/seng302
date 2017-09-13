@@ -80,8 +80,8 @@ public class GameSelectionController {
 
     @FXML
     public void initialize() {
-        registerListeners();
         initialiseBoatPicker();
+
         setUpModeSelection();
 
         final double height = Y_POS_BUTTON_BOX - Y_POS_ERROR_TEXT;
@@ -89,15 +89,17 @@ public class GameSelectionController {
         errorLabel.setMinHeight(height);
         errorLabel.setPrefHeight(height);
 
-        new Thread(() -> {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            reDraw();
-        }).start();
-        reDraw();
+//        new Thread(() -> {
+//            try {
+//                Thread.sleep(100);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            reDraw();
+//        }).start();
+//
+//        reDraw();
+        registerListeners();
     }
 
 
@@ -113,7 +115,7 @@ public class GameSelectionController {
     /**
      * Re draw the the pane which holds elements of the play interface to be in the middle of the window.
      */
-    void reDraw() {
+    public void reDraw() {
         // selection trail
         if (selectionTrailBox.getWidth() != 0) {
             selectionTrailBox.setLayoutX((outerPane.getScene().getWidth() / 2) - (selectionTrailBox.getWidth() / 2));
@@ -547,17 +549,15 @@ public class GameSelectionController {
 
     @SuppressWarnings("Duplicates")
     private void exitSelectionScreen() {
-        Stage stage = (Stage) outerPane.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PlayInterface.fxml"));
-        Parent root = null;
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
+        Parent root = null; // throws IOException
         try {
             root = loader.load();
         } catch (IOException e) {
-            System.err.println("Error occurred loading play interface screen");
+            System.err.println("Error occurred loading title screen.");
         }
-        PlayInterfaceController controller = loader.getController();
+        TitleScreenController controller = loader.getController();
         controller.setStage(stage);
-        stage.setTitle("High Seas");
         outerPane.getScene().setRoot(root);
         stage.setMaximized(true);
         stage.show();
@@ -608,10 +608,6 @@ public class GameSelectionController {
 
     void setStage(Stage stage) {
         this.stage = stage;
-    }
-
-
-    void setColour(Color colour) {
     }
 
 
