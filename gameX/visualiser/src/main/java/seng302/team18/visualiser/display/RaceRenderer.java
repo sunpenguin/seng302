@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * Class that takes a Race and a Group and draws the Race on the Group.
  */
-public class RaceRenderer {
+public class RaceRenderer implements Renderable {
 
     private Group group;
     private ClientRace race;
@@ -20,6 +20,7 @@ public class RaceRenderer {
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private Map<Integer, DisplayShark> sharksMap = new HashMap<>();
     private PixelMapper pixelMapper;
+    private boolean drawTrails;
 
 
     /**
@@ -41,9 +42,8 @@ public class RaceRenderer {
 
     /**
      * If the current race mode is challenge mode, the zoom level will be set to min zoom level.
-     *
+     * <p>
      * The player's boat will be tracked.
-     *
      */
     private void setChallengeModeCourse() {
         Boat boat = race.getBoat(race.getPlayerId());
@@ -60,7 +60,15 @@ public class RaceRenderer {
      * Draws displayBoats in the Race on the Group as well as the visible annotations including the BoatSails in both
      * the luffing and powered up position
      */
-    public void renderBoats() {
+    public void render() {
+        drawBoats();
+        if (drawTrails) {
+            drawTrails();
+        }
+    }
+
+
+    private void drawBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
@@ -160,7 +168,7 @@ public class RaceRenderer {
      * Makes a given display boat consistent with the boat
      *
      * @param displayBoat to update.
-     * @param boat containing updated information.
+     * @param boat        containing updated information.
      */
     private void synchronise(DisplayBoat displayBoat, Boat boat) {
         displayBoat.setCoordinate(boat.getCoordinate());
@@ -188,7 +196,7 @@ public class RaceRenderer {
     /**
      * Draws all the boats trails.
      */
-    public void drawTrails() {
+    private void drawTrails() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             Coordinate boatCoordinates = boat.getCoordinate();
@@ -213,15 +221,15 @@ public class RaceRenderer {
             DisplayTrail trail = trailMap.get(boat.getShortName());
 
             if (trail == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
-                final int MAX_TRAIL_LENGTH = 150;
+                final int MAX_TRAIL_LENGTH = 750;
                 DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
-                trail = new DisplayTrail(displayBoat.getColor(), MAX_HEADING_DIFFERENCE, MAX_TRAIL_LENGTH);
+                trail = new DisplayTrail(displayBoat.getColor(), MAX_TRAIL_LENGTH);
                 trailMap.put(boat.getShortName(), trail);
                 trail.addToGroup(group);
             }
 
-            if (trail != null) {
-                trail.addPoint(boat.getCoordinate(), boat.getHeading(), pixelMapper);
+            if (trail != null && boat.getSpeed() > 0.001) {
+                trail.addPoint(boat.getCoordinate(), pixelMapper);
             }
         }
     }
@@ -231,11 +239,13 @@ public class RaceRenderer {
      * Redraw the the trails behind each boat by looking into the Map of circles and coordinates and
      * resetting the points.
      */
-    public void reDrawTrails() {
-        for (Boat boat : race.getStartingList()) {
-            DisplayTrail trail = trailMap.get(boat.getShortName());
-            if (trail != null) {
-                trail.reDraw(pixelMapper);
+    public void refresh() {
+        if (drawTrails) {
+            for (Boat boat : race.getStartingList()) {
+                DisplayTrail trail = trailMap.get(boat.getShortName());
+                if (trail != null) {
+                    trail.reDraw(pixelMapper);
+                }
             }
         }
     }
@@ -247,10 +257,10 @@ public class RaceRenderer {
 
 
     /**
-     * Sets the annotation types that are visible.
+     * Sets the visibility of an annotation type
      *
-     * @param type      , AnnotationType, the type of annotiation.
-     * @param isVisible , Boolean, if the type is visible.
+     * @param type      the type of annotation
+     * @param isVisible whether the type is to be visible
      */
     public void setVisibleAnnotations(AnnotationType type, Boolean isVisible) {
         for (DisplayBoat boat : displayBoats.values()) {
@@ -274,5 +284,10 @@ public class RaceRenderer {
 
     public void clearCollisions() {
         displayBoats.values().forEach(displayBoat -> displayBoat.setHasCollided(false));
+    }
+
+
+    public void setDrawTrails(boolean drawTrails) {
+        this.drawTrails = drawTrails;
     }
 }

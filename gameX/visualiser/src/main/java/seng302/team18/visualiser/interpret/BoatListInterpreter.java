@@ -26,7 +26,8 @@ public class BoatListInterpreter extends MessageInterpreter {
     @Override
     public void interpret(MessageBody message) {
         if (message instanceof AC35XMLBoatMessage) {
-            Platform.runLater(() -> controller.updateBoatList());
+            AC35XMLBoatMessage boatMessage = (AC35XMLBoatMessage) message;
+            Platform.runLater(() -> controller.updateBoatList(boatMessage.getYachts()));
         }
     }
 

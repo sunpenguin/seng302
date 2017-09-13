@@ -157,7 +157,7 @@ public class MarkRounding {
     }
 
 
-    public Coordinate getDestination() {
+    public Coordinate getCoordinate() {
         return compoundMark.getCoordinate();
     }
 

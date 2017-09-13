@@ -29,6 +29,7 @@ public class CourseBuilderBumper extends AbstractCourseBuilder {
 
         markRoundings.add(new MarkRounding(1, getCompoundMarks().get(0), MarkRounding.Direction.PS, 3));
         markRoundings.add(new MarkRounding(2, getCompoundMarks().get(1), MarkRounding.Direction.PS, 3));
+        markRoundings.add(new MarkRounding(3, getCompoundMarks().get(2), MarkRounding.Direction.PS, 3));
 
         return markRoundings;
     }
@@ -38,19 +39,19 @@ public class CourseBuilderBumper extends AbstractCourseBuilder {
     protected List<CompoundMark> buildCompoundMarks() {
         // Note that these marks should be able to be removed during the task of removing unnecessary things.
         // Start Line
-        Mark start1 = new Mark(231, new Coordinate(5.00100, 4.00125));
-        start1.setHullNumber("LC21");
-        start1.setStoweName("PRO");
-        start1.setShortName("S1");
-        start1.setBoatName("Start Line 1");
+        Mark gate1mark1 = new Mark(231, new Coordinate(5.00100, 4.00125));
+        gate1mark1.setHullNumber("LC21");
+        gate1mark1.setStoweName("PRO");
+        gate1mark1.setShortName("S1");
+        gate1mark1.setBoatName("gate mark 1");
 
-        Mark start2 = new Mark(232, new Coordinate(5.00200, 4.00125));
-        start2.setHullNumber("LC22");
-        start2.setStoweName("PIN");
-        start2.setShortName("S2");
-        start2.setBoatName("Start Line 2");
+        Mark gate1mark2 = new Mark(232, new Coordinate(5.00200, 4.00125));
+        gate1mark2.setHullNumber("LC22");
+        gate1mark2.setStoweName("PIN");
+        gate1mark2.setShortName("S2");
+        gate1mark2.setBoatName("gate mark 2");
 
-        CompoundMark startGate = new CompoundMark("Start Line", Arrays.asList(start1, start2), 11);
+        CompoundMark gate1 = new CompoundMark("Start Line", Arrays.asList(gate1mark1, gate1mark2), 11);
 
         // Finish Line
         Mark finish1 = new Mark(238, new Coordinate(5.00100, 3.99975));
@@ -67,7 +68,26 @@ public class CourseBuilderBumper extends AbstractCourseBuilder {
 
         CompoundMark finishGate = new CompoundMark("Finish Line", Arrays.asList(finish1, finish2), 12);
 
-        return Arrays.asList(startGate, finishGate);
+        GPSCalculator calculator = new GPSCalculator();
+        Coordinate coord1 = calculator.getCentralCoordinate(Arrays.asList(finish1.getCoordinate(), gate1mark1.getCoordinate()));
+        Coordinate coord2 = calculator.getCentralCoordinate(Arrays.asList(finish2.getCoordinate(), gate1mark2.getCoordinate()));
+
+        Mark start1 = new Mark(235, coord1);
+        start1.setHullNumber("LC21");
+        start1.setStoweName("PRO");
+        start1.setShortName("S1");
+        start1.setBoatName("start Mark 1");
+
+        Mark start2 = new Mark(234, coord2);
+        start2.setHullNumber("LC21");
+        start2.setStoweName("PRO");
+        start2.setShortName("S2");
+        start2.setBoatName("start Mark 2");
+
+        CompoundMark startGate = new CompoundMark("Start Line", Arrays.asList(start1, start2), 13);
+
+
+        return Arrays.asList(startGate, gate1, finishGate);
     }
 
 
@@ -97,8 +117,6 @@ public class CourseBuilderBumper extends AbstractCourseBuilder {
         boundaryMarks.add(bottomLeft);
         boundaryMarks.add(left);
         boundaryMarks.add(topLeft);
-
-//        count += 2;
 
         return boundaryMarks;
     }

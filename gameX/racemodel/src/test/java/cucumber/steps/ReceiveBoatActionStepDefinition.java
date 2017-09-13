@@ -36,7 +36,7 @@ public class ReceiveBoatActionStepDefinition {
     @Given("^a player has connected to the mock$")
     public void a_player_has_connected_to_the_mock() throws Throwable {
         int boatId = 1337;
-        server = new Server(5649, 6);
+        server = new Server(5649);
         socket = SocketFactory.getDefault().createSocket("localhost", 5649);
         sender = new Sender(socket, new ControllerMessageFactory());
 

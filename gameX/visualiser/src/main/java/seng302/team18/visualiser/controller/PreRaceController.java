@@ -25,6 +25,7 @@ import seng302.team18.send.Sender;
 import java.io.IOException;
 import java.net.Socket;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 /**
  * Controller for the pre race view
@@ -204,8 +205,8 @@ public class PreRaceController {
     /**
      * Updates the list of boats.
      */
-    public void updateBoatList() {
-        listView.setItems(FXCollections.observableList(race.getStartingList()));
+    public void updateBoatList(List<Boat> boats) {
+        listView.setItems(FXCollections.observableList(boats));
     }
 
 

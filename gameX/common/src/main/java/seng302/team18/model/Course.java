@@ -128,7 +128,7 @@ public class Course {
     }
 
 
-    public Coordinate getCentralCoordinate() {
+    public Coordinate getCenter() {
         GPSCalculator calculator = new GPSCalculator();
         List<Coordinate> coordinates = calculator.findMinMaxPoints(this);
         return calculator.getCentralCoordinate(coordinates);
@@ -296,7 +296,7 @@ public class Course {
 
 
     public synchronized Coordinate getDestination(int legNumber) {
-        return markSequence.get(legNumber).getDestination();
+        return markSequence.get(legNumber).getCoordinate();
     }
 
 

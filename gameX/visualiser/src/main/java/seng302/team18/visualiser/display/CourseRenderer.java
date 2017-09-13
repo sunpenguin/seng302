@@ -1,7 +1,6 @@
 package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 /**
  * A class which renders the given course on the group so it can be displayed to the user.
  */
-public class CourseRenderer {
+public class CourseRenderer implements Renderable {
 
     private final Color MARK_COLOR = Color.GREY;
     private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
@@ -34,7 +33,7 @@ public class CourseRenderer {
     private RaceMode mode;
 
 
-    public CourseRenderer(PixelMapper pixelMapper, Course course, Group group, Pane pane, RaceMode mode) {
+    public CourseRenderer(PixelMapper pixelMapper, Course course, Group group, RaceMode mode) {
         this.course = course;
         this.group = group;
         this.pixelMapper = pixelMapper;
@@ -42,20 +41,26 @@ public class CourseRenderer {
     }
 
 
+    public void refresh() {
+        render();
+    }
+
+
     /**
-     * Called if the course needs to be re-rendered due to the window being resized.
+     * Renders the course.
      */
-    public void renderCourse() {
-        if (mode != RaceMode.CONTROLS_TUTORIAL && mode !=  RaceMode.BUMPER_BOATS) {
+    public void render() {
+        if (mode != RaceMode.CONTROLS_TUTORIAL && mode != RaceMode.BUMPER_BOATS) {
             double MARK_SIZE = 10;
             markSize = MARK_SIZE * pixelMapper.mappingRatio();
             List<CompoundMark> compoundMarks = course.getCompoundMarks();
             // Renders CompoundMarks
             for (int i = 0; i < compoundMarks.size(); i++) {
                 CompoundMark compoundMark = compoundMarks.get(i);
-                if (compoundMark.isGate() && (
+                if (compoundMark != null &&
+                        compoundMark.isGate() && (
                         compoundMark.getId().equals(course.getStartLineId()) ||
-                        compoundMark.getId().equals(course.getFinishLineId()))) { // draw a line between the gate if its a start or finish
+                                compoundMark.getId().equals(course.getFinishLineId()))) { // draw a line between the gate if its a start or finish
                     renderGate(compoundMark);
                 } else {
                     renderCompoundMark(compoundMark);
@@ -66,6 +71,7 @@ public class CourseRenderer {
         renderPickUps();
     }
 
+
     /**
      * Renders all of the course boundaries again due to resizing
      */
@@ -75,7 +81,9 @@ public class CourseRenderer {
         border = new Polyline();
 
         for (Coordinate boundaryMark : course.getCourseLimits()) {
-            renderBoundary(border, boundaryMark);
+            if (boundaryMark != null) {
+                renderBoundary(border, boundaryMark);
+            }
         }
 
         if (course.getCourseLimits().size() > 0 && !group.getChildren().contains(border)) {
@@ -123,6 +131,7 @@ public class CourseRenderer {
 
         return circle;
     }
+
 
     private Circle makeMark(Mark mark) {
         Circle circle = new Circle(markSize, MARK_COLOR);
@@ -200,7 +209,6 @@ public class CourseRenderer {
     }
 
 
-
     /**
      * Gets LINE_WEIGHT, scaling it to the current zoom.
      *
@@ -246,9 +254,6 @@ public class CourseRenderer {
     }
 
 
-
-
-
     /**
      * Creates a pick up if there isn't one and updates it if it exists.
      *
@@ -273,7 +278,7 @@ public class CourseRenderer {
      * Creates a pick up if there isn't one and updates it if it exists.
      *
      * @param pickUp not null.
-     * @param color of the pickup.
+     * @param color  of the pickup.
      */
     private void renderPickUp(PickUp pickUp, Color color) {
         Circle pickUpVisual = pickUps.get(pickUp.getId());
@@ -293,8 +298,6 @@ public class CourseRenderer {
         pickUpVisual.setCenterX(pixelCoordinates.getX());
         pickUpVisual.setCenterY(pixelCoordinates.getY());
     }
-
-
 
 
 }

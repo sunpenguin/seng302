@@ -3,6 +3,9 @@ package seng302.team18.visualiser.display;
 import javafx.animation.AnimationTimer;
 import seng302.team18.visualiser.util.PixelMapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * An AnimationTimer to update the view of the race
@@ -11,29 +14,24 @@ public class RaceLoop extends AnimationTimer {
     private long previousTime = 0;
     private double secondsElapsedSinceLastFpsUpdate = 0d;
     private int framesSinceLastFpsUpdate = 0;
-    private RaceRenderer renderer;
-    private CourseRenderer courseRenderer;
     private FPSReporter fpsReporter;
     private PixelMapper pixelMapper;
-    private VisualHealth healthDisplay;
-    private VisualPowerUp powerUpDisplay;
+    private List<Renderable> renderables = new ArrayList<>();
+
 
     /**
      * Constructor for the RaceLoop class.
      *
-     * @param renderer thing that renders the boats
-     * @param courseRenderer thing that renders the course
+     * @param renderables thing that need to be rendered each frame
      * @param fpsReporter thing that updates fps
+     * @param pixelMapper that maps
      */
-    public RaceLoop(RaceRenderer renderer, CourseRenderer courseRenderer, FPSReporter fpsReporter,
-                    PixelMapper pixelMapper, VisualHealth healthDisplay, VisualPowerUp powerUpDisplay) {
-        this.renderer = renderer;
+    public RaceLoop(List<Renderable> renderables, FPSReporter fpsReporter, PixelMapper pixelMapper) {
+        this.renderables.addAll(renderables);
         this.fpsReporter = fpsReporter;
-        this.courseRenderer = courseRenderer;
         this.pixelMapper = pixelMapper;
-        this.healthDisplay = healthDisplay;
-        this.powerUpDisplay = powerUpDisplay;
     }
+
 
     @Override
     public void handle(long currentTime) {
@@ -47,25 +45,22 @@ public class RaceLoop extends AnimationTimer {
         updateView();
     }
 
+
     /**
      * Call each renderer and update the display of the race.
      */
     private void updateView() {
         pixelMapper.calculateMappingScale();
-        renderer.renderBoats();
-        courseRenderer.renderCourse();
-        renderer.drawTrails();
-        if (null != healthDisplay) {
-            healthDisplay.display();
-        }
-        if (null != powerUpDisplay) {
-            powerUpDisplay.display();
+        for (Renderable renderable : renderables) {
+            renderable.render();
         }
         renderer.renderShark();
     }
 
+
     /**
      * Update the FPS label showing the current frame rate.
+     *
      * @param secondsElapsed The seconds elapsed since the last update.
      */
     private void updateFps(double secondsElapsed) {

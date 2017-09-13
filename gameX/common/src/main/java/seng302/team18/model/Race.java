@@ -7,7 +7,6 @@ import seng302.team18.util.GPSCalculator;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 
@@ -18,7 +17,7 @@ public class Race {
     private final GPSCalculator gps = new GPSCalculator();
     private final RoundingDetector detector = new RoundingDetector();
     private int id;
-    private RaceStatus status;
+    private RaceStatus status = RaceStatus.PRESTART;
     private RaceType raceType;
     private Regatta regatta = new Regatta();
     private Course course;
@@ -35,7 +34,7 @@ public class Race {
     private List<Projectile> newProjectileList = new ArrayList<>();
     private List<Projectile> removedProjectileList = new ArrayList<>();
     private int powerId = 0;
-    private int nextProjectileId = 300;
+//    private Boat spectatorBoat = new Boat("Spectator boat", "Spec boat", 9000, 0);
 
 
     public Race() {
@@ -74,9 +73,9 @@ public class Race {
     /**
      * Randomly places power ups.
      *
-     * @param powerUps number of power ups to place.
+     * @param powerUps  number of power ups to place.
      * @param prototype the base PickUp.
-     * @param duration how long the PickUp will last in milliseconds.
+     * @param duration  how long the PickUp will last in milliseconds.
      */
     public void addPickUps(int powerUps, PickUp prototype, double duration) {
         GPSCalculator calculator = new GPSCalculator();
@@ -93,14 +92,14 @@ public class Race {
     /**
      * Creates a single PickUp.
      *
-     * @param id of the new PickUp.
+     * @param id          of the new PickUp.
      * @param randomPoint location of the new PickUp.
-     * @param prototype the base PickUp.
-     * @param duration how long the PickUp will last in milliseconds.
+     * @param prototype   the base PickUp.
+     * @param duration    how long the PickUp will last in milliseconds.
      * @return the new PickUp.
      */
     private PickUp makePickUp(int id, Coordinate randomPoint, PickUp prototype, double duration) {
-        final double timeout =  System.currentTimeMillis() + duration;
+        final double timeout = System.currentTimeMillis() + duration;
         PickUp pickUp = prototype.clone();
         pickUp.setId(id);
         pickUp.setTimeout(timeout);
@@ -148,47 +147,15 @@ public class Race {
     private void setCourseForBoat(Boat boat) {
         if (course.getMarkSequence().size() > 1) {
             boat.setLegNumber(0);
-            boat.setCoordinate(getStartPosition(boat, boat.getLength() * 3));
+            boat.setCoordinate(positionSetter.getBoatPosition(boat, course, startingList.size()));
             boat.setHeading(gps.getBearing(
                     boat.getCoordinate(),
-                    course.getMarkSequence().get(0).getCompoundMark().getCoordinate()
+                    course.getMarkRounding(0).getCoordinate()
             ));
             boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
             boat.setRoundZone(Boat.RoundZone.ZONE1);
             boat.setStatus(BoatStatus.PRE_START);
         }
-    }
-
-
-    /**
-     * Method to calculate the starting position for a boat
-     * Prevents boats from overlapping
-     *
-     * @param boat       boat to get starting position for
-     * @param distBehind the distance behind the start line to place the boat (m)
-     * @return position for boat to start at
-     */
-    public Coordinate getStartPosition(Boat boat, double distBehind) {
-        MarkRounding startRounding = course.getMarkSequence().get(0);
-        Coordinate midPoint = startRounding.getCompoundMark().getCoordinate();
-        Coordinate startMark1 = startRounding.getCompoundMark().getMarks().get(0).getCoordinate();
-        Coordinate startMark2 = startRounding.getCompoundMark().getMarks().get(1).getCoordinate();
-
-        double bearing = gps.getBearing(startMark1, startMark2);
-
-        double diff = (startRounding.getRoundingDirection().equals(MarkRounding.Direction.PS)) ? 90 : -90;
-        double behind = (bearing + diff + 360) % 360;
-
-        double offset = startingList.size();
-
-        if ((offset % 2) == 0) {
-            offset /= 2;
-        } else {
-            offset = -Math.floor(offset / 2);
-        }
-
-        Coordinate behindMidPoint = gps.toCoordinate(midPoint, behind, distBehind);
-        return gps.toCoordinate(behindMidPoint, bearing, (boat.getLength() * offset + 10));
     }
 
 
@@ -203,7 +170,7 @@ public class Race {
     /**
      * Removes a participant from the race
      *
-     * @param boatID id for the participant to be removed
+     * @param boatID id of the participant to be removed
      */
     public void removeParticipant(int boatID) {
         for (Boat boat : startingList) {
@@ -218,7 +185,8 @@ public class Race {
     /**
      * Set the status for boat.
      *
-     * @param id Source ID for the boat to have its status changed.
+     * @param id     the id of the target boat
+     * @param status the status of the boat
      */
     public void setBoatStatus(Integer id, BoatStatus status) {
         for (Boat boat : startingList) {
@@ -230,9 +198,7 @@ public class Race {
 
 
     /**
-     * Starting list getter.
-     *
-     * @return List holding all entered boats.
+     * @return all entered boats.
      */
     public List<Boat> getStartingList() {
         return startingList;
@@ -240,28 +206,18 @@ public class Race {
 
 
     /**
-     * Starting list setter.
+     * Sets the contents of the starting list to be the same as the given list
      *
-     * @param startingList ArrayList holding all entered boats
+     * @param startingList the list of starters to use
      */
     public void setStartingList(List<Boat> startingList) {
         this.startingList.clear();
-        if (participantIds.size() == 0) {
-            this.startingList.addAll(startingList);
-        } else {
-            for (Boat boat : startingList) {
-                if (participantIds.contains(boat.getId())) {
-                    this.startingList.add(boat);
-                }
-            }
-        }
+        this.startingList.addAll(startingList);
     }
 
 
     /**
-     * Course getter.
-     *
-     * @return Course object
+     * @return the course for this race
      */
     public Course getCourse() {
         return course;
@@ -269,9 +225,7 @@ public class Race {
 
 
     /**
-     * Course setter.
-     *
-     * @param course Course object
+     * @param course the course to use for this race
      */
     public void setCourse(Course course) {
         this.course = course;
@@ -290,37 +244,31 @@ public class Race {
     }
 
 
+    /**
+     * Checks if this race has finished
+     *
+     * @return true if this race has finished, else false
+     */
     public boolean isFinished() {
-        Collection<BoatStatus> finishedStatuses = Arrays.asList(BoatStatus.DNF, BoatStatus.DNS, BoatStatus.FINISHED, BoatStatus.DSQ);
-        int numFinished = (int) startingList.stream()
-                .filter(boat -> finishedStatuses.contains(boat.getStatus()))
-                .count();
-        return startingList.size() == numFinished && startingList.size() != 0;
+        return status.equals(RaceStatus.FINISHED);
     }
 
 
+    /**
+     * @return the start time of this race
+     */
     public ZonedDateTime getStartTime() {
         return startTime;
     }
 
 
+    /**
+     * Sets the starting time of this race
+     *
+     * @param startTime the time at which to start the race
+     */
     public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
-    }
-
-
-    /**
-     * Sets participants and removes non participants for current list of boats.
-     *
-     * @param participantIds ids of all participants
-     */
-    public void setParticipantIds(List<Integer> participantIds) {
-        this.participantIds = participantIds;
-        List<Boat> newList = startingList.stream()
-                .filter(boat -> participantIds.contains(boat.getId()))
-                .collect(Collectors.toList());
-        startingList.clear();
-        startingList.addAll(newList);
     }
 
 
@@ -354,6 +302,11 @@ public class Race {
     }
 
 
+    /**
+     * Returns all the enqueued MarkRoundingEvents and clears the list
+     *
+     * @return the enqueued MarkRoundingEvents
+     */
     public List<MarkRoundingEvent> popMarkRoundingEvents() {
         List<MarkRoundingEvent> events = markRoundingEvents;
         markRoundingEvents = new ArrayList<>();
@@ -361,6 +314,11 @@ public class Race {
     }
 
 
+    /**
+     * Pops all the YachtEvents in the queue
+     *
+     * @return the popped YachtEvents
+     */
     public List<YachtEvent> popYachtEvents() {
         List<YachtEvent> events = yachtEvents;
         yachtEvents = new ArrayList<>();
@@ -368,6 +326,11 @@ public class Race {
     }
 
 
+    /**
+     * Pops all the PowerUpEvents off the queue
+     *
+     * @return the popped PowerUpEvents
+     */
     public List<PowerUpEvent> popPowerUpEvents() {
         List<PowerUpEvent> events = powerEvents;
         powerEvents = new ArrayList<>();
@@ -387,13 +350,23 @@ public class Race {
     }
 
 
+    /**
+     * Adds an event to the queue
+     *
+     * @param yachtEvent the event to be enqueued
+     */
     public void addYachtEvent(YachtEvent yachtEvent) {
         yachtEvents.add(yachtEvent);
     }
 
 
-    public void addMarkRoundingEvent(MarkRoundingEvent MarkRoundingEvent) {
-        markRoundingEvents.add(MarkRoundingEvent);
+    /**
+     * Adds an event to the queue
+     *
+     * @param markRoundingEvent the event to be enqueued
+     */
+    public void addMarkRoundingEvent(MarkRoundingEvent markRoundingEvent) {
+        markRoundingEvents.add(markRoundingEvent);
     }
 
 
@@ -447,15 +420,10 @@ public class Race {
     }
 
 
-    public void setPickUps(List<PickUp> pickUps) {
-        course.setPickUps(pickUps);
-    }
-
-
     /**
      * Consumes a power up.
      *
-     * @param boat that picked up the pick up
+     * @param boat   that picked up the pick up
      * @param pickUp that was picked up
      */
     public void consumePowerUp(Boat boat, PickUp pickUp) {
@@ -530,5 +498,20 @@ public class Race {
 
     public void setRemovedProjectileList(List<Projectile> removedProjectileList) {
         this.removedProjectileList = removedProjectileList;
+    }
+
+
+    public Coordinate getCenter() {
+        return course.getCenter();
+    }
+
+
+    public void setPositionSetter(StartPositionSetter positionSetter) {
+        this.positionSetter = positionSetter;
+    }
+
+
+    public StartPositionSetter getPositionSetter() {
+        return positionSetter;
     }
 }

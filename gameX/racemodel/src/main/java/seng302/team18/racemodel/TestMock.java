@@ -12,7 +12,6 @@ import seng302.team18.racemodel.connection.ConnectionListener;
 import seng302.team18.racemodel.connection.Server;
 import seng302.team18.racemodel.connection.ServerState;
 import seng302.team18.racemodel.message_generating.*;
-import seng302.team18.racemodel.model.AbstractCourseBuilder;
 
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -32,9 +31,7 @@ public class TestMock implements Observer {
     private MessageGenerator generatorXmlBoats;
     private MessageGenerator generatorXmlRace;
 
-    private AbstractCourseBuilder courseBuilder;
-    private boolean shouldSendXML = false;
-
+    private SimulationLoop simulationLoop = null;
 
     /**
      * The messages to be sent on a schedule during race simulation
@@ -42,32 +39,35 @@ public class TestMock implements Observer {
     private List<ScheduledMessageGenerator> scheduledMessages = new ArrayList<>();
 
 
-    public TestMock(Server server, XmlMessageBuilder messageBuilder, Race race, List<Boat> boats, AbstractCourseBuilder courseBuilder) {
+    public TestMock(Server server, XmlMessageBuilder messageBuilder, Race race, List<Boat> boats) {
         this.server = server;
         this.xmlMessageBuilder = messageBuilder;
         this.race = race;
         this.boats = boats;
-        this.courseBuilder = courseBuilder;
     }
+
 
     /**
      * Called by server, and connection listener
      *
-     * @param o object that has updated
+     * @param o   object that has updated
      * @param arg given by the object o
      */
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) { // Server ?
             ClientConnection client = (ClientConnection) arg;
-            race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
+            Boat b = boats.get(race.getStartingList().size());
+            race.addParticipant(b); // TODO: Justin 10/09 This should not be done here. We should wait until they register.
+            scheduledMessages.add(new BoatMessageGenerator(b));
             client.setId(boats.get(race.getStartingList().size()).getId());
 
             generateXMLs();
-            sendXmlRegatta(client);
+            sendRegattaXml(client);
             sendRaceXml();
             sendBoatsXml();
-        } else if (arg instanceof ServerState) { // Server
+
+        } else if (arg instanceof ServerState) {
             open = !ServerState.CLOSED.equals(arg);
         } else if (arg instanceof Integer) {
             Integer id = (Integer) arg;
@@ -76,6 +76,12 @@ public class TestMock implements Observer {
             generateXMLs();
             sendRaceXml();
             sendBoatsXml();
+
+            if (simulationLoop == null) {
+                simulationLoop = new SimulationLoop();
+                Thread t = new Thread(simulationLoop);
+                t.start();
+            }
         }
     }
 
@@ -91,13 +97,16 @@ public class TestMock implements Observer {
 
 
     /**
-     * Broadcast the race and boat XML files to all clients.
+     * Broadcast the race xml to all clients.
      */
     private void sendRaceXml() {
         server.broadcast(generatorXmlRace.getMessage());
     }
 
 
+    /**
+     * Broadcast the boats xml to all clients.
+     */
     private void sendBoatsXml() {
         server.broadcast(generatorXmlBoats.getMessage());
     }
@@ -108,75 +117,110 @@ public class TestMock implements Observer {
      *
      * @param newPlayer ClientConnection used to send message through.
      */
-    private void sendXmlRegatta(ClientConnection newPlayer) {
+    private void sendRegattaXml(ClientConnection newPlayer) {
         newPlayer.sendMessage(generatorXmlRegatta.getMessage());
     }
 
 
     /**
-     * Simulate the race while sending the scheduled messages
+     * Run the race.
+     * Updates the position of boats
      *
-     * @param startWaitTime    Number of seconds between the preparation phase and the start time
-     * @param warningWaitTime  Number of seconds between the time the method is executed and warning phase
-     * @param prepWaitTime     Number of seconds between the warning phase and the preparation phase
-     * @param cutoffDifference Number of seconds before entering the warning phase for not allowing new connections
+     * @param timeCurr The current time (milliseconds)
+     * @param timeLast The time (milliseconds) from the previous loop in runSimulation.
      */
-    public void runSimulation(int startWaitTime, int warningWaitTime, int prepWaitTime, int cutoffDifference) {
-        final int LOOP_FREQUENCY = 60;
+    private void runRace(long timeCurr, long timeLast) {
+        race.update((timeCurr - timeLast));
+    }
 
-        long timeCurr = System.currentTimeMillis();
-        long timeLast;
 
-        scheduledMessages.add(new RaceMessageGenerator(race));
-        scheduledMessages.add(new HeartBeatMessageGenerator());
-
-        // Set race time
-        ZonedDateTime initialTime = ZonedDateTime.now();
-        ZonedDateTime warningTime = initialTime.plusSeconds(warningWaitTime);
-        ZonedDateTime prepTime = warningTime.plusSeconds(prepWaitTime);
-        ZonedDateTime connectionCutOff = warningTime.minusSeconds(cutoffDifference);
-        race.setStartTime(prepTime.plusSeconds(startWaitTime));
-
-        race.setStatus(RaceStatus.PRESTART);
-
-        do {
-            if (shouldSendXML) {
-                generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
-                sendRaceXml();
+    /**
+     * Update the clients by sending any necessary new race info to them.
+     * Sends out updates for positions, mark roundings, etc.
+     *
+     * @param timeCurr The current time (milliseconds)
+     */
+    private void updateClients(long timeCurr) {
+        for (ScheduledMessageGenerator generator : scheduledMessages) {
+            if (generator.isTimeToSend(timeCurr)) {
+                server.broadcast(generator.getMessage());
             }
+        }
 
-            timeLast = timeCurr;
-            timeCurr = System.currentTimeMillis();
+        for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
+            server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
+        }
 
-            if (ZonedDateTime.now().isAfter(connectionCutOff)) {
-                server.stopAcceptingConnections();
-            }
+        for (YachtEvent event : race.popYachtEvents()) {
+            server.broadcast((new YachtEventCodeMessageGenerator(event, race.getId())).getMessage());
+        }
 
-            race.setCurrentTime(ZonedDateTime.now());
+        for (PickUp pickUp : race.getPickUps()) {
+            server.broadcast(new PowerUpMessageGenerator(pickUp).getMessage());
+        }
 
-            if ((race.getStatus() == RaceStatus.PRESTART) && ZonedDateTime.now().isAfter(warningTime)) {
-                race.setStatus(RaceStatus.WARNING);
+        for (PowerUpEvent event : race.popPowerUpEvents()) {
+            server.broadcast((new PowerTakenGenerator(event.getBoatId(), event.getPowerId(), event.getPowerDuration()).getMessage()));
+        }
+    }
 
-            } else if ((race.getStatus() == RaceStatus.WARNING) && ZonedDateTime.now().isAfter(prepTime)) {
-                generateXMLs();
-                sendRaceXml();
-                sendBoatsXml();
-                switchToPrep();
-            } else {
-                switchToStarted();
-            }
 
-            runRace(timeCurr, timeLast);
-            updateClients(timeCurr);
+    /**
+     * Send the final messages and set race status to Finished.
+     */
+    private void sendFinalMessages() {
+        race.setStatus(RaceStatus.FINISHED);
+        ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
+        server.broadcast(raceMessageGenerator.getMessage());
+        for (ScheduledMessageGenerator generator : scheduledMessages) {
+            server.broadcast(generator.getMessage());
+        }
+    }
 
-            // Sleep
-            try {
-                Thread.sleep(1000 / LOOP_FREQUENCY);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-        } while (!race.isFinished() && open);
+    private class SimulationLoop implements Runnable {
+
+        private boolean firstTime = true;
+
+        @Override
+        public void run() {
+            final int LOOP_FREQUENCY = 60;
+
+            long timeCurr = System.currentTimeMillis();
+            long timeLast;
+
+            scheduledMessages.add(new RaceMessageGenerator(race));
+            scheduledMessages.add(new HeartBeatMessageGenerator());
+
+            do {
+                if (race.getStatus().equals(RaceStatus.STARTED)) {
+                    generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
+                    sendRaceXml();
+                }
+
+                timeLast = timeCurr;
+                timeCurr = System.currentTimeMillis();
+
+                race.setCurrentTime(ZonedDateTime.now());
+
+                runRace(timeCurr, timeLast);
+
+                if (firstTime && race.getStatus().equals(RaceStatus.PREPARATORY)) {
+                    generateXMLs();
+                    sendBoatsXml();
+                    sendRaceXml();
+                    firstTime = false;
+                }
+
+                updateClients(timeCurr);
+
+                // Sleep
+                try {
+                    Thread.sleep(1000 / LOOP_FREQUENCY);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } while (!race.isFinished() && open);
 
         // Sends final message
         race.setStatus(RaceStatus.FINISHED);
@@ -279,5 +323,8 @@ public class TestMock implements Observer {
 
     public void setSendRaceXML(boolean send) {
         shouldSendXML = send;
+            sendFinalMessages();
+            server.close();
+        }
     }
 }
