@@ -17,17 +17,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
-import seng302.team18.messageparsing.AC35MessageParserFactory;
-import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.RaceMode;
-import seng302.team18.send.ControllerMessageFactory;
-import seng302.team18.send.Sender;
-import seng302.team18.visualiser.ClientRace;
-import seng302.team18.visualiser.util.ModelLoader;
 
-import javax.net.SocketFactory;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 
@@ -81,7 +73,6 @@ public class GameSelectionController {
     @FXML
     public void initialize() {
         initialiseBoatPicker();
-
         setUpModeSelection();
 
         final double height = Y_POS_BUTTON_BOX - Y_POS_ERROR_TEXT;
@@ -89,16 +80,6 @@ public class GameSelectionController {
         errorLabel.setMinHeight(height);
         errorLabel.setPrefHeight(height);
 
-//        new Thread(() -> {
-//            try {
-//                Thread.sleep(100);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            reDraw();
-//        }).start();
-//
-//        reDraw();
         registerListeners();
     }
 
@@ -187,9 +168,6 @@ public class GameSelectionController {
                 trailConnectionMode
         ));
 
-        // todo add thingy to upper box (transition)
-        // .setOnClicked(null);
-
         setOptionButtons(Arrays.asList(
                 createJoinButton(),
                 createCreateButton()
@@ -206,8 +184,6 @@ public class GameSelectionController {
                 getTrailGameMode(mode),
                 getTrailConnectionMode(isHosting)
         ));
-
-        // todo transition
 
         setOptionButtons(Arrays.asList(
                 createHostEntry(),
@@ -429,101 +405,19 @@ public class GameSelectionController {
         Label label = new Label();
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("playImage");
-        label.setOnMouseClicked(event -> startGame());
+        label.setOnMouseClicked(event ->
+                new GameConnection(
+                        errorLabel.textProperty(),
+                        outerPane,
+                        mode,
+                        boatColours.get(colourIndex)
+                ).startGame(
+                        ipStrProp.get(),
+                        portStrProp.get(),
+                        isHosting
+                )
+        );
         return label;
-
-    }
-
-
-    private void startGame() {
-        errorLabel.setText("");
-
-        // Check ip
-        String hostAddress = getHostAddress();
-        int port = getPort();
-        if (port < 0 || hostAddress == null) return;
-
-        if (isHosting) {
-            try {
-                (new ModelLoader()).startModel(port);
-            } catch (IOException e) {
-                errorLabel.setText("Unable to initiate server!");
-                e.printStackTrace();
-                return;
-            }
-
-            try {
-                Thread.sleep(400);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        openStream(hostAddress, port);
-    }
-
-
-    private String getHostAddress() {
-        if (ipStrProp.get().isEmpty()) {
-            errorLabel.setText(errorLabel.getText() + "\nPlease enter a valid host address!");
-            return null;
-        }
-
-        return ipStrProp.get();
-    }
-
-
-    private int getPort() {
-        int port = -1;
-        try {
-            port = Integer.parseInt(this.portStrProp.get());
-            if (port < 1024 || port > 65535) {
-                port = -1;
-                errorLabel.setText(errorLabel.getText() + "\nPlease enter a port number in the range 1025-65534!");
-            }
-        } catch (NumberFormatException e) {
-            errorLabel.setText(errorLabel.getText() + "\nPlease enter a valid port number!");
-        }
-
-        return port;
-    }
-
-
-    /**
-     * Creates a controller manager object and begins an instance of the program.
-     *
-     * @throws Exception A connection error
-     */
-    @SuppressWarnings("Duplicates")
-    private void startConnection(Receiver receiver, Sender sender) throws Exception {
-        Stage stage = (Stage) outerPane.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
-        Parent root = loader.load();
-        PreRaceController controller = loader.getController();
-        stage.setTitle("High Seas");
-        outerPane.getScene().setRoot(root);
-        stage.show();
-
-        ClientRace race = new ClientRace();
-        race.setMode(mode);
-        controller.setUp(race, receiver, sender);
-        controller.initConnection(boatColours.get(colourIndex));
-    }
-
-
-    /**
-     * Opens a socket and connection on the given host and port number
-     *
-     * @param host The host IP address for the socket
-     * @param port The port number used for the socket
-     */
-    private void openStream(String host, int port) {
-        try {
-            Socket socket = SocketFactory.getDefault().createSocket(host, port);
-            startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
-        } catch (Exception e) {
-            errorLabel.setText("Failed to connect to " + host + ":" + port + "!");
-        }
     }
 
 
@@ -547,7 +441,6 @@ public class GameSelectionController {
     }
 
 
-    @SuppressWarnings("Duplicates")
     private void exitSelectionScreen() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
         Parent root = null; // throws IOException

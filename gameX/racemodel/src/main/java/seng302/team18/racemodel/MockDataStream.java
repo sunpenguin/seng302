@@ -57,6 +57,13 @@ public class MockDataStream {
             serverPort = DEFAULT_PORT;
         }
 
+        Runtime.getRuntime().addShutdownHook(new Thread(MockDataStream::logProcessTermination));
+
         runMock(serverPort);
+    }
+
+
+    private static void logProcessTermination() {
+        System.out.println("High Seas Server process terminated");
     }
 }
