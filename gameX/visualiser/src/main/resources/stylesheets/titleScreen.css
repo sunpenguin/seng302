@@ -1,5 +1,4 @@
 .background {
-    /*-fx-background-color: linear-gradient(#327D91 60%, #004060);*/
     -fx-background-color: #327D91;
     -fx-text-fill: black;
 }
@@ -53,4 +52,10 @@
 .quitImage:hover {
     -fx-label-padding: 2;
     -fx-graphic: url('/images/title_screen/quit_button_alt.png');
+}
+
+.errorText {
+    -fx-font-family: "Munro";
+    -fx-font-size: 20;
+    -fx-text-fill: darkred;
 }

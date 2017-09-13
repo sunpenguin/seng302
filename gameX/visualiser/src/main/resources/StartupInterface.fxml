@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<AnchorPane fx:id="pane" style="-fx-background-color: #327D91;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.TitleScreenController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<AnchorPane fx:id="pane" style="-fx-background-color: #327D91;" xmlns="http://javafx.com/javafx/8.0.60"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="seng302.team18.visualiser.controller.TitleScreenController">
    <children>
       <AnchorPane fx:id="paneInner" maxHeight="600.0" maxWidth="600.0" minHeight="600.0" minWidth="600.0" prefHeight="600.0" prefWidth="600.0" styleClass="background" stylesheets="@stylesheets/titleScreen.css">
          <children>
-            <Text fx:id="errorText" fill="RED" layoutX="-66.0" layoutY="356.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="332.7294921875" x="200.0" y="200.0" />
-            <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #327D91;" styleClass="background2"/>
+             <Label fx:id="errorText" layoutX="50.0" layoutY="471.0" maxHeight="-Infinity" maxWidth="-Infinity"
+                    minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0"
+                    styleClass="errorText" stylesheets="@stylesheets/titleScreen.css" textOverrun="CLIP"
+                    wrapText="true">
+                 <padding>
+                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                 </padding>
+             </Label>
+             <Pane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #327D91;"
+                   styleClass="background2"/>
          </children>
       </AnchorPane>
    </children>

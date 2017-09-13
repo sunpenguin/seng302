@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
@@ -28,7 +27,7 @@ import java.net.Socket;
  */
 public class TitleScreenController {
     @FXML
-    private Text errorText;
+    private Label errorText;
     @FXML
     private AnchorPane pane;
     @FXML
@@ -48,6 +47,9 @@ public class TitleScreenController {
         initialiseQuitButton();
         initialiseTutorialButton();
         loadBoatAnimation();
+
+        errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());
+        errorText.setLayoutY((600 / 2) + 300);
     }
 
 
@@ -215,7 +217,6 @@ public class TitleScreenController {
      *
      * @throws Exception A connection error
      */
-    @SuppressWarnings("Duplicates")
     private void startConnection(Receiver receiver, Sender sender) throws Exception {
         Stage stage = (Stage) paneInner.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
