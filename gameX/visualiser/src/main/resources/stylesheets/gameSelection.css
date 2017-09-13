@@ -3,48 +3,48 @@
 }
 
 .raceImage {
-    -fx-graphic: url('/images/game_selection/RaceWhite.png');
+    -fx-graphic: url('/images/game_selection/race_white.png');
 }
 
 .raceImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/game_selection/RaceOrange.png');
+    -fx-graphic: url('/images/game_selection/race_orange.png');
 }
 
 .arcadeImage {
-    -fx-graphic: url('/images/game_selection/Arcade_Race_White.png');
+    -fx-graphic: url('/images/game_selection/arcade_white.png');
 }
 
 .arcadeImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/game_selection/Arcade_race_Orange.png');
+    -fx-graphic: url('/images/game_selection/arcade_orange.png');
 }
 
 .challengeImage {
-    -fx-graphic: url('/images/game_selection/SpyroWhite.png');
+    -fx-graphic: url('/images/game_selection/challenge_white.png');
 }
 
 .challengeImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/game_selection/SpyroOrange.png');
+    -fx-graphic: url('/images/game_selection/challenge_orange.png');
 }
 
 .bumperBoatsImage {
-    -fx-graphic: url('/images/game_selection/bumperBoatsWhite.png');
+    -fx-graphic: url('/images/game_selection/bumper_white.png');
 }
 
 .bumperBoatsImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/game_selection/bumperBoatsOrange.png');
+    -fx-graphic: url('/images/game_selection/bumper_orange.png');
 }
 
 .spectatorImage {
-    -fx-graphic: url('/images/game_selection/spectator_button.png');
+    -fx-graphic: url('/images/game_selection/spectator_white.png');
 }
 
 .spectatorImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/game_selection/spectator_button_alt.png');
+    -fx-graphic: url('/images/game_selection/spectator_orange.png');
 }
 
 .backButtonImage {
@@ -85,11 +85,15 @@
 
 .addressInput {
     -fx-font-family: "Munro";
-    -fx-font-size: 16;
+    -fx-font-size: 20;
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    -fx-border-width: 5px;
+    -fx-background-color: paleturquoise;
 }
 
 .errorText {
     -fx-font-family: "Munro";
-    -fx-font-size: 16;
-    -fx-text-fill: red;
+    -fx-font-size: 20;
+    -fx-text-fill: darkred;
 }
