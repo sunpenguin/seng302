@@ -486,8 +486,8 @@ public class Race {
         projectiles.add(sharky);
         nextProjectileId += 1;
         newProjectileList.add(sharky);
-        System.out.println("hi");
-        System.out.println(projectiles);
+//        System.out.println("hi");
+//        System.out.println(projectiles);
     }
 
     public List<Projectile> getProjectiles() {
