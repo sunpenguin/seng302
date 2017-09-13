@@ -19,7 +19,7 @@ public class ProjectileLocationMessageTest {
     private byte[] expected;
     private Projectile projectile;
     private MessageGenerator generator;
-
+ 
     @Before
     public void setUp() {
         projectile = new TigerShark(1,(new Coordinate(55,55)), 90);

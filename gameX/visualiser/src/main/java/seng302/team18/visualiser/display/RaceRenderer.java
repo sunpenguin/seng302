@@ -6,9 +6,8 @@ import seng302.team18.model.*;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.util.PixelMapper;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class that takes a Race and a Group and draws the Race on the Group.
@@ -77,8 +76,24 @@ public class RaceRenderer {
         }
     }
 
+    /**
+     * Checks if the projectile represented by each DisplayShark is still in bounds and removes the display shark from
+     * the group if it is not
+     */
+    public void removeSharks(){
+        for (DisplayShark shark : sharksMap.values()){
+            if (!race.getProjectiles().contains(shark.getProjectile())){
+                shark.removeFrom(group);
+                sharksMap.remove(shark.getProjectile().getId());
+            }
+        }
+    }
 
+    /**
+     * Renders the sharks on the group
+     */
     public void renderShark() {
+        removeSharks();
         for (int i = 0; i < race.getProjectiles().size(); i++){
             Projectile projectile = race.getProjectiles().get(i);
             DisplayShark shark = sharksMap.get(projectile.getId());
@@ -98,6 +113,7 @@ public class RaceRenderer {
 
         }
     }
+
 
 
     /**
@@ -139,10 +155,6 @@ public class RaceRenderer {
     }
 
 
-    private void removeProjectile(DisplayShark shark){
-        shark.removeFrom(group);
-        race.getProjectiles().remove(shark);
-    }
 
     /**
      * Makes a given display boat consistent with the boat
