@@ -62,18 +62,14 @@ public class TestMock implements Observer {
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) { // Server ?
             ClientConnection client = (ClientConnection) arg;
-            if (!client.isSpectaing()) { // not in spectating mode
-                race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
-                client.setId(boats.get(race.getStartingList().size()).getId());
-            } else {
-                client.setId(9000);
-            }
+            race.addParticipant(boats.get(race.getStartingList().size())); // Maybe a bug
+            client.setId(boats.get(race.getStartingList().size()).getId());
 
             generateXMLs();
             sendXmlRegatta(client);
             sendRaceXml();
             sendBoatsXml();
-        } else if (arg instanceof ServerState) {
+        } else if (arg instanceof ServerState) { // Server
             open = !ServerState.CLOSED.equals(arg);
         } else if (arg instanceof Integer) {
             Integer id = (Integer) arg;
@@ -82,15 +78,6 @@ public class TestMock implements Observer {
             generateXMLs();
             sendRaceXml();
             sendBoatsXml();
-        } else if (arg instanceof AcceptanceMessage) {
-            AcceptanceMessage message = (AcceptanceMessage) arg;
-            if (message.getRequestType() == RequestType.FAILURE_CLIENT_TYPE) {
-                System.out.println("Remove " + message.getSourceId() + " From the race");
-                race.removeParticipant(message.getSourceId());
-                generateXMLs();
-                sendRaceXml();
-                sendBoatsXml();
-            }
         }
     }
 
@@ -153,7 +140,6 @@ public class TestMock implements Observer {
         race.setStartTime(prepTime.plusSeconds(startWaitTime));
 
         race.setStatus(RaceStatus.PRESTART);
-
 
         do {
             if (shouldSendXML) {

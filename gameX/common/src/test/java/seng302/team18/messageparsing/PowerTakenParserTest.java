@@ -21,7 +21,7 @@ public class PowerTakenParserTest {
     public void setUp() {
         parser = new PowerTakenParser();
         this.message = new byte[] { 1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0 };
-        expected = new PowerTakenMessage(1, 2, 3000);
+        expected = new PowerTakenMessage(1, 2, 3);
     }
 
 

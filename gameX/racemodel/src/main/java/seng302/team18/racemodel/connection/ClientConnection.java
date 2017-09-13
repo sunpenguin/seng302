@@ -13,7 +13,6 @@ public class ClientConnection {
     private OutputStream out;
     private Socket client;
     private Integer id;
-    private boolean isSpectating;
 
 
     public ClientConnection(Socket socket) throws IOException {
@@ -82,13 +81,6 @@ public class ClientConnection {
         }
     }
 
-    public boolean isSpectaing() {
-        return isSpectating == true;
-    }
-
-    public void setSpectating(boolean spectating) {
-        isSpectating = spectating;
-    }
 }
 
 

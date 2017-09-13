@@ -123,6 +123,7 @@ public class RaceController implements Observer {
     private HBox timeBox;
     private Label timeLabel;
     private VisualHealth visualHealth;
+    private VisualPowerUp visualPowerUp;
 
     private BoatActionMessage message = null;
 
@@ -177,6 +178,7 @@ public class RaceController implements Observer {
                     break;
                 case S:
                     message.setConsume();
+                    race.activatePowerUp();
                     break;
                 default:
                     send = false;
@@ -620,6 +622,7 @@ public class RaceController implements Observer {
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
         if (getPlayerBoat() != null) {
             visualHealth = new VisualHealth(raceViewPane, getPlayerBoat());
+            visualPowerUp = new VisualPowerUp(raceViewPane, getPlayerBoat());
         }
 
         setupRaceTimer();
@@ -627,7 +630,8 @@ public class RaceController implements Observer {
 
         new ControlSchemeDisplay(raceViewPane);
 
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper, visualHealth);
+        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper
+                , visualHealth, visualPowerUp);
         raceLoop.start();
 
         registerListeners();
