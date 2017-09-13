@@ -458,13 +458,11 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         this.hasCollided = hasCollided;
     }
 
-    public PowerUp getPowerUp() {
-        return powerUp;
-    }
 
     public boolean isPowerActive() {
         return isPowerActive;
     }
+
 
     public void setPowerActive(boolean powerActive) {
         isPowerActive = powerActive;
