@@ -25,7 +25,6 @@ public class ConnectionListener extends Observable implements Observer {
     private List<Integer> ids;
     private MessageParserFactory factory;
     private ExecutorService executor = Executors.newCachedThreadPool();
-    private Long timeout = Long.MAX_VALUE;
 
     private Race race;
 
@@ -154,16 +153,6 @@ public class ConnectionListener extends Observable implements Observer {
         PlayerControllerReader player = new PlayerControllerReader(sourceID, receiver, interpreter);
         players.add(player);
         executor.submit(player);
-    }
-
-
-    /**
-     * sets timeout
-     *
-     * @param timeout Time at which the ConnectionListener will stop listening for requests (Epoch milli)
-     */
-    public void setTimeout(long timeout) {
-        this.timeout = timeout;
     }
 
 

@@ -4,6 +4,8 @@ import javax.net.ServerSocketFactory;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Streaming server to connect test mock with clients.
@@ -111,8 +113,12 @@ public class Server extends Observable {
                 if (clients.isEmpty() && closeOnEmpty) {
                     close();
                 } else {
-                    setChanged();
-                    notifyObservers(id);
+                    ExecutorService executor = Executors.newSingleThreadExecutor(); // TODO 14 Sept fix this SPE76 DHL25
+                    executor.submit(() -> {
+                        setChanged();
+                        notifyObservers(id);
+                    });
+                    executor.shutdown();
                 }
             }
         }
