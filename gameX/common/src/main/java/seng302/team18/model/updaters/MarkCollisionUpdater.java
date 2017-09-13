@@ -14,6 +14,9 @@ public class MarkCollisionUpdater extends CollisionUpdater {
 
     @Override
     protected List<AbstractBoat> getObstacles(AbstractBoat boat, Race race) {
-        return race.getCourse().getMarks().stream().map(mark -> ((AbstractBoat) mark)).collect(Collectors.toList());
+        return race.getCourse().getMarks()
+                .stream()
+                .map(mark -> ((AbstractBoat) mark))
+                .collect(Collectors.toList());
     }
 }

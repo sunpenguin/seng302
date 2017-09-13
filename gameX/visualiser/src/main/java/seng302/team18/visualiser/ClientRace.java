@@ -25,9 +25,6 @@ public class ClientRace {
     private ZonedDateTime currentTime;
     private Integer playerId;
     private RaceMode mode = RaceMode.RACE;
-    private List<Projectile> projectiles = new ArrayList<>();
-    private GPSCalculator gps = new GPSCalculator();
-    private int nextProjectileId = 300;
 
 
     public ClientRace() {
@@ -39,6 +36,8 @@ public class ClientRace {
         currentTime = ZonedDateTime.now(course.getTimeZone());
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         raceType = RaceType.MATCH;
+        GPSCalculator gps = new GPSCalculator();
+//        spectatorBoat.setCoordinate(gps.getCentralCoordinate(course.getCourseLimits()));
     }
 
 
@@ -133,6 +132,7 @@ public class ClientRace {
     public Course getCourse() {
         return course;
     }
+
 
     public int getId() {
         return id;
@@ -266,12 +266,32 @@ public class ClientRace {
     }
 
 
+    /**
+     * Get the PowerUp associated to the PickUp.
+     *
+     * @param id of the PickUp
+     * @return PowerUp that the PickUp had.
+     */
+    public PowerUp getPowerUp(int id) {
+        return getPickUp(id).getPower();
+    }
+
+
     public Coordinate getDestination(int legNumber) {
         return course.getDestination(legNumber);
     }
 
+
     public int numSequences() {
         return course.getMarkSequence().size();
+    }
+
+
+    public void activatePowerUp() {
+        Boat boat = getBoat(playerId);
+        if (boat.canActivatePower()) {
+            boat.activatePowerUp();
+        }
     }
 
 

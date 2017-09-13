@@ -353,6 +353,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         return previousCoordinate;
     }
 
+
     public enum RoundZone {
         ZONE1,
         ZONE2,
@@ -364,6 +365,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     public RoundZone getRoundZone() {
         return roundZone;
     }
+
 
     public void setRoundZone(RoundZone roundZone) {
         this.roundZone = roundZone;
@@ -381,6 +383,9 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     }
 
 
+    /**
+     * Activates the boat's PowerUp.
+     */
     public void activatePowerUp() {
         if(powerUp != null) {
             this.isPowerActive = true;
@@ -391,11 +396,37 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     }
 
 
+    /**
+     * Checks if a boat is able to use a PowerUp.
+     *
+     * @return true if a boat can use a PowerUp.
+     */
     public boolean canActivatePower() {
         if (null != powerUp && !isPowerActive) {
             return true;
         }
         return false;
+    }
+
+
+    /**
+     * Checks if a PowerUp has expired. If so, deactivate and remove the PowerUp.
+     */
+    public void expirePowerUp() {
+        if (powerUp != null && isPowerActive && ZonedDateTime.now().isAfter(powerDurationEnd)) {
+            isPowerActive = false;
+            powerUp = null;
+        }
+    }
+
+
+    /**
+     * Gets a boat PowerUp. Null otherwise.
+     *
+     * @return the PowerUp the boat has.
+     */
+    public PowerUp getPowerUp() {
+        return powerUp;
     }
 
 
