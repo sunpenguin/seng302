@@ -1,5 +1,8 @@
 package seng302.team18.racemodel.connection;
 
+import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -13,6 +16,7 @@ public class ClientConnection {
     private OutputStream out;
     private Socket client;
     private Integer id;
+    private RequestType requestType;
 
 
     public ClientConnection(Socket socket) throws IOException {
@@ -81,6 +85,20 @@ public class ClientConnection {
         }
     }
 
+
+    public RequestType getRequestType() {
+        return requestType;
+    }
+
+
+    public void setRequestType(RequestType requestType) {
+        this.requestType = requestType;
+    }
+
+
+    public boolean isPlayer() {
+        return requestType.isRaceType();
+    }
 }
 
 

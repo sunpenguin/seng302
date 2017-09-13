@@ -2,23 +2,19 @@ package seng302.team18.racemodel.connection;
 
 import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
-import seng302.team18.message.AC35MessageType;
-import seng302.team18.message.MessageBody;
+import seng302.team18.message.*;
 import seng302.team18.message.RequestMessage;
-import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceMode;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 import seng302.team18.racemodel.interpret.ColourInterpreter;
 import seng302.team18.racemodel.message_generating.AcceptanceMessageGenerator;
 import seng302.team18.racemodel.model.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,22 +24,18 @@ import java.util.concurrent.Executors;
 public class ConnectionListener extends Observable implements Observer {
 
     private List<PlayerControllerReader> players = new ArrayList<>();
-    private Race race;
     private List<Integer> ids;
     private MessageParserFactory factory;
     private ExecutorService executor = Executors.newCachedThreadPool();
-    private boolean firstPlayer = true;
+    private Long timeout = Long.MAX_VALUE;
 
-    private AbstractRaceBuilder raceBuilder;
-    private AbstractCourseBuilder courseBuilder;
-    private AbstractRegattaBuilder regattaBuilder = new RegattaBuilder1();
+    private Race race;
 
     /**
      * Constructs a new ConnectionListener.
      *
-     * @param race           The race
      * @param participantIds List of participant IDs
-     * @param factory        Factory to convert bytes to a RequestMessage.
+     * @param factory Factory to convert bytes to a RequestMessage.
      */
     public ConnectionListener(Race race, List<Integer> participantIds, MessageParserFactory factory) {
         this.race = race;
@@ -56,82 +48,92 @@ public class ConnectionListener extends Observable implements Observer {
      * Called when server notifies of a new connection.
      * Listens for a request packet to view or participate until either one is received or the timeout.
      *
-     * @param o   The observable object
+     * @param o The observable object
      * @param arg ClientConnection, the socket from which the client is connected.
      */
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) {
-            handleClient((ClientConnection) arg);
+            executor.submit(() -> {
+                try {
+                    handleConnection((ClientConnection) arg);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } else if (ServerState.CLOSED.equals(arg)) {
             close();
+        } else if (arg instanceof Integer) {
+            PlayerControllerReader player = getPlayer((Integer) arg);
+            if (player != null) {
+                player.close();
+            }
+            setChanged();
+            notifyObservers(arg);
         }
     }
 
 
     /**
-     * Add a new client.
-     * Recreate the race and course according to the request and the TestMock will send out the updated
+     * If the registration is for a tutorial, update the race accordingly and the TestMock will send out the updated
      * XML files.
      * When the registration is received, send the client their source ID.
      *
      * @param client Client who is connecting.
      */
-    private void handleClient(ClientConnection client) {
-        try {
-            Receiver receiver = new Receiver(client.getSocket(), factory);
-            int sourceID = ids.get(players.size());
-            long initalTime = System.currentTimeMillis();
-            long timeout = initalTime + 5000;
-
-            executor.submit(() -> {
-                MessageBody message = null;
-
-                while (message == null && System.currentTimeMillis() < timeout) {
-                    try {
-                        message = receiver.nextMessage();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                if (message instanceof RequestMessage) {
-                    respond(sourceID, (RequestMessage) message, client, receiver);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void handleConnection(ClientConnection client) throws IOException {
+        final int SPECTATOR_ID = 9000;
+        Receiver receiver = new Receiver(client.getSocket(), factory); // IOException
+        MessageBody message = getMessage(receiver);
+        if (message instanceof RequestMessage) {
+            RequestMessage request = (RequestMessage) message;
+            int id = ids.get(players.size());
+            client.setRequestType(request.getAction());
+            if (request.getAction() == RequestType.VIEWING) { // spectator
+                sendMessage(client, SPECTATOR_ID, request.getAction());
+                setChanged();
+                notifyObservers(client);
+            } else if (!isValidMode(request.getAction())) { // invalid
+                sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
+                client.close(); // IOException
+            } else if (System.currentTimeMillis() < timeout) { // a valid player
+                addPlayer(receiver, id);
+                sendMessage(client, id, request.getAction());
+                setChanged();
+                notifyObservers(client);
+            }
         }
+
     }
 
 
     /**
-     * Constructs a race with the given builders and sets the mode. Notify TestMock to regenerate XMLs.
+     * Returns the next message from the socket. (blocking)
+     * @param receiver to get the message from.
+     * @return the next message.
      */
-    private void constructRace() {
-        race.setCourseForBoats();
-        setChanged();
-        notifyObservers(this);
+    private MessageBody getMessage(Receiver receiver) {
+        MessageBody message = null;
+        while (message == null) {
+            try {
+                message = receiver.nextMessage();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return message;
     }
 
 
     /**
      * Sends a ResponseMessage to the player.
      *
-     * @param player   the socket to send player messages to.
+     * @param player the socket to send player messages to.
      * @param sourceID the assigned id of the player's boat.
      */
     private void sendMessage(ClientConnection player, int sourceID, RequestType requestType) {
         byte[] message = new AcceptanceMessageGenerator(sourceID, requestType).getMessage();
         player.sendMessage(message);
-        if (requestType == RequestType.FAILURE_CLIENT_TYPE) {
-            try {
-                player.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return;
-        }
         player.setId(sourceID);
     }
 
@@ -155,48 +157,20 @@ public class ConnectionListener extends Observable implements Observer {
 
 
     /**
-     * Close the PlayerControllerReader for each player, and shutdown the executor
+     * sets timeout
+     *
+     * @param timeout Time at which the ConnectionListener will stop listening for requests (Epoch milli)
      */
-    private void close() {
-        for (PlayerControllerReader player : players) {
-            player.close();
-        }
-        executor.shutdownNow();
+    public void setTimeout(long timeout) {
+        this.timeout = timeout;
     }
 
 
-    /**
-     * Responds to a request message
-     *
-     * @param id
-     * @param request
-     * @param client
-     * @param receiver
-     */
-    public void respond(int id, RequestMessage request, ClientConnection client, Receiver receiver) {
-        RequestType requestType = request.getAction();
-        final int SPECTATOR_ID = 9000;
-
-        if (!players.isEmpty() && requestType == RequestType.VIEWING) {
-            id = SPECTATOR_ID;
-        } else if (!isValidMode(requestType)) {
-            sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
-            return;
+    private void close() {
+        for (PlayerControllerReader player: players) {
+            player.close();
         }
-
-        if (firstPlayer) {
-            setRaceMode(requestType);
-            race = raceBuilder.buildRace(race, regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
-            firstPlayer = false;
-        }
-        constructRace();
-
-        if (requestType != RequestType.VIEWING) {
-            addPlayer(receiver, id);
-            setChanged();
-            notifyObservers(client);
-        }
-        sendMessage(client, id, requestType);
+        executor.shutdownNow();
     }
 
 
@@ -211,33 +185,12 @@ public class ConnectionListener extends Observable implements Observer {
     }
 
 
-    /**
-     * Sets the race mode to the correct type.
-     *
-     * @param type of the race.
-     */
-    private void setRaceMode(RequestType type) {
-        switch (type) {
-            case CONTROLS_TUTORIAL:
-                raceBuilder = new TutorialRaceBuilder();
-                courseBuilder = new CourseBuilderPractice();
-                break;
-            case ARCADE:
-                raceBuilder = new ArcadeRaceBuilder();
-                courseBuilder = new CourseBuilderRealistic();
-                break;
-            case BUMPER_BOATS:
-                raceBuilder = new BumperBoatsRaceBuilder();
-                courseBuilder = new CourseBuilderBumper();
-                break;
-            case RACING:
-                raceBuilder = new RegularRaceBuilder();
-                courseBuilder = new CourseBuilderRealistic();
-                break;
-            case CHALLENGE_MODE:
-                raceBuilder = new ChallengeRaceBuilder();
-                courseBuilder = new CourseBuilderChallenge();
-                break;
+    private PlayerControllerReader getPlayer(int id) {
+        for (PlayerControllerReader player : players) {
+            if (player.getId() == id) {
+                return player;
+            }
         }
+        return null;
     }
 }

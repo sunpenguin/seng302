@@ -1,19 +1,22 @@
 package seng302.team18.racemodel;
 
 
+import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
 import seng302.team18.racemodel.connection.ClientConnection;
-import seng302.team18.racemodel.connection.ConnectionListener;
 import seng302.team18.racemodel.connection.Server;
 import seng302.team18.racemodel.connection.ServerState;
 import seng302.team18.racemodel.message_generating.*;
+import seng302.team18.racemodel.model.*;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Class to handle a mock race
@@ -31,6 +34,7 @@ public class TestMock implements Observer {
     private MessageGenerator generatorXmlRace;
 
     private SimulationLoop simulationLoop = null;
+    private boolean isFirstPlayer = true;
 
     /**
      * The messages to be sent on a schedule during race simulation
@@ -47,41 +51,79 @@ public class TestMock implements Observer {
 
 
     /**
-     * Called by server, and connection listener
+     * Called by connection listener
      *
      * @param o   object that has updated
      * @param arg given by the object o
      */
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof ClientConnection) { // Server ?
-            ClientConnection client = (ClientConnection) arg;
-            Boat b = boats.get(race.getStartingList().size());
-            race.addParticipant(b); // TODO: Justin 10/09 This should not be done here. We should wait until they register.
-            scheduledMessages.add(new BoatMessageGenerator(b));
-            client.setId(boats.get(race.getStartingList().size()).getId());
-
-            generateXMLs();
-            sendRegattaXml(client);
-            sendRaceXml();
-            sendBoatsXml();
-
+        if (arg instanceof ClientConnection) { // ConnectionListener
+            handleClient((ClientConnection) arg);
         } else if (arg instanceof ServerState) {
             open = !ServerState.CLOSED.equals(arg);
         } else if (arg instanceof Integer) {
             Integer id = (Integer) arg;
             race.setBoatStatus(id, BoatStatus.DNF);
-        } else if (arg instanceof ConnectionListener) { // ConnectionListener
-            generateXMLs();
-            sendRaceXml();
-            sendBoatsXml();
-
-            if (simulationLoop == null) {
-                simulationLoop = new SimulationLoop();
-                Thread t = new Thread(simulationLoop);
-                t.start();
-            }
         }
+    }
+
+
+    private void handleClient(ClientConnection client) {
+        if (isFirstPlayer) {
+            generateRace(client.getRequestType());
+            simulationLoop = new SimulationLoop();
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.submit(simulationLoop);
+            executor.shutdown();
+            isFirstPlayer = false;
+        }
+        if (client.isPlayer()) {
+            Boat boat = boats.get(race.getStartingList().size());
+            race.addParticipant(boat);
+            scheduledMessages.add(new BoatMessageGenerator(boat));
+            client.setId(boats.get(race.getStartingList().size()).getId());
+        }
+
+        generateXMLs();
+        sendRegattaXml(client);
+        sendRaceXml();
+        sendBoatsXml();
+    }
+
+
+    /**
+     * Creates a new race from the given type.
+     * @param type of the request
+     */
+    private void generateRace(RequestType type) {
+        AbstractRaceBuilder raceBuilder;
+        AbstractCourseBuilder courseBuilder;
+        AbstractRegattaBuilder regattaBuilder = new RegattaBuilder1();
+        switch (type) {
+            case CONTROLS_TUTORIAL:
+                raceBuilder = new TutorialRaceBuilder();
+                courseBuilder = new CourseBuilderPractice();
+                break;
+            case ARCADE:
+                raceBuilder = new ArcadeRaceBuilder();
+                courseBuilder = new CourseBuilderRealistic();
+                break;
+            case BUMPER_BOATS:
+                raceBuilder = new BumperBoatsRaceBuilder();
+                courseBuilder = new CourseBuilderBumper();
+                break;
+            case CHALLENGE_MODE:
+                raceBuilder = new ChallengeRaceBuilder();
+                courseBuilder = new CourseBuilderChallenge();
+                break;
+            case RACING: // default mode is normal race
+            default:
+                raceBuilder = new RegularRaceBuilder();
+                courseBuilder = new CourseBuilderRealistic();
+                break;
+        }
+        race = raceBuilder.buildRace(race, regattaBuilder.buildRegatta(), courseBuilder.buildCourse());
     }
 
 

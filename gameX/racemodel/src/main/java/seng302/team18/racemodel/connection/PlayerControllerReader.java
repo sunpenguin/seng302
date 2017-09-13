@@ -43,4 +43,9 @@ public class PlayerControllerReader implements Runnable {
         open = false;
         receiver.close();
     }
+
+
+    public int getId() {
+        return id;
+    }
 }
