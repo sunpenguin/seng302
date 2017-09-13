@@ -19,6 +19,7 @@ public class ProjectileLocationInterpreterTest {
     private MessageInterpreter interpreter;
     private ProjectileLocationMessage message1;
     private ProjectileLocationMessage message2;
+    private ProjectileLocationMessage message3;
     private Projectile projectile1;
     private Projectile projectile2;
 
@@ -33,6 +34,7 @@ public class ProjectileLocationInterpreterTest {
         race.addProjectile(projectile2);
         message1 = new ProjectileLocationMessage(300, 11,10,60,50);
         message2 = new ProjectileLocationMessage(301,10,10,7,50);
+        message3 = new ProjectileLocationMessage(302,60,55, 90, 50);
     }
 
 
@@ -73,5 +75,20 @@ public class ProjectileLocationInterpreterTest {
         Assert.assertEquals(message2.getSpeed(), projectile2.getSpeed(), 0);
         Assert.assertEquals(message2.getHeading(), projectile2.getHeading(), 0);
 
+    }
+
+
+    /**
+     * Test to check message with wrong id
+     */
+    @Test
+    public void wrongIdTest() {
+        Coordinate pro1OldCoord = projectile1.getLocation();
+        Coordinate pro2OldCoord = projectile2.getLocation();
+
+        interpreter.interpret(message3);
+
+        Assert.assertEquals(pro1OldCoord, projectile1.getLocation());
+        Assert.assertEquals(pro2OldCoord, projectile2.getLocation());
     }
 }

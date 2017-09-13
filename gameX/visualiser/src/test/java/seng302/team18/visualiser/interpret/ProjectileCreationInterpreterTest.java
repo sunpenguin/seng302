@@ -6,6 +6,7 @@ import org.junit.Test;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.ProjectileCreationMessage;
+import seng302.team18.message.ProjectileGoneMessage;
 import seng302.team18.visualiser.ClientRace;
 
 /**
@@ -17,6 +18,7 @@ public class ProjectileCreationInterpreterTest {
     private ProjectileCreationMessage message1;
     private ProjectileCreationMessage message2;
     private ProjectileCreationMessage message3;
+    private ProjectileGoneMessage message4;
 
 
     @Before
@@ -27,6 +29,7 @@ public class ProjectileCreationInterpreterTest {
         message1 = new ProjectileCreationMessage(300);
         message2 = new ProjectileCreationMessage(301);
         message3 = new ProjectileCreationMessage(302);
+        message4 = new ProjectileGoneMessage(300);
     }
 
 
@@ -53,6 +56,17 @@ public class ProjectileCreationInterpreterTest {
         Assert.assertEquals(message1.getProjectile_id(), race.getProjectiles().get(0).getId());
         Assert.assertEquals(message2.getProjectile_id(), race.getProjectiles().get(1).getId());
         Assert.assertEquals(message3.getProjectile_id(), race.getProjectiles().get(2).getId());
+    }
+
+
+    /**
+     * Test for wrong type of message given
+     */
+    @Test
+    public void wrongMessageTypeTest() {
+        int startSize = race.getProjectiles().size();
+        interpreter.interpret(message4);
+        Assert.assertEquals(startSize, race.getProjectiles().size());
     }
 
 }
