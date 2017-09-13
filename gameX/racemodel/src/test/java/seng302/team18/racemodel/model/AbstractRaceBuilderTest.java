@@ -2,11 +2,7 @@ package seng302.team18.racemodel.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import seng302.team18.model.Course;
-import seng302.team18.model.Race;
-import seng302.team18.model.RaceType;
-import seng302.team18.model.RaceMode;
-import seng302.team18.model.Regatta;
+import seng302.team18.model.*;
 import seng302.team18.model.updaters.*;
 
 import java.util.ArrayList;
@@ -80,6 +76,12 @@ public class AbstractRaceBuilderTest {
         @Override
         protected RaceMode getRaceMode(){
             return RaceMode.RACE;
+        }
+
+
+        @Override
+        protected StartPositionSetter getPositionSetter() {
+            return new StartLineSetter(20);
         }
 
     }

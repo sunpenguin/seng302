@@ -1,9 +1,9 @@
 package seng302.team18.racemodel.model;
 
-import seng302.team18.model.RaceMode;
-import seng302.team18.model.RaceType;
+import seng302.team18.model.*;
 import seng302.team18.model.updaters.*;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +15,7 @@ import java.util.List;
  * @see seng302.team18.racemodel.model.AbstractRaceBuilder
  */
 public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
+    private StatusUpdater statusUpdater  = null;
 
     @Override
     protected int getId() {
@@ -32,6 +33,15 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new MovementUpdater());
         updaters.add(new BoatCollisionUpdater());
         updaters.add(new BumperBoatHealthUpdater());
+        updaters.add(new BumperCourseShrinker(new Coordinate(5.00150, 4.0005), 200, 34, 0.000005));
+
+        if (statusUpdater == null) {
+//            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 1);
+            statusUpdater = new BumperStatusUpdater(ZonedDateTime.now(), 2, 1, 1);
+            updaters.add(statusUpdater);
+        }
+
+        updaters.add(statusUpdater);
 
         return updaters;
     }
@@ -39,5 +49,11 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
     @Override
     protected RaceMode getRaceMode() {
         return RaceMode.BUMPER_BOATS;
+    }
+
+
+    @Override
+    protected StartPositionSetter getPositionSetter() {
+        return new CircularPositionSetter(100);
     }
 }

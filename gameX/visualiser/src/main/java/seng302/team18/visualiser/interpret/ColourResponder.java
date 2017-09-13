@@ -32,8 +32,7 @@ public class ColourResponder extends MessageInterpreter {
             if (!acceptanceMessage.getRequestType().isError()) {
                 try {
                     sender.send(new ColourMessage(color, acceptanceMessage.getSourceId()));
-                } catch (IOException e) {
-                }
+                } catch (IOException e) {}
             }
         }
     }

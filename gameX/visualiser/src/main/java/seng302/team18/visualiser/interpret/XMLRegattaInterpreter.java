@@ -7,8 +7,6 @@ import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 import seng302.team18.visualiser.ClientRace;
 
-import java.time.ZoneId;
-
 /**
  * A MessageInterpreter that takes a AC35XMLRegattaMessage and updates the central coordinate and timezone of a Race.
  */
@@ -38,13 +36,7 @@ public class XMLRegattaInterpreter extends MessageInterpreter {
         if (message instanceof AC35XMLRegattaMessage) {
             AC35XMLRegattaMessage regattaMessage = (AC35XMLRegattaMessage) message;
             race.getRegatta().setRegattaName(regattaMessage.getRegattaName());
-            String utcOffset = regattaMessage.getUtcOffset();
             Course course = race.getCourse();
-            if (utcOffset.startsWith("+") || utcOffset.startsWith("-")) {
-                course.setTimeZone(ZoneId.of("UTC" + utcOffset));
-            } else {
-                course.setTimeZone(ZoneId.of("UTC+" + utcOffset));
-            }
             course.setCentralCoordinate(new Coordinate(regattaMessage.getCentralLat(), regattaMessage.getCentralLong()));
         }
     }

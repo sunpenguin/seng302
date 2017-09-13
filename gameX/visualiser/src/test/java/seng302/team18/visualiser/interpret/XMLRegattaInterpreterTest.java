@@ -61,11 +61,9 @@ public class XMLRegattaInterpreterTest {
         interpreter.interpret(message);
 
         Course expected = new Course();
-        expected.setTimeZone(ZoneId.of("UTC" + utcOffset));
         Course actual = race.getCourse();
-        Assert.assertEquals(expected.getCentralCoordinate(), actual.getCentralCoordinate());
+        Assert.assertEquals(expected.getCenter(), actual.getCenter());
         Assert.assertEquals(0d, expected.getWindDirection(), 0.01);
-        Assert.assertEquals(expected.getTimeZone(), actual.getTimeZone());
         Assert.assertEquals(expected.getCourseLimits().size(), actual.getCourseLimits().size());
         for (int i = 0; i < expected.getCourseLimits().size(); i++) {
             Assert.assertEquals(expected.getCourseLimits().get(i), actual.getCourseLimits().get(i));

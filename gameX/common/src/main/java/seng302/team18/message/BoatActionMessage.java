@@ -1,6 +1,5 @@
 package seng302.team18.message;
 
-import seng302.team18.model.Boat;
 
 /**
  * MessageBody that contains information about a boats actions.

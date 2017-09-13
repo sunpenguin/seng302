@@ -1,6 +1,7 @@
 package seng302.team18.model.updaters;
 
 import seng302.team18.model.*;
+import seng302.team18.util.GPSCalculator;
 
 /**
  * Class to check ing boats have rounded a mark
@@ -67,9 +68,11 @@ public class MarkRoundingUpdater implements Updater {
         race.addYachtEvent(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OVER_START_LINE_EARLY));
         boat.setStatus(BoatStatus.OCS);
 
-        boat.setCoordinate(race.getStartPosition(boat, boat.getLength() * 6));
+        StartPositionSetter positionSetter = race.getPositionSetter();
+        boat.setCoordinate(positionSetter.getBoatPosition(boat, race.getCourse(), race.getStartingList().size()));
 
         boat.setSpeed(0);
         boat.setSailOut(true);
     }
+
 }

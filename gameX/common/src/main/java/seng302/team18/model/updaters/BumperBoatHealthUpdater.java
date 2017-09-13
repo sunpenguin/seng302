@@ -25,7 +25,7 @@ public class BumperBoatHealthUpdater implements Updater {
         for (Boat boat : race.getStartingList()) {
             if (isOutSide(boat, race)) {
                 boat.loseLife();
-                boat.setCoordinate(race.getStartPosition(boat, 3 * boat.getLength()));
+                boat.setCoordinate(race.getCenter());
                 boat.setSailOut(true);
 
                 if (boat.getLives() < 1) {

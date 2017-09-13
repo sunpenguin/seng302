@@ -3,6 +3,8 @@ package seng302.team18.visualiser.interpret;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.PowerTakenMessage;
+import seng302.team18.model.Boat;
+import seng302.team18.model.PowerUp;
 import seng302.team18.visualiser.ClientRace;
 
 /**
@@ -22,6 +24,15 @@ public class PowerTakenInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof PowerTakenMessage) {
             PowerTakenMessage takenMessage = (PowerTakenMessage) message;
+
+            for (Boat boat : race.getStartingList()) {
+                if (boat.getId() == takenMessage.getBoatId()) {
+                    boat.setPowerUp(race.getPowerUp(takenMessage.getPowerId()));
+                    PowerUp powerUp = boat.getPowerUp();
+                    powerUp.setDuration(takenMessage.getDuration());
+                }
+            }
+
             race.removePickUp(takenMessage.getPowerId());
         }
     }

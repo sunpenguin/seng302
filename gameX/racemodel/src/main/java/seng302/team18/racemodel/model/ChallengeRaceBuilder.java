@@ -3,6 +3,7 @@ package seng302.team18.racemodel.model;
 import seng302.team18.model.*;
 import seng302.team18.model.updaters.*;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,8 @@ import java.util.List;
  * RaceBuilder for the challenge mode.
  */
 public class ChallengeRaceBuilder extends AbstractRaceBuilder {
+    StatusUpdater statusUpdater = null;
+
 
     @Override
     protected int getId() {
@@ -33,6 +36,13 @@ public class ChallengeRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new MarkRoundingUpdater());
         updaters.add(new SpeedUpdater(34, 0.00025, 1));
         updaters.add(new ChallengeCourseShrinker(new Coordinate(38.21748,-106.52344), 34, 0.00000075, 0.025));
+
+        if (statusUpdater == null) {
+            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 5);
+        }
+
+        updaters.add(statusUpdater);
+
         return updaters;
     }
 
@@ -42,5 +52,10 @@ public class ChallengeRaceBuilder extends AbstractRaceBuilder {
             return RaceMode.CHALLENGE_MODE;
         }
 
+
+    @Override
+    protected StartPositionSetter getPositionSetter() {
+        return new StartLineSetter(20);
+    }
 
 }
