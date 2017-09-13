@@ -1,13 +1,12 @@
 package seng302.team18.visualiser.controller;
 
+import com.google.common.collect.Lists;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -38,6 +37,7 @@ import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
+import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.RaceMode;
@@ -92,21 +92,15 @@ public class RaceController implements Observer {
     @FXML
     private AnchorPane tabView;
 
-    private SortedList<Boat> sortedList;
-
     private Pane escapeMenuPane;
-    private EscapeMenuController escapeMenuController;
 
     private boolean fpsOn;
     private boolean onImportant;
     private boolean sailIn = false;
-    private boolean send = true;
 
     private ClientRace race;
-    private RaceLoop raceLoop;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
-    private WindDisplay windDisplay;
     private PixelMapper pixelMapper;
     private Map<AnnotationType, Boolean> importantAnnotations;
     private Sender sender;
@@ -119,13 +113,10 @@ public class RaceController implements Observer {
 
     private ControlsTutorial controlsTutorial;
 
-    private RaceClock raceClock;
+    private Clock clock;
     private HBox timeBox;
-    private Label timeLabel;
-    private VisualHealth visualHealth;
-    private VisualPowerUp visualPowerUp;
 
-    private BoatActionMessage message = null;
+    private VBox finishResultsBox = null;
 
 
     @FXML
@@ -150,9 +141,9 @@ public class RaceController implements Observer {
      *
      * @param keyEvent event for a particular key press
      */
-    private void installPlayerKey(KeyEvent keyEvent) {
+    private MessageBody handlePlayerKeyPress(KeyEvent keyEvent) {
         if (race.getMode() != RaceMode.SPECTATION) {
-            message = new BoatActionMessage(race.getPlayerId());
+            BoatActionMessage message = new BoatActionMessage(race.getPlayerId());
             switch (keyEvent.getCode()) {
                 case SPACE:
                     message.setAutoPilot();
@@ -181,9 +172,11 @@ public class RaceController implements Observer {
                     race.activatePowerUp();
                     break;
                 default:
-                    send = false;
+                    return null;
             }
+            return message;
         }
+        return null;
     }
 
 
@@ -192,7 +185,7 @@ public class RaceController implements Observer {
      *
      * @param keyEvent event for a particular key press
      */
-    private void installBasicKey(KeyEvent keyEvent) {
+    private void handleBasicKeyPress(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case Z:
                 if (pixelMapper.getZoomLevel() > 0) {
@@ -207,7 +200,7 @@ public class RaceController implements Observer {
             case X:
                 if (pixelMapper.getZoomLevel() - 1 <= 0) {
                     pixelMapper.setTracking(false);
-                    pixelMapper.setViewPortCenter(race.getCourse().getCentralCoordinate());
+                    pixelMapper.setViewPortCenter(race.getCenter());
                 }
                 pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() - 1);
 
@@ -222,17 +215,16 @@ public class RaceController implements Observer {
             case TAB:
                 toggleTabView();
                 break;
-            default:
-                send = true;
+//            default:
+//                send = true;
         }
     }
 
 
     /**
      * Register key presses to certain methods.
-     *
-     * Allow boat control only to actual racing player (client in spectrator mode can only view the race instead of playing).
-     *
+     * <p>
+     * Allow boat control only to actual racing player (client in spectator mode can only view the race instead of playing).
      */
     private void installKeyHandler() {
         EventHandler<KeyEvent> keyEventHandler =
@@ -240,11 +232,11 @@ public class RaceController implements Observer {
                     if (keyEvent.getCode() != null) {
 //                        BoatActionMessage message = null;
 
-                        installPlayerKey(keyEvent);
+                        MessageBody message = handlePlayerKeyPress(keyEvent);
 
-                        installBasicKey(keyEvent);
+                        handleBasicKeyPress(keyEvent);
 
-                        if (send && message != null) {
+                        if (message != null) {
                             if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
                                 controlsTutorial.setBoat(getPlayerBoat()); //TODO: get sam to change this seb67 17/8
                                 controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
@@ -304,6 +296,7 @@ public class RaceController implements Observer {
 
     }
 
+
     /**
      * Toggles the fps by setting label to be visible / invisible.
      */
@@ -343,28 +336,20 @@ public class RaceController implements Observer {
         });
     }
 
+
     /**
      * Creates a listener so the slider knows when its value has changed and it can update the annotations accordingly
      */
     private void setSliderListener() {
-        slider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
+        slider.valueProperty().addListener((ov, old_val, new_val) -> {
+            if (new_val.doubleValue() == 0d) {
+                setNoneAnnotationLevel();
             }
-        });
-        slider.valueProperty().addListener(new ChangeListener<Number>() {
-            public void changed(ObservableValue<? extends Number> ov,
-                                Number old_val, Number new_val) {
-                if (new_val.doubleValue() == 0d) {
-                    setNoneAnnotationLevel();
-                }
-                if (new_val.doubleValue() == 0.5d) {
-                    setToImportantAnnotationLevel();
-                }
-                if (new_val.doubleValue() == 1d) {
-                    setFullAnnotationLevel();
-                }
+            if (new_val.doubleValue() == 0.5d) {
+                setToImportantAnnotationLevel();
+            }
+            if (new_val.doubleValue() == 1d) {
+                setFullAnnotationLevel();
             }
         });
     }
@@ -384,9 +369,7 @@ public class RaceController implements Observer {
 
 
     /**
-     * Sets the annotation level to be none (no annotations showing)case S:
-                                message.setConsume();
-                                break;
+     * Sets the annotation level to be none (no annotations showing)
      */
     @FXML
     public void setNoneAnnotationLevel() {
@@ -467,9 +450,10 @@ public class RaceController implements Observer {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
-            escapeMenuController = loader.getController();
+            EscapeMenuController escapeMenuController = loader.getController();
             escapeMenuController.setup(group, interpreter, sender);
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
     }
 
 
@@ -506,7 +490,7 @@ public class RaceController implements Observer {
         ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
         observableList.addAll(race.getStartingList());
 
-        sortedList = new SortedList<>(observableList,
+        SortedList<Boat> sortedList = new SortedList<>(observableList,
                 (Boat boat1, Boat boat2) -> {
                     if (boat1.getPlace() < boat2.getPlace()) {
                         return -1;
@@ -585,7 +569,7 @@ public class RaceController implements Observer {
      * Retrieves the wind direction, scales the size of the arrow and then draws it on the Group
      */
     private void startWindDirection() {
-        windDisplay = new WindDisplay(race, arrow, speedLabel);
+        WindDisplay windDisplay = new WindDisplay(race, arrow, speedLabel);
         windDisplay.start();
     }
 
@@ -610,19 +594,21 @@ public class RaceController implements Observer {
         raceViewPane.resize(raceViewPane.getPrefWidth(), raceViewPane.getPrefHeight());
 
         pixelMapper = new PixelMapper(
-                bounds.get(0), bounds.get(1), race.getCourse().getCentralCoordinate(),
+                bounds.get(0), bounds.get(1), race.getCourse().getCenter(),
                 raceViewPane.heightProperty(), raceViewPane.widthProperty()
         );
 
         pixelMapper.setMaxZoom(16d);
         pixelMapper.calculateMappingScale();
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
-        raceRenderer.renderBoats();
+        raceRenderer.render();
         colours = raceRenderer.boatColors();
-        courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, raceViewPane, race.getMode());
-        if (getPlayerBoat() != null) {
-            visualHealth = new VisualHealth(raceViewPane, getPlayerBoat());
-            visualPowerUp = new VisualPowerUp(raceViewPane, getPlayerBoat());
+        courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, race.getMode());
+        raceRenderer.setDrawTrails(RaceMode.BUMPER_BOATS != race.getMode());
+        List<Renderable> renderables = new ArrayList<>(Arrays.asList(raceRenderer, courseRenderer));
+        if (race.getMode().hasLives() && getPlayerBoat() != null) {
+            renderables.add(new VisualHealth(raceViewPane, getPlayerBoat()));
+            VisualPowerUp visualPowerUp = new VisualPowerUp(raceViewPane, getPlayerBoat());
         }
 
         setupRaceTimer();
@@ -630,8 +616,7 @@ public class RaceController implements Observer {
 
         new ControlSchemeDisplay(raceViewPane);
 
-        raceLoop = new RaceLoop(raceRenderer, courseRenderer, new FPSReporter(fpsLabel), pixelMapper
-                , visualHealth, visualPowerUp);
+        RaceLoop raceLoop = new RaceLoop(renderables, new FPSReporter(fpsLabel), pixelMapper);
         raceLoop.start();
 
         registerListeners();
@@ -656,14 +641,14 @@ public class RaceController implements Observer {
      * Set up the container and label for the race clock. Text is displayed in the center of the container.
      */
     private void setupRaceTimer() {
-        timeLabel = new Label();
+        Label timeLabel = new Label();
         timeBox = new HBox(timeLabel);
         timeBox.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/raceview.css").toExternalForm());
         timeBox.getStyleClass().add("timeBox");
         timeLabel.setPrefWidth(80);
         timeBox.setPrefWidth(120);
         timeBox.setAlignment(Pos.CENTER);
-        raceClock = new RaceClock(timeLabel);
+        clock = new StopWatchClock(timeLabel);
         raceViewPane.getChildren().add(timeBox);
     }
 
@@ -672,7 +657,7 @@ public class RaceController implements Observer {
      * Start the race clock by invoking start() on the RaceClock's AnimationTimer.
      */
     private void startRaceTimer() {
-        raceClock.start();
+        clock.start();
     }
 
 
@@ -749,7 +734,7 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
         interpreter.add(AC35MessageType.YACHT_EVENT.getCode(), new YachtEventInterpreter(race));
         interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(raceClock));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(clock));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishRaceInterpreter(this));
         interpreter.add(AC35MessageType.POWER_UP.getCode(), new PowerUpInterpreter(race));
         interpreter.add(AC35MessageType.POWER_TAKEN.getCode(), new PowerTakenInterpreter(race));
@@ -766,12 +751,10 @@ public class RaceController implements Observer {
     public void redrawFeatures() {
         pixelMapper.calculateMappingScale();
         background.renderBackground();
-        courseRenderer.renderCourse();
-        raceRenderer.renderBoats();
-        raceRenderer.reDrawTrails();
+        courseRenderer.render();
+        raceRenderer.render();
+        raceRenderer.refresh();
         redrawTimeLabel();
-//        mode = RaceMode.ARCADE; // CHANGE MODE HERE
-//        openStream("127.0.0.1", 5005);
     }
 
 
@@ -779,20 +762,88 @@ public class RaceController implements Observer {
      * Displays the result of the race in table form
      */
     public void showFinishersList() {
-        List<Boat> boats = race.getStartingList();
+        if (finishResultsBox == null) {
+            String result = "MATCH COMPLETE\n\n";
+
+            List<Boat> boats = race.getStartingList();
+
+            if (race.getMode().equals(RaceMode.BUMPER_BOATS)) {
+                result += bumperFinishInfo(boats);
+            } else if (race.getMode().equals(RaceMode.CHALLENGE_MODE)) {
+                result += challengeFinishInfo(boats);
+            } else {
+                result += genericFinishInfo(boats);
+            }
+
+            result = result.substring(0, result.length() - 1);
+            Label resultLabel = new Label(result);
+            finishResultsBox = new VBox(resultLabel);
+            finishResultsBox.getStylesheets().addAll(RaceController.class.getResource("/stylesheets/style.css").toExternalForm());
+            finishResultsBox.getStyleClass().add("finishTable");
+            raceViewPane.getChildren().add(finishResultsBox);
+            finishResultsBox.setLayoutX(50);
+            finishResultsBox.setLayoutY(200);
+        }
+    }
+
+
+    /**
+     * Construct a string with finish information for a generic race.
+     * Displays Placing, name, status(FINISHED, DSQ, etc) for each boat on a newline.
+     *
+     * @param boats to display info for.
+     * @return constructed string
+     */
+    private String genericFinishInfo(List<Boat> boats) {
         boats.sort(Comparator.comparing(Boat::getPlace));
-        String result = "FINAL PLACINGS\n\n";
+        String result = "";
+
         for (Boat b : boats) {
             result += b.getPlace() + ": " + b.getShortName() + " " + b.getStatus().name() + "\n";
         }
-        result = result.substring(0, result.length() - 1);
-        Label resultLabel = new Label(result);
-        VBox resultBox = new VBox(resultLabel);
-        resultBox.getStylesheets().addAll(RaceController.class.getResource("/stylesheets/style.css").toExternalForm());
-        resultBox.getStyleClass().add("finishTable");
-        raceViewPane.getChildren().add(resultBox);
-        resultBox.setLayoutX(50);
-        resultBox.setLayoutY(200);
+
+        return result;
+    }
+
+
+    /**
+     * Construct a string with finish information for a generic race.
+     * Displays Name, status(WINNER or DEAD) for each boat on a newline.
+     *
+     * @param boats to display info for.
+     * @return constructed string
+     */
+    private String bumperFinishInfo(List<Boat> boats) {
+        boats.sort(Comparator.comparing(Boat::getLives));
+        boats = Lists.reverse(boats);
+        String result = "";
+
+        for (Boat b : boats) {
+            String state = b.getLives() > 0 ? "WINNER" : "DEAD";
+            result += b.getShortName() + " " + state + "\n";
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Construct a string with finish information for a generic race.
+     * Displays Name, leg number for each boat on a newline.
+     *
+     * @param boats to display info for.
+     * @return constructed string
+     */
+    private String challengeFinishInfo(List<Boat> boats) {
+        boats.sort(Comparator.comparing(Boat::getPlace));
+
+        String result = "";
+
+        for (Boat b : boats) {
+            result += b.getShortName() + " " + b.getLegNumber() + " GATES CLEARED\n";
+        }
+
+        return result;
     }
 
 
@@ -821,7 +872,11 @@ public class RaceController implements Observer {
             Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST"));
         } else if (arg instanceof Boat) {
             Platform.runLater(() -> {
-                openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES");
+                if (race.getMode().equals(RaceMode.CHALLENGE_MODE) || race.getMode().equals(RaceMode.BUMPER_BOATS)) {
+                    openEscapeMenu("GAME OVER");
+                } else {
+                    openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES");
+                }
                 sender.close();
             });
         }

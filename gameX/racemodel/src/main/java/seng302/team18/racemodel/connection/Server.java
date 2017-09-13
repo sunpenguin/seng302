@@ -11,15 +11,14 @@ import java.util.*;
 public class Server extends Observable {
     private final List<ClientConnection> clients = new ArrayList<>();
     private final ServerConnectionListener listener = new ServerConnectionListener();
-    private final int maxClients;
+    private final int maxClients = 20;
 
     private ServerSocket serverSocket;
     private final int port;
     private boolean closeOnEmpty;
 
-    public Server(int port, int maxClients) {
+    public Server(int port) {
         this.port = port;
-        this.maxClients = maxClients;
 
         try {
             serverSocket = ServerSocketFactory.getDefault().createServerSocket(port);

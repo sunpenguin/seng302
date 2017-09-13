@@ -62,7 +62,7 @@ public class XMLRegattaInterpreterTest {
 
         Course expected = new Course();
         Course actual = race.getCourse();
-        Assert.assertEquals(expected.getCentralCoordinate(), actual.getCentralCoordinate());
+        Assert.assertEquals(expected.getCenter(), actual.getCenter());
         Assert.assertEquals(0d, expected.getWindDirection(), 0.01);
         Assert.assertEquals(expected.getCourseLimits().size(), actual.getCourseLimits().size());
         for (int i = 0; i < expected.getCourseLimits().size(); i++) {

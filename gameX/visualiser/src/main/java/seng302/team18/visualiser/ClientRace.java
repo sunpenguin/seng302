@@ -287,6 +287,11 @@ public class ClientRace {
     }
 
 
+    public Coordinate getCenter() {
+        return course.getCenter();
+    }
+
+
     public void activatePowerUp() {
         Boat boat = getBoat(playerId);
         if (boat.canActivatePower()) {

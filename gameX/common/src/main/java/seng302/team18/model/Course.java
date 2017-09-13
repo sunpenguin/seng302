@@ -55,7 +55,7 @@ public class Course {
     }
 
 
-    public List<CompoundMark> getCompoundMarks() {
+    public synchronized List<CompoundMark> getCompoundMarks() {
         return compoundMarks;
     }
 
@@ -107,7 +107,7 @@ public class Course {
     }
 
 
-    public List<Coordinate> getCourseLimits() {
+    public synchronized List<Coordinate> getCourseLimits() {
         return new ArrayList<>(courseLimits);
     }
 
@@ -128,7 +128,7 @@ public class Course {
     }
 
 
-    public Coordinate getCentralCoordinate() {
+    public Coordinate getCenter() {
         GPSCalculator calculator = new GPSCalculator();
         List<Coordinate> coordinates = calculator.findMinMaxPoints(this);
         return calculator.getCentralCoordinate(coordinates);
@@ -296,7 +296,7 @@ public class Course {
 
 
     public synchronized Coordinate getDestination(int legNumber) {
-        return markSequence.get(legNumber).getDestination();
+        return markSequence.get(legNumber).getCoordinate();
     }
 
 

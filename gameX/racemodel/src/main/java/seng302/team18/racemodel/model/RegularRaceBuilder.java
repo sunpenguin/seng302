@@ -2,8 +2,11 @@ package seng302.team18.racemodel.model;
 
 import seng302.team18.model.RaceMode;
 import seng302.team18.model.RaceType;
+import seng302.team18.model.StartLineSetter;
+import seng302.team18.model.StartPositionSetter;
 import seng302.team18.model.updaters.*;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +18,7 @@ import java.util.List;
  * @see seng302.team18.racemodel.model.AbstractRaceBuilder
  */
 public class RegularRaceBuilder extends AbstractRaceBuilder {
+    StatusUpdater statusUpdater = null;
 
     @Override
     protected int getId() {
@@ -37,6 +41,12 @@ public class RegularRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());
 
+        if (statusUpdater == null) {
+            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 5);
+        }
+
+        updaters.add(statusUpdater);
+
         return updaters;
     }
 
@@ -44,5 +54,11 @@ public class RegularRaceBuilder extends AbstractRaceBuilder {
     @Override
     protected RaceMode getRaceMode() {
         return RaceMode.RACE;
+    }
+
+
+    @Override
+    protected StartPositionSetter getPositionSetter() {
+        return new StartLineSetter(20);
     }
 }

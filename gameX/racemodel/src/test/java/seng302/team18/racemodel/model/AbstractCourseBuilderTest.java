@@ -93,7 +93,7 @@ public class AbstractCourseBuilderTest {
         List<Coordinate> extremes = gpsCalculator.findMinMaxPoints(course);
         Coordinate centralCoordinate = gpsCalculator.midPoint(extremes.get(0), extremes.get(1));
 
-        assertEquals("centre coordinate is not as expected", centralCoordinate, course.getCentralCoordinate());
+        assertEquals("centre coordinate is not as expected", centralCoordinate, course.getCenter());
     }
 
 

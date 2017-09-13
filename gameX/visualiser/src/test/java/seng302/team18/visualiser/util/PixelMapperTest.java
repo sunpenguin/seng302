@@ -41,7 +41,7 @@ public class PixelMapperTest {
         GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(course);
         PixelMapper mapper = new PixelMapper(
-                bounds.get(0), bounds.get(1), course.getCentralCoordinate(),
+                bounds.get(0), bounds.get(1), course.getCenter(),
                 new SimpleDoubleProperty(500), new SimpleDoubleProperty(500)
         );
 
@@ -92,7 +92,7 @@ public class PixelMapperTest {
         GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(course);
         PixelMapper mapper = new PixelMapper(
-                bounds.get(0), bounds.get(1), course.getCentralCoordinate(),
+                bounds.get(0), bounds.get(1), course.getCenter(),
                 new SimpleDoubleProperty(500), new SimpleDoubleProperty(500)
         );
 
@@ -144,7 +144,7 @@ public class PixelMapperTest {
         GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(course);
         PixelMapper mapper = new PixelMapper(
-                bounds.get(0), bounds.get(1), course.getCentralCoordinate(),
+                bounds.get(0), bounds.get(1), course.getCenter(),
                 new SimpleDoubleProperty(500), new SimpleDoubleProperty(500)
         );
 

@@ -70,7 +70,7 @@ public class WindDirectionInterpreterTest {
         double expectedWindDirection = windDirection;
         Assert.assertEquals(expectedWindDirection, actual.getWindDirection(), 0.01);
         Assert.assertEquals(expected.getTimeZone(), actual.getTimeZone());
-        Assert.assertEquals(expected.getCentralCoordinate(), actual.getCentralCoordinate());
+        Assert.assertEquals(expected.getCenter(), actual.getCenter());
         Assert.assertEquals(expected.getCourseLimits().size(), actual.getCourseLimits().size());
         for (int i = 0; i < expected.getCourseLimits().size(); i++) {
             Assert.assertEquals(expected.getCourseLimits().get(i), actual.getCourseLimits().get(i));
