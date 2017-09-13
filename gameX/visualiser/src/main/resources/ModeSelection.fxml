@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
-
-<Pane fx:id="outerPane" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: #327D91;" stylesheets="@stylesheets/titleScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.GameSelectionController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<Pane fx:id="outerPane" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: #327D91;"
+      stylesheets="@stylesheets/titleScreen.css" xmlns="http://javafx.com/javafx/8.0.60"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.GameSelectionController">
    <children>
-      <Pane fx:id="innerPane" maxHeight="600.0" maxWidth="600.0" minHeight="600.0" minWidth="600.0" prefHeight="600.0" prefWidth="600.0" />
+      <VBox fx:id="selectionTrailBox" alignment="TOP_CENTER" layoutX="164.0" layoutY="70.0" maxWidth="-Infinity"
+            minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0"/>
+      <VBox fx:id="buttonBox" layoutX="164.0" layoutY="300.0" maxWidth="-Infinity" minWidth="-Infinity"
+            prefHeight="200.0" prefWidth="300.0" spacing="50.0">
+         <children>
+            <VBox fx:id="optionsBox" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0"
+                  spacing="5.0"/>
+            <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+                   onMouseClicked="#backButtonAction" prefHeight="45.0" prefWidth="300.0" styleClass="backButtonImage"
+                   stylesheets="@stylesheets/gameSelection.css"/>
+         </children>
+      </VBox>
+      <Label fx:id="errorLabel" layoutX="164.0" layoutY="270.0" maxWidth="-Infinity" minWidth="-Infinity"
+             prefWidth="300.0" styleClass="errorText" stylesheets="@stylesheets/gameSelection.css">
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+         </padding>
+      </Label>
    </children>
 </Pane>

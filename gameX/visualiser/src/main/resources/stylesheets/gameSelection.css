@@ -6,26 +6,13 @@
     -fx-graphic: url('/images/game_selection/RaceWhite.png');
 }
 
-.arcadeImage {
-    -fx-graphic: url('/images/game_selection/Arcade_Race_White.png');
-}
-
-.spyroImage {
-    -fx-graphic: url('/images/game_selection/SpyroWhite.png');
-}
-
-.bumperBoatsImage {
-    -fx-graphic: url('/images/game_selection/bumperBoatsWhite.png');
-}
-
 .raceImage:hover {
     -fx-label-padding: 2;
     -fx-graphic: url('/images/game_selection/RaceOrange.png');
 }
 
-.backButtonImage {
-    -fx-label-padding: 2;
-    -fx-graphic: url('/images/back_button.gif');
+.arcadeImage {
+    -fx-graphic: url('/images/game_selection/Arcade_Race_White.png');
 }
 
 .arcadeImage:hover {
@@ -33,19 +20,22 @@
     -fx-graphic: url('/images/game_selection/Arcade_race_Orange.png');
 }
 
-.spyroImage:hover {
+.challengeImage {
+    -fx-graphic: url('/images/game_selection/SpyroWhite.png');
+}
+
+.challengeImage:hover {
     -fx-label-padding: 2;
     -fx-graphic: url('/images/game_selection/SpyroOrange.png');
+}
+
+.bumperBoatsImage {
+    -fx-graphic: url('/images/game_selection/bumperBoatsWhite.png');
 }
 
 .bumperBoatsImage:hover {
     -fx-label-padding: 2;
     -fx-graphic: url('/images/game_selection/bumperBoatsOrange.png');
-}
-
-.backButtonImage:hover {
-    -fx-label-padding: 2;
-    -fx-graphic: url('/images/back_button_alt.gif');
 }
 
 .spectatorImage {
@@ -57,39 +47,40 @@
     -fx-graphic: url('/images/game_selection/spectator_button_alt.png');
 }
 
-.localHost {
-    -fx-graphic: url('/images/game_selection/host_button.gif');
+.backButtonImage {
+    -fx-graphic: url('/images/back_button.gif');
 }
 
-.localHost:hover {
-    -fx-graphic: url('/images/game_selection/host_button_alt.gif');
+.backButtonImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/back_button_alt.gif');
 }
 
-.localHost:selected {
-    -fx-graphic: url('/images/game_selection/host_button_blue.gif');
+.createImage {
+    -fx-graphic: url('/images/game_selection/create_game_white.png');
 }
 
-.remoteHost {
-    -fx-graphic: url('/images/game_selection/connect_button.gif');
+.createImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/game_selection/create_game_orange.png');
 }
 
-.remoteHost:hover {
-    -fx-graphic: url('/images/game_selection/connect_button_orange.gif');
+.joinImage {
+    -fx-graphic: url('/images/game_selection/join_game_white.png');
 }
 
-.remoteHost:selected {
-    -fx-graphic: url('/images/game_selection/connect_button_blue.gif');
+.joinImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/game_selection/join_game_orange.png');
 }
 
-.radio-button > .radio {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0;
-    -fx-background-radius: 0px;
-    -fx-padding: 0.0em; /* 4 8 4 8 */
+.playImage {
+    -fx-graphic: url('/images/play_button.png');
 }
 
-.radio-button:selected > .radio > .dot {
-    -fx-background-color: transparent;
+.playImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/play_button_alt.png');
 }
 
 .addressInput {

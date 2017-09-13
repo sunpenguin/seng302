@@ -1,11 +1,15 @@
 package seng302.team18.visualiser.controller;
 
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
@@ -20,7 +24,6 @@ import javax.net.SocketFactory;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Controller For the game type selection screen
@@ -28,162 +31,48 @@ import java.util.List;
 public class GameSelectionController {
 
     @FXML
+    private VBox buttonBox;
+    @FXML
+    private VBox optionsBox;
+    @FXML
+    private VBox selectionTrailBox;
+    @FXML
     private Pane outerPane;
     @FXML
-    private Pane innerPane;
+    private Label errorLabel;
+
     private Stage stage;
 
-    private Label spectatorLabel;
-    private RadioButton localHost;
-    private RadioButton remoteHost;
-    private ToggleGroup hostOption;
-    private TextField ip;
-    private TextField port;
-    private Label errorText;
+    private StringProperty ipStrProp;
+    private StringProperty portStrProp;
 
     private RaceMode mode;
+    private boolean isHosting;
+    private Color boatColour;
 
-    private int colourIndex = 0;
-    private List<Color> boatColours = Arrays.asList(Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
-            Color.CYAN, Color.BLUE, Color.PURPLE, Color.MAGENTA);
+    private final static double yPosSelectionBox = -250;
+    private final static double yPosErrorText = -100;
+    private final static double yPosButtonBox = 50;
 
 
     @FXML
     public void initialize() {
-        initialiseHostPort();
-        initialiseHostChoice();
-        initialiseRaceButton();
-        initialiseErrorText();
-        initialiseArcadeButton();
-        initialiseSpyroButton();
-        initialiseBumperBoatsButton();
-        initialiseSpectatorButton();
-        initialiseBackButton();
         registerListeners();
-        initialiseLabels();
-    }
+        setUpModeSelection();
 
+        final double height = yPosButtonBox - yPosErrorText;
+        errorLabel.setMaxHeight(height);
+        errorLabel.setMinHeight(height);
+        errorLabel.setPrefHeight(height);
 
-    private void initialiseLabels() {
-        int height = 45;
-        int width = 300;
-
-        Label first = new Label("1. Select connection");
-        Label second = new Label("2. Select game mode");
-
-        first.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        first.getStyleClass().add("adddressInput");
-        first.setMaxHeight(height);
-        first.setPrefHeight(height);
-        first.setMinHeight(height);
-        first.setMaxWidth(width);
-        first.setPrefWidth(width);
-        first.setMinWidth(width);
-        innerPane.getChildren().add(first);
-        first.setLayoutX((600 / 2) - (width / 2));
-        first.setLayoutY((600 / 2) - 300);
-
-        second.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        second.getStyleClass().add("adddressInput");
-        second.setMaxHeight(height);
-        second.setPrefHeight(height);
-        second.setMinHeight(height);
-        second.setMaxWidth(width);
-        second.setPrefWidth(width);
-        second.setMinWidth(width);
-        innerPane.getChildren().add(second);
-        second.setLayoutX((600 / 2) - (width / 2));
-        second.setLayoutY((600 / 2) - 50);
-
-    }
-
-
-    private void initialiseHostPort() {
-        int height = 45;
-        int ipWidth = 200;
-        int gap = 5;
-        int portWidth = 95;
-
-
-        ip = new TextField();
-        ip.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        ip.getStyleClass().add("addressInput");
-        ip.setPromptText("host address");
-        ip.setMaxHeight(height);
-        ip.setPrefHeight(height);
-        ip.setMinHeight(height);
-        ip.setMaxWidth(ipWidth);
-        ip.setPrefWidth(ipWidth);
-        ip.setMinWidth(ipWidth);
-        innerPane.getChildren().add(ip);
-        ip.setLayoutX((600 / 2) - ((ipWidth + gap + portWidth) / 2));
-        ip.setLayoutY((600 / 2) - 250);
-
-        port = new TextField("5005");
-        port.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        port.getStyleClass().add("addressInput");
-        port.setPromptText("port");
-        port.setMaxHeight(height);
-        port.setPrefHeight(height);
-        port.setMinHeight(height);
-        port.setMaxWidth(portWidth);
-        port.setPrefWidth(portWidth);
-        port.setMinWidth(portWidth);
-        innerPane.getChildren().add(port);
-        port.setLayoutX((600 / 2) + ipWidth + gap - ((ipWidth + gap + portWidth) / 2));
-        port.setLayoutY((600 / 2) - 250);
-    }
-
-
-    private void initialiseHostChoice() {
-        localHost = new RadioButton();
-        localHost.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        localHost.getStyleClass().add("localHost");
-        innerPane.getChildren().add(localHost);
-
-        Image localHostImage = new Image("/images/game_selection/RaceWhite.png");
-        localHost.setLayoutX((600 / 2) - (Math.floorDiv((int) localHostImage.getWidth(), 2)) - 13);
-        localHost.setLayoutY((600 / 2) - 150);
-
-        remoteHost = new RadioButton();
-        remoteHost.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        remoteHost.getStyleClass().add("remoteHost");
-        innerPane.getChildren().add(remoteHost);
-
-        Image remoteHostImage = new Image("/images/game_selection/RaceWhite.png");
-        remoteHost.setLayoutX((600 / 2) - (Math.floorDiv((int) remoteHostImage.getWidth(), 2)) - 13);
-        remoteHost.setLayoutY((600 / 2) - 200);
-
-        hostOption = new ToggleGroup();
-        hostOption.getToggles().addAll(localHost, remoteHost);
-    }
-
-
-    private void initialiseErrorText() {
-        int height = 45;
-        int width = 300;
-        errorText = new Label();
-        errorText.setWrapText(true);
-        errorText.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        errorText.getStyleClass().add("errorText");
-        errorText.setMaxHeight(height);
-        errorText.setPrefHeight(height);
-        errorText.setMinHeight(height);
-        errorText.setMaxWidth(width);
-        errorText.setPrefWidth(width);
-        errorText.setMinWidth(width);
-        innerPane.getChildren().add(errorText);
-        errorText.setLayoutX((600 / 2) - (width / 2));
-        errorText.setLayoutY((600 / 2) - 100);
-    }
-
-
-    private boolean isRemote() {
-        return isRemote(hostOption.getSelectedToggle());
-    }
-
-    private boolean isRemote(Toggle toggle) {
-        return toggle == remoteHost;
+        new Thread(() -> {
+            try {
+                Thread.sleep(35);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            reDraw();
+        }).start();
     }
 
 
@@ -191,19 +80,8 @@ public class GameSelectionController {
      * Register any necessary listeners.
      */
     private void registerListeners() {
-        outerPane.widthProperty().addListener((observableValue, oldWidth, newWidth) -> reDraw());
-        outerPane.heightProperty().addListener((observableValue, oldHeight, newHeight) -> reDraw());
-
-        hostOption.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            boolean isRemote = isRemote(newValue);
-            if (!isRemote) {
-                ip.setText("127.0.0.1");
-            }
-            ip.setEditable(isRemote);
-            ip.setVisible(isRemote);
-            port.setVisible(isRemote);
-        });
-        hostOption.selectToggle(remoteHost);
+        outerPane.widthProperty().addListener(((observable, oldValue, newValue) -> reDraw()));
+        outerPane.heightProperty().addListener(((observable, oldValue, newValue) -> reDraw()));
     }
 
 
@@ -211,13 +89,79 @@ public class GameSelectionController {
      * Re draw the the pane which holds elements of the play interface to be in the middle of the window.
      */
     void reDraw() {
-        if (!(innerPane.getWidth() == 0)) {
-            innerPane.setLayoutX((outerPane.getScene().getWidth() / 2) - (innerPane.getWidth() / 2));
-            innerPane.setLayoutY((innerPane.getScene().getHeight() / 2) - (innerPane.getHeight() / 2));
+        // selection trail
+        if (selectionTrailBox.getWidth() != 0) {
+            selectionTrailBox.setLayoutX((outerPane.getScene().getWidth() / 2) - (selectionTrailBox.getWidth() / 2));
+            selectionTrailBox.setLayoutY((outerPane.getScene().getHeight() / 2) + Math.min(selectionTrailBox.getHeight() + yPosErrorText, yPosSelectionBox));
         } else if (stage != null) {
-            innerPane.setLayoutX((stage.getWidth() / 2) - (innerPane.getPrefWidth() / 2));
-            innerPane.setLayoutY((stage.getHeight() / 2) - (innerPane.getPrefHeight() / 2));
+            selectionTrailBox.setLayoutX((stage.getWidth() / 2) - (selectionTrailBox.getPrefWidth() / 2));
+            selectionTrailBox.setLayoutY((stage.getHeight() / 2) + Math.min(selectionTrailBox.getPrefHeight() + yPosErrorText, yPosSelectionBox));
         }
+
+        // button box
+        //noinspection Duplicates
+        if (buttonBox.getWidth() != 0) {
+            buttonBox.setLayoutX((outerPane.getScene().getWidth() / 2) - (buttonBox.getWidth() / 2));
+            buttonBox.setLayoutY((outerPane.getScene().getHeight() / 2) + yPosButtonBox);
+        } else if (stage != null) {
+            buttonBox.setLayoutX((stage.getWidth() / 2) - (buttonBox.getPrefWidth() / 2));
+            buttonBox.setLayoutY((stage.getHeight() / 2) + yPosButtonBox);
+        }
+
+        // error text
+        //noinspection Duplicates
+        if (errorLabel.getWidth() != 0) {
+            errorLabel.setLayoutX((outerPane.getScene().getWidth() / 2) - (errorLabel.getWidth() / 2));
+            errorLabel.setLayoutY((outerPane.getScene().getHeight() / 2) + yPosErrorText);
+        } else if (stage != null) {
+            errorLabel.setLayoutX((stage.getWidth() / 2) - (errorLabel.getPrefWidth() / 2));
+            errorLabel.setLayoutY((stage.getHeight() / 2) + yPosErrorText);
+        }
+    }
+
+
+    private void setUpModeSelection() {
+        optionsBox.getChildren().clear();
+        optionsBox.getChildren().addAll(Arrays.asList(
+                createRaceButton(),
+                createArcadeButton(),
+                createChallengeButton(),
+                createBumperBoatsButton(),
+                createSpectatorButton()
+        ));
+
+        reDraw();
+    }
+
+
+    private void setUpConnectionType(RaceMode mode) {
+        this.mode = mode;
+
+        // todo add thingy to upper box (transition)
+        // .setOnClicked(null);
+
+        optionsBox.getChildren().clear();
+        optionsBox.getChildren().addAll(Arrays.asList(
+                createJoinButton(),
+                createCreateButton()
+        ));
+
+        reDraw();
+    }
+
+
+    private void setUpConnectionOptions(boolean isHosting) {
+        this.isHosting = isHosting;
+
+        // todo transition
+
+        optionsBox.getChildren().clear();
+        optionsBox.getChildren().addAll(Arrays.asList(
+                createHostEntry(),
+                createPlayButton()
+        ));
+
+        reDraw();
     }
 
 
@@ -225,16 +169,12 @@ public class GameSelectionController {
      * Set up the button for starting a race.
      * Image used will changed when hovered over as defined in the preRaceStyle css.
      */
-    private void initialiseRaceButton() {
-        Label raceLabel = new Label();
-        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        raceLabel.getStyleClass().add("raceImage");
-        innerPane.getChildren().add(raceLabel);
-
-        Image raceButtonImage = new Image("/images/game_selection/RaceWhite.png");
-        raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
-        raceLabel.setLayoutY((600 / 2));
-        raceLabel.setOnMouseClicked(event -> startGame(RaceMode.RACE));
+    private Node createRaceButton() {
+        Label label = new Label();
+        label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        label.getStyleClass().add("raceImage");
+        label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.RACE));
+        return label;
     }
 
 
@@ -242,16 +182,12 @@ public class GameSelectionController {
      * Set up the button for starting an arcade race.
      * Image used will changed when hovered over as defined in the preRaceStyle css.
      */
-    private void initialiseArcadeButton() {
-        Label raceLabel = new Label();
-        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        raceLabel.getStyleClass().add("arcadeImage");
-        innerPane.getChildren().add(raceLabel);
-
-        Image raceButtonImage = new Image("/images/game_selection/Arcade_Race_White.png");
-        raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
-        raceLabel.setLayoutY((600 / 2) + 50);
-        raceLabel.setOnMouseClicked(event -> startGame(RaceMode.ARCADE));
+    private Node createArcadeButton() {
+        Label label = new Label();
+        label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        label.getStyleClass().add("arcadeImage");
+        label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.ARCADE));
+        return label;
     }
 
 
@@ -259,16 +195,12 @@ public class GameSelectionController {
      * Set up the button for starting a challenge mode game.
      * Image used will changed when hovered over as defined in the preRaceStyle css.
      */
-    private void initialiseSpyroButton() {
-        Label raceLabel = new Label();
-        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        raceLabel.getStyleClass().add("spyroImage");
-        innerPane.getChildren().add(raceLabel);
-
-        Image raceButtonImage = new Image("/images/game_selection/SpyroWhite.png");
-        raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
-        raceLabel.setLayoutY((600 / 2) + 100);
-        raceLabel.setOnMouseClicked(event -> startGame(RaceMode.CHALLENGE_MODE));
+    private Node createChallengeButton() {
+        Label label = new Label();
+        label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        label.getStyleClass().add("challengeImage");
+        label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.CHALLENGE_MODE));
+        return label;
     }
 
 
@@ -276,16 +208,12 @@ public class GameSelectionController {
      * Set up the button for starting a bumper boats game.
      * Image used will changed when hovered over as defined in the preRaceStyle css.
      */
-    private void initialiseBumperBoatsButton() {
-        Label raceLabel = new Label();
-        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        raceLabel.getStyleClass().add("bumperBoatsImage");
-        innerPane.getChildren().add(raceLabel);
-
-        Image raceButtonImage = new Image("/images/game_selection/bumperBoatsWhite.png");
-        raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
-        raceLabel.setLayoutY((600 / 2) + 150);
-        raceLabel.setOnMouseClicked(event -> startGame(RaceMode.BUMPER_BOATS));
+    private Node createBumperBoatsButton() {
+        Label label = new Label();
+        label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        label.getStyleClass().add("bumperBoatsImage");
+        label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.BUMPER_BOATS));
+        return label;
     }
 
 
@@ -293,33 +221,160 @@ public class GameSelectionController {
      * Sets up the button for spectating an existing game,
      * Image used will changed when hovered over as defined in the playInterface css.
      */
-    private void initialiseSpectatorButton() {
-        spectatorLabel = new Label();
-        spectatorLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        spectatorLabel.getStyleClass().add("spectatorImage");
-        innerPane.getChildren().add(spectatorLabel);
-
-        Image spectatorImage = new Image("/images/game_selection/spectator_button.png");
-        spectatorLabel.setLayoutX((innerPane.getPrefWidth() / 2) - (Math.floorDiv((int) spectatorImage.getWidth(), 2)));
-        spectatorLabel.setLayoutY((innerPane.getPrefHeight() / 2) + 200);
-        spectatorLabel.setOnMouseClicked(event -> startGame(RaceMode.SPECTATION));
+    private Node createSpectatorButton() {
+        Label label = new Label();
+        label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        label.getStyleClass().add("spectatorImage");
+        label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.SPECTATION));
+        return label;
     }
 
 
     /**
-     * Set up the button for getting back to the title screen.
-     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     * Sets up the button for spectating an existing game,
+     * Image used will changed when hovered over as defined in the playInterface css.
      */
-    private void initialiseBackButton() {
-        Label raceLabel = new Label();
-        raceLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
-        raceLabel.getStyleClass().add("backButtonImage");
-        innerPane.getChildren().add(raceLabel);
+    private Node createCreateButton() {
+        Label label = new Label();
+        label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        label.getStyleClass().add("createImage");
+        label.setOnMouseClicked(event -> setUpConnectionOptions(true));
+        return label;
+    }
 
-        Image raceButtonImage = new Image("/images/back_button.gif");
-        raceLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) raceButtonImage.getWidth(), 2)));
-        raceLabel.setLayoutY((600 / 2) + 275);
-        raceLabel.setOnMouseClicked(event -> backButtonAction());
+
+    /**
+     * Sets up the button for spectating an existing game,
+     * Image used will changed when hovered over as defined in the playInterface css.
+     */
+    private Node createJoinButton() {
+        Label label = new Label();
+        label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        label.getStyleClass().add("joinImage");
+        label.setOnMouseClicked(event -> setUpConnectionOptions(false));
+        return label;
+    }
+
+
+    private Node createHostEntry() {
+        Node ipEntry = createIpField();
+        Node portEntry = createPortField();
+        AnchorPane pane = new AnchorPane();
+
+        final double width = 300;
+        final double height = 45;
+        pane.setMinWidth(width);
+        pane.setPrefWidth(width);
+        pane.setMaxWidth(width);
+        pane.setMinHeight(height);
+        pane.setPrefHeight(height);
+        pane.setMaxHeight(height);
+
+        AnchorPane.setBottomAnchor(ipEntry, 0D);
+        AnchorPane.setTopAnchor(ipEntry, 0D);
+        AnchorPane.setLeftAnchor(ipEntry, 0D);
+
+        AnchorPane.setBottomAnchor(portEntry, 0D);
+        AnchorPane.setTopAnchor(portEntry, 0D);
+        AnchorPane.setRightAnchor(portEntry, 0D);
+
+        pane.getChildren().add(ipEntry);
+        pane.getChildren().add(portEntry);
+
+        return pane;
+    }
+
+
+    private Node createIpField() {
+        TextField field = new TextField();
+        field.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        field.getStyleClass().add("addressInput");
+        field.setPromptText("host address");
+
+        final int height = 45;
+        final int width = 200;
+        field.setMaxHeight(height);
+        field.setPrefHeight(height);
+        field.setMinHeight(height);
+        field.setMaxWidth(width);
+        field.setPrefWidth(width);
+        field.setMinWidth(width);
+
+        if (isHosting) {
+            field.setText("127.0.0.1");
+            field.setDisable(true);
+        }
+
+        ipStrProp = field.textProperty();
+
+        return field;
+    }
+
+
+    private Node createPortField() {
+        final TextField field = new TextField("5005");
+        field.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        field.getStyleClass().add("addressInput");
+        field.setPromptText("port");
+
+        final int height = 45;
+        final int width = 95;
+        field.setMaxHeight(height);
+        field.setPrefHeight(height);
+        field.setMinHeight(height);
+        field.setMaxWidth(width);
+        field.setPrefWidth(width);
+        field.setMinWidth(width);
+
+        portStrProp = field.textProperty();
+
+        return field;
+    }
+
+
+    private Node createPlayButton() {
+        Label label = new Label();
+        label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
+        label.getStyleClass().add("playImage");
+        label.setOnMouseClicked(event -> startGame());
+        return label;
+
+    }
+
+
+    private void startGame() {
+        // Check ip
+        if (ipStrProp.get().isEmpty()) {
+            errorLabel.setText("Please enter a valid host address");
+            return;
+        }
+
+        // Check port
+        int port;
+        try {
+            port = Integer.parseInt(this.portStrProp.get());
+        } catch (NumberFormatException e) {
+            errorLabel.setText("Please enter a valid port number");
+            return;
+        }
+
+        if (isHosting) {
+            try {
+                (new ModelLoader()).startModel(port);
+            } catch (IOException e) {
+                errorLabel.setText("Unable to initiate server!");
+                e.printStackTrace();
+                return;
+            }
+
+            try {
+                Thread.sleep(400);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        openStream(ipStrProp.get(), port);
     }
 
 
@@ -330,7 +385,7 @@ public class GameSelectionController {
      */
     @SuppressWarnings("Duplicates")
     private void startConnection(Receiver receiver, Sender sender) throws Exception {
-        Stage stage = (Stage) innerPane.getScene().getWindow();
+        Stage stage = (Stage) outerPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
         Parent root = loader.load();
         PreRaceController controller = loader.getController();
@@ -341,8 +396,9 @@ public class GameSelectionController {
         ClientRace race = new ClientRace();
         race.setMode(mode);
         controller.setUp(race, receiver, sender);
-        controller.initConnection(boatColours.get(colourIndex));
+        controller.initConnection(boatColour);
     }
+
 
     /**
      * Opens a socket and connection on the given host and port number
@@ -355,7 +411,7 @@ public class GameSelectionController {
             Socket socket = SocketFactory.getDefault().createSocket(host, port);
             startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
         } catch (Exception e) {
-            errorText.setText("Failed to connect to " + host + ":" + port);
+            errorLabel.setText("Failed to connect to " + host + ":" + port);
         }
     }
 
@@ -364,8 +420,9 @@ public class GameSelectionController {
      * returns the player to the playInterface
      */
     @SuppressWarnings("Duplicates")
+    @FXML
     private void backButtonAction() {
-        Stage stage = (Stage) innerPane.getScene().getWindow();
+        Stage stage = (Stage) outerPane.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PlayInterface.fxml"));
         Parent root = null;
         try {
@@ -382,45 +439,12 @@ public class GameSelectionController {
     }
 
 
-    /**
-     * Act on user pressing the host new game button.
-     * Starts and arcade game
-     */
-    private void startGame(RaceMode raceMode) {
-        int port;
-        try {
-            port = Integer.parseInt(this.port.getText());
-        } catch (NumberFormatException e) {
-            errorText.setText("Please enter a valid port number");
-            return;
-        }
-
-        mode = raceMode;
-        if (!isRemote()) {
-            try {
-                (new ModelLoader()).startModel(port);
-            } catch (IOException e) {
-                errorText.setText("Unable to initiate server!");
-                e.printStackTrace();
-                return;
-            }
-        }
-
-        try {
-            Thread.sleep(400);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        openStream(ip.getText(), port);
-    }
-
-
     void setStage(Stage stage) {
         this.stage = stage;
     }
 
 
-    void setColourIndex(int colourIndex) {
-        this.colourIndex = colourIndex;
+    void setColour(Color colour) {
+        this.boatColour = colour;
     }
 }

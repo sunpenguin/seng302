@@ -283,7 +283,7 @@ public class PlayInterfaceController {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ModeSelection.fxml"));
         Parent root = loader.load();
         GameSelectionController controller = loader.getController();
-        controller.setColourIndex(colourIndex);
+        controller.setColour(boatColours.get(colourIndex));
         controller.reDraw();
         controller.setStage(stage);
         stage.setTitle("High Seas");
