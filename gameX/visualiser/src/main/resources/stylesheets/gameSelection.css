@@ -71,7 +71,7 @@
 
 .joinImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/game_selection/join_game_white.png');
+    -fx-graphic: url('/images/game_selection/join_game_orange.png');
 }
 
 .playImage {
