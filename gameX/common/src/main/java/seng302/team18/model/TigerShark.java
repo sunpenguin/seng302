@@ -5,7 +5,7 @@ import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.SpeedConverter;
 
 /**
- * Created by csl62 on 7/09/17.
+ * A type of projectile that travels in a straight line when fired
  */
 public class TigerShark extends Projectile{
 

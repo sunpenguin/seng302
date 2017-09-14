@@ -1,7 +1,7 @@
 package seng302.team18.message;
 
 /**
- * Class tpo hold data for a projectile location message
+ * Class to hold data for a projectile location message
  */
 public class ProjectileCreationMessage implements MessageBody {
 

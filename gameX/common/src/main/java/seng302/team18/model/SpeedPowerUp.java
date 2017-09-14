@@ -3,7 +3,7 @@ package seng302.team18.model;
 import seng302.team18.message.PowerType;
 
 /**
- * Created by dhl25 on 29/08/17.
+ * A PowerUP that increases the speed of a player when consumed
  */
 public class SpeedPowerUp extends PowerUp {
 

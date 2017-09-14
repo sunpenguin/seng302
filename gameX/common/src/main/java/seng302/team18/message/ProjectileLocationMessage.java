@@ -3,7 +3,7 @@ package seng302.team18.message;
 import seng302.team18.model.Coordinate;
 
 /**
- * Created by csl62 on 7/09/17.
+ * MessageBody that contains information about a projectiles location.
  */
 public class ProjectileLocationMessage implements MessageBody {
 

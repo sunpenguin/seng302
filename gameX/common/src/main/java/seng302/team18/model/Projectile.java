@@ -1,7 +1,7 @@
 package seng302.team18.model;
 
 /**
- * Created by csl62 on 7/09/17.
+ * A class to represent and hold information for a projectile in the race
  */
 public abstract class Projectile {
 

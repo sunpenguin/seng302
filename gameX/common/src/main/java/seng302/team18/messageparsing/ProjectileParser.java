@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by csl62 on 7/09/17.
+ * Parser for ProjectileLocation Messages
  */
 public class ProjectileParser implements MessageBodyParser{
 

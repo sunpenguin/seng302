@@ -3,7 +3,7 @@ package seng302.team18.model;
 import seng302.team18.message.PowerType;
 
 /**
- * Created by spe76 on 6/09/17.
+ * A PowerUp that can be fired at an opponent to stun them
  */
 public class SharkPowerUp extends PowerUp {
 
