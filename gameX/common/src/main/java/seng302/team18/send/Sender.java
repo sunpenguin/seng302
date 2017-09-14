@@ -50,6 +50,7 @@ public class Sender {
         MessageEncoder composer = factory.getEncoder(body.getType());
         outStream.write(composer.encode(body));
         outStream.flush();
+//        System.out.println("Sender::send type = " + AC35MessageType.from(body.getType()));
     }
 
 
@@ -61,6 +62,7 @@ public class Sender {
         while (isOpen) {
             try {
                 outStream.close();
+                socket.close();
                 isOpen = false;
             } catch (IOException e) {}
         }

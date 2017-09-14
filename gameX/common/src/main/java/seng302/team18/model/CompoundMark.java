@@ -15,7 +15,7 @@ public class CompoundMark implements GeographicLocation {
     public final static int MARK_SIZE = 1;
     private String name;
     private Integer id;
-    private List<Mark> marks;
+    private List<Mark> marks = new ArrayList<>();
     private List<Boat> passed;
 
     public CompoundMark(String name, Collection<Mark> marks, int id) {

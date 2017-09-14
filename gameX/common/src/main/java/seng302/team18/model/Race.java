@@ -494,4 +494,9 @@ public class Race {
     public StartPositionSetter getPositionSetter() {
         return positionSetter;
     }
+
+
+    public boolean hasStarted() {
+        return status == RaceStatus.STARTED || status.isAfter(RaceStatus.STARTED);
+    }
 }

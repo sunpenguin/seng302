@@ -27,16 +27,6 @@ public class Receiver {
     }
 
 
-    public Receiver(String host, int portNumber, MessageParserFactory parserFactory) throws IOException {
-        this.parserFactory = parserFactory;
-        socket = new Socket(host, portNumber);
-        inStream = socket.getInputStream();
-        if (!inStream.markSupported()) {
-            inStream = new BufferedInputStream(inStream);
-        }
-    }
-
-
     /**
      * Reads the next message from the input stream. If it is of a type which the program can read then a parser and
      * message are created. Otherwise the message is ignored and null is returned.

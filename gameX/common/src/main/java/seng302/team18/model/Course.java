@@ -56,7 +56,7 @@ public class Course {
 
 
     public synchronized List<CompoundMark> getCompoundMarks() {
-        return compoundMarks;
+        return new ArrayList<>(compoundMarks);
     }
 
 

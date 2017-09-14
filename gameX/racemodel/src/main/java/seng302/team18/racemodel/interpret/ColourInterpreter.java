@@ -23,9 +23,10 @@ public class ColourInterpreter extends MessageInterpreter {
         if (message instanceof ColourMessage) {
             ColourMessage colourMessage = (ColourMessage) message;
             Boat boat = getBoatById(colourMessage.getSourceID());
-            if (boat != null) {
-                boat.setColour(colourMessage.getColour());
+            while (boat == null) {
+                boat = getBoatById(colourMessage.getSourceID());
             }
+            boat.setColour(colourMessage.getColour());
         }
     }
 
