@@ -27,11 +27,10 @@ public class MockDataStream {
     /**
      * Main setup method for the application.
      */
-    private static void runMock() {
-        final int SERVER_PORT = 5005;
+    private static void runMock(int serverPort) {
 
         Race race = RACE_BUILDER.buildRace(new Race(), REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse());
-        Server server = new Server(SERVER_PORT);
+        Server server = new Server(serverPort);
         ConnectionListener listener = new ConnectionListener(race, PARTICIPANTS_BUILDER.getIdPool(), new AC35MessageParserFactory());
         TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool());
 
@@ -43,6 +42,28 @@ public class MockDataStream {
 
 
     public static void main(String[] args) {
-        runMock();
+        final int DEFAULT_PORT = 5005;
+        int serverPort = DEFAULT_PORT;
+
+        if (args.length == 1) {
+            try {
+                serverPort = Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) {
+                System.err.println("Unable to parse ");
+            }
+        }
+
+        if (serverPort < 1024 || serverPort > 65535) {
+            serverPort = DEFAULT_PORT;
+        }
+
+        Runtime.getRuntime().addShutdownHook(new Thread(MockDataStream::logProcessTermination));
+
+        runMock(serverPort);
+    }
+
+
+    private static void logProcessTermination() {
+        System.out.println("High Seas Server process terminated");
     }
 }

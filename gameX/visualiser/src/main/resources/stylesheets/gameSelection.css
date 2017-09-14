@@ -1,42 +1,54 @@
+@font-face {
+    src: url("/font/Munro.ttf");
+}
+
 .raceImage {
-    -fx-graphic: url('/images/RaceWhite.png');
-}
-
-.arcadeImage {
-    -fx-graphic: url('/images/Arcade_Race_White.png');
-}
-
-.spyroImage {
-    -fx-graphic: url('/images/SpyroWhite.png');
-}
-
-.bumperBoatsImage {
-    -fx-graphic: url('/images/bumperBoatsWhite.png');
+    -fx-graphic: url('/images/game_selection/race_white.png');
 }
 
 .raceImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/RaceOrange.png');
+    -fx-graphic: url('/images/game_selection/race_orange.png');
 }
 
-.backButtonImage {
-    -fx-label-padding: 2;
-    -fx-graphic: url('/images/back_button.gif');
+.arcadeImage {
+    -fx-graphic: url('/images/game_selection/arcade_white.png');
 }
 
 .arcadeImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/Arcade_race_Orange.png');
+    -fx-graphic: url('/images/game_selection/arcade_orange.png');
 }
 
-.spyroImage:hover {
+.challengeImage {
+    -fx-graphic: url('/images/game_selection/challenge_white.png');
+}
+
+.challengeImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/SpyroOrange.png');
+    -fx-graphic: url('/images/game_selection/challenge_orange.png');
+}
+
+.bumperBoatsImage {
+    -fx-graphic: url('/images/game_selection/bumper_white.png');
 }
 
 .bumperBoatsImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/bumperBoatsOrange.png');
+    -fx-graphic: url('/images/game_selection/bumper_orange.png');
+}
+
+.spectatorImage {
+    -fx-graphic: url('/images/game_selection/spectator_white.png');
+}
+
+.spectatorImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/game_selection/spectator_orange.png');
+}
+
+.backButtonImage {
+    -fx-graphic: url('/images/back_button.gif');
 }
 
 .backButtonImage:hover {
@@ -44,3 +56,68 @@
     -fx-graphic: url('/images/back_button_alt.gif');
 }
 
+.createImage {
+    -fx-graphic: url('/images/game_selection/create_game_white.png');
+}
+
+.createImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/game_selection/create_game_orange.png');
+}
+
+.joinImage {
+    -fx-graphic: url('/images/game_selection/join_game_white.png');
+}
+
+.joinImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/game_selection/join_game_orange.png');
+}
+
+.playImage {
+    -fx-graphic: url('/images/play_button.png');
+}
+
+.playImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/play_button_alt.png');
+}
+
+.boatFrame {
+    -fx-border-width: 5;
+    -fx-border-color: black;
+}
+
+.rightImage {
+    -fx-graphic: url('/images/game_selection/arrow_right_white.png');
+
+}
+
+.rightImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/game_selection/arrow_right_orange.png');
+}
+
+.leftImage {
+    -fx-graphic: url('/images/game_selection/arrow_left_white.png');
+}
+
+.leftImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/game_selection/arrow_left_orange.png');
+}
+
+.addressInput {
+    -fx-font-family: "Munro";
+    -fx-font-size: 20;
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    -fx-border-width: 5px;
+    -fx-background-color: paleturquoise;
+}
+
+.errorText {
+    -fx-font-family: "Munro";
+    -fx-font-size: 20;
+    -fx-text-fill: darkred;
+}
