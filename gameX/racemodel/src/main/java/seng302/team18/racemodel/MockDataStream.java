@@ -33,7 +33,6 @@ public class MockDataStream {
         Race race = RACE_BUILDER.buildRace(new Race(), REGATTA_BUILDER.buildRegatta(), COURSE_BUILDER.buildCourse());
         Server server = new Server(SERVER_PORT);
         ConnectionListener listener = new ConnectionListener(race, PARTICIPANTS_BUILDER.getIdPool(), new AC35MessageParserFactory());
-        // TODO make connection listener stop accepting player connections after some point in time
         TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool());
 
         server.setCloseOnEmpty(true);
