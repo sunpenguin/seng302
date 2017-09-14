@@ -4,6 +4,8 @@ import javax.net.ServerSocketFactory;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Streaming server to connect test mock with clients.
@@ -74,20 +76,19 @@ public class Server extends Observable {
      */
     public void close() {
         stopAcceptingConnections();
-        while (!clients.isEmpty()) {
-            for (int i = 0; i < clients.size(); i++) {
-                if (clients.get(i).isClosed()) {
-                    clients.remove(i);
-                }
+        for (ClientConnection client : clients) {
+            try {
+                client.close();
+            } catch (IOException e) {
+//                e.printStackTrace();
             }
+            clients.remove(client);
         }
         try {
-
             serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         setChanged();
         notifyObservers(ServerState.CLOSED);
     }
@@ -106,33 +107,17 @@ public class Server extends Observable {
         for (int i = 0; i < clients.size(); i++) {
             ClientConnection client = clients.get(i);
             Integer id = client.getId();
-            if (!client.sendMessage(message)) {
+            if (!client.sendMessage(message) || client.isClosed()) {
                 clients.remove(i);
                 if (clients.isEmpty() && closeOnEmpty) {
                     close();
                 } else {
-                    setChanged();
-                    notifyObservers(id);
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Closes any clients with the given id.
-     *
-     * @param id of the client.
-     */
-    public void closeConnection(Integer id) {
-        for (ClientConnection client : clients) {
-            if (client.getId().equals(id)) {
-                boolean isOpen = true;
-                while (isOpen) {
-                    try {
-                        client.close();
-                        isOpen = false;
-                    } catch (IOException e) {}
+                    ExecutorService executor = Executors.newSingleThreadExecutor(); // TODO 14 Sept fix this SPE76 DHL25
+                    executor.submit(() -> {
+                        setChanged();
+                        notifyObservers(id);
+                    });
+                    executor.shutdown();
                 }
             }
         }

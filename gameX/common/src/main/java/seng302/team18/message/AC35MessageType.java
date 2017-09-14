@@ -1,5 +1,7 @@
 package seng302.team18.message;
 
+import seng302.team18.model.Projectile;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +32,10 @@ public enum AC35MessageType {
     COLOUR(105),
     NAME(106),
     POWER_UP(112),
-    POWER_TAKEN(113);
+    POWER_TAKEN(113),
+    PROJECTILE_LOCATION(115),
+    PROJECTILE_GONE(116),
+    PROJECTILE_CREATION(117);
 
     private int code;
     private static final Map<Integer, AC35MessageType> CODE_MAP = Collections.unmodifiableMap(initializeMapping());

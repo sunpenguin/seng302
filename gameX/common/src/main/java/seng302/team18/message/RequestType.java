@@ -1,8 +1,6 @@
 package seng302.team18.message;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Enum for representing different requests when new players join a server.
@@ -15,7 +13,6 @@ public enum RequestType {
     ARCADE(4),
     BUMPER_BOATS(5),
     CHALLENGE_MODE(6),
-
     FAILURE_CLIENT_TYPE(18);
 
 
@@ -45,6 +42,17 @@ public enum RequestType {
      */
     public boolean isError() {
         return code >= 16;
+    }
+
+
+    /**
+     * Returns if the current request type is a race type.
+     *
+     * @return if the current request type is a race type.
+     */
+    public boolean isRaceType() {
+        List<RequestType> raceTypes = Arrays.asList(RACING, CONTROLS_TUTORIAL, ARCADE, BUMPER_BOATS, CHALLENGE_MODE);
+        return raceTypes.contains(this);
     }
 
 
