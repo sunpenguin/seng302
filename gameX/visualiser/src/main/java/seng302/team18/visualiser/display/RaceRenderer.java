@@ -62,6 +62,7 @@ public class RaceRenderer implements Renderable {
      */
     public void render() {
         drawBoats();
+        renderShark();
         if (drawTrails) {
             drawTrails();
         }
@@ -84,6 +85,7 @@ public class RaceRenderer implements Renderable {
         }
     }
 
+
     /**
      * Checks if the projectile represented by each DisplayShark is still in bounds and removes the display shark from
      * the group if it is not
@@ -97,11 +99,13 @@ public class RaceRenderer implements Renderable {
         }
     }
 
+
     /**
      * Renders the sharks on the group
      */
     public void renderShark() {
         removeSharks();
+
         for (int i = 0; i < race.getProjectiles().size(); i++){
             Projectile projectile = race.getProjectiles().get(i);
             DisplayShark shark = sharksMap.get(projectile.getId());

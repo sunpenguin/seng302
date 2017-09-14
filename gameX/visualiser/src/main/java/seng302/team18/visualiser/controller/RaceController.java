@@ -601,8 +601,6 @@ public class RaceController implements Observer {
         pixelMapper.setMaxZoom(16d);
         pixelMapper.calculateMappingScale();
         raceRenderer = new RaceRenderer(pixelMapper, race, group);
-        raceRenderer.renderBoats();
-        raceRenderer.renderShark();
         raceRenderer.render();
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, race.getMode());
@@ -760,10 +758,6 @@ public class RaceController implements Observer {
     public void redrawFeatures() {
         pixelMapper.calculateMappingScale();
         background.renderBackground();
-        courseRenderer.renderCourse();
-        raceRenderer.renderBoats();
-        raceRenderer.renderShark();
-        raceRenderer.reDrawTrails();
         courseRenderer.render();
         raceRenderer.render();
         raceRenderer.refresh();

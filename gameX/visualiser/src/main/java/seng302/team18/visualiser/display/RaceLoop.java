@@ -54,7 +54,6 @@ public class RaceLoop extends AnimationTimer {
         for (Renderable renderable : renderables) {
             renderable.render();
         }
-        renderer.renderShark();
     }
 
 

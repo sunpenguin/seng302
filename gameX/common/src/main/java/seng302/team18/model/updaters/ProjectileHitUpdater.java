@@ -2,6 +2,7 @@ package seng302.team18.model.updaters;
 
 import seng302.team18.model.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,16 +20,22 @@ public class ProjectileHitUpdater implements Updater {
 
     private void detectHit(Boat boat, Race race) {
         if (boat.getStatus().equals(BoatStatus.FINISHED)) return;
+
+        List<Projectile> projectilesToRemove = new ArrayList<>();
         for (Iterator<Projectile> it = race.getProjectiles().iterator(); it.hasNext();) {
             Projectile projectile = it.next();
             if (boat.hasCollided(projectile.getBodyMass())) {
-                it.remove();
                 PowerUp newStun = new StunPowerUp();
                 newStun.setDuration(5000);
                 boat.setPowerUp(newStun);
                 boat.activatePowerUp();
+                projectilesToRemove.add(projectile);
             }
         }
+        for (Projectile projectile : projectilesToRemove){
+            race.removeProjectile(projectile.getId());
+        }
+
 
 
     }

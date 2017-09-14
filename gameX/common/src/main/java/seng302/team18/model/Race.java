@@ -7,6 +7,7 @@ import seng302.team18.util.GPSCalculator;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 
@@ -34,6 +35,8 @@ public class Race {
     private List<Projectile> newProjectileList = new ArrayList<>();
     private List<Projectile> removedProjectileList = new ArrayList<>();
     private int powerId = 0;
+    private int nextProjectileId = 0;
+    private StartPositionSetter positionSetter;
 //    private Boat spectatorBoat = new Boat("Spectator boat", "Spec boat", 9000, 0);
 
 
@@ -475,29 +478,6 @@ public class Race {
                 it.remove();
             }
         }
-    }
-
-
-
-
-    public void setProjectiles(List<Projectile> projectiles) {
-        this.projectiles = projectiles;
-    }
-
-    public List<Projectile> getNewProjectileList() {
-        return newProjectileList;
-    }
-
-    public void setNewProjectileList(List<Projectile> newProjectileList) {
-        this.newProjectileList = newProjectileList;
-    }
-
-    public List<Projectile> getRemovedProjectileList() {
-        return removedProjectileList;
-    }
-
-    public void setRemovedProjectileList(List<Projectile> removedProjectileList) {
-        this.removedProjectileList = removedProjectileList;
     }
 
 
