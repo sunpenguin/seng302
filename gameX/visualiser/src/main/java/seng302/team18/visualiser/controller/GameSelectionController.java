@@ -110,12 +110,12 @@ public class GameSelectionController {
         if (buttonBox.getWidth() != 0) {
             buttonBox.setLayoutX((outerPane.getScene().getWidth() / 3) - (buttonBox.getWidth() / 2));
             buttonBox.setLayoutY((outerPane.getScene().getHeight() / 2) + Y_POS_BUTTON_BOX);
-            selectModeView.setLayoutX(buttonBox.getLayoutX());
-            selectModeView.setLayoutY(buttonBox.getLayoutY() - selectModeImage.getHeight() * 2);
+            selectModeView.setLayoutX(buttonBox.getLayoutX() + (buttonBox.getWidth() / 2) - (selectModeImage.getWidth() / 2));
+            selectModeView.setLayoutY(buttonBox.getLayoutY() - selectModeImage.getHeight() * 3);
         } else if (stage != null) {
             buttonBox.setLayoutX((stage.getWidth() / 3) - (buttonBox.getPrefWidth() / 2));
-            selectModeView.setLayoutX(buttonBox.getLayoutX());
-            buttonBox.setLayoutY((stage.getHeight() / 2) + Y_POS_BUTTON_BOX);
+            selectModeView.setLayoutX(buttonBox.getLayoutX() + (buttonBox.getWidth() / 2) - (selectModeImage.getWidth() / 2));
+            selectModeView.setLayoutY(buttonBox.getLayoutY() - selectModeImage.getHeight() * 3);
         }
 
         // error text
@@ -130,11 +130,15 @@ public class GameSelectionController {
 
         if (boatView.getWidth() != 0) {
             boatView.setLayoutX((outerPane.getScene().getWidth() / 2) + buttonBox.getWidth() - (0.75 * BOAT_SIZE));
-            customiseBoatView.setLayoutX((outerPane.getScene().getWidth() / 2) + buttonBox.getWidth() - (0.75 * BOAT_SIZE));
             boatView.setLayoutY((outerPane.getScene().getHeight() / 2) + Y_POS_BUTTON_BOX);
+            customiseBoatView.setLayoutX(boatView.getLayoutX() + (boatView.getWidth() / 2) - (customiseImage.getWidth() / 2));
+            customiseBoatView.setLayoutY(boatView.getLayoutY() - customiseImage.getHeight() * 3);
+
         } else if (stage != null) {
             boatView.setLayoutX((stage.getWidth() / 2) + (300 * 1.75));
             boatView.setLayoutY((stage.getHeight() / 2) + Y_POS_BUTTON_BOX);
+            customiseBoatView.setLayoutX(boatView.getLayoutX() + (boatView.getWidth() / 2) - (boatView.getWidth() / 2));
+            customiseBoatView.setLayoutY(boatView.getLayoutY() - customiseImage.getHeight() * 3);
         }
 
         final double arrowWidth = 55;
