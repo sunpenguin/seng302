@@ -9,6 +9,8 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -33,15 +35,9 @@ public class GameSelectionController {
     @FXML
     private Pane optionsBox;
     @FXML
-    private VBox selectionTrailBox;
-    @FXML
     private Pane outerPane;
     @FXML
     private Label errorLabel;
-    @FXML
-    private ImageView trailConnectionMode;
-    @FXML
-    private ImageView trailGameMode;
     @FXML
     private Pane boatView;
     @FXML
@@ -66,7 +62,12 @@ public class GameSelectionController {
     private final static double Y_POS_BUTTON_BOX = -40;
     private final static double OPTION_BUTTONS_HEIGHT = 50;
     private final static double ARROW_Y_GAP = 5;
-    private final static double BOAT_SIZE = 100;
+    private final static double BOAT_SIZE = 200;
+
+    private ImageView selectModeView;
+    private Image selectModeImage;
+    private ImageView customiseBoatView;
+    private Image customiseImage;
 
     private Polyline boat;
     private int colourIndex = 0;
@@ -76,6 +77,7 @@ public class GameSelectionController {
 
     @FXML
     public void initialize() {
+        initialiseHeaders();
         initialiseBoatPicker();
         setUpModeSelection();
 
@@ -101,41 +103,38 @@ public class GameSelectionController {
      * Reposition the the diplay elements to fit the current screen
      */
     public void reDraw() {
-        // selection trail
-        if (selectionTrailBox.getWidth() != 0) {
-            selectionTrailBox.setLayoutX((outerPane.getScene().getWidth() / 2) - (selectionTrailBox.getWidth() / 2));
-            selectionTrailBox.setLayoutY((outerPane.getScene().getHeight() / 2) + Math.min(Y_POS_ERROR_TEXT - selectionTrailBox.getHeight(), Y_POS_SELECTION_BOX));
-        } else if (stage != null) {
-            selectionTrailBox.setLayoutX((stage.getWidth() / 2) - (selectionTrailBox.getPrefWidth() / 2));
-            selectionTrailBox.setLayoutY((stage.getHeight() / 2) + Math.min(selectionTrailBox.getPrefHeight() + Y_POS_ERROR_TEXT, Y_POS_SELECTION_BOX));
-        }
+
 
         // button box
         //noinspection Duplicates
         if (buttonBox.getWidth() != 0) {
-            buttonBox.setLayoutX((outerPane.getScene().getWidth() / 2) - (buttonBox.getWidth() / 2));
+            buttonBox.setLayoutX((outerPane.getScene().getWidth() / 3) - (buttonBox.getWidth() / 2));
             buttonBox.setLayoutY((outerPane.getScene().getHeight() / 2) + Y_POS_BUTTON_BOX);
+            selectModeView.setLayoutX(buttonBox.getLayoutX());
+            selectModeView.setLayoutY(buttonBox.getLayoutY() - selectModeImage.getHeight() * 2);
         } else if (stage != null) {
-            buttonBox.setLayoutX((stage.getWidth() / 2) - (buttonBox.getPrefWidth() / 2));
+            buttonBox.setLayoutX((stage.getWidth() / 3) - (buttonBox.getPrefWidth() / 2));
+            selectModeView.setLayoutX(buttonBox.getLayoutX());
             buttonBox.setLayoutY((stage.getHeight() / 2) + Y_POS_BUTTON_BOX);
         }
 
         // error text
         //noinspection Duplicates
         if (errorLabel.getWidth() != 0) {
-            errorLabel.setLayoutX((outerPane.getScene().getWidth() / 2) - (errorLabel.getWidth() / 2));
+            errorLabel.setLayoutX((outerPane.getScene().getWidth() / 3) - (errorLabel.getWidth() / 2));
             errorLabel.setLayoutY((outerPane.getScene().getHeight() / 2) + Y_POS_ERROR_TEXT);
         } else if (stage != null) {
-            errorLabel.setLayoutX((stage.getWidth() / 2) - (errorLabel.getPrefWidth() / 2));
+            errorLabel.setLayoutX((stage.getWidth() / 3) - (errorLabel.getPrefWidth() / 2));
             errorLabel.setLayoutY((stage.getHeight() / 2) + Y_POS_ERROR_TEXT);
         }
 
         if (boatView.getWidth() != 0) {
-            boatView.setLayoutX((outerPane.getScene().getWidth() / 2) - buttonBox.getWidth() - (0.75 * BOAT_SIZE));
-            boatView.setLayoutY((outerPane.getScene().getHeight() / 2) + Y_POS_BOAT_VIEW);
+            boatView.setLayoutX((outerPane.getScene().getWidth() / 2) + buttonBox.getWidth() - (0.75 * BOAT_SIZE));
+            customiseBoatView.setLayoutX((outerPane.getScene().getWidth() / 2) + buttonBox.getWidth() - (0.75 * BOAT_SIZE));
+            boatView.setLayoutY((outerPane.getScene().getHeight() / 2) + Y_POS_BUTTON_BOX);
         } else if (stage != null) {
-            boatView.setLayoutX((stage.getWidth() / 2) - (300 * 1.75));
-            boatView.setLayoutX((stage.getHeight() / 2) - (225));
+            boatView.setLayoutX((stage.getWidth() / 2) + (300 * 1.75));
+            boatView.setLayoutY((stage.getHeight() / 2) + Y_POS_BUTTON_BOX);
         }
 
         final double arrowWidth = 55;
@@ -143,6 +142,16 @@ public class GameSelectionController {
         arrowLeft.setLayoutY(boatView.getLayoutY() + boatView.getHeight() + ARROW_Y_GAP);
         arrowRight.setLayoutX(boatView.getLayoutX() + boatView.getWidth() - arrowWidth);
         arrowRight.setLayoutY(boatView.getLayoutY() + boatView.getHeight() + ARROW_Y_GAP);
+    }
+
+    public void initialiseHeaders() {
+        customiseImage = new Image("/images/game_selection/customise_boat.gif");
+        customiseBoatView = new ImageView(customiseImage);
+        outerPane.getChildren().add(customiseBoatView);
+
+        selectModeImage = new Image("/images/game_selection/select_game_mode.gif");
+        selectModeView = new ImageView(selectModeImage);
+        outerPane.getChildren().add(selectModeView);
     }
 
 
@@ -159,11 +168,6 @@ public class GameSelectionController {
                 createSpectatorButton()
         ));
 
-        selectionTrailBox.getChildren().setAll(Arrays.asList(
-                trailGameMode,
-                trailConnectionMode
-        ));
-
         reDraw();
     }
 
@@ -176,10 +180,6 @@ public class GameSelectionController {
     private void setUpConnectionType(RaceMode mode) {
         this.mode = mode;
         this.isHosting = null;
-        selectionTrailBox.getChildren().setAll(Arrays.asList(
-                getTrailGameMode(mode),
-                trailConnectionMode
-        ));
 
         setOptionButtons(Arrays.asList(
                 createJoinButton(),
@@ -197,11 +197,6 @@ public class GameSelectionController {
      */
     private void setUpConnectionOptions(boolean isHosting) {
         this.isHosting = isHosting;
-
-        selectionTrailBox.getChildren().setAll(Arrays.asList(
-                getTrailGameMode(mode),
-                getTrailConnectionMode(isHosting)
-        ));
 
         setOptionButtons(Arrays.asList(
                 createHostEntry(),

@@ -9,22 +9,22 @@
       stylesheets="@stylesheets/titleScreen.css" xmlns="http://javafx.com/javafx/8.0.60"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.GameSelectionController">
    <children>
-      <VBox fx:id="selectionTrailBox" alignment="TOP_CENTER" layoutX="164.0" layoutY="70.0" maxWidth="-Infinity"
-            minWidth="-Infinity" prefWidth="300.0" spacing="5.0">
-         <children>
-            <ImageView fx:id="trailGameMode" fitHeight="45.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/game_selection/game_mode.png"/>
-               </image>
-            </ImageView>
-            <ImageView fx:id="trailConnectionMode" fitHeight="45.0" fitWidth="300.0" pickOnBounds="true"
-                       preserveRatio="true">
-               <image>
-                  <Image url="@images/game_selection/connection_mode.png"/>
-               </image>
-            </ImageView>
-         </children>
-      </VBox>
+      <!--<VBox fx:id="selectionTrailBox" alignment="TOP_CENTER" layoutX="164.0" layoutY="70.0" maxWidth="-Infinity"-->
+            <!--minWidth="-Infinity" prefWidth="300.0" spacing="5.0">-->
+         <!--<children>-->
+            <!--<ImageView fx:id="trailGameMode" fitHeight="45.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">-->
+               <!--<image>-->
+                  <!--<Image url="@images/game_selection/game_mode.png"/>-->
+               <!--</image>-->
+            <!--</ImageView>-->
+            <!--<ImageView fx:id="trailConnectionMode" fitHeight="45.0" fitWidth="300.0" pickOnBounds="true"-->
+                       <!--preserveRatio="true">-->
+               <!--<image>-->
+                  <!--<Image url="@images/game_selection/connection_mode.png"/>-->
+               <!--</image>-->
+            <!--</ImageView>-->
+         <!--</children>-->
+      <!--</VBox>-->
       <VBox fx:id="buttonBox" layoutX="164.0" layoutY="300.0" maxWidth="-Infinity" minWidth="-Infinity"
             prefHeight="200.0" prefWidth="300.0" spacing="25.0">
          <children>
