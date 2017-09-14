@@ -76,13 +76,14 @@ public class Server extends Observable {
      */
     public void close() {
         stopAcceptingConnections();
-        for (ClientConnection client : clients) {
+        for (Iterator<ClientConnection> it = clients.iterator(); it.hasNext();) {
+            ClientConnection client = it.next();
             try {
                 client.close();
             } catch (IOException e) {
 //                e.printStackTrace();
             }
-            clients.remove(client);
+            it.remove();
         }
         try {
             serverSocket.close();
