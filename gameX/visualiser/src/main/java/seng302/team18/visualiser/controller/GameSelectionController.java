@@ -10,12 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
@@ -103,8 +101,6 @@ public class GameSelectionController {
      * Reposition the the diplay elements to fit the current screen
      */
     public void reDraw() {
-
-
         // button box
         //noinspection Duplicates
         if (buttonBox.getWidth() != 0) {
@@ -148,7 +144,11 @@ public class GameSelectionController {
         arrowRight.setLayoutY(boatView.getLayoutY() + boatView.getHeight() + ARROW_Y_GAP);
     }
 
-    public void initialiseHeaders() {
+
+    /**
+     * Create the header images
+     */
+    private void initialiseHeaders() {
         customiseImage = new Image("/images/game_selection/customise_boat.gif");
         customiseBoatView = new ImageView(customiseImage);
         outerPane.getChildren().add(customiseBoatView);
@@ -208,36 +208,6 @@ public class GameSelectionController {
         ));
 
         reDraw();
-    }
-
-
-    private ImageView getTrailGameMode(RaceMode mode) {
-        String url = "/images/game_selection/game_mode.png";
-        switch (mode) {
-            case RACE:
-                url = "images/game_selection/race_white.png";
-                break;
-            case ARCADE:
-                url = "images/game_selection/arcade_white.png";
-                break;
-            case CHALLENGE_MODE:
-                url = "images/game_selection/challenge_white.png";
-                break;
-            case BUMPER_BOATS:
-                url = "images/game_selection/bumper_white.png";
-                break;
-            case SPECTATION:
-                url = "images/game_selection/spectator_white.png";
-                break;
-        }
-
-        return new ImageView(url);
-    }
-
-
-    private ImageView getTrailConnectionMode(boolean isHosting) {
-        String url = (isHosting) ? "images/game_selection/create_game_white.png" : "images/game_selection/join_game_white.png";
-        return new ImageView(url);
     }
 
 
@@ -306,7 +276,10 @@ public class GameSelectionController {
         Label label = new Label();
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("spectatorImage");
-        label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.SPECTATION));
+        label.setOnMouseClicked(event -> {
+            setUpConnectionType(RaceMode.SPECTATION);
+            setUpConnectionOptions(false);
+        });
         return label;
     }
 
@@ -480,6 +453,8 @@ public class GameSelectionController {
             exitSelectionScreen();
         } else if (isHosting == null) {
             setUpModeSelection();
+        } else if (mode.equals(RaceMode.SPECTATION)) {
+            setUpModeSelection();
         } else {
             setUpConnectionType(mode);
         }
@@ -547,6 +522,9 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * @param stage the stage showing this UI
+     */
     void setStage(Stage stage) {
         this.stage = stage;
     }
