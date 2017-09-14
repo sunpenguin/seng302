@@ -2,6 +2,10 @@ package seng302.team18.racemodel;
 
 
 import seng302.team18.message.RequestType;
+
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.AcceptanceMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
 import seng302.team18.racemodel.connection.ClientConnection;
@@ -17,6 +21,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.*;
 
 /**
  * Class to handle a mock race
@@ -202,6 +207,25 @@ public class TestMock implements Observer {
 
         for (PowerUpEvent event : race.popPowerUpEvents()) {
             server.broadcast((new PowerTakenGenerator(event.getBoatId(), event.getPowerId(), event.getPowerDuration()).getMessage()));
+        }
+
+        for (Projectile projectile : race.popNewProjectileIds()) {
+            server.broadcast((new ProjectileCreationMessageGenerator(projectile.getId()).getMessage()));
+            ScheduledMessageGenerator newProMessageGen = new ProjectileMessageGenerator(AC35MessageType.PROJECTILE_LOCATION.getCode(), projectile);
+            scheduledMessages.add(newProMessageGen);
+        }
+
+        for (Projectile projectile : race.popRemovedProjectiles()) {
+            for (Iterator<ScheduledMessageGenerator> it = scheduledMessages.iterator(); it.hasNext(); ) {
+                ScheduledMessageGenerator sched = it.next();
+                if (sched instanceof ProjectileMessageGenerator) {
+                    ProjectileMessageGenerator projectileMessageGenerator = (ProjectileMessageGenerator) sched;
+                    if (projectileMessageGenerator.getProjectileId() == projectile.getId()) {
+                        server.broadcast((new ProjectileGoneGenerator(projectile.getId()).getMessage()));
+                        it.remove();
+                    }
+                }
+            }
         }
     }
 

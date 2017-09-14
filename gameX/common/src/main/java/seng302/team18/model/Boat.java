@@ -2,6 +2,7 @@ package seng302.team18.model;
 
 
 import javafx.beans.property.*;
+import seng302.team18.message.PowerType;
 import seng302.team18.util.GPSCalculator;
 
 import java.time.ZonedDateTime;
@@ -29,7 +30,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private PowerUp powerUp;// = new SpeedPowerUp(this);
     private boolean isPowerActive = false; //Changed for merging into dev branch
     private ZonedDateTime powerDurationEnd;
-    private PowerUp updater = new BoatUpdater();
+    private PowerUp updater = new BoatPowerUpUpdater();
     private int lives;
     private boolean hasCollided = false;
 
@@ -378,6 +379,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
     public void setPowerUp(PowerUp powerUp) {
         this.powerUp = powerUp;
+        isPowerActive = false;
     }
 
 
@@ -385,10 +387,12 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * Activates the boat's PowerUp.
      */
     public void activatePowerUp() {
-        isPowerActive = true;
-        powerDurationEnd = ZonedDateTime.now().plusSeconds((long) powerUp.getDuration() / 1000);
-        setChanged();
-        notifyObservers(powerUp);
+        if(powerUp != null) {
+            this.isPowerActive = true;
+            powerDurationEnd = ZonedDateTime.now().plusSeconds((long) powerUp.getDuration() / 1000);
+            setChanged();
+            notifyObservers(powerUp);
+        }
     }
 
 
@@ -433,7 +437,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @param time that has passed
      */
     public void update(double time) {
-        if (isPowerActive && null != powerUp) {
+        if (isPowerActive) {
             powerUp.update(this, time);
             if (ZonedDateTime.now().isAfter(powerDurationEnd)) {
                 isPowerActive = false;
@@ -452,5 +456,15 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
     public void setHasCollided(boolean hasCollided) {
         this.hasCollided = hasCollided;
+    }
+
+
+    public boolean isPowerActive() {
+        return isPowerActive;
+    }
+
+
+    public void setPowerActive(boolean powerActive) {
+        isPowerActive = powerActive;
     }
 }
