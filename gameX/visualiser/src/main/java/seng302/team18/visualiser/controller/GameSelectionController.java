@@ -54,8 +54,6 @@ public class GameSelectionController {
     private RaceMode mode;
     private Boolean isHosting;
 
-    private final static double Y_POS_BOAT_VIEW = -200;
-    private final static double Y_POS_SELECTION_BOX = -250;
     private final static double Y_POS_ERROR_TEXT = -210;
     private final static double Y_POS_BUTTON_BOX = -100;
     private final static double OPTION_BUTTONS_HEIGHT = 50;
