@@ -58,8 +58,8 @@ public class GameSelectionController {
 
     private final static double Y_POS_BOAT_VIEW = -200;
     private final static double Y_POS_SELECTION_BOX = -250;
-    private final static double Y_POS_ERROR_TEXT = -150;
-    private final static double Y_POS_BUTTON_BOX = -40;
+    private final static double Y_POS_ERROR_TEXT = -210;
+    private final static double Y_POS_BUTTON_BOX = -100;
     private final static double OPTION_BUTTONS_HEIGHT = 50;
     private final static double ARROW_Y_GAP = 5;
     private final static double BOAT_SIZE = 200;
