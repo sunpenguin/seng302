@@ -1,6 +1,6 @@
 package seng302.team18.model;
 
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ public class Course {
     private List<CompoundMark> compoundMarks = new ArrayList<>();
     private List<MarkRounding> markSequence = new ArrayList<>();
     private List<Coordinate> courseLimits = new ArrayList<>();
+    private List<PickUp> pickUps = new ArrayList<>();
 
     private double windDirection = 0d;
     private double windSpeed = 0d;
@@ -26,7 +27,7 @@ public class Course {
     private ZoneId timeZone = ZoneId.systemDefault();
 
 
-    public Course(Collection<CompoundMark> marks, Collection<Coordinate> boundaries, double windDirection, double windSpeed,
+    public Course(Collection<CompoundMark> marks, List<Coordinate> boundaries, double windDirection, double windSpeed,
                   ZoneId timeZone, List<MarkRounding> markSequence) {
         this.compoundMarks.addAll(marks);
         this.courseLimits.addAll(boundaries);
@@ -39,7 +40,7 @@ public class Course {
         initializeCourse();
     }
 
-    public Course(Collection<CompoundMark> marks, Collection<Coordinate> boundaries, List<MarkRounding> markSequence) {
+    public Course(Collection<CompoundMark> marks, List<Coordinate> boundaries, List<MarkRounding> markSequence) {
         this.compoundMarks.addAll(marks);
         this.courseLimits.addAll(boundaries);
         this.markSequence.addAll(markSequence);
@@ -54,8 +55,8 @@ public class Course {
     }
 
 
-    public List<CompoundMark> getCompoundMarks() {
-        return compoundMarks;
+    public synchronized List<CompoundMark> getCompoundMarks() {
+        return new ArrayList<>(compoundMarks);
     }
 
 
@@ -65,12 +66,12 @@ public class Course {
     }
 
 
-    public List<MarkRounding> getMarkSequence() {
+    public synchronized List<MarkRounding> getMarkSequence() {
         return markSequence;
     }
 
 
-    public void setMarkSequence(Collection<MarkRounding> markSequence) {
+    public synchronized void setMarkSequence(List<MarkRounding> markSequence) {
         this.markSequence.clear();
         this.markSequence.addAll(markSequence);
         initializeCourse();
@@ -106,12 +107,12 @@ public class Course {
     }
 
 
-    public List<Coordinate> getCourseLimits() {
+    public synchronized List<Coordinate> getCourseLimits() {
         return new ArrayList<>(courseLimits);
     }
 
 
-    public void setCourseLimits(Collection<Coordinate> boundaries) {
+    public void setCourseLimits(List<Coordinate> boundaries) {
         this.courseLimits.clear();
         this.courseLimits.addAll(boundaries);
     }
@@ -127,8 +128,8 @@ public class Course {
     }
 
 
-    public Coordinate getCentralCoordinate() {
-        GPSCalculations calculator = new GPSCalculations();
+    public Coordinate getCenter() {
+        GPSCalculator calculator = new GPSCalculator();
         List<Coordinate> coordinates = calculator.findMinMaxPoints(this);
         return calculator.getCentralCoordinate(coordinates);
     }
@@ -173,7 +174,7 @@ public class Course {
 
 
     private void setMarkRoundingAngle(MarkRounding previous, MarkRounding current, MarkRounding future) {
-        GPSCalculations calculator = new GPSCalculations();
+        GPSCalculator calculator = new GPSCalculator();
 
         double previousAngle = calculator.getBearing(previous.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
         double futureAngle = calculator.getBearing(future.getCompoundMark().getCoordinate(), current.getCompoundMark().getCoordinate());
@@ -197,7 +198,7 @@ public class Course {
 
         } else {
 
-            GPSCalculations calculator = new GPSCalculations();
+            GPSCalculator calculator = new GPSCalculator();
 
             Mark mark1 = rounding.getCompoundMark().getMarks().get(0);
             Mark mark2 = rounding.getCompoundMark().getMarks().get(1);
@@ -230,6 +231,89 @@ public class Course {
 
     public String getName() {
         return name;
+    }
+
+
+    public void addPickUp(PickUp pickUp) {
+        pickUps.add(pickUp);
+    }
+
+
+    /**
+     * Removes a single PickUp given an id.
+     *
+     * @param id of the PickUp.
+     */
+    public void removePickUp(int id) {
+        pickUps.removeIf(pickUp -> pickUp.getId() == id);
+    }
+
+
+    /**
+     * Removes PickUp that have expired.
+     */
+    public void removeOldPickUps() {
+        List<PickUp> remaining = new ArrayList<>();
+        for (PickUp pickUp: pickUps) {
+            if (!pickUp.hasExpired()) {
+                remaining.add(pickUp);
+            }
+        }
+        setPickUps(remaining);
+    }
+
+
+    public List<PickUp> getPickUps() {
+        return new ArrayList<>(pickUps);
+    }
+
+
+    /**
+     * Returns pick up with specified id.
+     * null if not exists
+     *
+     * @param id of the pick up
+     * @return the pick up with the given id.
+     */
+    public PickUp getPickUp(int id) {
+        for (PickUp pickUp : pickUps) {
+            if (pickUp.getId() == id) {
+                return pickUp;
+            }
+        }
+        return null;
+    }
+
+
+    public void setPickUps(List<PickUp> pickUps) {
+        this.pickUps = pickUps;
+    }
+
+
+    public synchronized MarkRounding getMarkRounding(int sequenceNumber) {
+        return markSequence.get(sequenceNumber);
+    }
+
+
+    public synchronized Coordinate getDestination(int legNumber) {
+        return markSequence.get(legNumber).getCoordinate();
+    }
+
+
+    public synchronized int getStartLineId() {
+        try {
+            return markSequence.get(0).getMarkId();
+        } catch (Exception e) {
+            for (MarkRounding mark : markSequence) {
+                System.out.println(mark);
+            }
+            throw e;
+        }
+    }
+
+
+    public synchronized int getFinishLineId() {
+        return markSequence.get(markSequence.size() - 1).getMarkId();
     }
 }
 

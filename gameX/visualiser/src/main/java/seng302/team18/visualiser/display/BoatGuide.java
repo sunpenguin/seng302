@@ -3,10 +3,9 @@ package seng302.team18.visualiser.display;
 import javafx.scene.Group;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import seng302.team18.model.Coordinate;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -16,29 +15,41 @@ import seng302.team18.visualiser.util.PixelMapper;
 public class BoatGuide extends DisplayBoatDecorator {
 
     private Polygon arrow;
-    private Scale scale;
-    private Rotate rotation;
+    private Translate translation = new Translate(0, 0);
+    private Rotate rotation = new Rotate(0, 0, 0);
     private Coordinate location;
     private PixelMapper mapper;
 
-    private final static GPSCalculations GPS = new GPSCalculations();
+    private final static GPSCalculator GPS = new GPSCalculator();
 
 
-    public BoatGuide(PixelMapper mapper, DisplayBoat boat) {
+    BoatGuide(PixelMapper mapper, DisplayBoat boat) {
         super(boat);
         this.mapper = mapper;
         arrow = new Polygon();
-        arrow.getPoints().addAll(
-                -4d, -10d,
-                0d, -18d,
-                4d, -10d);
-        scale = new Scale(1, 1, 0, 0);
-        rotation = new Rotate(0, 0, 0);
-        arrow.getTransforms().addAll(scale, rotation);
+        setUpShape(mapper.mappingRatio());
+        arrow.getTransforms().addAll(rotation, translation);
     }
 
+
+    private void setUpShape(double mappingRatio) {
+        double pixelLength = getBoatLength() * mappingRatio / 2;
+
+        Double[] shape = new Double[]{
+                -0.33 * pixelLength, 0.0,
+                0.0, -0.66 * pixelLength,
+                0.33 * pixelLength, 0.0
+        };
+
+        arrow.getPoints().clear();
+        arrow.getPoints().addAll(shape);
+        translation.setY(-pixelLength);
+    }
+
+
+    @Override
     public void setCoordinate(Coordinate coordinate) {
-        XYPair pixels = mapper.coordToPixel(coordinate);
+        XYPair pixels = mapper.mapToPane(coordinate);
 
         this.location = coordinate;
         arrow.setLayoutX(pixels.getX());
@@ -47,13 +58,14 @@ public class BoatGuide extends DisplayBoatDecorator {
     }
 
 
+    @Override
     public void setScale(double scaleFactor) {
-        scale.setX(scaleFactor);
-        scale.setY(scaleFactor);
+        setUpShape(scaleFactor);
         super.setScale(scaleFactor);
     }
 
 
+    @Override
     public void addToGroup(Group group) {
         group.getChildren().add(arrow);
         super.addToGroup(group);
@@ -61,6 +73,14 @@ public class BoatGuide extends DisplayBoatDecorator {
     }
 
 
+    @Override
+    public void removeFrom(Group group) {
+        group.getChildren().remove(arrow);
+        super.removeFrom(group);
+    }
+
+
+    @Override
     public void setDestination(Coordinate destination) {
         if (destination != null) {
             double destinationHeading = GPS.getBearing(location, destination);
@@ -70,7 +90,6 @@ public class BoatGuide extends DisplayBoatDecorator {
         }
         super.setDestination(destination);
     }
-
 
 
 }

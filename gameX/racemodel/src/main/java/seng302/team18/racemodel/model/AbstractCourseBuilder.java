@@ -4,7 +4,7 @@ import seng302.team18.model.CompoundMark;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Course;
 import seng302.team18.model.MarkRounding;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 
 import java.time.ZoneId;
 import java.util.List;
@@ -16,10 +16,10 @@ import java.util.List;
  */
 public abstract class AbstractCourseBuilder {
 
-    /**
-     * The compound marks in the course
-     */
-    private List<CompoundMark> compoundMarks = buildCompoundMarks();
+
+    private List<Coordinate> boundaryMarks;
+    private List<CompoundMark> compoundMarks;
+    private List<MarkRounding> markRoundings;
 
 
     /**
@@ -28,11 +28,15 @@ public abstract class AbstractCourseBuilder {
      * @return the constructed course
      */
     public Course buildCourse() {
-        Course course = new Course(compoundMarks, getBoundaryMarks(), getMarkRoundings());
+        boundaryMarks = getBoundaryMarks();
+        compoundMarks = buildCompoundMarks();
+        markRoundings = getMarkRoundings();
 
-        GPSCalculations gpsCalculations = new GPSCalculations();
-        List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(course);
-        Coordinate center = gpsCalculations.midPoint(extremes.get(0), extremes.get(1));
+        Course course = new Course(compoundMarks, boundaryMarks, markRoundings);
+
+        GPSCalculator gpsCalculator = new GPSCalculator();
+        List<Coordinate> extremes = gpsCalculator.findMinMaxPoints(course);
+        Coordinate center = gpsCalculator.midPoint(extremes.get(0), extremes.get(1));
         course.setCentralCoordinate(center);
         course.setWindDirection(getWindDirection());
         course.setWindSpeed(getWindSpeed());
@@ -64,7 +68,7 @@ public abstract class AbstractCourseBuilder {
     /**
      * @return the boundary marks to initialise the course with
      */
-    protected abstract List<Coordinate> getBoundaryMarks();
+    public abstract List<Coordinate> getBoundaryMarks();
 
 
     /**

@@ -1,15 +1,11 @@
 package seng302.team18.model;
 
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.scene.paint.Color;
 import javafx.beans.property.*;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.message.PowerType;
+import seng302.team18.util.GPSCalculator;
 
-import java.util.List;
+import java.time.ZonedDateTime;
 
 /**
  * A class which stores information about a boat.
@@ -20,9 +16,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty legNumber = new SimpleIntegerProperty(0);
-    private double boatLength;
     private double heading;
-    private Coordinate coordinate;
     private Coordinate previousCoordinate;
     private IntegerProperty place;
     private Long timeTilNextMark;
@@ -33,17 +27,23 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private boolean isControlled;
     private boolean sailOut;
     private RoundZone roundZone = RoundZone.ZONE1;
+    private PowerUp powerUp;// = new SpeedPowerUp(this);
+    private boolean isPowerActive = false; //Changed for merging into dev branch
+    private ZonedDateTime powerDurationEnd;
+    private PowerUp updater = new BoatPowerUpUpdater();
+    private int lives;
+    private boolean hasCollided = false;
 
     /**
      * A constructor for the Boat class
      *
-     * @param boatName  The name of the boat
+     * @param name      The name of the boat
      * @param shortName The name of the team the boat belongs to
      * @param id        The id of the boat
      */
-    public Boat(String boatName, String shortName, int id, double boatLength) {
-        super(id, boatName, shortName);
-        this.boatLength = boatLength;
+    public Boat(String name, String shortName, int id, double length) {
+        super(id, name, shortName);
+        setLength(length);
         speed = new SimpleDoubleProperty();
         place = new SimpleIntegerProperty(1);
         timeTilNextMark = 0L;
@@ -52,6 +52,8 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         isControlled = true;
         sailOut = true; // Starts with luffing
         status = BoatStatus.UNDEFINED;
+        setWeight(10);
+        lives = 3;
     }
 
 
@@ -121,14 +123,10 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     }
 
 
-    public Coordinate getCoordinate() {
-        return coordinate;
-    }
-
 
     public void setCoordinate(Coordinate coordinate) {
-        previousCoordinate = this.coordinate;
-        this.coordinate = coordinate;
+        previousCoordinate = getCoordinate();
+        super.setCoordinate(coordinate);
     }
 
 
@@ -156,10 +154,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         this.timeTilNextMark = timeTilNextMark;
     }
 
-    @Override
-    public double getLength() {
-        return boatLength;
-    }
 
     public Long getTimeSinceLastMark() {
         return timeSinceLastMark;
@@ -185,7 +179,12 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         return sailOut;
     }
 
-
+    /**
+     * Sets the sails
+     * True = sails out = luffing
+     * False = sails in = powered up
+     * @param sailOut
+     */
     public void setSailOut(boolean sailOut) {
         this.sailOut = sailOut;
     }
@@ -200,7 +199,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
                 ", leg=" + legNumber +
                 ", id=" + getId() +
                 ", heading=" + heading +
-                ", coordinate=" + coordinate +
+                ", coordinate=" + getCoordinate() +
                 ", place=" + place +
                 ", timeTilNextMark=" + timeTilNextMark +
                 ", timeSinceLastMark=" + timeSinceLastMark +
@@ -277,34 +276,23 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         return trueWindAngle;
     }
 
+
     /**
-     * Method to check if boat has collided with another boat
-     * TODO: jth102, sbe67 25/07, handle collisions with more than one obstacle
-     *
-     * @param obstacles  list of Abstract Boats to check if boat has collied
-     * @return the obstacle the boat has collided, null is not collision
+     * Method to decrease a players health
      */
-    public AbstractBoat hasCollided(List<AbstractBoat> obstacles){
-        AbstractBoat collidedWith = null;
-        GPSCalculations calculator = new GPSCalculations();
-        double collisionZone;
-        double distanceBetween;
-        for(AbstractBoat obstacle : obstacles) {
-            if (!obstacle.equals(this)) {
-                collisionZone = (obstacle.getLength()) + (boatLength/2);
+    public void loseLife() {
+        lives -= 1;
+    }
 
-                if (obstacle instanceof Mark) {
-                    collisionZone *= 1.3;
-                }
+    public int getLives(){
+        return lives;
+    }
 
-                distanceBetween = calculator.distance(coordinate, (obstacle).getCoordinate());
 
-                if (distanceBetween < collisionZone) {
-                    collidedWith = obstacle;
-                }
-            }
-        }
-        return collidedWith;
+    public boolean hasCollided(BodyMass bodyMass) {
+        GPSCalculator calculator = new GPSCalculator();
+        double collisionZone = getBodyMass().getRadius() + bodyMass.getRadius();
+        return calculator.distance(getCoordinate(), bodyMass.getLocation()) < collisionZone;
     }
 
 
@@ -365,17 +353,19 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         return previousCoordinate;
     }
 
+
     public enum RoundZone {
         ZONE1,
         ZONE2,
         ZONE3,
-        ZONE4;
+        ZONE4
     }
 
 
     public RoundZone getRoundZone() {
         return roundZone;
     }
+
 
     public void setRoundZone(RoundZone roundZone) {
         this.roundZone = roundZone;
@@ -384,5 +374,97 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
     public StringProperty statusStringProperty() {
         return statusStringProperty;
+    }
+
+
+    public void setPowerUp(PowerUp powerUp) {
+        this.powerUp = powerUp;
+        isPowerActive = false;
+    }
+
+
+    /**
+     * Activates the boat's PowerUp.
+     */
+    public void activatePowerUp() {
+        if(powerUp != null) {
+            this.isPowerActive = true;
+            powerDurationEnd = ZonedDateTime.now().plusSeconds((long) powerUp.getDuration() / 1000);
+            setChanged();
+            notifyObservers(powerUp);
+        }
+    }
+
+
+    /**
+     * Checks if a boat is able to use a PowerUp.
+     *
+     * @return true if a boat can use a PowerUp.
+     */
+    public boolean canActivatePower() {
+        if (null != powerUp && !isPowerActive) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * Checks if a PowerUp has expired. If so, deactivate and remove the PowerUp.
+     */
+    public void expirePowerUp() {
+        if (powerUp != null && isPowerActive && ZonedDateTime.now().isAfter(powerDurationEnd)) {
+            isPowerActive = false;
+            powerUp = null;
+        }
+    }
+
+
+    /**
+     * Gets a boat PowerUp. Null otherwise.
+     *
+     * @return the PowerUp the boat has.
+     */
+    public PowerUp getPowerUp() {
+        return powerUp;
+    }
+
+
+    /**
+     * Updates the boats coordinates to move closer to the boats destination.
+     * Amount moved is proportional to the time passed
+     *
+     * @param time that has passed
+     */
+    public void update(double time) {
+        if (isPowerActive) {
+            powerUp.update(this, time);
+            if (ZonedDateTime.now().isAfter(powerDurationEnd)) {
+                isPowerActive = false;
+                powerUp = null;
+            }
+        } else {
+            updater.update(this, time);
+        }
+    }
+
+
+    public boolean getHasCollided() {
+        return hasCollided;
+    }
+
+
+    public void setHasCollided(boolean hasCollided) {
+        this.hasCollided = hasCollided;
+    }
+
+
+    public boolean isPowerActive() {
+        return isPowerActive;
+    }
+
+
+    public void setPowerActive(boolean powerActive) {
+        isPowerActive = powerActive;
     }
 }

@@ -16,18 +16,14 @@ import java.util.List;
 public class DisplayTrail {
     private List<Coordinate> coordinates;
     private Polyline polyline;
-    private Double heading;
-    private Double headingVariance;
     private Integer length;
 
 
-    public DisplayTrail(Color color, double headingVariance, int length) {
-        this.headingVariance = headingVariance;
+    public DisplayTrail(Color color, int length) {
         this.length = length;
         coordinates = new ArrayList<>();
         polyline = new Polyline();
         polyline.setStroke(color);
-        heading = 1000000000d;
     }
 
 
@@ -35,20 +31,18 @@ public class DisplayTrail {
      * Adds a coordinate to the list of coordinates forming the boat trail.
      *
      * @param coordinate  The coordinate at which the boat was
-     * @param heading     the heading of the boat at that point
      * @param pixelMapper To create an XY coordinate pair
      */
-    public void addPoint(Coordinate coordinate, double heading, PixelMapper pixelMapper) {
+    public void addPoint(Coordinate coordinate, PixelMapper pixelMapper) {
         int trailSize = polyline.getPoints().size();
 
-        if (Math.abs(this.heading - heading) < headingVariance && trailSize >= 4) {
-            polyline.getPoints().remove(trailSize - 1);
-            polyline.getPoints().remove(trailSize - 2);
-            coordinates.remove(coordinates.size() - 1);
-        }
+//        if (trailSize >= 4) {
+//            polyline.getPoints().remove(trailSize - 1);
+//            polyline.getPoints().remove(trailSize - 2);
+//            coordinates.remove(coordinates.size() - 1);
+//        }
 
-        this.heading = heading;
-        XYPair pixel = pixelMapper.coordToPixel(coordinate);
+        XYPair pixel = pixelMapper.mapToPane(coordinate);
         polyline.getPoints().addAll(pixel.getX(), pixel.getY());
         coordinates.add(coordinate);
 
@@ -69,7 +63,7 @@ public class DisplayTrail {
         List<Double> updatedTrailPoints = new ArrayList<>();
 
         for (Coordinate coordinate : coordinates) {
-            XYPair newPixels = pixelMapper.coordToPixel(coordinate);
+            XYPair newPixels = pixelMapper.mapToPane(coordinate);
             updatedTrailPoints.add(newPixels.getX());
             updatedTrailPoints.add(newPixels.getY());
         }

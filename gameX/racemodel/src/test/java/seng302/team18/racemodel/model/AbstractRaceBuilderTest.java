@@ -2,11 +2,11 @@ package seng302.team18.racemodel.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import seng302.team18.model.Course;
-import seng302.team18.model.Race;
-import seng302.team18.model.RaceType;
-import seng302.team18.model.RaceMode;
-import seng302.team18.model.Regatta;
+import seng302.team18.model.*;
+import seng302.team18.model.updaters.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,7 +21,7 @@ public class AbstractRaceBuilderTest {
     @Before
     public void setUp() throws Exception {
         AbstractRaceBuilder raceBuilder = new ConcreteRaceBuilder();
-        race = raceBuilder.buildRace(new Race(), REGATTA, COURSE, RaceMode.RACE);
+        race = raceBuilder.buildRace(new Race(), REGATTA, COURSE);
     }
 
 
@@ -60,5 +60,29 @@ public class AbstractRaceBuilderTest {
         protected RaceType getRaceType() {
             return RACE_TYPE;
         }
+
+        @Override
+        protected List<Updater> getUpdaters(){
+            List<Updater> updaters = new ArrayList<>();
+            updaters.add(new BoatUpdater());
+            updaters.add(new BoatCollisionUpdater());
+            updaters.add(new MarkCollisionUpdater());
+            updaters.add(new OutOfBoundsUpdater());
+            updaters.add(new MarkRoundingUpdater());
+
+            return updaters;
+        }
+
+        @Override
+        protected RaceMode getRaceMode(){
+            return RaceMode.RACE;
+        }
+
+
+        @Override
+        protected StartPositionSetter getPositionSetter() {
+            return new StartLineSetter(20);
+        }
+
     }
 }

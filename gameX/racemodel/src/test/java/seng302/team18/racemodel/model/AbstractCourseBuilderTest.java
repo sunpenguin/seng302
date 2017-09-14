@@ -3,7 +3,7 @@ package seng302.team18.racemodel.model;
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.*;
-import seng302.team18.util.GPSCalculations;
+import seng302.team18.util.GPSCalculator;
 
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -89,11 +89,11 @@ public class AbstractCourseBuilderTest {
 
     @Test
     public void buildCourse_centreCoordinates() throws Exception {
-        GPSCalculations gpsCalculations = new GPSCalculations();
-        List<Coordinate> extremes = gpsCalculations.findMinMaxPoints(course);
-        Coordinate centralCoordinate = gpsCalculations.midPoint(extremes.get(0), extremes.get(1));
+        GPSCalculator gpsCalculator = new GPSCalculator();
+        List<Coordinate> extremes = gpsCalculator.findMinMaxPoints(course);
+        Coordinate centralCoordinate = gpsCalculator.midPoint(extremes.get(0), extremes.get(1));
 
-        assertEquals("centre coordinate is not as expected", centralCoordinate, course.getCentralCoordinate());
+        assertEquals("centre coordinate is not as expected", centralCoordinate, course.getCenter());
     }
 
 
@@ -197,7 +197,7 @@ public class AbstractCourseBuilderTest {
         }
 
         @Override
-        protected List<Coordinate> getBoundaryMarks() {
+        public List<Coordinate> getBoundaryMarks() {
             return boundaryMarks;
         }
 

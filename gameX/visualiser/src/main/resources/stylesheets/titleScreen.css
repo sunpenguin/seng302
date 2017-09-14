@@ -1,5 +1,4 @@
 .background {
-    /*-fx-background-color: linear-gradient(#327D91 60%, #004060);*/
     -fx-background-color: #327D91;
     -fx-text-fill: black;
 }
@@ -19,21 +18,31 @@
 }
 
 .hostImage {
-    -fx-graphic: url('/images/title_screen/play_button.png');
+    -fx-graphic: url('/images/play_button.png');
 }
 
 .hostImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/title_screen/play_button_alt.png');
+    -fx-graphic: url('/images/play_button_alt.png');
 }
 
 .controlsImage {
     -fx-graphic: url('/images/title_screen/view_controls_button.png');
 }
 
+
 .controlsImage:hover {
     -fx-label-padding: 2;
     -fx-graphic: url('/images/title_screen/view_controls_button_alt.png');
+}
+
+.tutorialImage {
+    -fx-graphic: url('/images/title_screen/tutorial_button.gif');
+}
+
+.tutorialImage:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/title_screen/tutorial_button_alt.gif');
 }
 
 .quitImage {
@@ -43,4 +52,10 @@
 .quitImage:hover {
     -fx-label-padding: 2;
     -fx-graphic: url('/images/title_screen/quit_button_alt.png');
+}
+
+.errorText {
+    -fx-font-family: "Munro";
+    -fx-font-size: 20;
+    -fx-text-fill: darkred;
 }

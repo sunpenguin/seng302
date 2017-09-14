@@ -11,19 +11,22 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import seng302.team18.interpreting.CompositeMessageInterpreter;
-import seng302.team18.interpreting.MessageInterpreter;
-import seng302.team18.message.*;
+import seng302.team18.interpret.CompositeMessageInterpreter;
+import seng302.team18.interpret.MessageInterpreter;
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
-import seng302.team18.model.Race;
-import seng302.team18.visualiser.display.PreRaceTimes;
-import seng302.team18.visualiser.messageinterpreting.*;
 import seng302.team18.send.Sender;
+import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.display.PreRaceTimes;
+import seng302.team18.visualiser.interpret.*;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 /**
  * Controller for the pre race view
@@ -48,12 +51,9 @@ public class PreRaceController {
 
     private Interpreter interpreter;
     private Sender sender;
-    private Race race;
+    private ClientRace race;
 
     private boolean hasChanged = false;
-
-    private Stage stage;
-
 
     public void initialize() {
     }
@@ -67,7 +67,7 @@ public class PreRaceController {
      * @param receiver the receiver
      * @param sender   the sender
      */
-    public void setUp(Race race, Receiver receiver, Sender sender) {
+    public void setUp(ClientRace race, Receiver receiver, Sender sender) {
         this.sender = sender;
         this.race = race;
         raceNameText.setText(race.getRegatta().getName());
@@ -97,7 +97,6 @@ public class PreRaceController {
         interpreter.start();
 
         RequestType requestType;
-        System.out.println(race.getMode());
         switch (race.getMode()) {
             case RACE:
                 requestType = RequestType.RACING;
@@ -105,12 +104,25 @@ public class PreRaceController {
             case CONTROLS_TUTORIAL:
                 requestType = RequestType.CONTROLS_TUTORIAL;
                 break;
+            case CHALLENGE_MODE:
+                requestType = RequestType.CHALLENGE_MODE;
+                break;
+            case ARCADE:
+                requestType = RequestType.ARCADE;
+                break;
+            case BUMPER_BOATS:
+                requestType = RequestType.BUMPER_BOATS;
+                break;
+            case SPECTATION:
+                requestType = RequestType.VIEWING;
+                break;
             default:
                 requestType = RequestType.RACING;
         }
         try {
             sender.send(new RequestMessage(requestType));
         } catch (IOException e) {
+            e.printStackTrace();
             // TODO Callum / David 9 August show error (has been disconnected)
         }
 
@@ -195,14 +207,10 @@ public class PreRaceController {
     /**
      * Updates the list of boats.
      */
-    public void updateBoatList() {
-        listView.setItems(FXCollections.observableList(race.getStartingList()));
+    public void updateBoatList(List<Boat> boats) {
+        listView.setItems(FXCollections.observableList(boats));
     }
 
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
 
     private void showNetWorkInfo() {
         Socket socket = interpreter.getSocket();

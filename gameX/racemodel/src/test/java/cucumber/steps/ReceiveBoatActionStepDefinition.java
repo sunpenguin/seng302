@@ -10,13 +10,12 @@ import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.racemodel.ConnectionListener;
+import seng302.team18.racemodel.connection.ConnectionListener;
 import seng302.team18.racemodel.connection.Server;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
 
 import javax.net.SocketFactory;
-import java.io.IOException;
 import java.net.Socket;
 import java.util.Collections;
 
@@ -37,7 +36,7 @@ public class ReceiveBoatActionStepDefinition {
     @Given("^a player has connected to the mock$")
     public void a_player_has_connected_to_the_mock() throws Throwable {
         int boatId = 1337;
-        server = new Server(5649, 6);
+        server = new Server(5649);
         socket = SocketFactory.getDefault().createSocket("localhost", 5649);
         sender = new Sender(socket, new ControllerMessageFactory());
 

@@ -1,14 +1,13 @@
 package seng302.team18.racemodel.connection;
 
-import seng302.team18.interpreting.MessageInterpreter;
-import seng302.team18.message.BoatActionMessage;
+import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.MessageBody;
 import seng302.team18.messageparsing.*;
 
 import java.io.IOException;
 
 /**
- * Class for reading and interpreting messages sent by Human controlled players
+ * Class for reading and interpret messages sent by Human controlled players
  */
 public class PlayerControllerReader implements Runnable {
 
@@ -43,5 +42,10 @@ public class PlayerControllerReader implements Runnable {
     public void close() {
         open = false;
         receiver.close();
+    }
+
+
+    public int getId() {
+        return id;
     }
 }

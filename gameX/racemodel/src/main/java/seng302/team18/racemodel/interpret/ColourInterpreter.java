@@ -1,6 +1,6 @@
 package seng302.team18.racemodel.interpret;
 
-import seng302.team18.interpreting.MessageInterpreter;
+import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.ColourMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
@@ -23,9 +23,10 @@ public class ColourInterpreter extends MessageInterpreter {
         if (message instanceof ColourMessage) {
             ColourMessage colourMessage = (ColourMessage) message;
             Boat boat = getBoatById(colourMessage.getSourceID());
-            if (boat != null) {
-                boat.setColour(colourMessage.getColour());
+            while (boat == null) {
+                boat = getBoatById(colourMessage.getSourceID());
             }
+            boat.setColour(colourMessage.getColour());
         }
     }
 

@@ -5,6 +5,9 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 import seng302.team18.model.*;
+import seng302.team18.model.updaters.BoatUpdater;
+import seng302.team18.model.updaters.OutOfBoundsUpdater;
+import seng302.team18.model.updaters.Updater;
 
 import java.util.*;
 
@@ -15,18 +18,8 @@ public class BoundaryDetection {
 
     private Boat boat;
     private Race race;
-    private BoatStatus oldStatus = BoatStatus.RACING;
-    private BoatStatus newStatus = BoatStatus.RACING;
-    private boolean hasChanged = false;
-    private Observer observer = new Observer() {
-        @Override
-        public void update(Observable o, Object arg) {
-            if (arg instanceof Boat) {
-                Boat boat =  (Boat) arg;
-                newStatus = boat.getStatus();
-            }
-        }
-    };
+    private BoatStatus oldStatus = BoatStatus.PRE_START;
+    private BoatStatus newStatus = BoatStatus.PRE_START;
 
     @Given("^a course$")
     public void a_course() throws Throwable {
@@ -41,9 +34,12 @@ public class BoundaryDetection {
         boundaries.add(boundary4);
 
         race = new Race();
+        List<Updater> updaters = new ArrayList<>();
+        updaters.add(new BoatUpdater());
+        updaters.add(new OutOfBoundsUpdater());
+        race.setUpdaters(updaters);
         Course course = new Course(getCompoundMarks(), boundaries, getRoundings());
         race.setCourse(course);
-        race.addObserver(observer);
     }
 
     @Given("^a boat inside the courses bounds$")
@@ -56,26 +52,24 @@ public class BoundaryDetection {
 
     @When("^the player stays inside the boundary$")
     public void the_player_stays_inside_the_boundary() throws Throwable {
-        race.updateBoats(1);
+        race.update(1);
     }
 
     @Then("^the players status will stay the same$")
     public void the_players_status_will_stay_the_same() throws Throwable {
         Assert.assertEquals(oldStatus, boat.getStatus());
-        Assert.assertEquals(oldStatus, newStatus);
     }
 
     @When("^the player moves outside the boundary$")
     public void the_player_moves_outside_the_boundary() throws Throwable {
         boat.setSailOut(false);
         boat.setSpeed(100000);
-        race.updateBoats(999999999);
+        race.update(999999999);
     }
 
     @Then("^the players status will be set to disqualified\\.$")
     public void the_players_status_will_be_set_to_disqualified() throws Throwable {
         Assert.assertEquals(BoatStatus.DSQ, boat.getStatus());
-        Assert.assertEquals(BoatStatus.DSQ, newStatus);
     }
 
 

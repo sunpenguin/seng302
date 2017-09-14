@@ -1,26 +1,24 @@
 package seng302.team18.model;
 
-import seng302.team18.util.GPSCalculations;
-import seng302.team18.util.SpeedConverter;
+import seng302.team18.message.PowerType;
+import seng302.team18.model.updaters.Updater;
+import seng302.team18.util.GPSCalculator;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 
 /**
  * A class to represent an individual race.
  */
-public class Race extends Observable {
-    private final GPSCalculations gps = new GPSCalculations();
+public class Race {
+    private final GPSCalculator gps = new GPSCalculator();
     private final RoundingDetector detector = new RoundingDetector();
     private int id;
-    private RaceStatus status;
+    private RaceStatus status = RaceStatus.PRESTART;
     private RaceType raceType;
     private Regatta regatta = new Regatta();
     private Course course;
@@ -28,10 +26,19 @@ public class Race extends Observable {
     private List<Boat> startingList;
     private ZonedDateTime startTime = ZonedDateTime.now();
     private ZonedDateTime currentTime;
-    private Integer playerId;
     private List<MarkRoundingEvent> markRoundingEvents = new ArrayList<>();
     private List<YachtEvent> yachtEvents = new ArrayList<>();
+    private List<PowerUpEvent> powerEvents = new ArrayList<>();
     private RaceMode mode = RaceMode.RACE;
+    private List<Updater> updaters = new ArrayList<>();
+    private List<Projectile> projectiles = new ArrayList<>();
+    private List<Projectile> newProjectileList = new ArrayList<>();
+    private List<Projectile> removedProjectileList = new ArrayList<>();
+    private int powerId = 0;
+    private int nextProjectileId = 0;
+    private StartPositionSetter positionSetter;
+//    private Boat spectatorBoat = new Boat("Spectator boat", "Spec boat", 9000, 0);
+
 
     public Race() {
         participantIds = new ArrayList<>();
@@ -48,7 +55,7 @@ public class Race extends Observable {
     /**
      * Race class constructor.
      *
-     * @param startingList ArrayList holding all entered boats
+     * @param startingList List holding all entered boats
      * @param course       Course object
      * @param raceId       Integer representing the race id
      * @param raceType     RaceType enum indicating the type of race to create
@@ -63,19 +70,66 @@ public class Race extends Observable {
         this.status = RaceStatus.NOT_ACTIVE;
         this.raceType = raceType;
         setCourseForBoats();
-        setInitialSpeed();
     }
 
 
     /**
-     * Sets the speed of the boats at the start line
+     * Randomly places power ups.
+     *
+     * @param powerUps  number of power ups to place.
+     * @param prototype the base PickUp.
+     * @param duration  how long the PickUp will last in milliseconds.
      */
-    private void setInitialSpeed() {
-        double speed = 100;
-        for (Boat boat : startingList) {
-            boat.setSpeed(speed); // knots
-            speed -= 10;
+    public void addPickUps(int powerUps, PickUp prototype, double duration) {
+        GPSCalculator calculator = new GPSCalculator();
+        int maxId = powerId + powerUps;
+        while (powerId < maxId) {
+            Coordinate randomPoint = calculator.randomPoint(course.getCourseLimits());
+            PickUp pickUp = makePickUp(powerId, randomPoint, prototype, duration);
+            course.addPickUp(pickUp);
+            powerId += 1;
         }
+    }
+
+
+    /**
+     * Creates a single PickUp.
+     *
+     * @param id          of the new PickUp.
+     * @param randomPoint location of the new PickUp.
+     * @param prototype   the base PickUp.
+     * @param duration    how long the PickUp will last in milliseconds.
+     * @return the new PickUp.
+     */
+    private PickUp makePickUp(int id, Coordinate randomPoint, PickUp prototype, double duration) {
+        final double timeout = System.currentTimeMillis() + duration;
+        PickUp pickUp = prototype.clone();
+        pickUp.setId(id);
+        pickUp.setTimeout(timeout);
+        pickUp.setPower(getRandomPower());
+        pickUp.setLocation(randomPoint);
+        return pickUp;
+    }
+
+
+    /**
+     * Generates a random PowerUp to put in the PickUp.
+     *
+     * @return a random PowerUp.
+     */
+    private PowerUp getRandomPower() {
+        int max = 1;
+        PowerUp powerUp = null;
+
+        int randomNum = ThreadLocalRandom.current().nextInt(0, max + 1);
+        if (randomNum == 0) {
+            powerUp = new SpeedPowerUp(3);
+        } else if (randomNum == 1) {
+            powerUp = new SharkPowerUp();
+        }
+
+        powerUp.setDuration(5000d);
+        return powerUp;
     }
 
 
@@ -96,47 +150,15 @@ public class Race extends Observable {
     private void setCourseForBoat(Boat boat) {
         if (course.getMarkSequence().size() > 1) {
             boat.setLegNumber(0);
-            boat.setCoordinate(getStartPosition(boat, boat.getLength() * 3));
+            boat.setCoordinate(positionSetter.getBoatPosition(boat, course, startingList.size()));
             boat.setHeading(gps.getBearing(
-                    course.getMarkSequence().get(0).getCompoundMark().getCoordinate(),
-                    course.getMarkSequence().get(1).getCompoundMark().getCoordinate()
+                    boat.getCoordinate(),
+                    course.getMarkRounding(0).getCoordinate()
             ));
             boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
             boat.setRoundZone(Boat.RoundZone.ZONE1);
             boat.setStatus(BoatStatus.PRE_START);
         }
-    }
-
-
-    /**
-     * Method to calculate the starting position for a boat
-     * Prevents boats from overlapping
-     *
-     * @param boat       boat to get starting position for
-     * @param distBehind the distance behind the start line to place the boat (m)
-     * @return position for boat to start at
-     */
-    private Coordinate getStartPosition(Boat boat, double distBehind) {
-        MarkRounding startRounding = course.getMarkSequence().get(0);
-        Coordinate midPoint = startRounding.getCompoundMark().getCoordinate();
-        Coordinate startMark1 = startRounding.getCompoundMark().getMarks().get(0).getCoordinate();
-        Coordinate startMark2 = startRounding.getCompoundMark().getMarks().get(1).getCoordinate();
-
-        double bearing = gps.getBearing(startMark1, startMark2);
-
-        double diff = (startRounding.getRoundingDirection().equals(MarkRounding.Direction.PS)) ? 90 : -90;
-        double behind = (bearing + diff + 360) % 360;
-
-        double offset = startingList.size();
-
-        if ((offset % 2) == 0) {
-            offset /= 2;
-        } else {
-            offset = -Math.floor(offset / 2);
-        }
-
-        Coordinate behindMidPoint = gps.toCoordinate(midPoint, behind, distBehind);
-        return gps.toCoordinate(behindMidPoint, bearing, (boat.getLength() * offset + 10));
     }
 
 
@@ -150,11 +172,12 @@ public class Race extends Observable {
 
     /**
      * Removes a participant from the race
-     * @param boatID id for the participant to be removed
+     *
+     * @param boatID id of the participant to be removed
      */
-    public void removeParticipant (int boatID) {
+    public void removeParticipant(int boatID) {
         for (Boat boat : startingList) {
-            if(boat.getId().equals(boatID)){
+            if (boat.getId().equals(boatID)) {
                 startingList.remove(boat);
                 participantIds.remove(boatID);
             }
@@ -165,7 +188,8 @@ public class Race extends Observable {
     /**
      * Set the status for boat.
      *
-     * @param id Source ID for the boat to have its status changed.
+     * @param id     the id of the target boat
+     * @param status the status of the boat
      */
     public void setBoatStatus(Integer id, BoatStatus status) {
         for (Boat boat : startingList) {
@@ -177,9 +201,7 @@ public class Race extends Observable {
 
 
     /**
-     * Starting list getter.
-     *
-     * @return List holding all entered boats.
+     * @return all entered boats.
      */
     public List<Boat> getStartingList() {
         return startingList;
@@ -187,31 +209,18 @@ public class Race extends Observable {
 
 
     /**
-     * Starting list setter.
+     * Sets the contents of the starting list to be the same as the given list
      *
-     * @param startingList ArrayList holding all entered boats
+     * @param startingList the list of starters to use
      */
     public void setStartingList(List<Boat> startingList) {
         this.startingList.clear();
-        if (participantIds.size() == 0) {
-            this.startingList.addAll(startingList);
-        } else {
-            for (Boat boat : startingList) {
-                if (participantIds.contains(boat.getId())) {
-                    this.startingList.add(boat);
-                }
-            }
-        }
-        for (Boat boat : this.startingList) {
-            boat.setControlled(playerId != null && playerId.equals(boat.getId()));
-        }
+        this.startingList.addAll(startingList);
     }
 
 
     /**
-     * Course getter.
-     *
-     * @return Course object
+     * @return the course for this race
      */
     public Course getCourse() {
         return course;
@@ -219,9 +228,7 @@ public class Race extends Observable {
 
 
     /**
-     * Course setter.
-     *
-     * @param course Course object
+     * @param course the course to use for this race
      */
     public void setCourse(Course course) {
         this.course = course;
@@ -229,190 +236,42 @@ public class Race extends Observable {
 
 
     /**
-     * Updates the position and heading of every boat in the race.
+     * Updates the race by the given amount of time.
      *
      * @param time the time in seconds
      */
-    public void updateBoats(double time) { // time in seconds
-        for (Boat boat : startingList) {
-            updateBoat(boat, time);
-        }
-    }
-
-    private void updateBoat(Boat boat, double time) {
-        GPSCalculations calculator = new GPSCalculations();
-
-        updatePosition(boat, time);
-
-        List<Coordinate> boundaries = course.getCourseLimits();
-        if (boundaries.size() > 0) {
-            if (!calculator.contains(boat.getCoordinate(), boundaries) && !(boat.getStatus().equals(BoatStatus.DSQ))) {
-                boat.setStatus(BoatStatus.DSQ);
-                setChanged();
-                notifyObservers(boat);
-            }
+    public void update(double time) { // time in seconds
+        for (Updater updater : updaters) {
+            updater.update(this, time);
         }
     }
 
 
     /**
-     * Sets the next Leg of the boat, updates the mark to show the boat has passed it,
-     * and sets the destination to the next marks coordinates.
+     * Checks if this race has finished
      *
-     * @param boat    the boat
-     * @param nextLeg the next leg
+     * @return true if this race has finished, else false
      */
-    public void setNextLeg(Boat boat, int nextLeg) {
-        int currentLeg = boat.getLegNumber();
-
-        if (currentLeg == nextLeg) return;
-
-        final int newPlace = ((Long) startingList.stream().filter(b -> b.getLegNumber() >= nextLeg).count()).intValue() + 1;
-        final int oldPace = boat.getPlace();
-
-        if (oldPace < newPlace) {
-            startingList.stream()
-                    .filter(boat1 -> boat1.getPlace() <= newPlace)
-                    .filter(boat1 -> oldPace < boat1.getPlace())
-                    .forEach(boat1 -> boat1.setPlace(boat1.getPlace() + 1));
-        } else if (newPlace < oldPace) {
-            startingList.stream()
-                    .filter(boat1 -> boat1.getPlace() < oldPace)
-                    .filter(boat1 -> newPlace <= boat1.getPlace())
-                    .forEach(boat1 -> boat1.setPlace(boat1.getPlace() + 1));
-        }
-
-        boat.setPlace(newPlace);
-        markRoundingEvents.add(new MarkRoundingEvent(System.currentTimeMillis(), boat, course.getMarkSequence().get(currentLeg)));
-
-        if (nextLeg == course.getMarkSequence().size()) {
-            boat.setStatus(BoatStatus.FINISHED);
-            boat.setSpeed(0);
-            boat.setSailOut(true);
-        }
-
-        boat.setLegNumber(nextLeg);
-    }
-
-
-    /**
-     * Updates the boats coordinates to move closer to the boats destination.
-     * Amount moved is proportional to the time passed
-     * Detects if there has been a collision between the boat and another abstract boat after updating the position
-     *
-     * @param boat to be moved
-     * @param time that has passed
-     */
-    private void updatePosition(Boat boat, double time) {
-        double speed = boat.getSpeed(); // knots
-        if (boat.isSailOut()) {
-            speed = 0;
-        }
-
-        List<AbstractBoat> obstacles = new ArrayList<>(startingList);
-        obstacles.addAll(course.getMarks());
-        AbstractBoat obstacle = null;
-        if (mode != RaceMode.CONTROLS_TUTORIAL) {
-            obstacle = boat.hasCollided(obstacles);
-        }
-        if (obstacle instanceof Boat && ((Boat) obstacle).getStatus().equals(BoatStatus.FINISHED)) {
-            obstacle = null;
-        } else if (boat.getStatus().equals(BoatStatus.FINISHED)){
-            obstacle =null;
-        }
-
-        if (obstacle != null) {
-            handleCollision(boat, obstacle);
-        } else {
-            double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
-            double secondsTime = time / 1000.0d;
-            double distanceTravelled = mpsSpeed * secondsTime;
-
-            // set next position based on current coordinate, distance travelled, and heading.
-            boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
-        }
-
-        if (!mode.equals(RaceMode.CONTROLS_TUTORIAL)) {
-            if (boat.getStatus().equals(BoatStatus.RACING) && detector.hasPassedDestination(boat, course)) {
-                setNextLeg(boat, boat.getLegNumber() + 1);
-            } else if (boat.getStatus().equals(BoatStatus.PRE_START) && boat.getLegNumber() == 0
-                    && detector.hasPassedDestination(boat, course)) {
-                statusOSCPenalty(boat);
-            } else if (boat.getStatus().equals(BoatStatus.OCS) && currentTime.isAfter(startTime.plusSeconds(5))) {
-                yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OCS_PENALTY_COMPLETE));
-                boat.setStatus(BoatStatus.RACING);
-                boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
-            }
-        }
-    }
-
-
-    /**
-     * Sets the boat to appropriate conditions when a boat has an OCS status.
-     *
-     * @param boat the boat which has the OCS status
-     */
-    private void statusOSCPenalty(Boat boat) {
-        yachtEvents.add(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OVER_START_LINE_EARLY));
-        boat.setStatus(BoatStatus.OCS);
-
-        boat.setCoordinate(getStartPosition(boat, boat.getLength() * 6));
-
-        boat.setSpeed(0);
-        boat.setSailOut(true);
-    }
-
-
-    /**
-     * Handles the collision when one is detected by printing to the console
-     * NOTE: Bumper car edition currently in play
-     *
-     * @param boat     boat collision was detected from
-     * @param obstacle obstacle the boat collided with
-     */
-    private void handleCollision(Boat boat, AbstractBoat obstacle) {
-        GPSCalculations calculator = new GPSCalculations();
-        double bearingOfCollision = calculator.getBearing(obstacle.getCoordinate(), boat.getCoordinate());
-        Coordinate newBoatCoordinate = calculator.toCoordinate(boat.getCoordinate(), bearingOfCollision, boat.getLength());
-        boat.setCoordinate(newBoatCoordinate);
-        if (obstacle instanceof Boat) {
-            Coordinate newObstacleCoordinate = calculator.toCoordinate(obstacle.getCoordinate(), bearingOfCollision, -obstacle.getLength());
-            ((Boat) obstacle).setCoordinate(newObstacleCoordinate);
-        }
-    }
-
-
     public boolean isFinished() {
-        Collection<BoatStatus> finishedStatuses = Arrays.asList(BoatStatus.DNF, BoatStatus.DNS, BoatStatus.FINISHED, BoatStatus.DSQ);
-        int numFinished = (int) startingList.stream()
-                .filter(boat -> finishedStatuses.contains(boat.getStatus()))
-                .count();
-        return startingList.size() == numFinished && startingList.size() != 0;
+        return status.equals(RaceStatus.FINISHED);
     }
 
 
+    /**
+     * @return the start time of this race
+     */
     public ZonedDateTime getStartTime() {
         return startTime;
     }
 
 
+    /**
+     * Sets the starting time of this race
+     *
+     * @param startTime the time at which to start the race
+     */
     public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
-    }
-
-
-    /**
-     * Sets participants and removes non participants for current list of boats.
-     *
-     * @param participantIds ids of all participants
-     */
-    public void setParticipantIds(List<Integer> participantIds) {
-        this.participantIds = participantIds;
-        List<Boat> newList = startingList.stream()
-                .filter(boat -> participantIds.contains(boat.getId()))
-                .collect(Collectors.toList());
-        startingList.clear();
-        startingList.addAll(newList);
     }
 
 
@@ -446,6 +305,11 @@ public class Race extends Observable {
     }
 
 
+    /**
+     * Returns all the enqueued MarkRoundingEvents and clears the list
+     *
+     * @return the enqueued MarkRoundingEvents
+     */
     public List<MarkRoundingEvent> popMarkRoundingEvents() {
         List<MarkRoundingEvent> events = markRoundingEvents;
         markRoundingEvents = new ArrayList<>();
@@ -453,6 +317,11 @@ public class Race extends Observable {
     }
 
 
+    /**
+     * Pops all the YachtEvents in the queue
+     *
+     * @return the popped YachtEvents
+     */
     public List<YachtEvent> popYachtEvents() {
         List<YachtEvent> events = yachtEvents;
         yachtEvents = new ArrayList<>();
@@ -460,15 +329,47 @@ public class Race extends Observable {
     }
 
 
-    public int getPlayerId() {
-        return playerId;
+    /**
+     * Pops all the PowerUpEvents off the queue
+     *
+     * @return the popped PowerUpEvents
+     */
+    public List<PowerUpEvent> popPowerUpEvents() {
+        List<PowerUpEvent> events = powerEvents;
+        powerEvents = new ArrayList<>();
+        return events;
+    }
+
+    public List<Projectile> popNewProjectileIds(){
+        List<Projectile> events = newProjectileList;
+        newProjectileList = new ArrayList<>();
+        return events;
+    }
+
+    public List<Projectile> popRemovedProjectiles(){
+        List<Projectile> events = removedProjectileList;
+        removedProjectileList = new ArrayList<>();
+        return events;
     }
 
 
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
+    /**
+     * Adds an event to the queue
+     *
+     * @param yachtEvent the event to be enqueued
+     */
+    public void addYachtEvent(YachtEvent yachtEvent) {
+        yachtEvents.add(yachtEvent);
+    }
 
-        startingList.forEach(boat -> boat.setControlled(boat.getId().equals(playerId)));
+
+    /**
+     * Adds an event to the queue
+     *
+     * @param markRoundingEvent the event to be enqueued
+     */
+    public void addMarkRoundingEvent(MarkRoundingEvent markRoundingEvent) {
+        markRoundingEvents.add(markRoundingEvent);
     }
 
 
@@ -492,23 +393,6 @@ public class Race extends Observable {
     }
 
 
-    /**
-     * Gets a boat from the race given an ID.
-     *
-     * @param id the ID of the boat.
-     * @return the boat with the specified ID, null otherwise.
-     */
-    public Boat getBoat(int id) {
-        for (Boat boat : startingList) {
-            if (boat.getId() == id) {
-                return boat;
-            }
-        }
-
-        return null;
-    }
-
-
     public RaceMode getMode() {
         return mode;
     }
@@ -516,5 +400,103 @@ public class Race extends Observable {
 
     public void setMode(RaceMode mode) {
         this.mode = mode;
+    }
+
+
+    public RoundingDetector getDetector() {
+        return detector;
+    }
+
+
+    public void setUpdaters(List<Updater> updaters) {
+        this.updaters = updaters;
+    }
+
+
+    public MarkRounding getMarkRounding(int sequenceNumber) {
+        return course.getMarkRounding(sequenceNumber);
+    }
+
+
+    public List<PickUp> getPickUps() {
+        return course.getPickUps();
+    }
+
+
+    /**
+     * Consumes a power up.
+     *
+     * @param boat   that picked up the pick up
+     * @param pickUp that was picked up
+     */
+    public void consumePowerUp(Boat boat, PickUp pickUp) {
+        boat.setPowerUp(pickUp.getPower());
+        List<PickUp> pickUps = course.getPickUps();
+        pickUps.remove(pickUp);
+        course.setPickUps(pickUps);
+        powerEvents.add(new PowerUpEvent(boat.getId(), pickUp));
+    }
+
+
+    public void removeOldPickUps() {
+        course.removeOldPickUps();
+    }
+
+
+    /**
+     * Method to add a projectile to the race
+     * Projectiles collected in powerUps
+     *
+     * @param boat the boat that creates the projectile
+     * @param type the type of power up used
+     */
+    public void addProjectile(Boat boat, PowerType type) {
+        Projectile sharky = new TigerShark(nextProjectileId, new Coordinate(0,0), boat.getHeading());
+        Coordinate location = gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), (boat.getLength() + sharky.getBodyMass().getRadius() + 5));
+        sharky.setLocation(location);
+        projectiles.add(sharky);
+        nextProjectileId += 1;
+        newProjectileList.add(sharky);
+//        System.out.println("hi");
+//        System.out.println(projectiles);
+    }
+
+    public List<Projectile> getProjectiles() {
+        return projectiles;
+    }
+
+    /**
+     * Method to remove a projectile from the race
+     *
+     * @param projectile_id the id of the projectile to be removed
+     */
+    public void removeProjectile(int projectile_id) {
+        for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
+            Projectile projectile = it.next();
+            if (projectile.getId() == projectile_id) {
+                removedProjectileList.add(projectile);
+                it.remove();
+            }
+        }
+    }
+
+
+    public Coordinate getCenter() {
+        return course.getCenter();
+    }
+
+
+    public void setPositionSetter(StartPositionSetter positionSetter) {
+        this.positionSetter = positionSetter;
+    }
+
+
+    public StartPositionSetter getPositionSetter() {
+        return positionSetter;
+    }
+
+
+    public boolean hasStarted() {
+        return status == RaceStatus.STARTED || status.isAfter(RaceStatus.STARTED);
     }
 }

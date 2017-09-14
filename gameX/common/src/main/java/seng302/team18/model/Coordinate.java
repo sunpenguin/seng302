@@ -28,7 +28,7 @@ public class Coordinate {
      *
      * @return the latitude
      */
-    public Double getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
@@ -38,10 +38,8 @@ public class Coordinate {
      *
      * @param latitude value for the latitude
      */
-    public void setLatitude(double latitude) { // TODO throw exception?
-        if (-90 <= latitude && latitude <= 90.0) {
-            this.latitude = latitude;
-        }
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
 
@@ -50,7 +48,7 @@ public class Coordinate {
      *
      * @return the longitude
      */
-    public Double getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
@@ -60,10 +58,8 @@ public class Coordinate {
      *
      * @param longitude value for the longitude
      */
-    public void setLongitude(double longitude) { // TODO throw exception?
-        if (-180 <= longitude && longitude <= 180) {
-            this.longitude = longitude;
-        }
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
 
