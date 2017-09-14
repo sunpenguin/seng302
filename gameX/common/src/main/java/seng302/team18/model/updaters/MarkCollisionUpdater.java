@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by sbe67 on 5/09/17.
+ * Used to check if boats collide with marks
  */
 public class MarkCollisionUpdater extends CollisionUpdater {
 

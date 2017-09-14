@@ -1,12 +1,13 @@
 package seng302.team18.model;
 
+import seng302.team18.message.PowerType;
 import seng302.team18.model.updaters.Updater;
 import seng302.team18.util.GPSCalculator;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 
@@ -30,8 +31,13 @@ public class Race {
     private List<PowerUpEvent> powerEvents = new ArrayList<>();
     private RaceMode mode = RaceMode.RACE;
     private List<Updater> updaters = new ArrayList<>();
+    private List<Projectile> projectiles = new ArrayList<>();
+    private List<Projectile> newProjectileList = new ArrayList<>();
+    private List<Projectile> removedProjectileList = new ArrayList<>();
     private int powerId = 0;
+    private int nextProjectileId = 0;
     private StartPositionSetter positionSetter;
+//    private Boat spectatorBoat = new Boat("Spectator boat", "Spec boat", 9000, 0);
 
 
     public Race() {
@@ -112,7 +118,16 @@ public class Race {
      * @return a random PowerUp.
      */
     private PowerUp getRandomPower() {
-        PowerUp powerUp = new SpeedPowerUp(3);
+        int max = 1;
+        PowerUp powerUp = null;
+
+        int randomNum = ThreadLocalRandom.current().nextInt(0, max + 1);
+        if (randomNum == 0) {
+            powerUp = new SpeedPowerUp(3);
+        } else if (randomNum == 1) {
+            powerUp = new SharkPowerUp();
+        }
+
         powerUp.setDuration(5000d);
         return powerUp;
     }
@@ -325,6 +340,18 @@ public class Race {
         return events;
     }
 
+    public List<Projectile> popNewProjectileIds(){
+        List<Projectile> events = newProjectileList;
+        newProjectileList = new ArrayList<>();
+        return events;
+    }
+
+    public List<Projectile> popRemovedProjectiles(){
+        List<Projectile> events = removedProjectileList;
+        removedProjectileList = new ArrayList<>();
+        return events;
+    }
+
 
     /**
      * Adds an event to the queue
@@ -413,6 +440,44 @@ public class Race {
 
     public void removeOldPickUps() {
         course.removeOldPickUps();
+    }
+
+
+    /**
+     * Method to add a projectile to the race
+     * Projectiles collected in powerUps
+     *
+     * @param boat the boat that creates the projectile
+     * @param type the type of power up used
+     */
+    public void addProjectile(Boat boat, PowerType type) {
+        Projectile sharky = new TigerShark(nextProjectileId, new Coordinate(0,0), boat.getHeading());
+        Coordinate location = gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), (boat.getLength() + sharky.getBodyMass().getRadius() + 5));
+        sharky.setLocation(location);
+        projectiles.add(sharky);
+        nextProjectileId += 1;
+        newProjectileList.add(sharky);
+//        System.out.println("hi");
+//        System.out.println(projectiles);
+    }
+
+    public List<Projectile> getProjectiles() {
+        return projectiles;
+    }
+
+    /**
+     * Method to remove a projectile from the race
+     *
+     * @param projectile_id the id of the projectile to be removed
+     */
+    public void removeProjectile(int projectile_id) {
+        for (Iterator<Projectile> it = projectiles.iterator(); it.hasNext();) {
+            Projectile projectile = it.next();
+            if (projectile.getId() == projectile_id) {
+                removedProjectileList.add(projectile);
+                it.remove();
+            }
+        }
     }
 
 

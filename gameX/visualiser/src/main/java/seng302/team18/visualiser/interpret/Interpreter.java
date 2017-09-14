@@ -78,6 +78,8 @@ public class Interpreter extends Observable {
 
     /**
      * Shuts down the interpreter
+     *
+     * @return if it has closed
      */
     public boolean close() {
         executor.shutdownNow();

@@ -7,9 +7,9 @@ import seng302.team18.util.SpeedConverter;
 /**
  * Created by dhl25 on 29/08/17.
  */
-public class BoatUpdater extends PowerUp {
+public class BoatPowerUpUpdater extends PowerUp {
 
-    public BoatUpdater() {
+    public BoatPowerUpUpdater() {
         super();
     }
 

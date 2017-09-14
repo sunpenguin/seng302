@@ -1,6 +1,10 @@
 package seng302.team18.racemodel;
 
 
+
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.AcceptanceMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
 import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
 import seng302.team18.racemodel.connection.ClientConnection;
@@ -10,10 +14,7 @@ import seng302.team18.racemodel.connection.ServerState;
 import seng302.team18.racemodel.message_generating.*;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 /**
  * Class to handle a mock race
@@ -221,8 +222,110 @@ public class TestMock implements Observer {
                 }
             } while (!race.isFinished() && open);
 
-            sendFinalMessages();
-            server.close();
+            // Sends final message
+            race.setStatus(RaceStatus.FINISHED);
+            ScheduledMessageGenerator raceMessageGenerator = new RaceMessageGenerator(race);
+            server.broadcast(raceMessageGenerator.getMessage());
         }
+
+
+        /**
+         * Switch into the preparatory stage.
+         * At this time, also stop accepting new connections and set up a BoatMessageGenerator for each boat.
+         */
+        private void switchToPrep() {
+            race.setStatus(RaceStatus.PREPARATORY);
+            server.stopAcceptingConnections();
+
+            for (Boat b : race.getStartingList()) {
+                scheduledMessages.add(new BoatMessageGenerator(b));
+            }
+        }
+
+
+        /**
+         * If at the necessary time, switch the RaceStatus to STARTED.
+         */
+        private void switchToStarted() {
+            if ((race.getStatus() == RaceStatus.PREPARATORY) && ZonedDateTime.now().isAfter(race.getStartTime())) {
+                race.setStatus(RaceStatus.STARTED);
+                race.getStartingList().stream()
+                        .filter(boat -> boat.getStatus().equals(BoatStatus.PRE_START))
+                        .forEach(boat -> boat.setStatus(BoatStatus.RACING));
+
+            }
+        }
+
+
+        /**
+         * Run the race.
+         * Updates the position of boats
+         *
+         * @param timeCurr The current time (milliseconds)
+         * @param timeLast The time (milliseconds) from the previous loop in runSimulation.
+         */
+        private void runRace(long timeCurr, long timeLast) {
+            race.update((timeCurr - timeLast));
+        }
+
+
+        /**
+         * Update the clients by sending any necessary new race info to them.
+         * Sends out updates for positions, mark roundings, etc.
+         *
+         * @param timeCurr The current time (milliseconds)
+         */
+        private void updateClients(long timeCurr) {
+            for (ScheduledMessageGenerator sendable : scheduledMessages) {
+                if (sendable.isTimeToSend(timeCurr)) {
+                    server.broadcast(sendable.getMessage());
+                }
+            }
+
+            for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
+                server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
+            }
+
+            for (YachtEvent event : race.popYachtEvents()) {
+                server.broadcast((new YachtEventCodeMessageGenerator(event, race.getId())).getMessage());
+            }
+
+            for (PickUp pickUp : race.getPickUps()) {
+                server.broadcast(new PowerUpMessageGenerator(pickUp).getMessage());
+            }
+
+            for (PowerUpEvent event : race.popPowerUpEvents()) {
+                server.broadcast((new PowerTakenGenerator(event.getBoatId(), event.getPowerId(), event.getPowerDuration()).getMessage()));
+            }
+
+            for (Projectile projectile : race.popNewProjectileIds()) {
+                server.broadcast((new ProjectileCreationMessageGenerator(projectile.getId()).getMessage()));
+                ScheduledMessageGenerator newProMessageGen = new ProjectileMessageGenerator(AC35MessageType.PROJECTILE_LOCATION.getCode(), projectile);
+                scheduledMessages.add(newProMessageGen);
+            }
+
+            for (Projectile projectile : race.popRemovedProjectiles()) {
+                for (Iterator<ScheduledMessageGenerator> it = scheduledMessages.iterator(); it.hasNext(); ) {
+                    ScheduledMessageGenerator sched = it.next();
+                    if (sched instanceof ProjectileMessageGenerator) {
+                        ProjectileMessageGenerator projectileMessageGenerator = (ProjectileMessageGenerator) sched;
+                        if (projectileMessageGenerator.getProjectileId() == projectile.getId()) {
+                            server.broadcast((new ProjectileGoneGenerator(projectile.getId()).getMessage()));
+                            it.remove();
+                        }
+                    }
+                }
+            }
+
+
+        }
+
     }
 }
+//    public void setSendRaceXML(boolean send) {
+//        shouldSendXML = send;
+//            sendFinalMessages();
+//            server.close();
+//        }
+//    }
+//}

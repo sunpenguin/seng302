@@ -13,7 +13,7 @@ public abstract class MessageGenerator {
 
 
     /**
-     * Construct a MessageGenerator with a type indicating what type of message is reuired.
+     * Construct a MessageGenerator with a type indicating what type of message is required.
      *
      * @param type Integer representing the message type
      */

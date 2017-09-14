@@ -5,28 +5,26 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
+import seng302.team18.message.PowerType;
 import seng302.team18.model.*;
-import seng302.team18.model.updaters.BumperBoatHealthUpdater;
-import seng302.team18.model.updaters.BoatUpdater;
-import seng302.team18.model.updaters.OutOfBoundsUpdater;
-import seng302.team18.model.updaters.Updater;
+import seng302.team18.model.updaters.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
- * Created by sbe67 on 4/09/17.
+ * Steps to run the projectile creation feature tests
  */
-public class BumperBoatLosesLife {
+public class ProjectileCreation {
 
-    private Boat boat;
     private Race race;
-    private BoatStatus oldStatus = BoatStatus.RACING;
-    private BoatStatus newStatus = BoatStatus.RACING;
-    private int oldBoatLives;
+    private Boat boat1;
+    private Boat boat2;
 
-    @Given("^a bumperBoat race$")
-    public void a_bumperBoat_race() throws Throwable {
-    Coordinate boundary1 = new Coordinate(32.30502, -64.85857);
+    @Given("^a race with projectiles$")
+    public void a_race_with_projectiles() throws Throwable {
+        Coordinate boundary1 = new Coordinate(32.30502, -64.85857);
         Coordinate boundary2 = new Coordinate(32.30502, -64.85235);
         Coordinate boundary3 = new Coordinate(32.29925, -64.85235);
         Coordinate boundary4 = new Coordinate(32.29925, -64.85857);
@@ -39,58 +37,74 @@ public class BumperBoatLosesLife {
         race = new Race();
         List<Updater> updaters = new ArrayList<>();
         updaters.add(new BoatUpdater());
-        updaters.add(new BumperBoatHealthUpdater());
+        updaters.add(new ProjectileUpdater());
+        updaters.add(new ProjectileHitUpdater());
+        updaters.add(new OutOfBoundsUpdater());
         race.setUpdaters(updaters);
         Course course = new Course(getCompoundMarks(), boundaries, getRoundings());
-        race.setCourse(course);        boat = new Boat("name", "shortName", 1, 1);
-        boat.setCoordinate(new Coordinate(32.30463, -64.85245));
-        boat.setStatus(oldStatus);
-        oldBoatLives = boat.getLives();
-        race.addParticipant(boat);
+        race.setCourse(course);
     }
 
-    @Given("^a boat inside the courses bumperBoat race bounds$")
-    public void a_boat_inside_the_courses_bumperBoat_race_bounds() throws Throwable {
-        boat = new Boat("name", "shortName", 1, 1);
-        boat.setCoordinate(new Coordinate(32.30463, -64.85245));
-        boat.setStatus(oldStatus);
-        oldBoatLives = boat.getLives();
-        race.addParticipant(boat);
+    @Given("^two boats$")
+    public void two_boats() throws Throwable {
+        boat1 = new Boat("boat name 1", "shortName1", 1, 14);
+        boat1.setCoordinate(new Coordinate(32.30463, -64.85245));
+        boat2 = new Boat("boat name 2", "shortName2", 2, 14);
+        boat2.setCoordinate(new Coordinate(32.2999, -64.857));
+        race.addParticipant(boat1);
+        race.addParticipant(boat2);
     }
 
-
-    @When("^the player stays inside the bumperBoat boundary$")
-    public void the_player_stays_inside_the_bumperBoat_boundary() throws Throwable {
-        race.update(1);
+    @Given("^the first boat has a tiger shark power up$")
+    public void the_first_boat_has_a_tiger_shark_power_up() throws Throwable {
+       boat1.setPowerUp(new SharkPowerUp());
+       boat1.setPowerActive(false);
     }
 
-    @Then("^the players lives will stay the same$")
-    public void the_players_lives_will_stay_the_same() throws Throwable {
-        Assert.assertEquals(oldBoatLives, boat.getLives());
+    @When("^the boat fires the projectile$")
+    public void the_boat_fires_the_projectile() throws Throwable {
+        boat1.activatePowerUp();
+        race.update(20);
     }
 
-    @Then("^the player will have (\\d+) lives$")
-    public void the_player_will_have_lives(int lives) throws Throwable {
-        Assert.assertEquals(lives, boat.getLives());
+    @When("^picks up another projectile$")
+    public void picks_up_another_projectile() throws Throwable {
+        boat1.setPowerUp(new SharkPowerUp());
+        boat1.setPowerActive(false);
     }
 
-    @When("^the player has (\\d+) lives$")
-    public void the_player_has_lives(int lives) throws Throwable {
-        while(boat.getLives() > lives) {
-            boat.loseLife();
-        }
+    @When("^fires the second projectile$")
+    public void fires_the_second_projectile() throws Throwable {
+        boat1.activatePowerUp();
+        race.update(20);
     }
 
-    @When("^the player moves outside the the bumperBoat boundary$")
-    public void the_player_moves_outside_the_the_bumperBoat_boundary() throws Throwable {
-        boat.setSailOut(false);
-        boat.setSpeed(100000);
-        race.update(999999999);
+    @Then("^the the first projectiles id will differ form the second projectiles id$")
+    public void the_the_first_projectiles_id_will_differ_form_the_second_projectiles_id() throws Throwable {
+        Assert.assertNotEquals(race.getProjectiles().get(0).getId(),race.getProjectiles().get(1).getId());
     }
 
-    @Then("^the players bumperBoat status will be set to disqualified\\.$")
-    public void the_players_bumperBoat_status_will_be_set_to_disqualified() throws Throwable {
-        Assert.assertEquals(BoatStatus.DSQ, boat.getStatus());
+    @When("^the projectile leave the boundaries$")
+    public void the_projectile_leave_the_boundaries() throws Throwable {
+        race.update(50000);
+    }
+
+    @Then("^the projectile will cease to exist$")
+    public void the_projectile_will_cease_to_exist() throws Throwable {
+        Assert.assertEquals(race.getProjectiles().size(), 0);
+    }
+
+    @When("^it hits a second boat$")
+    public void it_hits_a_second_boat() throws Throwable {
+        boat2.setCoordinate(new Coordinate(32.2999, -64.857));
+        race.getProjectiles().get(0).setLocation(boat2.getCoordinate());
+        race.update(0.000003);
+    }
+
+    @Then("^the second boat will be stunned$")
+    public void the_second_boat_will_be_stunned() throws Throwable {
+        Assert.assertEquals(boat2.getPowerUp().getType(), PowerType.STUN);
+        Assert.assertEquals(boat2.isPowerActive(), true);
     }
 
     private List<CompoundMark> getCompoundMarks() {
@@ -167,4 +181,15 @@ public class BumperBoatLosesLife {
         return markRoundings;
     }
 
+
+    private PickUp createPrototype() {
+        BodyMass mass = new BodyMass();
+        mass.setWeight(0);
+        mass.setRadius(12);
+
+        PickUp pickUp = new PickUp(-1);
+        pickUp.setBodyMass(mass);
+
+        return pickUp;
+    }
 }

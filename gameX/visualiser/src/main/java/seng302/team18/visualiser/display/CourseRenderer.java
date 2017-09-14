@@ -264,6 +264,9 @@ public class CourseRenderer implements Renderable {
             case SPEED:
                 renderPickUp(pickUp, Color.GREEN);
                 break;
+            case SHARK:
+                renderPickUp(pickUp, Color.RED);
+                break;
             default:
                 System.out.println("PowerUpInterpreter::makePowerUp has gone horribly wrong (ask Sunguin for help)");
                 return;

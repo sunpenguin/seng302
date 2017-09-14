@@ -2,15 +2,12 @@ package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import seng302.team18.model.Boat;
-import seng302.team18.model.BoatStatus;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.RaceMode;
+import seng302.team18.model.*;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.util.PixelMapper;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class that takes a Race and a Group and draws the Race on the Group.
@@ -21,6 +18,7 @@ public class RaceRenderer implements Renderable {
     private ClientRace race;
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
+    private Map<Integer, DisplayShark> sharksMap = new HashMap<>();
     private PixelMapper pixelMapper;
     private boolean drawTrails;
 
@@ -64,6 +62,7 @@ public class RaceRenderer implements Renderable {
      */
     public void render() {
         drawBoats();
+        renderShark();
         if (drawTrails) {
             drawTrails();
         }
@@ -74,7 +73,6 @@ public class RaceRenderer implements Renderable {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
-
             if (displayBoat == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
                 displayBoat = makeBoat(boat);
             }
@@ -86,6 +84,48 @@ public class RaceRenderer implements Renderable {
             }
         }
     }
+
+
+    /**
+     * Checks if the projectile represented by each DisplayShark is still in bounds and removes the display shark from
+     * the group if it is not
+     */
+    public void removeSharks(){
+        for (DisplayShark shark : sharksMap.values()){
+            if (!race.getProjectiles().contains(shark.getProjectile())){
+                shark.removeFrom(group);
+                sharksMap.remove(shark.getProjectile().getId());
+            }
+        }
+    }
+
+
+    /**
+     * Renders the sharks on the group
+     */
+    public void renderShark() {
+        removeSharks();
+
+        for (int i = 0; i < race.getProjectiles().size(); i++){
+            Projectile projectile = race.getProjectiles().get(i);
+            DisplayShark shark = sharksMap.get(projectile.getId());
+            if (shark == null){
+                shark = new DisplayShark(projectile, pixelMapper);
+                sharksMap.put(projectile.getId(), shark);
+                shark.addToGroup(group);
+
+            } else if (shark.getProjectile() != null) {
+                shark.setScale(pixelMapper.mappingRatio());
+                shark.setCoordinate(projectile.getLocation());
+                shark.setHeading(projectile.getHeading());
+            } else {
+                shark.removeFrom(group);
+                sharksMap.remove(shark.getProjectile().getId());
+            }
+
+        }
+    }
+
 
 
     /**
@@ -125,6 +165,7 @@ public class RaceRenderer implements Renderable {
         DisplayTrail trail = trailMap.remove(displayBoat.getShortName());
         trail.removeFrom(group);
     }
+
 
 
     /**
