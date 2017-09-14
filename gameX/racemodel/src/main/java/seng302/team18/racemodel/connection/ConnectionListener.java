@@ -60,6 +60,8 @@ public class ConnectionListener extends Observable implements Observer {
             });
         } else if (ServerState.CLOSED.equals(arg)) {
             close();
+            setChanged();
+            notifyObservers(arg);
         } else if (arg instanceof Integer) {
             PlayerControllerReader player = getPlayer((Integer) arg);
             if (player != null) {

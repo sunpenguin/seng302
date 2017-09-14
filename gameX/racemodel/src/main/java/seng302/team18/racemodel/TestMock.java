@@ -58,7 +58,7 @@ public class TestMock implements Observer {
      */
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof ClientConnection) { // ConnectionListener
+        if (arg instanceof ClientConnection) {
             handleClient((ClientConnection) arg);
         } else if (arg instanceof ServerState) {
             open = !ServerState.CLOSED.equals(arg);
