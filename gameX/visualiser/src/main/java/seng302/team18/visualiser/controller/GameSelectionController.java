@@ -307,7 +307,10 @@ public class GameSelectionController {
         Label label = new Label();
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("spectatorImage");
-        label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.SPECTATION));
+        label.setOnMouseClicked(event -> {
+            setUpConnectionType(RaceMode.SPECTATION);
+            setUpConnectionOptions(false);
+        });
         return label;
     }
 
@@ -480,6 +483,8 @@ public class GameSelectionController {
         if (mode == null) {
             exitSelectionScreen();
         } else if (isHosting == null) {
+            setUpModeSelection();
+        } else if (mode.equals(RaceMode.SPECTATION)) {
             setUpModeSelection();
         } else {
             setUpConnectionType(mode);
