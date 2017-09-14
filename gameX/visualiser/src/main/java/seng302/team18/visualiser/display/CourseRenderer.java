@@ -155,9 +155,15 @@ public class CourseRenderer implements Renderable {
      * @param compoundMark CompoundMark to reset.
      */
     private void renderCompoundMark(CompoundMark compoundMark) {
-        for (int i = 0; i < compoundMark.getMarks().size(); i++) {
-            Mark mark = compoundMark.getMarks().get(i);
-            renderMark(mark);
+        try {
+            if (compoundMark.getMarks() != null) {
+                for (int i = 0; i < compoundMark.getMarks().size(); i++) {
+                    Mark mark = compoundMark.getMarks().get(i);
+                    renderMark(mark);
+                }
+            }
+        } catch (NullPointerException e) {
+            // TODO david 14/09
         }
     }
 
