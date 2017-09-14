@@ -54,6 +54,9 @@ public class GameSelectionController {
     private StringProperty ipStrProp;
     private StringProperty portStrProp;
 
+    private boolean isIpFirstFocus = true;
+    private boolean isPortFirstFocus = true;
+
     private RaceMode mode;
     private Boolean isHosting;
 
@@ -69,6 +72,7 @@ public class GameSelectionController {
     private int colourIndex = 0;
     private List<Color> boatColours = Arrays.asList(Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
             Color.CYAN, Color.BLUE, Color.PURPLE, Color.MAGENTA);
+
 
     @FXML
     public void initialize() {
@@ -94,7 +98,7 @@ public class GameSelectionController {
 
 
     /**
-     * Re draw the the pane which holds elements of the play interface to be in the middle of the window.
+     * Reposition the the diplay elements to fit the current screen
      */
     public void reDraw() {
         // selection trail
@@ -142,7 +146,11 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Present the mode selection options
+     */
     private void setUpModeSelection() {
+        mode = null;
         setOptionButtons(Arrays.asList(
                 createRaceButton(),
                 createArcadeButton(),
@@ -160,9 +168,14 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Present the connection type options
+     *
+     * @param mode the connection mode to use
+     */
     private void setUpConnectionType(RaceMode mode) {
         this.mode = mode;
-
+        this.isHosting = null;
         selectionTrailBox.getChildren().setAll(Arrays.asList(
                 getTrailGameMode(mode),
                 trailConnectionMode
@@ -177,6 +190,11 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Present connection options
+     *
+     * @param isHosting true if the game should be self-hosted, otherwise false
+     */
     private void setUpConnectionOptions(boolean isHosting) {
         this.isHosting = isHosting;
 
@@ -225,8 +243,9 @@ public class GameSelectionController {
 
 
     /**
-     * Set up the button for starting a race.
-     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     * Get a button that selects the game type as a race
+     *
+     * @return the button
      */
     private Labeled createRaceButton() {
         Label label = new Label();
@@ -238,8 +257,9 @@ public class GameSelectionController {
 
 
     /**
-     * Set up the button for starting an arcade race.
-     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     * Get a button that selects the game type as a arcade race
+     *
+     * @return the button
      */
     private Labeled createArcadeButton() {
         Label label = new Label();
@@ -251,8 +271,9 @@ public class GameSelectionController {
 
 
     /**
-     * Set up the button for starting a challenge mode game.
-     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     * Get a button that selects the game type as a challenge race
+     *
+     * @return the button
      */
     private Labeled createChallengeButton() {
         Label label = new Label();
@@ -264,8 +285,9 @@ public class GameSelectionController {
 
 
     /**
-     * Set up the button for starting a bumper boats game.
-     * Image used will changed when hovered over as defined in the preRaceStyle css.
+     * Get a button that selects the game type as a bumper boats game
+     *
+     * @return the button
      */
     private Labeled createBumperBoatsButton() {
         Label label = new Label();
@@ -277,8 +299,9 @@ public class GameSelectionController {
 
 
     /**
-     * Sets up the button for spectating an existing game,
-     * Image used will changed when hovered over as defined in the playInterface css.
+     * Get a button that selects the game type as spectator mode
+     *
+     * @return the button
      */
     private Labeled createSpectatorButton() {
         Label label = new Label();
@@ -290,8 +313,9 @@ public class GameSelectionController {
 
 
     /**
-     * Sets up the button for spectating an existing game,
-     * Image used will changed when hovered over as defined in the playInterface css.
+     * Get a button that selects the connection type as self hosting
+     *
+     * @return the button
      */
     private Labeled createCreateButton() {
         Label label = new Label();
@@ -303,8 +327,9 @@ public class GameSelectionController {
 
 
     /**
-     * Sets up the button for spectating an existing game,
-     * Image used will changed when hovered over as defined in the playInterface css.
+     * Get a button that selects the connection type as remote hosting
+     *
+     * @return the button
      */
     private Labeled createJoinButton() {
         Label label = new Label();
@@ -315,6 +340,11 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Gets a set of host details entry controls
+     *
+     * @return the controls
+     */
     private Region createHostEntry() {
         Control ipEntry = createIpField();
         Control portEntry = createPortField();
@@ -344,8 +374,11 @@ public class GameSelectionController {
     }
 
 
-    private boolean isIpFirstFocus = true;
-
+    /**
+     * Create an entry element for IP/host address
+     *
+     * @return the control
+     */
     private Control createIpField() {
         TextField field = new TextField();
         field.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -380,6 +413,11 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Create an entry element for port number
+     *
+     * @return the control
+     */
     private Control createPortField() {
         final TextField field = new TextField("5005");
         field.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -397,10 +435,23 @@ public class GameSelectionController {
 
         portStrProp = field.textProperty();
 
+        isPortFirstFocus = true;
+        field.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (isPortFirstFocus && newValue && isIpFirstFocus) {
+                outerPane.requestFocus();
+                isPortFirstFocus = false;
+            }
+        });
+
         return field;
     }
 
 
+    /**
+     * Create a button that initiates the connection
+     *
+     * @return the button
+     */
     private Labeled createPlayButton() {
         Label label = new Label();
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
@@ -422,25 +473,23 @@ public class GameSelectionController {
 
 
     /**
-     * returns the player to the playInterface
+     * Returns to the previous selection stream
      */
     @FXML
     private void backButtonAction() {
         if (mode == null) {
             exitSelectionScreen();
-
         } else if (isHosting == null) {
-            // Go back to mode selection
-            mode = null;
             setUpModeSelection();
         } else {
-            // go back to hosting selection
-            isHosting = null;
             setUpConnectionType(mode);
         }
     }
 
 
+    /**
+     * Returns to the title screen
+     */
     private void exitSelectionScreen() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
         Parent root = null; // throws IOException
@@ -458,7 +507,7 @@ public class GameSelectionController {
 
 
     /**
-     * Creates buttons for left and right selection and sets up a preview of the boat with the current colour.
+     * Places the colour-displaying boat in its frame
      */
     private void initialiseBoatPicker() {
         Double[] boatShape = new Double[]{
@@ -504,6 +553,11 @@ public class GameSelectionController {
     }
 
 
+    /**
+     * Arranges the given buttons in the options region
+     *
+     * @param buttons the buttons to display
+     */
     private void setOptionButtons(List<Region> buttons) {
         double x = optionsBox.getLayoutX();
         double y = optionsBox.getLayoutY();
