@@ -37,7 +37,7 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
 
         if (statusUpdater == null) {
 //            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 1);
-            statusUpdater = new BumperStatusUpdater(ZonedDateTime.now(), 2, 1, 1);
+            statusUpdater = new BumperStatusUpdater(ZonedDateTime.now(), 15, 1, 1);
             updaters.add(statusUpdater);
         }
 

@@ -38,7 +38,7 @@ public class ChallengeRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new ChallengeCourseShrinker(new Coordinate(38.21748,-106.52344), 34, 0.00000075, 0.025));
 
         if (statusUpdater == null) {
-            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 5);
+            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 15, 1, 5);
         }
 
         updaters.add(statusUpdater);
