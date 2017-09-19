@@ -34,12 +34,6 @@
                         </LinearGradient>
                      </fill>
                        </Polygon>
-                       <Text layoutX="43.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N" wrappingWidth="16.46484375">
-                           <font>
-                               <Font size="18.0" />
-                           </font>
-                       </Text>
-                       <Text layoutX="4.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
                   <Label fx:id="speedLabel" alignment="CENTER" layoutX="-1.0" layoutY="129.0" prefHeight="15.0" prefWidth="104.0" text="speedLabel" textAlignment="CENTER" />
                    </children>
                </AnchorPane>

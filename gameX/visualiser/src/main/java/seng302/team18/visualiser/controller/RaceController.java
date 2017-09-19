@@ -571,7 +571,7 @@ public class RaceController implements Observer {
      * Retrieves the wind direction, scales the size of the arrow and then draws it on the Group
      */
     private void startWindDirection() {
-        WindDisplay windDisplay = new WindDisplay(race, arrow, speedLabel);
+        WindDisplay windDisplay = new WindDisplay(race, arrow, speedLabel, raceViewPane);
         windDisplay.start();
     }
 
