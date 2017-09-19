@@ -117,8 +117,6 @@ public class Server extends Observable {
             }
         }
 
-        if (!toRemove.isEmpty()) System.out.println(toRemove);
-
         removeClients(toRemove);
         if (clients.isEmpty() && closeOnEmpty) {
             close();

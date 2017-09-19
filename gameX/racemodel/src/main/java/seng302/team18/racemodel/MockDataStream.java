@@ -16,6 +16,7 @@ import seng302.team18.racemodel.build.regatta.RegattaBuilderRealistic;
 import seng302.team18.racemodel.connection.ConnectionListener;
 import seng302.team18.racemodel.connection.Server;
 
+
 /**
  * Class to set up the mock stream
  */
