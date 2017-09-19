@@ -121,6 +121,8 @@ public class RaceController implements Observer {
 
     @FXML
     public void initialize() {
+        raceViewPane.getStylesheets().add(this.getClass().getResource("/stylesheets/raceview.css").toExternalForm());
+        fpsLabel.getStyleClass().add("fpsLabel");
         installKeyHandler();
         setSliderListener();
         sliderSetup();
