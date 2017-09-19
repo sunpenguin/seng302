@@ -38,7 +38,7 @@ public class ClientRace {
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
         raceType = RaceType.MATCH;
         GPSCalculator gps = new GPSCalculator();
-//        spectatorBoat.setCoordinate(gps.getCentralCoordinate(course.getCourseLimits()));
+//        spectatorBoat.setCoordinate(gps.getCentralCoordinate(course.getLimits()));
     }
 
 

@@ -130,10 +130,10 @@ public class XmlMessageBuilderTest {
 
     @Test
     public void buildRaceXmlMessage_boundaries() throws Exception {
-        assertEquals("wrong number of boundary marks", race.getCourse().getCourseLimits().size(), raceMessage.getBoundaryMarks().size());
+        assertEquals("wrong number of boundary marks", race.getCourse().getLimits().size(), raceMessage.getBoundaryMarks().size());
 
-        for (int i = 0; i < race.getCourse().getCourseLimits().size(); i++) {
-            Coordinate boundaryMark = race.getCourse().getCourseLimits().get(i);
+        for (int i = 0; i < race.getCourse().getLimits().size(); i++) {
+            Coordinate boundaryMark = race.getCourse().getLimits().get(i);
             assertTrue("message does not contain boundary mark: " + i, raceMessage.getBoundaryMarks().contains(boundaryMark));
         }
     }

@@ -99,7 +99,7 @@ public class XmlMessageBuilder {
             participants.put(boat.getId(), raceDefaults.getParticipantEntryDirection());
         }
 
-        message.setBoundaryMarks(race.getCourse().getCourseLimits());
+        message.setBoundaryMarks(race.getCourse().getLimits());
         message.setCompoundMarks(race.getCourse().getCompoundMarks());
         message.setStartTime(race.getStartTime().format(XmlMessage.DATE_TIME_FORMATTER));
         message.setStartPostponed(race.getStatus().equals(RaceStatus.POSTPONED));

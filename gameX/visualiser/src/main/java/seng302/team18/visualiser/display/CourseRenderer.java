@@ -80,14 +80,14 @@ public class CourseRenderer implements Renderable {
         group.getChildren().remove(border);
         border = new Polyline();
 
-        for (Coordinate boundaryMark : course.getCourseLimits()) {
+        for (Coordinate boundaryMark : course.getLimits()) {
             if (boundaryMark != null) {
                 renderBoundary(border, boundaryMark);
             }
         }
 
-        if (course.getCourseLimits().size() > 0 && !group.getChildren().contains(border)) {
-            renderBoundary(border, course.getCourseLimits().get(0));
+        if (course.getLimits().size() > 0 && !group.getChildren().contains(border)) {
+            renderBoundary(border, course.getLimits().get(0));
             group.getChildren().add(border);
         }
 

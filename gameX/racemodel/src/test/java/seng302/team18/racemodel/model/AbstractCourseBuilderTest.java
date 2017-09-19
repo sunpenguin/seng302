@@ -45,11 +45,11 @@ public class AbstractCourseBuilderTest {
 
     @Test
     public void buildCourse_boundary() throws Exception {
-        assertEquals("incorrect number of course boundary marks", boundaryMarks.size(), course.getCourseLimits().size());
+        assertEquals("incorrect number of course boundary marks", boundaryMarks.size(), course.getLimits().size());
 
         for (int i = 0; i < boundaryMarks.size(); i++) {
             Coordinate expected = boundaryMarks.get(i);
-            Coordinate actual = course.getCourseLimits().get(i);
+            Coordinate actual = course.getLimits().get(i);
 
             assertEquals("course boundary" + i + "is not as expected", expected, actual);
         }
