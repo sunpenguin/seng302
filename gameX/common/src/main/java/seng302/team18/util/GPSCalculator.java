@@ -227,7 +227,7 @@ public class GPSCalculator {
     public synchronized List<Coordinate> findMinMaxPoints(Course course) {
         List<Coordinate> points = new ArrayList<>();
 
-        points.addAll(course.getCourseLimits());
+        points.addAll(course.getLimits());
         points.addAll(course.getCompoundMarks().stream()
                 .flatMap(compoundMark -> compoundMark.getMarks().stream().map(Mark::getCoordinate))
                 .collect(Collectors.toList())

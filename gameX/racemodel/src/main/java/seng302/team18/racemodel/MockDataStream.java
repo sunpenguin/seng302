@@ -1,13 +1,20 @@
 package seng302.team18.racemodel;
 
-import seng302.team18.messageparsing.AC35MessageParserFactory;
+import seng302.team18.parse.AC35MessageParserFactory;
 import seng302.team18.model.Race;
-import seng302.team18.racemodel.ac35_xml_encoding.BoatXmlDefaults;
-import seng302.team18.racemodel.ac35_xml_encoding.RaceXmlDefaults;
-import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
+import seng302.team18.racemodel.encode.BoatXmlDefaults;
+import seng302.team18.racemodel.encode.RaceXmlDefaults;
+import seng302.team18.racemodel.encode.XmlMessageBuilder;
+import seng302.team18.racemodel.build.course.AbstractCourseBuilder;
+import seng302.team18.racemodel.build.course.CourseBuilderRealistic;
+import seng302.team18.racemodel.build.participants.AbstractParticipantsBuilder;
+import seng302.team18.racemodel.build.participants.ParticipantsBuilderSize20;
+import seng302.team18.racemodel.build.race.AbstractRaceBuilder;
+import seng302.team18.racemodel.build.race.RegularRaceBuilder;
+import seng302.team18.racemodel.build.regatta.AbstractRegattaBuilder;
+import seng302.team18.racemodel.build.regatta.RegattaBuilderRealistic;
 import seng302.team18.racemodel.connection.ConnectionListener;
 import seng302.team18.racemodel.connection.Server;
-import seng302.team18.racemodel.model.*;
 
 /**
  * Class to set up the mock stream

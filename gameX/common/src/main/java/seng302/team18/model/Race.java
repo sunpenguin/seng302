@@ -84,7 +84,7 @@ public class Race {
         GPSCalculator calculator = new GPSCalculator();
         int maxId = powerId + powerUps;
         while (powerId < maxId) {
-            Coordinate randomPoint = calculator.randomPoint(course.getCourseLimits());
+            Coordinate randomPoint = calculator.randomPoint(course.getLimits());
             PickUp pickUp = makePickUp(powerId, randomPoint, prototype, duration);
             course.addPickUp(pickUp);
             powerId += 1;

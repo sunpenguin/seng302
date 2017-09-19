@@ -41,12 +41,21 @@ import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.RaceMode;
-import seng302.team18.send.Sender;
+import seng302.team18.encode.Sender;
 import seng302.team18.util.GPSCalculator;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.*;
-import seng302.team18.visualiser.interpret.*;
-import seng302.team18.visualiser.messageinterpreting.YachtEventInterpreter;
+import seng302.team18.visualiser.display.ui.Clock;
+import seng302.team18.visualiser.display.render.*;
+import seng302.team18.visualiser.display.ui.DisplaySparkline;
+import seng302.team18.visualiser.display.ui.FPSReporter;
+import seng302.team18.visualiser.display.ui.StopWatchClock;
+import seng302.team18.visualiser.interpret.Interpreter;
+import seng302.team18.visualiser.interpret.americascup.*;
+import seng302.team18.visualiser.interpret.unique.*;
+import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
+import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
+import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
@@ -216,7 +225,7 @@ public class RaceController implements Observer {
                 toggleTabView();
                 break;
 //            default:
-//                send = true;
+//                encode = true;
         }
     }
 

@@ -107,7 +107,7 @@ public class Course {
     }
 
 
-    public synchronized List<Coordinate> getCourseLimits() {
+    public synchronized List<Coordinate> getLimits() {
         return new ArrayList<>(courseLimits);
     }
 
