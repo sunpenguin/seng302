@@ -6,8 +6,8 @@ import seng302.team18.model.*;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.util.PixelMapper;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class that takes a Race and a Group and draws the Race on the Group.
@@ -21,6 +21,7 @@ public class RaceRenderer implements Renderable {
     private Map<Integer, DisplayShark> sharksMap = new HashMap<>();
     private PixelMapper pixelMapper;
     private boolean drawTrails;
+    private DisplayRoundingArrow arrow;
 
 
     /**
@@ -63,8 +64,19 @@ public class RaceRenderer implements Renderable {
     public void render() {
         drawBoats();
         renderShark();
+        renderArrow();
         if (drawTrails) {
             drawTrails();
+        }
+    }
+
+    private void renderArrow() {
+        for (Boat boat: race.getStartingList()) {
+            race.getDestination(boat.getLegNumber());
+            CompoundMark current = race.getCourse().getMarkRounding(boat.getLegNumber()).getCompoundMark();
+            CompoundMark next = race.getCourse().getMarkRounding(boat.getLegNumber() + 1).getCompoundMark();
+            arrow = new DisplayRoundingArrow(current, next, pixelMapper);
+            arrow.drawArrow();
         }
     }
 
