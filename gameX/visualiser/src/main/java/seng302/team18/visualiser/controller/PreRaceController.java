@@ -8,15 +8,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
-import seng302.team18.message.RequestMessage;
-import seng302.team18.message.RequestType;
-import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.send.Sender;
 import seng302.team18.visualiser.ClientRace;
@@ -80,7 +76,7 @@ public class PreRaceController {
 
         Stage stage = (Stage) listView.getScene().getWindow();
         this.interpreter = interpreter;
-        interpreter.setInterpreter(initialiseInterpreter());
+        addInterpreters();
         showNetWorkInfo();
 
         stage.setOnCloseRequest((event) -> {
@@ -128,19 +124,17 @@ public class PreRaceController {
      *
      * @return the message interpreter
      */
-    private MessageInterpreter initialiseInterpreter() {
-        MessageInterpreter interpreter = new CompositeMessageInterpreter();
+    private void addInterpreters() {
 
         //interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race, new GameConnection()));
-        interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
-        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
-        interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
-        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
+        interpreter.getInterpreter().add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
+        interpreter.getInterpreter().add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
+        interpreter.getInterpreter().add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
+        interpreter.getInterpreter().add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
+        interpreter.getInterpreter().add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
 
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
+        interpreter.getInterpreter().add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
 
-        return interpreter;
     }
 
 
