@@ -30,7 +30,7 @@ public class VisualPowerUp implements Renderable {
         powerImage = new Image("/images/race_view/Arrow2.gif");
         sharkImage1 = new Image("/images/race_view/reefShark.gif");
         powerBox = new HBox();
-        powerBox.setLayoutX(135);
+        powerBox.setLayoutX(185);
         powerBox.setLayoutY(80);
         speedView = new ImageView(powerImage);
         sharkView1 = new ImageView(sharkImage1);

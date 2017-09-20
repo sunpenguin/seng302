@@ -25,6 +25,8 @@ public class WindDisplay extends AnimationTimer {
     private ImageView windView = new ImageView(windImageSmall);
     private double offsetX = windImageSmall.getWidth() / 2;
     private double offsetY = windImageSmall.getHeight() / 2;
+    private final int LIGHT_WIND = 20;
+    private final int MODERATE_WIND = 25;
 
 
     public WindDisplay(ClientRace race, Polygon arrow, Label speedLabel, Pane pane) {
@@ -40,62 +42,41 @@ public class WindDisplay extends AnimationTimer {
         windView.setLayoutY(offsetY);
     }
 
-    int count = 0;
-    int nwSpeed = 15;
-    boolean countUp = true;
 
     @Override
     public void handle(long currentTime) {
         if (direction < 0) {
             return;
         }
-        double newWindDirection = (race.getCourse().getWindDirection() + 180 + count) % 360;
+        double newWindDirection = (race.getCourse().getWindDirection() + 180) % 360;
         double newWindSpeed = race.getCourse().getWindSpeed();
-
-        if (countUp) {
-            if (nwSpeed > 30) {
-                nwSpeed = 30;
-                countUp = false;
-            } else {
-                nwSpeed++;
-            }
-        } else {
-            if (nwSpeed < 15) {
-                nwSpeed = 15;
-                countUp = true;
-            } else {
-                nwSpeed--;
-            }
-        }
-
-        newWindSpeed = nwSpeed;
 
         speedLabel.setText(String.format("%.2f", newWindSpeed) + " knots");
 
         setWindImage(newWindSpeed);
 
-        updateWindDisplay(newWindDirection, newWindSpeed);
-
-        count += 1;
+        updateWindDisplay(newWindDirection);
     }
 
 
-    private void updateWindDisplay(double newWindDirection, double newWindSpeed) {
-        if (newWindSpeed / scaleY <= 0.3) {
-            arrow.setScaleY(0.3);
-        } else if (newWindSpeed / scaleY <= 0.75) {
-            arrow.setScaleY(newWindSpeed / scaleY);
-        } else {
-            arrow.setScaleY(0.75);
-        }
+    /**
+     * Sets the rotation of the ImageView containing the wind
+     *
+     * @param newWindDirection angle to set the ImageView to
+     */
+    private void updateWindDisplay(double newWindDirection) {
         windView.setRotate(newWindDirection);
     }
 
 
+    /**
+     * Sets the Image in the ImageView according to 3 different zones of wind speed.
+     * @param speed
+     */
     private void setWindImage(double speed) {
-        if (speed <= 20) {
+        if (speed <= LIGHT_WIND) {
             windView.setImage(windImageSmall);
-        } else if (speed <= 25) {
+        } else if (speed <= MODERATE_WIND) {
             windView.setImage(windImageMedium);
         } else {
             windView.setImage(windImageBig);
