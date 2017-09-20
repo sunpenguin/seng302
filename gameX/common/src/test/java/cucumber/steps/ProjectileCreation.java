@@ -43,6 +43,7 @@ public class ProjectileCreation {
         race.setUpdaters(updaters);
         Course course = new Course(getCompoundMarks(), boundaries, getRoundings());
         race.setCourse(course);
+        race.setPositionSetter(new StartLineSetter(5));
     }
 
     @Given("^two boats$")
