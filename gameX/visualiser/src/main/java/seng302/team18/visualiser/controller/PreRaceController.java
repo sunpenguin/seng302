@@ -64,10 +64,10 @@ public class PreRaceController {
      * duration before the race starts.
      *
      * @param race     The race to be set up in the pre-race.
-     * @param receiver the receiver
-     * @param sender   the sender
+     * @param sender   the sender\
+     * @param interpreter the interpreter
      */
-    public void setUp(ClientRace race, Receiver receiver, Sender sender) {
+    public void setUp(ClientRace race,  Sender sender, Interpreter interpreter) {
         this.sender = sender;
         this.race = race;
         raceNameText.setText(race.getRegatta().getName());
@@ -79,14 +79,13 @@ public class PreRaceController {
         preRaceTimes.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
-        this.interpreter = new Interpreter(receiver);
+        this.interpreter = interpreter;
         interpreter.setInterpreter(initialiseInterpreter());
         showNetWorkInfo();
 
         stage.setOnCloseRequest((event) -> {
             interpreter.close();
-            interpreter.closeReceiver();
-            while (!receiver.close()) {
+            while (!interpreter.closeReceiver()) {
             }
             System.out.println("shutting down");
             System.exit(0);
@@ -132,7 +131,7 @@ public class PreRaceController {
     private MessageInterpreter initialiseInterpreter() {
         MessageInterpreter interpreter = new CompositeMessageInterpreter();
 
-        //interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
+        //interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race, new GameConnection()));
         interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));

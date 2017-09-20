@@ -49,6 +49,7 @@ public class Receiver {
             return null;
         }
         MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.getType());
+        //TODO The line above throws a null pointer sbe67 20/9
         byte[] bodyBytes = new byte[head.bodySize()];
         byte[] checkBytes = new byte[detector.errorCheckSize()];
 

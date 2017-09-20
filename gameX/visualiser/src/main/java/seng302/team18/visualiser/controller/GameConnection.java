@@ -148,7 +148,7 @@ public class GameConnection {
 
 
     /**
-     * Method to attempt to connect with server
+     * Method to attempt to connection with server
      */
     private void attemptConnection() {
         interpreter = new Interpreter(receiver);
@@ -216,7 +216,6 @@ public class GameConnection {
 
 
     public void goToPreRace() throws Exception {
-        interpreter.close();
         sender.send(new ColourMessage(color, race.getPlayerId()));
 
         Stage stage = (Stage) node.getScene().getWindow();
@@ -227,8 +226,7 @@ public class GameConnection {
         node.getScene().setRoot(root);
         stage.show();
 
-
-        controller.setUp(race, receiver, sender);
+        controller.setUp(race, sender, interpreter);
     }
 
 }
