@@ -9,6 +9,7 @@ import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.model.*;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 
 import java.util.*;
 
