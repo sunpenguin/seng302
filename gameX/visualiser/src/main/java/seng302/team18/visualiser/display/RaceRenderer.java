@@ -95,7 +95,7 @@ public class RaceRenderer implements Renderable {
      * Checks if the projectile represented by each DisplayShark is still in bounds and removes the display shark from
      * the group if it is not
      */
-    public void removeSharks() {
+    private void removeSharks() {
         for (DisplayShark shark : sharksMap.values()) {
             if (!race.getProjectiles().contains(shark.getProjectile())) {
                 shark.removeFrom(group);
@@ -108,7 +108,7 @@ public class RaceRenderer implements Renderable {
     /**
      * Renders the sharks on the group
      */
-    public void renderShark() {
+    private void renderShark() {
         removeSharks();
 
         for (int i = 0; i < race.getProjectiles().size(); i++) {
@@ -224,7 +224,6 @@ public class RaceRenderer implements Renderable {
         if (boat.getStatus().equals(BoatStatus.DSQ)) {
             trailMap.get(boat.getShortName()).removeFrom(group);
         } else {
-            final double MAX_HEADING_DIFFERENCE = 0.5d; // smaller => smoother trail, higher => more fps
             DisplayTrail trail = trailMap.get(boat.getShortName());
 
             if (trail == null && !BoatStatus.DSQ.equals(boat.getStatus())) {

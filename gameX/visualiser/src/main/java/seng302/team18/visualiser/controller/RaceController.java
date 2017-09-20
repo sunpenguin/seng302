@@ -98,7 +98,6 @@ public class RaceController implements Observer {
 
     private boolean fpsOn;
     private boolean onImportant;
-    private boolean sailIn = false;
 
     private ClientRace race;
     private RaceRenderer raceRenderer;
@@ -163,11 +162,12 @@ public class RaceController implements Observer {
                     message.setDownwind();
                     break;
                 case SHIFT:
-                    sailIn = getPlayerBoat().isSailOut();
-                    if (sailIn) {
-                        message.setSailIn();
-                    } else {
-                        message.setSailOut();
+                    if (null != getPlayerBoat()) {
+                        if (getPlayerBoat().isSailOut()) {
+                            message.setSailIn();
+                        } else {
+                            message.setSailOut();
+                        }
                     }
                     break;
                 case S:
@@ -218,8 +218,6 @@ public class RaceController implements Observer {
             case TAB:
                 toggleTabView();
                 break;
-//            default:
-//                send = true;
         }
     }
 
@@ -233,7 +231,6 @@ public class RaceController implements Observer {
         EventHandler<KeyEvent> keyEventHandler =
                 keyEvent -> {
                     if (keyEvent.getCode() != null) {
-//                        BoatActionMessage message = null;
 
                         MessageBody message = handlePlayerKeyPress(keyEvent);
 
@@ -362,7 +359,7 @@ public class RaceController implements Observer {
      * Sets the annotation level to be full (all annotations showing)
      */
     @FXML
-    public void setFullAnnotationLevel() {
+    private void setFullAnnotationLevel() {
         onImportant = false;
 
         for (AnnotationType type : AnnotationType.values()) {
@@ -375,7 +372,7 @@ public class RaceController implements Observer {
      * Sets the annotation level to be none (no annotations showing)
      */
     @FXML
-    public void setNoneAnnotationLevel() {
+    private void setNoneAnnotationLevel() {
         onImportant = false;
 
         for (AnnotationType type : AnnotationType.values()) {
@@ -388,7 +385,7 @@ public class RaceController implements Observer {
      * Sets the annotation level to be important (user selects annotations showing)
      */
     @FXML
-    public void setToImportantAnnotationLevel() {
+    private void setToImportantAnnotationLevel() {
         onImportant = true;
         for (Map.Entry<AnnotationType, Boolean> importantAnnotation : importantAnnotations.entrySet()) {
             raceRenderer.setVisibleAnnotations(importantAnnotation.getKey(), importantAnnotation.getValue());
@@ -456,6 +453,7 @@ public class RaceController implements Observer {
             EscapeMenuController escapeMenuController = loader.getController();
             escapeMenuController.setup(group, interpreter, sender, soundPlayer);
         } catch (IOException e) {
+            //pass
         }
     }
 
@@ -493,16 +491,7 @@ public class RaceController implements Observer {
         ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
         observableList.addAll(race.getStartingList());
 
-        SortedList<Boat> sortedList = new SortedList<>(observableList,
-                (Boat boat1, Boat boat2) -> {
-                    if (boat1.getPlace() < boat2.getPlace()) {
-                        return -1;
-                    } else if (boat1.getPlace() > boat2.getPlace()) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
+        SortedList<Boat> sortedList = new SortedList<>(observableList, Comparator.comparingInt(Boat::getPlace));
         tableView.setItems(sortedList);
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("shortName"));
@@ -553,7 +542,7 @@ public class RaceController implements Observer {
 
         // Resets the columns to the original order whenever the user tries to change them
         tableView.getColumns().addListener(new ListChangeListener<TableColumn<Boat, ?>>() {
-            public boolean suspended;
+            private boolean suspended;
 
             @Override
             public void onChanged(Change change) {
@@ -758,7 +747,7 @@ public class RaceController implements Observer {
      * To call when GUI features need redrawing.
      * (For example, when zooming in, the course features are required to change)
      */
-    public void redrawFeatures() {
+    private void redrawFeatures() {
         pixelMapper.calculateMappingScale();
         background.renderBackground();
         courseRenderer.render();
@@ -806,13 +795,13 @@ public class RaceController implements Observer {
      */
     private String genericFinishInfo(List<Boat> boats) {
         boats.sort(Comparator.comparing(Boat::getPlace));
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (Boat b : boats) {
-            result += b.getPlace() + ": " + b.getShortName() + " " + b.getStatus().name() + "\n";
+            result.append(b.getPlace()).append(": ").append(b.getShortName()).append(" ").append(b.getStatus().name()).append("\n");
         }
 
-        return result;
+        return result.toString();
     }
 
 
@@ -826,14 +815,14 @@ public class RaceController implements Observer {
     private String bumperFinishInfo(List<Boat> boats) {
         boats.sort(Comparator.comparing(Boat::getLives));
         boats = Lists.reverse(boats);
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (Boat b : boats) {
             String state = b.getLives() > 0 ? "WINNER" : "DEAD";
-            result += b.getShortName() + " " + state + "\n";
+            result.append(b.getShortName()).append(" ").append(state).append("\n");
         }
 
-        return result;
+        return result.toString();
     }
 
 
@@ -847,13 +836,13 @@ public class RaceController implements Observer {
     private String challengeFinishInfo(List<Boat> boats) {
         boats.sort(Comparator.comparing(Boat::getPlace));
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (Boat b : boats) {
-            result += b.getShortName() + " " + b.getLegNumber() + " GATES CLEARED\n";
+            result.append(b.getShortName()).append(" ").append(b.getLegNumber()).append(" GATES CLEARED\n");
         }
 
-        return result;
+        return result.toString();
     }
 
 
