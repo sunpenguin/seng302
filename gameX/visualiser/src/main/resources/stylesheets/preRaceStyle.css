@@ -1,0 +1,7 @@
+@font-face {
+    src: url("/font/Munro.ttf");
+}
+
+.label {
+    -fx-font-family: "Munro";
+}
