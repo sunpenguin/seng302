@@ -1,7 +1,7 @@
 package seng302.team18.racemodel.encode;
 
 /**
- * Defaults for when building a Boats.xml message from build classes
+ * Defaults for when building a Boats.xml message from builder classes
  */
 public class BoatXmlDefaults implements IBoatsXmlDefaults {
 

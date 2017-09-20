@@ -7,12 +7,12 @@ import seng302.team18.message.AC35XMLRaceMessage;
 import seng302.team18.message.AC35XMLRegattaMessage;
 import seng302.team18.message.XmlMessage;
 import seng302.team18.model.*;
-import seng302.team18.racemodel.build.course.AbstractCourseBuilder;
-import seng302.team18.racemodel.build.course.CourseBuilder1;
-import seng302.team18.racemodel.build.race.AbstractRaceBuilder;
-import seng302.team18.racemodel.build.race.RegularRaceBuilder;
-import seng302.team18.racemodel.build.regatta.AbstractRegattaBuilder;
-import seng302.team18.racemodel.build.regatta.RegattaBuilder1;
+import seng302.team18.racemodel.builder.course.AbstractCourseBuilder;
+import seng302.team18.racemodel.builder.course.CourseBuilder1;
+import seng302.team18.racemodel.builder.race.AbstractRaceBuilder;
+import seng302.team18.racemodel.builder.race.RegularRaceBuilder;
+import seng302.team18.racemodel.builder.regatta.AbstractRegattaBuilder;
+import seng302.team18.racemodel.builder.regatta.RegattaBuilder1;
 
 import java.util.Arrays;
 import java.util.List;

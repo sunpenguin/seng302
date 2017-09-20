@@ -36,7 +36,7 @@ public abstract class XmlEncoder<T extends XmlMessage> {
 
 
     /**
-     * Builds a document build from the given message
+     * Builds a document builder from the given message
      *
      * @param xmlMessage the message to encode
      * @return the message encoded into a document

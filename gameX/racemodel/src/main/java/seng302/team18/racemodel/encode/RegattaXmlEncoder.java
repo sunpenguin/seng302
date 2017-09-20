@@ -14,9 +14,9 @@ import javax.xml.transform.dom.DOMSource;
 public class RegattaXmlEncoder extends XmlEncoder<AC35XMLRegattaMessage> {
 
     /**
-     * Build a build of the XML structure from a AC35XMLRegattaMessage
+     * Build a builder of the XML structure from a AC35XMLRegattaMessage
      *
-     * @param regattaMessage the message to build the XML structure from
+     * @param regattaMessage the message to builder the XML structure from
      * @return the XML-structured message
      * @throws ParserConfigurationException if the XML structure cannot be created
      */

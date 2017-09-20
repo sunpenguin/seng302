@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Builds Xml message classes on demand, when supplied with build classes.
+ * Builds Xml message classes on demand, when supplied with builder classes.
  * Uses a set of defaults supplied at construction to populate fields not available
- * from the build classes.
+ * from the builder classes.
  *
  * @see seng302.team18.message.AC35XMLBoatMessage
  * @see seng302.team18.message.AC35XMLRegattaMessage
@@ -35,7 +35,7 @@ public class XmlMessageBuilder {
 
 
     /**
-     * Constructs a XmlMessage build, and sets the default values to use
+     * Constructs a XmlMessage builder, and sets the default values to use
      *
      * @param boatsDefaults the supplier for the defaults for Boats.xml
      * @param raceDefaults  the supplier for defaults for Race.xml
@@ -47,9 +47,9 @@ public class XmlMessageBuilder {
 
 
     /**
-     * Uses the given race to build a AC35XMLBoatMessage
+     * Uses the given race to builder a AC35XMLBoatMessage
      *
-     * @param race the race to build a AC35XMLBoatMessage for
+     * @param race the race to builder a AC35XMLBoatMessage for
      * @return the generated message class
      */
     public AC35XMLBoatMessage buildBoatsXmlMessage(Race race) {
@@ -86,9 +86,9 @@ public class XmlMessageBuilder {
 
 
     /**
-     * Uses the given race to build a  AC35XMLRaceMessage
+     * Uses the given race to builder a  AC35XMLRaceMessage
      *
-     * @param race the race to build a AC35XMLRaceMessage for
+     * @param race the race to builder a AC35XMLRaceMessage for
      * @return the generated message class
      */
     public AC35XMLRaceMessage buildRaceXmlMessage(Race race) {
@@ -112,9 +112,9 @@ public class XmlMessageBuilder {
     }
 
     /**
-     * Uses the given race to build a  AC35XMLRegattaMessage
+     * Uses the given race to builder a  AC35XMLRegattaMessage
      *
-     * @param race the race to build a AC35XMLRegattaMessage for
+     * @param race the race to builder a AC35XMLRegattaMessage for
      * @return the generated message class
      */
     public AC35XMLRegattaMessage buildRegattaMessage(Race race) {

@@ -17,9 +17,9 @@ import java.time.ZonedDateTime;
 public class BoatsXmlEncoder extends XmlEncoder<AC35XMLBoatMessage> {
 
     /**
-     * Build a build of the XML structure from a AC35XMLBoatMessage
+     * Build a builder of the XML structure from a AC35XMLBoatMessage
      *
-     * @param boatMessage the message to build the XML structure from
+     * @param boatMessage the message to builder the XML structure from
      * @return the XML-structured message
      * @throws ParserConfigurationException if the XML structure cannot be created
      */

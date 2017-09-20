@@ -22,9 +22,9 @@ import java.util.Map;
 public class RaceXmlEncoder extends XmlEncoder<AC35XMLRaceMessage> {
 
     /**
-     * Build a build of the XML structure from a AC35XMLRaceMessage
+     * Build a builder of the XML structure from a AC35XMLRaceMessage
      *
-     * @param raceMessage the message to build the XML structure from
+     * @param raceMessage the message to builder the XML structure from
      * @return the XML-structured message
      * @throws ParserConfigurationException if the XML structure cannot be created
      */

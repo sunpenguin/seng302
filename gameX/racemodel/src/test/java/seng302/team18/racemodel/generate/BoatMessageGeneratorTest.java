@@ -3,12 +3,12 @@ package seng302.team18.racemodel.generate;
 import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Race;
-import seng302.team18.racemodel.build.course.AbstractCourseBuilder;
-import seng302.team18.racemodel.build.course.CourseBuilder1;
-import seng302.team18.racemodel.build.race.AbstractRaceBuilder;
-import seng302.team18.racemodel.build.race.RegularRaceBuilder;
-import seng302.team18.racemodel.build.regatta.AbstractRegattaBuilder;
-import seng302.team18.racemodel.build.regatta.RegattaBuilder1;
+import seng302.team18.racemodel.builder.course.AbstractCourseBuilder;
+import seng302.team18.racemodel.builder.course.CourseBuilder1;
+import seng302.team18.racemodel.builder.race.AbstractRaceBuilder;
+import seng302.team18.racemodel.builder.race.RegularRaceBuilder;
+import seng302.team18.racemodel.builder.regatta.AbstractRegattaBuilder;
+import seng302.team18.racemodel.builder.regatta.RegattaBuilder1;
 import seng302.team18.util.ByteCheck;
 import seng302.team18.util.SpeedConverter;
 
