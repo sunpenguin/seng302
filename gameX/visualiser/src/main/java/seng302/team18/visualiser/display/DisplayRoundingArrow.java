@@ -1,6 +1,7 @@
 package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import seng302.team18.model.CompoundMark;
@@ -9,7 +10,6 @@ import seng302.team18.model.Mark;
 import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,9 +68,9 @@ public class DisplayRoundingArrow {
         double pixelLength = current.getMarks().get(0).getLength();
 
         Double[] headShape = new Double[]{
-                0.0, -pixelLength,
-                -pixelLength * 0.6667, pixelLength * 0.7454,
-                pixelLength * 0.6667, pixelLength * 0.7454,
+                0.0, -pixelLength * 0.45,
+                -pixelLength * 0.45, pixelLength * 0.45,
+                pixelLength * 0.45, pixelLength * 0.45,
                 0.0, -pixelLength
         };
 
@@ -84,7 +84,7 @@ public class DisplayRoundingArrow {
                 endPoints.get(1).getX(), endPoints.get(1).getY());
         arrowLine.setFill(javafx.scene.paint.Color.WHITE);
         arrowLine.setStyle("-fx-stroke: green");
-//        line.setStrokeWidth(geScaledLineWeight());
+        arrowLine.setStrokeWidth(2);
     }
 
     public void addToGroup(Group group) {
@@ -104,9 +104,10 @@ public class DisplayRoundingArrow {
         arrowLine.setEndX(endPoints.get(1).getX());
         arrowLine.setEndY(endPoints.get(1).getY());
 
-        arrowHead.setLayoutX(endPoints.get(0).getX());
-        arrowHead.setLayoutY(endPoints.get(0).getY());
+        arrowHead.setLayoutX(endPoints.get(1).getX());
+        arrowHead.setLayoutY(endPoints.get(1).getY());
         arrowHead.setStyle("-fx-stroke: green");
+        arrowHead.setFill(Color.GREEN);
         arrowHead.setRotate(bearing);
     }
 }

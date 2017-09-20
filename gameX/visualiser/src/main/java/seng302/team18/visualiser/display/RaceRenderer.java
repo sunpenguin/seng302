@@ -19,9 +19,11 @@ public class RaceRenderer implements Renderable {
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private Map<Integer, DisplayShark> sharksMap = new HashMap<>();
+    private Map<Integer, DisplayRoundingArrow> arrowMap = new HashMap<>();
     private PixelMapper pixelMapper;
     private boolean drawTrails;
     private DisplayRoundingArrow arrow;
+    private RoundingDetector detector = new RoundingDetector();
 
 
     /**
@@ -71,16 +73,25 @@ public class RaceRenderer implements Renderable {
     }
 
     private void renderArrow() {
+        removeArrow();
+
         for (Boat boat: race.getStartingList()) {
-            race.getDestination(boat.getLegNumber());
             CompoundMark current = race.getCourse().getMarkRounding(boat.getLegNumber()).getCompoundMark();
+            System.out.println("current" + current.getName());
             CompoundMark next = race.getCourse().getMarkRounding(boat.getLegNumber() + 1).getCompoundMark();
+            System.out.println("next: " + next.getName());
             arrow = new DisplayRoundingArrow(current, next, pixelMapper);
             arrow.drawArrow();
+            arrowMap.put(boat.getLegNumber(), arrow);
             arrow.addToGroup(group);
         }
     }
 
+    private void removeArrow() {
+        if (arrowMap.containsValue(arrow)) {
+            arrow.removeFromGroup(group);
+        }
+    }
 
     private void drawBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
