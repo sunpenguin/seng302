@@ -6,13 +6,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
-import seng302.team18.model.Coordinate;
 import seng302.team18.util.XYPair;
+import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.util.PixelMapper;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
 
-import java.io.InputStream;
 import java.util.*;
 
 
@@ -91,21 +88,7 @@ public class DisplayCollision extends DisplayBoatDecorator {
 
         if (hasCollided) {
             playCollisionAnimation();
-            playCollisionSound();
-        }
-    }
-
-
-    /**
-     * Plays a collision sound
-     */
-    private void playCollisionSound() {
-        try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("collision.wav");
-            AudioStream audioStream = new AudioStream(inputStream);
-            AudioPlayer.player.start(audioStream);
-        } catch (Exception e) {
-            e.printStackTrace();
+            SoundEffect.COLLISION.play();
         }
     }
 
