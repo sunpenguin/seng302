@@ -6,7 +6,8 @@ import javafx.scene.media.AudioClip;
  * 'Fire-and-forget' sound effects
  */
 public enum SoundEffect {
-    COLLISION("audio/collision.wav");
+    COLLISION("audio/collision.wav"),
+    FIRE_BULLET("audio/fire_bullet.wav");
 
 
     private final AudioClip audioClip;

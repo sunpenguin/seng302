@@ -6,13 +6,14 @@ import seng302.team18.message.ProjectileCreationMessage;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.TigerShark;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.sound.SoundEffect;
 
 /**
  * Class to interpret the projectile creation message
  */
-public class ProjectileCreationInterpreter extends MessageInterpreter{
+public class ProjectileCreationInterpreter extends MessageInterpreter {
 
-    ClientRace race;
+    private ClientRace race;
 
 
     /**
@@ -24,11 +25,13 @@ public class ProjectileCreationInterpreter extends MessageInterpreter{
         this.race = race;
     }
 
+
     @Override
     public void interpret(MessageBody message) {
         if (message instanceof ProjectileCreationMessage) {
             ProjectileCreationMessage projectileMessage = (ProjectileCreationMessage) message;
-            race.addProjectile(new TigerShark(projectileMessage.getProjectile_id(), new Coordinate(0,0),0));
+            race.addProjectile(new TigerShark(projectileMessage.getProjectile_id(), new Coordinate(0, 0), 0));
+            SoundEffect.FIRE_BULLET.play();
         }
     }
 }
