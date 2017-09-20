@@ -42,7 +42,9 @@ public class BumperBoatLosesLife {
         updaters.add(new BumperBoatHealthUpdater());
         race.setUpdaters(updaters);
         Course course = new Course(getCompoundMarks(), boundaries, getRoundings());
-        race.setCourse(course);        boat = new Boat("name", "shortName", 1, 1);
+        race.setCourse(course);
+        race.setPositionSetter(new CircularPositionSetter(5));
+        boat = new Boat("name", "shortName", 1, 1);
         boat.setCoordinate(new Coordinate(32.30463, -64.85245));
         boat.setStatus(oldStatus);
         oldBoatLives = boat.getLives();
