@@ -1,6 +1,8 @@
 package seng302.team18.visualiser.display;
 
 import javafx.animation.AnimationTimer;
+import seng302.team18.visualiser.display.render.Renderable;
+import seng302.team18.visualiser.display.ui.FPSReporter;
 import seng302.team18.visualiser.util.PixelMapper;
 
 import java.util.ArrayList;

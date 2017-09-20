@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import seng302.team18.send.Sender;
+import seng302.team18.encode.Sender;
 import seng302.team18.visualiser.interpret.Interpreter;
 
 import java.io.IOException;

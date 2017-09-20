@@ -4,15 +4,16 @@ package seng302.team18.racemodel;
 import seng302.team18.message.RequestType;
 
 import seng302.team18.message.AC35MessageType;
-import seng302.team18.message.AcceptanceMessage;
-import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
-import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
+import seng302.team18.racemodel.encode.XmlMessageBuilder;
+import seng302.team18.racemodel.builder.course.*;
+import seng302.team18.racemodel.builder.race.*;
+import seng302.team18.racemodel.builder.regatta.AbstractRegattaBuilder;
+import seng302.team18.racemodel.builder.regatta.RegattaBuilder1;
 import seng302.team18.racemodel.connection.ClientConnection;
 import seng302.team18.racemodel.connection.Server;
 import seng302.team18.racemodel.connection.ServerState;
-import seng302.team18.racemodel.message_generating.*;
-import seng302.team18.racemodel.model.*;
+import seng302.team18.racemodel.generate.*;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -161,10 +162,10 @@ public class TestMock implements Observer {
     /**
      * Send the regatta XML file to a new client.
      *
-     * @param newPlayer ClientConnection used to send message through.
+     * @param newPlayer ClientConnection used to encode message through.
      */
     private void sendRegattaXml(ClientConnection newPlayer) {
-        newPlayer.sendMessage(generatorXmlRegatta.getMessage());
+        newPlayer.send(generatorXmlRegatta.getMessage());
     }
 
 

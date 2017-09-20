@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
+import seng302.team18.visualiser.display.render.RaceRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
