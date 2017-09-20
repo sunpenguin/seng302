@@ -77,6 +77,7 @@ public class RaceRenderer implements Renderable {
             CompoundMark next = race.getCourse().getMarkRounding(boat.getLegNumber() + 1).getCompoundMark();
             arrow = new DisplayRoundingArrow(current, next, pixelMapper);
             arrow.drawArrow();
+            arrow.addToGroup(group);
         }
     }
 

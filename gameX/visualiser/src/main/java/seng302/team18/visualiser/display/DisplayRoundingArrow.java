@@ -10,7 +10,6 @@ import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,34 +20,30 @@ public class DisplayRoundingArrow {
 
     private CompoundMark current;
     private CompoundMark next;
-    private Color color;
     private Polyline arrowHead;
     private Line arrowLine;
     private List<XYPair> endPoints  = new ArrayList<>();
-    private Coordinate position;
     private GPSCalculator calculator = new GPSCalculator();
     private PixelMapper pixelMapper;
+    private double bearing;
 
 
     public DisplayRoundingArrow(CompoundMark current, CompoundMark next, PixelMapper pixelMapper) {
         this.current = current;
         this.next = next;
-        color = Color.green;
         arrowHead = new Polyline();
         this.pixelMapper = pixelMapper;
     }
 
 
     public void drawArrow() {
-        double pixelLength = current.getMarks().get(0).getLength();
+        makeHeadShape();
+        calculateEndPoints();
+        makeLine();
+        setPosition();
+    }
 
-        Double[] headShape = new Double[]{
-                0.0, -pixelLength,
-                -pixelLength * 0.6667, pixelLength * 0.7454,
-                pixelLength * 0.6667, pixelLength * 0.7454,
-                0.0, -pixelLength
-        };
-
+    private void calculateEndPoints() {
         Coordinate middle = null;
 
         if (current.isGate()) {
@@ -59,30 +54,38 @@ public class DisplayRoundingArrow {
             middle = current.getMarks().get(0).getCoordinate();
         }
 
-        double bearing = calculator.getBearing(current.getCoordinate(), next.getCoordinate());
-
+        bearing = calculator.getBearing(current.getCoordinate(), next.getCoordinate());
         Coordinate start = calculator.toCoordinate(middle, bearing, 100);
         Coordinate end = calculator.toCoordinate(start, bearing, 50);
         XYPair startPixel = pixelMapper.mapToPane(start);
         XYPair endPixel = pixelMapper.mapToPane(end);
+
         endPoints.add(startPixel);
         endPoints.add(endPixel);
+    }
 
+    private void makeHeadShape() {
+        double pixelLength = current.getMarks().get(0).getLength();
+
+        Double[] headShape = new Double[]{
+                0.0, -pixelLength,
+                -pixelLength * 0.6667, pixelLength * 0.7454,
+                pixelLength * 0.6667, pixelLength * 0.7454,
+                0.0, -pixelLength
+        };
+
+        arrowHead.getPoints().clear();
+        arrowHead.getPoints().addAll(headShape);
+    }
+
+    private void makeLine() {
         arrowLine = new Line(
                 endPoints.get(0).getX(), endPoints.get(0).getY(),
                 endPoints.get(1).getX(), endPoints.get(1).getY());
         arrowLine.setFill(javafx.scene.paint.Color.WHITE);
         arrowLine.setStyle("-fx-stroke: green");
 //        line.setStrokeWidth(geScaledLineWeight());
-        arrowLine.setStartX(endPoints.get(0).getX());
-        arrowLine.setStartY(endPoints.get(0).getY());
-        arrowLine.setEndX(endPoints.get(1).getX());
-        arrowLine.setEndY(endPoints.get(1).getY());
-
-        arrowHead.getPoints().clear();
-        arrowHead.getPoints().addAll(headShape);
     }
-
 
     public void addToGroup(Group group) {
         group.getChildren().add(arrowHead);
@@ -95,11 +98,15 @@ public class DisplayRoundingArrow {
         group.getChildren().remove(arrowLine);
     }
 
-    public Coordinate getPosition() {
-        return position;
-    }
+    public void setPosition() {
+        arrowLine.setStartX(endPoints.get(0).getX());
+        arrowLine.setStartY(endPoints.get(0).getY());
+        arrowLine.setEndX(endPoints.get(1).getX());
+        arrowLine.setEndY(endPoints.get(1).getY());
 
-    public void setPosition(Coordinate position) {
-        this.position = position;
+        arrowHead.setLayoutX(endPoints.get(0).getX());
+        arrowHead.setLayoutY(endPoints.get(0).getY());
+        arrowHead.setStyle("-fx-stroke: green");
+        arrowHead.setRotate(bearing);
     }
 }
