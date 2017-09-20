@@ -20,9 +20,8 @@ import java.util.stream.Collectors;
  */
 public class CourseRenderer implements Renderable {
 
-    private final Color MARK_COLOR = Color.GREY;
+    private final Color MARK_COLOR = Color.color(0.502, 0.4078, 0.4);
     private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
-    private double markSize;
     private Polyline border = new Polyline();
     private Map<Integer, Circle> marks = new HashMap<>();
     private Map<String, Line> gates = new HashMap<>();
@@ -51,12 +50,9 @@ public class CourseRenderer implements Renderable {
      */
     public void render() {
         if (mode != RaceMode.CONTROLS_TUTORIAL && mode != RaceMode.BUMPER_BOATS) {
-            double MARK_SIZE = 10;
-            markSize = MARK_SIZE * pixelMapper.mappingRatio();
             List<CompoundMark> compoundMarks = course.getCompoundMarks();
             // Renders CompoundMarks
-            for (int i = 0; i < compoundMarks.size(); i++) {
-                CompoundMark compoundMark = compoundMarks.get(i);
+            for (CompoundMark compoundMark : compoundMarks) {
                 if (compoundMark != null &&
                         compoundMark.isGate() && (
                         compoundMark.getId().equals(course.getStartLineId()) ||
@@ -123,13 +119,12 @@ public class CourseRenderer implements Renderable {
      * @return the circle on screen
      */
     private Circle renderMark(Mark mark) {
-//        double scaledMarSize = getScaledMarkSize();
         Circle circle = marks.get(mark.getId());
         if (circle == null) {
             circle = makeMark(mark);
         }
 
-        circle.setRadius(markSize);
+        circle.setRadius(mark.getLength() * pixelMapper.mappingRatio() / 2);
         Coordinate coordinate = mark.getCoordinate();
         XYPair pixelCoordinates = pixelMapper.mapToPane(coordinate);
         circle.setCenterX(pixelCoordinates.getX());
@@ -140,7 +135,7 @@ public class CourseRenderer implements Renderable {
 
 
     private Circle makeMark(Mark mark) {
-        Circle circle = new Circle(markSize, MARK_COLOR);
+        Circle circle = new Circle(mark.getLength() * pixelMapper.mappingRatio() / 2, MARK_COLOR);
 
         circle.setOnMouseClicked((event) -> {
             pixelMapper.setZoomLevel(4);
@@ -281,7 +276,6 @@ public class CourseRenderer implements Renderable {
                 break;
             default:
                 System.out.println("PowerUpInterpreter::makePowerUp has gone horribly wrong (ask Sunguin for help)");
-                return;
         }
     }
 
