@@ -10,6 +10,7 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.Course;
 import seng302.team18.model.RaceStatus;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.interpret.americascup.WindDirectionInterpreter;
 
 import java.time.Instant;
 import java.time.ZoneId;
