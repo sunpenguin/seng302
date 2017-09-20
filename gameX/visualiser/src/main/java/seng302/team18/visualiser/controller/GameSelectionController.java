@@ -19,6 +19,7 @@ import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.sound.SoundEffect;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -45,6 +46,7 @@ public class GameSelectionController {
     private Label arrowRight;
 
     private Stage stage;
+    private SoundEffectPlayer soundPlayer;
 
     private StringProperty ipStrProp;
     private StringProperty portStrProp;
@@ -493,6 +495,7 @@ public class GameSelectionController {
         }
         TitleScreenController controller = loader.getController();
         controller.setStage(stage);
+        controller.setSoundPlayer(soundPlayer);
         outerPane.getScene().setRoot(root);
         stage.setMaximized(true);
         stage.show();
@@ -571,13 +574,31 @@ public class GameSelectionController {
     }
 
 
-    @FXML
-    private void buttonEnteredAction() {
-        SoundEffect.BUTTON_MOUSE_ENTER.play();
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setSoundPlayer(SoundEffectPlayer player) {
+        this.soundPlayer = player;
     }
 
 
+    /**
+     * Common actions for OnMouseEntered events of menu buttons.
+     * <p>
+     * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_ENTER SoundEffect#BUTTON_MOUSE_ENTER}
+     */
+    @FXML
+    private void buttonEnteredAction() {
+        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
+    }
+
+
+    /**
+     * Common actions for OnMouseClicked events of menu buttons.
+     * <p>
+     * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_CLICK SoundEffect#BUTTON_MOUSE_CLICK}
+     */
     private void buttonClickedAction() {
-        SoundEffect.BUTTON_MOUSE_CLICK.play();
+        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
     }
 }

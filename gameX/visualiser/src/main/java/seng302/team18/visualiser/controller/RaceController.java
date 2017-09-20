@@ -47,6 +47,8 @@ import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.interpret.*;
 import seng302.team18.visualiser.messageinterpreting.YachtEventInterpreter;
+import seng302.team18.visualiser.sound.SoundEffect;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
@@ -104,6 +106,7 @@ public class RaceController implements Observer {
     private PixelMapper pixelMapper;
     private Map<AnnotationType, Boolean> importantAnnotations;
     private Sender sender;
+    private SoundEffectPlayer soundPlayer = new SoundEffectPlayer();
 
     private Interpreter interpreter;
     private RaceBackground background;
@@ -451,7 +454,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             EscapeMenuController escapeMenuController = loader.getController();
-            escapeMenuController.setup(group, interpreter, sender);
+            escapeMenuController.setup(group, interpreter, sender, soundPlayer);
         } catch (IOException e) {
         }
     }
@@ -600,7 +603,7 @@ public class RaceController implements Observer {
 
         pixelMapper.setMaxZoom(16d);
         pixelMapper.calculateMappingScale();
-        raceRenderer = new RaceRenderer(pixelMapper, race, group);
+        raceRenderer = new RaceRenderer(pixelMapper, race, group, soundPlayer);
         raceRenderer.render();
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, race.getMode());
@@ -744,7 +747,7 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLivesInterpreter(race));
         interpreter.add(AC35MessageType.PROJECTILE_LOCATION.getCode(), new ProjectileLocationInterpreter(race));
-        interpreter.add(AC35MessageType.PROJECTILE_CREATION.getCode(), new ProjectileCreationInterpreter(race));
+        interpreter.add(AC35MessageType.PROJECTILE_CREATION.getCode(), new ProjectileCreationInterpreter(race, () -> soundPlayer.playEffect(SoundEffect.FIRE_BULLET)));
         interpreter.add(AC35MessageType.PROJECTILE_GONE.getCode(), new ProjectileGoneInterpreter(race));
 
         return interpreter;

@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.sound.SoundEffect;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 import java.io.IOException;
 
@@ -30,6 +31,7 @@ public class TitleScreenController {
     private boolean controlsVisible = false;
 
     private Stage stage;
+    private SoundEffectPlayer soundPlayer;
 
 
     public void initialize() {
@@ -60,6 +62,7 @@ public class TitleScreenController {
         }
         GameSelectionController controller = loader.getController();
         controller.setStage(stage);
+        controller.setSoundPlayer(soundPlayer);
         stage.setTitle("High Seas");
         pane.getScene().setRoot(root);
         stage.setMaximized(true);
@@ -226,12 +229,30 @@ public class TitleScreenController {
     }
 
 
-    private void buttonEnteredAction() {
-        SoundEffect.BUTTON_MOUSE_ENTER.play();
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setSoundPlayer(SoundEffectPlayer player) {
+        this.soundPlayer = player;
     }
 
 
+    /**
+     * Common actions for OnMouseEntered events of menu buttons.
+     * <p>
+     * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_ENTER SoundEffect#BUTTON_MOUSE_ENTER}
+     */
+    private void buttonEnteredAction() {
+        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
+    }
+
+
+    /**
+     * Common actions for OnMouseClicked events of menu buttons.
+     * <p>
+     * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_CLICK SoundEffect#BUTTON_MOUSE_CLICK}
+     */
     private void buttonClickedAction() {
-        SoundEffect.BUTTON_MOUSE_CLICK.play();
+        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
     }
 }

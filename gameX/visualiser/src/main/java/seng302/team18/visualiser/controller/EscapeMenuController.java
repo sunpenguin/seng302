@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import seng302.team18.send.Sender;
 import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.sound.SoundEffect;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 import java.io.IOException;
 
@@ -25,6 +26,8 @@ public class EscapeMenuController {
     private Group group;
     private Interpreter interpreter;
     private Sender sender;
+    private SoundEffectPlayer soundPlayer;
+
 
     @FXML
     public void initialize() {
@@ -69,6 +72,7 @@ public class EscapeMenuController {
             stage.setResizable(true);
             stage.setMaximized(true);
             controller.setStage(stage);
+            controller.setSoundPlayer(soundPlayer);
             controller.reDraw();
             stage.show();
         } catch (IOException e) {
@@ -92,21 +96,33 @@ public class EscapeMenuController {
      * @param group       Group to place menu on
      * @param interpreter Interpreter to close when we quit the race.
      * @param sender      Sender to close when we quit the race.
+     * @param player      the manager for audio playback from this scene
      */
-    public void setup(Group group, Interpreter interpreter, Sender sender) {
+    public void setup(Group group, Interpreter interpreter, Sender sender, SoundEffectPlayer player) {
         this.group = group;
         this.interpreter = interpreter;
         this.sender = sender;
+        this.soundPlayer = player;
     }
 
 
+    /**
+     * Common actions for OnMouseEntered events of menu buttons.
+     * <p>
+     * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_ENTER SoundEffect#BUTTON_MOUSE_ENTER}
+     */
     private void buttonEnteredAction() {
-        SoundEffect.BUTTON_MOUSE_ENTER.play();
+        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
     }
 
 
+    /**
+     * Common actions for OnMouseClicked events of menu buttons.
+     * <p>
+     * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_CLICK SoundEffect#BUTTON_MOUSE_CLICK}
+     */
     private void buttonClickedAction() {
-        SoundEffect.BUTTON_MOUSE_CLICK.play();
+        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
     }
 }
 

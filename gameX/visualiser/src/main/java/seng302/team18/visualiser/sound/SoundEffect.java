@@ -1,7 +1,5 @@
 package seng302.team18.visualiser.sound;
 
-import javafx.scene.media.AudioClip;
-
 /**
  * 'Fire-and-forget' sound effects
  */
@@ -12,18 +10,15 @@ public enum SoundEffect {
     BUTTON_MOUSE_CLICK("audio/button_click.wav");
 
 
-    private final AudioClip audioClip;
+    private final String url;
 
 
     SoundEffect(String url) {
-        this.audioClip = new AudioClip(getClass().getClassLoader().getResource(url).toString());
+        this.url = getClass().getClassLoader().getResource(url).toString();
     }
 
 
-    /**
-     * Plays the sound effect
-     */
-    public void play() {
-        audioClip.play();
+    public String getUrl() {
+        return url;
     }
 }

@@ -6,7 +6,7 @@ import seng302.team18.message.ProjectileCreationMessage;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.TigerShark;
 import seng302.team18.visualiser.ClientRace;
-import seng302.team18.visualiser.sound.SoundEffect;
+import seng302.team18.visualiser.util.Procedure;
 
 /**
  * Class to interpret the projectile creation message
@@ -14,15 +14,18 @@ import seng302.team18.visualiser.sound.SoundEffect;
 public class ProjectileCreationInterpreter extends MessageInterpreter {
 
     private ClientRace race;
+    private Procedure callback;
 
 
     /**
      * Constructor for ProjectileGoneInterpreter.
      *
-     * @param race to check.
+     * @param race     race to check
+     * @param callback procedure to run when a projectile is added
      */
-    public ProjectileCreationInterpreter(ClientRace race) {
+    public ProjectileCreationInterpreter(ClientRace race, Procedure callback) {
         this.race = race;
+        this.callback = callback;
     }
 
 
@@ -31,7 +34,7 @@ public class ProjectileCreationInterpreter extends MessageInterpreter {
         if (message instanceof ProjectileCreationMessage) {
             ProjectileCreationMessage projectileMessage = (ProjectileCreationMessage) message;
             race.addProjectile(new TigerShark(projectileMessage.getProjectile_id(), new Coordinate(0, 0), 0));
-            SoundEffect.FIRE_BULLET.play();
+            callback.execute();
         }
     }
 }

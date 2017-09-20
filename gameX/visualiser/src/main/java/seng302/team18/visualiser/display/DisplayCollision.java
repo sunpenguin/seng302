@@ -7,8 +7,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import seng302.team18.util.XYPair;
-import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.util.PixelMapper;
+import seng302.team18.visualiser.util.Procedure;
 
 import java.util.*;
 
@@ -57,12 +57,21 @@ public class DisplayCollision extends DisplayBoatDecorator {
     private PixelMapper pixelMapper;
     private Group group;
     private Random random = new Random();
+    private final Procedure collisionSoundEffect;
 
 
-    public DisplayCollision(PixelMapper pixelMapper, DisplayBoat displayBoat) {
+    /**
+     * Constructs a new DisplayCollision decorator
+     *
+     * @param pixelMapper          the mapper to use when mapping geographic coordinates onto the screen
+     * @param displayBoat          the display boat to be decorated
+     * @param collisionSoundEffect a procedure to be executed when the collision should play its sound effect
+     */
+    public DisplayCollision(PixelMapper pixelMapper, DisplayBoat displayBoat, Procedure collisionSoundEffect) {
         super(displayBoat);
 
         this.pixelMapper = pixelMapper;
+        this.collisionSoundEffect = collisionSoundEffect;
         shapes = new HashSet<>();
     }
 
@@ -88,7 +97,7 @@ public class DisplayCollision extends DisplayBoatDecorator {
 
         if (hasCollided) {
             playCollisionAnimation();
-            SoundEffect.COLLISION.play();
+            collisionSoundEffect.execute();
         }
     }
 
