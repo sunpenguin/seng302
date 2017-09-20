@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
+import seng302.team18.visualiser.sound.SoundEffect;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -218,7 +219,11 @@ public class GameSelectionController {
         Label label = new Label();
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("raceImage");
-        label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.RACE));
+        label.setOnMouseClicked(event -> {
+            setUpConnectionType(RaceMode.RACE);
+            buttonClickedAction();
+        });
+        label.setOnMouseEntered(event1 -> buttonEnteredAction());
         return label;
     }
 
@@ -232,7 +237,11 @@ public class GameSelectionController {
         Label label = new Label();
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("arcadeImage");
-        label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.ARCADE));
+        label.setOnMouseClicked(event -> {
+            setUpConnectionType(RaceMode.ARCADE);
+            buttonClickedAction();
+        });
+        label.setOnMouseEntered(event1 -> buttonEnteredAction());
         return label;
     }
 
@@ -246,7 +255,11 @@ public class GameSelectionController {
         Label label = new Label();
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("challengeImage");
-        label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.CHALLENGE_MODE));
+        label.setOnMouseClicked(event -> {
+            setUpConnectionType(RaceMode.CHALLENGE_MODE);
+            buttonClickedAction();
+        });
+        label.setOnMouseEntered(event1 -> buttonEnteredAction());
         return label;
     }
 
@@ -260,7 +273,11 @@ public class GameSelectionController {
         Label label = new Label();
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("bumperBoatsImage");
-        label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.BUMPER_BOATS));
+        label.setOnMouseClicked(event -> {
+            setUpConnectionType(RaceMode.BUMPER_BOATS);
+            buttonClickedAction();
+        });
+        label.setOnMouseEntered(event1 -> buttonEnteredAction());
         return label;
     }
 
@@ -276,8 +293,10 @@ public class GameSelectionController {
         label.getStyleClass().add("spectatorImage");
         label.setOnMouseClicked(event -> {
             setUpConnectionType(RaceMode.SPECTATION);
+            buttonClickedAction();
             setUpConnectionOptions(false);
         });
+        label.setOnMouseEntered(event1 -> buttonEnteredAction());
         return label;
     }
 
@@ -291,7 +310,11 @@ public class GameSelectionController {
         Label label = new Label();
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("createImage");
-        label.setOnMouseClicked(event -> setUpConnectionOptions(true));
+        label.setOnMouseClicked(event -> {
+            setUpConnectionOptions(true);
+            buttonClickedAction();
+        });
+        label.setOnMouseEntered(event1 -> buttonEnteredAction());
         return label;
     }
 
@@ -305,7 +328,11 @@ public class GameSelectionController {
         Label label = new Label();
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("joinImage");
-        label.setOnMouseClicked(event -> setUpConnectionOptions(false));
+        label.setOnMouseClicked(event -> {
+            setUpConnectionOptions(false);
+            buttonClickedAction();
+        });
+        label.setOnMouseEntered(event1 -> buttonEnteredAction());
         return label;
     }
 
@@ -426,18 +453,12 @@ public class GameSelectionController {
         Label label = new Label();
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("playImage");
-        label.setOnMouseClicked(event ->
-                new GameConnection(
-                        errorLabel.textProperty(),
-                        outerPane,
-                        mode,
-                        boatColours.get(colourIndex)
-                ).startGame(
-                        ipStrProp.get(),
-                        portStrProp.get(),
-                        isHosting
-                )
-        );
+        label.setOnMouseClicked(event -> {
+            buttonClickedAction();
+            new GameConnection(errorLabel.textProperty(), outerPane, mode, boatColours.get(colourIndex))
+                    .startGame(ipStrProp.get(), portStrProp.get(), isHosting);
+        });
+        label.setOnMouseEntered(event1 -> buttonEnteredAction());
         return label;
     }
 
@@ -447,11 +468,11 @@ public class GameSelectionController {
      */
     @FXML
     private void backButtonAction() {
+        buttonClickedAction();
+
         if (mode == null) {
             exitSelectionScreen();
-        } else if (isHosting == null) {
-            setUpModeSelection();
-        } else if (mode.equals(RaceMode.SPECTATION)) {
+        } else if (isHosting == null || mode.equals(RaceMode.SPECTATION)) {
             setUpModeSelection();
         } else {
             setUpConnectionType(mode);
@@ -505,6 +526,7 @@ public class GameSelectionController {
      */
     @FXML
     private void rightButtonAction() {
+        buttonClickedAction();
         colourIndex = (colourIndex + 1) % boatColours.size();
         boat.setFill(boatColours.get(colourIndex));
     }
@@ -515,6 +537,7 @@ public class GameSelectionController {
      */
     @FXML
     private void leftButtonAction() {
+        buttonClickedAction();
         colourIndex = Math.floorMod((colourIndex - 1), boatColours.size());
         boat.setFill(boatColours.get(colourIndex));
     }
@@ -545,5 +568,16 @@ public class GameSelectionController {
 
             y += OPTION_BUTTONS_HEIGHT;
         }
+    }
+
+
+    @FXML
+    private void buttonEnteredAction() {
+        SoundEffect.BUTTON_MOUSE_ENTER.play();
+    }
+
+
+    private void buttonClickedAction() {
+        SoundEffect.BUTTON_MOUSE_CLICK.play();
     }
 }

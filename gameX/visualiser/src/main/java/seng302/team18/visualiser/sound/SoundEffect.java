@@ -7,7 +7,9 @@ import javafx.scene.media.AudioClip;
  */
 public enum SoundEffect {
     COLLISION("audio/collision.wav"),
-    FIRE_BULLET("audio/fire_bullet.wav");
+    FIRE_BULLET("audio/fire_bullet.wav"),
+    BUTTON_MOUSE_ENTER("audio/button_hover.wav"),
+    BUTTON_MOUSE_CLICK("audio/button_click.wav");
 
 
     private final AudioClip audioClip;
