@@ -1,8 +1,6 @@
 package seng302.team18.util;
 
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.Course;
-import seng302.team18.model.Mark;
+import seng302.team18.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -252,10 +250,11 @@ public class GPSCalculator {
 
 
     /**
-     * Detects whether or not a certain coordinate is located inside a polygon of coordinate points
-     * @param location The location point you are checking is inside the polygon
-     * @param boundary The polygon
-     * @return True if the location is inside the polygon, false if it is outside
+     * Detects whether or not a certain coordinate is located inside a polygon of coordinate points.
+     *
+     * @param location The location point you are checking is inside the polygon.
+     * @param boundary The polygon.
+     * @return True if the location is inside the polygon, false if it is outside.
      */
     public boolean isInside(Coordinate location, List<Coordinate> boundary) {
         if (boundary.size() < 3) {
@@ -301,40 +300,89 @@ public class GPSCalculator {
 
 
     /**
-     * Randomly generate a point inside the given boundary.
-     * @param bounds course boundary
-     * @return a random point inside the given boundary
+     * Randomly generate a point inside the given race.
+     *
+     * @param race to generate a point for.
+     * @return a random point inside the boundary of the race.
      */
-    public Coordinate randomPoint(List<Coordinate> bounds) {
+    public Coordinate randomPoint(Race race) {
+        List<Coordinate> bounds = race.getCourse().getLimits();
         List<Coordinate> corners = findMinMaxPoints(bounds);
         Coordinate topLeft = corners.get(0);
         Coordinate bottomRight = corners.get(1);
-        return randomPoint(bounds, topLeft, bottomRight);
+        return randomPoint(race.getStartingList(), race.getCourse(), topLeft, bottomRight);
     }
 
 
     /**
      * Randomly generate a point inside the racing area.
-     * @param bounds course boundary
+     *
+     * @param startingList boats that are participating in the race.
+     * @param course course to check for.
      * @param topLeft top left corner
      * @param bottomRight bottom right corner
-     * @return a random point inside the racing area
+     * @return a valid random point inside the racing area
      */
-    private Coordinate randomPoint(List<Coordinate> bounds, Coordinate topLeft, Coordinate bottomRight) {
+    private Coordinate randomPoint(List<Boat> startingList, Course course, Coordinate topLeft, Coordinate bottomRight) {
         Random random = new Random();
         double randY = random.nextDouble();
         double randX = random.nextDouble();
         double newX = (topLeft.getLatitude() - bottomRight.getLatitude()) * randX + bottomRight.getLatitude();
         double newY = (bottomRight.getLongitude() - topLeft.getLongitude()) * randY + topLeft.getLongitude();
         Coordinate randomPoint = new Coordinate(newX, newY);
-        if (isInside(randomPoint, bounds)) {
+
+        double xSize = (bottomRight.getLongitude() - topLeft.getLongitude()) / 40;
+        double ySize = (topLeft.getLatitude() - bottomRight.getLatitude()) / 40;
+
+        if (isValidPoint(startingList, course, randomPoint, xSize, ySize)) {
             return randomPoint;
         }
-        return randomPoint(bounds, topLeft, bottomRight);
+
+        return randomPoint(startingList, course, topLeft, bottomRight);
     }
 
 
+    /**
+     * Checks if a random point generated overlaps with any existing course feature.
+     * First checks if the point is inside the race course.
+     * If so, get and construct boxes around each obstacles and check if the point exists inside the box.
+     *
+     * @param startingList boats that are participating in the race.
+     * @param course course to check for.
+     * @param randomPoint to be checked.
+     * @param xSize x-size of half of the square used to access course elements.
+     * @param ySize y-size of half of the square used to access course elements.
+     * @return true if the point is in the course and does not overlap with other elements.
+     */
+    private boolean isValidPoint(List<Boat> startingList, Course course, Coordinate randomPoint, double xSize, double ySize) {
+        if (!isInside(randomPoint, course.getLimits())) {
+            return false;
+        }
 
+        List<Coordinate> coordinates = new ArrayList<>();
+
+        for (Boat boat : startingList) {
+            coordinates.add(boat.getCoordinate());
+        }
+
+        for (Mark mark : course.getMarks()) {
+            coordinates.add(mark.getCoordinate());
+        }
+
+        for (Coordinate coordinate : coordinates) {
+            List<Coordinate> tempBounds = new ArrayList<>();
+            tempBounds.add(new Coordinate(coordinate.getLatitude() - xSize, coordinate.getLongitude() - ySize));
+            tempBounds.add(new Coordinate(coordinate.getLatitude() + xSize, coordinate.getLongitude() - ySize));
+            tempBounds.add(new Coordinate(coordinate.getLatitude() + xSize, coordinate.getLongitude() + ySize));
+            tempBounds.add(new Coordinate(coordinate.getLatitude() - xSize, coordinate.getLongitude() + ySize));
+
+            if (isInside(randomPoint, tempBounds)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 }
 
