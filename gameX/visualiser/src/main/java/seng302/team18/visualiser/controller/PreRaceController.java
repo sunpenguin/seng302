@@ -85,49 +85,14 @@ public class PreRaceController {
 
         stage.setOnCloseRequest((event) -> {
             interpreter.close();
+            interpreter.closeReceiver();
             while (!receiver.close()) {
             }
             System.out.println("shutting down");
             System.exit(0);
         });
-    }
 
-
-    public void initConnection(Color color) {
         interpreter.start();
-
-        RequestType requestType;
-        switch (race.getMode()) {
-            case RACE:
-                requestType = RequestType.RACING;
-                break;
-            case CONTROLS_TUTORIAL:
-                requestType = RequestType.CONTROLS_TUTORIAL;
-                break;
-            case CHALLENGE_MODE:
-                requestType = RequestType.CHALLENGE_MODE;
-                break;
-            case ARCADE:
-                requestType = RequestType.ARCADE;
-                break;
-            case BUMPER_BOATS:
-                requestType = RequestType.BUMPER_BOATS;
-                break;
-            case SPECTATION:
-                requestType = RequestType.VIEWING;
-                break;
-            default:
-                requestType = RequestType.RACING;
-        }
-        try {
-            sender.send(new RequestMessage(requestType));
-        } catch (IOException e) {
-            e.printStackTrace();
-            // TODO Callum / David 9 August show error (has been disconnected)
-        }
-
-        MessageInterpreter acceptanceResponse = new ColourResponder(color, sender);
-        interpreter.getInterpreter().add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
     }
 
 
@@ -167,7 +132,7 @@ public class PreRaceController {
     private MessageInterpreter initialiseInterpreter() {
         MessageInterpreter interpreter = new CompositeMessageInterpreter();
 
-        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
+        //interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));

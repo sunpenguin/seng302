@@ -6,12 +6,20 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import seng302.team18.interpret.CompositeMessageInterpreter;
+import seng302.team18.interpret.MessageInterpreter;
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.ColourMessage;
+import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
 import seng302.team18.messageparsing.AC35MessageParserFactory;
 import seng302.team18.messageparsing.Receiver;
 import seng302.team18.model.RaceMode;
 import seng302.team18.send.ControllerMessageFactory;
 import seng302.team18.send.Sender;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.interpret.AcceptanceInterpreter;
+import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.util.ModelLoader;
 
 import javax.net.SocketFactory;
@@ -28,6 +36,10 @@ public class GameConnection {
     private final Node node;
     private final RaceMode mode;
     private final Color color;
+    private Interpreter interpreter;
+    private Receiver receiver;
+    private Sender sender;
+    private ClientRace race;
 
 
     /**
@@ -125,23 +137,64 @@ public class GameConnection {
      * @param receiver a reciver
      * @param sender   a sender
      * @return true if the operation is successful, else false
-     * @throws Exception if the next scene cannot be loaded
      */
-    private boolean startConnection(Receiver receiver, Sender sender) throws Exception {
-        Stage stage = (Stage) node.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
-        Parent root = loader.load();
-        PreRaceController controller = loader.getController();
-        stage.setTitle("High Seas");
-        node.getScene().setRoot(root);
-        stage.show();
-
-        ClientRace race = new ClientRace();
+    private void startConnection(Receiver receiver, Sender sender){
+        this.receiver = receiver;
+        this.sender = sender;
+        race = new ClientRace();
         race.setMode(mode);
-        controller.setUp(race, receiver, sender);
-        controller.initConnection(color);
-        return true;
-        // TODO afj19 14/09 here(probably) we should be checking the response from the server and returning false if it is rejected
+        attemptConnection();
+    }
+
+
+    /**
+     * Method to attempt to connect with server
+     */
+    private void attemptConnection() {
+        interpreter = new Interpreter(receiver);
+        interpreter.setInterpreter(makeInterpreter(race));
+        interpreter.start();
+
+        RequestType requestType;
+        switch (race.getMode()) {
+            case RACE:
+                requestType = RequestType.RACING;
+                break;
+            case CONTROLS_TUTORIAL:
+                requestType = RequestType.CONTROLS_TUTORIAL;
+                break;
+            case CHALLENGE_MODE:
+                requestType = RequestType.CHALLENGE_MODE;
+                break;
+            case ARCADE:
+                requestType = RequestType.ARCADE;
+                break;
+            case BUMPER_BOATS:
+                requestType = RequestType.BUMPER_BOATS;
+                break;
+            case SPECTATION:
+                requestType = RequestType.VIEWING;
+                break;
+            default:
+                requestType = RequestType.RACING;
+        }
+
+
+        try {
+            sender.send(new RequestMessage(requestType));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private MessageInterpreter makeInterpreter(ClientRace race) {
+        MessageInterpreter interpreter = new CompositeMessageInterpreter();
+        MessageInterpreter acceptanceResponse = new AcceptanceInterpreter(race, this);
+        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
+
+        return interpreter;
     }
 
 
@@ -154,10 +207,28 @@ public class GameConnection {
     private boolean openStream(String host, int port) {
         try {
             Socket socket = SocketFactory.getDefault().createSocket(host, port);
-            return startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
+            startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
         } catch (Exception e) {
             errorText.set("Failed to connect to " + host + ":" + port + "!");
         }
         return false;
     }
+
+
+    public void goToPreRace() throws Exception {
+        interpreter.close();
+        sender.send(new ColourMessage(color, race.getPlayerId()));
+
+        Stage stage = (Stage) node.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
+        Parent root = loader.load();
+        PreRaceController controller = loader.getController();
+        stage.setTitle("High Seas");
+        node.getScene().setRoot(root);
+        stage.show();
+
+
+        controller.setUp(race, receiver, sender);
+    }
+
 }
