@@ -86,8 +86,6 @@ public class PreRaceController {
             System.out.println("shutting down");
             System.exit(0);
         });
-
-        interpreter.start();
     }
 
 
