@@ -4,8 +4,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import seng302.team18.model.Coordinate;
+import seng302.team18.model.Race;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +16,7 @@ import java.util.List;
 public class GPSCalculatorTest {
 
     private GPSCalculator gps;
+    private Race race;
     private List<Coordinate> boundaryMarks1; // course case 1
     private List<Coordinate> boundaryMarks2; // course case 2
     private List<Coordinate> boundaryMarks3; // course case 3
@@ -24,6 +25,7 @@ public class GPSCalculatorTest {
     @Before
     public void setUp() {
         gps = new GPSCalculator();
+        race = new Race();
         boundaryMarks1 = new ArrayList<>();
         boundaryMarks2 = new ArrayList<>();
         boundaryMarks3 = new ArrayList<>();
@@ -150,7 +152,8 @@ public class GPSCalculatorTest {
      * Check if the point is inside the course boundary case 1.
      */
     public void randomPoint1Test() {
-        Coordinate randomPoint = gps.randomPoint(boundaryMarks1);
+        race.getCourse().setCourseLimits(boundaryMarks1);
+        Coordinate randomPoint = gps.randomPoint(race);
 
         boolean isInside = gps.isInside(randomPoint, boundaryMarks1);
 
@@ -163,7 +166,8 @@ public class GPSCalculatorTest {
      * Check if the point is inside the course boundary case 1.
      */
     public void randomPoint2Test() {
-        Coordinate randomPoint = gps.randomPoint(boundaryMarks1);
+        race.getCourse().setCourseLimits(boundaryMarks1);
+        Coordinate randomPoint = gps.randomPoint(race);
 
         boolean isInside = gps.isInside(randomPoint, boundaryMarks1);
 
@@ -176,7 +180,8 @@ public class GPSCalculatorTest {
      * Check if the point is inside the course boundary case 2.
      */
     public void randomPoint3Test() {
-        Coordinate randomPoint = gps.randomPoint(boundaryMarks2);
+        race.getCourse().setCourseLimits(boundaryMarks2);
+        Coordinate randomPoint = gps.randomPoint(race);
 
         boolean isInside = gps.isInside(randomPoint, boundaryMarks2);
 
@@ -189,7 +194,8 @@ public class GPSCalculatorTest {
      * Check if the point is inside the course boundary case 2.
      */
     public void randomPoint4Test() {
-        Coordinate randomPoint = gps.randomPoint(boundaryMarks2);
+        race.getCourse().setCourseLimits(boundaryMarks2);
+        Coordinate randomPoint = gps.randomPoint(race);
 
         boolean isInside = gps.isInside(randomPoint, boundaryMarks2);
 
@@ -202,7 +208,8 @@ public class GPSCalculatorTest {
      * Check if the point is inside the course boundary case 3.
      */
     public void randomPoint5Test() {
-        Coordinate randomPoint = gps.randomPoint(boundaryMarks3);
+        race.getCourse().setCourseLimits(boundaryMarks3);
+        Coordinate randomPoint = gps.randomPoint(race);
 
         boolean isInside = gps.isInside(randomPoint, boundaryMarks3);
 
@@ -215,7 +222,8 @@ public class GPSCalculatorTest {
      * Check if the point is inside the course boundary case 3.
      */
     public void randomPoint6Test() {
-        Coordinate randomPoint = gps.randomPoint(boundaryMarks3);
+        race.getCourse().setCourseLimits(boundaryMarks3);
+        Coordinate randomPoint = gps.randomPoint(race);
 
         boolean isInside = gps.isInside(randomPoint, boundaryMarks3);
 

@@ -175,8 +175,6 @@ public class CourseRenderer implements Renderable {
      * @param compoundMark CompundMark to reset (Start/Finish only)
      */
     private void renderGate(CompoundMark compoundMark) {
-//        double scaledMarkSize = getScaledMarkSize();
-
         List<XYPair> endPoints = new ArrayList<>();
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
@@ -185,7 +183,6 @@ public class CourseRenderer implements Renderable {
             endPoints.add(pixelCoordinates);
         }
         renderGateConnection(endPoints, compoundMark);
-
     }
 
 
@@ -296,6 +293,7 @@ public class CourseRenderer implements Renderable {
                 pixelMapper.setViewPortCenter(pickUp.getLocation());
             });
             group.getChildren().addAll(pickUpVisual);
+            pickUpVisual.toBack();
             pickUps.put(pickUp.getId(), pickUpVisual);
         }
         pickUpVisual.setRadius(pickUpSize);
