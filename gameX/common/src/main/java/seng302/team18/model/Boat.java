@@ -2,7 +2,6 @@ package seng302.team18.model;
 
 
 import javafx.beans.property.*;
-import seng302.team18.message.PowerType;
 import seng302.team18.util.GPSCalculator;
 
 import java.time.ZonedDateTime;
@@ -33,7 +32,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private PowerUp updater = new BoatPowerUpUpdater();
     private int lives;
     private boolean hasCollided = false;
-    private boolean passedDestination = false;
 
     /**
      * A constructor for the Boat class
@@ -183,7 +181,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * Sets the sails
      * True = sails out = luffing
      * False = sails in = powered up
-     * @param sailOut
+     * @param sailOut status of sailing out
      */
     public void setSailOut(boolean sailOut) {
         this.sailOut = sailOut;
@@ -352,14 +350,6 @@ reated by hqi19 on 21/09/17.
 
     public Coordinate getPreviousCoordinate() {
         return previousCoordinate;
-    }
-
-    public boolean hasPassedDestination() {
-        return passedDestination;
-    }
-
-    public void setPassedDestination(boolean passedDestination) {
-        this.passedDestination = passedDestination;
     }
 
 

@@ -65,13 +65,18 @@ public class RaceRenderer implements Renderable {
     public void render() {
         drawBoats();
         renderShark();
-        drawArrow();
+        if (race.getMode() == RaceMode.ARCADE || race.getMode() == RaceMode.RACE) {
+            drawArrow(); // draw rounding arrow for a boat's current next mark
+        }
         if (drawTrails) {
             drawTrails();
         }
     }
 
 
+    /**
+     * Draw the rounding arrow that tells each boat how to round the most current next mark/gate.
+     */
     private void drawArrow() {
         removeArrow();
 
@@ -86,6 +91,9 @@ public class RaceRenderer implements Renderable {
     }
 
 
+    /**
+     * Remove the previous rounding arrow once the boat has already passed it.
+     */
     private void removeArrow() {
         if (arrowMap.containsValue(arrow)) {
             arrow.removeFromGroup(group);

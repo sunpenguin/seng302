@@ -4,7 +4,6 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.Polyline;
 import seng302.team18.model.CompoundMark;
 import seng302.team18.model.Coordinate;
@@ -24,8 +23,8 @@ public class DisplayRoundingArrow {
     private CompoundMark current;
     private Polyline arrowHead;
     private Line arrowLine;
-    private CubicCurve curve1 = new CubicCurve();
-    private  Path arrowIni = new Path();
+    //    private CubicCurve curve1 = new CubicCurve();
+//    private  Path arrowIni = new Path();
     private List<XYPair> endPoints  = new ArrayList<>();
     private GPSCalculator calculator = new GPSCalculator();
     private PixelMapper pixelMapper;
@@ -42,6 +41,9 @@ public class DisplayRoundingArrow {
     }
 
 
+    /**
+     * Create the rounding arrow.
+     */
     private void drawArrow() {
         makeHeadShape();
         calculateEndPoints();
@@ -50,17 +52,24 @@ public class DisplayRoundingArrow {
         setPosition();
     }
 
+
+    /**
+     * Calculate the start and end points for the body of the arrow.
+     */
     private void calculateEndPoints() {
+        double turingAngle = 0;
         if (current.isGate()) {
             Mark m1 = current.getMarks().get(0);
             Mark m2 = current.getMarks().get(1);
             middle = calculator.midPoint(m1.getCoordinate(), m2.getCoordinate());
+            turingAngle = 180;
         } else {
             middle = current.getMarks().get(0).getCoordinate();
+            turingAngle = 270;
         }
 
         bearing = (calculator.getBearing(current.getMarks().get(0).getCoordinate(), middle) + 90) % 360;
-        Coordinate start = calculator.toCoordinate(middle, (bearing + 180) % 360, 20);
+        Coordinate start = calculator.toCoordinate(middle, (bearing + turingAngle) % 360, 20);
         Coordinate end = calculator.toCoordinate(start, (bearing + 180) % 360, 50);
         XYPair startPixel = pixelMapper.mapToPane(start);
         XYPair endPixel = pixelMapper.mapToPane(end);
@@ -69,6 +78,11 @@ public class DisplayRoundingArrow {
         endPoints.add(endPixel);
     }
 
+
+    /**
+     * Create the size (shape) of the arrow head.
+     *
+     */
     private void makeHeadShape() {
         double pixelLength = current.getMarks().get(0).getLength();
 
@@ -83,6 +97,11 @@ public class DisplayRoundingArrow {
         arrowHead.getPoints().addAll(headShape);
     }
 
+
+    /**
+     * Create the body (line) of the arrow.
+     *
+     */
     private void makeLine() {
         arrowLine = new Line(
                 endPoints.get(0).getX(), endPoints.get(0).getY(),
@@ -92,6 +111,12 @@ public class DisplayRoundingArrow {
         arrowLine.setStrokeWidth(2);
     }
 
+
+    /**
+     * Add created arrow to the group.
+     *
+     * @param group arrow to be added on
+     */
     public void addToGroup(Group group) {
         group.getChildren().add(arrowHead);
         group.getChildren().add(arrowLine);
@@ -100,23 +125,42 @@ public class DisplayRoundingArrow {
     }
 
 
+    /**
+     * Remove existing arrow from the group.
+     *
+     * @param group arrow to be removed from
+     */
     public void removeFromGroup(Group group) {
         group.getChildren().remove(arrowHead);
         group.getChildren().remove(arrowLine);
+//        group.getChildren().remove(curve1);
+//        group.getChildren().remove(arrowIni);
     }
 
+
+    /**
+     * Set the position of the arrow in the race.
+     *
+     */
     private void setPosition() {
         arrowLine.setStartX(endPoints.get(0).getX());
         arrowLine.setStartY(endPoints.get(0).getY());
         arrowLine.setEndX(endPoints.get(1).getX());
         arrowLine.setEndY(endPoints.get(1).getY());
 
-        arrowHead.setLayoutX(endPoints.get(0).getX());
-        arrowHead.setLayoutY(endPoints.get(0).getY());
         arrowHead.setStyle("-fx-stroke: green");
         arrowHead.setFill(Color.GREEN);
-        arrowHead.setRotate(bearing);
+        if (current.getName().equals("Start Line")) {
+            arrowHead.setLayoutX(endPoints.get(1).getX());
+            arrowHead.setLayoutY(endPoints.get(1).getY());
+            arrowHead.setRotate((bearing + 180) % 360);
+        } else {
+            arrowHead.setLayoutX(endPoints.get(0).getX());
+            arrowHead.setLayoutY(endPoints.get(0).getY());
+            arrowHead.setRotate(bearing);
+        }
     }
+
 
 //TODO: hqi19 21/09/17 want the arrow look nice or not
 //    private void curve () {
