@@ -76,16 +76,13 @@ public class RaceRenderer implements Renderable {
         removeArrow();
 
         for (Boat boat: race.getStartingList()) {
-            CompoundMark current = race.getCourse().getMarkRounding(boat.getLegNumber()).getCompoundMark();
-            System.out.println("current" + current.getName());
-            CompoundMark next = race.getCourse().getMarkRounding(boat.getLegNumber() + 1).getCompoundMark();
-            System.out.println("next: " + next.getName());
-            arrow = new DisplayRoundingArrow(current.getCoordinate(), next, pixelMapper);
-            arrow.drawArrow();
-            arrowMap.put(boat.getLegNumber(), arrow);
-            arrow.addToGroup(group);
+            if (boat.getStatus() != BoatStatus.FINISHED) {
+                CompoundMark current = race.getCourse().getMarkRounding(boat.getLegNumber()).getCompoundMark();
+                arrow = new DisplayRoundingArrow(current, pixelMapper);
+                arrowMap.put(boat.getLegNumber(), arrow);
+                arrow.addToGroup(group);
+            }
         }
-
     }
 
 
@@ -117,7 +114,7 @@ public class RaceRenderer implements Renderable {
      * Checks if the projectile represented by each DisplayShark is still in bounds and removes the display shark from
      * the group if it is not
      */
-    public void removeSharks(){
+    private void removeSharks() {
         for (DisplayShark shark : sharksMap.values()){
             if (!race.getProjectiles().contains(shark.getProjectile())){
                 shark.removeFrom(group);
@@ -130,7 +127,7 @@ public class RaceRenderer implements Renderable {
     /**
      * Renders the sharks on the group
      */
-    public void renderShark() {
+    private void renderShark() {
         removeSharks();
 
         for (int i = 0; i < race.getProjectiles().size(); i++){
@@ -149,7 +146,6 @@ public class RaceRenderer implements Renderable {
                 shark.removeFrom(group);
                 sharksMap.remove(shark.getProjectile().getId());
             }
-
         }
     }
 
