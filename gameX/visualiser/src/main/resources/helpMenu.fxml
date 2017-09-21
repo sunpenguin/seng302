@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="600.0" style="-fx-background-color: aqua;" stylesheets="@stylesheets/helpMenu.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.HelpMenuController">
+   <children>
+      <HBox fx:id="tabHBox" alignment="CENTER" prefHeight="50.0" prefWidth="600.0" styleClass="tabHBox">
+         <children>
+            <Label fx:id="controlsLabel" />
+            <Label fx:id="gameModeLabel" />
+         </children>
+      </HBox>
+      <Pane fx:id="contentPane" layoutY="50.0" prefHeight="670.0" prefWidth="600.0" styleClass="mainPane" />
+   </children>
+</Pane>

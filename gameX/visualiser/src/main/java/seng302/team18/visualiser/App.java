@@ -11,11 +11,11 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("helpMenu.fxml"));
         Parent root = loader.load(); // throws IOException
-        TitleScreenController controller = loader.getController();
-        controller.setStage(primaryStage);
-        controller.reDraw();
+//        TitleScreenController controller = loader.getController();
+//        controller.setStage(primaryStage);
+//        controller.reDraw();
         primaryStage.setTitle("High Seas");
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
