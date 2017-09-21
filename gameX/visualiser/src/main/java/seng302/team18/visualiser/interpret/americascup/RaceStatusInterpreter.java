@@ -6,6 +6,10 @@ import seng302.team18.message.MessageBody;
 import seng302.team18.model.RaceStatus;
 import seng302.team18.visualiser.ClientRace;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 
@@ -15,20 +19,26 @@ import java.util.function.Consumer;
 public class RaceStatusInterpreter extends MessageInterpreter {
 
     private final ClientRace race;
-    private final Consumer<Boolean> onRaceFinish;
-    private final Consumer<Boolean> onRaceStart;
+    private final Map<RaceStatus, List<Consumer<Boolean>>> callbacks = new HashMap<>();
 
     /**
      * Constructor for a RaceStatusInterpreter.
      *
-     * @param race         the race
-     * @param onRaceFinish callback on race finishing
-     * @param onRaceStart  callback on race starting
+     * @param race the race
      */
-    public RaceStatusInterpreter(ClientRace race, Consumer<Boolean> onRaceFinish, Consumer<Boolean> onRaceStart) {
+    public RaceStatusInterpreter(ClientRace race) {
         this.race = race;
-        this.onRaceFinish = onRaceFinish;
-        this.onRaceStart = onRaceStart;
+    }
+
+
+    /**
+     * Adds a callback to be called when the race status changes to the given status
+     *
+     * @param status   the target status
+     * @param callback the callback
+     */
+    public void addCallback(RaceStatus status, Consumer<Boolean> callback) {
+        callbacks.computeIfAbsent(status, key -> new ArrayList<>()).add(callback);
     }
 
 
@@ -40,15 +50,8 @@ public class RaceStatusInterpreter extends MessageInterpreter {
 
             boolean isChangedStatus = !race.getStatus().equals(statusCode);
             race.setStatus(statusCode);
-            if (isChangedStatus) {
-                switch (statusCode) {
-                    case STARTED:
-                        onRaceStart.accept(true);
-                        break;
-                    case FINISHED:
-                        onRaceFinish.accept(true);
-                        break;
-                }
+            if (isChangedStatus && callbacks.containsKey(statusCode)) {
+                callbacks.get(statusCode).forEach(callback -> callback.accept(true));
             }
         }
     }

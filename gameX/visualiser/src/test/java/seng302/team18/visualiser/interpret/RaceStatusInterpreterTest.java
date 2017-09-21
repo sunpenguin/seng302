@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 public class RaceStatusInterpreterTest {
 
     private ClientRace race;
-    private MessageInterpreter interpreter;
+    private RaceStatusInterpreter interpreter;
     private boolean didStart;
     private boolean didFinish;
 
@@ -27,7 +27,9 @@ public class RaceStatusInterpreterTest {
         didStart = false;
         didFinish = false;
         race = new ClientRace();
-        interpreter = new RaceStatusInterpreter(race, aBool -> didFinish = true, aBool -> didStart = true);
+        interpreter = new RaceStatusInterpreter(race);
+        interpreter.addCallback(RaceStatus.FINISHED, aBool -> didFinish = true);
+        interpreter.addCallback(RaceStatus.STARTED, aBool -> didStart = true);
     }
 
 
