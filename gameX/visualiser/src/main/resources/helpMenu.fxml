@@ -9,10 +9,15 @@
    <children>
       <HBox fx:id="tabHBox" alignment="CENTER" prefHeight="50.0" prefWidth="600.0" styleClass="tabHBox">
          <children>
-            <Label fx:id="controlsLabel" />
-            <Label fx:id="gameModeLabel" />
+            <ToggleButton fx:id="controlsToggle" mnemonicParsing="false" style="-fx-background-color: transparent;" />
+            <ToggleButton fx:id="modesToggle" mnemonicParsing="false" style="-fx-background-color: transparent;" />
          </children>
       </HBox>
-      <Pane fx:id="contentPane" layoutY="50.0" prefHeight="670.0" prefWidth="600.0" styleClass="mainPane" />
+      <Pane fx:id="contentPane" layoutY="50.0" prefHeight="670.0" prefWidth="600.0" styleClass="mainPane">
+         <children>
+            <Label fx:id="gameModeLabel" />
+            <Label fx:id="controlsLabel" />
+         </children>
+      </Pane>
    </children>
 </Pane>

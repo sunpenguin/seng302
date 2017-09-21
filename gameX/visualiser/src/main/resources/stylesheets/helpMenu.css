@@ -10,13 +10,21 @@
     -fx-graphic: url('/images/title_screen/help_menu/gameModeHelp.png');
 }
 
+.gameModeImage:selected {
+    -fx-graphic: url('/images/title_screen/help_menu/gameModeHelp.png');
+}
+
 
 .controlsImage {
     -fx-graphic: url('/images/title_screen/help_menu/keyboardControlsHelp_alt.png');
 }
 
-.controlsImage:armed {
+.controlsImage:selected {
 -fx-graphic: url('/images/title_screen/help_menu/keyboardControlsHelp.png');
+}
+
+.controlsImage:hover {
+    -fx-graphic: url('/images/title_screen/help_menu/keyboardControlsHelp.png');
 }
 
 
