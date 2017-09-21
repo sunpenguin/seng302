@@ -10,7 +10,8 @@ public enum SoundEffect {
     FIRE_BULLET("audio/fire_bullet.wav"),
     BUTTON_MOUSE_ENTER("audio/button_hover.wav"),
     BUTTON_MOUSE_CLICK("audio/button_click.wav"),
-    PLAYER_DISQUALIFIED("audio/fail.wav");
+    PLAYER_DISQUALIFIED("audio/fail.wav"),
+    LOSE_LIFE("audio/lose_life.wav");
 
 
     private final String url;
