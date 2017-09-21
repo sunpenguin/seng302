@@ -22,7 +22,6 @@ public class MarkArrowUpdater implements Updater{
      */
     private void updateMarkArrow(Boat boat, Race race) {
         boolean hasPassed = race.getDetector().hasPassedDestination(boat, race.getCourse());
-        System.out.println(hasPassed);
 
         switch (race.getMode()) {
             case RACE:
@@ -38,6 +37,7 @@ public class MarkArrowUpdater implements Updater{
                 } else {
                     boat.setPassedDestination(false);
                 }
+                break;
         }
     }
 }

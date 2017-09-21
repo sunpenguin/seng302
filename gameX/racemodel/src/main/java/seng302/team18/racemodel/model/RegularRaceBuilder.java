@@ -40,6 +40,7 @@ public class RegularRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new MarkCollisionUpdater());
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());
+        updaters.add(new MarkArrowUpdater());
 
         if (statusUpdater == null) {
             statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 15, 1, 5);

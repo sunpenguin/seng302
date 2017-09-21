@@ -7,10 +7,13 @@ import seng302.team18.model.*;
  */
 public class MarkRoundingUpdater implements Updater {
 
+    private boolean hasPassed = false;
+
     @Override
     public void update(Race race, double time) {
         for (Boat boat : race.getStartingList()) {
             checkForRounding(boat, race);
+            updateMarkArrow(boat, race);
         }
     }
 
@@ -21,7 +24,7 @@ public class MarkRoundingUpdater implements Updater {
      * @param boat to update.
      */
     private void checkForRounding(Boat boat, Race race) {
-        boolean hasPassed = race.getDetector().hasPassedDestination(boat, race.getCourse());
+        hasPassed = race.getDetector().hasPassedDestination(boat, race.getCourse());
 
         switch (boat.getStatus()) {
             case RACING:
@@ -40,6 +43,27 @@ public class MarkRoundingUpdater implements Updater {
                     boat.setStatus(BoatStatus.RACING);
                     boat.setSpeed(boat.getBoatTWS(race.getCourse().getWindSpeed(), race.getCourse().getWindDirection()));
                 }
+        }
+    }
+
+
+
+    private void updateMarkArrow(Boat boat, Race race) {
+        switch (race.getMode()) {
+            case RACE:
+                if (hasPassed) {
+                    boat.setPassedDestination(true);
+                } else {
+                    boat.setPassedDestination(false);
+                }
+                break;
+            case ARCADE:
+                if (hasPassed) {
+                    boat.setPassedDestination(true);
+                } else {
+                    boat.setPassedDestination(false);
+                }
+                break;
         }
     }
 
