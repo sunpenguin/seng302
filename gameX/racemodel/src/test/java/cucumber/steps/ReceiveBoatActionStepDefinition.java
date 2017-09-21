@@ -50,7 +50,7 @@ public class ReceiveBoatActionStepDefinition {
         listener = new ConnectionListener(race, Collections.singletonList(boatId), new AC35MessageParserFactory());
 
         server.addObserver(listener);
-        server.openServer();
+        server.open();
         sender.send(new RequestMessage(RequestType.RACING));
         server.stopAcceptingConnections();
     }
