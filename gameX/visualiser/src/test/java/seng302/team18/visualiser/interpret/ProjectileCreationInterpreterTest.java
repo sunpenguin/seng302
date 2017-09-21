@@ -25,7 +25,7 @@ public class ProjectileCreationInterpreterTest {
     public void setUp() {
 
         race = new ClientRace();
-        interpreter = new ProjectileCreationInterpreter(race, () -> {
+        interpreter = new ProjectileCreationInterpreter(race, (foo) -> {
         });
         message1 = new ProjectileCreationMessage(300);
         message2 = new ProjectileCreationMessage(301);

@@ -159,7 +159,7 @@ public class RaceRenderer implements Renderable {
             }
         }
         displayBoat = new DisplaySail(pixelMapper, displayBoat);
-        displayBoat = new DisplayCollision(pixelMapper, displayBoat, () -> soundPlayer.playEffect(SoundEffect.COLLISION));
+        displayBoat = new DisplayCollision(pixelMapper, displayBoat, (wasPlayerCollided) -> soundPlayer.playEffect(SoundEffect.COLLISION));
         displayBoat.addToGroup(group);
         displayBoats.put(boat.getShortName(), displayBoat);
         return displayBoat;

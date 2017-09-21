@@ -744,7 +744,7 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLivesInterpreter(race));
         interpreter.add(AC35MessageType.PROJECTILE_LOCATION.getCode(), new ProjectileLocationInterpreter(race));
-        interpreter.add(AC35MessageType.PROJECTILE_CREATION.getCode(), new ProjectileCreationInterpreter(race, () -> soundPlayer.playEffect(SoundEffect.FIRE_BULLET)));
+        interpreter.add(AC35MessageType.PROJECTILE_CREATION.getCode(), new ProjectileCreationInterpreter(race, (wasFiredByPlayer) -> soundPlayer.playEffect(SoundEffect.FIRE_BULLET)));
         interpreter.add(AC35MessageType.PROJECTILE_GONE.getCode(), new ProjectileGoneInterpreter(race));
 
         return interpreter;

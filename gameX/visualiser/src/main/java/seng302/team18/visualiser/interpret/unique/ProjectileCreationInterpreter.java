@@ -6,7 +6,8 @@ import seng302.team18.message.ProjectileCreationMessage;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.TigerShark;
 import seng302.team18.visualiser.ClientRace;
-import seng302.team18.visualiser.util.Procedure;
+
+import java.util.function.Consumer;
 
 /**
  * Class to interpret the projectile creation message
@@ -14,7 +15,7 @@ import seng302.team18.visualiser.util.Procedure;
 public class ProjectileCreationInterpreter extends MessageInterpreter {
 
     private ClientRace race;
-    private Procedure callback;
+    private Consumer<Boolean> callback;
 
 
     /**
@@ -23,7 +24,7 @@ public class ProjectileCreationInterpreter extends MessageInterpreter {
      * @param race     race to check
      * @param callback procedure to run when a projectile is added
      */
-    public ProjectileCreationInterpreter(ClientRace race, Procedure callback) {
+    public ProjectileCreationInterpreter(ClientRace race, Consumer<Boolean> callback) {
         this.race = race;
         this.callback = callback;
     }
@@ -34,7 +35,7 @@ public class ProjectileCreationInterpreter extends MessageInterpreter {
         if (message instanceof ProjectileCreationMessage) {
             ProjectileCreationMessage projectileMessage = (ProjectileCreationMessage) message;
             race.addProjectile(new TigerShark(projectileMessage.getProjectile_id(), new Coordinate(0, 0), 0));
-            callback.execute();
+            callback.accept(false); // No way to determine which boat created this projectile, so we default to false
         }
     }
 }
