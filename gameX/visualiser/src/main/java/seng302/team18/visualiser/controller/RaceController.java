@@ -738,7 +738,7 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.YACHT_EVENT.getCode(), new YachtEventInterpreter(race));
         interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(clock));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishRaceInterpreter(this));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceStatusInterpreter(race, aBoolean -> Platform.runLater(this::showFinishersList), (aBoolean -> soundPlayer.playEffect(SoundEffect.RACE_START))));
         interpreter.add(AC35MessageType.POWER_UP.getCode(), new PowerUpInterpreter(race));
         interpreter.add(AC35MessageType.POWER_TAKEN.getCode(), new PowerTakenInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
@@ -768,7 +768,7 @@ public class RaceController implements Observer {
     /**
      * Displays the result of the race in table form
      */
-    public void showFinishersList() {
+    private void showFinishersList() {
         if (finishResultsBox == null) {
             String result = "MATCH COMPLETE\n\n";
 
