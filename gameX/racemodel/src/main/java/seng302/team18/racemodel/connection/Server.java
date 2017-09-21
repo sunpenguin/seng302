@@ -36,7 +36,7 @@ public class Server extends Observable {
      * Opens the server.
      * Blocks waiting for the first client connection, then opens a second thread to listen for subsequent connections
      */
-    public void openServer() {
+    public void open() {
         System.out.println("Stream opened successfully on port: " + port);
 
         acceptClientConnection();
@@ -74,6 +74,7 @@ public class Server extends Observable {
      * (Blocking)
      */
     public void close() {
+//        System.out.println("Server::close");
         stopAcceptingConnections();
         for (ClientConnection client : clients) {
             try {
@@ -89,6 +90,7 @@ public class Server extends Observable {
 
         setChanged();
         notifyObservers(ServerState.CLOSED);
+//        System.out.println("Server::closed");
     }
 
 
@@ -119,6 +121,7 @@ public class Server extends Observable {
 
         removeClients(toRemove);
         if (clients.isEmpty() && closeOnEmpty) {
+//            System.out.println("Server::broadcast close");
             close();
         }
 
