@@ -160,6 +160,7 @@ public class ConnectionListener extends Observable implements Observer {
             player.close();
         }
         executor.shutdownNow();
+//        System.out.println("ConnectionListener::close");
     }
 
 
