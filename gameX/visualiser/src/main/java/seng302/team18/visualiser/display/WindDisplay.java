@@ -74,7 +74,6 @@ public class WindDisplay extends AnimationTimer {
      * @param speed
      */
     private void setWindImage(double speed) {
-        speed = 30;
         if (speed <= LIGHT_WIND) {
             windView.setImage(windImageSmall);
         } else if (speed <= MODERATE_WIND) {

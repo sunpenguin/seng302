@@ -319,6 +319,4 @@ public class CourseRenderer implements Renderable {
         pickUpVisual.setLayoutX(pixelCoordinates.getX() - (powerImageSize / 2));
         pickUpVisual.setLayoutY(pixelCoordinates.getY() - (powerImageSize / 2));
     }
-
-
 }
