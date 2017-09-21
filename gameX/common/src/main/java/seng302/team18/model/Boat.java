@@ -355,7 +355,7 @@ reated by hqi19 on 21/09/17.
     }
 
     public boolean hasPassedDestination() {
-        return passedDestination = true;
+        return passedDestination;
     }
 
     public void setPassedDestination(boolean passedDestination) {

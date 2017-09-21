@@ -65,32 +65,36 @@ public class RaceRenderer implements Renderable {
     public void render() {
         drawBoats();
         renderShark();
-//        drawArrow();
+        drawArrow();
         if (drawTrails) {
             drawTrails();
         }
     }
 
-    private void drawArrow(Boat boat) {
-        if (boat.hasPassedDestination()) {
-            int leg = boat.getLegNumber();
-            Coordinate current = race.getCourse().getMarkSequence().get(leg).getCompoundMark().getCoordinate();
-            CompoundMark next = race.getCourse().getMarkSequence().get(leg + 1).getCompoundMark();
-            arrow = new DisplayRoundingArrow(current, next, pixelMapper);
+
+    private void drawArrow() {
+        removeArrow();
+
+        for (Boat boat: race.getStartingList()) {
+            CompoundMark current = race.getCourse().getMarkRounding(boat.getLegNumber()).getCompoundMark();
+            System.out.println("current" + current.getName());
+            CompoundMark next = race.getCourse().getMarkRounding(boat.getLegNumber() + 1).getCompoundMark();
+            System.out.println("next: " + next.getName());
+            arrow = new DisplayRoundingArrow(current.getCoordinate(), next, pixelMapper);
             arrow.drawArrow();
             arrowMap.put(boat.getLegNumber(), arrow);
             arrow.addToGroup(group);
-        } else {
-            removeArrow(boat);
         }
 
     }
 
-    private void removeArrow(Boat boat) {
-        if (arrowMap.containsKey(boat.getLegNumber())) {
-            arrowMap.get(boat.getLegNumber()).removeFromGroup(group);
+
+    private void removeArrow() {
+        if (arrowMap.containsValue(arrow)) {
+            arrow.removeFromGroup(group);
         }
     }
+
 
     private void drawBoats() {
         for (int i = 0; i < race.getStartingList().size(); i++) {
@@ -98,7 +102,6 @@ public class RaceRenderer implements Renderable {
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
             if (displayBoat == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
                 displayBoat = makeBoat(boat);
-                drawArrow(boat);
             }
 
             if (displayBoat != null && BoatStatus.DSQ.equals(boat.getStatus())) {

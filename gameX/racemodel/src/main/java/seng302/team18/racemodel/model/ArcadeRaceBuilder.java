@@ -38,7 +38,7 @@ public class ArcadeRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new MarkCollisionUpdater());
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());
-        updaters.add(new MarkArrowUpdater());
+//        updaters.add(new MarkArrowUpdater());
         updaters.add(new PowerUpUpdater(makePickUp(), 4));
         updaters.add(new ProjectileUpdater());
         updaters.add(new ProjectileHitUpdater());

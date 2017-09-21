@@ -22,16 +22,19 @@ public class DisplayRoundingArrow {
     private CompoundMark next;
     private Polyline arrowHead;
     private Line arrowLine;
+    private CubicCurve curve1 = new CubicCurve();
+    private  Path arrowIni = new Path();
     private List<XYPair> endPoints  = new ArrayList<>();
     private GPSCalculator calculator = new GPSCalculator();
     private PixelMapper pixelMapper;
     private double bearing;
+    private Coordinate middle;
 
 
     public DisplayRoundingArrow(Coordinate current, CompoundMark next, PixelMapper pixelMapper) {
         this.current = current;
         this.next = next;
-        arrowHead = new Polyline();
+        arrowHead = new Polyline();CubicCurve curve1 = new CubicCurve();
         this.pixelMapper = pixelMapper;
     }
 
@@ -40,11 +43,12 @@ public class DisplayRoundingArrow {
         makeHeadShape();
         calculateEndPoints();
         makeLine();
+        curve();
         setPosition();
     }
 
     private void calculateEndPoints() {
-        Coordinate middle = null;
+        Path arrowIni = new Path();
 
         if (next.isGate()) {
             Mark m1 = next.getMarks().get(0);
@@ -90,6 +94,8 @@ public class DisplayRoundingArrow {
     public void addToGroup(Group group) {
         group.getChildren().add(arrowHead);
         group.getChildren().add(arrowLine);
+//        group.getChildren().add(curve1);
+//        group.getChildren().add(arrowIni);
     }
 
 
@@ -112,43 +118,45 @@ public class DisplayRoundingArrow {
     }
 
 
+    private void curve () {
+        double startX = endPoints.get(0).getX();
+        double startY = endPoints.get(0).getY();
+        double endX = endPoints.get(1).getX();
+        double endY = endPoints.get(1).getY();
 
+        double cx = startY + 100;
+        double cy = endY - 100;
 
+        curve1.setStartX(startX);
+        curve1.setStartY(startY);
+        curve1.setEndX(endX);
+        curve1.setEndY(endY);
 
+        curve1.setControlX1(startX);
+        curve1.setControlX2(endX);
+        curve1.setControlY1(cx);
+        curve1.setControlY2(cy);
 
-    public void Curve (Group group) {
-        CubicCurve curve1 = new CubicCurve( 125, 150, 125, 225, 325, 225, 325, 300);
-        curve1.setStroke(Color.BLACK);
+        curve1.setStroke(Color.GREEN);
         curve1.setStrokeWidth(1);
-        curve1.setFill( null);
+        curve1.setStyle("-fx-stroke: green");
+        curve1.setFill(null);
 
-        double size=Math.max(curve1.getBoundsInLocal().getWidth(),
+        double size = Math.max(curve1.getBoundsInLocal().getWidth(),
                 curve1.getBoundsInLocal().getHeight());
-        double scale=size/4d;
+        double scale = size/4d;
 
         Point2D ori=eval(curve1,0);
         Point2D tan=evalDt(curve1,0).normalize().multiply(scale);
-        Path arrowIni=new Path();
+
         arrowIni.getElements().add(new MoveTo(ori.getX()+0.2*tan.getX()-0.2*tan.getY(),
                 ori.getY()+0.2*tan.getY()+0.2*tan.getX()));
         arrowIni.getElements().add(new LineTo(ori.getX(), ori.getY()));
         arrowIni.getElements().add(new LineTo(ori.getX()+0.2*tan.getX()+0.2*tan.getY(),
                 ori.getY()+0.2*tan.getY()-0.2*tan.getX()));
-
-        ori=eval(curve1,1);
-        tan=evalDt(curve1,1).normalize().multiply(scale);
-        Path arrowEnd=new Path();
-        arrowEnd.getElements().add(new MoveTo(ori.getX()-0.2*tan.getX()-0.2*tan.getY(),
-                ori.getY()-0.2*tan.getY()+0.2*tan.getX()));
-        arrowEnd.getElements().add(new LineTo(ori.getX(), ori.getY()));
-        arrowEnd.getElements().add(new LineTo(ori.getX()-0.2*tan.getX()+0.2*tan.getY(),
-                ori.getY()-0.2*tan.getY()-0.2*tan.getX()));
-
-        group.getChildren().addAll(curve1, arrowIni, arrowEnd);
-
-//        primaryStage.setScene(new Scene(root, 800, 600));
-//        primaryStage.show();
+        arrowIni.setRotate(bearing);
     }
+
 
     /**
      * Evaluate the cubic curve at a parameter 0<=t<=1, returns a Point2D
@@ -175,7 +183,7 @@ public class DisplayRoundingArrow {
      * @return a Point2D
      */
     private Point2D evalDt(CubicCurve c, float t){
-        Point2D p=new Point2D(-3*Math.pow(1-t,2)*c.getStartX()+
+        Point2D p1=new Point2D(-3*Math.pow(1-t,2)*c.getStartX()+
                 3*(Math.pow(1-t, 2)-2*t*(1-t))*c.getControlX1()+
                 3*((1-t)*2*t-t*t)*c.getControlX2()+
                 3*Math.pow(t, 2)*c.getEndX(),
@@ -183,6 +191,6 @@ public class DisplayRoundingArrow {
                         3*(Math.pow(1-t, 2)-2*t*(1-t))*c.getControlY1()+
                         3*((1-t)*2*t-t*t)*c.getControlY2()+
                         3*Math.pow(t, 2)*c.getEndY());
-        return p;
+        return p1;
     }
 }
