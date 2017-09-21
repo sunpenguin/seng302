@@ -5,8 +5,8 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 import seng302.team18.message.BoatActionMessage;
-import seng302.team18.send.ControllerMessageFactory;
-import seng302.team18.send.Sender;
+import seng302.team18.encode.ControllerMessageFactory;
+import seng302.team18.encode.Sender;
 
 
 import javax.net.ServerSocketFactory;

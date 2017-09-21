@@ -17,7 +17,7 @@ public class OutOfBoundsUpdater implements Updater {
         }
         for (Projectile projectile : race.getProjectiles()){
             GPSCalculator calculator = new GPSCalculator();
-            List<Coordinate> boundaries = race.getCourse().getCourseLimits();
+            List<Coordinate> boundaries = race.getCourse().getLimits();
 
             if (!calculator.isInside(projectile.getLocation(), boundaries)) {
                 race.removeProjectile(projectile.getId());
@@ -47,7 +47,7 @@ public class OutOfBoundsUpdater implements Updater {
      */
     private boolean isOutSide(Boat boat, Race race) {
         GPSCalculator calculator = new GPSCalculator();
-        List<Coordinate> boundaries = race.getCourse().getCourseLimits();
+        List<Coordinate> boundaries = race.getCourse().getLimits();
 
         return boundaries.size() > 2
                 && !calculator.isInside(boat.getCoordinate(), boundaries)
