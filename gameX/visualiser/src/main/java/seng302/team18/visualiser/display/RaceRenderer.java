@@ -23,7 +23,6 @@ public class RaceRenderer implements Renderable {
     private PixelMapper pixelMapper;
     private boolean drawTrails;
     private DisplayRoundingArrow arrow;
-    private RoundingDetector detector = new RoundingDetector();
 
 
     /**
@@ -76,15 +75,24 @@ public class RaceRenderer implements Renderable {
         removeArrow();
 
         for (Boat boat: race.getStartingList()) {
-            CompoundMark current = race.getCourse().getMarkRounding(boat.getLegNumber()).getCompoundMark();
-            System.out.println("current" + current.getName());
-            CompoundMark next = race.getCourse().getMarkRounding(boat.getLegNumber() + 1).getCompoundMark();
-            System.out.println("next: " + next.getName());
-            arrow = new DisplayRoundingArrow(current, next, pixelMapper);
-            arrow.drawArrow();
-            arrowMap.put(boat.getLegNumber(), arrow);
-            arrow.addToGroup(group);
+            if (boat.hasPassedDestination()) {
+                int leg = boat.getLegNumber();
+                Coordinate current = null;
+                if (boat.getCoordinate() == null) {
+                    current = race.getCourse().getMarkSequence().get(leg).getCompoundMark().getCoordinate();
+                } else {
+                    current = boat.getCoordinate();
+                }
+                CompoundMark next = race.getCourse().getMarkSequence().get(leg + 1).getCompoundMark();
+                arrow = new DisplayRoundingArrow(current, next, pixelMapper);
+                arrow.drawArrow();
+                arrowMap.put(boat.getLegNumber(), arrow);
+                arrow.addToGroup(group);
+            } else {
+                removeArrow();
+            }
         }
+
     }
 
     private void removeArrow() {

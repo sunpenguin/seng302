@@ -33,6 +33,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private PowerUp updater = new BoatPowerUpUpdater();
     private int lives;
     private boolean hasCollided = false;
+    private boolean passedDestination = false;
 
     /**
      * A constructor for the Boat class
@@ -111,7 +112,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     public int getLegNumber() {
         return legNumber.get();
     }
-
 
     public IntegerProperty legNumberProperty() {
         return legNumber;
@@ -300,6 +300,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * Sets heading so that VMG towards up wind is maximum and updates the speed.
      * <p>
      * Pre-condition: boat is heading towards from 0 to 180 degree.
+reated by hqi19 on 21/09/17.
      *
      * @param windSpeed     double, speed of the wind in knots
      * @param windDirection double, direction of the wind (degrees)
@@ -351,6 +352,14 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
     public Coordinate getPreviousCoordinate() {
         return previousCoordinate;
+    }
+
+    public boolean hasPassedDestination() {
+        return passedDestination = true;
+    }
+
+    public void setPassedDestination(boolean passedDestination) {
+        this.passedDestination = passedDestination;
     }
 
 
