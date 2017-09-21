@@ -7,6 +7,7 @@ import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.ProjectileCreationMessage;
 import seng302.team18.message.ProjectileGoneMessage;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.interpret.unique.ProjectileCreationInterpreter;
 
 /**
  * Class to test projectile creation interpreter

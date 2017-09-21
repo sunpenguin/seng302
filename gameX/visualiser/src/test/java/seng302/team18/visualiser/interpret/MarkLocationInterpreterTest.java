@@ -10,6 +10,7 @@ import seng302.team18.model.CompoundMark;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Mark;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.interpret.americascup.BoatLocationInterpreter;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -8,7 +8,8 @@ import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestType;
-import seng302.team18.send.Sender;
+import seng302.team18.encode.Sender;
+import seng302.team18.visualiser.interpret.unique.ColourResponder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

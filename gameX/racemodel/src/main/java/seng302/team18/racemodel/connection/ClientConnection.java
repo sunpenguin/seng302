@@ -4,6 +4,7 @@ import seng302.team18.message.RequestType;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * Holds a connection to a socket.
@@ -20,7 +21,7 @@ public class ClientConnection {
 
     public ClientConnection(Socket socket) throws IOException {
         this.socket = socket;
-        out = new DataOutputStream(this.socket.getOutputStream());
+        out = socket.getOutputStream();
         in = socket.getInputStream();
         if (!in.markSupported()) {
             in = new BufferedInputStream(in);
@@ -30,20 +31,22 @@ public class ClientConnection {
 
     /**
      * Send a message to a socket.
-     * Returns false on failure to send the message. (Socket closed by remote)
+     * Returns false on failure to encode the message. (Socket closed by remote)
      *
-     * @param message the message to send.
+     * @param message the message to encode.
      * @return if the message was sent.
      */
-    public boolean sendMessage(byte[] message) {
+    public boolean send(byte[] message) {
+//        System.out.println("ClientConnection::send");
         try {
             out.write(message);
             out.flush();
             return true;
-        } catch (IOException e) {
+        } catch (Exception e) {
 //            e.printStackTrace();
             return false;
         }
+
     }
 
 
@@ -56,6 +59,7 @@ public class ClientConnection {
         in.close();
         out.close();
         socket.close();
+//        System.out.println("ClientConnection::close");
     }
 
 

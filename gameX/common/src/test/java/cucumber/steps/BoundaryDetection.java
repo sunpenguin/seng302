@@ -40,6 +40,7 @@ public class BoundaryDetection {
         race.setUpdaters(updaters);
         Course course = new Course(getCompoundMarks(), boundaries, getRoundings());
         race.setCourse(course);
+        race.setPositionSetter(new StartLineSetter(5));
     }
 
     @Given("^a boat inside the courses bounds$")
