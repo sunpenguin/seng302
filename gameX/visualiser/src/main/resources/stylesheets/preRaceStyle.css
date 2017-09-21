@@ -5,3 +5,20 @@
 .label {
     -fx-font-family: "Munro";
 }
+
+.list-view{
+    -fx-font-family: "Munro";
+    -fx-font-size: 15px;
+
+}
+
+.list-cell:even{
+    -fx-background-color: #FE5A00;
+}
+
+.list-cell:odd{
+    -fx-background-color: white;
+}
+
+
+
