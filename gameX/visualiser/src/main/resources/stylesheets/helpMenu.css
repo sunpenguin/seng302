@@ -2,6 +2,11 @@
     src: url("/font/Munro.ttf");
 }
 
+.label {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Munro";
+}
+
 .gameModeImage {
     -fx-graphic: url('/images/title_screen/help_menu/gameModeHelp_alt.png');
 }

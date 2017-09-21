@@ -13,11 +13,82 @@
             <ToggleButton fx:id="modesToggle" mnemonicParsing="false" style="-fx-background-color: transparent;" />
          </children>
       </HBox>
-      <Pane fx:id="contentPane" layoutY="50.0" prefHeight="670.0" prefWidth="600.0" styleClass="mainPane">
+      <StackPane fx:id="stackPane" layoutY="50.0">
          <children>
-            <Label fx:id="gameModeLabel" />
-            <Label fx:id="controlsLabel" />
+            <Pane fx:id="modePane" prefHeight="200.0" prefWidth="200.0" styleClass="mainPane">
+               <children>
+                  <GridPane layoutX="25.0" layoutY="25.0" prefHeight="620.0" prefWidth="550.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="RACE" />
+                        <Label text="DESCIPTION" GridPane.columnIndex="1" />
+                        <Label text="ARCADE RACE" GridPane.rowIndex="1" />
+                        <Label text="CHALLENGE MODE" GridPane.rowIndex="2" />
+                        <Label text="BUMPER BOATS" GridPane.rowIndex="3" />
+                        <Label text="SPECTATOR" GridPane.rowIndex="4" />
+                        <Label text="DESCIPTION" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="DESCIPTION" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="DESCIPTION" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label text="DESCIPTION" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                     </children>
+                  </GridPane>
+               </children>
+            </Pane>
+            <Pane fx:id="controlsPane" layoutY="50.0" prefHeight="670.0" prefWidth="600.0" styleClass="mainPane" visible="false">
+               <children>
+                  <GridPane layoutX="25.0" layoutY="25.0" prefHeight="620.0" prefWidth="550.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="UP" />
+                        <Label text="Label" GridPane.columnIndex="1" />
+                        <Label text="DOWN" GridPane.rowIndex="1" />
+                        <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="LEFT" GridPane.rowIndex="2" />
+                        <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="RIGHT" GridPane.rowIndex="3" />
+                        <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label text="SHIFT" GridPane.rowIndex="4" />
+                        <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label text="S" GridPane.rowIndex="5" />
+                        <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label text="Z" GridPane.rowIndex="6" />
+                        <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <Label text="X" GridPane.rowIndex="7" />
+                        <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <Label text="TAB" GridPane.rowIndex="8" />
+                        <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <Label text="ESC" GridPane.rowIndex="9" />
+                        <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                     </children>
+                  </GridPane>
+               </children>
+            </Pane>
          </children>
-      </Pane>
+      </StackPane>
    </children>
 </Pane>
