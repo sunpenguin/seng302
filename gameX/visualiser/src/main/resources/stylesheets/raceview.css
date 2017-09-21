@@ -3,8 +3,17 @@
 }
 
 .label {
-    -fx-font-size: 30;
+    -fx-font-size: 20pt;
     -fx-font-family: "Munro";
+}
+
+
+.fpsLabel {
+    -fx-font-size: 15pt;
+}
+
+.windLabel {
+    -fx-font-size: 15pt;
 }
 
 .timeBox {
