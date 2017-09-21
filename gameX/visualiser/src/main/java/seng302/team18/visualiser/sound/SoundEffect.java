@@ -12,7 +12,8 @@ public enum SoundEffect {
     BUTTON_MOUSE_CLICK("audio/button_click.wav"),
     PLAYER_DISQUALIFIED("audio/fail.wav"),
     LOSE_LIFE("audio/lose_life.wav"),
-    RACE_START("audio/button_click.wav") // TODO create sound effect
+    RACE_START("audio/button_click.wav"), // TODO create sound effect
+    ACTIVATE_SPEED_BOOST("audio/button_click.wav") // TODO create sound effect
     ;
 
 
