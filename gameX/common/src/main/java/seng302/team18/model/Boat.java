@@ -2,7 +2,6 @@ package seng302.team18.model;
 
 
 import javafx.beans.property.*;
-import seng302.team18.message.PowerType;
 import seng302.team18.util.GPSCalculator;
 
 import java.time.ZonedDateTime;
@@ -183,7 +182,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * Sets the sails
      * True = sails out = luffing
      * False = sails in = powered up
-     * @param sailOut
+     * @param sailOut true if the sail is out.
      */
     public void setSailOut(boolean sailOut) {
         this.sailOut = sailOut;
@@ -301,8 +300,8 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * <p>
      * Pre-condition: boat is heading towards from 0 to 180 degree.
      *
-     * @param windSpeed     double, speed of the wind in knots
-     * @param windDirection double, direction of the wind (degrees)
+     * @param windSpeed     speed of the wind in knots
+     * @param windDirection direction of the wind (degrees)
      */
     public void optimalUpWind(double windSpeed, double windDirection) {
         double left = 270;
@@ -310,12 +309,12 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         double windRelativeHeading = (heading - windDirection + 360) % 360;
         if (windRelativeHeading <= right) {
             double optimalAngle = (polar.upWindAngle(windSpeed) + windDirection) % 360;
-            double optimalSpeed = polar.upWindSpeed(windSpeed);
+            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
         } else if (windRelativeHeading >= left) {
             double optimalAngle = (360 - polar.upWindAngle(windSpeed) + windDirection) % 360;
-            double optimalSpeed = polar.upWindSpeed(windSpeed);
+            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
         }
@@ -327,8 +326,8 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * <p>
      * Pre-condition: boat is heading towards from 90 to 270 degree.
      *
-     * @param windSpeed     double, speed of the wind in knots
-     * @param windDirection double, direction of the wind (degrees)
+     * @param windSpeed     speed of the wind in knots
+     * @param windDirection direction of the wind (degrees)
      */
     public void optimalDownWind(double windSpeed, double windDirection) {
         double right = 90;
@@ -337,12 +336,12 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         double windRelativeHeading = (heading - windDirection + 360) % 360;
         if (windRelativeHeading >= right && windRelativeHeading <= bottom) {
             double optimalAngle = (polar.downWindAngle(windSpeed) + windDirection) % 360;
-            double optimalSpeed = polar.downWindSpeed(windSpeed);
+            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
         } else if (windRelativeHeading >= bottom && windRelativeHeading <= left) {
             double optimalAngle = (360 - polar.downWindAngle(windSpeed) + windDirection) % 360;
-            double optimalSpeed = polar.downWindSpeed(windSpeed);
+            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
         }

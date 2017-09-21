@@ -50,7 +50,7 @@ public abstract class PolarPattern {
      * The polar with the closest windSpeed is selected.
      * Note: If distance from two polars is the same, the lower speed polar is selected.
      *
-     * @param windSpeed double, the speed of the wind.
+     * @param windSpeed the speed of the wind.
      * @return polar with closest windSpeed to given windSpeed
      */
     public Polar getPolarForWindSpeed(double windSpeed) {
@@ -332,13 +332,10 @@ public abstract class PolarPattern {
         double boatSpeed;
 
         if (valuesForWindspeeds.size() == 2) { //If two polars used
-            for (XYPair pair : valuesForWindspeeds){
-            }
             boatSpeed = calculateYAtXbetween2points(valuesForWindspeeds, windSpeed);
         } else {//Only one polar
             if (windSpeed > closestPolars.get(0).getWindSpeed()) {  //If above highest polar value
                 double maxWindspeed = closestPolars.get(0).getWindSpeed();
-
                 boatSpeed = valuesForWindspeeds.get(0).getY() * (windSpeed / maxWindspeed);
             } else {
                 boatSpeed = valuesForWindspeeds.get(0).getY();
