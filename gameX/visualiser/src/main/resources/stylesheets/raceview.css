@@ -12,6 +12,10 @@
     -fx-font-size: 15pt;
 }
 
+.windLabel {
+    -fx-font-size: 15pt;
+}
+
 .timeBox {
     -fx-background-color: white;
     -fx-padding: 5px;

@@ -28,11 +28,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
+import seng302.team18.encode.Sender;
 import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
@@ -41,12 +41,11 @@ import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.RaceMode;
-import seng302.team18.encode.Sender;
 import seng302.team18.util.GPSCalculator;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.*;
-import seng302.team18.visualiser.display.ui.Clock;
 import seng302.team18.visualiser.display.render.*;
+import seng302.team18.visualiser.display.ui.Clock;
 import seng302.team18.visualiser.display.ui.DisplaySparkline;
 import seng302.team18.visualiser.display.ui.FPSReporter;
 import seng302.team18.visualiser.display.ui.StopWatchClock;
@@ -88,8 +87,6 @@ public class RaceController implements Observer {
     private TableColumn<Boat, String> boatStatusColumn;
     @FXML
     private Pane raceViewPane;
-    @FXML
-    private Polygon arrow;
     @FXML
     private Label speedLabel;
     @FXML
@@ -580,7 +577,7 @@ public class RaceController implements Observer {
      * Retrieves the wind direction, scales the size of the arrow and then draws it on the Group
      */
     private void startWindDirection() {
-        WindDisplay windDisplay = new WindDisplay(race, arrow, speedLabel, raceViewPane);
+        WindDisplay windDisplay = new WindDisplay(race, speedLabel, raceViewPane);
         windDisplay.start();
     }
 
