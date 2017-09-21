@@ -878,6 +878,7 @@ public class RaceController implements Observer {
         } else if (arg instanceof Boolean) {
             Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST"));
         } else if (arg instanceof Boat) {
+            soundPlayer.playEffect(SoundEffect.PLAYER_DISQUALIFIED);
             Platform.runLater(() -> {
                 if (race.getMode().equals(RaceMode.CHALLENGE_MODE) || race.getMode().equals(RaceMode.BUMPER_BOATS)) {
                     openEscapeMenu("GAME OVER");
