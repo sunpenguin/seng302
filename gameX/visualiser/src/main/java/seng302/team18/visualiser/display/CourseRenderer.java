@@ -35,7 +35,7 @@ public class CourseRenderer implements Renderable {
     private PixelMapper pixelMapper;
     private RaceMode mode;
 
-    private Image speedPowerup = new Image("/images/race_view/Arrow2.gif");
+    private Image speedPowerup = new Image("/images/race_view/Arrow2_no_back.gif");
     private Image sharkPowerup = new Image("/images/race_view/reefShark.gif");
     private double powerImageSize = speedPowerup.getWidth();
 
