@@ -35,8 +35,8 @@ public class CourseRenderer implements Renderable {
     private RaceMode mode;
 
     private Image speedPowerup = new Image("/images/race_view/Arrow2_no_back.gif");
-    private Image sharkPowerup = new Image("/images/race_view/reefShark.gif");
-    private double powerImageSize = speedPowerup.getWidth();
+    private Image sharkPowerup = new Image("/images/race_view/reefShark_no_back.gif");
+    private double powerImageSize;
 
 
     public CourseRenderer(PixelMapper pixelMapper, Course course, Group group, RaceMode mode) {
@@ -95,7 +95,7 @@ public class CourseRenderer implements Renderable {
                 group.getChildren().add(border);
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("course limit = " + course.getLimits());
-                System.out.println("course limit size = " + course);
+                System.out.println("course limit size = " + course.getLimits().size());
                 e.printStackTrace();
             }
         }
@@ -286,13 +286,14 @@ public class CourseRenderer implements Renderable {
 
     /**
      * Creates a pick up if there isn't one and updates it if it exists.
+     * Scales the image to the correct size in pixels.
      *
      * @param pickUp not null.
      */
     private void renderPickUp(PickUp pickUp, PowerType type) {
         ImageView pickUpVisual = pickUps.get(pickUp.getId());
         double pickUpSize = pixelMapper.mappingRatio() * pickUp.getRadius();
-        double imageRatio = powerImageSize / (pickUpSize * 2);
+
         if (pickUpVisual == null) {
             switch (type) {
                 case SPEED: pickUpVisual = new ImageView(speedPowerup); break;
@@ -306,8 +307,13 @@ public class CourseRenderer implements Renderable {
             pickUpVisual.toBack();
             pickUps.put(pickUp.getId(), pickUpVisual);
         }
+
+        powerImageSize = pickUp.getType().equals(PowerType.SPEED) ? speedPowerup.getWidth() : sharkPowerup.getWidth();
+
+        double imageRatio = powerImageSize / (pickUpSize * 2);  // Ratio for scaling image to correct size
         pickUpVisual.setScaleX(1 / imageRatio);
         pickUpVisual.setScaleY(1 / imageRatio);
+
         Coordinate coordinate = pickUp.getLocation();
         XYPair pixelCoordinates = pixelMapper.mapToPane(coordinate);
         pickUpVisual.setLayoutX(pixelCoordinates.getX() - (powerImageSize / 2));
