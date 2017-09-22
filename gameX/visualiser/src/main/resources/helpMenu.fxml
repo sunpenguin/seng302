@@ -26,9 +26,9 @@
                       <RowConstraints maxHeight="98.0" minHeight="0.0" prefHeight="68.0" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="208.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="114.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="278.0" minHeight="10.0" prefHeight="118.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="198.0" minHeight="10.0" prefHeight="102.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="158.0" minHeight="10.0" prefHeight="137.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="278.0" minHeight="10.0" prefHeight="136.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="198.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="158.0" minHeight="10.0" prefHeight="129.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Label alignment="TOP_LEFT" contentDisplay="TOP" text="RACE" />
