@@ -1,10 +1,13 @@
 package seng302.team18.visualiser.display.render;
 
 import javafx.scene.Group;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
+import seng302.team18.message.PowerType;
 import seng302.team18.model.*;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
@@ -25,11 +28,14 @@ public class CourseRenderer implements Renderable {
     private Polyline border = new Polyline();
     private Map<Integer, Circle> marks = new HashMap<>();
     private Map<String, Line> gates = new HashMap<>();
-    private Map<Integer, Circle> pickUps = new HashMap<>();
+    private Map<Integer, ImageView> pickUps = new HashMap<>();
     private Course course;
     private Group group;
     private PixelMapper pixelMapper;
     private RaceMode mode;
+
+    private static final Image SPEED_POWER_UP = new Image("/images/race_view/Arrow2_no_back.gif");
+    private static final Image SHARK_POWER_UP = new Image("/images/race_view/reefShark_no_back.gif");
 
 
     public CourseRenderer(PixelMapper pixelMapper, Course course, Group group, RaceMode mode) {
@@ -88,7 +94,7 @@ public class CourseRenderer implements Renderable {
                 group.getChildren().add(border);
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("course limit = " + course.getLimits());
-                System.out.println("course limit size = " + course);
+                System.out.println("course limit size = " + course.getLimits().size());
                 e.printStackTrace();
             }
         }
@@ -266,10 +272,10 @@ public class CourseRenderer implements Renderable {
     private void renderPickUp(PickUp pickUp) {
         switch (pickUp.getType()) {
             case SPEED:
-                renderPickUp(pickUp, Color.GREEN);
+                renderPickUp(pickUp, PowerType.SPEED);
                 break;
             case SHARK:
-                renderPickUp(pickUp, Color.RED);
+                renderPickUp(pickUp, PowerType.SHARK);
                 break;
             default:
                 System.out.println("PowerUpInterpreter::makePowerUp has gone horribly wrong (ask Sunguin for help)");
@@ -279,29 +285,46 @@ public class CourseRenderer implements Renderable {
 
     /**
      * Creates a pick up if there isn't one and updates it if it exists.
+     * Scales the image to the correct size in pixels.
      *
      * @param pickUp not null.
-     * @param color  of the pickup.
      */
-    private void renderPickUp(PickUp pickUp, Color color) {
-        Circle pickUpVisual = pickUps.get(pickUp.getId());
+    private void renderPickUp(PickUp pickUp, PowerType type) {
+        ImageView pickUpVisual = pickUps.get(pickUp.getId());
         double pickUpSize = pixelMapper.mappingRatio() * pickUp.getRadius();
+
         if (pickUpVisual == null) {
-            pickUpVisual = new Circle(pickUpSize, color);
+
+            switch (type) {
+                case SPEED:
+                    pickUpVisual = new ImageView(SPEED_POWER_UP);
+                    break;
+                case SHARK:
+                    pickUpVisual = new ImageView(SHARK_POWER_UP);
+                    break;
+                default:
+                    return;
+            }
+
             pickUpVisual.setOnMouseClicked((event) -> {
                 pixelMapper.setZoomLevel(4);
                 pixelMapper.setViewPortCenter(pickUp.getLocation());
             });
+
             group.getChildren().addAll(pickUpVisual);
             pickUpVisual.toBack();
             pickUps.put(pickUp.getId(), pickUpVisual);
         }
-        pickUpVisual.setRadius(pickUpSize);
+
+        double powerImageSize = pickUp.getType().equals(PowerType.SPEED) ? SPEED_POWER_UP.getWidth() : SHARK_POWER_UP.getWidth();
+
+        double imageRatio = powerImageSize / (pickUpSize * 2);  // Ratio for scaling image to correct size
+        pickUpVisual.setScaleX(1 / imageRatio);
+        pickUpVisual.setScaleY(1 / imageRatio);
+
         Coordinate coordinate = pickUp.getLocation();
         XYPair pixelCoordinates = pixelMapper.mapToPane(coordinate);
-        pickUpVisual.setCenterX(pixelCoordinates.getX());
-        pickUpVisual.setCenterY(pixelCoordinates.getY());
+        pickUpVisual.setLayoutX(pixelCoordinates.getX() - (powerImageSize / 2));
+        pickUpVisual.setLayoutY(pixelCoordinates.getY() - (powerImageSize / 2));
     }
-
-
 }

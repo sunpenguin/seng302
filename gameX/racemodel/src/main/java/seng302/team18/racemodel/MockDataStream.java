@@ -45,7 +45,7 @@ public class MockDataStream {
         server.setCloseOnEmpty(true);
         server.addObserver(listener);
         listener.addObserver(testMock);
-        server.openServer();
+        server.open();
     }
 
 

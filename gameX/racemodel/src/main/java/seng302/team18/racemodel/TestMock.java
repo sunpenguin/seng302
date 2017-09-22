@@ -259,6 +259,7 @@ public class TestMock implements Observer {
             scheduledMessages.add(new HeartBeatMessageGenerator());
 
             do {
+//                System.out.println("TestMock SimulationLoop::run");
                 if (race.getStatus().equals(RaceStatus.STARTED)) {
                     generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
                     sendRaceXml();
@@ -290,6 +291,7 @@ public class TestMock implements Observer {
 
             sendFinalMessages();
             server.close();
+//            System.out.println("TestMock SimulationLoop::run finished");
         }
     }
 }
