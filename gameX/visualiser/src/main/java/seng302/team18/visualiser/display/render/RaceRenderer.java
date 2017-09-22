@@ -74,16 +74,21 @@ public class RaceRenderer implements Renderable {
         for (int i = 0; i < race.getStartingList().size(); i++) {
             Boat boat = race.getStartingList().get(i);
             DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
-            if (displayBoat == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
+            if (displayBoat == null && isValidCode(boat.getStatus())) {
                 displayBoat = makeBoat(boat);
             }
 
-            if (displayBoat != null && BoatStatus.DSQ.equals(boat.getStatus())) {
+            if (displayBoat != null && !isValidCode(boat.getStatus())) {
                 remove(displayBoat);
             } else if (displayBoat != null && boat.getCoordinate() != null) {
                 synchronise(displayBoat, boat);
             }
         }
+    }
+
+
+    private boolean isValidCode(BoatStatus status) {
+        return ! (BoatStatus.DSQ.equals(status) || BoatStatus.DNF.equals(status));
     }
 
 
