@@ -11,7 +11,6 @@ import seng302.team18.util.ByteCheck;
 public class AC35MessageHeadParser implements MessageHeadParser {
 
 
-
     /**
      * Reads a byte array and associates the information read with a message head.
      *
@@ -30,6 +29,7 @@ public class AC35MessageHeadParser implements MessageHeadParser {
         return new AC35MessageHead(messageType, len);
     }
 
+
     /**
      * Gets the size of the header.
      *
@@ -37,7 +37,6 @@ public class AC35MessageHeadParser implements MessageHeadParser {
      */
     @Override
     public int headerSize() {
-        final int HEADER_BYTE_SIZE = 15;
-        return HEADER_BYTE_SIZE;
+        return 15;
     }
 }

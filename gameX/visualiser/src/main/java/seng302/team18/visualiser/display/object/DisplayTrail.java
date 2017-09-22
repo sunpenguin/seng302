@@ -80,7 +80,8 @@ public class DisplayTrail {
 
     /**
      * Removes the trail from the group.
-     * @param group
+     *
+     * @param group to remove trail from.
      */
     public void removeFrom(Group group) {
         group.getChildren().remove(polyline);

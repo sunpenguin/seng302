@@ -8,7 +8,7 @@ import seng302.team18.model.Boat;
 import java.util.List;
 
 /**
- * Created by dhl25 on 17/08/17.
+ * Class used to interpret a ColourMessage.
  */
 public class ColourInterpreter extends MessageInterpreter {
 

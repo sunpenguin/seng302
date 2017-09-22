@@ -1,16 +1,15 @@
 package seng302.team18.encode;
 
-import java.io.ByteArrayOutputStream;
-
 import javafx.scene.paint.Color;
 import seng302.team18.message.ColourMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.util.ByteCheck;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Created by dhl25 on 16/08/17.
+ * Encodes colour message to byte arrays.
  */
 public class ColourEncoder extends MessageEncoder {
 
