@@ -70,11 +70,13 @@ public class GameConnection {
     public boolean startGame(String hostString, String portString, boolean isHosting) {
         String hostAddress = parseHostAddress(hostString);
         int port = parsePort(portString);
-        if (port < 0 || hostAddress == null) return false;
+        if (port < 0 || hostAddress == null) {
+            return false;
+        }
 
         if (isHosting) {
             try {
-                (new ModelLoader()).startModel(port);
+                new ModelLoader().startModel(port);
             } catch (IOException e) {
                 errorText.set("Unable to initiate server!");
                 e.printStackTrace();
@@ -82,13 +84,14 @@ public class GameConnection {
             }
 
             try {
-                Thread.sleep(400);
+                Thread.sleep(400); // This is to give time for the process to start
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        return openStream(hostAddress, port);
+        openStream(hostAddress, port);
+        return false;
     }
 
 
@@ -204,18 +207,17 @@ public class GameConnection {
      * @param host The host IP address for the socket
      * @param port The port number used for the socket
      */
-    private boolean openStream(String host, int port) {
+    private void openStream(String host, int port) {
         try {
             Socket socket = SocketFactory.getDefault().createSocket(host, port);
             startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
         } catch (Exception e) {
             errorText.set("Failed to connect to " + host + ":" + port + "!");
         }
-        return false;
     }
 
 
-    public void goToPreRace() throws Exception {
+    public void goToPreRace() throws IOException {
         sender.send(new ColourMessage(color, race.getPlayerId()));
 
         Stage stage = (Stage) node.getScene().getWindow();
@@ -227,6 +229,10 @@ public class GameConnection {
         stage.show();
 
         controller.setUp(race, sender, interpreter);
+    }
+
+    public void setFailedConnection() {
+        errorText.set("Failed to connect to server:\nServer rejected connection");
     }
 
 }

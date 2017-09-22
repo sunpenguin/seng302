@@ -8,6 +8,8 @@ import seng302.team18.message.RequestType;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.controller.GameConnection;
 
+import java.io.IOException;
+
 /**
  * The MarkLocationInterpreter that sets the client's player id
  *
@@ -33,11 +35,14 @@ public class AcceptanceInterpreter extends MessageInterpreter {
             RequestType requestType =  ((AcceptanceMessage) message).getRequestType();
             if (requestType.getCode() != race.getMode().getCode()) {
                 //TODO inform user of failed connection sbe67 20/9
+                Platform.runLater(() -> {
+                    gameConnection.setFailedConnection();
+                });
             } else {
                 Platform.runLater(() -> {
                     try {
                         gameConnection.goToPreRace();
-                    } catch (Exception e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 });
