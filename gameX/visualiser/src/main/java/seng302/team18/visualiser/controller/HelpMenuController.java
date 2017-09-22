@@ -1,21 +1,22 @@
 package seng302.team18.visualiser.controller;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Toggle;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 
 public class HelpMenuController {
 
-    @FXML private HBox tabHBox;
     @FXML private ToggleButton controlsToggle;
     @FXML private ToggleButton modesToggle;
     @FXML private Pane controlsPane;
     @FXML private Pane modePane;
+    @FXML private Pane outerPane;
+    @FXML private Label closeLabel;
+
+    private Pane titleScreenPane;
 
 
     @FXML public void initialize() {
@@ -24,6 +25,8 @@ public class HelpMenuController {
 
         modesToggle.getStyleClass().add("gameModeImage");
         modesToggle.setOnMouseClicked(event -> showGameModeHelp());
+
+        closeLabel.setOnMouseClicked(event -> close());
 
         showControlsHelp();
     }
@@ -62,5 +65,18 @@ public class HelpMenuController {
 
         previous.setVisible(false);
         next.setVisible(true);
+    }
+
+
+    /**
+     * Close the help menu by removing the node from the title screen
+     */
+    private void close() {
+        titleScreenPane.getChildren().remove(outerPane);
+    }
+
+
+    public void setup(Pane pane) {
+        titleScreenPane = pane;
     }
 }

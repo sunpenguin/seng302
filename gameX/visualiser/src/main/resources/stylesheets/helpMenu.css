@@ -33,6 +33,15 @@
 }
 
 
+.crossImage {
+    -fx-graphic: url('/images/title_screen/help_menu/crosss.png');
+}
+
+.crossImage:hover {
+    -fx-graphic: url('/images/title_screen/help_menu/crosss_alt.png');
+}
+
+
 .mainPane {
     -fx-background-color: aqua;
     -fx-border-color: black;

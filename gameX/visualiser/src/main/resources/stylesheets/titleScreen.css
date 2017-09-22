@@ -26,14 +26,14 @@
     -fx-graphic: url('/images/play_button_alt.png');
 }
 
-.controlsImage {
-    -fx-graphic: url('/images/title_screen/view_controls_button.png');
+.helpImage {
+    -fx-graphic: url('/images/title_screen/help_menu/help_button.png');
 }
 
 
-.controlsImage:hover {
+.helpImage:hover {
     -fx-label-padding: 2;
-    -fx-graphic: url('/images/title_screen/view_controls_button_alt.png');
+    -fx-graphic: url('/images/title_screen/help_menu/help_button_alt.png');
 }
 
 .tutorialImage {

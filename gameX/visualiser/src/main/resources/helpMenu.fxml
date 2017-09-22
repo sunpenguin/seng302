@@ -4,15 +4,16 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="600.0" style="-fx-background-color: aqua;" stylesheets="@stylesheets/helpMenu.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.HelpMenuController">
+<Pane fx:id="outerPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="600.0" style="-fx-background-color: transparent;" stylesheets="@stylesheets/helpMenu.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.HelpMenuController">
    <children>
-      <HBox fx:id="tabHBox" alignment="CENTER" prefHeight="50.0" prefWidth="600.0" styleClass="tabHBox">
+      <Label fx:id="closeLabel" layoutX="8.0" layoutY="8.0" styleClass="crossImage" />
+      <HBox fx:id="tabHBox" alignment="CENTER" layoutY="50.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="600.0" style="-fx-background-color: aqua;" styleClass="tabHBox">
          <children>
             <ToggleButton fx:id="controlsToggle" mnemonicParsing="false" style="-fx-background-color: transparent;" />
             <ToggleButton fx:id="modesToggle" mnemonicParsing="false" style="-fx-background-color: transparent;" />
          </children>
       </HBox>
-      <StackPane fx:id="stackPane" layoutY="50.0">
+      <StackPane fx:id="stackPane" layoutY="100.0" style="-fx-background-color: aqua;">
          <children>
             <Pane fx:id="modePane" prefHeight="200.0" prefWidth="200.0" styleClass="mainPane">
                <children>
