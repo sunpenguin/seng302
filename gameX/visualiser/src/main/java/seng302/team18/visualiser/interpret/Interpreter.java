@@ -47,7 +47,9 @@ public class Interpreter extends Observable {
                          messageBody = receiver.nextMessage();
                      } catch (IOException e1) {
                          close();
+                         closeReceiver();
                      } catch (Exception e2){
+                         e2.printStackTrace();
                          System.err.println("e2 interpreter start method");
                      }
                      if (messageBody != null) {
@@ -78,11 +80,17 @@ public class Interpreter extends Observable {
 
     /**
      * Shuts down the interpreter
-     *
-     * @return if it has closed
      */
-    public boolean close() {
+    public void close() {
         executor.shutdownNow();
+
+    }
+
+
+    /**
+     * Shuts down the receiver
+     */
+    public boolean closeReceiver(){
         return receiver.close();
     }
 }

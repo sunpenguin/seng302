@@ -8,15 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import seng302.team18.interpret.CompositeMessageInterpreter;
-import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
-import seng302.team18.message.RequestMessage;
-import seng302.team18.message.RequestType;
-import seng302.team18.parse.Receiver;
 import seng302.team18.model.Boat;
 import seng302.team18.encode.Sender;
 import seng302.team18.visualiser.ClientRace;
@@ -24,8 +18,6 @@ import seng302.team18.visualiser.display.ui.PreRaceTimes;
 import seng302.team18.visualiser.interpret.americascup.BoatListInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceTimeInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceToMainRaceInterpreter;
-import seng302.team18.visualiser.interpret.unique.AcceptanceInterpreter;
-import seng302.team18.visualiser.interpret.unique.ColourResponder;
 import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
@@ -72,10 +64,10 @@ public class PreRaceController {
      * duration before the race starts.
      *
      * @param race     The race to be set up in the pre-race.
-     * @param receiver the receiver
-     * @param sender   the sender
+     * @param sender   the sender\
+     * @param interpreter the interpreter
      */
-    public void setUp(ClientRace race, Receiver receiver, Sender sender) {
+    public void setUp(ClientRace race,  Sender sender, Interpreter interpreter) {
         this.sender = sender;
         this.race = race;
         raceNameText.setText(race.getRegatta().getName());
@@ -87,55 +79,17 @@ public class PreRaceController {
         preRaceTimes.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
-        this.interpreter = new Interpreter(receiver);
-        interpreter.setInterpreter(initialiseInterpreter());
+        this.interpreter = interpreter;
+        addInterpreters();
         showNetWorkInfo();
 
         stage.setOnCloseRequest((event) -> {
             interpreter.close();
-            while (!receiver.close()) {
+            while (!interpreter.closeReceiver()) {
             }
             System.out.println("shutting down");
             System.exit(0);
         });
-    }
-
-
-    public void initConnection(Color color) {
-        interpreter.start();
-
-        RequestType requestType;
-        switch (race.getMode()) {
-            case RACE:
-                requestType = RequestType.RACING;
-                break;
-            case CONTROLS_TUTORIAL:
-                requestType = RequestType.CONTROLS_TUTORIAL;
-                break;
-            case CHALLENGE_MODE:
-                requestType = RequestType.CHALLENGE_MODE;
-                break;
-            case ARCADE:
-                requestType = RequestType.ARCADE;
-                break;
-            case BUMPER_BOATS:
-                requestType = RequestType.BUMPER_BOATS;
-                break;
-            case SPECTATION:
-                requestType = RequestType.VIEWING;
-                break;
-            default:
-                requestType = RequestType.RACING;
-        }
-        try {
-            sender.send(new RequestMessage(requestType));
-        } catch (IOException e) {
-            e.printStackTrace();
-            // TODO Callum / David 9 August show error (has been disconnected)
-        }
-
-        MessageInterpreter acceptanceResponse = new ColourResponder(color, sender);
-        interpreter.getInterpreter().add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
     }
 
 
@@ -172,19 +126,17 @@ public class PreRaceController {
      *
      * @return the message interpreter
      */
-    private MessageInterpreter initialiseInterpreter() {
-        MessageInterpreter interpreter = new CompositeMessageInterpreter();
+    private void addInterpreters() {
 
-        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
-        interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
-        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
-        interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
-        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
+        //interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race, new GameConnection()));
+        interpreter.getInterpreter().add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
+        interpreter.getInterpreter().add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
+        interpreter.getInterpreter().add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
+        interpreter.getInterpreter().add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
+        interpreter.getInterpreter().add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
 
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
+        interpreter.getInterpreter().add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
 
-        return interpreter;
     }
 
 
