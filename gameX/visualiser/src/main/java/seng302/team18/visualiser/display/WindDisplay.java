@@ -5,7 +5,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Polygon;
 import seng302.team18.visualiser.ClientRace;
 
 /**
@@ -13,33 +12,33 @@ import seng302.team18.visualiser.ClientRace;
  */
 public class WindDisplay extends AnimationTimer {
 
-    private ClientRace race;
-    private Polygon arrow;
-    private Label speedLabel;
-    private double direction;
-    private double scaleY = 40;
-    private Pane pane;
-    private Image windImageSmall = new Image("/images/race_view/wind_arrow_small.png");
-    private Image windImageMedium = new Image("/images/race_view/wind_arrow_medium.png");
-    private Image windImageBig = new Image("/images/race_view/wind_arrow_big.png");
-    private ImageView windView = new ImageView(windImageSmall);
-    private double offsetX = windImageSmall.getWidth() / 2;
-    private double offsetY = windImageSmall.getHeight() / 2;
-    private final int LIGHT_WIND = 20;
-    private final int MODERATE_WIND = 25;
+    private final ClientRace race;
+    private final Label speedLabel;
+    private final double direction;
+
+    private static final Image WIND_IMAGE_SMALL = new Image("/images/race_view/wind_arrow_small.png");
+    private static final Image WIND_IMAGE_MEDIUM = new Image("/images/race_view/wind_arrow_medium.png");
+    private static final Image WIND_IMAGE_BIG = new Image("/images/race_view/wind_arrow_big.png");
+    private final ImageView windView = new ImageView(WIND_IMAGE_SMALL);
+
+    private static final double OFFSET_X = WIND_IMAGE_SMALL.getWidth() / 4;
+    private static final double OFFSET_Y = WIND_IMAGE_SMALL.getHeight() / 4;
+    private static final int LIGHT_WIND = 20;
+    private static final int MODERATE_WIND = 25;
 
 
-    public WindDisplay(ClientRace race, Polygon arrow, Label speedLabel, Pane pane) {
+    public WindDisplay(ClientRace race, Label speedLabel, Pane pane) {
         this.race = race;
-        this.arrow = arrow;
         this.speedLabel = speedLabel;
         this.direction = race.getCourse().getWindDirection();
-        this.pane = pane;
-        arrow.setVisible(false);
-        speedLabel.setVisible(false);
         pane.getChildren().add(windView);
-        windView.setLayoutX(offsetX);
-        windView.setLayoutY(offsetY);
+
+        windView.setLayoutX(OFFSET_X);
+        windView.setLayoutY(OFFSET_Y);
+
+        speedLabel.setLayoutX(OFFSET_X);
+        speedLabel.setLayoutY(OFFSET_Y * 1.5 + WIND_IMAGE_SMALL.getHeight());
+        speedLabel.getStyleClass().add("windLabel");
     }
 
 
@@ -54,7 +53,6 @@ public class WindDisplay extends AnimationTimer {
         speedLabel.setText(String.format("%.2f", newWindSpeed) + " knots");
 
         setWindImage(newWindSpeed);
-
         updateWindDisplay(newWindDirection);
     }
 
@@ -71,15 +69,16 @@ public class WindDisplay extends AnimationTimer {
 
     /**
      * Sets the Image in the ImageView according to 3 different zones of wind speed.
-     * @param speed
+     *
+     * @param speed the speed in knots
      */
     private void setWindImage(double speed) {
         if (speed <= LIGHT_WIND) {
-            windView.setImage(windImageSmall);
+            windView.setImage(WIND_IMAGE_SMALL);
         } else if (speed <= MODERATE_WIND) {
-            windView.setImage(windImageMedium);
+            windView.setImage(WIND_IMAGE_MEDIUM);
         } else {
-            windView.setImage(windImageBig);
+            windView.setImage(WIND_IMAGE_BIG);
         }
     }
 }

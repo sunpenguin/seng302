@@ -13,7 +13,7 @@ public class BoatUpdater implements Updater {
     public void update(Race race, double time) {
         for (Boat boat : race.getStartingList()) {
             boat.update(time);
-            if (boat.isPowerActive() == true && boat.getPowerUp().getType().equals(PowerType.SHARK)) {
+            if (boat.isPowerActive() && boat.getPowerUp().getType().equals(PowerType.SHARK)) {
                 race.addProjectile(boat, boat.getPowerUp().getType());
                 boat.setPowerActive(false);
                 boat.setPowerUp(null);

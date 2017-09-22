@@ -5,15 +5,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import seng302.team18.model.Boat;
-import seng302.team18.visualiser.display.render.Renderable;
 
 /**
  * Class for displaying an image for the currently held power up
  */
 public class VisualPowerUp implements Renderable {
 
-    private Image powerImage;
-    private Image sharkImage1;
     private HBox powerBox;
     private ImageView speedView;
     private ImageView sharkView1;
@@ -28,8 +25,8 @@ public class VisualPowerUp implements Renderable {
      */
     public VisualPowerUp(Pane pane, Boat boat) {
         this.boat = boat;
-        powerImage = new Image("/images/race_view/Arrow2.gif");
-        sharkImage1 = new Image("/images/race_view/reefShark.gif");
+        Image powerImage = new Image("/images/race_view/Arrow2.gif");
+        Image sharkImage1 = new Image("/images/race_view/reefShark.gif");
         powerBox = new HBox();
         powerBox.setLayoutX(185);
         powerBox.setLayoutY(80);

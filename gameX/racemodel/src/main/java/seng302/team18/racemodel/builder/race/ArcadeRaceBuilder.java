@@ -2,7 +2,6 @@ package seng302.team18.racemodel.builder.race;
 
 import seng302.team18.model.*;
 import seng302.team18.model.updaters.*;
-import seng302.team18.model.updaters.BoatUpdater;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import java.util.List;
  */
 public class ArcadeRaceBuilder extends AbstractRaceBuilder {
     private StatusUpdater statusUpdater  = null;
+
 
     @Override
     protected int getId() {
@@ -50,7 +50,6 @@ public class ArcadeRaceBuilder extends AbstractRaceBuilder {
 
         return updaters;
     }
-
 
 
     private PickUp makePickUp() {
