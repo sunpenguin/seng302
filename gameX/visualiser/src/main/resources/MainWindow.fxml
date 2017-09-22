@@ -1,53 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.paint.*?>
-<?import java.lang.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.chart.*?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightblue;" stylesheets="@stylesheets/style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.RaceController">
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="720.0"
+            prefWidth="1280.0" style="-fx-background-color: lightblue;" stylesheets="@stylesheets/style.css"
+            xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="seng302.team18.visualiser.controller.RaceController">
    <children>
        <AnchorPane fx:id="raceViewPane" minHeight="0.0" minWidth="0.0" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: lightblue;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
            <children>
                <Group fx:id="group" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
-               <AnchorPane layoutX="2.0" layoutY="4.0" prefHeight="143.0" prefWidth="104.0">
-                   <children>
-                       <Polygon fx:id="arrow" layoutX="51.0" layoutY="70.0" scaleX="0.3" scaleY="0.75" stroke="BLACK" strokeType="INSIDE">
-                           <points>
-                               <Double fx:value="-50.0" />
-                               <Double fx:value="40.0" />
-                               <Double fx:value="50.0" />
-                               <Double fx:value="40.0" />
-                               <Double fx:value="0.0" />
-                               <Double fx:value="-60.0" />
-                           </points>
-                     <fill>
-                        <LinearGradient endX="0.5288461538461539" endY="0.625" startX="0.46634615384615374" startY="0.625">
-                           <stops>
-                              <Stop color="#ed0000d7" />
-                              <Stop color="WHITE" offset="1.0" />
-                           </stops>
-                        </LinearGradient>
-                     </fill>
-                       </Polygon>
-                       <Text layoutX="43.0" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="N" wrappingWidth="16.46484375">
-                           <font>
-                               <Font size="18.0" />
-                           </font>
-                       </Text>
-                       <Text layoutX="4.0" layoutY="126.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wind Direction" />
-                  <Label fx:id="speedLabel" alignment="CENTER" layoutX="-1.0" layoutY="129.0" prefHeight="15.0" prefWidth="104.0" text="speedLabel" textAlignment="CENTER" />
-                   </children>
-               </AnchorPane>
                <Label fx:id="fpsLabel" layoutX="729.0" layoutY="12.0" prefHeight="15.0" prefWidth="79.0" text="FPS:" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="12.0">
                    <font>
                        <Font name="System Bold" size="13.0" />
                    </font>
                </Label>
+               <Label fx:id="speedLabel" alignment="CENTER" layoutX="27.0" layoutY="162.0" prefHeight="15.0"
+                      prefWidth="123.0" text="Wind Speed:" textAlignment="CENTER"/>
             <AnchorPane fx:id="finisherPane" layoutX="440.0" layoutY="110.0" maxHeight="500.0" maxWidth="400.0" minHeight="500.0" minWidth="400.0" prefHeight="500.0" prefWidth="400.0" visible="false">
                <children>
                   <TableView fx:id="finisherTable" maxHeight="500.0" maxWidth="400.0" minHeight="500.0" minWidth="400.0" prefHeight="500.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
