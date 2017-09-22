@@ -5,10 +5,9 @@ import seng302.team18.message.MessageBody;
 import seng302.team18.parse.Receiver;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.time.ZonedDateTime;
 import java.util.Observable;
-
-import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -90,7 +89,7 @@ public class Interpreter extends Observable {
     /**
      * Shuts down the receiver
      */
-    public boolean closeReceiver(){
+    public boolean closeReceiver() {
         return receiver.close();
     }
 }

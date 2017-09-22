@@ -6,8 +6,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import seng302.team18.parse.AC35MessageParserFactory;
-import seng302.team18.parse.Receiver;
+import seng302.team18.encode.ControllerMessageFactory;
+import seng302.team18.encode.Sender;
 import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
@@ -15,11 +15,11 @@ import seng302.team18.message.ColourMessage;
 import seng302.team18.message.RequestMessage;
 import seng302.team18.message.RequestType;
 import seng302.team18.model.RaceMode;
-import seng302.team18.encode.ControllerMessageFactory;
-import seng302.team18.encode.Sender;
+import seng302.team18.parse.AC35MessageParserFactory;
+import seng302.team18.parse.Receiver;
 import seng302.team18.visualiser.ClientRace;
-import seng302.team18.visualiser.interpret.unique.AcceptanceInterpreter;
 import seng302.team18.visualiser.interpret.Interpreter;
+import seng302.team18.visualiser.interpret.unique.AcceptanceInterpreter;
 import seng302.team18.visualiser.util.ModelLoader;
 
 import javax.net.SocketFactory;
@@ -138,7 +138,7 @@ public class GameConnection {
      * @param sender   a sender
      * @return true if the operation is successful, else false
      */
-    private void startConnection(Receiver receiver, Sender sender){
+    private void startConnection(Receiver receiver, Sender sender) {
         this.receiver = receiver;
         this.sender = sender;
         race = new ClientRace();

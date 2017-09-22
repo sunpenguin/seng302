@@ -1,6 +1,7 @@
 package seng302.team18.parse;
 
-import seng302.team18.message.*;
+import seng302.team18.message.MessageBody;
+import seng302.team18.message.MessageHead;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -49,7 +50,6 @@ public class Receiver {
             return null;
         }
         MessageBodyParser bodyParser = parserFactory.makeBodyParser(head.getType());
-        //TODO The line above throws a null pointer sbe67 20/9
         byte[] bodyBytes = new byte[head.bodySize()];
         byte[] checkBytes = new byte[detector.errorCheckSize()];
 

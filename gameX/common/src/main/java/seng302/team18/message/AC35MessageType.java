@@ -1,7 +1,5 @@
 package seng302.team18.message;
 
-import seng302.team18.model.Projectile;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

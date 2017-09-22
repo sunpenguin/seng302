@@ -10,15 +10,15 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import seng302.team18.encode.Sender;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.model.Boat;
-import seng302.team18.encode.Sender;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.ui.PreRaceTimes;
+import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.interpret.americascup.BoatListInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceTimeInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceToMainRaceInterpreter;
-import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
@@ -67,7 +67,7 @@ public class PreRaceController {
      * @param sender   the sender\
      * @param interpreter the interpreter
      */
-    public void setUp(ClientRace race,  Sender sender, Interpreter interpreter) {
+    public void setUp(ClientRace race, Sender sender, Interpreter interpreter) {
         this.sender = sender;
         this.race = race;
         raceNameText.setText(race.getRegatta().getName());
