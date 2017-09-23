@@ -7,7 +7,7 @@ import seng302.team18.model.Race;
 /**
  * Class to update boats position and powerup usages
  */
-public class BoatUpdater implements Updater {
+public class BoatsUpdater implements Updater {
 
     @Override
     public void update(Race race, double time) {
