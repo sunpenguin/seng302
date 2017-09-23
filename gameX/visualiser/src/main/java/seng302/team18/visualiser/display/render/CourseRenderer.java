@@ -55,20 +55,19 @@ public class CourseRenderer implements Renderable {
      * Renders the course.
      */
     public void render() {
-        if (mode != RaceMode.CONTROLS_TUTORIAL && mode != RaceMode.BUMPER_BOATS) {
-            List<CompoundMark> compoundMarks = course.getCompoundMarks();
-            // Renders CompoundMarks
-            for (CompoundMark compoundMark : compoundMarks) {
-                if (compoundMark != null &&
-                        compoundMark.isGate() && (
-                        compoundMark.getId().equals(course.getStartLineId()) ||
-                                compoundMark.getId().equals(course.getFinishLineId()))) { // draw a line between the gate if its a start or finish
-                    renderGate(compoundMark);
-                } else {
-                    renderCompoundMark(compoundMark);
-                }
+        List<CompoundMark> compoundMarks = course.getCompoundMarks();
+        // Renders CompoundMarks
+        for (CompoundMark compoundMark : compoundMarks) {
+            if (compoundMark != null &&
+                    compoundMark.isGate() && (
+                    compoundMark.getId().equals(course.getStartLineId()) ||
+                            compoundMark.getId().equals(course.getFinishLineId()))) { // draw a line between the gate if its a start or finish
+                renderGate(compoundMark);
+            } else {
+                renderCompoundMark(compoundMark);
             }
         }
+
         renderBoundaries();
         renderPickUps();
     }
