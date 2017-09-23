@@ -1,6 +1,5 @@
 package seng302.team18.model;
 
-import javafx.scene.shape.Polyline;
 import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.SpeedConverter;
 

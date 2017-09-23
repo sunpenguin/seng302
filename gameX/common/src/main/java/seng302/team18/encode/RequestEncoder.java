@@ -39,15 +39,15 @@ public class RequestEncoder extends MessageEncoder {
 
 
     /**
-     * Generates the checksum for the request message
+     * Generates the checksum for the request message.
      *
-     * @param head of message to create checksum for
-     * @param body of message to create checksum for
-     * @return the generated checksum as a byte array
-     * @throws IOException
+     * @param head of message to create checksum for.
+     * @param body of message to create checksum for.
+     * @return the generated checksum as a byte array.
+     * @throws IOException as it is not this method's responsibility.
      */
     @Override
-    protected byte[] generateChecksum(byte[] head, byte[] body) throws IOException{
+    protected byte[] generateChecksum(byte[] head, byte[] body) throws IOException {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         outStream.write(head);
         outStream.write(body);
