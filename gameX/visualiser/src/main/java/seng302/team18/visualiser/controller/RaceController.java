@@ -461,6 +461,7 @@ public class RaceController implements Observer {
             EscapeMenuController escapeMenuController = loader.getController();
             escapeMenuController.setup(group, interpreter, sender);
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -786,6 +787,19 @@ public class RaceController implements Observer {
                 result += bumperFinishInfo(boats);
             } else if (race.getMode().equals(RaceMode.CHALLENGE_MODE)) {
                 result += challengeFinishInfo(boats);
+            } else if (race.getMode().equals(RaceMode.SPECTATION)) {
+                System.out.println("I am viewing " + race.getView());
+                switch (race.getView()) {
+                    case BUMPER_BOATS:
+                        result += bumperFinishInfo(boats);
+                        break;
+                    case CHALLENGE_MODE:
+                        result += challengeFinishInfo(boats);
+                        break;
+                    default:
+                        result += genericFinishInfo(boats);
+                        break;
+                }
             } else {
                 result += genericFinishInfo(boats);
             }
@@ -834,7 +848,12 @@ public class RaceController implements Observer {
         String result = "";
 
         for (Boat b : boats) {
-            String state = b.getLives() > 0 ? "WINNER" : "DEAD";
+//            String state = b.getLives() > 0 ? "WINNER" : "DEAD";
+            String state = "DEAD";
+
+            if (b.getLives() > 0) {
+                state = "WINNER";
+            }
             result += b.getShortName() + " " + state + "\n";
         }
 
