@@ -103,6 +103,7 @@ public class RaceController implements Observer {
 
     private Pane escapeMenuPane;
 
+    private boolean annotationsOn;
     private boolean fpsOn;
     private boolean onImportant;
     private boolean sailIn = false;
@@ -136,6 +137,7 @@ public class RaceController implements Observer {
         installTabHandler();
         setSliderListener();
         sliderSetup();
+        annotationsOn = false;
         fpsOn = true;
         importantAnnotations = new HashMap<>();
         for (AnnotationType type : AnnotationType.values()) {
@@ -329,10 +331,22 @@ public class RaceController implements Observer {
     /**
      * Toggles the fps by setting label to be visible / invisible.
      */
-    @FXML
     public void toggleFPS() {
         fpsOn = !fpsOn;
         fpsLabel.setVisible(fpsOn);
+    }
+
+
+    /**
+     * Toggles the annotations by setting annotations to be visible / invisible.
+     */
+    public void toggleAnnotations() {
+        annotationsOn = !annotationsOn;
+        if (annotationsOn) {
+            setFullAnnotationLevel();
+        } else {
+            setNoneAnnotationLevel();
+        }
     }
 
 
@@ -388,7 +402,7 @@ public class RaceController implements Observer {
      * Sets the annotation level to be full (all annotations showing)
      */
     @FXML
-    public void setFullAnnotationLevel() {
+    private void setFullAnnotationLevel() {
         onImportant = false;
 
         for (AnnotationType type : AnnotationType.values()) {
@@ -401,7 +415,7 @@ public class RaceController implements Observer {
      * Sets the annotation level to be none (no annotations showing)
      */
     @FXML
-    public void setNoneAnnotationLevel() {
+    private void setNoneAnnotationLevel() {
         onImportant = false;
 
         for (AnnotationType type : AnnotationType.values()) {
@@ -414,7 +428,7 @@ public class RaceController implements Observer {
      * Sets the annotation level to be important (user selects annotations showing)
      */
     @FXML
-    public void setToImportantAnnotationLevel() {
+    private void setToImportantAnnotationLevel() {
         onImportant = true;
         for (Map.Entry<AnnotationType, Boolean> importantAnnotation : importantAnnotations.entrySet()) {
             raceRenderer.setVisibleAnnotations(importantAnnotation.getKey(), importantAnnotation.getValue());
@@ -460,19 +474,6 @@ public class RaceController implements Observer {
 
 
     /**
-     * Toggle the tabView (holds detailed race info on and off)
-     */
-    private void toggleTabView() {
-        if (tabView.isVisible()) {
-            tabView.setVisible(false);
-        } else {
-            tabView.setVisible(true);
-            fadeIn.play();
-        }
-    }
-
-
-    /**
      * Loads the FXML and controller for the escape menu.
      */
     private void loadEscapeMenu() {
@@ -480,7 +481,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             EscapeMenuController escapeMenuController = loader.getController();
-            escapeMenuController.setup(group, interpreter, sender);
+            escapeMenuController.setup(group, interpreter, sender, this);
         } catch (IOException e) {
         }
     }
@@ -663,7 +664,6 @@ public class RaceController implements Observer {
         interpreter.addObserver(this);
 
         loadEscapeMenu();
-
 
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
     }
