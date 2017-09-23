@@ -21,15 +21,14 @@ import java.util.List;
  */
 public class CourseBuilderBumper extends AbstractCourseBuilder {
 
-    private double count = 0;
 
     @Override
     protected List<MarkRounding> getMarkRoundings() {
         List<MarkRounding> markRoundings = new ArrayList<>();
 
-        markRoundings.add(new MarkRounding(1, getCompoundMarks().get(0), MarkRounding.Direction.PS, 3));
-        markRoundings.add(new MarkRounding(2, getCompoundMarks().get(1), MarkRounding.Direction.PS, 3));
-        markRoundings.add(new MarkRounding(3, getCompoundMarks().get(2), MarkRounding.Direction.PS, 3));
+//        markRoundings.add(new MarkRounding(1, getCompoundMarks().get(0), MarkRounding.Direction.PS, 3));
+//        markRoundings.add(new MarkRounding(2, getCompoundMarks().get(1), MarkRounding.Direction.PS, 3));
+//        markRoundings.add(new MarkRounding(3, getCompoundMarks().get(2), MarkRounding.Direction.PS, 3));
 
         return markRoundings;
     }

@@ -21,7 +21,7 @@ public class RaceRenderer implements Renderable {
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private Map<Integer, DisplayShark> sharksMap = new HashMap<>();
     private PixelMapper pixelMapper;
-    private boolean drawTrails;
+    private boolean hasTrails;
 
 
     /**
@@ -64,7 +64,7 @@ public class RaceRenderer implements Renderable {
     public void render() {
         drawBoats();
         renderShark();
-        if (drawTrails) {
+        if (hasTrails) {
             drawTrails();
         }
     }
@@ -168,8 +168,10 @@ public class RaceRenderer implements Renderable {
     private void remove(DisplayBoat displayBoat) {
         displayBoat.removeFrom(group);
         displayBoats.remove(displayBoat.getShortName());
-        DisplayTrail trail = trailMap.remove(displayBoat.getShortName());
-        trail.removeFrom(group);
+        if (hasTrails) {
+            DisplayTrail trail = trailMap.remove(displayBoat.getShortName());
+            trail.removeFrom(group);
+        }
     }
 
 
@@ -250,7 +252,7 @@ public class RaceRenderer implements Renderable {
      * resetting the points.
      */
     public void refresh() {
-        if (drawTrails) {
+        if (hasTrails) {
             for (Boat boat : race.getStartingList()) {
                 DisplayTrail trail = trailMap.get(boat.getShortName());
                 if (trail != null) {
@@ -298,6 +300,6 @@ public class RaceRenderer implements Renderable {
 
 
     public void setDrawTrails(boolean drawTrails) {
-        this.drawTrails = drawTrails;
+        this.hasTrails = drawTrails;
     }
 }

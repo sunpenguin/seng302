@@ -10,6 +10,7 @@ import java.util.List;
 public class CircularPositionSetter implements StartPositionSetter {
 
     private double distance;
+    private GPSCalculator calculator = new GPSCalculator();
 
 
     public CircularPositionSetter(double distance) {
@@ -28,9 +29,13 @@ public class CircularPositionSetter implements StartPositionSetter {
 
     @Override
     public Coordinate getBoatPosition(Boat boat, Course course, int numBoats) {
-        GPSCalculator calculator = new GPSCalculator();
         Coordinate center = course.getCenter();
         return calculator.toCoordinate(center, ((360 / numBoats * boat.getId() + 90) % 360), distance);
     }
 
+
+    @Override
+    public double getBoatHeading(Coordinate boatCoord, Course course) {
+        return calculator.getBearing(boatCoord, course.getCenter());
+    }
 }
