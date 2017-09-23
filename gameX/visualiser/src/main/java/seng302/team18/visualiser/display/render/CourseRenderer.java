@@ -68,7 +68,9 @@ public class CourseRenderer implements Renderable {
             }
         }
 
-        renderBoundaries();
+        if (!mode.equals(RaceMode.CONTROLS_TUTORIAL)) {
+            renderBoundaries();
+        }
         renderPickUps();
     }
 
