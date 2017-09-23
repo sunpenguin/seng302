@@ -8,11 +8,18 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 
 /**
  * Controller for when the application first starts up
@@ -31,13 +38,23 @@ public class TitleScreenController {
     private Stage stage;
 
 
-    public void initialize() {
+    public void initialize()  {
         registerListeners();
         initialiseHostButton();
         initialiseControlsButton();
         initialiseQuitButton();
         initialiseTutorialButton();
         loadBoatAnimation();
+
+        try {
+            String song = "/Users/cslaven/Desktop/Uni/302/team-18/gameX/visualiser/src/main/resources/themetune.wav";
+            Media hit = new Media(new File(song).toURI().toString());
+            MediaPlayer mediaPlayer = new MediaPlayer(hit);
+            mediaPlayer.setCycleCount(mediaPlayer.INDEFINITE);
+            mediaPlayer.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());
         errorText.setLayoutY((600 / 2) + 300);
