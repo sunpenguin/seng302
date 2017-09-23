@@ -8,8 +8,8 @@
 
 .list-view{
     -fx-font-family: "Munro";
-    -fx-font-size: 15px;
-
+    -fx-font-size: 15 px;
+    -fx-border-width: 20;
 }
 
 .list-cell:even{
@@ -19,6 +19,3 @@
 .list-cell:odd{
     -fx-background-color: white;
 }
-
-
-
