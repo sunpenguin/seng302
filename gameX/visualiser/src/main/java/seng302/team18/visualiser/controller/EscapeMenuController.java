@@ -69,6 +69,7 @@ public class EscapeMenuController {
         fpsLabel.setLayoutY((pane.getPrefHeight() / 2));
         fpsLabel.setOnMouseClicked(event -> {
             raceController.toggleFPS();
+            group.getChildren().remove(raceController.getEscapeMenuPane());
         });
     }
 
@@ -88,6 +89,7 @@ public class EscapeMenuController {
         annotationsLabel.setLayoutY((pane.getPrefHeight() / 2) - (int) annotationsButtonImage.getHeight() * 2);
         annotationsLabel.setOnMouseClicked(event -> {
             raceController.toggleAnnotations();
+            group.getChildren().remove(raceController.getEscapeMenuPane());
         });
     }
 

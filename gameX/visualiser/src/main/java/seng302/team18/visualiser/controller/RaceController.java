@@ -93,26 +93,18 @@ public class RaceController implements Observer {
     @FXML
     private Label speedLabel;
     @FXML
-    private CategoryAxis yPositionsAxis;
-    @FXML
-    private LineChart<String, String> sparklinesChart;
-    @FXML
-    private Slider slider;
-    @FXML
     private AnchorPane tabView;
 
     private Pane escapeMenuPane;
 
     private boolean annotationsOn;
     private boolean fpsOn;
-    private boolean onImportant;
     private boolean sailIn = false;
 
     private ClientRace race;
     private RaceRenderer raceRenderer;
     private CourseRenderer courseRenderer;
     private PixelMapper pixelMapper;
-    private Map<AnnotationType, Boolean> importantAnnotations;
     private Sender sender;
 
     private Interpreter interpreter;
@@ -135,14 +127,8 @@ public class RaceController implements Observer {
         fpsLabel.getStyleClass().add("fpsLabel");
         installKeyHandler();
         installTabHandler();
-        setSliderListener();
-        sliderSetup();
         annotationsOn = false;
         fpsOn = true;
-        importantAnnotations = new HashMap<>();
-        for (AnnotationType type : AnnotationType.values()) {
-            importantAnnotations.put(type, false);
-        }
         group.setManaged(false);
         background = new RaceBackground(raceViewPane, "/images/water.gif");
         tabView.setVisible(false);
@@ -309,22 +295,12 @@ public class RaceController implements Observer {
 
 
     /**
-     * initialises the sparkline graph.
+     * Gets the pane used for the escape menu.
+     *
+     * @return pane used for the escape menu.
      */
-    private void setUpSparklines(Map<String, Color> boatColors) {
-        List<String> list = new ArrayList<>();
-        for (int i = race.getStartingList().size(); i > 0; i--) {
-            list.add(String.valueOf(i));
-        }
-        ObservableList<String> observableList = FXCollections.observableList(list);
-        yPositionsAxis.setCategories(observableList);
-        Queue<SparklineDataPoint> dataQueue = new LinkedList<>();
-        SparklineDataGetter dataGetter = new SparklineDataGetter(dataQueue, race);
-        dataGetter.listenToBoat();
-
-        DisplaySparkline displaySparkline = new DisplaySparkline(dataQueue, boatColors, sparklinesChart);
-        displaySparkline.start();
-
+    public Pane getEscapeMenuPane() {
+        return escapeMenuPane;
     }
 
 
@@ -351,60 +327,9 @@ public class RaceController implements Observer {
 
 
     /**
-     * Sets up the Slider so that it can be used to switch between the different levels of annotation
-     */
-    private void sliderSetup() {
-        TextArea t = new TextArea();
-        t.setText("Annotation Slider");
-        IntegerProperty sliderValue = new SimpleIntegerProperty(0);
-        slider.setSnapToTicks(true);
-        slider.setShowTickMarks(true);
-        slider.setShowTickLabels(true);
-        slider.setMajorTickUnit(0.5f);
-        slider.setBlockIncrement(0.5f);
-        t.textProperty().bind(sliderValue.asString());
-        slider.setLabelFormatter(new StringConverter<Double>() {
-            @Override
-            public String toString(Double n) {
-                if (n == 0d) return "None";
-                if (n == 0.5d) return "Important";
-                if (n == 1d) return "Full";
-                return "Important";
-            }
-
-            @Override
-            public Double fromString(String s) {
-                return 0.0;
-            }
-        });
-    }
-
-
-    /**
-     * Creates a listener so the slider knows when its value has changed and it can update the annotations accordingly
-     */
-    private void setSliderListener() {
-        slider.valueProperty().addListener((ov, old_val, new_val) -> {
-            if (new_val.doubleValue() == 0d) {
-                setNoneAnnotationLevel();
-            }
-            if (new_val.doubleValue() == 0.5d) {
-                setToImportantAnnotationLevel();
-            }
-            if (new_val.doubleValue() == 1d) {
-                setFullAnnotationLevel();
-            }
-        });
-    }
-
-
-    /**
      * Sets the annotation level to be full (all annotations showing)
      */
-    @FXML
     private void setFullAnnotationLevel() {
-        onImportant = false;
-
         for (AnnotationType type : AnnotationType.values()) {
             raceRenderer.setVisibleAnnotations(type, true);
         }
@@ -414,49 +339,10 @@ public class RaceController implements Observer {
     /**
      * Sets the annotation level to be none (no annotations showing)
      */
-    @FXML
     private void setNoneAnnotationLevel() {
-        onImportant = false;
-
         for (AnnotationType type : AnnotationType.values()) {
             raceRenderer.setVisibleAnnotations(type, false);
         }
-    }
-
-
-    /**
-     * Sets the annotation level to be important (user selects annotations showing)
-     */
-    @FXML
-    private void setToImportantAnnotationLevel() {
-        onImportant = true;
-        for (Map.Entry<AnnotationType, Boolean> importantAnnotation : importantAnnotations.entrySet()) {
-            raceRenderer.setVisibleAnnotations(importantAnnotation.getKey(), importantAnnotation.getValue());
-        }
-    }
-
-
-    /**
-     * Brings up a pop-up window, showing all possible annotation options that the user can toggle on and off.
-     * Only shows when the annotation level is on important.
-     */
-    @FXML
-    public void openAnnotationsWindow() {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ImportantAnnotationsPopup.fxml"));
-        Scene newScene;
-        try {
-            newScene = new Scene(loader.load());
-        } catch (IOException e) {
-            // TODO: pop up maybe
-            return;
-        }
-        ImportantAnnotationsController controller = loader.getController();
-        controller.addObserver(this);
-        controller.setImportant(importantAnnotations);
-
-        Stage inputStage = new Stage();
-        inputStage.setScene(newScene);
-        inputStage.showAndWait();
     }
 
 
@@ -657,7 +543,6 @@ public class RaceController implements Observer {
         startWindDirection();
         setUpTable();
         setNoneAnnotationLevel();
-        setUpSparklines(raceRenderer.boatColors());
 
         this.interpreter = interpreter;
         interpreter.setInterpreter(initialiseInterpreter());
@@ -699,6 +584,12 @@ public class RaceController implements Observer {
     private void redrawTimeLabel() {
         timeBox.setLayoutX((raceViewPane.getWidth()) / 2.0 - (timeBox.getPrefWidth() / 2.0));
         timeBox.setLayoutY(10.0);
+    }
+
+
+    private void redrawTabView() {
+        tabView.setLayoutX((raceViewPane.getWidth() / 2) - tabView.getPrefWidth() / 2);
+        tabView.setLayoutY((raceViewPane.getHeight() / 2) - tabView.getPrefHeight() / 2);
     }
 
 
@@ -784,13 +675,14 @@ public class RaceController implements Observer {
      * To call when GUI features need redrawing.
      * (For example, when zooming in, the course features are required to change)
      */
-    public void redrawFeatures() {
+    private void redrawFeatures() {
         pixelMapper.calculateMappingScale();
         background.renderBackground();
         courseRenderer.render();
         raceRenderer.render();
         raceRenderer.refresh();
         redrawTimeLabel();
+        redrawTabView();
     }
 
 
@@ -884,27 +776,14 @@ public class RaceController implements Observer {
 
 
     /**
-     * Receives updates from the ImportantAnnotationController to update the important annotations
+     * Receives updates from observed classes.
      *
      * @param o   the observable object.
      * @param arg an argument passed to the notifyObservers method.
      */
     @Override
     public void update(java.util.Observable o, Object arg) {
-        if (arg instanceof Map) {
-            Map annotations = (Map) arg;
-            for (AnnotationType type : AnnotationType.values()) {
-                if (annotations.containsKey(type)) {
-                    Object on = annotations.get(type);
-                    if (on instanceof Boolean) {
-                        importantAnnotations.put(type, (Boolean) on);
-                    }
-                }
-            }
-            if (onImportant) {
-                setToImportantAnnotationLevel();
-            }
-        } else if (arg instanceof Boolean) {
+        if (arg instanceof Boolean) {
             Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST"));
         } else if (arg instanceof Boat) {
             Platform.runLater(() -> {
