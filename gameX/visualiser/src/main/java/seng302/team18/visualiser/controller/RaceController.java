@@ -22,6 +22,9 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -130,6 +133,7 @@ public class RaceController implements Observer {
         raceViewPane.getStylesheets().add(this.getClass().getResource("/stylesheets/raceview.css").toExternalForm());
         fpsLabel.getStyleClass().add("fpsLabel");
         installKeyHandler();
+        installTabHandler();
         setSliderListener();
         sliderSetup();
         fpsOn = true;
@@ -182,6 +186,7 @@ public class RaceController implements Observer {
                 default:
                     return null;
             }
+            keyEvent.consume();
             return message;
         }
         return null;
@@ -220,12 +225,8 @@ public class RaceController implements Observer {
                     openEscapeMenu("");
                 }
                 break;
-            case TAB:
-                toggleTabView();
-                break;
-//            default:
-//                encode = true;
         }
+        keyEvent.consume();
     }
 
 
@@ -238,8 +239,6 @@ public class RaceController implements Observer {
         EventHandler<KeyEvent> keyEventHandler =
                 keyEvent -> {
                     if (keyEvent.getCode() != null) {
-//                        BoatActionMessage message = null;
-
                         MessageBody message = handlePlayerKeyPress(keyEvent);
 
                         handleBasicKeyPress(keyEvent);
@@ -265,6 +264,28 @@ public class RaceController implements Observer {
         raceViewPane.setFocusTraversable(true);
         raceViewPane.requestFocus();
         raceViewPane.focusedProperty().addListener((observable, oldValue, newValue) -> Platform.runLater(() -> raceViewPane.requestFocus()));
+    }
+
+
+    /**
+     * Allows for the TAB menu to he viewed by holding down the tab button.
+     */
+    private void installTabHandler() {
+        final KeyCombination tab = new KeyCodeCombination(KeyCode.TAB);
+
+        raceViewPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (tab.match(event)) {
+                tabView.setVisible(true);
+                event.consume();
+            }
+        });
+
+        raceViewPane.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
+            if (tab.match(event)) {
+                tabView.setVisible(false);
+                event.consume();
+            }
+        });
     }
 
 
