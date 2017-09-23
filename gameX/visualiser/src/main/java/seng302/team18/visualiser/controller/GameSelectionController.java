@@ -18,7 +18,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
-import seng302.team18.model.SpectatingView;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -54,7 +53,6 @@ public class GameSelectionController {
 
     private RaceMode mode;
     private Boolean isHosting;
-    private SpectatingView view;
 
     private final static double Y_POS_ERROR_TEXT = -210;
     private final static double Y_POS_BUTTON_BOX = -100;
@@ -221,7 +219,6 @@ public class GameSelectionController {
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("raceImage");
         label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.RACE));
-        view = SpectatingView.RACE;
         return label;
     }
 
@@ -236,7 +233,6 @@ public class GameSelectionController {
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("arcadeImage");
         label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.ARCADE));
-        view = SpectatingView.ARCADE;
         return label;
     }
 
@@ -251,7 +247,6 @@ public class GameSelectionController {
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("challengeImage");
         label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.CHALLENGE_MODE));
-        view = SpectatingView.CHALLENGE_MODE;
         return label;
     }
 
@@ -266,7 +261,6 @@ public class GameSelectionController {
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("bumperBoatsImage");
         label.setOnMouseClicked(event -> setUpConnectionType(RaceMode.BUMPER_BOATS));
-        view = SpectatingView.BUMPER_BOATS;
         return label;
     }
 
@@ -437,7 +431,6 @@ public class GameSelectionController {
                         errorLabel.textProperty(),
                         outerPane,
                         mode,
-                        view,
                         boatColours.get(colourIndex)
                 ).startGame(
                         ipStrProp.get(),

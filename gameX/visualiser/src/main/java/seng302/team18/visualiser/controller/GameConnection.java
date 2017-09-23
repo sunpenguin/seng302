@@ -6,12 +6,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import seng302.team18.model.SpectatingView;
-import seng302.team18.parse.AC35MessageParserFactory;
-import seng302.team18.parse.Receiver;
-import seng302.team18.model.RaceMode;
 import seng302.team18.encode.ControllerMessageFactory;
 import seng302.team18.encode.Sender;
+import seng302.team18.model.RaceMode;
+import seng302.team18.parse.AC35MessageParserFactory;
+import seng302.team18.parse.Receiver;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.util.ModelLoader;
 
@@ -29,7 +28,6 @@ public class GameConnection {
     private final Node node;
     private final RaceMode mode;
     private final Color color;
-    private SpectatingView view;
 
 
     /**
@@ -40,15 +38,6 @@ public class GameConnection {
      * @param mode      the game type to launch/connect to
      * @param color     the colour of the player's boat
      */
-    public GameConnection(StringProperty errorText, Node node, RaceMode mode, SpectatingView view, Color color) {
-        this.errorText = errorText;
-        this.node = node;
-        this.mode = mode;
-        this.view = view;
-        this.color = color;
-        errorText.set("");
-    }
-
     public GameConnection(StringProperty errorText, Node node, RaceMode mode, Color color) {
         this.errorText = errorText;
         this.node = node;
@@ -149,31 +138,11 @@ public class GameConnection {
 
         ClientRace race = new ClientRace();
         race.setMode(mode);
-//        System.out.println("i should be viewing " + view);
-        race.setView(view);
         controller.setUp(race, receiver, sender);
         controller.initConnection(color);
         return true;
         // TODO afj19 14/09 here(probably) we should be checking the response from the server and returning false if it is rejected
     }
-
-
-//    private void setUpSpectatingView() {
-//        switch (mode) {
-//            case ARCADE:
-//                view = SpectatingView.ARCADE;
-//                break;
-//            case RACE:
-//                view = SpectatingView.RACE;
-//                break;
-//            case CHALLENGE_MODE:
-//                view = SpectatingView.CHALLENGE_MODE;
-//                break;
-//            case BUMPER_BOATS:
-//                view = SpectatingView.BUMPER_BOATS;
-//                break;
-//        }
-//    }
 
 
     /**

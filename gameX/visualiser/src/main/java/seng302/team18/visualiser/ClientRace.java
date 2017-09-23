@@ -24,8 +24,6 @@ public class ClientRace {
     private Integer playerId;
     private RaceMode mode = RaceMode.RACE;
     private List<Projectile> projectiles = new ArrayList<>();
-    private SpectatingView view = SpectatingView.RACE;
-
 
     public ClientRace() {
         participantIds = new ArrayList<>();
@@ -337,11 +335,4 @@ public class ClientRace {
         return projectiles;
     }
 
-    public SpectatingView getView() {
-        return view;
-    }
-
-    public void setView(SpectatingView view) {
-        this.view = view;
-    }
 }

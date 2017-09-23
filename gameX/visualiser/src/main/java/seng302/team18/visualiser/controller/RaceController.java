@@ -787,19 +787,6 @@ public class RaceController implements Observer {
                 result += bumperFinishInfo(boats);
             } else if (race.getMode().equals(RaceMode.CHALLENGE_MODE)) {
                 result += challengeFinishInfo(boats);
-            } else if (race.getMode().equals(RaceMode.SPECTATION)) {
-                System.out.println("I am viewing " + race.getView());
-                switch (race.getView()) {
-                    case BUMPER_BOATS:
-                        result += bumperFinishInfo(boats);
-                        break;
-                    case CHALLENGE_MODE:
-                        result += challengeFinishInfo(boats);
-                        break;
-                    default:
-                        result += genericFinishInfo(boats);
-                        break;
-                }
             } else {
                 result += genericFinishInfo(boats);
             }
@@ -846,18 +833,33 @@ public class RaceController implements Observer {
         boats.sort(Comparator.comparing(Boat::getLives));
         boats = Lists.reverse(boats);
         String result = "";
+        Boat winner = findWinner(boats);
 
         for (Boat b : boats) {
-//            String state = b.getLives() > 0 ? "WINNER" : "DEAD";
-            String state = "DEAD";
-
-            if (b.getLives() > 0) {
-                state = "WINNER";
-            }
+            String state = b.equals(winner) ? "WINNER" : "DEAD";
             result += b.getShortName() + " " + state + "\n";
         }
 
         return result;
+    }
+
+
+    /**
+     * Find the boat that has the maximum number of lives in all players' boats.
+     *
+     * @param boats list of participanting boats.
+     * @return a boat has the maximum number of lives
+     */
+    private Boat findWinner(List<Boat> boats) {
+        Boat winner = boats.get(0);
+
+        for (Boat boat : boats) {
+            if (boat.getLives() > winner.getLives()) {
+                winner = boat;
+            }
+        }
+
+        return winner;
     }
 
 
