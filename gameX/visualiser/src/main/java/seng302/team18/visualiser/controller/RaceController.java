@@ -94,6 +94,8 @@ public class RaceController implements Observer {
     private Label speedLabel;
     @FXML
     private AnchorPane tabView;
+    @FXML
+    private Label currentRankingsLabel;
 
     private Pane escapeMenuPane;
 
@@ -124,6 +126,7 @@ public class RaceController implements Observer {
     @FXML
     public void initialize() {
         raceViewPane.getStylesheets().add(this.getClass().getResource("/stylesheets/raceview.css").toExternalForm());
+        tabView.getStylesheets().add(this.getClass().getResource("/stylesheets/raceview.css").toExternalForm());
         fpsLabel.getStyleClass().add("fpsLabel");
         installKeyHandler();
         installTabHandler();
@@ -588,6 +591,7 @@ public class RaceController implements Observer {
 
 
     private void redrawTabView() {
+        currentRankingsLabel.setLayoutX(tabView.getPrefWidth() / 2 - currentRankingsLabel.getPrefWidth() / 2);
         tabView.setLayoutX((raceViewPane.getWidth() / 2) - tabView.getPrefWidth() / 2);
         tabView.setLayoutY((raceViewPane.getHeight() / 2) - tabView.getPrefHeight() / 2);
     }

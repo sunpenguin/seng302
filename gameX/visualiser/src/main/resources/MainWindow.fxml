@@ -33,16 +33,16 @@
        </AnchorPane>
        <AnchorPane fx:id="tabView" layoutX="300.0" layoutY="100.0" minHeight="0.0" minWidth="0.0" prefHeight="437.0" prefWidth="724.0" style="-fx-background-color: dbdbdb;">
            <children>
-            <Label layoutX="304.0" layoutY="14.0" text="Current Rankings" textAlignment="CENTER" />
+            <Label fx:id="currentRankingsLabel" layoutX="287.0" layoutY="6.0" prefHeight="17.0" prefWidth="200.0" text="Current Rankings" textAlignment="CENTER" />
                    <AnchorPane prefHeight="400.0" prefWidth="725.0" style="-fx-background-color: dbdbdb;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                        <children>
-                           <TableView fx:id="tableView" layoutX="-7.0" prefHeight="391.0" prefWidth="680.0" AnchorPane.bottomAnchor="-33.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <TableView fx:id="tableView" layoutX="-7.0" prefHeight="400.0" prefWidth="724.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                <columns>
-                                   <TableColumn fx:id="boatPositionColumn" prefWidth="52.0" text="Place" />
-                                   <TableColumn fx:id="boatColorColumn" maxWidth="50.0" minWidth="-Infinity" prefWidth="39.0" />
-                                   <TableColumn fx:id="boatNameColumn" minWidth="0.0" prefWidth="330.0" text="Name" />
-                                   <TableColumn fx:id="boatSpeedColumn" maxWidth="293.0" minWidth="0.0" prefWidth="138.0" text="Speed (kn)" />
-                        <TableColumn fx:id="boatStatusColumn" prefWidth="163.0" text="Status" />
+                                   <TableColumn fx:id="boatPositionColumn" prefWidth="79.0" text="Place" />
+                                   <TableColumn fx:id="boatColorColumn" maxWidth="50.0" minWidth="-Infinity" prefWidth="31.0" />
+                                   <TableColumn fx:id="boatNameColumn" minWidth="0.0" prefWidth="328.0" text="Name" />
+                                   <TableColumn fx:id="boatSpeedColumn" maxWidth="293.0" minWidth="0.0" prefWidth="148.0" text="Speed (kn)" />
+                        <TableColumn fx:id="boatStatusColumn" prefWidth="136.0" text="Status" />
                                </columns>
                            </TableView>
                        </children>
