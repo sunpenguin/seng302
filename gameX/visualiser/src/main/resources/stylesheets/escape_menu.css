@@ -22,6 +22,15 @@
     -fx-graphic: url('/images/escape_menu/fps_button_image_alt.png');
 }
 
+.fpsImage:selected {
+    -fx-graphic: url('/images/escape_menu/fps_button_image_alt.png');
+}
+
+.fpsImage:selected:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/escape_menu/fps_button_image.png');
+}
+
 .annotationsImage {
     -fx-graphic: url('/images/escape_menu/annotations_button_image.png');
 }
@@ -29,4 +38,13 @@
 .annotationsImage:hover {
     -fx-label-padding: 2;
     -fx-graphic: url('/images/escape_menu/annotations_button_image_alt.png');
+}
+
+.annotationsImage:selected {
+    -fx-graphic: url('/images/escape_menu/annotations_button_image_alt.png');
+}
+
+.annotationsImage:selected:hover {
+    -fx-label-padding: 2;
+    -fx-graphic: url('/images/escape_menu/annotations_button_image.png');
 }

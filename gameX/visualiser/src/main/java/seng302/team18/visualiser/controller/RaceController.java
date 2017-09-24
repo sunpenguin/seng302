@@ -5,8 +5,6 @@ import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -17,10 +15,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -31,10 +29,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Duration;
-import javafx.util.StringConverter;
 import seng302.team18.encode.Sender;
 import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
@@ -47,7 +43,6 @@ import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.*;
 import seng302.team18.visualiser.display.render.*;
 import seng302.team18.visualiser.display.ui.Clock;
-import seng302.team18.visualiser.display.ui.DisplaySparkline;
 import seng302.team18.visualiser.display.ui.FPSReporter;
 import seng302.team18.visualiser.display.ui.StopWatchClock;
 import seng302.team18.visualiser.interpret.Interpreter;
@@ -60,8 +55,6 @@ import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
-import seng302.team18.visualiser.util.SparklineDataGetter;
-import seng302.team18.visualiser.util.SparklineDataPoint;
 
 import java.io.IOException;
 import java.util.*;
@@ -373,7 +366,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             EscapeMenuController escapeMenuController = loader.getController();
-            escapeMenuController.setup(group, interpreter, sender, this); // soundPlayer
+            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer);
         } catch (IOException e) {
             //pass
         }

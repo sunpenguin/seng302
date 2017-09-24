@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -28,6 +29,10 @@ public class EscapeMenuController {
     private Sender sender;
     private RaceController raceController;
     private SoundEffectPlayer soundPlayer;
+
+    private boolean fpsOn = true;
+    private boolean annotationsOn = false;
+    private final int BUTTON_LAYOUTX_OFFSET = 9;
 
     @FXML
     public void initialize() {
@@ -64,18 +69,34 @@ public class EscapeMenuController {
      * Image used will changed when hovered over as defined in the escape_menu css.
      */
     private void initialiseFPSButton() {
-        Label fpsLabel = new Label();
-        fpsLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/escape_menu.css").toExternalForm());
-        fpsLabel.getStyleClass().add("fpsImage");
-        pane.getChildren().add(fpsLabel);
+        ToggleButton fpsButton = new ToggleButton();
+        fpsButton.getStylesheets().add(this.getClass().getResource("/stylesheets/escape_menu.css").toExternalForm());
+        fpsButton.getStyleClass().add("fpsImage");
+        pane.getChildren().add(fpsButton);
 
         Image fpsButtonImage = new Image("/images/escape_menu/fps_button_image.png");
-        fpsLabel.setLayoutX((pane.getPrefWidth() / 2) - (Math.floorDiv((int) fpsButtonImage.getWidth(), 2)));
-        fpsLabel.setLayoutY((pane.getPrefHeight() / 2));
-        fpsLabel.setOnMouseClicked(event -> {
+        fpsButton.setLayoutX((pane.getPrefWidth() / 2) - (Math.floorDiv((int) fpsButtonImage.getWidth(), 2)) - BUTTON_LAYOUTX_OFFSET);
+        fpsButton.setLayoutY((pane.getPrefHeight() / 2));
+        fpsButton.setSelected(fpsOn);
+        fpsButton.setOnMouseClicked(event -> {
+            buttonClickedAction();
             raceController.toggleFPS();
+            fpsOn = !fpsOn;
+            setButtonSelected(fpsButton, fpsOn);
             group.getChildren().remove(raceController.getEscapeMenuPane());
         });
+        fpsButton.setOnMouseEntered(event -> buttonEnteredAction());
+    }
+
+
+    /**
+     * Sets a button to be selected.
+     *
+     * @param button   to set selected for.
+     * @param selected boolean to change the button selected.
+     */
+    private void setButtonSelected(ToggleButton button, boolean selected) {
+        button.setSelected(selected);
     }
 
 
@@ -84,18 +105,23 @@ public class EscapeMenuController {
      * Image used will changed when hovered over as defined in the escape_menu css.
      */
     private void initialiseAnnotationsButton() {
-        Label annotationsLabel = new Label();
-        annotationsLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/escape_menu.css").toExternalForm());
-        annotationsLabel.getStyleClass().add("annotationsImage");
-        pane.getChildren().add(annotationsLabel);
+        ToggleButton annotationsButton = new ToggleButton();
+        annotationsButton.getStylesheets().add(this.getClass().getResource("/stylesheets/escape_menu.css").toExternalForm());
+        annotationsButton.getStyleClass().add("annotationsImage");
+        pane.getChildren().add(annotationsButton);
 
         Image annotationsButtonImage = new Image("/images/escape_menu/annotations_button_image.png");
-        annotationsLabel.setLayoutX((pane.getPrefWidth() / 2) - (Math.floorDiv((int) annotationsButtonImage.getWidth(), 2)));
-        annotationsLabel.setLayoutY((pane.getPrefHeight() / 2) - (int) annotationsButtonImage.getHeight() * 2);
-        annotationsLabel.setOnMouseClicked(event -> {
+        annotationsButton.setLayoutX((pane.getPrefWidth() / 2) - (Math.floorDiv((int) annotationsButtonImage.getWidth(), 2)) - BUTTON_LAYOUTX_OFFSET);
+        annotationsButton.setLayoutY((pane.getPrefHeight() / 2) - (int) annotationsButtonImage.getHeight() * 2);
+        annotationsButton.setSelected(annotationsOn);
+        annotationsButton.setOnMouseClicked(event -> {
+            buttonClickedAction();
             raceController.toggleAnnotations();
+            annotationsOn = !annotationsOn;
+            setButtonSelected(annotationsButton, annotationsOn);
             group.getChildren().remove(raceController.getEscapeMenuPane());
         });
+        annotationsButton.setOnMouseEntered(event -> buttonEnteredAction());
     }
 
 
