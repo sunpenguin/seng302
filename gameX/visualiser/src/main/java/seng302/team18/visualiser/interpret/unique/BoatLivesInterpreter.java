@@ -8,6 +8,7 @@ import seng302.team18.visualiser.ClientRace;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * The BoatLivesInterpreter that sets the number of lives a boat has.
@@ -15,15 +16,19 @@ import java.util.List;
  * @see MessageInterpreter
  */
 public class BoatLivesInterpreter extends MessageInterpreter {
+
     private ClientRace race;
+    private Consumer<Boolean> callback;
 
     /**
      * Constructor for BoatLivesInterpreter.
      *
-     * @param race Race, race
+     * @param race     Race, race
+     * @param callback procedure to run when a boat loses a life
      */
-    public BoatLivesInterpreter(ClientRace race) {
+    public BoatLivesInterpreter(ClientRace race, Consumer<Boolean> callback) {
         this.race = race;
+        this.callback = callback;
     }
 
     @Override
@@ -38,8 +43,10 @@ public class BoatLivesInterpreter extends MessageInterpreter {
                     boat = boatIterator.next();
                 }
                 if (boat.getId().equals(actionMessage.getSourceId())) {
-                    while(boat.getLives() > actionMessage.getLives()) {
+                    boolean isPlayer = race.getPlayerId() == boat.getId();
+                    while (boat.getLives() > actionMessage.getLives()) {
                         boat.loseLife();
+                        callback.accept(isPlayer);
                     }
                 }
             }

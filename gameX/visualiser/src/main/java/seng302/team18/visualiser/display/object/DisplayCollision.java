@@ -8,11 +8,9 @@ import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
 
-import java.io.InputStream;
 import java.util.*;
+import java.util.function.Consumer;
 
 
 /**
@@ -59,12 +57,22 @@ public class DisplayCollision extends DisplayBoatDecorator {
     private PixelMapper pixelMapper;
     private Group group;
     private Random random = new Random();
+    private final Consumer<Boolean> collisionSoundEffect;
 
 
-    public DisplayCollision(PixelMapper pixelMapper, DisplayBoat displayBoat) {
+    /**
+     * Constructs a new DisplayCollision decorator
+     *
+     * @param pixelMapper          the mapper to use when mapping geographic coordinates onto the screen
+     * @param displayBoat          the display boat to be decorated
+     * @param collisionSoundEffect a procedure to be executed when the collision should play its sound effect. takes
+     *                             a boolean parameter, which is true if the collision is from the player's boat, else false
+     */
+    public DisplayCollision(PixelMapper pixelMapper, DisplayBoat displayBoat, Consumer<Boolean> collisionSoundEffect) {
         super(displayBoat);
 
         this.pixelMapper = pixelMapper;
+        this.collisionSoundEffect = collisionSoundEffect;
         shapes = new HashSet<>();
     }
 
@@ -90,21 +98,7 @@ public class DisplayCollision extends DisplayBoatDecorator {
 
         if (hasCollided) {
             playCollisionAnimation();
-            playCollisionSound();
-        }
-    }
-
-
-    /**
-     * Plays a collision sound
-     */
-    private void playCollisionSound() {
-        try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("collision.wav");
-            AudioStream audioStream = new AudioStream(inputStream);
-            AudioPlayer.player.start(audioStream);
-        } catch (Exception e) {
-            e.printStackTrace();
+            collisionSoundEffect.accept(isControlled());
         }
     }
 

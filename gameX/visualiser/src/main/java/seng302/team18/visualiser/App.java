@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import seng302.team18.visualiser.controller.TitleScreenController;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 public class App extends Application {
 
@@ -15,6 +16,7 @@ public class App extends Application {
         Parent root = loader.load(); // throws IOException
         TitleScreenController controller = loader.getController();
         controller.setStage(primaryStage);
+        controller.setSoundPlayer(new SoundEffectPlayer());
         controller.reDraw();
         primaryStage.setTitle("High Seas");
         Scene scene = new Scene(root);

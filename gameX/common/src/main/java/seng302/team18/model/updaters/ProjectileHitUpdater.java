@@ -29,6 +29,7 @@ public class ProjectileHitUpdater implements Updater {
                 boat.setPowerUp(newStun);
                 boat.activatePowerUp();
                 projectilesToRemove.add(projectile);
+                race.addYachtEvent(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.BOAT_COLLIDE_WITH_MARK));
             }
         }
         for (Projectile projectile : projectilesToRemove) {
