@@ -6,6 +6,7 @@ import seng302.team18.util.GPSCalculator;
 import java.util.List;
 
 public abstract class CollisionUpdater implements Updater {
+    private double totalPushBack;
 
 
     @Override
@@ -26,6 +27,13 @@ public abstract class CollisionUpdater implements Updater {
 
         for (AbstractBoat object : getObstacles(boat, race)) {
             if (boat.hasCollided(object.getBodyMass())) {
+
+                if (race.getMode() == RaceMode.BUMPER_BOATS) {
+                    totalPushBack = 100; // meters
+                } else {
+                    totalPushBack = 25; // meters
+                }
+
                 handleCollision(boat.getBodyMass(), object.getBodyMass());
                 notifyCollision(race, boat, object);
             }
@@ -49,7 +57,6 @@ public abstract class CollisionUpdater implements Updater {
      * @param obstacle obstacle the boat collided with
      */
     private void handleCollision(BodyMass object, BodyMass obstacle) {
-        final double totalPushBack = 25; // meters
         GPSCalculator calculator = new GPSCalculator();
         double bearingOfCollision = calculator.getBearing(obstacle.getLocation(), object.getLocation());
         double ratio = object.getWeight() + obstacle.getWeight();
