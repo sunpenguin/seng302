@@ -1,11 +1,9 @@
 package seng302.team18.racemodel;
 
 
-import seng302.team18.message.RequestType;
-
 import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
-import seng302.team18.racemodel.encode.XmlMessageBuilder;
 import seng302.team18.racemodel.builder.course.*;
 import seng302.team18.racemodel.builder.race.*;
 import seng302.team18.racemodel.builder.regatta.AbstractRegattaBuilder;
@@ -13,16 +11,13 @@ import seng302.team18.racemodel.builder.regatta.RegattaBuilder1;
 import seng302.team18.racemodel.connection.ClientConnection;
 import seng302.team18.racemodel.connection.Server;
 import seng302.team18.racemodel.connection.ServerState;
+import seng302.team18.racemodel.encode.XmlMessageBuilder;
 import seng302.team18.racemodel.generate.*;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.*;
 
 /**
  * Class to handle a mock race
@@ -41,6 +36,7 @@ public class TestMock implements Observer {
 
     private SimulationLoop simulationLoop = null;
     private boolean isFirstPlayer = true;
+    private ExecutorService executor;
 
     /**
      * The messages to be sent on a schedule during race simulation
@@ -68,6 +64,8 @@ public class TestMock implements Observer {
             handleClient((ClientConnection) arg);
         } else if (arg instanceof ServerState) {
             open = !ServerState.CLOSED.equals(arg);
+            race.setStatus(RaceStatus.FINISHED);
+            open = false;
         } else if (arg instanceof Integer) {
             Integer id = (Integer) arg;
             race.setBoatStatus(id, BoatStatus.DNF);
@@ -79,7 +77,7 @@ public class TestMock implements Observer {
         if (isFirstPlayer) {
             generateRace(client.getRequestType());
             simulationLoop = new SimulationLoop();
-            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor = Executors.newSingleThreadExecutor();
             executor.submit(simulationLoop);
             executor.shutdown();
             isFirstPlayer = false;
@@ -290,8 +288,9 @@ public class TestMock implements Observer {
             } while (!race.isFinished() && open);
 
             sendFinalMessages();
-            server.close();
-//            System.out.println("TestMock SimulationLoop::run finished");
+            if (server.getState() == ServerState.OPEN) {
+                server.close();
+            }
         }
     }
 }

@@ -22,6 +22,7 @@ public class Server extends Observable {
     private ServerSocket serverSocket;
     private final int port;
     private boolean closeOnEmpty;
+    private ServerState state;
 
     public Server(int port) {
         this.port = port;
@@ -44,6 +45,7 @@ public class Server extends Observable {
 
         acceptClientConnection();
         listener.start();
+        state = ServerState.OPEN;
     }
 
 
@@ -91,8 +93,10 @@ public class Server extends Observable {
             e.printStackTrace();
         }
 
+        state = ServerState.CLOSED;
+
         setChanged();
-        notifyObservers(ServerState.CLOSED);
+        notifyObservers(state);
 //        System.out.println("Server::closed");
     }
 
@@ -194,5 +198,15 @@ public class Server extends Observable {
         public void stopListening() {
             listening = false;
         }
+    }
+
+
+    /**
+     * Gets the state of the server
+     *
+     * @return Open or closed
+     */
+    public ServerState getState() {
+        return state;
     }
 }
