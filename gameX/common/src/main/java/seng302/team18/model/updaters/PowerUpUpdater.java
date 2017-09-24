@@ -29,6 +29,7 @@ public class PowerUpUpdater implements Updater {
             addPowerUps(race);
         }
         shrinkPowerUps(race);
+
         for (Boat boat : race.getStartingList()) {
             powerUpStuff(race, boat);
         }
@@ -58,7 +59,7 @@ public class PowerUpUpdater implements Updater {
      */
     private void shrinkPowerUps(Race race) {
         final double THIRTY_SECONDS_IN_MILLISECONDS = 30 * 1000;
-        final double minRadius = 4;
+        final double minRadius = 6;
         final double currentTime = System.currentTimeMillis();
         final double oldRadius = prototype.getRadius();
         for (PickUp pickUp : race.getPickUps()){

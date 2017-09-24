@@ -37,7 +37,7 @@ public class Race {
     private int powerId = 0;
     private int nextProjectileId = 0;
     private StartPositionSetter positionSetter;
-//    private Boat spectatorBoat = new Boat("Spectator boat", "Spec boat", 9000, 0);
+    private List<PowerUp> powerUps = Arrays.asList(new SpeedPowerUp(3), new SharkPowerUp());
 
 
     public Race() {
@@ -106,30 +106,14 @@ public class Race {
         PickUp pickUp = prototype.clone();
         pickUp.setId(id);
         pickUp.setTimeout(timeout);
-        pickUp.setPower(getRandomPower());
+        pickUp.setPower(randomPowerUp());
         pickUp.setLocation(randomPoint);
         return pickUp;
     }
 
 
-    /**
-     * Generates a random PowerUp to put in the PickUp.
-     *
-     * @return a random PowerUp.
-     */
-    private PowerUp getRandomPower() {
-        int max = 1;
-        PowerUp powerUp = null;
-
-        int randomNum = ThreadLocalRandom.current().nextInt(0, max + 1);
-        if (randomNum == 0) {
-            powerUp = new SpeedPowerUp(3);
-        } else if (randomNum == 1) {
-            powerUp = new SharkPowerUp();
-        }
-
-        powerUp.setDuration(5000d);
-        return powerUp;
+    private PowerUp randomPowerUp() {
+        return powerUps.get(ThreadLocalRandom.current().nextInt(powerUps.size())).clone();
     }
 
 
@@ -493,4 +477,5 @@ public class Race {
     public boolean hasStarted() {
         return status == RaceStatus.STARTED || status.isAfter(RaceStatus.STARTED);
     }
+
 }
