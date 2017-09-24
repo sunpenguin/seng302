@@ -113,7 +113,9 @@ public class Race {
 
 
     private PowerUp randomPowerUp() {
-        return powerUps.get(ThreadLocalRandom.current().nextInt(powerUps.size())).clone();
+        PowerUp powerUp = powerUps.get(ThreadLocalRandom.current().nextInt(powerUps.size())).clone();
+        powerUp.setDuration(5000);
+        return powerUp;
     }
 
 
@@ -426,22 +428,21 @@ public class Race {
      * Projectiles collected in powerUps
      *
      * @param boat the boat that creates the projectile
-     * @param type the type of power up used
      */
-    public void addProjectile(Boat boat, PowerType type) {
+    public void addProjectile(Boat boat) {
         Projectile sharky = new TigerShark(nextProjectileId, new Coordinate(0,0), boat.getHeading());
         Coordinate location = gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), (boat.getLength() + sharky.getBodyMass().getRadius() + 5));
         sharky.setLocation(location);
         projectiles.add(sharky);
         nextProjectileId += 1;
         newProjectileList.add(sharky);
-//        System.out.println("hi");
-//        System.out.println(projectiles);
     }
+
 
     public List<Projectile> getProjectiles() {
         return projectiles;
     }
+
 
     /**
      * Method to remove a projectile from the race

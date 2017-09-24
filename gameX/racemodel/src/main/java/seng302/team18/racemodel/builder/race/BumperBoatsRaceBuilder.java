@@ -36,10 +36,10 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new BumperCourseShrinker(new Coordinate(5.00150, 4.0005), 200, 34, 0.0000025));
         updaters.add(new PowerUpUpdater(makePickUp(), 4));
         updaters.add(new ProjectileUpdater());
-        updaters.add(new ProjectileHitUpdater());
+        updaters.add(new BumperBoatsHitUpdater());
 
         if (statusUpdater == null) {
-            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 1);
+            statusUpdater = new BumperStatusUpdater(ZonedDateTime.now(), 2, 1, 1);
         }
         updaters.add(statusUpdater);
 
