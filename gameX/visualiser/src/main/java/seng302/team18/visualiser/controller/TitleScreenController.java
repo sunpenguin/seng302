@@ -122,8 +122,7 @@ public class TitleScreenController {
         controlsLabel.setLayoutY((600 / 2) + 150);
         controlsLabel.setOnMouseClicked(event -> {
             buttonClickedAction();
-            toggleControlsView();
-            openHelpMenu()
+            openHelpMenu();
         });
 
         controlsLabel.setOnMouseEntered(event1 -> buttonEnteredAction());
@@ -141,6 +140,7 @@ public class TitleScreenController {
             HelpMenuController controller = loader.getController();
             controller.setup(paneInner);
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

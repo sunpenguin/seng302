@@ -4,13 +4,12 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import seng302.team18.model.*;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.display.AnnotationType;
+import seng302.team18.visualiser.display.object.*;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
-import seng302.team18.visualiser.display.*;
-import seng302.team18.visualiser.display.object.*;
 import seng302.team18.visualiser.util.PixelMapper;
 
-import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +24,7 @@ public class RaceRenderer implements Renderable {
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private Map<Integer, DisplayShark> sharksMap = new HashMap<>();
     private PixelMapper pixelMapper;
-    private boolean drawTrails;
+    private boolean hasTrails;
     private final SoundEffectPlayer soundPlayer;
 
 
