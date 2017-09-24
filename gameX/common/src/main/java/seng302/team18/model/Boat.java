@@ -15,7 +15,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty legNumber = new SimpleIntegerProperty(0);
-    private double heading;
+    private double heading = 0;
     private Coordinate previousCoordinate;
     private IntegerProperty place;
     private Long timeTilNextMark;
@@ -29,7 +29,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private PowerUp powerUp;// = new SpeedPowerUp(this);
     private boolean isPowerActive = false; //Changed for merging into dev branch
     private ZonedDateTime powerDurationEnd;
-    private PowerUp updater = new BoatPowerUpUpdater();
+    private PowerUp updater = new BoatUpdater();
     private int lives;
     private boolean hasCollided = false;
 

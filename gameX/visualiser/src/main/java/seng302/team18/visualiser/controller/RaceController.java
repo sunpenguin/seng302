@@ -41,9 +41,7 @@ import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Boat;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.RaceMode;
+import seng302.team18.model.*;
 import seng302.team18.util.GPSCalculator;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.*;
@@ -58,6 +56,8 @@ import seng302.team18.visualiser.interpret.unique.*;
 import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
+import seng302.team18.visualiser.sound.SoundEffect;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 import seng302.team18.visualiser.util.SparklineDataGetter;
@@ -101,6 +101,7 @@ public class RaceController implements Observer {
 
     private boolean annotationsOn;
     private boolean fpsOn;
+    private boolean onImportant;
     private boolean sailIn = false;
 
     private ClientRace race;
@@ -108,6 +109,7 @@ public class RaceController implements Observer {
     private CourseRenderer courseRenderer;
     private PixelMapper pixelMapper;
     private Sender sender;
+    private SoundEffectPlayer soundPlayer = new SoundEffectPlayer();
 
     private Interpreter interpreter;
     private RaceBackground background;
@@ -163,11 +165,12 @@ public class RaceController implements Observer {
                     message.setDownwind();
                     break;
                 case SHIFT:
-                    sailIn = getPlayerBoat().isSailOut();
-                    if (sailIn) {
-                        message.setSailIn();
-                    } else {
-                        message.setSailOut();
+                    if (null != getPlayerBoat()) {
+                        if (getPlayerBoat().isSailOut()) {
+                            message.setSailIn();
+                        } else {
+                            message.setSailOut();
+                        }
                     }
                     break;
                 case S:
@@ -217,7 +220,6 @@ public class RaceController implements Observer {
                 }
                 break;
         }
-        keyEvent.consume();
     }
 
 
@@ -230,6 +232,7 @@ public class RaceController implements Observer {
         EventHandler<KeyEvent> keyEventHandler =
                 keyEvent -> {
                     if (keyEvent.getCode() != null) {
+
                         MessageBody message = handlePlayerKeyPress(keyEvent);
 
                         handleBasicKeyPress(keyEvent);
@@ -370,8 +373,9 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             EscapeMenuController escapeMenuController = loader.getController();
-            escapeMenuController.setup(group, interpreter, sender, this);
+            escapeMenuController.setup(group, interpreter, sender, this); // soundPlayer
         } catch (IOException e) {
+            //pass
         }
     }
 
@@ -409,16 +413,7 @@ public class RaceController implements Observer {
         ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
         observableList.addAll(race.getStartingList());
 
-        SortedList<Boat> sortedList = new SortedList<>(observableList,
-                (Boat boat1, Boat boat2) -> {
-                    if (boat1.getPlace() < boat2.getPlace()) {
-                        return -1;
-                    } else if (boat1.getPlace() > boat2.getPlace()) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
+        SortedList<Boat> sortedList = new SortedList<>(observableList, Comparator.comparingInt(Boat::getPlace));
         tableView.setItems(sortedList);
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("shortName"));
@@ -469,7 +464,7 @@ public class RaceController implements Observer {
 
         // Resets the columns to the original order whenever the user tries to change them
         tableView.getColumns().addListener(new ListChangeListener<TableColumn<Boat, ?>>() {
-            public boolean suspended;
+            private boolean suspended;
 
             @Override
             public void onChanged(Change change) {
@@ -519,7 +514,7 @@ public class RaceController implements Observer {
 
         pixelMapper.setMaxZoom(16d);
         pixelMapper.calculateMappingScale();
-        raceRenderer = new RaceRenderer(pixelMapper, race, group);
+        raceRenderer = new RaceRenderer(pixelMapper, race, group, soundPlayer);
         raceRenderer.render();
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, race.getMode());
@@ -659,16 +654,21 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLocationInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
-        interpreter.add(AC35MessageType.YACHT_EVENT.getCode(), new YachtEventInterpreter(race));
+        YachtEventInterpreter yachtEventInterpreter = new YachtEventInterpreter(race);
+        yachtEventInterpreter.addCallback(YachtEventCode.ACTIVATED_SPEED_BOOST, isPlayerBoost -> soundPlayer.playEffect(SoundEffect.ACTIVATE_SPEED_BOOST));
+        interpreter.add(AC35MessageType.YACHT_EVENT.getCode(), yachtEventInterpreter);
         interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(clock));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new FinishRaceInterpreter(this));
+        RaceStatusInterpreter raceStatusInterpreter = new RaceStatusInterpreter(race);
+        raceStatusInterpreter.addCallback(RaceStatus.FINISHED, aBoolean -> Platform.runLater(this::showFinishersList));
+        raceStatusInterpreter.addCallback(RaceStatus.STARTED, aBoolean -> soundPlayer.playEffect(SoundEffect.RACE_START));
+        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), raceStatusInterpreter);
         interpreter.add(AC35MessageType.POWER_UP.getCode(), new PowerUpInterpreter(race));
         interpreter.add(AC35MessageType.POWER_TAKEN.getCode(), new PowerTakenInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
-        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLivesInterpreter(race));
+        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLivesInterpreter(race, (wasPlayerLostLife) -> soundPlayer.playEffect(SoundEffect.LOSE_LIFE)));
         interpreter.add(AC35MessageType.PROJECTILE_LOCATION.getCode(), new ProjectileLocationInterpreter(race));
-        interpreter.add(AC35MessageType.PROJECTILE_CREATION.getCode(), new ProjectileCreationInterpreter(race));
+        interpreter.add(AC35MessageType.PROJECTILE_CREATION.getCode(), new ProjectileCreationInterpreter(race, (wasFiredByPlayer) -> soundPlayer.playEffect(SoundEffect.FIRE_BULLET)));
         interpreter.add(AC35MessageType.PROJECTILE_GONE.getCode(), new ProjectileGoneInterpreter(race));
 
         return interpreter;
@@ -693,7 +693,7 @@ public class RaceController implements Observer {
     /**
      * Displays the result of the race in table form
      */
-    public void showFinishersList() {
+    private void showFinishersList() {
         if (finishResultsBox == null) {
             String result = "MATCH COMPLETE\n\n";
 
@@ -728,13 +728,13 @@ public class RaceController implements Observer {
      */
     private String genericFinishInfo(List<Boat> boats) {
         boats.sort(Comparator.comparing(Boat::getPlace));
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (Boat b : boats) {
-            result += b.getPlace() + ": " + b.getShortName() + " " + b.getStatus().name() + "\n";
+            result.append(b.getPlace()).append(": ").append(b.getShortName()).append(" ").append(b.getStatus().name()).append("\n");
         }
 
-        return result;
+        return result.toString();
     }
 
 
@@ -748,14 +748,14 @@ public class RaceController implements Observer {
     private String bumperFinishInfo(List<Boat> boats) {
         boats.sort(Comparator.comparing(Boat::getLives));
         boats = Lists.reverse(boats);
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (Boat b : boats) {
             String state = b.getLives() > 0 ? "WINNER" : "DEAD";
-            result += b.getShortName() + " " + state + "\n";
+            result.append(b.getShortName()).append(" ").append(state).append("\n");
         }
 
-        return result;
+        return result.toString();
     }
 
 
@@ -769,13 +769,13 @@ public class RaceController implements Observer {
     private String challengeFinishInfo(List<Boat> boats) {
         boats.sort(Comparator.comparing(Boat::getPlace));
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         for (Boat b : boats) {
-            result += b.getShortName() + " " + b.getLegNumber() + " GATES CLEARED\n";
+            result.append(b.getShortName()).append(" ").append(b.getLegNumber()).append(" GATES CLEARED\n");
         }
 
-        return result;
+        return result.toString();
     }
 
 
@@ -790,6 +790,7 @@ public class RaceController implements Observer {
         if (arg instanceof Boolean) {
             Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST"));
         } else if (arg instanceof Boat) {
+            soundPlayer.playEffect(SoundEffect.PLAYER_DISQUALIFIED);
             Platform.runLater(() -> {
                 if (race.getMode().equals(RaceMode.CHALLENGE_MODE) || race.getMode().equals(RaceMode.BUMPER_BOATS)) {
                     openEscapeMenu("GAME OVER");

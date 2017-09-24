@@ -10,6 +10,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import seng302.team18.encode.Sender;
 import seng302.team18.visualiser.interpret.Interpreter;
+import seng302.team18.visualiser.sound.SoundEffect;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 import java.io.IOException;
 
@@ -18,16 +20,17 @@ import java.io.IOException;
  */
 public class EscapeMenuController {
 
-    @FXML private Pane pane;
+    @FXML
+    private Pane pane;
 
     private Group group;
-    private Label quitLabel;
-    private Image quitButtonImage;
     private Interpreter interpreter;
     private Sender sender;
     private RaceController raceController;
+    private SoundEffectPlayer soundPlayer;
 
-    @FXML public void initialize() {
+    @FXML
+    public void initialize() {
         initialiseAnnotationsButton();
         initialiseFPSButton();
         initialiseQuitButton();
@@ -39,18 +42,20 @@ public class EscapeMenuController {
      * Image used will changed when hovered over as defined in the escape_menu css.
      */
     private void initialiseQuitButton() {
-        quitLabel = new Label();
+        Label quitLabel = new Label();
         quitLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/escape_menu.css").toExternalForm());
         quitLabel.getStyleClass().add("quitImage");
         pane.getChildren().add(quitLabel);
 
-        quitButtonImage = new Image("/images/escape_menu/quit_button_image.png");
+        Image quitButtonImage = new Image("/images/escape_menu/quit_button_image.png");
         quitLabel.setLayoutX((pane.getPrefWidth() / 2) - (Math.floorDiv((int) quitButtonImage.getWidth(), 2)));
         quitLabel.setLayoutY((pane.getPrefHeight() / 2) + (int) quitButtonImage.getHeight() * 2);
         quitLabel.setOnMouseClicked(event -> {
+            buttonClickedAction();
             closeConnection();
             returnToTitle();
         });
+        quitLabel.setOnMouseEntered(event -> buttonEnteredAction());
     }
 
 
@@ -108,9 +113,12 @@ public class EscapeMenuController {
             stage.setResizable(true);
             stage.setMaximized(true);
             controller.setStage(stage);
+            controller.setSoundPlayer(soundPlayer);
             controller.reDraw();
             stage.show();
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            // pass
+        }
     }
 
 
@@ -126,15 +134,38 @@ public class EscapeMenuController {
     /**
      * Set up the escape menu.
      *
-     * @param group Group to place menu on
-     * @param interpreter Interpreter to close when we quit the raceController.
-     * @param sender Sender to close when we quit the raceController.
+     * @param group       Group to place menu on
+     * @param interpreter Interpreter to close when we quit the race.
+     * @param sender      Sender to close when we quit the race.
+     * @param raceController to connect the escaoe menu to.
+     * @param player      the manager for audio playback from this scene.
      */
-    public void setup(Group group, Interpreter interpreter, Sender sender, RaceController raceController) {
+    public void setup(Group group, Interpreter interpreter, Sender sender, RaceController raceController, SoundEffectPlayer player) {
         this.group = group;
         this.interpreter = interpreter;
         this.sender = sender;
         this.raceController = raceController;
+        this.soundPlayer = player;
+    }
+
+
+    /**
+     * Common actions for OnMouseEntered events of menu buttons.
+     * <p>
+     * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_ENTER SoundEffect#BUTTON_MOUSE_ENTER}
+     */
+    private void buttonEnteredAction() {
+        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
+    }
+
+
+    /**
+     * Common actions for OnMouseClicked events of menu buttons.
+     * <p>
+     * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_CLICK SoundEffect#BUTTON_MOUSE_CLICK}
+     */
+    private void buttonClickedAction() {
+        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
     }
 }
 

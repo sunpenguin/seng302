@@ -4,9 +4,8 @@ import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.BoatActionStatus;
 import seng302.team18.message.MessageBody;
-import seng302.team18.model.Boat;
-import seng302.team18.model.BoatStatus;
-import seng302.team18.model.Race;
+import seng302.team18.message.PowerType;
+import seng302.team18.model.*;
 import seng302.team18.util.VMGAngles;
 
 import java.util.Arrays;
@@ -61,7 +60,6 @@ public class BoatActionInterpreter extends MessageInterpreter {
 
     /**
      * Updates the starting list continuously.
-     *
      */
     private void updateList() {
         boats = race.getStartingList()
@@ -94,6 +92,9 @@ public class BoatActionInterpreter extends MessageInterpreter {
         } else if (action == BoatActionStatus.POWER_UP.action()) {
             if (boat.canActivatePower()) {
                 boat.activatePowerUp();
+                if (boat.getPowerUp().getType().equals(PowerType.SPEED)) {
+                    race.addYachtEvent(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.ACTIVATED_SPEED_BOOST));
+                }
             }
 
         }

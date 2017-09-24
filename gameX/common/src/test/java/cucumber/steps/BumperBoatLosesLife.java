@@ -1,14 +1,12 @@
 package cucumber.steps;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 import seng302.team18.model.*;
 import seng302.team18.model.updaters.BumperBoatHealthUpdater;
-import seng302.team18.model.updaters.BoatUpdater;
-import seng302.team18.model.updaters.OutOfBoundsUpdater;
+import seng302.team18.model.updaters.BoatsUpdater;
 import seng302.team18.model.updaters.Updater;
 
 import java.util.*;
@@ -38,7 +36,7 @@ public class BumperBoatLosesLife {
 
         race = new Race();
         List<Updater> updaters = new ArrayList<>();
-        updaters.add(new BoatUpdater());
+        updaters.add(new BoatsUpdater());
         updaters.add(new BumperBoatHealthUpdater());
         race.setUpdaters(updaters);
         Course course = new Course(getCompoundMarks(), boundaries, getRoundings());

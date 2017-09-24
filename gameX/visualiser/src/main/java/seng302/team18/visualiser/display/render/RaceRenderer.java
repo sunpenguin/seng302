@@ -4,11 +4,14 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import seng302.team18.model.*;
 import seng302.team18.visualiser.ClientRace;
-import seng302.team18.visualiser.display.*;
+import seng302.team18.visualiser.display.AnnotationType;
 import seng302.team18.visualiser.display.object.*;
+import seng302.team18.visualiser.sound.SoundEffect;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 import seng302.team18.visualiser.util.PixelMapper;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class that takes a Race and a Group and draws the Race on the Group.
@@ -21,7 +24,8 @@ public class RaceRenderer implements Renderable {
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private Map<Integer, DisplayShark> sharksMap = new HashMap<>();
     private PixelMapper pixelMapper;
-    private boolean drawTrails;
+    private boolean hasTrails;
+    private final SoundEffectPlayer soundPlayer;
 
 
     /**
@@ -30,11 +34,13 @@ public class RaceRenderer implements Renderable {
      * @param pixelMapper for converting coordinates to pixel coordinates
      * @param race        the race containing the displayBoats to be drawn
      * @param group       the group to be drawn on
+     * @param soundPlayer the manager for audio playback from this scene
      */
-    public RaceRenderer(PixelMapper pixelMapper, ClientRace race, Group group) {
+    public RaceRenderer(PixelMapper pixelMapper, ClientRace race, Group group, SoundEffectPlayer soundPlayer) {
         this.race = race;
         this.group = group;
         this.pixelMapper = pixelMapper;
+        this.soundPlayer = soundPlayer;
         if (race.getMode() == RaceMode.CHALLENGE_MODE) {
             setChallengeModeCourse();
         }
@@ -64,7 +70,7 @@ public class RaceRenderer implements Renderable {
     public void render() {
         drawBoats();
         renderShark();
-        if (drawTrails) {
+        if (hasTrails) {
             drawTrails();
         }
     }
@@ -96,9 +102,9 @@ public class RaceRenderer implements Renderable {
      * Checks if the projectile represented by each DisplayShark is still in bounds and removes the display shark from
      * the group if it is not
      */
-    private void removeSharks(){
-        for (DisplayShark shark : sharksMap.values()){
-            if (!race.getProjectiles().contains(shark.getProjectile())){
+    private void removeSharks() {
+        for (DisplayShark shark : sharksMap.values()) {
+            if (!race.getProjectiles().contains(shark.getProjectile())) {
                 shark.removeFrom(group);
                 sharksMap.remove(shark.getProjectile().getId());
             }
@@ -112,10 +118,10 @@ public class RaceRenderer implements Renderable {
     private void renderShark() {
         removeSharks();
 
-        for (int i = 0; i < race.getProjectiles().size(); i++){
+        for (int i = 0; i < race.getProjectiles().size(); i++) {
             Projectile projectile = race.getProjectiles().get(i);
             DisplayShark shark = sharksMap.get(projectile.getId());
-            if (shark == null){
+            if (shark == null) {
                 shark = new DisplayShark(projectile, pixelMapper);
                 sharksMap.put(projectile.getId(), shark);
                 shark.addToGroup(group);
@@ -131,7 +137,6 @@ public class RaceRenderer implements Renderable {
 
         }
     }
-
 
 
     /**
@@ -153,7 +158,7 @@ public class RaceRenderer implements Renderable {
             }
         }
         displayBoat = new DisplaySail(pixelMapper, displayBoat);
-        displayBoat = new DisplayCollision(pixelMapper, displayBoat);
+        displayBoat = new DisplayCollision(pixelMapper, displayBoat, (wasPlayerCollided) -> soundPlayer.playEffect(SoundEffect.COLLISION));
         displayBoat.addToGroup(group);
         displayBoats.put(boat.getShortName(), displayBoat);
         return displayBoat;
@@ -168,10 +173,11 @@ public class RaceRenderer implements Renderable {
     private void remove(DisplayBoat displayBoat) {
         displayBoat.removeFrom(group);
         displayBoats.remove(displayBoat.getShortName());
-        DisplayTrail trail = trailMap.remove(displayBoat.getShortName());
-        trail.removeFrom(group);
+        if (hasTrails) {
+            DisplayTrail trail = trailMap.remove(displayBoat.getShortName());
+            trail.removeFrom(group);
+        }
     }
-
 
 
     /**
@@ -227,7 +233,6 @@ public class RaceRenderer implements Renderable {
         if (boat.getStatus().equals(BoatStatus.DSQ)) {
             trailMap.get(boat.getShortName()).removeFrom(group);
         } else {
-            final double MAX_HEADING_DIFFERENCE = 0.5d; // smaller => smoother trail, higher => more fps
             DisplayTrail trail = trailMap.get(boat.getShortName());
 
             if (trail == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
@@ -250,7 +255,7 @@ public class RaceRenderer implements Renderable {
      * resetting the points.
      */
     public void refresh() {
-        if (drawTrails) {
+        if (hasTrails) {
             for (Boat boat : race.getStartingList()) {
                 DisplayTrail trail = trailMap.get(boat.getShortName());
                 if (trail != null) {
@@ -298,6 +303,6 @@ public class RaceRenderer implements Renderable {
 
 
     public void setDrawTrails(boolean drawTrails) {
-        this.drawTrails = drawTrails;
+        this.hasTrails = drawTrails;
     }
 }

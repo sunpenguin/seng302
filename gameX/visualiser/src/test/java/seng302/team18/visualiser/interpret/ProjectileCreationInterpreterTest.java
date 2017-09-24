@@ -25,7 +25,8 @@ public class ProjectileCreationInterpreterTest {
     public void setUp() {
 
         race = new ClientRace();
-        interpreter = new ProjectileCreationInterpreter(race);
+        interpreter = new ProjectileCreationInterpreter(race, (foo) -> {
+        });
         message1 = new ProjectileCreationMessage(300);
         message2 = new ProjectileCreationMessage(301);
         message3 = new ProjectileCreationMessage(302);
@@ -37,22 +38,23 @@ public class ProjectileCreationInterpreterTest {
      * Test to add 1 projectile
      */
     @Test
-    public void add1Test(){
+    public void add1Test() {
         int initsize = race.getProjectiles().size();
         interpreter.interpret(message1);
-        Assert.assertEquals(initsize +1, race.getProjectiles().size());
+        Assert.assertEquals(initsize + 1, race.getProjectiles().size());
         Assert.assertEquals(message1.getProjectile_id(), race.getProjectiles().get(0).getId());
     }
+
     /**
      * Test to add multiple projectile
      */
     @Test
-    public void addMultipleTest(){
+    public void addMultipleTest() {
         int initsize = race.getProjectiles().size();
         interpreter.interpret(message1);
         interpreter.interpret(message2);
         interpreter.interpret(message3);
-        Assert.assertEquals(initsize +3, race.getProjectiles().size());
+        Assert.assertEquals(initsize + 3, race.getProjectiles().size());
         Assert.assertEquals(message1.getProjectile_id(), race.getProjectiles().get(0).getId());
         Assert.assertEquals(message2.getProjectile_id(), race.getProjectiles().get(1).getId());
         Assert.assertEquals(message3.getProjectile_id(), race.getProjectiles().get(2).getId());
