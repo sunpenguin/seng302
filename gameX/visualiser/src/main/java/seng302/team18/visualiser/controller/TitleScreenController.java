@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
@@ -20,15 +21,11 @@ import java.io.IOException;
  * Controller for when the application first starts up
  */
 public class TitleScreenController {
-    @FXML
-    private Label errorText;
-    @FXML
-    private AnchorPane pane;
-    @FXML
-    private AnchorPane paneInner;
+    @FXML private Label errorText;
+    @FXML private AnchorPane pane;
+    @FXML private AnchorPane paneInner;
 
-    private ImageView controlsImageView;
-    private boolean controlsVisible = false;
+    private Pane helpMenuPane;
 
     private Stage stage;
     private SoundEffectPlayer soundPlayer;
@@ -37,7 +34,8 @@ public class TitleScreenController {
     public void initialize() {
         registerListeners();
         initialiseHostButton();
-        initialiseControlsButton();
+        initialiseHelpButton();
+        loadHelpMenu();
         initialiseQuitButton();
         initialiseTutorialButton();
         loadBoatAnimation();
@@ -113,20 +111,50 @@ public class TitleScreenController {
      * Set up the button for viewing the controls
      * Image used will changed when hovered over as defined in the preRaceStyle css.
      */
-    private void initialiseControlsButton() {
+    private void initialiseHelpButton() {
         Label controlsLabel = new Label();
         controlsLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
-        controlsLabel.getStyleClass().add("controlsImage");
+        controlsLabel.getStyleClass().add("helpImage");
         paneInner.getChildren().add(controlsLabel);
 
-        Image controlsButtonImage = new Image("/images/title_screen/view_controls_button.png");
+        Image controlsButtonImage = new Image("/images/title_screen/help_menu/help_button.png");
         controlsLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) controlsButtonImage.getWidth(), 2)));
         controlsLabel.setLayoutY((600 / 2) + 150);
         controlsLabel.setOnMouseClicked(event -> {
             buttonClickedAction();
             toggleControlsView();
+            openHelpMenu()
         });
+
         controlsLabel.setOnMouseEntered(event1 -> buttonEnteredAction());
+
+    }
+
+
+    /**
+     * Load the associated FXML for the help menu into a Pane object.
+     */
+    private void loadHelpMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("helpMenu.fxml"));
+            helpMenuPane = loader.load();
+            HelpMenuController controller = loader.getController();
+            controller.setup(paneInner);
+        } catch (IOException e) {
+        }
+    }
+
+
+    /**
+     * Show the help menu on top of the title screen
+     */
+    private void openHelpMenu() {
+        if (!paneInner.getChildren().contains(helpMenuPane)) {
+            paneInner.getChildren().add(helpMenuPane);
+            helpMenuPane.toFront();
+            helpMenuPane.setLayoutX(0);
+            helpMenuPane.setLayoutY(-100);
+        }
     }
 
 
@@ -200,26 +228,6 @@ public class TitleScreenController {
         } else if (stage != null) {
             paneInner.setLayoutX((stage.getWidth() / 2) - (300));
             paneInner.setLayoutY((stage.getHeight() / 2) - (300));
-        }
-    }
-
-
-    /**
-     * Toggle the controls layout image in and out of view.
-     * Image is placed in the middle of the pane, fit to the width.
-     */
-    private void toggleControlsView() {
-        if (controlsVisible) {
-            pane.getChildren().remove(controlsImageView);
-            controlsVisible = false;
-        } else {
-            Image controlsImage = new Image("images/keyboardLayout.png");
-            controlsImageView = new ImageView(controlsImage);
-            pane.getChildren().add(controlsImageView);
-            controlsImageView.setPreserveRatio(true);
-            controlsImageView.setFitWidth(paneInner.getWidth());
-            controlsImageView.setLayoutX((pane.getWidth() / 2) - (paneInner.getWidth() / 2));
-            controlsVisible = true;
         }
     }
 

@@ -5,13 +5,14 @@ import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.SpeedConverter;
 
 /**
- * Created by dhl25 on 29/08/17.
+ * Class to update boat PowerUps.
  */
-public class BoatPowerUpUpdater extends PowerUp {
+public class BoatUpdater extends PowerUp {
 
-    public BoatPowerUpUpdater() {
+    public BoatUpdater() {
         super();
     }
+
 
     @Override
     public void update(Boat boat, double time) {
@@ -20,15 +21,14 @@ public class BoatPowerUpUpdater extends PowerUp {
         if (boat.isSailOut()) {
             speed = 0;
         }
-
         GPSCalculator gps = new GPSCalculator();
         double mpsSpeed = new SpeedConverter().knotsToMs(speed); // convert to meters/second
         double secondsTime = time / 1000.0d;
         double distanceTravelled = mpsSpeed * secondsTime;
-
-        // set next position based on current coordinate, distance travelled, and heading.
-        boat.setCoordinate(gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled));
+        Coordinate nextPosition = gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), distanceTravelled);
+        boat.setCoordinate(nextPosition);
     }
+
 
     @Override
     public boolean isTerminated() {

@@ -36,8 +36,7 @@ public abstract class MessageGenerator {
             outputStream.write(payload);
             byte[] crc = CRCGenerator.generateCRC(outputStream.toByteArray());
             outputStream.write(crc);
-            byte[] message = outputStream.toByteArray();
-            return message;
+            return outputStream.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
             byte[] error = {0};

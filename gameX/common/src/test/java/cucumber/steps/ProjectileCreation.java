@@ -36,7 +36,7 @@ public class ProjectileCreation {
 
         race = new Race();
         List<Updater> updaters = new ArrayList<>();
-        updaters.add(new BoatUpdater());
+        updaters.add(new BoatsUpdater());
         updaters.add(new ProjectileUpdater());
         updaters.add(new ProjectileHitUpdater());
         updaters.add(new OutOfBoundsUpdater());

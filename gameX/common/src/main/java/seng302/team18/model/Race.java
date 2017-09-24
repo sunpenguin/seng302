@@ -139,26 +139,20 @@ public class Race {
      * current(starting CompoundMark) and next CompoundMark.
      */
     public void setCourseForBoats() {
-        if (course.getMarkSequence().size() > 1) {
-            for (Boat boat : startingList) {
-                setCourseForBoat(boat);
-            }
+        for (Boat boat : startingList) {
+            setCourseForBoat(boat);
         }
     }
 
 
     private void setCourseForBoat(Boat boat) {
-        if (course.getMarkSequence().size() > 1) {
-            boat.setLegNumber(0);
-            boat.setCoordinate(positionSetter.getBoatPosition(boat, course, startingList.size()));
-            boat.setHeading(gps.getBearing(
-                    boat.getCoordinate(),
-                    course.getMarkRounding(0).getCoordinate()
-            ));
-            boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
-            boat.setRoundZone(Boat.RoundZone.ZONE1);
-            boat.setStatus(BoatStatus.PRE_START);
-        }
+        boat.setLegNumber(0);
+        Coordinate boatPosition = positionSetter.getBoatPosition(boat, course, startingList.size());
+        boat.setCoordinate(boatPosition);
+        boat.setHeading(positionSetter.getBoatHeading(boat.getCoordinate(), course));
+        boat.setSpeed(boat.getBoatTWS(course.getWindSpeed(), course.getWindDirection()));
+        boat.setRoundZone(Boat.RoundZone.ZONE1);
+        boat.setStatus(BoatStatus.PRE_START);
     }
 
 

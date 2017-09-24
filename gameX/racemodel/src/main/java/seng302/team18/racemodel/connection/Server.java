@@ -2,9 +2,12 @@ package seng302.team18.racemodel.connection;
 
 import javax.net.ServerSocketFactory;
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
-import java.util.concurrent.Executor;
+import java.net.ServerSocket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
