@@ -167,12 +167,7 @@ public class DisplayBoat implements GeographicLocation {
                     String formatSpecSpeed = "%." + DECIMAL_PLACES + "f";
                     annotationText.append(String.format(formatSpecSpeed, speed.get()))
                             .append(" knots\n");
-                } else if (AnnotationType.ESTIMATED_TIME_NEXT_MARK.equals(entry.getKey()) && estimatedTime > 0) {
-                    annotationText.append(estimatedTime)
-                            .append("\n");
-                } else if (AnnotationType.TIME_SINCE_LAST_MARK.equals(entry.getKey()))
-                    annotationText.append(timeSinceLastMark)
-                            .append("\n");
+                }
             }
         }
         annotation.setText(annotationText.toString());

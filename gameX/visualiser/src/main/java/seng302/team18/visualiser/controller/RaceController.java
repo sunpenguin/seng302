@@ -91,11 +91,10 @@ public class RaceController implements Observer {
     private Label currentRankingsLabel;
 
     private Pane escapeMenuPane;
+    private Pane eventMenuPane;
 
     private boolean annotationsOn;
     private boolean fpsOn;
-    private boolean onImportant;
-    private boolean sailIn = false;
 
     private ClientRace race;
     private RaceRenderer raceRenderer;
@@ -209,7 +208,7 @@ public class RaceController implements Observer {
                 if (group.getChildren().contains(escapeMenuPane)) {
                     group.getChildren().remove(escapeMenuPane);
                 } else {
-                    openEscapeMenu("");
+                    openEscapeMenu("", escapeMenuPane);
                 }
                 break;
         }
@@ -241,7 +240,7 @@ public class RaceController implements Observer {
                             try {
                                 sender.send(message);
                             } catch (IOException e) {
-                                openEscapeMenu("You have been disconnected!");
+                                openEscapeMenu("You have been disconnected!", eventMenuPane);
                             }
                         }
                     }
@@ -361,6 +360,7 @@ public class RaceController implements Observer {
     /**
      * Loads the FXML and controller for the escape menu.
      */
+    @SuppressWarnings("Duplicates")
     private void loadEscapeMenu() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
@@ -374,24 +374,41 @@ public class RaceController implements Observer {
 
 
     /**
-     * Opens the escapeMenu by adding to the group and placing it in the middle of the race view.
+     * Loads the FXML and controller for the event menu.
      */
-    private void openEscapeMenu(String message) {
-        if (!group.getChildren().contains(escapeMenuPane)) {
+
+    @SuppressWarnings("Duplicates")
+    private void loadEventMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EventMenu.fxml"));
+            eventMenuPane = loader.load();
+            EventMenuController eventMenuController = loader.getController();
+            eventMenuController.setup(group, interpreter, sender, soundPlayer);
+        } catch (IOException e) {
+            //pass
+        }
+    }
+
+
+    /**
+     * Opens the menu by adding to the group and placing it in the middle of the race view.
+     */
+    private void openEscapeMenu(String message, Pane menuPane) {
+        if (!group.getChildren().contains(menuPane)) {
             Label label = new Label(message);
             label.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/style.css").toExternalForm());
             label.getStyleClass().add("message");
             HBox box = new HBox(label);
             box.setAlignment(Pos.TOP_CENTER);
             box.setPadding(new Insets(6, 6, 6, 6));
-            box.setPrefWidth(escapeMenuPane.getMinWidth());
+            box.setPrefWidth(menuPane.getMinWidth());
             label.setMaxWidth(box.getPrefWidth());
             label.setWrapText(true);
-            escapeMenuPane.getChildren().add(box);
-            group.getChildren().add(escapeMenuPane);
-            escapeMenuPane.toFront();
-            escapeMenuPane.setLayoutX((raceViewPane.getWidth() / 2) - escapeMenuPane.getMinWidth() / 2);
-            escapeMenuPane.setLayoutY((raceViewPane.getHeight() / 2) - escapeMenuPane.getMinHeight() / 2);
+            menuPane.getChildren().add(box);
+            group.getChildren().add(menuPane);
+            menuPane.toFront();
+            menuPane.setLayoutX((raceViewPane.getWidth() / 2) - menuPane.getMinWidth() / 2);
+            menuPane.setLayoutY((raceViewPane.getHeight() / 2) - menuPane.getMinHeight() / 2);
         }
     }
 
@@ -540,6 +557,7 @@ public class RaceController implements Observer {
         interpreter.addObserver(this);
 
         loadEscapeMenu();
+        loadEventMenu();
 
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
     }
@@ -781,14 +799,14 @@ public class RaceController implements Observer {
     @Override
     public void update(java.util.Observable o, Object arg) {
         if (arg instanceof Boolean) {
-            Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST"));
+            Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST", eventMenuPane));
         } else if (arg instanceof Boat) {
             soundPlayer.playEffect(SoundEffect.PLAYER_DISQUALIFIED);
             Platform.runLater(() -> {
                 if (race.getMode().equals(RaceMode.CHALLENGE_MODE) || race.getMode().equals(RaceMode.BUMPER_BOATS)) {
-                    openEscapeMenu("GAME OVER");
+                    openEscapeMenu("GAME OVER", eventMenuPane);
                 } else {
-                    openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES");
+                    openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES", eventMenuPane);
                 }
                 sender.close();
             });
