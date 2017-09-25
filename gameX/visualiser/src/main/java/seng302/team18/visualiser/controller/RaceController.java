@@ -736,7 +736,6 @@ public class RaceController implements Observer {
         YachtEventInterpreter yachtEventInterpreter = new YachtEventInterpreter(race);
         yachtEventInterpreter.addCallback(YachtEventCode.ACTIVATED_SPEED_BOOST, isPlayerBoost -> soundPlayer.playEffect(SoundEffect.ACTIVATE_SPEED_BOOST));
         interpreter.add(AC35MessageType.YACHT_EVENT.getCode(), yachtEventInterpreter);
-        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(clock));
         RaceStatusInterpreter raceStatusInterpreter = new RaceStatusInterpreter(race);
         raceStatusInterpreter.addCallback(RaceStatus.FINISHED, aBoolean -> Platform.runLater(this::showFinishersList));
