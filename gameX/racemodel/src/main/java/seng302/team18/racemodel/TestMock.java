@@ -36,7 +36,6 @@ public class TestMock implements Observer {
 
     private SimulationLoop simulationLoop = null;
     private boolean isFirstPlayer = true;
-    private ExecutorService executor;
 
     /**
      * The messages to be sent on a schedule during race simulation
@@ -77,7 +76,7 @@ public class TestMock implements Observer {
         if (isFirstPlayer) {
             generateRace(client.getRequestType());
             simulationLoop = new SimulationLoop();
-            executor = Executors.newSingleThreadExecutor();
+            ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.submit(simulationLoop);
             executor.shutdown();
             isFirstPlayer = false;
