@@ -25,7 +25,6 @@ public class ClientRace {
     private RaceMode mode = RaceMode.RACE;
     private List<Projectile> projectiles = new ArrayList<>();
 
-
     public ClientRace() {
         participantIds = new ArrayList<>();
         startingList = new ArrayList<>();
@@ -335,4 +334,5 @@ public class ClientRace {
     public List<Projectile> getProjectiles() {
         return projectiles;
     }
+
 }
