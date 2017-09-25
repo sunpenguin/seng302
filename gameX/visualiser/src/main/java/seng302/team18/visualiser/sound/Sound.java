@@ -1,4 +1,4 @@
-package seng302.team18.visualiser.display;
+package seng302.team18.visualiser.sound;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
