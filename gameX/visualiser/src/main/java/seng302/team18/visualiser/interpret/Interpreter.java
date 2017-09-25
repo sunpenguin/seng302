@@ -49,7 +49,6 @@ public class Interpreter extends Observable {
                          closeReceiver();
                      } catch (Exception e2){
                          e2.printStackTrace();
-                         System.err.println("e2 interpreter start method");
                      }
                      if (messageBody != null) {
                          timeout = ZonedDateTime.now().plusSeconds(5);
