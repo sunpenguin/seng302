@@ -9,13 +9,13 @@ import java.io.File;
 /**
  * Created by cslaven on 25/09/17.
  */
-public class Sound {
+public class ThemeTunePlayer {
 
     private static boolean playing = false;
 
 
     public void playTrack(String soundFile){
-        if (Sound.playing){
+        if (ThemeTunePlayer.playing){
             return;
         }
         else {
@@ -33,6 +33,6 @@ public class Sound {
     }
 
     public static void setPlaying(boolean playing) {
-        Sound.playing = playing;
+        ThemeTunePlayer.playing = playing;
     }
 }

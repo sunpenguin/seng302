@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import seng302.team18.visualiser.controller.TitleScreenController;
-import seng302.team18.visualiser.sound.Sound;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 public class App extends Application {
@@ -14,8 +14,8 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        Sound sound = new Sound();
-        sound.playTrack("/Users/cslaven/Desktop/Uni/302/team-18/gameX/visualiser/src/main/resources/themetune.wav");
+        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer();
+        themeTunePlayer.playTrack("audio/theme.wav");
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
         Parent root = loader.load(); // throws IOException
         TitleScreenController controller = loader.getController();

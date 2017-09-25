@@ -12,7 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
-import seng302.team18.visualiser.sound.Sound;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
@@ -41,8 +41,8 @@ public class TitleScreenController {
         initialiseTutorialButton();
         loadBoatAnimation();
 
-        Sound sound = new Sound();
-        sound.playTrack("/resources/themetune.wav");
+        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer();
+        themeTunePlayer.playTrack("audio/theme.wav");
 
         errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());
         errorText.setLayoutY((600 / 2) + 300);
