@@ -263,7 +263,11 @@ public class ClientRace {
      * @return PowerUp that the PickUp had.
      */
     public PowerUp getPowerUp(int id) {
-        return getPickUp(id).getPower();
+        PickUp pickUp = getPickUp(id);
+        if (null == pickUp) {
+            return null;
+        }
+        return pickUp.getPower();
     }
 
 
