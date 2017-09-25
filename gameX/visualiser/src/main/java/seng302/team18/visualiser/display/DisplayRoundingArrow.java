@@ -2,37 +2,32 @@ package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polyline;
-import seng302.team18.model.CompoundMark;
-import seng302.team18.model.Coordinate;
-import seng302.team18.model.Mark;
-import seng302.team18.util.GPSCalculator;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
+import seng302.team18.model.MarkRounding;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class for information for arrow that rounds a mark.
  */
 public class DisplayRoundingArrow {
 
-    private CompoundMark current;
-    private Polyline arrowHead;
-    private Line arrowLine;
-    private List<XYPair> endPoints = new ArrayList<>();
-    private GPSCalculator calculator = new GPSCalculator();
+    private MarkRounding markRounding;
+    private Shape head;
+    private Arc tail;
     private PixelMapper pixelMapper;
-    private double bearing;
-    private Coordinate middle;
+
+    private final static Color COLOR = Color.GREEN;
 
 
-    public DisplayRoundingArrow(CompoundMark current, PixelMapper pixelMapper) {
-        this.current = current;
-        arrowHead = new Polyline();
+    public DisplayRoundingArrow(PixelMapper pixelMapper, MarkRounding markRounding) {
         this.pixelMapper = pixelMapper;
+        this.markRounding = markRounding;
+
         drawArrow();
     }
 
@@ -41,67 +36,46 @@ public class DisplayRoundingArrow {
      * Create the rounding arrow.
      */
     private void drawArrow() {
-        makeHeadShape();
-        calculateEndPoints();
-        makeLine();
-        setPosition();
-    }
+        tail = makeTail();
+        head = makeHeadShape();
 
-
-    /**
-     * Calculate the start and end points for the body of the arrow.
-     */
-    private void calculateEndPoints() {
-        double turingAngle = 0;
-        if (current.isGate()) {
-            Mark m1 = current.getMarks().get(0);
-            Mark m2 = current.getMarks().get(1);
-            middle = calculator.midPoint(m1.getCoordinate(), m2.getCoordinate());
-            turingAngle = 180;
-        } else {
-            middle = current.getMarks().get(0).getCoordinate();
-            turingAngle = 270;
-        }
-
-        bearing = (calculator.getBearing(current.getMarks().get(0).getCoordinate(), middle) + 90) % 360;
-        Coordinate start = calculator.toCoordinate(middle, (bearing + turingAngle) % 360, 20);
-        Coordinate end = calculator.toCoordinate(start, (bearing + 180) % 360, 50);
-        XYPair startPixel = pixelMapper.mapToPane(start);
-        XYPair endPixel = pixelMapper.mapToPane(end);
-
-        endPoints.add(startPixel);
-        endPoints.add(endPixel);
+        head.setLayoutX(calculateHeadX());
+        head.setLayoutY(calculateHeadY());
+        head.getTransforms().add(new Rotate(getHeadingAtFinish(), 0, 0));
     }
 
 
     /**
      * Create the size (shape) of the arrow head.
      */
-    private void makeHeadShape() {
-        double pixelLength = current.getMarks().get(0).getLength();
+    private Shape makeHeadShape() {
+        double pixelLength = markRounding.getCompoundMark().getMarks().get(0).getLength() * pixelMapper.mappingRatio() * 0.2;
 
         Double[] headShape = new Double[]{
-                0.0, -pixelLength * 0.45,
-                -pixelLength * 0.45, pixelLength * 0.45,
-                pixelLength * 0.45, pixelLength * 0.45,
-                0.0, -pixelLength * 0.45
+                0.0, 0.0,
+                pixelLength, 0.0,
+                0.0, -pixelLength * 3,
+                -pixelLength, 0.0
         };
 
-        arrowHead.getPoints().clear();
-        arrowHead.getPoints().addAll(headShape);
+        Polygon polygon = new Polygon();
+        polygon.getPoints().addAll(headShape);
+        polygon.setFill(COLOR);
+        polygon.setStrokeWidth(0);
+        return polygon;
     }
 
 
-    /**
-     * Create the body (line) of the arrow.
-     */
-    private void makeLine() {
-        arrowLine = new Line(
-                endPoints.get(0).getX(), endPoints.get(0).getY(),
-                endPoints.get(1).getX(), endPoints.get(1).getY());
-        arrowLine.setFill(javafx.scene.paint.Color.WHITE);
-        arrowLine.setStyle("-fx-stroke: green");
-        arrowLine.setStrokeWidth(2);
+    private Arc makeTail() {
+        XYPair center = pixelMapper.mapToPane(markRounding.getCompoundMark().getMarks().get(0).getCoordinate());
+        final double radius = markRounding.getCompoundMark().getMarks().get(0).getLength() * 2 * pixelMapper.mappingRatio();
+
+        Arc tail = new Arc(center.getX(), center.getY(), radius, radius, 90, 135);
+        tail.setType(ArcType.OPEN);
+        tail.setStroke(COLOR);
+        tail.setStrokeWidth(2);
+        tail.setFill(Color.TRANSPARENT);
+        return tail;
     }
 
 
@@ -111,8 +85,8 @@ public class DisplayRoundingArrow {
      * @param group arrow to be added on
      */
     public void addToGroup(Group group) {
-        group.getChildren().add(arrowHead);
-        group.getChildren().add(arrowLine);
+        group.getChildren().add(head);
+        group.getChildren().add(tail);
     }
 
 
@@ -122,30 +96,22 @@ public class DisplayRoundingArrow {
      * @param group arrow to be removed from
      */
     public void removeFromGroup(Group group) {
-        group.getChildren().remove(arrowHead);
-        group.getChildren().remove(arrowLine);
+        group.getChildren().remove(head);
+        group.getChildren().remove(tail);
     }
 
 
-    /**
-     * Set the position of the arrow in the race.
-     */
-    private void setPosition() {
-        arrowLine.setStartX(endPoints.get(0).getX());
-        arrowLine.setStartY(endPoints.get(0).getY());
-        arrowLine.setEndX(endPoints.get(1).getX());
-        arrowLine.setEndY(endPoints.get(1).getY());
+    private double calculateHeadX() {
+        return tail.getCenterX() + tail.getRadiusX() * Math.cos(Math.toRadians(tail.getStartAngle() + tail.getLength()));
+    }
 
-        arrowHead.setStyle("-fx-stroke: green");
-        arrowHead.setFill(Color.GREEN);
-        if (current.getName().equals("Start Line")) {
-            arrowHead.setLayoutX(endPoints.get(1).getX());
-            arrowHead.setLayoutY(endPoints.get(1).getY());
-            arrowHead.setRotate((bearing + 180) % 360);
-        } else {
-            arrowHead.setLayoutX(endPoints.get(0).getX());
-            arrowHead.setLayoutY(endPoints.get(0).getY());
-            arrowHead.setRotate(bearing);
-        }
+
+    private double calculateHeadY() {
+        return tail.getCenterY() - tail.getRadiusY() * Math.sin(Math.toRadians(tail.getStartAngle() + tail.getLength()));
+    }
+
+
+    private double getHeadingAtFinish() {
+        return (tail.getStartAngle() + tail.getLength() + ((tail.getLength() < 0) ? 90 : -90) + 360) % 360;
     }
 }

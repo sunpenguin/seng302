@@ -2,7 +2,6 @@ package seng302.team18.visualiser.display.render;
 
 import javafx.scene.Group;
 import seng302.team18.model.BoatStatus;
-import seng302.team18.model.CompoundMark;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.DisplayRoundingArrow;
 import seng302.team18.visualiser.util.PixelMapper;
@@ -32,8 +31,7 @@ public class VisualRoundingArrow implements Renderable {
                 .filter(boat -> boat.getId() == race.getPlayerId())
                 .filter(boat -> !boat.getStatus().equals(BoatStatus.FINISHED))
                 .forEach(boat -> {
-                    CompoundMark current = race.getCourse().getMarkRounding(boat.getLegNumber()).getCompoundMark();
-                    arrow = new DisplayRoundingArrow(current, pixelMapper);
+                    arrow = new DisplayRoundingArrow(pixelMapper, race.getCourse().getMarkRounding(boat.getLegNumber()));
                     arrow.addToGroup(group);
                 });
     }
