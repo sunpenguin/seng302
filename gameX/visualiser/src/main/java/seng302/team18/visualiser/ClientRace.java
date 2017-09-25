@@ -21,7 +21,7 @@ public class ClientRace {
     private List<Boat> startingList;
     private ZonedDateTime startTime = ZonedDateTime.now();
     private ZonedDateTime currentTime;
-    private Integer playerId;
+    private int playerId = -1;
     private RaceMode mode = RaceMode.RACE;
     private List<Projectile> projectiles = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public class ClientRace {
             }
         }
         for (Boat boat : this.startingList) {
-            boat.setControlled(playerId != null && playerId.equals(boat.getId()));
+            boat.setControlled(playerId == boat.getId());
         }
     }
 
