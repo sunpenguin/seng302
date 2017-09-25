@@ -43,7 +43,6 @@ public class DisplayBoat implements GeographicLocation {
     private final Rotate rotation = new Rotate(0, 0, 0);
 
     private Text annotation;
-    private Long estimatedTime = 0L;
     private final static int DECIMAL_PLACES = 1; // for speed annotation
     private Map<AnnotationType, Boolean> visibleAnnotations;
     private final static int ANNOTATION_OFFSET_X = 10;
@@ -125,11 +124,6 @@ public class DisplayBoat implements GeographicLocation {
     }
 
 
-    public void setEstimatedTime(Long estimatedTime) {
-        this.estimatedTime = estimatedTime;
-    }
-
-
     public void addToGroup(Group group) {
         group.getChildren().add(boatPoly);
         group.getChildren().add(annotation);
@@ -188,11 +182,6 @@ public class DisplayBoat implements GeographicLocation {
 
     public Color getColor() {
         return boatColor;
-    }
-
-
-    public void setTimeSinceLastMark(Long timeSinceLastMark) {
-        this.timeSinceLastMark = timeSinceLastMark;
     }
 
 

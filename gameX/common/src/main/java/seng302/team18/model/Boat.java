@@ -31,6 +31,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private ZonedDateTime powerDurationEnd;
     private PowerUp updater = new BoatUpdater();
     private int lives;
+    private IntegerProperty livesIntegerProperty = new SimpleIntegerProperty();
     private boolean hasCollided = false;
 
     /**
@@ -53,6 +54,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         status = BoatStatus.UNDEFINED;
         setWeight(10);
         lives = 3;
+        livesIntegerProperty.setValue(lives);
     }
 
 
@@ -281,6 +283,12 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      */
     public void loseLife() {
         lives -= 1;
+        livesIntegerProperty.setValue(lives);
+    }
+
+
+    public IntegerProperty livesIntegerProperty() {
+        return livesIntegerProperty;
     }
 
     public int getLives(){

@@ -80,7 +80,7 @@ public class RaceController implements Observer {
     @FXML
     private TableColumn<Boat, String> boatColorColumn;
     @FXML
-    private TableColumn<Boat, String> boatStatusColumn;
+    private TableColumn<Boat, Integer> boatStatusColumn;
     @FXML
     private Pane raceViewPane;
     @FXML
@@ -417,17 +417,16 @@ public class RaceController implements Observer {
      * Sets the cell values for the race table, these are place, boat name and boat speed.
      */
     private void setUpTable() {
-        Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
-                boat.placeProperty(), boat.speedProperty()
-        };
-        ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
-        observableList.addAll(race.getStartingList());
-
-        SortedList<Boat> sortedList = new SortedList<>(observableList, Comparator.comparingInt(Boat::getPlace));
-        tableView.setItems(sortedList);
+        setTableData();
         boatPositionColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         boatNameColumn.setCellValueFactory(new PropertyValueFactory<>("shortName"));
-        boatStatusColumn.setCellValueFactory(new PropertyValueFactory<>("statusString"));
+
+        if (race.getMode() == RaceMode.BUMPER_BOATS) {
+            bumperBoatTabMenu();
+        } else {
+            boatStatusColumn.setCellValueFactory(new PropertyValueFactory<>("statusString"));
+        }
+
 
         boatSpeedColumn.setCellValueFactory(new PropertyValueFactory<>("speed"));
         boatSpeedColumn.setCellFactory(col -> new TableCell<Boat, Double>() {
@@ -483,6 +482,66 @@ public class RaceController implements Observer {
                     this.suspended = true;
                     tableView.getColumns().setAll(columns);
                     this.suspended = false;
+                }
+            }
+        });
+    }
+
+
+    /**
+     * Sets the table data of the table depending on the mode.
+     */
+    private void setTableData() {
+        if (race.getMode() == RaceMode.BUMPER_BOATS) {
+            Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
+                    boat.livesIntegerProperty()
+            };
+            ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
+            observableList.addAll(race.getStartingList());
+
+            SortedList<Boat> sortedList = new SortedList<>(observableList, Comparator.comparingInt(Boat::getLives).reversed());
+            tableView.setItems(sortedList);
+        } else {
+            Callback<Boat, Observable[]> callback = (Boat boat) -> new Observable[]{
+                    boat.placeProperty(), boat.speedProperty()
+            };
+            ObservableList<Boat> observableList = FXCollections.observableArrayList(callback);
+            observableList.addAll(race.getStartingList());
+
+            SortedList<Boat> sortedList = new SortedList<>(observableList, Comparator.comparingInt(Boat::getPlace));
+            tableView.setItems(sortedList);
+        }
+    }
+
+
+    /**
+     * Alters tab menu for Bumper Boats.
+     */
+    private void bumperBoatTabMenu() {
+        boatPositionColumn.setCellFactory(col -> new TableCell<Boat, Integer>() {
+            @Override
+            public void updateItem(Integer position, boolean empty) {
+                super.updateItem(position, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText("N/A");
+                }
+            }
+        });
+
+        boatStatusColumn.setText("Lives");
+        boatStatusColumn.setCellValueFactory(new PropertyValueFactory<>("livesInteger"));
+        boatStatusColumn.setCellFactory(col -> new TableCell<Boat, Integer>() {
+            @Override
+            public void updateItem(Integer lives, boolean empty) {
+                super.updateItem(lives, empty);
+                if (empty) {
+                    setText(null);
+                } else if (lives == 1) {
+                    setText(lives + " life");
+                } else {
+                    setText(lives + " lives");
                 }
             }
         });
@@ -596,6 +655,9 @@ public class RaceController implements Observer {
     }
 
 
+    /**
+     * Set the layout of the tab view to the middle-center of the race view pane.
+     */
     private void redrawTabView() {
         currentRankingsLabel.setLayoutX(tabView.getPrefWidth() / 2 - currentRankingsLabel.getPrefWidth() / 2);
         tabView.setLayoutX((raceViewPane.getWidth() / 2) - tabView.getPrefWidth() / 2);
