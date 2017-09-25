@@ -2,17 +2,22 @@ package seng302.team18.racemodel.connection;
 
 import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
-import seng302.team18.message.*;
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
+import seng302.team18.model.Race;
 import seng302.team18.parse.MessageParserFactory;
 import seng302.team18.parse.Receiver;
-import seng302.team18.model.Race;
+import seng302.team18.racemodel.generate.AcceptanceMessageGenerator;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 import seng302.team18.racemodel.interpret.ColourInterpreter;
-import seng302.team18.racemodel.generate.AcceptanceMessageGenerator;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -58,7 +63,7 @@ public class ConnectionListener extends Observable implements Observer {
                     e.printStackTrace();
                 }
             });
-        } else if (ServerState.CLOSED.equals(arg)) {
+        } else if (!ServerState.OPEN.equals(arg)) {
             close();
             setChanged();
             notifyObservers(arg);

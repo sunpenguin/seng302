@@ -63,9 +63,9 @@ public class TestMock implements Observer {
         if (arg instanceof ClientConnection) {
             handleClient((ClientConnection) arg);
         } else if (arg instanceof ServerState) {
-            open = !ServerState.CLOSED.equals(arg);
-            race.setStatus(RaceStatus.FINISHED);
-            open = false;
+            if (ServerState.EMPTY.equals(arg) || ServerState.CLOSED.equals(arg)) {
+                open = false;
+            }
         } else if (arg instanceof Integer) {
             Integer id = (Integer) arg;
             race.setBoatStatus(id, BoatStatus.DNF);
@@ -287,10 +287,10 @@ public class TestMock implements Observer {
                 }
             } while (!race.isFinished() && open);
 
-            sendFinalMessages();
-            if (server.getState() == ServerState.OPEN) {
-                server.close();
+            if (server.getState().equals(ServerState.OPEN)) {
+                sendFinalMessages();
             }
+            server.close();
         }
     }
 }

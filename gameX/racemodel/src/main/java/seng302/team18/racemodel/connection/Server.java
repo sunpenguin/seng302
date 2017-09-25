@@ -21,7 +21,6 @@ public class Server extends Observable {
 
     private ServerSocket serverSocket;
     private final int port;
-    private boolean closeOnEmpty;
     private ServerState state;
 
     public Server(int port) {
@@ -94,10 +93,8 @@ public class Server extends Observable {
         }
 
         state = ServerState.CLOSED;
-
         setChanged();
         notifyObservers(state);
-//        System.out.println("Server::closed");
     }
 
 
@@ -123,11 +120,13 @@ public class Server extends Observable {
                     setChanged();
                     notifyObservers(id);
                 });
+                executor.shutdown();
             }
         }
 
         removeClients(toRemove);
-        if (clients.isEmpty() && closeOnEmpty) {
+
+        if (clients.isEmpty()) {
             close();
         }
 
@@ -161,17 +160,6 @@ public class Server extends Observable {
     }
 
 
-
-    /**
-     * Closes the server if there are no clients.
-     *
-     * @param close if there are no clients.
-     */
-    public void setCloseOnEmpty(boolean close) {
-        closeOnEmpty = close;
-    }
-
-
     /**
      * Thread that listens for incoming connections.
      */
@@ -201,11 +189,6 @@ public class Server extends Observable {
     }
 
 
-    /**
-     * Gets the state of the server
-     *
-     * @return Open or closed
-     */
     public ServerState getState() {
         return state;
     }

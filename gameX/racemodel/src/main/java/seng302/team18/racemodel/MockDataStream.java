@@ -42,7 +42,6 @@ public class MockDataStream {
         ConnectionListener listener = new ConnectionListener(race, PARTICIPANTS_BUILDER.getIdPool(), new AC35MessageParserFactory());
         TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool());
 
-        server.setCloseOnEmpty(true);
         server.addObserver(listener);
         listener.addObserver(testMock);
         server.open();
