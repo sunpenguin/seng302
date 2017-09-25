@@ -94,8 +94,6 @@ public class CourseRenderer implements Renderable {
                 renderBoundary(border, course.getLimits().get(0));
                 group.getChildren().add(border);
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("course limit = " + course.getLimits());
-                System.out.println("course limit size = " + course.getLimits().size());
                 e.printStackTrace();
             }
         }

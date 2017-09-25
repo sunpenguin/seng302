@@ -385,7 +385,7 @@ public class RaceController implements Observer {
             EventMenuController eventMenuController = loader.getController();
             eventMenuController.setup(group, interpreter, sender, soundPlayer);
         } catch (IOException e) {
-            //pass
+            e.printStackTrace();
         }
     }
 
@@ -668,7 +668,6 @@ public class RaceController implements Observer {
         YachtEventInterpreter yachtEventInterpreter = new YachtEventInterpreter(race);
         yachtEventInterpreter.addCallback(YachtEventCode.ACTIVATED_SPEED_BOOST, isPlayerBoost -> soundPlayer.playEffect(SoundEffect.ACTIVATE_SPEED_BOOST));
         interpreter.add(AC35MessageType.YACHT_EVENT.getCode(), yachtEventInterpreter);
-        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(clock));
         RaceStatusInterpreter raceStatusInterpreter = new RaceStatusInterpreter(race);
         raceStatusInterpreter.addCallback(RaceStatus.FINISHED, aBoolean -> Platform.runLater(this::showFinishersList));
@@ -760,13 +759,33 @@ public class RaceController implements Observer {
         boats.sort(Comparator.comparing(Boat::getLives));
         boats = Lists.reverse(boats);
         StringBuilder result = new StringBuilder();
+        Boat winner = findWinner(boats);
 
         for (Boat b : boats) {
-            String state = b.getLives() > 0 ? "WINNER" : "DEAD";
+            String state = b.equals(winner) ? "WINNER" : "DEAD";
             result.append(b.getShortName()).append(" ").append(state).append("\n");
         }
 
         return result.toString();
+    }
+
+
+    /**
+     * Find the boat that has the maximum number of lives in all players' boats.
+     *
+     * @param boats list of participanting boats.
+     * @return a boat has the maximum number of lives
+     */
+    private Boat findWinner(List<Boat> boats) {
+        Boat winner = boats.get(0);
+
+        for (Boat boat : boats) {
+            if (boat.getLives() > winner.getLives()) {
+                winner = boat;
+            }
+        }
+
+        return winner;
     }
 
 
