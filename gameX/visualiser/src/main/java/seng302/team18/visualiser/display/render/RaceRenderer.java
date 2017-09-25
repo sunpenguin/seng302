@@ -24,11 +24,9 @@ public class RaceRenderer implements Renderable {
     private Map<String, DisplayBoat> displayBoats = new HashMap<>();
     private Map<String, DisplayTrail> trailMap = new HashMap<>();
     private Map<Integer, DisplayShark> sharksMap = new HashMap<>();
-    private Map<Integer, DisplayRoundingArrow> arrowMap = new HashMap<>();
     private PixelMapper pixelMapper;
     private boolean hasTrails;
     private final SoundEffectPlayer soundPlayer;
-    private DisplayRoundingArrow arrow;
 
 
     /**
@@ -73,38 +71,9 @@ public class RaceRenderer implements Renderable {
     public void render() {
         drawBoats();
         renderShark();
-        if (race.getMode() == RaceMode.ARCADE || race.getMode() == RaceMode.RACE) {
-            drawArrow(); // draw rounding arrow for a boat's current next mark
-        }
+
         if (hasTrails) {
             drawTrails();
-        }
-    }
-
-
-    /**
-     * Draw the rounding arrow that tells each boat how to round the most current next mark/gate.
-     */
-    private void drawArrow() {
-        removeArrow();
-
-        for (Boat boat: race.getStartingList()) {
-            if (boat.getStatus() != BoatStatus.FINISHED) {
-                CompoundMark current = race.getCourse().getMarkRounding(boat.getLegNumber()).getCompoundMark();
-                arrow = new DisplayRoundingArrow(current, pixelMapper);
-                arrowMap.put(boat.getLegNumber(), arrow);
-                arrow.addToGroup(group);
-            }
-        }
-    }
-
-
-    /**
-     * Remove the previous rounding arrow once the boat has already passed it.
-     */
-    private void removeArrow() {
-        if (arrowMap.containsValue(arrow)) {
-            arrow.removeFromGroup(group);
         }
     }
 
