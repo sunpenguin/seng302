@@ -155,6 +155,11 @@ public class DisplayRoundingArrow {
 
 
     private double getHeadingAtFinish(Arc tail) {
-        return (tail.getStartAngle() + tail.getLength() + 270) % 360;
+        double arcDegrees = tail.getStartAngle() + tail.getLength();
+        double screenAngle = (720 - arcDegrees) % 360;
+        if (tail.getLength() < 0) {
+            screenAngle = (screenAngle + 180) % 360;
+        }
+        return screenAngle;
     }
 }
