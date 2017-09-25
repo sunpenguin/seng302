@@ -7,17 +7,17 @@ import org.junit.Assert;
 import seng302.team18.message.BoatActionMessage;
 import seng302.team18.message.RequestMessage;
 import seng302.team18.message.RequestType;
-import seng302.team18.messageparsing.AC35MessageParserFactory;
-import seng302.team18.model.Boat;
-import seng302.team18.model.Race;
+import seng302.team18.model.*;
+import seng302.team18.parse.AC35MessageParserFactory;
 import seng302.team18.racemodel.connection.ConnectionListener;
 import seng302.team18.racemodel.connection.Server;
-import seng302.team18.send.ControllerMessageFactory;
-import seng302.team18.send.Sender;
+import seng302.team18.encode.ControllerMessageFactory;
+import seng302.team18.encode.Sender;
 
 import javax.net.SocketFactory;
 import java.net.Socket;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * Cucumber step definitions for receiving BoatActionMessage.
@@ -43,14 +43,30 @@ public class ReceiveBoatActionStepDefinition {
         Race race = new Race();
         race.getCourse().setWindDirection(windDirection);
         race.getCourse().setWindSpeed(windSpeed);
+        race.setPositionSetter(new StartPositionSetter() {
+            @Override
+            public void setBoatPositions(List<Boat> boats, Course course) {
+
+            }
+
+            @Override
+            public Coordinate getBoatPosition(Boat boat, Course course, int numBoats) {
+                return new Coordinate(0, 0);
+            }
+
+            @Override
+            public double getBoatHeading(Coordinate boatCoord, Course course) {
+                return oldHeading;
+            }
+        });
         boat = new Boat("name", "short name", boatId, 10);
-        boat.setHeading(oldHeading);
         race.addParticipant(boat);
+        boat.setHeading(oldHeading);
 
         listener = new ConnectionListener(race, Collections.singletonList(boatId), new AC35MessageParserFactory());
 
         server.addObserver(listener);
-        server.openServer();
+        server.open();
         sender.send(new RequestMessage(RequestType.RACING));
         server.stopAcceptingConnections();
     }

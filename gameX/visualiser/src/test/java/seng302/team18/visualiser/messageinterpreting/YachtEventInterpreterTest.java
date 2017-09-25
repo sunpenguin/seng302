@@ -7,6 +7,7 @@ import seng302.team18.message.AC35YachtEventMessage;
 import seng302.team18.model.Boat;
 import seng302.team18.model.YachtEventCode;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.interpret.americascup.YachtEventInterpreter;
 
 import java.util.Arrays;
 

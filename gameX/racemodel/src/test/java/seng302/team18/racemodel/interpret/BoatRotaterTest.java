@@ -1,6 +1,5 @@
 package seng302.team18.racemodel.interpret;
 
-import cucumber.api.java.cs.A;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +31,7 @@ public class BoatRotaterTest {
     @Test
     public void setVMGPassTest() {
         double expectedHeading = 43.0d;
-        double expectedSpeed = 10.0d;
+        double expectedSpeed = 12.35d;
         rotater.setVMG(windDirection, windSpeed, deadZone);
         Assert.assertEquals(expectedHeading, boat.getHeading(), 0.1);
         Assert.assertEquals(expectedSpeed, boat.getSpeed(), 0.1);

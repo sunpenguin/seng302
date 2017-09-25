@@ -36,13 +36,14 @@ public class ProjectileCreation {
 
         race = new Race();
         List<Updater> updaters = new ArrayList<>();
-        updaters.add(new BoatUpdater());
+        updaters.add(new BoatsUpdater());
         updaters.add(new ProjectileUpdater());
         updaters.add(new ProjectileHitUpdater());
         updaters.add(new OutOfBoundsUpdater());
         race.setUpdaters(updaters);
         Course course = new Course(getCompoundMarks(), boundaries, getRoundings());
         race.setCourse(course);
+        race.setPositionSetter(new StartLineSetter(5));
     }
 
     @Given("^two boats$")

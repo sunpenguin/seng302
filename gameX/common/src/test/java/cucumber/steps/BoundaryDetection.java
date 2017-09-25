@@ -5,7 +5,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 import seng302.team18.model.*;
-import seng302.team18.model.updaters.BoatUpdater;
+import seng302.team18.model.updaters.BoatsUpdater;
 import seng302.team18.model.updaters.OutOfBoundsUpdater;
 import seng302.team18.model.updaters.Updater;
 
@@ -35,11 +35,12 @@ public class BoundaryDetection {
 
         race = new Race();
         List<Updater> updaters = new ArrayList<>();
-        updaters.add(new BoatUpdater());
+        updaters.add(new BoatsUpdater());
         updaters.add(new OutOfBoundsUpdater());
         race.setUpdaters(updaters);
         Course course = new Course(getCompoundMarks(), boundaries, getRoundings());
         race.setCourse(course);
+        race.setPositionSetter(new StartLineSetter(5));
     }
 
     @Given("^a boat inside the courses bounds$")

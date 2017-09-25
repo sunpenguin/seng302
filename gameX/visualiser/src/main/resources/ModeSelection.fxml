@@ -2,9 +2,9 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <Pane fx:id="outerPane" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: #327D91;"
       stylesheets="@stylesheets/titleScreen.css" xmlns="http://javafx.com/javafx/8.0.60"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.GameSelectionController">
@@ -15,8 +15,8 @@
             <Pane fx:id="optionsBox" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0"
                   prefWidth="300.0"/>
             <Label maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                   onMouseClicked="#backButtonAction" prefHeight="45.0" prefWidth="300.0" styleClass="backButtonImage"
-                   stylesheets="@stylesheets/gameSelection.css"/>
+                   onMouseClicked="#backButtonAction" onMouseEntered="#buttonEnteredAction" prefHeight="45.0"
+                   prefWidth="300.0" styleClass="backButtonImage" stylesheets="@stylesheets/gameSelection.css"/>
          </children>
          <padding>
             <Insets top="5.0"/>
@@ -31,9 +31,10 @@
       </Label>
       <StackPane fx:id="boatView" layoutX="34.0" layoutY="177.0" styleClass="boatFrame"
                  stylesheets="@stylesheets/gameSelection.css"/>
-      <Label fx:id="arrowLeft" layoutX="54.0" layoutY="359.0" onMouseClicked="#leftButtonAction" styleClass="leftImage"
-             stylesheets="@stylesheets/gameSelection.css"/>
+      <Label fx:id="arrowLeft" layoutX="54.0" layoutY="359.0" onMouseClicked="#leftButtonAction"
+             onMouseEntered="#buttonEnteredAction" styleClass="leftImage" stylesheets="@stylesheets/gameSelection.css"/>
       <Label fx:id="arrowRight" layoutX="54.0" layoutY="359.0" onMouseClicked="#rightButtonAction"
-             styleClass="rightImage" stylesheets="@stylesheets/gameSelection.css"/>
+             onMouseEntered="#buttonEnteredAction" styleClass="rightImage"
+             stylesheets="@stylesheets/gameSelection.css"/>
    </children>
 </Pane>

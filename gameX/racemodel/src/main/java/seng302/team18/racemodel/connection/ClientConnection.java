@@ -2,7 +2,10 @@ package seng302.team18.racemodel.connection;
 
 import seng302.team18.message.RequestType;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 /**
@@ -20,7 +23,7 @@ public class ClientConnection {
 
     public ClientConnection(Socket socket) throws IOException {
         this.socket = socket;
-        out = new DataOutputStream(this.socket.getOutputStream());
+        out = socket.getOutputStream();
         in = socket.getInputStream();
         if (!in.markSupported()) {
             in = new BufferedInputStream(in);
@@ -30,20 +33,20 @@ public class ClientConnection {
 
     /**
      * Send a message to a socket.
-     * Returns false on failure to send the message. (Socket closed by remote)
+     * Returns false on failure to encode the message. (Socket closed by remote)
      *
-     * @param message the message to send.
+     * @param message the message to encode.
      * @return if the message was sent.
      */
-    public boolean sendMessage(byte[] message) {
+    public boolean send(byte[] message) {
         try {
             out.write(message);
             out.flush();
             return true;
-        } catch (IOException e) {
-//            e.printStackTrace();
+        } catch (Exception e) {
             return false;
         }
+
     }
 
 
@@ -52,6 +55,11 @@ public class ClientConnection {
     }
 
 
+    /**
+     * Closses the client connection
+     *
+     * @throws IOException
+     */
     public void close() throws IOException {
         in.close();
         out.close();
@@ -76,14 +84,6 @@ public class ClientConnection {
      */
     public boolean isClosed() {
         return socket.isClosed();
-//        try {
-//            in.mark(1);
-//            boolean isClosed = in.read() == -1;
-//            in.reset();
-//            return isClosed;
-//        } catch (IOException e) {
-//            return true;
-//        }
     }
 
 

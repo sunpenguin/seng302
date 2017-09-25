@@ -11,6 +11,7 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.Course;
 import seng302.team18.model.RaceStatus;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -73,9 +74,9 @@ public class XMLBoatInterpreterTest {
         Assert.assertEquals(0d, expected.getWindDirection(), 0.01);
         Assert.assertEquals(expected.getTimeZone(), actual.getTimeZone());
         Assert.assertEquals(expected.getCenter(), actual.getCenter());
-        Assert.assertEquals(expected.getCourseLimits().size(), actual.getCourseLimits().size());
-        for (int i = 0; i < expected.getCourseLimits().size(); i++) {
-            Assert.assertEquals(expected.getCourseLimits().get(i), actual.getCourseLimits().get(i));
+        Assert.assertEquals(expected.getLimits().size(), actual.getLimits().size());
+        for (int i = 0; i < expected.getLimits().size(); i++) {
+            Assert.assertEquals(expected.getLimits().get(i), actual.getLimits().get(i));
         }
         Assert.assertEquals(expected.getCompoundMarks().size(), actual.getCompoundMarks().size());
         for (int i = 0; i < expected.getCompoundMarks().size(); i++) {

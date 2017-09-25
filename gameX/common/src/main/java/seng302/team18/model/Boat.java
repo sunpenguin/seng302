@@ -15,7 +15,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private DoubleProperty speed;
     //Set to -1 initially to prevent null pointer problems
     private IntegerProperty legNumber = new SimpleIntegerProperty(0);
-    private double heading;
+    private double heading = 0;
     private Coordinate previousCoordinate;
     private IntegerProperty place;
     private Long timeTilNextMark;
@@ -29,7 +29,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private PowerUp powerUp;// = new SpeedPowerUp(this);
     private boolean isPowerActive = false; //Changed for merging into dev branch
     private ZonedDateTime powerDurationEnd;
-    private PowerUp updater = new BoatPowerUpUpdater();
+    private PowerUp updater = new BoatUpdater();
     private int lives;
     private boolean hasCollided = false;
 
@@ -111,6 +111,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         return legNumber.get();
     }
 
+
     public IntegerProperty legNumberProperty() {
         return legNumber;
     }
@@ -181,7 +182,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * Sets the sails
      * True = sails out = luffing
      * False = sails in = powered up
-     * @param sailOut status of sailing out
+     * @param sailOut true if the sail is out.
      */
     public void setSailOut(boolean sailOut) {
         this.sailOut = sailOut;
@@ -298,10 +299,9 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * Sets heading so that VMG towards up wind is maximum and updates the speed.
      * <p>
      * Pre-condition: boat is heading towards from 0 to 180 degree.
-reated by hqi19 on 21/09/17.
      *
-     * @param windSpeed     double, speed of the wind in knots
-     * @param windDirection double, direction of the wind (degrees)
+     * @param windSpeed     speed of the wind in knots
+     * @param windDirection direction of the wind (degrees)
      */
     public void optimalUpWind(double windSpeed, double windDirection) {
         double left = 270;
@@ -309,12 +309,12 @@ reated by hqi19 on 21/09/17.
         double windRelativeHeading = (heading - windDirection + 360) % 360;
         if (windRelativeHeading <= right) {
             double optimalAngle = (polar.upWindAngle(windSpeed) + windDirection) % 360;
-            double optimalSpeed = polar.upWindSpeed(windSpeed);
+            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
         } else if (windRelativeHeading >= left) {
             double optimalAngle = (360 - polar.upWindAngle(windSpeed) + windDirection) % 360;
-            double optimalSpeed = polar.upWindSpeed(windSpeed);
+            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
         }
@@ -326,8 +326,8 @@ reated by hqi19 on 21/09/17.
      * <p>
      * Pre-condition: boat is heading towards from 90 to 270 degree.
      *
-     * @param windSpeed     double, speed of the wind in knots
-     * @param windDirection double, direction of the wind (degrees)
+     * @param windSpeed     speed of the wind in knots
+     * @param windDirection direction of the wind (degrees)
      */
     public void optimalDownWind(double windSpeed, double windDirection) {
         double right = 90;
@@ -336,12 +336,12 @@ reated by hqi19 on 21/09/17.
         double windRelativeHeading = (heading - windDirection + 360) % 360;
         if (windRelativeHeading >= right && windRelativeHeading <= bottom) {
             double optimalAngle = (polar.downWindAngle(windSpeed) + windDirection) % 360;
-            double optimalSpeed = polar.downWindSpeed(windSpeed);
+            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
         } else if (windRelativeHeading >= bottom && windRelativeHeading <= left) {
             double optimalAngle = (360 - polar.downWindAngle(windSpeed) + windDirection) % 360;
-            double optimalSpeed = polar.downWindSpeed(windSpeed);
+            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setHeading(optimalAngle);
             setSpeed(optimalSpeed);
         }

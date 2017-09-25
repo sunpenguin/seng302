@@ -1,27 +1,24 @@
 package seng302.team18.racemodel;
 
 
-import seng302.team18.message.RequestType;
-
 import seng302.team18.message.AC35MessageType;
-import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.RequestType;
 import seng302.team18.model.*;
-import seng302.team18.racemodel.ac35_xml_encoding.XmlMessageBuilder;
+import seng302.team18.racemodel.builder.course.*;
+import seng302.team18.racemodel.builder.race.*;
+import seng302.team18.racemodel.builder.regatta.AbstractRegattaBuilder;
+import seng302.team18.racemodel.builder.regatta.RegattaBuilder1;
 import seng302.team18.racemodel.connection.ClientConnection;
 import seng302.team18.racemodel.connection.Server;
 import seng302.team18.racemodel.connection.ServerState;
-import seng302.team18.racemodel.message_generating.*;
-import seng302.team18.racemodel.model.*;
+import seng302.team18.racemodel.encode.XmlMessageBuilder;
+import seng302.team18.racemodel.generate.*;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.*;
 
 /**
  * Class to handle a mock race
@@ -66,7 +63,9 @@ public class TestMock implements Observer {
         if (arg instanceof ClientConnection) {
             handleClient((ClientConnection) arg);
         } else if (arg instanceof ServerState) {
-            open = !ServerState.CLOSED.equals(arg);
+            if (ServerState.EMPTY.equals(arg) || ServerState.CLOSED.equals(arg)) {
+                open = false;
+            }
         } else if (arg instanceof Integer) {
             Integer id = (Integer) arg;
             race.setBoatStatus(id, BoatStatus.DNF);
@@ -82,18 +81,29 @@ public class TestMock implements Observer {
             executor.submit(simulationLoop);
             executor.shutdown();
             isFirstPlayer = false;
+        } else if (client.getRequestType() == RequestType.CONTROLS_TUTORIAL) {
+            byte[] message = new AcceptanceMessageGenerator(client.getId(), RequestType.FAILURE_CLIENT_TYPE).getMessage();
+            client.send(message);
+            try {
+                client.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        if (client.isPlayer()) {
-            Boat boat = boats.get(race.getStartingList().size());
-            race.addParticipant(boat);
-            scheduledMessages.add(new BoatMessageGenerator(boat));
-            client.setId(boats.get(race.getStartingList().size()).getId());
-        }
+        if (!client.isClosed()) {
+            if (client.isPlayer()) {
+                Boat boat = boats.get(race.getStartingList().size());
+                race.addParticipant(boat);
+                race.setCourseForBoats();
+                scheduledMessages.add(new BoatMessageGenerator(boat));
+                client.setId(boats.get(race.getStartingList().size()).getId());
+            }
 
-        generateXMLs();
-        sendRegattaXml(client);
-        sendRaceXml();
-        sendBoatsXml();
+            generateXMLs();
+            sendRegattaXml(client);
+            sendRaceXml();
+            sendBoatsXml();
+        }
     }
 
 
@@ -161,23 +171,12 @@ public class TestMock implements Observer {
     /**
      * Send the regatta XML file to a new client.
      *
-     * @param newPlayer ClientConnection used to send message through.
+     * @param newPlayer ClientConnection used to encode message through.
      */
     private void sendRegattaXml(ClientConnection newPlayer) {
-        newPlayer.sendMessage(generatorXmlRegatta.getMessage());
+        newPlayer.send(generatorXmlRegatta.getMessage());
     }
 
-
-    /**
-     * Run the race.
-     * Updates the position of boats
-     *
-     * @param timeCurr The current time (milliseconds)
-     * @param timeLast The time (milliseconds) from the previous loop in runSimulation.
-     */
-    private void runRace(long timeCurr, long timeLast) {
-        race.update((timeCurr - timeLast));
-    }
 
 
     /**
@@ -262,13 +261,13 @@ public class TestMock implements Observer {
                     generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
                     sendRaceXml();
                 }
-
                 timeLast = timeCurr;
                 timeCurr = System.currentTimeMillis();
 
                 race.setCurrentTime(ZonedDateTime.now());
 
-                runRace(timeCurr, timeLast);
+                race.update((timeCurr - timeLast));
+
 
                 if (firstTime && race.getStatus().equals(RaceStatus.PREPARATORY)) {
                     generateXMLs();
@@ -279,6 +278,8 @@ public class TestMock implements Observer {
 
                 updateClients(timeCurr);
 
+//                System.out.println("TestMock SimulationLoop::run");
+
                 // Sleep
                 try {
                     Thread.sleep(1000 / LOOP_FREQUENCY);
@@ -287,7 +288,9 @@ public class TestMock implements Observer {
                 }
             } while (!race.isFinished() && open);
 
-            sendFinalMessages();
+            if (server.getState().equals(ServerState.OPEN)) {
+                sendFinalMessages();
+            }
             server.close();
         }
     }
