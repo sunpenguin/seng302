@@ -2,9 +2,11 @@ package seng302.team18.racemodel.connection;
 
 import seng302.team18.message.RequestType;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 
 /**
  * Holds a connection to a socket.
@@ -53,6 +55,11 @@ public class ClientConnection {
     }
 
 
+    /**
+     * Closses the client connection
+     *
+     * @throws IOException
+     */
     public void close() throws IOException {
         in.close();
         out.close();
@@ -77,14 +84,6 @@ public class ClientConnection {
      */
     public boolean isClosed() {
         return socket.isClosed();
-//        try {
-//            in.mark(1);
-//            boolean isClosed = in.read() == -1;
-//            in.reset();
-//            return isClosed;
-//        } catch (IOException e) {
-//            return true;
-//        }
     }
 
 

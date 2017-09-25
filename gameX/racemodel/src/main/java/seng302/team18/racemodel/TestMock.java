@@ -63,7 +63,9 @@ public class TestMock implements Observer {
         if (arg instanceof ClientConnection) {
             handleClient((ClientConnection) arg);
         } else if (arg instanceof ServerState) {
-            open = !ServerState.CLOSED.equals(arg);
+            if (ServerState.EMPTY.equals(arg) || ServerState.CLOSED.equals(arg)) {
+                open = false;
+            }
         } else if (arg instanceof Integer) {
             Integer id = (Integer) arg;
             race.setBoatStatus(id, BoatStatus.DNF);
@@ -92,6 +94,7 @@ public class TestMock implements Observer {
             if (client.isPlayer()) {
                 Boat boat = boats.get(race.getStartingList().size());
                 race.addParticipant(boat);
+                race.setCourseForBoats();
                 scheduledMessages.add(new BoatMessageGenerator(boat));
                 client.setId(boats.get(race.getStartingList().size()).getId());
             }
@@ -174,17 +177,6 @@ public class TestMock implements Observer {
         newPlayer.send(generatorXmlRegatta.getMessage());
     }
 
-
-    /**
-     * Run the race.
-     * Updates the position of boats
-     *
-     * @param timeCurr The current time (milliseconds)
-     * @param timeLast The time (milliseconds) from the previous loop in runSimulation.
-     */
-    private void runRace(long timeCurr, long timeLast) {
-        race.update((timeCurr - timeLast));
-    }
 
 
     /**
@@ -269,13 +261,13 @@ public class TestMock implements Observer {
                     generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
                     sendRaceXml();
                 }
-
                 timeLast = timeCurr;
                 timeCurr = System.currentTimeMillis();
 
                 race.setCurrentTime(ZonedDateTime.now());
 
-                runRace(timeCurr, timeLast);
+                race.update((timeCurr - timeLast));
+
 
                 if (firstTime && race.getStatus().equals(RaceStatus.PREPARATORY)) {
                     generateXMLs();
@@ -286,6 +278,8 @@ public class TestMock implements Observer {
 
                 updateClients(timeCurr);
 
+//                System.out.println("TestMock SimulationLoop::run");
+
                 // Sleep
                 try {
                     Thread.sleep(1000 / LOOP_FREQUENCY);
@@ -294,7 +288,9 @@ public class TestMock implements Observer {
                 }
             } while (!race.isFinished() && open);
 
-            sendFinalMessages();
+            if (server.getState().equals(ServerState.OPEN)) {
+                sendFinalMessages();
+            }
             server.close();
         }
     }

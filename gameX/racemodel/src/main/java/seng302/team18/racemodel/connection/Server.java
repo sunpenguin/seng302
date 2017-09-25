@@ -2,9 +2,12 @@ package seng302.team18.racemodel.connection;
 
 import javax.net.ServerSocketFactory;
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
-import java.util.concurrent.Executor;
+import java.net.ServerSocket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,7 +21,7 @@ public class Server extends Observable {
 
     private ServerSocket serverSocket;
     private final int port;
-    private boolean closeOnEmpty;
+    private ServerState state;
 
     public Server(int port) {
         this.port = port;
@@ -36,11 +39,12 @@ public class Server extends Observable {
      * Opens the server.
      * Blocks waiting for the first client connection, then opens a second thread to listen for subsequent connections
      */
-    public void openServer() {
+    public void open() {
         System.out.println("Stream opened successfully on port: " + port);
 
         acceptClientConnection();
         listener.start();
+        state = ServerState.OPEN;
     }
 
 
@@ -74,6 +78,7 @@ public class Server extends Observable {
      * (Blocking)
      */
     public void close() {
+//        System.out.println("Server::close");
         stopAcceptingConnections();
         for (ClientConnection client : clients) {
             try {
@@ -87,8 +92,9 @@ public class Server extends Observable {
             e.printStackTrace();
         }
 
+        state = ServerState.CLOSED;
         setChanged();
-        notifyObservers(ServerState.CLOSED);
+        notifyObservers(state);
     }
 
 
@@ -114,11 +120,13 @@ public class Server extends Observable {
                     setChanged();
                     notifyObservers(id);
                 });
+                executor.shutdown();
             }
         }
 
         removeClients(toRemove);
-        if (clients.isEmpty() && closeOnEmpty) {
+
+        if (clients.isEmpty()) {
             close();
         }
 
@@ -152,17 +160,6 @@ public class Server extends Observable {
     }
 
 
-
-    /**
-     * Closes the server if there are no clients.
-     *
-     * @param close if there are no clients.
-     */
-    public void setCloseOnEmpty(boolean close) {
-        closeOnEmpty = close;
-    }
-
-
     /**
      * Thread that listens for incoming connections.
      */
@@ -189,5 +186,10 @@ public class Server extends Observable {
         public void stopListening() {
             listening = false;
         }
+    }
+
+
+    public ServerState getState() {
+        return state;
     }
 }
