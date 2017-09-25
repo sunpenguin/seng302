@@ -1,10 +1,7 @@
 package seng302.team18.racemodel;
 
-import seng302.team18.parse.AC35MessageParserFactory;
 import seng302.team18.model.Race;
-import seng302.team18.racemodel.encode.BoatXmlDefaults;
-import seng302.team18.racemodel.encode.RaceXmlDefaults;
-import seng302.team18.racemodel.encode.XmlMessageBuilder;
+import seng302.team18.parse.AC35MessageParserFactory;
 import seng302.team18.racemodel.builder.course.AbstractCourseBuilder;
 import seng302.team18.racemodel.builder.course.CourseBuilderRealistic;
 import seng302.team18.racemodel.builder.participants.AbstractParticipantsBuilder;
@@ -15,6 +12,9 @@ import seng302.team18.racemodel.builder.regatta.AbstractRegattaBuilder;
 import seng302.team18.racemodel.builder.regatta.RegattaBuilderRealistic;
 import seng302.team18.racemodel.connection.ConnectionListener;
 import seng302.team18.racemodel.connection.Server;
+import seng302.team18.racemodel.encode.BoatXmlDefaults;
+import seng302.team18.racemodel.encode.RaceXmlDefaults;
+import seng302.team18.racemodel.encode.XmlMessageBuilder;
 
 
 /**
@@ -42,7 +42,6 @@ public class MockDataStream {
         ConnectionListener listener = new ConnectionListener(race, PARTICIPANTS_BUILDER.getIdPool(), new AC35MessageParserFactory());
         TestMock testMock = new TestMock(server, XML_MESSAGE_BUILDER, race, PARTICIPANTS_BUILDER.getParticipantPool());
 
-        server.setCloseOnEmpty(true);
         server.addObserver(listener);
         listener.addObserver(testMock);
         server.open();
@@ -68,6 +67,7 @@ public class MockDataStream {
         Runtime.getRuntime().addShutdownHook(new Thread(MockDataStream::logProcessTermination));
 
         runMock(serverPort);
+
     }
 
 
