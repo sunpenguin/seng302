@@ -33,9 +33,11 @@
 }
 
 .table-row-cell{
-    -fx-background-color: lightblue;
+    -fx-background-color: deepskyblue;
+    -fx-border-color: #00d8ff;
 }
 
 .table-row-cell:odd{
-    -fx-background-color: #85C1E9;
+    -fx-background-color: deepskyblue;
+    -fx-border-color: #00d8ff;
 }
