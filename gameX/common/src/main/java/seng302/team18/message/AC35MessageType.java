@@ -82,4 +82,12 @@ public enum AC35MessageType {
         }
         return codeMap;
     }
+
+
+    @Override
+    public String toString() {
+        return "AC35MessageType{" +
+                "code=" + code +
+                '}';
+    }
 }

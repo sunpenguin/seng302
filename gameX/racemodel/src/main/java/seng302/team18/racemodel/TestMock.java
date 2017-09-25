@@ -14,6 +14,7 @@ import seng302.team18.racemodel.connection.ServerState;
 import seng302.team18.racemodel.encode.XmlMessageBuilder;
 import seng302.team18.racemodel.generate.*;
 
+import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -80,19 +81,29 @@ public class TestMock implements Observer {
             executor.submit(simulationLoop);
             executor.shutdown();
             isFirstPlayer = false;
+        } else if (client.getRequestType() == RequestType.CONTROLS_TUTORIAL) {
+            byte[] message = new AcceptanceMessageGenerator(client.getId(), RequestType.FAILURE_CLIENT_TYPE).getMessage();
+            client.send(message);
+            try {
+                client.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        if (client.isPlayer()) {
-            Boat boat = boats.get(race.getStartingList().size());
-            race.addParticipant(boat);
-            race.setCourseForBoats();
-            scheduledMessages.add(new BoatMessageGenerator(boat));
-            client.setId(boats.get(race.getStartingList().size()).getId());
-        }
+        if (!client.isClosed()) {
+            if (client.isPlayer()) {
+                Boat boat = boats.get(race.getStartingList().size());
+                race.addParticipant(boat);
+                race.setCourseForBoats();
+                scheduledMessages.add(new BoatMessageGenerator(boat));
+                client.setId(boats.get(race.getStartingList().size()).getId());
+            }
 
-        generateXMLs();
-        sendRegattaXml(client);
-        sendRaceXml();
-        sendBoatsXml();
+            generateXMLs();
+            sendRegattaXml(client);
+            sendRaceXml();
+            sendBoatsXml();
+        }
     }
 
 

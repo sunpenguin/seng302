@@ -86,6 +86,7 @@ public class EscapeMenuController {
      */
     private void closeConnection() {
         interpreter.close();
+        interpreter.closeReceiver();
         sender.close();
     }
 
