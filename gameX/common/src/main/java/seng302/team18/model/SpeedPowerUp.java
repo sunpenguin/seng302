@@ -7,7 +7,7 @@ import seng302.team18.message.PowerType;
  */
 public class SpeedPowerUp extends PowerUp {
 
-    private BoatPowerUpUpdater updater = new BoatPowerUpUpdater();
+    private BoatUpdater updater = new BoatUpdater();
     private double multiplier;
 
     public SpeedPowerUp(double multiplier) {

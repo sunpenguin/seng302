@@ -1,7 +1,6 @@
 package seng302.team18.model.updaters;
 
 import seng302.team18.model.*;
-import seng302.team18.util.GPSCalculator;
 
 /**
  * Class to check ing boats have rounded a mark

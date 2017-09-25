@@ -30,17 +30,13 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
     @Override
     protected List<Updater> getUpdaters() {
         List<Updater> updaters = new ArrayList<>();
-        updaters.add(new BoatUpdater());
+        updaters.add(new BoatsUpdater());
         updaters.add(new BoatCollisionUpdater());
         updaters.add(new BumperBoatHealthUpdater());
         updaters.add(new BumperCourseShrinker(new Coordinate(5.00150, 4.0005), 200, 34, 0.000005));
-
         if (statusUpdater == null) {
-//            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 1);
-            statusUpdater = new BumperStatusUpdater(ZonedDateTime.now(), 15, 1, 1);
-            updaters.add(statusUpdater);
+            statusUpdater = new BumperStatusUpdater(ZonedDateTime.now(), 2, 1, 1);
         }
-
         updaters.add(statusUpdater);
 
         return updaters;

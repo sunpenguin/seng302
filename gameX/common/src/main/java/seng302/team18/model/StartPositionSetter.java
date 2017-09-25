@@ -20,4 +20,14 @@ public interface StartPositionSetter {
      * @return the boat's starting position
      */
     Coordinate getBoatPosition(Boat boat, Course course, int numBoats);
+
+
+    /**
+     * Get the heading to point the boat in for the start of the race.
+     *
+     * @param boatCoord the coordinates of the boat
+    *  @param course the boat is on
+     * @return the boat's heading in degrees
+     */
+    double getBoatHeading(Coordinate boatCoord, Course course);
 }

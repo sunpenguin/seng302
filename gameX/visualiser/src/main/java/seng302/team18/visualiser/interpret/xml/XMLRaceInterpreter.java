@@ -6,8 +6,6 @@ import seng302.team18.message.MessageBody;
 import seng302.team18.model.Course;
 import seng302.team18.visualiser.ClientRace;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**

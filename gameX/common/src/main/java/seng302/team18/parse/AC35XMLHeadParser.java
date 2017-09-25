@@ -29,7 +29,6 @@ public class AC35XMLHeadParser implements MessageHeadParser {
 
     @Override
     public int headerSize() {
-        final int HEADER_SIZE = 14;
-        return HEADER_SIZE;
+        return 14;
     }
 }

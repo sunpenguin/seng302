@@ -8,9 +8,12 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
+import seng302.team18.visualiser.sound.SoundEffect;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 import java.io.IOException;
 
@@ -18,23 +21,21 @@ import java.io.IOException;
  * Controller for when the application first starts up
  */
 public class TitleScreenController {
-    @FXML
-    private Label errorText;
-    @FXML
-    private AnchorPane pane;
-    @FXML
-    private AnchorPane paneInner;
+    @FXML private Label errorText;
+    @FXML private AnchorPane pane;
+    @FXML private AnchorPane paneInner;
 
-    private ImageView controlsImageView;
-    private boolean controlsVisible = false;
+    private Pane helpMenuPane;
 
     private Stage stage;
+    private SoundEffectPlayer soundPlayer;
 
 
     public void initialize() {
         registerListeners();
         initialiseHostButton();
-        initialiseControlsButton();
+        initialiseHelpButton();
+        loadHelpMenu();
         initialiseQuitButton();
         initialiseTutorialButton();
         loadBoatAnimation();
@@ -59,6 +60,7 @@ public class TitleScreenController {
         }
         GameSelectionController controller = loader.getController();
         controller.setStage(stage);
+        controller.setSoundPlayer(soundPlayer);
         stage.setTitle("High Seas");
         pane.getScene().setRoot(root);
         stage.setMaximized(true);
@@ -97,7 +99,11 @@ public class TitleScreenController {
         Image hostButtonImage = new Image("/images/play_button.png");
         hostLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) hostButtonImage.getWidth(), 2)));
         hostLabel.setLayoutY((600 / 2) + 100);
-        hostLabel.setOnMouseClicked(event -> toPlayScreen());
+        hostLabel.setOnMouseClicked(event -> {
+            buttonClickedAction();
+            toPlayScreen();
+        });
+        hostLabel.setOnMouseEntered(event1 -> buttonEnteredAction());
     }
 
 
@@ -105,16 +111,50 @@ public class TitleScreenController {
      * Set up the button for viewing the controls
      * Image used will changed when hovered over as defined in the preRaceStyle css.
      */
-    private void initialiseControlsButton() {
+    private void initialiseHelpButton() {
         Label controlsLabel = new Label();
         controlsLabel.getStylesheets().add(this.getClass().getResource("/stylesheets/titleScreen.css").toExternalForm());
-        controlsLabel.getStyleClass().add("controlsImage");
+        controlsLabel.getStyleClass().add("helpImage");
         paneInner.getChildren().add(controlsLabel);
 
-        Image controlsButtonImage = new Image("/images/title_screen/view_controls_button.png");
+        Image controlsButtonImage = new Image("/images/title_screen/help_menu/help_button.png");
         controlsLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) controlsButtonImage.getWidth(), 2)));
         controlsLabel.setLayoutY((600 / 2) + 150);
-        controlsLabel.setOnMouseClicked(event -> toggleControlsView());
+        controlsLabel.setOnMouseClicked(event -> {
+            buttonClickedAction();
+            openHelpMenu();
+        });
+
+        controlsLabel.setOnMouseEntered(event1 -> buttonEnteredAction());
+
+    }
+
+
+    /**
+     * Load the associated FXML for the help menu into a Pane object.
+     */
+    private void loadHelpMenu() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("helpMenu.fxml"));
+            helpMenuPane = loader.load();
+            HelpMenuController controller = loader.getController();
+            controller.setup(paneInner);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Show the help menu on top of the title screen
+     */
+    private void openHelpMenu() {
+        if (!paneInner.getChildren().contains(helpMenuPane)) {
+            paneInner.getChildren().add(helpMenuPane);
+            helpMenuPane.toFront();
+            helpMenuPane.setLayoutX(0);
+            helpMenuPane.setLayoutY(-100);
+        }
     }
 
 
@@ -131,7 +171,11 @@ public class TitleScreenController {
         Image quitButtonImage = new Image("/images/title_screen/quit_button.png");
         quitLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) quitButtonImage.getWidth(), 2)));
         quitLabel.setLayoutY((600 / 2) + 250);
-        quitLabel.setOnMouseClicked(event -> System.exit(0));
+        quitLabel.setOnMouseClicked(event -> {
+            buttonClickedAction();
+            System.exit(0);
+        });
+        quitLabel.setOnMouseEntered(event1 -> buttonEnteredAction());
     }
 
 
@@ -148,18 +192,12 @@ public class TitleScreenController {
         Image tutorialImage = new Image("/images/title_screen/tutorial_button.gif");
         tutorialLabel.setLayoutX((600 / 2) - (Math.floorDiv((int) tutorialImage.getWidth(), 2)));
         tutorialLabel.setLayoutY((600 / 2) + 200);
-        tutorialLabel.setOnMouseClicked(event ->
-                new GameConnection(
-                        errorText.textProperty(),
-                        paneInner,
-                        RaceMode.CONTROLS_TUTORIAL,
-                        Color.RED
-                ).startGame(
-                        "127.0.0.1",
-                        "5010",
-                        true
-                )
-        );
+        tutorialLabel.setOnMouseClicked(event -> {
+            buttonClickedAction();
+            new GameConnection(errorText.textProperty(), paneInner, RaceMode.CONTROLS_TUTORIAL, Color.RED)
+                    .startGame("127.0.0.1", "5010", true);
+        });
+        tutorialLabel.setOnMouseEntered(event1 -> buttonEnteredAction());
     }
 
 
@@ -194,27 +232,35 @@ public class TitleScreenController {
     }
 
 
-    /**
-     * Toggle the controls layout image in and out of view.
-     * Image is placed in the middle of the pane, fit to the width.
-     */
-    private void toggleControlsView() {
-        if (controlsVisible) {
-            pane.getChildren().remove(controlsImageView);
-            controlsVisible = false;
-        } else {
-            Image controlsImage = new Image("images/keyboardLayout.png");
-            controlsImageView = new ImageView(controlsImage);
-            pane.getChildren().add(controlsImageView);
-            controlsImageView.setPreserveRatio(true);
-            controlsImageView.setFitWidth(paneInner.getWidth());
-            controlsImageView.setLayoutX((pane.getWidth() / 2) - (paneInner.getWidth() / 2));
-            controlsVisible = true;
-        }
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setSoundPlayer(SoundEffectPlayer player) {
+        this.soundPlayer = player;
+    }
+
+
+    /**
+     * Common actions for OnMouseEntered events of menu buttons.
+     * <p>
+     * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_ENTER SoundEffect#BUTTON_MOUSE_ENTER}
+     */
+    private void buttonEnteredAction() {
+        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
+    }
+
+
+    /**
+     * Common actions for OnMouseClicked events of menu buttons.
+     * <p>
+     * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_CLICK SoundEffect#BUTTON_MOUSE_CLICK}
+     */
+    private void buttonClickedAction() {
+        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
     }
 }
