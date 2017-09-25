@@ -6,6 +6,9 @@ import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AC35MessageType;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.interpret.americascup.BoatLocationInterpreter;
+import seng302.team18.visualiser.interpret.americascup.MarkRoundingInterpreter;
+import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
 
 /**
  * Test class for CompositeMessageInterpreter.

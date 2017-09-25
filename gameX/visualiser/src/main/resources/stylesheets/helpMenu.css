@@ -1,0 +1,55 @@
+@font-face {
+    src: url("/font/Munro.ttf");
+}
+
+.label {
+    -fx-font-size: 15pt;
+    -fx-font-family: "Munro";
+}
+
+.gameModeImage {
+    -fx-graphic: url('/images/title_screen/help_menu/gameModeHelp_alt.png');
+}
+
+.gameModeImage:hover {
+    -fx-graphic: url('/images/title_screen/help_menu/gameModeHelp.png');
+}
+
+.gameModeImage:selected {
+    -fx-graphic: url('/images/title_screen/help_menu/gameModeHelp.png');
+}
+
+
+.controlsImage {
+    -fx-graphic: url('/images/title_screen/help_menu/keyboardControlsHelp_alt.png');
+}
+
+.controlsImage:selected {
+-fx-graphic: url('/images/title_screen/help_menu/keyboardControlsHelp.png');
+}
+
+.controlsImage:hover {
+    -fx-graphic: url('/images/title_screen/help_menu/keyboardControlsHelp.png');
+}
+
+
+.crossImage {
+    -fx-graphic: url('/images/title_screen/help_menu/crosss.png');
+}
+
+.crossImage:hover {
+    -fx-graphic: url('/images/title_screen/help_menu/crosss_alt.png');
+}
+
+
+.mainPane {
+    -fx-background-color: aqua;
+    -fx-border-color: black;
+    -fx-border-width: 2px 4px 4px 4px;
+}
+
+.tabHBox {
+    -fx-background-color: aqua;
+    -fx-border-color: black;
+    -fx-border-width: 4px 4px 2px 4px;
+}

@@ -2,7 +2,7 @@ package seng302.team18.visualiser.interpret;
 
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.MessageBody;
-import seng302.team18.messageparsing.Receiver;
+import seng302.team18.parse.Receiver;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;

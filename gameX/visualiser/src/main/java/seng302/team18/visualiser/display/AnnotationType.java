@@ -11,7 +11,7 @@ public enum AnnotationType {
 
     private int code;
 
-    private AnnotationType(int code) {
+    AnnotationType(int code) {
         this.code = code;
     }
 

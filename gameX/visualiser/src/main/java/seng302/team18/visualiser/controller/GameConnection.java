@@ -6,11 +6,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import seng302.team18.messageparsing.AC35MessageParserFactory;
-import seng302.team18.messageparsing.Receiver;
+import seng302.team18.parse.AC35MessageParserFactory;
+import seng302.team18.parse.Receiver;
 import seng302.team18.model.RaceMode;
-import seng302.team18.send.ControllerMessageFactory;
-import seng302.team18.send.Sender;
+import seng302.team18.encode.ControllerMessageFactory;
+import seng302.team18.encode.Sender;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.util.ModelLoader;
 
