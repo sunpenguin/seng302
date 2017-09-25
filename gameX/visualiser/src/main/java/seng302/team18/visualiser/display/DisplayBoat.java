@@ -74,6 +74,7 @@ public class DisplayBoat implements GeographicLocation {
         setUpAnnotations();
     }
 
+
     private void setUpBoatShape(double mappingRatio) {
         double pixelLength = boatLength * mappingRatio / 2;
 
