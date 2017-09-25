@@ -13,6 +13,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
+import seng302.team18.visualiser.display.Sound;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
@@ -31,6 +32,7 @@ public class TitleScreenController {
     private AnchorPane pane;
     @FXML
     private AnchorPane paneInner;
+    private Sound sound = new Sound();
 
     private ImageView controlsImageView;
     private boolean controlsVisible = false;
@@ -46,15 +48,8 @@ public class TitleScreenController {
         initialiseTutorialButton();
         loadBoatAnimation();
 
-        try {
-            String song = "/Users/cslaven/Desktop/Uni/302/team-18/gameX/visualiser/src/main/resources/themetune.wav";
-            Media hit = new Media(new File(song).toURI().toString());
-            MediaPlayer mediaPlayer = new MediaPlayer(hit);
-            mediaPlayer.setCycleCount(mediaPlayer.INDEFINITE);
-            mediaPlayer.play();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Sound sound = new Sound();
+        sound.playTrack("/resources/themetune.wav");
 
         errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());
         errorText.setLayoutY((600 / 2) + 300);
