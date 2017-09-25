@@ -92,6 +92,7 @@ public class TestMock implements Observer {
             if (client.isPlayer()) {
                 Boat boat = boats.get(race.getStartingList().size());
                 race.addParticipant(boat);
+                race.setCourseForBoats();
                 scheduledMessages.add(new BoatMessageGenerator(boat));
                 client.setId(boats.get(race.getStartingList().size()).getId());
             }
@@ -175,17 +176,6 @@ public class TestMock implements Observer {
     }
 
 
-    /**
-     * Run the race.
-     * Updates the position of boats
-     *
-     * @param timeCurr The current time (milliseconds)
-     * @param timeLast The time (milliseconds) from the previous loop in runSimulation.
-     */
-    private void runRace(long timeCurr, long timeLast) {
-        race.update((timeCurr - timeLast));
-    }
-
 
     /**
      * Update the clients by sending any necessary new race info to them.
@@ -265,18 +255,17 @@ public class TestMock implements Observer {
             scheduledMessages.add(new HeartBeatMessageGenerator());
 
             do {
-//                System.out.println("TestMock SimulationLoop::run");
                 if (race.getStatus().equals(RaceStatus.STARTED)) {
                     generatorXmlRace = new XmlMessageGeneratorRace(xmlMessageBuilder.buildRaceXmlMessage(race));
                     sendRaceXml();
                 }
-
                 timeLast = timeCurr;
                 timeCurr = System.currentTimeMillis();
 
                 race.setCurrentTime(ZonedDateTime.now());
 
-                runRace(timeCurr, timeLast);
+                race.update((timeCurr - timeLast));
+
 
                 if (firstTime && race.getStatus().equals(RaceStatus.PREPARATORY)) {
                     generateXMLs();
@@ -286,6 +275,8 @@ public class TestMock implements Observer {
                 }
 
                 updateClients(timeCurr);
+
+//                System.out.println("TestMock SimulationLoop::run");
 
                 // Sleep
                 try {
@@ -297,7 +288,6 @@ public class TestMock implements Observer {
 
             sendFinalMessages();
             server.close();
-//            System.out.println("TestMock SimulationLoop::run finished");
         }
     }
 }

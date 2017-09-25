@@ -50,4 +50,10 @@ public class StartLineSetter implements StartPositionSetter {
         Coordinate behindMidPoint = calculator.toCoordinate(midPoint, behind, distance);
         return calculator.toCoordinate(behindMidPoint, bearing, (boat.getLength() * offset + 10));
     }
+
+
+    @Override
+    public double getBoatHeading(Coordinate boatCoord, Course course) {
+        return calculator.getBearing(boatCoord, course.getMarkRounding(0).getCoordinate());
+    }
 }

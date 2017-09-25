@@ -12,7 +12,8 @@ public enum YachtEventCode {
     CLEAR_BEHIND_START_AFTER_EARLY((byte) 0x04),
     OCS_PENALTY_COMPLETE((byte) 0x22),
     BOAT_IN_COLLISION(((byte) 0x21)),
-    BOAT_COLLIDE_WITH_MARK(((byte) 0x23));
+    BOAT_COLLIDE_WITH_MARK(((byte) 0x23)),
+    ACTIVATED_SPEED_BOOST((byte) 0x25);
 
     private final byte code;
 

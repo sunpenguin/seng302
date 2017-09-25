@@ -48,6 +48,7 @@ public enum AC35MessageType {
         this.code = code;
     }
 
+
     /**
      * Returns the AC35MessageType associated with a getCode. If none exists then it returns null.
      *
@@ -58,6 +59,7 @@ public enum AC35MessageType {
         return CODE_MAP.get(code);
     }
 
+
     /**
      * Getter for the getCode of the message type.
      *
@@ -66,6 +68,7 @@ public enum AC35MessageType {
     public int getCode() {
         return code;
     }
+
 
     /**
      * Creates a map between a code and its message type.

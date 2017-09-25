@@ -62,7 +62,6 @@ public class GPSCalculator {
      * @return the destination coordinate
      */
     public Coordinate toCoordinate(Coordinate initialCoord, double bearing, double distance) {
-
         double bR = Math.toRadians(bearing);
         double lat1R = Math.toRadians(initialCoord.getLatitude());
         double lon1R = Math.toRadians(initialCoord.getLongitude());
