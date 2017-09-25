@@ -30,6 +30,8 @@ public abstract class CollisionUpdater implements Updater {
 
                 if (race.getMode() == RaceMode.BUMPER_BOATS) {
                     totalPushBack = 100; // meters
+                } else if (race.getMode() == RaceMode.CHALLENGE_MODE) {
+                    totalPushBack = 15; // meters
                 } else {
                     totalPushBack = 25; // meters
                 }
