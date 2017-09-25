@@ -35,7 +35,7 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new BumperBoatHealthUpdater());
         updaters.add(new BumperCourseShrinker(new Coordinate(5.00150, 4.0005), 200, 34, 0.000005));
         if (statusUpdater == null) {
-            statusUpdater = new BumperStatusUpdater(ZonedDateTime.now(), 2, 1, 1);
+            statusUpdater = new BumperStatusUpdater(ZonedDateTime.now(), 10, 1, 1);
         }
         updaters.add(statusUpdater);
 
@@ -50,6 +50,6 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
 
     @Override
     protected StartPositionSetter getPositionSetter() {
-        return new CircularPositionSetter(100);
+        return new CircularPositionSetter(15);
     }
 }
