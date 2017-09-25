@@ -410,16 +410,36 @@ public class Race {
      * @param pickUp that was picked up
      */
     public void consumePowerUp(Boat boat, PickUp pickUp) {
-        boat.setPowerUp(pickUp.getPower());
-        List<PickUp> pickUps = course.getPickUps();
-        pickUps.remove(pickUp);
-        course.setPickUps(pickUps);
-        powerEvents.add(new PowerUpEvent(boat.getId(), pickUp));
+        int boatId = Integer.MAX_VALUE; // For if we want to consume a power up not related to a specific boat
+
+        if (boat != null) {
+            boatId = boat.getId();
+            boat.setPowerUp(pickUp.getPower());
+            List<PickUp> pickUps = course.getPickUps();
+            pickUps.remove(pickUp);
+            course.setPickUps(pickUps);
+        }
+
+        powerEvents.add(new PowerUpEvent(boatId, pickUp));
     }
 
 
-    public void removeOldPickUps() {
-        course.removeOldPickUps();
+    /**
+     * Removes any PickUps which are either outside the course limits or have expired.
+     */
+    public void removePickUps() {
+        List<PickUp> pickUps = course.getPickUps();
+        List<PickUp> remaining = new ArrayList<>();
+
+        for (PickUp pickUp: pickUps) {
+            if (!gps.isInside(pickUp.getLocation(), course.getLimits())) {
+                consumePowerUp(null, pickUp);
+            } else if (!pickUp.hasExpired()) {
+                remaining.add(pickUp);
+            }
+        }
+
+        course.setPickUps(remaining);
     }
 
 
