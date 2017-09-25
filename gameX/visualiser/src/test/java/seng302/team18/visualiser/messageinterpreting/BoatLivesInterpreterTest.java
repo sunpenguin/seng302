@@ -8,7 +8,7 @@ import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.Coordinate;
 import seng302.team18.visualiser.ClientRace;
-import seng302.team18.visualiser.interpret.BoatLivesInterpreter;
+import seng302.team18.visualiser.interpret.unique.BoatLivesInterpreter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,11 +35,12 @@ public class BoatLivesInterpreterTest {
         startingList = new ArrayList<>(Arrays.asList(boat1, boat2, boat3));
         race.setParticipantIds(Arrays.asList(420, 100, 077));
         race.setStartingList(startingList);
-        interpreter = new BoatLivesInterpreter(race);
+        interpreter = new BoatLivesInterpreter(race, (isPlayerLosingLife) -> {
+        });
     }
 
     @Test
-    public void interpreteBoatLivesTest1(){
+    public void interpreteBoatLivesTest1() {
         message = new AC35BoatLocationMessage(420, new Coordinate(20, 20), 100, 10, true, 3);
         interpreter.interpret(message);
         Boat boatToCheck = race.getStartingList().get(0);
@@ -47,7 +48,7 @@ public class BoatLivesInterpreterTest {
     }
 
     @Test
-    public void interpreteBoatLivesTest2(){
+    public void interpreteBoatLivesTest2() {
         message = new AC35BoatLocationMessage(100, new Coordinate(20, 20), 100, 10, true, 2);
         interpreter.interpret(message);
         Boat boatToCheck = race.getStartingList().get(1);
@@ -55,7 +56,7 @@ public class BoatLivesInterpreterTest {
     }
 
     @Test
-    public void interpreteBoatLivesTest3(){
+    public void interpreteBoatLivesTest3() {
         message = new AC35BoatLocationMessage(077, new Coordinate(20, 20), 100, 10, true, 0);
         interpreter.interpret(message);
         Boat boatToCheck = race.getStartingList().get(2);

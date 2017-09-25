@@ -2,17 +2,22 @@ package seng302.team18.racemodel.connection;
 
 import seng302.team18.interpret.CompositeMessageInterpreter;
 import seng302.team18.interpret.MessageInterpreter;
-import seng302.team18.message.*;
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
-import seng302.team18.messageparsing.MessageParserFactory;
-import seng302.team18.messageparsing.Receiver;
+import seng302.team18.message.RequestType;
 import seng302.team18.model.Race;
+import seng302.team18.parse.MessageParserFactory;
+import seng302.team18.parse.Receiver;
+import seng302.team18.racemodel.generate.AcceptanceMessageGenerator;
 import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 import seng302.team18.racemodel.interpret.ColourInterpreter;
-import seng302.team18.racemodel.message_generating.AcceptanceMessageGenerator;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,7 +26,7 @@ import java.util.concurrent.Executors;
  */
 public class ConnectionListener extends Observable implements Observer {
 
-    private List<PlayerControllerReader> players = new ArrayList<>();
+    private List<PlayerControlsReader> players = new ArrayList<>();
     private List<Integer> ids;
     private MessageParserFactory factory;
     private ExecutorService executor = Executors.newCachedThreadPool();
@@ -63,10 +68,7 @@ public class ConnectionListener extends Observable implements Observer {
             setChanged();
             notifyObservers(arg);
         } else if (arg instanceof Integer) {
-            PlayerControllerReader player = getPlayer((Integer) arg);
-            if (player != null) {
-                player.close();
-            }
+            removePlayer((Integer) arg);
             setChanged();
             notifyObservers(arg);
         }
@@ -74,9 +76,9 @@ public class ConnectionListener extends Observable implements Observer {
 
 
     /**
-     * If the registration is for a tutorial, update the race accordingly and the TestMock will send out the updated
+     * If the registration is for a tutorial, update the race accordingly and the TestMock will encode out the updated
      * XML files.
-     * When the registration is received, send the client their source ID.
+     * When the registration is received, encode the client their source ID.
      *
      * @param client Client who is connecting.
      */
@@ -130,12 +132,12 @@ public class ConnectionListener extends Observable implements Observer {
     /**
      * Sends a ResponseMessage to the player.
      *
-     * @param player the socket to send player messages to.
+     * @param player the socket to encode player messages to.
      * @param sourceID the assigned id of the player's boat.
      */
     private void sendMessage(ClientConnection player, int sourceID, RequestType requestType) {
         byte[] message = new AcceptanceMessageGenerator(sourceID, requestType).getMessage();
-        player.sendMessage(message);
+        player.send(message);
         player.setId(sourceID);
     }
 
@@ -152,17 +154,18 @@ public class ConnectionListener extends Observable implements Observer {
         interpreter.add(AC35MessageType.COLOUR.getCode(), new ColourInterpreter(race.getStartingList()));
         interpreter.add(AC35MessageType.BOAT_ACTION.getCode(), new BoatActionInterpreter(race, sourceID));
 
-        PlayerControllerReader player = new PlayerControllerReader(sourceID, receiver, interpreter);
+        PlayerControlsReader player = new PlayerControlsReader(sourceID, receiver, interpreter);
         players.add(player);
         executor.submit(player);
     }
 
 
     private void close() {
-        for (PlayerControllerReader player: players) {
+        for (PlayerControlsReader player: players) {
             player.close();
         }
         executor.shutdownNow();
+//        System.out.println("ConnectionListener::close");
     }
 
 
@@ -177,10 +180,12 @@ public class ConnectionListener extends Observable implements Observer {
     }
 
 
-    private PlayerControllerReader getPlayer(int id) {
-        for (PlayerControllerReader player : players) {
+    private PlayerControlsReader removePlayer(int id) {
+        for (int i = players.size() - 1; i >= 0; i--) {
+            PlayerControlsReader player = players.get(i);
             if (player.getId() == id) {
-                return player;
+                player.close();
+                players.remove(i);
             }
         }
         return null;

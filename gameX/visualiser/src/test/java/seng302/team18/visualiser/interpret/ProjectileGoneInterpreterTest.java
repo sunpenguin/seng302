@@ -6,11 +6,11 @@ import org.junit.Test;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.ProjectileCreationMessage;
 import seng302.team18.message.ProjectileGoneMessage;
-import seng302.team18.message.ProjectileLocationMessage;
 import seng302.team18.model.Coordinate;
 import seng302.team18.model.Projectile;
 import seng302.team18.model.TigerShark;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.interpret.unique.ProjectileGoneInterpreter;
 
 /**
  * Classs to test the projectile gone interpreter

@@ -13,7 +13,6 @@ public enum RaceMode {
     ARCADE(RequestType.ARCADE.getCode()),
     BUMPER_BOATS(RequestType.BUMPER_BOATS.getCode()),
     CHALLENGE_MODE(RequestType.CHALLENGE_MODE.getCode()),
-    RACE_TUTORIAL(7),
     START_TUTORIAL(8);
 
     private int code;

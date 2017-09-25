@@ -10,6 +10,7 @@ import seng302.team18.message.MessageBody;
 import seng302.team18.model.Boat;
 import seng302.team18.model.BoatStatus;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.interpret.americascup.EstimatedTimeInterpreter;
 
 import java.util.ArrayList;
 import java.util.Arrays;

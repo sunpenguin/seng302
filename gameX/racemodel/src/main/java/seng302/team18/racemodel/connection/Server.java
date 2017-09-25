@@ -2,8 +2,12 @@ package seng302.team18.racemodel.connection;
 
 import javax.net.ServerSocketFactory;
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
+import java.net.ServerSocket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,7 +39,7 @@ public class Server extends Observable {
      * Opens the server.
      * Blocks waiting for the first client connection, then opens a second thread to listen for subsequent connections
      */
-    public void openServer() {
+    public void open() {
         System.out.println("Stream opened successfully on port: " + port);
 
         acceptClientConnection();
@@ -58,8 +62,6 @@ public class Server extends Observable {
         } catch (SocketTimeoutException e) {
             // The time out expired, no big deal
         } catch(IOException e) {
-            setChanged();
-            notifyObservers(ServerState.CLOSED);
             close();
         }
     }
@@ -75,23 +77,23 @@ public class Server extends Observable {
      * (Blocking)
      */
     public void close() {
+//        System.out.println("Server::close");
         stopAcceptingConnections();
-        for (Iterator<ClientConnection> it = clients.iterator(); it.hasNext();) {
-            ClientConnection client = it.next();
+        for (ClientConnection client : clients) {
             try {
                 client.close();
-            } catch (IOException e) {
-//                e.printStackTrace();
-            }
-            it.remove();
+            } catch (IOException e) {}
         }
+        clients.clear();
         try {
             serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         setChanged();
         notifyObservers(ServerState.CLOSED);
+//        System.out.println("Server::closed");
     }
 
 
@@ -99,30 +101,62 @@ public class Server extends Observable {
      * Broadcasts a message to all connected clients
      *
      * @param message the message to broadcast
-     * @see ClientConnection#sendMessage(byte[])
+     * @see ClientConnection#send(byte[])
      */
     public void broadcast(byte[] message) {
         if (message.length == 1) { //Scheduled messages should return {0} if there is an error when constructing them
             return; // TODO move this out side of server
         }
+        List<Integer> toRemove = new ArrayList<>();
         for (int i = 0; i < clients.size(); i++) {
             ClientConnection client = clients.get(i);
             Integer id = client.getId();
-            if (!client.sendMessage(message) || client.isClosed()) {
-                clients.remove(i);
-                if (clients.isEmpty() && closeOnEmpty) {
-                    close();
-                } else {
-                    ExecutorService executor = Executors.newSingleThreadExecutor(); // TODO 14 Sept fix this SPE76 DHL25
-                    executor.submit(() -> {
-                        setChanged();
-                        notifyObservers(id);
-                    });
-                    executor.shutdown();
-                }
+
+            if (!client.send(message) || client.isClosed()) {
+                toRemove.add(i);
+                ExecutorService executor = Executors.newSingleThreadScheduledExecutor(); // For what ever reason the setChanged + notify takes forever
+                executor.submit(() -> {
+                    setChanged();
+                    notifyObservers(id);
+                });
             }
         }
+
+        removeClients(toRemove);
+        if (clients.isEmpty() && closeOnEmpty) {
+//            System.out.println("Server::broadcast close");
+            close();
+        }
+
     }
+
+
+    /**
+     * Removes all clients at the given indices
+     *
+     * @param indices of the clients to remove
+     */
+    private void removeClients(List<Integer> indices) {
+        for (int i = indices.size() - 1; i >= 0; i--) { // must be done in reverse order or else indices change once removed
+            removeClient(indices.get(i));
+        }
+    }
+
+
+    /**
+     * Removes a client at the given index.
+     *
+     * @param i index of the client to remove.
+     */
+    private void removeClient(int i) {
+        try {
+            clients.get(i).close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        clients.remove(i);
+    }
+
 
 
     /**
