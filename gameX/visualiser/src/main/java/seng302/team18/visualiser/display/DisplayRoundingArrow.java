@@ -12,6 +12,7 @@ import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -28,27 +29,35 @@ public class DisplayRoundingArrow {
     private final static double TAIL_WIDTH = 1.5;
     private final static double ARROW_SCALING_FACTOR = 0.80;
 
+    private final static Collection<MarkRounding.GateType> straightArrowedGates = Arrays.asList(
+            MarkRounding.GateType.THROUGH_GATE,
+            MarkRounding.GateType.ROUND_BOTH_MARKS
+    );
+
 
     public DisplayRoundingArrow(PixelMapper pixelMapper, MarkRounding markRounding) {
         this.pixelMapper = pixelMapper;
 
         if (markRounding.getCompoundMark().isGate()) {
-            drawGateArrows(markRounding);
+            if (straightArrowedGates.contains(markRounding.getGateType())) {
+                drawRoundGateArrows(markRounding, !markRounding.getGateType().isThroughFirst());
+            } else {
+                drawRoundGateArrows(markRounding, !markRounding.getGateType().isThroughFirst());
+            }
         } else {
             drawMarkArrow(markRounding);
         }
     }
 
 
-    private void drawGateArrows(MarkRounding rounding) {
+    private void drawRoundGateArrows(MarkRounding rounding, boolean isDirReversed) {
         XYPair mark1 = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(0).getCoordinate());
         XYPair mark2 = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(1).getCoordinate());
 
         double bearing1to2 = Math.atan2(mark2.getX() - mark1.getX(), mark2.getY() - mark1.getY()) - Math.PI / 2;
-        if (bearing1to2 < 0) {
-            bearing1to2 += Math.PI * 2;
-        }
+        if (bearing1to2 < 0) bearing1to2 += Math.PI * 2;
         bearing1to2 = Math.toDegrees(bearing1to2);
+        if (isDirReversed) bearing1to2 += 180;
         double bearing2to1 = (bearing1to2 + 180) % 360;
         boolean is1Clockwise = rounding.getRoundingDirection().equals(MarkRounding.Direction.SP);
 

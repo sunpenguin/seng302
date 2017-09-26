@@ -119,20 +119,27 @@ public class MarkRounding {
 
 
     public enum GateType {
-        THROUGH_THEN_ROUND("through gate on arrival, round gate on departure"),
-        THROUGH_GATE("straight through gate"),
-        ROUND_BOTH_MARKS("s-bend gate (round both marks)"),
-        ROUND_THEN_THROUGH("round gate on arrival, through gate on departure");
+        THROUGH_THEN_ROUND("through gate on arrival, round gate on departure", true),
+        THROUGH_GATE("straight through gate", true),
+        ROUND_BOTH_MARKS("s-bend gate (round both marks)", false),
+        ROUND_THEN_THROUGH("round gate on arrival, through gate on departure", false);
 
-        private String gateType;
+        private final String gateType;
+        private final boolean throughFirst;
 
-        GateType(String type) {
+        GateType(String type, boolean throughFirst) {
             gateType = type;
+            this.throughFirst = throughFirst;
         }
 
 
         public String getType() {
             return gateType;
+        }
+
+
+        public boolean isThroughFirst() {
+            return throughFirst;
         }
     }
 
