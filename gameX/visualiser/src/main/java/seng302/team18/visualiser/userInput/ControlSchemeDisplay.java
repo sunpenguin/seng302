@@ -1,11 +1,13 @@
 package seng302.team18.visualiser.userInput;
 
+import javafx.animation.TranslateTransition;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 
 
 /**
@@ -16,6 +18,7 @@ public class ControlSchemeDisplay {
     private ImageView imageView;
     private Image image;
     private boolean controlsVisible;
+    TranslateTransition transition;
 
 
     /**
@@ -41,6 +44,8 @@ public class ControlSchemeDisplay {
         imageView.setPreserveRatio(true);
         pane.getChildren().add(imageView);
         imageView.setVisible(false);
+        transition = new TranslateTransition(Duration.millis(150), imageView);
+        imageView.setLayoutY(-image.getHeight());
     }
 
 
@@ -51,6 +56,8 @@ public class ControlSchemeDisplay {
         imageView.setLayoutX((pane.getWidth() / 2) - (image.getWidth() / 2));
         imageView.setVisible(true);
         controlsVisible = true;
+        transition.setByY(image.getHeight());
+        transition.play();
     }
 
 
@@ -58,7 +65,8 @@ public class ControlSchemeDisplay {
      *  Hides the imageView holding the control scheme by removing it from the raceViewPane.
      */
     private void hideControlScheme() {
-        imageView.setVisible(false);
+        transition.setByY(-image.getHeight());
+        transition.play();
         controlsVisible = false;
     }
 
