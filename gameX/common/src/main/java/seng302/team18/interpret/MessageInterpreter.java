@@ -12,6 +12,7 @@ public abstract class MessageInterpreter extends Observable {
 
     /**
      * Abstract method for interpret MessageBody.
+     *
      * @param message to be interpreted
      */
     public abstract void interpret(MessageBody message);
@@ -19,6 +20,7 @@ public abstract class MessageInterpreter extends Observable {
 
     /**
      * Adds a MessageInterpreter to the MessageInterpreter unless it is not a composite MessageInterpreter.
+     *
      * @param type of message the MessageInterpreter (parameter) will listen to.
      * @param interpreter the MessageInterpreter to be added with the type of message.
      */
@@ -27,6 +29,7 @@ public abstract class MessageInterpreter extends Observable {
 
     /**
      * Removes a MessageInterpreter from the MessageInterpreter unless it is not a composite MessageInterpreter.
+     *
      * @param type of message the MessageInterpreter (parameter) was listening to.
      * @param interpreter the MessageInterpreter to be removed from the type of message.
      */

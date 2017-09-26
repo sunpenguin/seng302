@@ -13,8 +13,9 @@ public enum SoundEffect {
     PLAYER_DISQUALIFIED("audio/fail.wav"),
     LOSE_LIFE("audio/lose_life.wav"),
     RACE_START("audio/button_click.wav"), // TODO create sound effect
-    ACTIVATE_SPEED_BOOST("audio/button_click.wav") // TODO create sound effect
-    ;
+    ACTIVATE_SPEED_BOOST("audio/button_click.wav"), // TODO create sound effect
+    CROSS_FINISH_LINE("audio/button_click.wav"), // TODO create sound effect
+    PICK_UP_POWER_UP("audio/button_click.wav"); // TODO create sound effect
 
 
     private final String url;
