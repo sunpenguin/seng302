@@ -33,7 +33,12 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new BoatsUpdater());
         updaters.add(new BoatCollisionUpdater());
         updaters.add(new BumperBoatHealthUpdater());
-        updaters.add(new BumperCourseShrinker(new Coordinate(5.00150, 4.0005), 200, 34, 0.000005));
+        updaters.add(new BumperCourseShrinker(new Coordinate(5.00150, 4.0005), 200, 34, 0.0000025));
+        updaters.add(new PowerUpUpdater(makePickUp(), 4));
+        updaters.add(new ProjectileUpdater());
+        updaters.add(new BumperBoatsHitUpdater());
+        updaters.add(new ProjectileOutOfBoundsUpdater());
+
         if (statusUpdater == null) {
             statusUpdater = new BumperStatusUpdater(ZonedDateTime.now(), 2, 1, 1);
         }
@@ -51,5 +56,16 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
     @Override
     protected StartPositionSetter getPositionSetter() {
         return new CircularPositionSetter(100);
+    }
+
+
+    private PickUp makePickUp() {
+        BodyMass mass = new BodyMass();
+        mass.setRadius(12);
+        mass.setWeight(0);
+
+        PickUp pickUp = new PickUp(-1);
+        pickUp.setBodyMass(mass);
+        return pickUp;
     }
 }

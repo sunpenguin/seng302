@@ -1,12 +1,10 @@
 package cucumber.steps;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 import seng302.team18.model.*;
-import seng302.team18.model.updaters.PowerUpUpdater;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,7 +61,7 @@ public class PowerUpStepDefinition {
     @Then("^another power up will replace it\\.$")
     public void another_power_up_will_replace_it() throws Throwable {
         Course course = race.getCourse();
-        race.removeOldPickUps();
+        race.removePickUps();
         race.addPickUps(1, prototype, 10);
         Assert.assertEquals(course.getPickUp(1).getId(), 1);
     }

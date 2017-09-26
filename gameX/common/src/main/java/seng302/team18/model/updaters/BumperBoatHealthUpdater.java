@@ -27,10 +27,10 @@ public class BumperBoatHealthUpdater implements Updater {
                 boat.loseLife();
                 boat.setCoordinate(race.getCenter());
                 boat.setSailOut(true);
+            }
 
-                if (boat.getLives() < 1) {
-                    boat.setStatus(BoatStatus.DSQ);
-                }
+            if (boat.getLives() < 1) {
+                boat.setStatus(BoatStatus.DSQ);
             }
         }
     }

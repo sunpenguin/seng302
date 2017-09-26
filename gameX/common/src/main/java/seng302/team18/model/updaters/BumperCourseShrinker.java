@@ -42,7 +42,7 @@ public class BumperCourseShrinker implements Updater {
 
     @Override
     public void update(Race race, double time) {
-        if (!RaceStatus.STARTED.equals(race.getStatus())) {
+        if (!RaceStatus.STARTED.equals(race.getStatus()) || boundaryDistance < 0.1) {
             return;
         }
         timeSinceUpdate += time;

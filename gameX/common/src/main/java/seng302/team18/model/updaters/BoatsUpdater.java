@@ -14,7 +14,7 @@ public class BoatsUpdater implements Updater {
         for (Boat boat : race.getStartingList()) {
             boat.update(time);
             if (boat.isPowerActive() && boat.getPowerUp().getType().equals(PowerType.SHARK)) {
-                race.addProjectile(boat, boat.getPowerUp().getType());
+                race.addProjectile(boat);
                 boat.setPowerActive(false);
                 boat.setPowerUp(null);
             }
