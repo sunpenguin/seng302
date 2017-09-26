@@ -17,19 +17,21 @@ import java.util.Collection;
  */
 public class DisplayRoundingArrow {
 
-    private Collection<Shape> shapes = new ArrayList<>();
-    private PixelMapper pixelMapper;
-
-    private final static Color COLOR = Color.BLACK;
-    private final static int PERIOD_MILLIS = 3500;
-    private final static double MARK_ARROW_ARC_LENGTH = 120;
-    private final static double TAIL_WIDTH = 1.5;
-    private final static double ARROW_SCALING_FACTOR = 0.80;
-
-    private final static Collection<MarkRounding.GateType> straightArrowedGates = Arrays.asList(
+    private static final Color COLOR = Color.BLACK;
+    private static final int PERIOD_MILLIS = 2500;
+    private static final double MARK_ARROW_ARC_LENGTH = 120;
+    private static final double TAIL_WIDTH = 1.5;
+    private static final double ARROW_SCALING_FACTOR = 0.80;
+    private static final double STRAIGHT_ARROW_LENGTH = 2; // In boat lengths
+    private static final double STRAIGHT_ARROW_RADIUS = 1.0; // In boat lengths
+    private static final double CURVED_ARROW_RADIUS = 1.5; // In boat lengths
+    private static final Collection<MarkRounding.GateType> straightArrowedGates = Arrays.asList(
             MarkRounding.GateType.THROUGH_GATE,
             MarkRounding.GateType.ROUND_BOTH_MARKS
     );
+
+    private Collection<Shape> shapes = new ArrayList<>();
+    private PixelMapper pixelMapper;
 
 
     public DisplayRoundingArrow(PixelMapper pixelMapper, MarkRounding markRounding) {
@@ -58,10 +60,10 @@ public class DisplayRoundingArrow {
         double bearing2to1 = (bearing1to2 + 180) % 360;
         boolean is1Clockwise = rounding.getRoundingDirection().equals(MarkRounding.Direction.SP);
 
-        double size = rounding.getCompoundMark().getMarks().get(0).getLength();
+        double markSize = rounding.getCompoundMark().getMarks().get(0).getLength();
 
-        drawArcedArrow(mark1, size, bearing1to2, 180, is1Clockwise);
-        drawArcedArrow(mark2, size, bearing2to1, 180, !is1Clockwise);
+        drawArcedArrow(mark1, markSize, bearing1to2, 180, is1Clockwise);
+        drawArcedArrow(mark2, markSize, bearing2to1, 180, !is1Clockwise);
     }
 
 
@@ -72,19 +74,21 @@ public class DisplayRoundingArrow {
         double bearing1to2 = Math.atan2(mark2.getX() - mark1.getX(), mark2.getY() - mark1.getY()) - Math.PI / 2;
         if (bearing1to2 < 0) bearing1to2 += Math.PI * 2;
         bearing1to2 = Math.toDegrees(bearing1to2);
-//        if (isDirReversed) bearing1to2 += 180;
-        double bearing2to1 = (bearing1to2 + 180) % 360;
+        if (isDirReversed) bearing1to2 += 180;
         boolean is1Clockwise = rounding.getRoundingDirection().equals(MarkRounding.Direction.SP);
-
-        double length = rounding.getCompoundMark().getMarks().get(0).getLength();
-        double offset = 1.5 * length * pixelMapper.mappingRatio();
-
-        XYPair arrow1 = new XYPair(mark1.getX() + offset * Math.cos(bearing1to2), mark1.getY() + offset * Math.sin(bearing1to2));
         double arrowHeading = (bearing1to2 + (is1Clockwise ? 360 - 90 : 90)) % 360;
-        drawStraightArrow(arrow1, length * 3, arrowHeading);
 
-        arrow1 = new XYPair(mark2.getX() + offset * Math.cos(bearing2to1), mark2.getY() + offset * Math.sin(bearing2to1));
-        drawStraightArrow(arrow1, length * 3, arrowHeading);
+        double markSize = rounding.getCompoundMark().getMarks().get(0).getLength();
+        double offset = STRAIGHT_ARROW_RADIUS * markSize * pixelMapper.mappingRatio();
+        XYPair endPos;
+
+        endPos = polarToCartesian(mark1, offset, bearing1to2);
+        endPos = polarToCartesian(endPos, scaleValue(0, markSize * STRAIGHT_ARROW_LENGTH) / -2, arrowHeading);
+        drawStraightArrow(endPos, markSize, arrowHeading, is1Clockwise);
+
+        endPos = polarToCartesian(mark2, -offset, bearing1to2);
+        endPos = polarToCartesian(endPos, scaleValue(0, markSize * STRAIGHT_ARROW_LENGTH) / -2, arrowHeading);
+        drawStraightArrow(endPos, markSize, arrowHeading, is1Clockwise);
 
     }
 
@@ -94,8 +98,8 @@ public class DisplayRoundingArrow {
         double offset = MARK_ARROW_ARC_LENGTH / (isClockwise ? 2 : -2);
         double startAngle = (rounding.getPassAngle() - offset + 540) % 360;
         XYPair center = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(0).getCoordinate());
-        double size = rounding.getCompoundMark().getMarks().get(0).getLength();
-        drawArcedArrow(center, size, startAngle, offset * 2, isClockwise);
+        double markSize = rounding.getCompoundMark().getMarks().get(0).getLength();
+        drawArcedArrow(center, markSize, startAngle, offset * 2, isClockwise);
     }
 
 
@@ -103,7 +107,7 @@ public class DisplayRoundingArrow {
      * Create the rounding arrow.
      */
     private void drawArcedArrow(XYPair center, double size, double startAngle, double maxLength, boolean isClockwise) {
-        Arc tail = makeArcedTail(center, size * 1.5, startAngle, maxLength, isClockwise);
+        Arc tail = makeArcedTail(center, size * CURVED_ARROW_RADIUS, startAngle, maxLength, isClockwise);
         Shape head = makeHeadShape(size);
 
         shapes.add(tail);
@@ -115,27 +119,27 @@ public class DisplayRoundingArrow {
     }
 
 
-    private void drawStraightArrow(XYPair centre, double length, double heading) {
-        Path tail = new Path();
-        tail.getElements().add(new MoveTo(0, 0));
-        tail.getElements().add(new VLineTo(length));
-        tail.setLayoutX(centre.getX());
-        tail.setLayoutY(centre.getY());
-        tail.getTransforms().add(new Rotate(heading, 0, 0));
+    private void drawStraightArrow(XYPair endPos, double markSize, double heading, boolean is1Clockwise) {
+        double length = scaleValue(0, getLength(markSize * STRAIGHT_ARROW_LENGTH));
+        XYPair headPos = polarToCartesian(endPos, length, heading);
 
-        XYPair headPos = new XYPair(centre.getX() + length * Math.cos(heading), centre.getY() + length * Math.sin(heading));
-        Shape head = makeHeadShape(length);
+        Line tail = new Line(endPos.getX(), endPos.getY(), headPos.getX(), headPos.getY());
+        tail.setStroke(COLOR);
+        tail.setStrokeWidth(scaleValue(2, TAIL_WIDTH));
+
+        Shape head = makeHeadShape(markSize);
         head.setLayoutX(headPos.getX());
         head.setLayoutY(headPos.getY());
-        head.getTransforms().add(new Rotate(heading, 0, 0));
+        double headHeading = 90 - heading;
+        head.getTransforms().add(new Rotate(headHeading, 0, 0));
 
         shapes.add(tail);
         shapes.add(head);
     }
 
 
-    private Arc makeArcedTail(XYPair center, double size, double startAngle, double maxLength, boolean isClockwise) {
-        final double radius = size * pixelMapper.mappingRatio();
+    private Arc makeArcedTail(XYPair center, double radius, double startAngle, double maxLength, boolean isClockwise) {
+        radius *= pixelMapper.mappingRatio();
         maxLength *= (isClockwise ? -1 : 1);
 
         Arc tail = new Arc(center.getX(), center.getY(), radius, radius, startAngle, getLength(maxLength));
@@ -199,12 +203,12 @@ public class DisplayRoundingArrow {
 
 
     private double calculateHeadX(Arc tail) {
-        return tail.getCenterX() + tail.getRadiusX() * Math.cos(Math.toRadians(tail.getStartAngle() + tail.getLength()));
+        return polarX(tail.getCenterX(), tail.getRadiusX(), Math.toRadians(tail.getStartAngle() + tail.getLength()));
     }
 
 
     private double calculateHeadY(Arc tail) {
-        return tail.getCenterY() - tail.getRadiusY() * Math.sin(Math.toRadians(tail.getStartAngle() + tail.getLength()));
+        return polarY(tail.getCenterY(), tail.getRadiusY(), Math.toRadians(tail.getStartAngle() + tail.getLength()));
     }
 
 
@@ -216,4 +220,21 @@ public class DisplayRoundingArrow {
         }
         return screenAngle;
     }
+
+
+    private XYPair polarToCartesian(XYPair start, double radius, double angleDeg) {
+        double angleRad = Math.toRadians(angleDeg);
+        return new XYPair(polarX(start.getX(), radius, angleRad), polarY(start.getY(), radius, angleRad));
+    }
+
+
+    private double polarX(double x, double radius, double angleRad) {
+        return x + radius * Math.cos(angleRad);
+    }
+
+
+    private double polarY(double y, double radius, double angleRad) {
+        return y - radius * Math.sin(angleRad);
+    }
+
 }
