@@ -95,13 +95,16 @@
                            <effect>
                               <DropShadow />
                            </effect>
+                           <GridPane.margin>
+                              <Insets right="8.0" />
+                           </GridPane.margin>
                         </Label>
                         <Label styleClass="labelLarge" stylesheets="@stylesheets/helpMenu.css" text="Race Start Time:" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                            <font>
                               <Font size="24.0" />
                            </font>
                            <GridPane.margin>
-                              <Insets right="25.0" />
+                              <Insets right="10.0" />
                            </GridPane.margin>
                            <effect>
                               <DropShadow />
@@ -112,7 +115,7 @@
                               <Font size="24.0" />
                            </font>
                            <padding>
-                              <Insets right="25.0" />
+                              <Insets right="10.0" />
                            </padding>
                            <effect>
                               <DropShadow />
@@ -123,7 +126,7 @@
                               <Font size="18.0" />
                            </font>
                            <GridPane.margin>
-                              <Insets right="25.0" />
+                              <Insets right="10.0" />
                            </GridPane.margin>
                            <effect>
                               <DropShadow />
@@ -134,7 +137,7 @@
                               <Font size="18.0" />
                            </font>
                            <GridPane.margin>
-                              <Insets right="25.0" />
+                              <Insets right="10.0" />
                            </GridPane.margin>
                            <effect>
                               <DropShadow />
@@ -145,7 +148,7 @@
                               <Font size="18.0" />
                            </font>
                            <GridPane.margin>
-                              <Insets right="25.0" />
+                              <Insets right="10.0" />
                            </GridPane.margin>
                            <effect>
                               <DropShadow />
@@ -162,6 +165,9 @@
                <font>
                   <Font size="24.0" />
                </font>
+               <GridPane.margin>
+                  <Insets right="24.0" />
+               </GridPane.margin>
             </Label>
             <ListView fx:id="listView" styleClass="tabHBox" stylesheets="@stylesheets/helpMenu.css" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
          </children>

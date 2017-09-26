@@ -46,6 +46,14 @@ public class TitleScreenController {
 
         errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());
         errorText.setLayoutY((600 / 2) + 300);
+
+
+    }
+
+    public void setup(){
+        stage.setOnCloseRequest((event) -> {
+            System.exit(0);
+        });
     }
 
 
