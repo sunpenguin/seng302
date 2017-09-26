@@ -7,6 +7,18 @@
     -fx-font-family: "Munro";
 }
 
+.labelLarge {
+    -fx-font-family: "Munro";
+    -fx-font-size: 18pt;
+}
+
+
+
+.labelSmall{
+    -fx-font-family: "Munro";
+    -fx-font-size: 13pt;
+}
+
 .gameModeImage {
     -fx-graphic: url('/images/title_screen/help_menu/gameModeHelp_alt.png');
 }
