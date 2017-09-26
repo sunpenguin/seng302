@@ -25,14 +25,15 @@ public class PowerUpUpdater implements Updater {
     @Override
     public void update(Race race, double time) {
         race.removePickUps();
-        if (race.getStatus().equals(RaceStatus.STARTED)) {
-            addPowerUps(race);
-        }
-        shrinkPowerUps(race);
 
         for (Boat boat : race.getStartingList()) {
             powerUpStuff(race, boat);
         }
+
+        if (race.getStatus().equals(RaceStatus.STARTED)) {
+            addPowerUps(race);
+        }
+        shrinkPowerUps(race);
     }
 
 
