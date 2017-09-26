@@ -3,12 +3,10 @@ package seng302.team18.visualiser.sound;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Created by cslaven on 25/09/17.
+ * Class to handle playing th theme tune
  */
 public class ThemeTunePlayer {
 
@@ -16,11 +14,14 @@ public class ThemeTunePlayer {
     private static MediaPlayer mediaPlayer;
     private String path = "audio/theme.wav";
 
+
+    /**
+     * Method the play the track
+     */
     public void playTrack(){
         if (ThemeTunePlayer.playing){
             return;
-        }
-        else {
+        } else {
             URL resource = getClass().getClassLoader().getResource(path);
             String path = resource.toString();
             Media song = new Media(path);
@@ -33,16 +34,12 @@ public class ThemeTunePlayer {
         }
     }
 
+
+    /**
+     * Method to stop the track
+     */
     public static void stopTrack(){
         mediaPlayer.stop();
         playing = false;
-    }
-
-    public static boolean isPlaying() {
-        return playing;
-    }
-
-    public static void setPlaying(boolean playing) {
-        ThemeTunePlayer.playing = playing;
     }
 }
