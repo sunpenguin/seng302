@@ -2,11 +2,12 @@ package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
-import seng302.team18.model.AbstractBoat;
 import seng302.team18.model.MarkRounding;
-import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -21,10 +22,11 @@ public class DisplayRoundingArrow {
     private Collection<Shape> shapes = new ArrayList<>();
     private PixelMapper pixelMapper;
 
-    private final static GPSCalculator GPS_CALCULATOR = new GPSCalculator();
-    private final static Color COLOR = Color.GREEN;
-    private final static int PERIOD_MILLIS = 5000;
+    private final static Color COLOR = Color.BLACK;
+    private final static int PERIOD_MILLIS = 3500;
     private final static double MARK_ARROW_ARC_LENGTH = 120;
+    private final static double TAIL_WIDTH = 1.5;
+    private final static double ARROW_SCALING_FACTOR = 0.80;
 
 
     public DisplayRoundingArrow(PixelMapper pixelMapper, MarkRounding markRounding) {
@@ -39,24 +41,21 @@ public class DisplayRoundingArrow {
 
 
     private void drawGateArrows(MarkRounding rounding) {
-        double bearing1to2 = GPS_CALCULATOR.getBearing(
-                rounding.getCompoundMark().getMarks().get(0).getCoordinate(),
-                rounding.getCompoundMark().getMarks().get(1).getCoordinate()
-        );
+        XYPair mark1 = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(0).getCoordinate());
+        XYPair mark2 = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(1).getCoordinate());
+
+        double bearing1to2 = Math.atan2(mark2.getX() - mark1.getX(), mark2.getY() - mark1.getY()) - Math.PI / 2;
+        if (bearing1to2 < 0) {
+            bearing1to2 += Math.PI * 2;
+        }
+        bearing1to2 = Math.toDegrees(bearing1to2);
         double bearing2to1 = (bearing1to2 + 180) % 360;
-
         boolean is1Clockwise = rounding.getRoundingDirection().equals(MarkRounding.Direction.SP);
-        drawArcedArrow(rounding.getCompoundMark().getMarks().get(0), bearing1to2, 180, is1Clockwise);
-        drawArcedArrow(rounding.getCompoundMark().getMarks().get(1), bearing2to1, 180, !is1Clockwise);
 
-        Line line = new Line();
-        XYPair start = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(0).getCoordinate());
-        line.setStartX(start.getX());
-        line.setStartY(start.getY());
-        XYPair end = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(1).getCoordinate());
-        line.setEndX(end.getX());
-        line.setEndY(end.getY());
-        shapes.add(line);
+        double size = rounding.getCompoundMark().getMarks().get(0).getLength();
+
+        drawArcedArrow(mark1, size, bearing1to2, 180, is1Clockwise);
+        drawArcedArrow(mark2, size, bearing2to1, 180, !is1Clockwise);
     }
 
 
@@ -64,16 +63,18 @@ public class DisplayRoundingArrow {
         boolean isClockwise = rounding.getRoundingDirection().equals(MarkRounding.Direction.STARBOARD);
         double offset = MARK_ARROW_ARC_LENGTH / (isClockwise ? 2 : -2);
         double startAngle = (rounding.getPassAngle() - offset + 540) % 360;
-        drawArcedArrow(rounding.getCompoundMark().getMarks().get(0), startAngle, offset * 2, isClockwise);
+        XYPair center = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(0).getCoordinate());
+        double size = rounding.getCompoundMark().getMarks().get(0).getLength();
+        drawArcedArrow(center, size, startAngle, offset * 2, isClockwise);
     }
 
 
     /**
      * Create the rounding arrow.
      */
-    private void drawArcedArrow(AbstractBoat mark, double startAngle, double maxLength, boolean isClockwise) {
-        Arc tail = makeArcedTail(mark, startAngle, maxLength, isClockwise);
-        Shape head = makeHeadShape(mark);
+    private void drawArcedArrow(XYPair center, double size, double startAngle, double maxLength, boolean isClockwise) {
+        Arc tail = makeArcedTail(center, size * 1.5, startAngle, maxLength, isClockwise);
+        Shape head = makeHeadShape(size);
 
         shapes.add(tail);
         shapes.add(head);
@@ -84,15 +85,14 @@ public class DisplayRoundingArrow {
     }
 
 
-    private Arc makeArcedTail(AbstractBoat mark, double startAngle, double maxLength, boolean isClockwise) {
-        XYPair center = pixelMapper.mapToPane(mark.getCoordinate());
-        final double radius = mark.getLength() * 2 * pixelMapper.mappingRatio();
+    private Arc makeArcedTail(XYPair center, double size, double startAngle, double maxLength, boolean isClockwise) {
+        final double radius = size * pixelMapper.mappingRatio();
         maxLength *= (isClockwise ? -1 : 1);
 
         Arc tail = new Arc(center.getX(), center.getY(), radius, radius, startAngle, getLength(maxLength));
         tail.setType(ArcType.OPEN);
         tail.setStroke(COLOR);
-        tail.setStrokeWidth(2);
+        tail.setStrokeWidth(scaleValue(2, TAIL_WIDTH));
         tail.setFill(Color.TRANSPARENT);
         return tail;
     }
@@ -103,11 +103,16 @@ public class DisplayRoundingArrow {
     }
 
 
+    private double scaleValue(double min, double value) {
+        return Math.max(min, value * Math.pow(pixelMapper.mappingRatio(), ARROW_SCALING_FACTOR));
+    }
+
+
     /**
      * Create the size (shape) of the arrow head.
      */
-    private Shape makeHeadShape(AbstractBoat mark) {
-        double pixelLength = mark.getLength() * pixelMapper.mappingRatio() * 0.2;
+    private Shape makeHeadShape(double size) {
+        double pixelLength = scaleValue(scaleValue(2, TAIL_WIDTH), size * 0.15);
 
         Double[] headShape = new Double[]{
                 0.0, 0.0,
