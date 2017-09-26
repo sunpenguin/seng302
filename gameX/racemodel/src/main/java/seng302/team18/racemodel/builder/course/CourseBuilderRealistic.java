@@ -136,7 +136,7 @@ public class CourseBuilderRealistic extends AbstractCourseBuilder {
 
     @Override
     protected double getWindSpeed() {
-        return 25;
+        return 30;
     }
 
 
