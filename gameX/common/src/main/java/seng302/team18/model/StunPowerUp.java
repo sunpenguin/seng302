@@ -28,4 +28,9 @@ public class StunPowerUp extends PowerUp {
         return PowerType.STUN;
     }
 
+    @Override
+    public PowerUp clone() {
+        return new StunPowerUp();
+    }
+
 }

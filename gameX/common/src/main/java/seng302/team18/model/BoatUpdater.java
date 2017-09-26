@@ -41,4 +41,9 @@ public class BoatUpdater extends PowerUp {
         return null;
     }
 
+    @Override
+    public PowerUp clone() {
+        return new BoatUpdater();
+    }
+
 }
