@@ -1,10 +1,14 @@
 package seng302.team18.visualiser.interpret.unique;
 
+import javafx.application.Platform;
 import seng302.team18.interpret.MessageInterpreter;
 import seng302.team18.message.AcceptanceMessage;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestType;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.controller.GameConnection;
+
+import java.io.IOException;
 
 /**
  * The MarkLocationInterpreter that sets the client's player id
@@ -15,10 +19,12 @@ public class AcceptanceInterpreter extends MessageInterpreter {
 
 
     private ClientRace race;
+    private GameConnection gameConnection;
 
 
-    public AcceptanceInterpreter(ClientRace race) {
+    public AcceptanceInterpreter(ClientRace race, GameConnection gameConnection) {
         this.race = race;
+        this.gameConnection = gameConnection;
     }
 
 
@@ -28,7 +34,19 @@ public class AcceptanceInterpreter extends MessageInterpreter {
             int sourceId = ((AcceptanceMessage) message).getSourceId();
             RequestType requestType =  ((AcceptanceMessage) message).getRequestType();
             if (requestType.getCode() != race.getMode().getCode()) {
-                //TODO Return user to title screen sbe67 15/8/2017
+                //TODO inform user of failed connection sbe67 20/9
+                Platform.runLater(() -> {
+                    gameConnection.setFailedConnection();
+                });
+            } else {
+                Platform.runLater(() -> {
+                    try {
+                        gameConnection.goToPreRace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+
             }
             race.setPlayerId(sourceId);
         }

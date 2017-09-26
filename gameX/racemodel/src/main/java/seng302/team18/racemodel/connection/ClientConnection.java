@@ -39,13 +39,11 @@ public class ClientConnection {
      * @return if the message was sent.
      */
     public boolean send(byte[] message) {
-//        System.out.println("ClientConnection::send");
         try {
             out.write(message);
             out.flush();
             return true;
         } catch (Exception e) {
-//            e.printStackTrace();
             return false;
         }
 
@@ -57,11 +55,15 @@ public class ClientConnection {
     }
 
 
+    /**
+     * Closses the client connection
+     *
+     * @throws IOException
+     */
     public void close() throws IOException {
         in.close();
         out.close();
         socket.close();
-//        System.out.println("ClientConnection::close");
     }
 
 
@@ -82,14 +84,6 @@ public class ClientConnection {
      */
     public boolean isClosed() {
         return socket.isClosed();
-//        try {
-//            in.mark(1);
-//            boolean isClosed = in.read() == -1;
-//            in.reset();
-//            return isClosed;
-//        } catch (IOException e) {
-//            return true;
-//        }
     }
 
 
