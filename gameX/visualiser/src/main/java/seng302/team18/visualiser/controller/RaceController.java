@@ -231,7 +231,7 @@ public class RaceController implements Observer {
 
                         if (message != null) {
                             if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
-                                controlsTutorial.setBoat(getPlayerBoat()); //TODO: get sam to change this seb67 17/8
+                                controlsTutorial.setBoat(getPlayerBoat());
                                 controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
                                 if (controlsTutorial.checkIfProgressed(keyEvent.getCode())) {
                                     controlsTutorial.displayNext();
