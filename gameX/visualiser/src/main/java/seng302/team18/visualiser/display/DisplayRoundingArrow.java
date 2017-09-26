@@ -2,10 +2,7 @@ package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
 import seng302.team18.model.MarkRounding;
 import seng302.team18.util.XYPair;
@@ -40,7 +37,7 @@ public class DisplayRoundingArrow {
 
         if (markRounding.getCompoundMark().isGate()) {
             if (straightArrowedGates.contains(markRounding.getGateType())) {
-                drawRoundGateArrows(markRounding, !markRounding.getGateType().isThroughFirst());
+                drawStraightGateArrows(markRounding, !markRounding.getGateType().isThroughFirst());
             } else {
                 drawRoundGateArrows(markRounding, !markRounding.getGateType().isThroughFirst());
             }
@@ -68,6 +65,30 @@ public class DisplayRoundingArrow {
     }
 
 
+    private void drawStraightGateArrows(MarkRounding rounding, boolean isDirReversed) {
+        XYPair mark1 = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(0).getCoordinate());
+        XYPair mark2 = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(1).getCoordinate());
+
+        double bearing1to2 = Math.atan2(mark2.getX() - mark1.getX(), mark2.getY() - mark1.getY()) - Math.PI / 2;
+        if (bearing1to2 < 0) bearing1to2 += Math.PI * 2;
+        bearing1to2 = Math.toDegrees(bearing1to2);
+//        if (isDirReversed) bearing1to2 += 180;
+        double bearing2to1 = (bearing1to2 + 180) % 360;
+        boolean is1Clockwise = rounding.getRoundingDirection().equals(MarkRounding.Direction.SP);
+
+        double length = rounding.getCompoundMark().getMarks().get(0).getLength();
+        double offset = 1.5 * length * pixelMapper.mappingRatio();
+
+        XYPair arrow1 = new XYPair(mark1.getX() + offset * Math.cos(bearing1to2), mark1.getY() + offset * Math.sin(bearing1to2));
+        double arrowHeading = (bearing1to2 + (is1Clockwise ? 360 - 90 : 90)) % 360;
+        drawStraightArrow(arrow1, length * 3, arrowHeading);
+
+        arrow1 = new XYPair(mark2.getX() + offset * Math.cos(bearing2to1), mark2.getY() + offset * Math.sin(bearing2to1));
+        drawStraightArrow(arrow1, length * 3, arrowHeading);
+
+    }
+
+
     private void drawMarkArrow(MarkRounding rounding) {
         boolean isClockwise = rounding.getRoundingDirection().equals(MarkRounding.Direction.STARBOARD);
         double offset = MARK_ARROW_ARC_LENGTH / (isClockwise ? 2 : -2);
@@ -91,6 +112,25 @@ public class DisplayRoundingArrow {
         head.setLayoutX(calculateHeadX(tail));
         head.setLayoutY(calculateHeadY(tail));
         head.getTransforms().add(new Rotate(getHeadingAtFinish(tail), 0, 0));
+    }
+
+
+    private void drawStraightArrow(XYPair centre, double length, double heading) {
+        Path tail = new Path();
+        tail.getElements().add(new MoveTo(0, 0));
+        tail.getElements().add(new VLineTo(length));
+        tail.setLayoutX(centre.getX());
+        tail.setLayoutY(centre.getY());
+        tail.getTransforms().add(new Rotate(heading, 0, 0));
+
+        XYPair headPos = new XYPair(centre.getX() + length * Math.cos(heading), centre.getY() + length * Math.sin(heading));
+        Shape head = makeHeadShape(length);
+        head.setLayoutX(headPos.getX());
+        head.setLayoutY(headPos.getY());
+        head.getTransforms().add(new Rotate(heading, 0, 0));
+
+        shapes.add(tail);
+        shapes.add(head);
     }
 
 

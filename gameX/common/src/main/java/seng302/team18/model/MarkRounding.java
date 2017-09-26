@@ -76,6 +76,49 @@ public class MarkRounding {
     }
 
 
+    public double getPassAngle() {
+        return passAngle;
+    }
+
+
+    public void setPassAngle(double passAngle) {
+        this.passAngle = passAngle;
+    }
+
+
+    public GateType getGateType() {
+        return gateType;
+    }
+
+
+    public void setGateType(GateType gateType) {
+        this.gateType = gateType;
+    }
+
+
+    public Coordinate getCoordinate() {
+        return compoundMark.getCoordinate();
+    }
+
+
+    public int getMarkId() {
+        return compoundMark.getId();
+    }
+
+
+    @Override
+    public String toString() {
+        return "MarkRounding{" +
+                "sequenceNumber=" + sequenceNumber +
+                ", compoundMark=" + compoundMark +
+                ", roundingDirection=" + roundingDirection +
+                ", zoneSize=" + zoneSize +
+                ", passAngle=" + passAngle +
+                ", gateType=" + gateType +
+                '}';
+    }
+
+
     /**
      * The direction that boat should take a mark rounding
      */
@@ -127,6 +170,7 @@ public class MarkRounding {
         private final String gateType;
         private final boolean throughFirst;
 
+
         GateType(String type, boolean throughFirst) {
             gateType = type;
             this.throughFirst = throughFirst;
@@ -141,48 +185,5 @@ public class MarkRounding {
         public boolean isThroughFirst() {
             return throughFirst;
         }
-    }
-
-
-    public double getPassAngle() {
-        return passAngle;
-    }
-
-
-    public void setPassAngle(double passAngle) {
-        this.passAngle = passAngle;
-    }
-
-
-    public GateType getGateType() {
-        return gateType;
-    }
-
-
-    public void setGateType(GateType gateType) {
-        this.gateType = gateType;
-    }
-
-
-    public Coordinate getCoordinate() {
-        return compoundMark.getCoordinate();
-    }
-
-
-    public int getMarkId() {
-        return compoundMark.getId();
-    }
-
-
-    @Override
-    public String toString() {
-        return "MarkRounding{" +
-                "sequenceNumber=" + sequenceNumber +
-                ", compoundMark=" + compoundMark +
-                ", roundingDirection=" + roundingDirection +
-                ", zoneSize=" + zoneSize +
-                ", passAngle=" + passAngle +
-                ", gateType=" + gateType +
-                '}';
     }
 }
