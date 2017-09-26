@@ -141,7 +141,6 @@ public class GameConnection {
         controller.setUp(race, receiver, sender);
         controller.initConnection(color);
         return true;
-        // TODO afj19 14/09 here(probably) we should be checking the response from the server and returning false if it is rejected
     }
 
 
