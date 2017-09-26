@@ -600,7 +600,7 @@ public class RaceController implements Observer {
         raceViewPane.resize(raceViewPane.getPrefWidth(), raceViewPane.getPrefHeight());
 
         pixelMapper = new PixelMapper(
-                bounds.get(0), bounds.get(1), race.getCourse().getCenter(),
+                bounds.get(0), bounds.get(1), race.getCenter(),
                 raceViewPane.heightProperty(), raceViewPane.widthProperty()
         );
 
