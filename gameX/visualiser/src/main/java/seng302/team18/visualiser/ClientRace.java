@@ -335,4 +335,8 @@ public class ClientRace {
         return projectiles;
     }
 
+
+    public double getWindDirection() {
+        return course.getWindDirection();
+    }
 }
