@@ -36,6 +36,7 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
             builder = factory.newDocumentBuilder(); // parser configuration exception
             doc = builder.parse(stream); // io exception, SAXException
         } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
             return null;
         }
 
