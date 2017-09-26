@@ -44,12 +44,6 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
 
 
     @Override
-    public void setEstimatedTime(Long estimatedTime) {
-        boat.setEstimatedTime(estimatedTime);
-    }
-
-
-    @Override
     public void addToGroup(Group group) {
         boat.addToGroup(group);
 
@@ -71,12 +65,6 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
     @Override
     public Color getColor() {
         return boat.getColor();
-    }
-
-
-    @Override
-    public void setTimeSinceLastMark(Long timeSinceLastMark) {
-        boat.setTimeSinceLastMark(timeSinceLastMark);
     }
 
 

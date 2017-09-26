@@ -5,9 +5,7 @@ package seng302.team18.visualiser.display;
  */
 public enum AnnotationType {
     NAME(1),
-    SPEED(2),
-    ESTIMATED_TIME_NEXT_MARK(3),
-    TIME_SINCE_LAST_MARK(4);
+    SPEED(2);
 
     private int code;
 

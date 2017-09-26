@@ -63,7 +63,7 @@ public class ConnectionListener extends Observable implements Observer {
                     e.printStackTrace();
                 }
             });
-        } else if (ServerState.CLOSED.equals(arg)) {
+        } else if (!ServerState.OPEN.equals(arg)) {
             close();
             setChanged();
             notifyObservers(arg);
