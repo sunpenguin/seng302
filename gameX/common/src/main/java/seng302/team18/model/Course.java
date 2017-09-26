@@ -250,7 +250,7 @@ public class Course {
 
 
     /**
-     * Removes PickUp that have expired.
+     * Removes PickUps that have expired.
      */
     public void removeOldPickUps() {
         List<PickUp> remaining = new ArrayList<>();

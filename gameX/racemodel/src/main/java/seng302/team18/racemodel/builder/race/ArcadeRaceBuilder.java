@@ -41,6 +41,8 @@ public class ArcadeRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new PowerUpUpdater(makePickUp(), 4));
         updaters.add(new ProjectileUpdater());
         updaters.add(new ProjectileHitUpdater());
+        updaters.add(new ProjectileOutOfBoundsUpdater());
+
 
         if (statusUpdater == null) {
             statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 5);

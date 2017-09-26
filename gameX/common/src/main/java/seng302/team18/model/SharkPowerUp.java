@@ -25,4 +25,9 @@ public class SharkPowerUp extends PowerUp {
     public PowerType getType() {
         return PowerType.SHARK;
     }
+
+    @Override
+    public PowerUp clone() {
+        return new SharkPowerUp();
+    }
 }
