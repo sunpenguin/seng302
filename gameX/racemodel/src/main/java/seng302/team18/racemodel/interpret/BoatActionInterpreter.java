@@ -10,8 +10,6 @@ import seng302.team18.util.VMGAngles;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * The class used to interpret BoatActionMessage.
@@ -20,7 +18,7 @@ public class BoatActionInterpreter extends MessageInterpreter {
 
     private Race race;
     private int id;
-    private List<Boat> boats;
+    private Boat boat;
     private BoatRotater boatRotater;
     private final static Collection<BoatStatus> UNCONTROLLABLE_STATUSES = Arrays.asList(BoatStatus.OCS, BoatStatus.FINISHED);
 
@@ -33,11 +31,8 @@ public class BoatActionInterpreter extends MessageInterpreter {
     public BoatActionInterpreter(Race race, int boatId) {
         this.race = race;
         this.id = boatId;
-        this.boats = race.getStartingList()
-                .stream()
-                .filter(boat -> boat.getId().equals(id))
-                .collect(Collectors.toList());
-        this.boatRotater = new BoatRotater(boats, 3d);
+        this.boat = race.getBoat(boatId);
+        this.boatRotater = new BoatRotater(boat);
     }
 
 
@@ -45,27 +40,14 @@ public class BoatActionInterpreter extends MessageInterpreter {
     public void interpret(MessageBody message) {
         if (message instanceof BoatActionMessage) {
             BoatActionMessage actionMessage = (BoatActionMessage) message;
-            updateList();
-            boatRotater = new BoatRotater(boats, 3d);
-            for (Boat boat : boats) {
-                if (!UNCONTROLLABLE_STATUSES.contains(boat.getStatus()) && actionMessage.getId() == id) {
-                    applyActions(boat, actionMessage);
-                } else {
-                    boat.setSailOut(true);
-                }
+            boat = race.getBoat(id);
+            boatRotater.setBoat(boat);
+            if (!UNCONTROLLABLE_STATUSES.contains(boat.getStatus()) && actionMessage.getId() == id) {
+                applyActions(boat, actionMessage);
+            } else {
+                boat.setSailOut(true);
             }
         }
-    }
-
-
-    /**
-     * Updates the starting list continuously.
-     */
-    private void updateList() {
-        boats = race.getStartingList()
-                .stream()
-                .filter(boat -> boat.getId().equals(id))
-                .collect(Collectors.toList());
     }
 
 
