@@ -13,6 +13,7 @@ import seng302.team18.encode.Sender;
 import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 
 import java.io.IOException;
 
@@ -33,6 +34,7 @@ public class EscapeMenuController {
     private boolean fpsOn = true;
     private boolean annotationsOn = false;
     private final int BUTTON_LAYOUTX_OFFSET = 9;
+    private ThemeTunePlayer themeTunePlayer;
 
     @FXML
     public void initialize() {
@@ -132,6 +134,7 @@ public class EscapeMenuController {
     @SuppressWarnings("Duplicates")
     private void returnToTitle() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
+        themeTunePlayer.stopTrack();
 
         try {
             Parent root = loader.load();
@@ -168,13 +171,15 @@ public class EscapeMenuController {
      * @param sender      Sender to close when we quit the race.
      * @param raceController to connect the escaoe menu to.
      * @param player      the manager for audio playback from this scene.
+     * @param themeTunePlayer the player to manage the theme tune
      */
-    public void setup(Group group, Interpreter interpreter, Sender sender, RaceController raceController, SoundEffectPlayer player) {
+    public void setup(Group group, Interpreter interpreter, Sender sender, RaceController raceController, SoundEffectPlayer player, ThemeTunePlayer themeTunePlayer) {
         this.group = group;
         this.interpreter = interpreter;
         this.sender = sender;
         this.raceController = raceController;
         this.soundPlayer = player;
+        this.themeTunePlayer = themeTunePlayer;
     }
 
 

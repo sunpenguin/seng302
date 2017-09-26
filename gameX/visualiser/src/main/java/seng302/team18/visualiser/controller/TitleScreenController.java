@@ -12,9 +12,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
-import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 
 import java.io.IOException;
 
@@ -41,7 +41,7 @@ public class TitleScreenController {
         initialiseTutorialButton();
         loadBoatAnimation();
 
-        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer();
+        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer("audio/BeepBoop.wav");
         themeTunePlayer.playTrack();
 
         errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());
