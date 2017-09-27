@@ -3,7 +3,7 @@ package seng302.team18.model.updaters;
 import seng302.team18.model.*;
 
 /**
- * Class to check ing boats have rounded a mark
+ * Class to check if boats have rounded a mark
  */
 public class MarkRoundingUpdater implements Updater {
 
@@ -21,15 +21,25 @@ public class MarkRoundingUpdater implements Updater {
      * @param boat to update.
      */
     private void checkForRounding(Boat boat, Race race) {
-        if (boat.getStatus().equals(BoatStatus.RACING) && race.getDetector().hasPassedDestination(boat, race.getCourse())) {
-            setNextLeg(boat, boat.getLegNumber() + 1, race);
-        } else if (boat.getStatus().equals(BoatStatus.PRE_START) && boat.getLegNumber() == 0
-                && race.getDetector().hasPassedDestination(boat, race.getCourse())) {
-            statusOSCPenalty(boat, race);
-        } else if (boat.getStatus().equals(BoatStatus.OCS) && race.getCurrentTime().isAfter(race.getStartTime().plusSeconds(5))) {
-            race.addYachtEvent(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OCS_PENALTY_COMPLETE));
-            boat.setStatus(BoatStatus.RACING);
-            boat.setSpeed(boat.getBoatTWS(race.getCourse().getWindSpeed(), race.getCourse().getWindDirection()));
+        boolean hasPassed = race.getDetector().hasPassedDestination(boat, race.getCourse());
+
+        switch (boat.getStatus()) {
+            case RACING:
+                if (hasPassed) {
+                    setNextLeg(boat, boat.getLegNumber() + 1, race);
+                }
+                break;
+            case PRE_START:
+                if (boat.getLegNumber() == 0 && hasPassed) {
+                    statusOSCPenalty(boat, race);
+                }
+                break;
+            case OCS:
+                if (race.getCurrentTime().isAfter(race.getStartTime().plusSeconds(5))) {
+                    race.addYachtEvent(new YachtEvent(System.currentTimeMillis(), boat.getId(), YachtEventCode.OCS_PENALTY_COMPLETE));
+                    boat.setStatus(BoatStatus.RACING);
+                    boat.setSpeed(boat.getBoatTWS(race.getCourse().getWindSpeed(), race.getCourse().getWindDirection()));
+                }
         }
     }
 

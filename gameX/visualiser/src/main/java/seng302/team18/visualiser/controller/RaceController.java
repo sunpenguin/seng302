@@ -625,10 +625,16 @@ public class RaceController implements Observer {
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, race.getMode());
         raceRenderer.setDrawTrails(RaceMode.BUMPER_BOATS != race.getMode());
+
         List<Renderable> renderables = new ArrayList<>(Arrays.asList(raceRenderer, courseRenderer));
         if (race.getMode().hasLives() && getPlayerBoat() != null) {
             renderables.add(new VisualHealth(raceViewPane, getPlayerBoat()));
         }
+
+        if (race.getMode() == RaceMode.ARCADE || race.getMode() == RaceMode.RACE) {
+            renderables.add(new VisualRoundingArrow(race, pixelMapper, group));
+        }
+
 
         if (getPlayerBoat() != null) {
             renderables.add(new VisualPowerUp(raceViewPane, getPlayerBoat()));

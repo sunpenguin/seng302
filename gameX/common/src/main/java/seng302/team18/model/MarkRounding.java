@@ -76,6 +76,49 @@ public class MarkRounding {
     }
 
 
+    public double getPassAngle() {
+        return passAngle;
+    }
+
+
+    public void setPassAngle(double passAngle) {
+        this.passAngle = passAngle;
+    }
+
+
+    public GateType getGateType() {
+        return gateType;
+    }
+
+
+    public void setGateType(GateType gateType) {
+        this.gateType = gateType;
+    }
+
+
+    public Coordinate getCoordinate() {
+        return compoundMark.getCoordinate();
+    }
+
+
+    public int getMarkId() {
+        return compoundMark.getId();
+    }
+
+
+    @Override
+    public String toString() {
+        return "MarkRounding{" +
+                "sequenceNumber=" + sequenceNumber +
+                ", compoundMark=" + compoundMark +
+                ", roundingDirection=" + roundingDirection +
+                ", zoneSize=" + zoneSize +
+                ", passAngle=" + passAngle +
+                ", gateType=" + gateType +
+                '}';
+    }
+
+
     /**
      * The direction that boat should take a mark rounding
      */
@@ -119,63 +162,28 @@ public class MarkRounding {
 
 
     public enum GateType {
-        THROUGH_THEN_ROUND("through gate on arrival, round gate on departure"),
-        THROUGH_GATE("straight through gate"),
-        ROUND_BOTH_MARKS("s-bend gate (round both marks)"),
-        ROUND_THEN_THROUGH("round gate on arrival, through gate on departure");
+        THROUGH_THEN_ROUND("through gate on arrival, round gate on departure", true),
+        THROUGH_GATE("straight through gate", true),
+        ROUND_BOTH_MARKS("s-bend gate (round both marks)", false),
+        ROUND_THEN_THROUGH("round gate on arrival, through gate on departure", false);
 
-        private String gateType;
+        private final String gateType;
+        private final boolean throughFirst;
 
-        GateType(String type) {
+
+        GateType(String type, boolean throughFirst) {
             gateType = type;
+            this.throughFirst = throughFirst;
         }
 
 
         public String getType() {
             return gateType;
         }
-    }
 
 
-    public double getPassAngle() {
-        return passAngle;
-    }
-
-
-    public void setPassAngle(double passAngle) {
-        this.passAngle = passAngle;
-    }
-
-
-    public GateType getGateType() {
-        return gateType;
-    }
-
-
-    public void setGateType(GateType gateType) {
-        this.gateType = gateType;
-    }
-
-
-    public Coordinate getCoordinate() {
-        return compoundMark.getCoordinate();
-    }
-
-
-    public int getMarkId() {
-        return compoundMark.getId();
-    }
-
-
-    @Override
-    public String toString() {
-        return "MarkRounding{" +
-                "sequenceNumber=" + sequenceNumber +
-                ", compoundMark=" + compoundMark +
-                ", roundingDirection=" + roundingDirection +
-                ", zoneSize=" + zoneSize +
-                ", passAngle=" + passAngle +
-                ", gateType=" + gateType +
-                '}';
+        public boolean isThroughFirst() {
+            return throughFirst;
+        }
     }
 }
