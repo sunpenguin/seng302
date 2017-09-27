@@ -130,9 +130,6 @@ public class PreRaceController {
     private void addInterpreters() {
 
         //interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race, new GameConnection()));
-        interpreter.getInterpreter().add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
-        interpreter.getInterpreter().add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
-        interpreter.getInterpreter().add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
         interpreter.getInterpreter().add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
         interpreter.getInterpreter().add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
 
