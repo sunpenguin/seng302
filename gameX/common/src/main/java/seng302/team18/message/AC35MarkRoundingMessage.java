@@ -5,7 +5,7 @@ package seng302.team18.message;
  */
 public class AC35MarkRoundingMessage implements MessageBody {
     private int boatId;
-    private long time; // TODO afj19, 20th July: check that this is correctly being used as epoch milliseconds
+    private long time;
 
     /**
      * Constructor for AC35MarkRoundingMessage

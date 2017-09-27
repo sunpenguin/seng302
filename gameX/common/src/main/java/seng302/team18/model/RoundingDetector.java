@@ -17,7 +17,6 @@ public class RoundingDetector {
      * @return if has passed its destination mark
      */
     public boolean hasPassedDestination(Boat boat, Course course) {
-        // TODO afj19 10/08/17: check that this is never called once the boat is finished, or make sure that we won't get index exceptions accessing the roundings
         int legNumber = boat.getLegNumber();
         MarkRounding currentRounding = course.getMarkSequence().get(legNumber);
         boolean passed = false;
