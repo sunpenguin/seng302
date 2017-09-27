@@ -23,6 +23,7 @@ import seng302.team18.visualiser.interpret.unique.AcceptanceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 import seng302.team18.visualiser.util.ModelLoader;
 
 import javax.net.SocketFactory;
@@ -43,6 +44,7 @@ public class GameConnection {
     private Receiver receiver;
     private Sender sender;
     private ClientRace race;
+    private SoundEffectPlayer soundPlayer;
 
 
     /**
@@ -198,10 +200,10 @@ public class GameConnection {
     private MessageInterpreter makeInterpreter(ClientRace race) {
         MessageInterpreter interpreter = new CompositeMessageInterpreter();
         MessageInterpreter acceptanceResponse = new AcceptanceInterpreter(race, this);
-        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
         interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
+        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
 
         return interpreter;
     }
@@ -234,11 +236,20 @@ public class GameConnection {
         node.getScene().setRoot(root);
         stage.show();
 
+        controller.setSoundPlayer(soundPlayer);
         controller.setUp(race, sender, interpreter);
     }
 
     public void setFailedConnection() {
         errorText.set("Failed to connect to server:\nServer rejected connection");
+    }
+
+
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setSoundPlayer(SoundEffectPlayer player) {
+        this.soundPlayer = player;
     }
 
 }
