@@ -45,9 +45,7 @@ public class SoundEffectPlayer {
 
 
     public long getDuration(SoundEffect effect) {
-//        System.out.println(effect.getUrl());
         URL url = effect.getUrl();
-//        System.out.println("url = " + url);
         URI uri = null;
         try {
             uri = url.toURI();
