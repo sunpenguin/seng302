@@ -58,6 +58,7 @@ public class DisplayCollision extends DisplayBoatDecorator {
     private Group group;
     private Random random = new Random();
     private final Consumer<Boolean> collisionSoundEffect;
+    private long lastCollisionTime = 0;
 
 
     /**
@@ -96,9 +97,10 @@ public class DisplayCollision extends DisplayBoatDecorator {
     public void setHasCollided(boolean hasCollided) {
         super.setHasCollided(hasCollided);
 
-        if (hasCollided) {
+        if (hasCollided && (lastCollisionTime + MAX_DURATION < System.currentTimeMillis())) {
             playCollisionAnimation();
             collisionSoundEffect.accept(isControlled());
+            lastCollisionTime = System.currentTimeMillis();
         }
     }
 
