@@ -53,6 +53,7 @@ import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.CheatyControlManipulator;
 import seng302.team18.visualiser.util.PixelMapper;
@@ -93,6 +94,7 @@ public class RaceController implements Observer {
 
     private Pane escapeMenuPane;
     private Pane eventMenuPane;
+    private ThemeTunePlayer themeTunePlayer;
 
     private boolean annotationsOn;
     private boolean fpsOn;
@@ -102,7 +104,7 @@ public class RaceController implements Observer {
     private CourseRenderer courseRenderer;
     private PixelMapper pixelMapper;
     private Sender sender;
-    private SoundEffectPlayer soundPlayer = new SoundEffectPlayer();
+    private SoundEffectPlayer soundPlayer;
 
     private Interpreter interpreter;
     private RaceBackground background;
@@ -132,6 +134,10 @@ public class RaceController implements Observer {
         background = new RaceBackground(raceViewPane, "/images/water.gif");
         tabView.setVisible(false);
         initialiseFadeTransition();
+
+        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer();
+        themeTunePlayer.playSound("audio/Ocean_Waves-Mike_Koenig-980635527.mp3");
+
     }
 
 
@@ -389,7 +395,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             EscapeMenuController escapeMenuController = loader.getController();
-            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer);
+            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer, themeTunePlayer);
         } catch (IOException e) {
             //pass
         }
@@ -598,6 +604,7 @@ public class RaceController implements Observer {
     public void setUp(ClientRace race, Interpreter interpreter, Sender sender) {
         this.sender = sender;
         this.race = race;
+
 
         GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
@@ -938,5 +945,13 @@ public class RaceController implements Observer {
                 sender.close();
             });
         }
+    }
+
+
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setSoundPlayer(SoundEffectPlayer player) {
+        this.soundPlayer = player;
     }
 }

@@ -18,7 +18,8 @@ import java.util.List;
  * @see AbstractRaceBuilder
  */
 public class RegularRaceBuilder extends AbstractRaceBuilder {
-    StatusUpdater statusUpdater = null;
+
+    private StatusUpdater statusUpdater = null;
 
     @Override
     protected int getId() {

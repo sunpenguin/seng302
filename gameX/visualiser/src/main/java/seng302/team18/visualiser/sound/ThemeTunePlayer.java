@@ -12,19 +12,18 @@ public class ThemeTunePlayer {
 
     private static boolean playing = false;
     private static MediaPlayer mediaPlayer;
-    private String path = "audio/theme.wav";
 
 
     /**
      * Method the play the track
      */
-    public void playTrack(){
+    public void playSound(String path){
         if (ThemeTunePlayer.playing){
             return;
         } else {
             URL resource = getClass().getClassLoader().getResource(path);
-            String path = resource.toString();
-            Media song = new Media(path);
+            String songPath = resource.toString();
+            Media song = new Media(songPath);
             mediaPlayer = new MediaPlayer(song);
             mediaPlayer.setVolume(0.6);
             mediaPlayer.play();
@@ -40,6 +39,7 @@ public class ThemeTunePlayer {
      */
     public static void stopTrack(){
         mediaPlayer.stop();
+        mediaPlayer.dispose();
         playing = false;
     }
 }

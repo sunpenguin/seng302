@@ -12,7 +12,6 @@ import java.time.format.DateTimeFormatter;
 public class PreRaceTimes extends AnimationTimer {
 
     private Label startLabel;
-    private Label timeZoneLabel;
     private Label currentTimeLabel;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private ClientRace race;
@@ -22,13 +21,11 @@ public class PreRaceTimes extends AnimationTimer {
      * Constructor for the PreRaceTimes class.
      *
      * @param startLabel the label which will hold the start time text of a race.
-     * @param timeZoneLabel the label which will hold the time zone text of a race.
      * @param currentTimeLabel the label which will hold the current time text of a race.
      * @param race the race to be observed.
      */
-    public PreRaceTimes(Label startLabel, Label timeZoneLabel, Label currentTimeLabel, ClientRace race) {
+    public PreRaceTimes(Label startLabel, Label currentTimeLabel, ClientRace race) {
         this.startLabel = startLabel;
-        this.timeZoneLabel = timeZoneLabel;
         this.currentTimeLabel = currentTimeLabel;
         this.race = race;
     }
@@ -38,11 +35,5 @@ public class PreRaceTimes extends AnimationTimer {
     public void handle(long now) {
         startLabel.setText(race.getStartTime().format(formatter));
         currentTimeLabel.setText(race.getCurrentTime().format(formatter));
-
-        if (race.getCourse().getTimeZone().toString().equals("UTC")) {
-            timeZoneLabel.setText("UTC+00:00");
-        } else {
-            timeZoneLabel.setText(race.getCourse().getTimeZone().toString());
-        }
     }
 }
