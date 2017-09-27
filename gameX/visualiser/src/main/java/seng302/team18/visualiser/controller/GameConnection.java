@@ -17,9 +17,6 @@ import seng302.team18.message.RequestType;
 import seng302.team18.model.RaceMode;
 import seng302.team18.parse.AC35MessageParserFactory;
 import seng302.team18.parse.Receiver;
-import seng302.team18.model.RaceMode;
-import seng302.team18.parse.AC35MessageParserFactory;
-import seng302.team18.parse.Receiver;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.interpret.unique.AcceptanceInterpreter;
@@ -97,7 +94,7 @@ public class GameConnection {
         }
 
         openStream(hostAddress, port);
-        return false;
+        return true;
     }
 
 

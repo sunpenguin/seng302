@@ -250,9 +250,9 @@ public class Course {
 
 
     /**
-     * Removes PickUp that have expired.
+     * Removes PickUps that have expired.
      */
-    public void removeOldPickUps() {
+    public synchronized void removeOldPickUps() {
         List<PickUp> remaining = new ArrayList<>();
         for (PickUp pickUp: pickUps) {
             if (!pickUp.hasExpired()) {
@@ -285,7 +285,7 @@ public class Course {
     }
 
 
-    public void setPickUps(List<PickUp> pickUps) {
+    public synchronized void setPickUps(List<PickUp> pickUps) {
         this.pickUps = pickUps;
     }
 

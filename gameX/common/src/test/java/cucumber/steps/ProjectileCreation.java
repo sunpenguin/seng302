@@ -1,6 +1,5 @@
 package cucumber.steps;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -40,6 +39,7 @@ public class ProjectileCreation {
         updaters.add(new ProjectileUpdater());
         updaters.add(new ProjectileHitUpdater());
         updaters.add(new OutOfBoundsUpdater());
+        updaters.add(new ProjectileOutOfBoundsUpdater());
         race.setUpdaters(updaters);
         Course course = new Course(getCompoundMarks(), boundaries, getRoundings());
         race.setCourse(course);

@@ -30,7 +30,7 @@ public class VisualHealth implements Renderable {
         this.boat = boat;
         heartImage = new Image("/images/race_view/heart.png");
         heartBox = new HBox();
-        heartBox.setLayoutX(100);
+        heartBox.setLayoutX(150);
         heartBox.setLayoutY(10);
         heartView1 = new ImageView(heartImage);
         heartView2 = new ImageView(heartImage);
