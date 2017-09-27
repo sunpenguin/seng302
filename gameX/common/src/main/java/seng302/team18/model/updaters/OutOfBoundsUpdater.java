@@ -15,15 +15,6 @@ public class OutOfBoundsUpdater implements Updater {
         for (Boat boat : race.getStartingList()) {
             checkForBoundaryDSQ(boat, race);
         }
-        for (Projectile projectile : race.getProjectiles()){
-            GPSCalculator calculator = new GPSCalculator();
-            List<Coordinate> boundaries = race.getCourse().getLimits();
-
-            if (!calculator.isInside(projectile.getLocation(), boundaries)) {
-                race.removeProjectile(projectile.getId());
-                break;
-            }
-        }
     }
 
 

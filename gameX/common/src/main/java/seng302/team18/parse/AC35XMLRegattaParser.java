@@ -36,6 +36,7 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
             builder = factory.newDocumentBuilder(); // parser configuration exception
             doc = builder.parse(stream); // io exception, SAXException
         } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
             return null;
         }
 
@@ -58,7 +59,7 @@ public class AC35XMLRegattaParser implements MessageBodyParser {
     }
 
     /**
-     * Converts the input byte stream to standarad characters and passes these the the parser to read them and create the
+     * Converts the input byte stream to standard characters and passes these the the parser to read them and create the
      * regatta message.
      *
      * @param bytes an array of bytes from the input stream

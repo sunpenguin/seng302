@@ -14,7 +14,6 @@ public class ClientRace {
 
     private int id;
     private RaceStatus status;
-    private RaceType raceType;
     private Regatta regatta = new Regatta();
     private Course course;
     private List<Integer> participantIds;
@@ -25,7 +24,6 @@ public class ClientRace {
     private RaceMode mode = RaceMode.RACE;
     private List<Projectile> projectiles = new ArrayList<>();
 
-
     public ClientRace() {
         participantIds = new ArrayList<>();
         startingList = new ArrayList<>();
@@ -34,7 +32,6 @@ public class ClientRace {
         status = RaceStatus.NOT_ACTIVE;
         currentTime = ZonedDateTime.now(course.getTimeZone());
         startTime = ZonedDateTime.ofInstant(Instant.EPOCH, course.getTimeZone());
-        raceType = RaceType.MATCH;
     }
 
 
@@ -56,21 +53,6 @@ public class ClientRace {
         }
         for (Boat boat : this.startingList) {
             boat.setControlled(playerId == boat.getId());
-        }
-    }
-
-
-    /**
-     * Removes a participant from the race
-     *
-     * @param boatID id for the participant to be removed
-     */
-    public void removeParticipant(int boatID) {
-        for (Boat boat : startingList) {
-            if (boat.getId().equals(boatID)) {
-                startingList.remove(boat);
-                participantIds.remove(boatID);
-            }
         }
     }
 
@@ -144,33 +126,13 @@ public class ClientRace {
     }
 
 
-    public RaceType getRaceType() {
-        return raceType;
-    }
-
-
-    public void setRaceType(RaceType raceType) {
-        this.raceType = raceType;
-    }
-
-
     public Regatta getRegatta() {
         return regatta;
     }
 
 
-    public void setRegatta(Regatta regatta) {
-        this.regatta = regatta;
-    }
-
-
     public void setCourse(Course course) {
         this.course = course;
-    }
-
-
-    public List<Integer> getParticipantIds() {
-        return participantIds;
     }
 
 
@@ -201,11 +163,6 @@ public class ClientRace {
 
     public void setCurrentTime(ZonedDateTime currentTime) {
         this.currentTime = currentTime;
-    }
-
-
-    public void setPlayerId(Integer playerId) {
-        this.playerId = playerId;
     }
 
 
@@ -263,7 +220,11 @@ public class ClientRace {
      * @return PowerUp that the PickUp had.
      */
     public PowerUp getPowerUp(int id) {
-        return getPickUp(id).getPower();
+        PickUp pickUp = getPickUp(id);
+        if (null == pickUp) {
+            return null;
+        }
+        return pickUp.getPower();
     }
 
 
@@ -325,7 +286,7 @@ public class ClientRace {
 
     /**
      * Method to add a projectile to the races list of projectiles
-     * @param projectile the projecitle to be added
+     * @param projectile the projectile to be added
      */
     public void addProjectile(Projectile projectile) {
         projectiles.add(projectile);
@@ -334,5 +295,10 @@ public class ClientRace {
 
     public List<Projectile> getProjectiles() {
         return projectiles;
+    }
+
+
+    public double getWindDirection() {
+        return course.getWindDirection();
     }
 }

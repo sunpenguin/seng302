@@ -37,7 +37,7 @@ public class Race {
     private int powerId = 0;
     private int nextProjectileId = 0;
     private StartPositionSetter positionSetter;
-//    private Boat spectatorBoat = new Boat("Spectator boat", "Spec boat", 9000, 0);
+    private List<PowerUp> powerUps = Arrays.asList(new SpeedPowerUp(3), new SharkPowerUp());
 
 
     public Race() {
@@ -106,29 +106,19 @@ public class Race {
         PickUp pickUp = prototype.clone();
         pickUp.setId(id);
         pickUp.setTimeout(timeout);
-        pickUp.setPower(getRandomPower());
+        pickUp.setPower(randomPowerUp());
         pickUp.setLocation(randomPoint);
         return pickUp;
     }
 
 
-    /**
-     * Generates a random PowerUp to put in the PickUp.
-     *
-     * @return a random PowerUp.
-     */
-    private PowerUp getRandomPower() {
-        int max = 1;
-        PowerUp powerUp = null;
-
-        int randomNum = ThreadLocalRandom.current().nextInt(0, max + 1);
-        if (randomNum == 0) {
-            powerUp = new SpeedPowerUp(3);
-        } else if (randomNum == 1) {
-            powerUp = new SharkPowerUp();
+    private PowerUp randomPowerUp() {
+        PowerUp powerUp = powerUps.get(ThreadLocalRandom.current().nextInt(powerUps.size())).clone();
+        if (powerUp.getType() == PowerType.SHARK) {
+            powerUp.setDuration(1000);
+        } else {
+            powerUp.setDuration(5000);
         }
-
-        powerUp.setDuration(5000d);
         return powerUp;
     }
 
@@ -424,16 +414,36 @@ public class Race {
      * @param pickUp that was picked up
      */
     public void consumePowerUp(Boat boat, PickUp pickUp) {
-        boat.setPowerUp(pickUp.getPower());
-        List<PickUp> pickUps = course.getPickUps();
-        pickUps.remove(pickUp);
-        course.setPickUps(pickUps);
-        powerEvents.add(new PowerUpEvent(boat.getId(), pickUp));
+        int boatId = Integer.MAX_VALUE; // For if we want to consume a power up not related to a specific boat
+
+        if (boat != null) {
+            boatId = boat.getId();
+            boat.setPowerUp(pickUp.getPower());
+            List<PickUp> pickUps = course.getPickUps();
+            pickUps.remove(pickUp);
+            course.setPickUps(pickUps);
+        }
+
+        powerEvents.add(new PowerUpEvent(boatId, pickUp));
     }
 
 
-    public void removeOldPickUps() {
-        course.removeOldPickUps();
+    /**
+     * Removes any PickUps which are either outside the course limits or have expired.
+     */
+    public void removePickUps() {
+        List<PickUp> pickUps = course.getPickUps();
+        List<PickUp> remaining = new ArrayList<>();
+
+        for (PickUp pickUp: pickUps) {
+            if (!gps.isInside(pickUp.getLocation(), course.getLimits())) {
+                consumePowerUp(null, pickUp);
+            } else if (!pickUp.hasExpired()) {
+                remaining.add(pickUp);
+            }
+        }
+
+        course.setPickUps(remaining);
     }
 
 
@@ -442,22 +452,21 @@ public class Race {
      * Projectiles collected in powerUps
      *
      * @param boat the boat that creates the projectile
-     * @param type the type of power up used
      */
-    public void addProjectile(Boat boat, PowerType type) {
+    public void addProjectile(Boat boat) {
         Projectile sharky = new TigerShark(nextProjectileId, new Coordinate(0,0), boat.getHeading());
         Coordinate location = gps.toCoordinate(boat.getCoordinate(), boat.getHeading(), (boat.getLength() + sharky.getBodyMass().getRadius() + 5));
         sharky.setLocation(location);
         projectiles.add(sharky);
         nextProjectileId += 1;
         newProjectileList.add(sharky);
-//        System.out.println("hi");
-//        System.out.println(projectiles);
     }
+
 
     public List<Projectile> getProjectiles() {
         return projectiles;
     }
+
 
     /**
      * Method to remove a projectile from the race
@@ -490,7 +499,12 @@ public class Race {
     }
 
 
-    public boolean hasStarted() {
-        return status == RaceStatus.STARTED || status.isAfter(RaceStatus.STARTED);
+    public Boat getBoat(int id) {
+        for (Boat boat : startingList) {
+            if (boat.getId() == id) {
+                return boat;
+            }
+        }
+        return null;
     }
 }

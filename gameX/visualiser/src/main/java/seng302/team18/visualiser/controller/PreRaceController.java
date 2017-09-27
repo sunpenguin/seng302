@@ -8,32 +8,25 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import seng302.team18.interpret.CompositeMessageInterpreter;
-import seng302.team18.interpret.MessageInterpreter;
-import seng302.team18.message.AC35MessageType;
-import seng302.team18.message.RequestMessage;
-import seng302.team18.message.RequestType;
-import seng302.team18.parse.Receiver;
-import seng302.team18.model.Boat;
 import seng302.team18.encode.Sender;
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.model.Boat;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.ui.PreRaceTimes;
+import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.interpret.americascup.BoatListInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceTimeInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceToMainRaceInterpreter;
-import seng302.team18.visualiser.interpret.unique.AcceptanceInterpreter;
-import seng302.team18.visualiser.interpret.unique.ColourResponder;
-import seng302.team18.visualiser.interpret.Interpreter;
-import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
-import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
-import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
+import seng302.team18.visualiser.sound.SoundEffect;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -47,9 +40,7 @@ public class PreRaceController {
     @FXML
     private ListView<Boat> listView;
     @FXML
-    private Label timeZoneLabel;
-    @FXML
-    private Text raceNameText;
+    private Label raceNameText;
     @FXML
     private Label ipLabel;
     @FXML
@@ -61,6 +52,8 @@ public class PreRaceController {
     private Sender sender;
     private ClientRace race;
 
+    private SoundEffectPlayer soundPlayer;
+
     private boolean hasChanged = false;
 
     public void initialize() {
@@ -71,81 +64,37 @@ public class PreRaceController {
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
      * duration before the race starts.
      *
-     * @param race     The race to be set up in the pre-race.
-     * @param receiver the receiver
-     * @param sender   the sender
+     * @param race        The race to be set up in the pre-race.
+     * @param sender      the sender\
+     * @param interpreter the interpreter
      */
-    public void setUp(ClientRace race, Receiver receiver, Sender sender) {
+    public void setUp(ClientRace race, Sender sender, Interpreter interpreter) {
         this.sender = sender;
         this.race = race;
-        raceNameText.setText(race.getRegatta().getName());
-        displayTimeZone(race.getStartTime());
+        this.interpreter = interpreter;
 
+        addInterpreters();
+        setUpStartSound();
         setUpLists();
+
         listView.setItems(FXCollections.observableList(race.getStartingList()));
-        PreRaceTimes preRaceTimes = new PreRaceTimes(startTimeLabel, timeZoneLabel, timeLabel, race);
+        PreRaceTimes preRaceTimes = new PreRaceTimes(startTimeLabel, timeLabel, race);
         preRaceTimes.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
-        this.interpreter = new Interpreter(receiver);
-        interpreter.setInterpreter(initialiseInterpreter());
+
         showNetWorkInfo();
+
+        raceNameText.setText(race.getMode().toString());
+        raceNameText.setStyle("-fx-font-size: 42pt");
 
         stage.setOnCloseRequest((event) -> {
             interpreter.close();
-            while (!receiver.close()) {
+            while (!interpreter.closeReceiver()) {
             }
             System.out.println("shutting down");
             System.exit(0);
         });
-    }
-
-
-    public void initConnection(Color color) {
-        interpreter.start();
-
-        RequestType requestType;
-        switch (race.getMode()) {
-            case RACE:
-                requestType = RequestType.RACING;
-                break;
-            case CONTROLS_TUTORIAL:
-                requestType = RequestType.CONTROLS_TUTORIAL;
-                break;
-            case CHALLENGE_MODE:
-                requestType = RequestType.CHALLENGE_MODE;
-                break;
-            case ARCADE:
-                requestType = RequestType.ARCADE;
-                break;
-            case BUMPER_BOATS:
-                requestType = RequestType.BUMPER_BOATS;
-                break;
-            case SPECTATION:
-                requestType = RequestType.VIEWING;
-                break;
-            default:
-                requestType = RequestType.RACING;
-        }
-        try {
-            sender.send(new RequestMessage(requestType));
-        } catch (IOException e) {
-            e.printStackTrace();
-            // TODO Callum / David 9 August show error (has been disconnected)
-        }
-
-        MessageInterpreter acceptanceResponse = new ColourResponder(color, sender);
-        interpreter.getInterpreter().add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
-    }
-
-
-    /**
-     * Shows the time zone of the race
-     *
-     * @param zoneTime USED TO GET THE UTC OFFSET
-     */
-    private void displayTimeZone(ZonedDateTime zoneTime) {
-        timeZoneLabel.setText("UTC " + zoneTime.getOffset().toString());
     }
 
 
@@ -169,22 +118,12 @@ public class PreRaceController {
 
     /**
      * Set up and initialise interpreter variables, adding interpreters of each relevant type to the global interpreter.
-     *
-     * @return the message interpreter
      */
-    private MessageInterpreter initialiseInterpreter() {
-        MessageInterpreter interpreter = new CompositeMessageInterpreter();
+    private void addInterpreters() {
+        interpreter.getInterpreter().add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
+        interpreter.getInterpreter().add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
+        interpreter.getInterpreter().add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
 
-        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race));
-        interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
-        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
-        interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
-        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
-
-        interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
-
-        return interpreter;
     }
 
 
@@ -197,6 +136,7 @@ public class PreRaceController {
         if (hasChanged) {
             return;
         }
+        ThemeTunePlayer.stopTrack();
         hasChanged = true;
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
         Parent root = loader.load(); // throws IOException
@@ -206,6 +146,7 @@ public class PreRaceController {
         stage.setResizable(true);
         stage.setMaximized(true);
         stage.show();
+        controller.setSoundPlayer(soundPlayer);
         controller.setUp(race, interpreter, sender);
         controller.updateControlsTutorial();
         controller.updateControlsTutorial();
@@ -224,6 +165,40 @@ public class PreRaceController {
         Socket socket = interpreter.getSocket();
         ipLabel.setText(socket.getInetAddress().toString());
         portLabel.setText(String.valueOf(socket.getPort()));
+    }
+
+
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setSoundPlayer(SoundEffectPlayer player) {
+        this.soundPlayer = player;
+    }
+
+
+    private void setUpStartSound() {
+        new Thread(() -> {
+            while (race.getStartTime().toInstant().equals(Instant.EPOCH)) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    // pass
+                }
+            }
+            SoundEffect startLeadIn = SoundEffect.RACE_START_LEAD_IN;
+            long duration = soundPlayer.getDuration(startLeadIn);
+            ZonedDateTime playTime = race.getStartTime().minus(duration, ChronoUnit.MILLIS);
+
+            while (race.getCurrentTime().isBefore(playTime)) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    // pass
+                }
+            }
+
+            soundPlayer.playEffect(startLeadIn);
+        }).start();
     }
 
 }

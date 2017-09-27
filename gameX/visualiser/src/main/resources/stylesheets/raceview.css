@@ -7,7 +7,6 @@
     -fx-font-family: "Munro";
 }
 
-
 .fpsLabel {
     -fx-font-size: 15pt;
 }
@@ -21,4 +20,55 @@
     -fx-padding: 5px;
     -fx-border-color: black;
     -fx-border-width: 3px 3px 3px 3px;
+}
+
+.table-view .table-cell {
+    -fx-font-size: 15pt;
+    -fx-font-family: "Munro";
+    -fx-alignment: center;
+}
+
+
+.table-view .column-header {
+     -fx-background-color: #00d8ff;
+}
+
+.table-row-cell{
+    -fx-background-color: deepskyblue;
+    -fx-border-color: #00d8ff;
+}
+
+.table-row-cell:odd{
+    -fx-background-color: deepskyblue;
+    -fx-border-color: #00d8ff;
+}
+
+
+.list-view .list-cell {
+    -fx-font-size: 15pt;
+    -fx-font-family: "Munro";
+    -fx-alignment: center;
+}
+
+.list-view {
+    -fx-background-color: #00d8ff;
+}
+
+.list-cell:odd{
+    -fx-background-color: deepskyblue;
+    -fx-border-color: #00d8ff;
+}
+
+
+.list-cell:even{
+    -fx-background-color: deepskyblue;
+    -fx-border-color: #00d8ff;
+}
+
+.list-view.scroll-pane{
+    -fx-background-color: #00d8ff;
+}
+
+.list-view.scroll-bar{
+    -fx-background-color: deepskyblue;
 }

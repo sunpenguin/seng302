@@ -26,6 +26,19 @@ public enum AC35MessageType {
     // non ac35 codes
     REQUEST(55),
     ACCEPTANCE(56),
+    BOAT_STATE(0x67),
+    BOAT_CUSTOMIZATION_REQUEST(0x68),
+    FALLEN_CREW(0x6B),
+    HOST_GAME(0x6C),
+    HOST_GAME_CANCEL(0x6D),
+    PLAYER_READY(0x6E),
+    LEAVE_LOBBY(0x6F),
+    REQUEST_AVAILABLE_RACES(0x72),
+    ABILITY_MESSAGE(0x76),
+    WHIRLPOOL(0x77),
+    ZAFFRE_SHARK(0x77),
+    CREW_DEAD(0x79),
+    COURSE_THEME(0x80),
     BOAT_ACTION(100),
     COLOUR(105),
     NAME(106),
@@ -82,4 +95,6 @@ public enum AC35MessageType {
         }
         return codeMap;
     }
+
+
 }

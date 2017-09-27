@@ -26,4 +26,12 @@ public class SpeedPowerUp extends PowerUp {
     public PowerType getType() {
         return PowerType.SPEED;
     }
+
+
+    @Override
+    public PowerUp clone() {
+        return new SpeedPowerUp(multiplier);
+    }
+
+
 }

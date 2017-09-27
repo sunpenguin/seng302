@@ -18,7 +18,8 @@ import java.util.List;
  * @see AbstractRaceBuilder
  */
 public class RegularRaceBuilder extends AbstractRaceBuilder {
-    StatusUpdater statusUpdater = null;
+
+    private StatusUpdater statusUpdater = null;
 
     @Override
     protected int getId() {
@@ -42,7 +43,7 @@ public class RegularRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new MarkRoundingUpdater());
 
         if (statusUpdater == null) {
-            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 1, 5);
+            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 1, 1, 1);
         }
 
         updaters.add(statusUpdater);

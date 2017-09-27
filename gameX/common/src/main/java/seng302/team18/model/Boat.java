@@ -31,6 +31,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     private ZonedDateTime powerDurationEnd;
     private PowerUp updater = new BoatUpdater();
     private int lives;
+    private IntegerProperty livesIntegerProperty = new SimpleIntegerProperty();
     private boolean hasCollided = false;
 
     /**
@@ -53,6 +54,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         status = BoatStatus.UNDEFINED;
         setWeight(10);
         lives = 3;
+        livesIntegerProperty.setValue(lives);
     }
 
 
@@ -281,6 +283,12 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      */
     public void loseLife() {
         lives -= 1;
+        livesIntegerProperty.setValue(lives);
+    }
+
+
+    public IntegerProperty livesIntegerProperty() {
+        return livesIntegerProperty;
     }
 
     public int getLives(){
@@ -309,13 +317,13 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         double windRelativeHeading = (heading - windDirection + 360) % 360;
         if (windRelativeHeading <= right) {
             double optimalAngle = (polar.upWindAngle(windSpeed) + windDirection) % 360;
-            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setHeading(optimalAngle);
+            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setSpeed(optimalSpeed);
         } else if (windRelativeHeading >= left) {
             double optimalAngle = (360 - polar.upWindAngle(windSpeed) + windDirection) % 360;
-            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setHeading(optimalAngle);
+            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setSpeed(optimalSpeed);
         }
     }
@@ -336,13 +344,13 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         double windRelativeHeading = (heading - windDirection + 360) % 360;
         if (windRelativeHeading >= right && windRelativeHeading <= bottom) {
             double optimalAngle = (polar.downWindAngle(windSpeed) + windDirection) % 360;
-            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setHeading(optimalAngle);
+            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setSpeed(optimalSpeed);
         } else if (windRelativeHeading >= bottom && windRelativeHeading <= left) {
             double optimalAngle = (360 - polar.downWindAngle(windSpeed) + windDirection) % 360;
-            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setHeading(optimalAngle);
+            double optimalSpeed = getBoatTWS(windSpeed, windDirection);
             setSpeed(optimalSpeed);
         }
     }
