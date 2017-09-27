@@ -6,7 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import seng302.team18.visualiser.controller.TitleScreenController;
-import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 public class App extends Application {
