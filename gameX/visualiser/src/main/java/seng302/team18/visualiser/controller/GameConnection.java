@@ -20,6 +20,9 @@ import seng302.team18.parse.Receiver;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.interpret.unique.AcceptanceInterpreter;
+import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
+import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
+import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
 import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.util.ModelLoader;
@@ -200,6 +203,9 @@ public class GameConnection {
     private MessageInterpreter makeInterpreter(ClientRace race) {
         MessageInterpreter interpreter = new CompositeMessageInterpreter();
         MessageInterpreter acceptanceResponse = new AcceptanceInterpreter(race, this);
+        interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
+        interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
+        interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
         interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
 
         return interpreter;

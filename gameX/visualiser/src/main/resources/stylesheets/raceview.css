@@ -64,3 +64,11 @@
     -fx-background-color: deepskyblue;
     -fx-border-color: #00d8ff;
 }
+
+.list-view.scroll-pane{
+    -fx-background-color: #00d8ff;
+}
+
+.list-view.scroll-bar{
+    -fx-background-color: deepskyblue;
+}

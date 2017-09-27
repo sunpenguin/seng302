@@ -72,4 +72,13 @@ public enum RaceStatus {
     public boolean isAfter(RaceStatus status) {
         return this.order > status.order;
     }
+
+    /**
+     * Returns true if the current status is before the given status.
+     * @param status to compare to
+     * @return if the current status is before the given status
+     */
+    public boolean isBefore(RaceStatus status) {
+        return this.order < status.order;
+    }
 }

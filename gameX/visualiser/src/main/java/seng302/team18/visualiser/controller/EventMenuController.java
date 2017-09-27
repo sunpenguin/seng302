@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -58,17 +57,6 @@ public class EventMenuController {
             returnToTitle();
         });
         quitLabel.setOnMouseEntered(event -> buttonEnteredAction());
-    }
-
-
-    /**
-     * Sets a button to be selected.
-     *
-     * @param button   to set selected for.
-     * @param selected boolean to change the button selected.
-     */
-    private void setButtonSelected(ToggleButton button, boolean selected) {
-        button.setSelected(selected);
     }
 
 

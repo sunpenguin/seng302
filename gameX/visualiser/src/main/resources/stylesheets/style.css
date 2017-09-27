@@ -9,10 +9,16 @@
     src: url("/font/Munro.ttf");
 }
 
-.message {
+.event {
     -fx-font-size: 27 pt;
     -fx-font-family: "Munro";
     -fx-text-fill: crimson;
+}
+
+.message {
+    -fx-font-size: 27pt;
+    -fx-font-family: "Munro";
+    -fx-text-fill: black;
 }
 
 

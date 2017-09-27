@@ -1,5 +1,6 @@
 package seng302.team18.parse;
 
+import seng302.team18.message.AC35MessageType;
 import seng302.team18.message.MessageBody;
 import seng302.team18.message.MessageHead;
 

@@ -229,6 +229,7 @@ public class GPSCalculator {
                 .flatMap(compoundMark -> compoundMark.getMarks().stream().map(Mark::getCoordinate))
                 .collect(Collectors.toList())
         );
+
         return findMinMaxPoints(points);
     }
 

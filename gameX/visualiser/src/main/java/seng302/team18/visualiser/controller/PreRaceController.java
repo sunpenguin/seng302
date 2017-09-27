@@ -18,6 +18,7 @@ import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.interpret.americascup.BoatListInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceTimeInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceToMainRaceInterpreter;
+import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
@@ -40,8 +41,6 @@ public class PreRaceController {
     private Label startTimeLabel;
     @FXML
     private ListView<Boat> listView;
-    @FXML
-    private Label timeZoneLabel;
     @FXML
     private Label raceNameText;
     @FXML
@@ -72,21 +71,23 @@ public class PreRaceController {
     public void setUp(ClientRace race, Sender sender, Interpreter interpreter, ThemeTunePlayer themeTunePlayer) {
         this.sender = sender;
         this.race = race;
+        this.interpreter = interpreter;
         this.themeTunePlayer = themeTunePlayer;
-        raceNameText.setText(race.getRegatta().getName());
-        displayTimeZone(race.getStartTime());
 
+        addInterpreters();
         setUpStartSound();
-
         setUpLists();
+
         listView.setItems(FXCollections.observableList(race.getStartingList()));
-        PreRaceTimes preRaceTimes = new PreRaceTimes(startTimeLabel, timeZoneLabel, timeLabel, race);
+        PreRaceTimes preRaceTimes = new PreRaceTimes(startTimeLabel, timeLabel, race);
         preRaceTimes.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
-        this.interpreter = interpreter;
-        addInterpreters();
+
         showNetworkInfo();
+
+        raceNameText.setText(race.getMode().toString());
+        raceNameText.setStyle("-fx-font-size: 42pt");
 
         stage.setOnCloseRequest((event) -> {
             interpreter.close();
@@ -100,16 +101,6 @@ public class PreRaceController {
             System.out.println("shutting down");
             System.exit(0);
         });
-    }
-
-
-    /**
-     * Shows the time zone of the race
-     *
-     * @param zoneTime USED TO GET THE UTC OFFSET
-     */
-    private void displayTimeZone(ZonedDateTime zoneTime) {
-        timeZoneLabel.setText("UTC " + zoneTime.getOffset().toString());
     }
 
 
@@ -135,14 +126,8 @@ public class PreRaceController {
      * Set up and initialise interpreter variables, adding interpreters of each relevant type to the global interpreter.
      */
     private void addInterpreters() {
-
-        //interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race, new GameConnection()));
-        interpreter.getInterpreter().add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
-        interpreter.getInterpreter().add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
-        interpreter.getInterpreter().add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
         interpreter.getInterpreter().add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
         interpreter.getInterpreter().add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
-
         interpreter.getInterpreter().add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
 
     }

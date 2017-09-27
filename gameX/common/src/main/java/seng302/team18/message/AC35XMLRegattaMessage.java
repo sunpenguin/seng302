@@ -85,4 +85,5 @@ public class AC35XMLRegattaMessage implements XmlMessage {
     public String getCourseName() {
         return courseName;
     }
+
 }
