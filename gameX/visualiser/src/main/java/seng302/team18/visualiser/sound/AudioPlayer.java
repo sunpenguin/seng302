@@ -33,17 +33,16 @@ public class AudioPlayer {
     @SuppressWarnings("FieldCanBeLocal")
     private double volumeAmbient = 1;
 
-    private boolean isMutedMusic = false;
-    private boolean isMutedEffect = false;
+    private boolean isMusicMuted = false;
+    private boolean isEffectsMuted = false;
+
 
     /**
      * Constructs a new instance of AudioPlayer
      */
     public AudioPlayer() {
-        effectPlayers = Arrays.stream(SoundEffect.values())
-                .collect(Collectors.toMap(effect -> effect, effect -> new MediaPlayer(new Media(effect.getUrl()))));
-        effectClips = Arrays.stream(SoundEffect.values())
-                .collect(Collectors.toMap(effect -> effect, effect -> new AudioClip(effect.getUrl())));
+        effectPlayers = Arrays.stream(SoundEffect.values()).collect(Collectors.toMap(effect -> effect, effect -> new MediaPlayer(new Media(effect.getUrl()))));
+        effectClips = Arrays.stream(SoundEffect.values()).collect(Collectors.toMap(effect -> effect, effect -> new AudioClip(effect.getUrl())));
         ambientPlayers = new HashMap<>();
     }
 
@@ -60,7 +59,7 @@ public class AudioPlayer {
 
 
     /**
-     * Gets the duration of the specified sound effect. Returns {@link Duration#UNKNOWN Duration.UNKOWN}
+     * Gets the duration of the specified sound effect. Returns {@link Duration#UNKNOWN Duration.UNKNOWN}
      * if the media player is not loaded yet
      *
      * @param effect the effect
@@ -90,6 +89,11 @@ public class AudioPlayer {
     }
 
 
+    /**
+     * Plays the given music track on a loop.
+     *
+     * @param track the track to play. If null, playback stops
+     */
     public void loopMusic(Music track) {
         if (musicPlayer != null) {
             musicPlayer.stop();
@@ -106,6 +110,10 @@ public class AudioPlayer {
     }
 
 
+    /**
+     * Starts playing the given ambient track in a loop
+     * @param track the ambient track to play
+     */
     public void loopAmbient(Ambient track) {
         if (!ambientPlayers.containsKey(track)) {
             MediaPlayer player = new MediaPlayer(new Media(track.getUrl()));
@@ -117,6 +125,9 @@ public class AudioPlayer {
     }
 
 
+    /**
+     * Stops the playback of all ambient tracks
+     */
     public void stopAllAmbient() {
         Set<Map.Entry<Ambient, MediaPlayer>> players = ambientPlayers.entrySet();
         players.forEach(entry -> {
@@ -129,37 +140,37 @@ public class AudioPlayer {
 
 
     private double getVolumeMusic() {
-        return (isMutedMusic) ? 0 : volumeMusic * RELATIVE_VOLUME_MUSIC;
+        return (isMusicMuted) ? 0 : volumeMusic * RELATIVE_VOLUME_MUSIC;
     }
 
 
     private double getVolumeEffect() {
-        return (isMutedEffect) ? 0 : volumeEffect * RELATIVE_VOLUME_EFFECT;
+        return (isEffectsMuted) ? 0 : volumeEffect * RELATIVE_VOLUME_EFFECT;
     }
 
 
     private double getVolumeAmbient() {
-        return (isMutedMusic) ? 0 : volumeAmbient * RELATIVE_VOLUME_AMBIENT;
+        return (isMusicMuted) ? 0 : volumeAmbient * RELATIVE_VOLUME_AMBIENT;
     }
 
 
-    public void setMutedMusic(boolean mutedMusic) {
-        isMutedMusic = mutedMusic;
+    public void setMusicMuted(boolean musicMuted) {
+        isMusicMuted = musicMuted;
         musicPlayer.setVolume(getVolumeMusic());
     }
 
 
-    public void setMutedEffect(boolean mutedEffect) {
-        isMutedEffect = mutedEffect;
+    public void setEffectsMuted(boolean effectsMuted) {
+        isEffectsMuted = effectsMuted;
     }
 
 
-    public boolean isMutedMusic() {
-        return isMutedMusic;
+    public boolean isMusicMuted() {
+        return isMusicMuted;
     }
 
 
-    public boolean isMutedEffect() {
-        return isMutedEffect;
+    public boolean isEffectsMuted() {
+        return isEffectsMuted;
     }
 }

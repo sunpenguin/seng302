@@ -57,8 +57,8 @@ public class TitleScreenController {
         musicButton.setLayoutX(100);
         soundEffectsButton.setLayoutY(-50);
 
-        musicButton.selectedProperty().addListener((observable, oldValue, newValue) -> audioPlayer.setMutedMusic(newValue));
-        soundEffectsButton.selectedProperty().addListener((observable, oldValue, newValue) -> audioPlayer.setMutedEffect(newValue));
+        musicButton.selectedProperty().addListener((observable, oldValue, newValue) -> audioPlayer.setMusicMuted(newValue));
+        soundEffectsButton.selectedProperty().addListener((observable, oldValue, newValue) -> audioPlayer.setEffectsMuted(newValue));
 
         musicButton.getStyleClass().add("musicView");
         soundEffectsButton.getStyleClass().add("soundView");
@@ -78,8 +78,8 @@ public class TitleScreenController {
         audioPlayer.loopMusic(Music.BEEPBOOP);
         audioPlayer.stopAllAmbient();
 
-        musicButton.setSelected(audioPlayer.isMutedMusic());
-        soundEffectsButton.setSelected(audioPlayer.isMutedEffect());
+        musicButton.setSelected(audioPlayer.isMusicMuted());
+        soundEffectsButton.setSelected(audioPlayer.isEffectsMuted());
     }
 
 
