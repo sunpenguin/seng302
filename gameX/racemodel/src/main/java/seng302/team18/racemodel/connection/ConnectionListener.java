@@ -28,8 +28,6 @@ public class ConnectionListener extends Observable implements Observer {
     private List<Integer> ids;
     private MessageParserFactory factory;
     private ExecutorService executor = Executors.newCachedThreadPool();
-    private final int MAX_PLAYERS = 6;
-    private int playersJoined = 0;
 
     private Race race;
 
@@ -94,7 +92,7 @@ public class ConnectionListener extends Observable implements Observer {
                 sendMessage(client, SPECTATOR_ID, request.getAction());
                 setChanged();
                 notifyObservers(client);
-            } else if (!isValidMode(request.getAction()) || playersJoined >= MAX_PLAYERS) { // invalid
+            } else if (!isValidMode(request.getAction())) { // invalid
                 sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
                 client.close(); // IOException
             } else if (isJoinable(race.getStatus())) { // a valid player before the race starts
@@ -102,7 +100,6 @@ public class ConnectionListener extends Observable implements Observer {
                 sendMessage(client, id, request.getAction());
                 setChanged();
                 notifyObservers(client);
-                playersJoined++;
             } else { // a valid player after the race starts
                 sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
                 client.close(); // IOException
@@ -165,7 +162,6 @@ public class ConnectionListener extends Observable implements Observer {
             player.close();
         }
         executor.shutdownNow();
-//        System.out.println("ConnectionListener::close");
     }
 
 

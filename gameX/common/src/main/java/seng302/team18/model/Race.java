@@ -195,6 +195,15 @@ public class Race {
     }
 
 
+    public List<Boat> getCompetitors() {
+        final List<BoatStatus> racingCodes = Arrays.asList(BoatStatus.PRE_START, BoatStatus.RACING);
+        return new ArrayList<>(startingList
+                        .stream()
+                        .filter(boat -> racingCodes.contains(boat.getStatus()))
+                        .collect(Collectors.toList()));
+    }
+
+
     /**
      * Sets the contents of the starting list to be the same as the given list
      *
