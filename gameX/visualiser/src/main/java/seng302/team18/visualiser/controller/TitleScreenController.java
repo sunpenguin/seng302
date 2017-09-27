@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -33,6 +34,17 @@ public class TitleScreenController {
     private SoundEffectPlayer soundPlayer;
     private ThemeTunePlayer themeTunePlayer;
 
+    private Image soundEffectsOnImage = new Image("/images/title_screen/sound_effects_on.png");
+    private Image soundEffectsOffImage = new Image("/images/title_screen/sound_effects_off.png");
+    private Image musicOnImage = new Image("/images/title_screen/music_on.png");
+    private Image musicOffImage = new Image("/images/title_screen/music_off.png");
+
+    private ToggleButton soundEffectsButton = new ToggleButton();
+    private ToggleButton musicButton = new ToggleButton();
+
+    private boolean soundOn = true;
+    private boolean musicOn = true;
+
 
     public void initialize()  {
         registerListeners();
@@ -48,6 +60,29 @@ public class TitleScreenController {
 
         errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());
         errorText.setLayoutY((600 / 2) + 300);
+
+        paneInner.getChildren().add(soundEffectsButton);
+        paneInner.getChildren().add(musicButton);
+
+        musicButton.setLayoutY(-50);
+        musicButton.setLayoutX(100);
+        soundEffectsButton.setLayoutY(-50);
+
+        musicButton.setOnMouseClicked(event -> toggleMusic());
+        soundEffectsButton.setOnMouseClicked(event -> toggleSoundEffects());
+
+        musicButton.getStyleClass().add("musicView");
+        soundEffectsButton.getStyleClass().add("soundView");
+    }
+
+
+    private void toggleMusic() {
+        musicOn = !musicOn;
+    }
+
+
+    private void toggleSoundEffects() {
+        soundOn = !soundOn;
     }
 
 
