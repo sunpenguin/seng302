@@ -573,8 +573,6 @@ public class RaceController implements Observer {
         this.sender = sender;
         this.race = race;
 
-        themeTunePlayer = new ThemeTunePlayer("audio/theme.wav");
-        themeTunePlayer.playTrack();
 
         GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
