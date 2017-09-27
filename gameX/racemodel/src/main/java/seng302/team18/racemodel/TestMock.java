@@ -59,13 +59,11 @@ public class TestMock implements Observer {
      * @param arg given by the object o
      */
     @Override
-    public void update(Observable o, Object arg) {
+    public synchronized void update(Observable o, Object arg) {
         if (arg instanceof ClientConnection) {
             handleClient((ClientConnection) arg);
         } else if (arg instanceof ServerState) {
-            if (ServerState.EMPTY.equals(arg) || ServerState.CLOSED.equals(arg)) {
-                open = false;
-            }
+            open = ServerState.OPEN.equals(arg);
         } else if (arg instanceof Integer) {
             Integer id = (Integer) arg;
             race.setBoatStatus(id, BoatStatus.DNF);
@@ -84,11 +82,7 @@ public class TestMock implements Observer {
         } else if (client.getRequestType() == RequestType.CONTROLS_TUTORIAL) {
             byte[] message = new AcceptanceMessageGenerator(client.getId(), RequestType.FAILURE_CLIENT_TYPE).getMessage();
             client.send(message);
-            try {
-                client.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            client.close();
         }
         if (!client.isClosed()) {
             if (client.isPlayer()) {
@@ -96,7 +90,6 @@ public class TestMock implements Observer {
                 race.addParticipant(boat);
                 race.setCourseForBoats();
                 scheduledMessages.add(new BoatMessageGenerator(boat));
-                client.setId(boats.get(race.getStartingList().size()).getId());
             }
 
             generateXMLs();
@@ -178,7 +171,6 @@ public class TestMock implements Observer {
     }
 
 
-
     /**
      * Update the clients by sending any necessary new race info to them.
      * Sends out updates for positions, mark roundings, etc.
@@ -240,6 +232,7 @@ public class TestMock implements Observer {
             server.broadcast(generator.getMessage());
         }
     }
+    
 
 
     private class SimulationLoop implements Runnable {

@@ -23,7 +23,7 @@ import seng302.team18.visualiser.interpret.unique.AcceptanceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
-import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.AudioPlayer;
 import seng302.team18.visualiser.util.ModelLoader;
 
 import javax.net.SocketFactory;
@@ -44,7 +44,8 @@ public class GameConnection {
     private Receiver receiver;
     private Sender sender;
     private ClientRace race;
-    private SoundEffectPlayer soundPlayer;
+    private AudioPlayer audioPlayer;
+    private boolean failed = false;
 
 
     /**
@@ -54,12 +55,14 @@ public class GameConnection {
      * @param node      a node from the calling scene
      * @param mode      the game type to launch/connect to
      * @param color     the colour of the player's boat
+     * @param player    manages the audio playback from this scene
      */
-    public GameConnection(StringProperty errorText, Node node, RaceMode mode, Color color) {
+    public GameConnection(StringProperty errorText, Node node, RaceMode mode, Color color, AudioPlayer player) {
         this.errorText = errorText;
         this.node = node;
         this.mode = mode;
         this.color = color;
+        this.audioPlayer = player;
         errorText.set("");
     }
 
@@ -70,13 +73,12 @@ public class GameConnection {
      * @param hostString the address of the host
      * @param portString the port to connect to
      * @param isHosting  true if a server should be started, else false
-     * @return true if the operation succeeded, else false
      */
-    public boolean startGame(String hostString, String portString, boolean isHosting) {
+    public void startGame(String hostString, String portString, boolean isHosting) {
         String hostAddress = parseHostAddress(hostString);
         int port = parsePort(portString);
         if (port < 0 || hostAddress == null) {
-            return false;
+            return;
         }
 
         if (isHosting) {
@@ -85,7 +87,7 @@ public class GameConnection {
             } catch (IOException e) {
                 errorText.set("Unable to initiate server!");
                 e.printStackTrace();
-                return false;
+                return;
             }
 
             try {
@@ -96,7 +98,7 @@ public class GameConnection {
         }
 
         openStream(hostAddress, port);
-        return true;
+        return;
     }
 
 
@@ -142,9 +144,8 @@ public class GameConnection {
     /**
      * Creates a controller manager object and begins an instance of the program.
      *
-     * @param receiver a reciver
+     * @param receiver a receiver
      * @param sender   a sender
-     * @return true if the operation is successful, else false
      */
     private void startConnection(Receiver receiver, Sender sender) {
         this.receiver = receiver;
@@ -219,13 +220,16 @@ public class GameConnection {
         try {
             Socket socket = SocketFactory.getDefault().createSocket(host, port);
             startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
+            failed = false;
         } catch (Exception e) {
             errorText.set("Failed to connect to " + host + ":" + port + "!");
+            failed = true;
         }
     }
 
 
     public void goToPreRace() throws IOException {
+        failed = false;
         sender.send(new ColourMessage(color, race.getPlayerId()));
 
         Stage stage = (Stage) node.getScene().getWindow();
@@ -236,20 +240,21 @@ public class GameConnection {
         node.getScene().setRoot(root);
         stage.show();
 
-        controller.setSoundPlayer(soundPlayer);
-        controller.setUp(race, sender, interpreter);
+        controller.setUp(race, sender, interpreter, audioPlayer);
     }
 
     public void setFailedConnection() {
         errorText.set("Failed to connect to server:\nServer rejected connection");
+        failed = true;
     }
 
 
     /**
-     * @param player manages the audio playback from this scene
+     * Returns if the connection has fialed or not
+     *
+     * @return
      */
-    public void setSoundPlayer(SoundEffectPlayer player) {
-        this.soundPlayer = player;
+    public boolean hasFailed() {
+        return failed;
     }
-
 }

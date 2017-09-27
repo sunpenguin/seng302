@@ -49,7 +49,6 @@ public abstract class MessageEncoder {
         byte messageType = (byte) message.getType();
         byte[] timestampBytes = ByteCheck.getCurrentTime6Bytes();
 
-        //TODO just like HeaderGenerate from racemodel, there needs to be a better way to generate source id
         byte[] sourceID = new byte[4];
         sourceID[0] = 11;
         sourceID[1] = 22;

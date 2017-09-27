@@ -4,7 +4,6 @@ import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import seng302.team18.message.PowerType;
@@ -94,7 +93,7 @@ public class CourseRenderer implements Renderable {
                 renderBoundary(border, course.getLimits().get(0));
                 group.getChildren().add(border);
             } catch (IndexOutOfBoundsException e) {
-                //e.printStackTrace();
+//                Non-fatal Exception
             }
         }
 

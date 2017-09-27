@@ -234,7 +234,7 @@ public class Course {
     }
 
 
-    public void addPickUp(PickUp pickUp) {
+    public synchronized void addPickUp(PickUp pickUp) {
         pickUps.add(pickUp);
     }
 
@@ -244,7 +244,7 @@ public class Course {
      *
      * @param id of the PickUp.
      */
-    public void removePickUp(int id) {
+    public synchronized void removePickUp(int id) {
         pickUps.removeIf(pickUp -> pickUp.getId() == id);
     }
 
@@ -254,6 +254,7 @@ public class Course {
      */
     public synchronized void removeOldPickUps() {
         List<PickUp> remaining = new ArrayList<>();
+        List<PickUp> pickUps = new ArrayList<>(this.pickUps);
         for (PickUp pickUp: pickUps) {
             if (!pickUp.hasExpired()) {
                 remaining.add(pickUp);
@@ -286,7 +287,7 @@ public class Course {
 
 
     public synchronized void setPickUps(List<PickUp> pickUps) {
-        this.pickUps = pickUps;
+        this.pickUps = new ArrayList<>(pickUps);
     }
 
 

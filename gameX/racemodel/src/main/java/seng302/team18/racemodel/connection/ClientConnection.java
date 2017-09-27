@@ -58,12 +58,15 @@ public class ClientConnection {
     /**
      * Closes the client connection
      *
-     * @throws IOException
      */
-    public void close() throws IOException {
-        in.close();
-        out.close();
-        socket.close();
+    public void close() {
+        try {
+            in.close();
+            out.close();
+            socket.close();
+        } catch (IOException e) {
+//            e.printStackTrace();
+        }
     }
 
 

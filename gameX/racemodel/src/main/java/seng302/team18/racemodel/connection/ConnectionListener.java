@@ -61,12 +61,12 @@ public class ConnectionListener extends Observable implements Observer {
                     e.printStackTrace();
                 }
             });
-        } else if (!ServerState.OPEN.equals(arg)) {
-            close();
-            setChanged();
-            notifyObservers(arg);
         } else if (arg instanceof Integer) {
             removePlayer((Integer) arg);
+            setChanged();
+            notifyObservers(arg);
+        } else if (arg instanceof ServerState && !ServerState.OPEN.equals(arg)) {
+            close();
             setChanged();
             notifyObservers(arg);
         }
@@ -89,27 +89,22 @@ public class ConnectionListener extends Observable implements Observer {
             int id = ids.get(players.size());
             client.setRequestType(request.getAction());
             if (request.getAction() == RequestType.VIEWING) { // spectator
-                System.out.println("ConnectionListener::handleConnection spectator");
                 sendMessage(client, SPECTATOR_ID, request.getAction());
                 setChanged();
                 notifyObservers(client);
             } else if (!isValidMode(request.getAction())) { // invalid
-                System.out.println("ConnectionListener::handleConnection invalid");
                 sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
                 client.close(); // IOException
             } else if (isJoinable(race.getStatus())) { // a valid player before the race starts
-                System.out.println("ConnectionListener::handleConnection valid");
                 addPlayer(receiver, id);
                 sendMessage(client, id, request.getAction());
                 setChanged();
                 notifyObservers(client);
             } else { // a valid player after the race starts
-                System.out.println("ConnectionListener::handleConnection too late");
                 sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
                 client.close(); // IOException
             }
         }
-
     }
 
 

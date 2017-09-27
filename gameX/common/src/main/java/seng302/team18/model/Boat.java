@@ -474,4 +474,9 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     public void setPowerActive(boolean powerActive) {
         isPowerActive = powerActive;
     }
+
+
+    public boolean isRacing() {
+        return status.isRacing();
+    }
 }

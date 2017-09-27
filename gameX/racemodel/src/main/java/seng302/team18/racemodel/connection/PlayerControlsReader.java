@@ -29,12 +29,10 @@ public class PlayerControlsReader implements Runnable {
     @Override
     public void run() {
         while (open) {
-//            System.out.println("PlayerControlsReader::run");
             try {
                 MessageBody message = receiver.nextMessage(); // io exception
                 interpreter.interpret(message);
             } catch (IOException e) {
-//                System.out.println("PlayerControlsReader::run closed");
                 close();
             }
         }
@@ -44,7 +42,6 @@ public class PlayerControlsReader implements Runnable {
     public void close() {
         open = false;
         receiver.close();
-//        System.out.println("PlayerControlsReader::close " + receiver.close());
     }
 
 
