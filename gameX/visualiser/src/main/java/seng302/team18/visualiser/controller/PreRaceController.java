@@ -46,7 +46,7 @@ public class PreRaceController {
     @FXML
     private Label timeZoneLabel;
     @FXML
-    private Text raceNameText;
+    private Label raceNameText;
     @FXML
     private Label ipLabel;
     @FXML
@@ -77,6 +77,7 @@ public class PreRaceController {
     public void setUp(ClientRace race, Sender sender, Interpreter interpreter) {
         this.sender = sender;
         this.race = race;
+        System.out.println(race.getRegatta().getName());
         raceNameText.setText(race.getRegatta().getName());
         displayTimeZone(race.getStartTime());
 

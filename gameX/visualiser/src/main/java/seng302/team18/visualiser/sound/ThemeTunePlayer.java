@@ -12,28 +12,18 @@ public class ThemeTunePlayer {
 
     private static boolean playing = false;
     private static MediaPlayer mediaPlayer;
-    private String path = "audio/theme.mp3";
 
-
-    /**
-     * Constructor for a theme player
-     *
-     * @param path the path to the sound file to be played
-     */
-    public ThemeTunePlayer(String path) {
-        this.path = path;
-    }
 
     /**
      * Method the play the track
      */
-    public void playTrack(){
+    public void playSound(String path){
         if (ThemeTunePlayer.playing){
             return;
         } else {
             URL resource = getClass().getClassLoader().getResource(path);
-            String path = resource.toString();
-            Media song = new Media(path);
+            String songPath = resource.toString();
+            Media song = new Media(songPath);
             mediaPlayer = new MediaPlayer(song);
             mediaPlayer.setVolume(0.6);
             mediaPlayer.play();

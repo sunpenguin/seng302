@@ -22,6 +22,7 @@ public class App extends Application {
         Parent root = loader.load(); // throws IOException
         TitleScreenController controller = loader.getController();
         controller.setStage(primaryStage);
+        controller.setup();
         controller.setSoundPlayer(new SoundEffectPlayer());
         controller.reDraw();
         primaryStage.setTitle("High Seas");

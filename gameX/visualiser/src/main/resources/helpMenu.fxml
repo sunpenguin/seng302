@@ -15,7 +15,7 @@
       </HBox>
       <StackPane fx:id="stackPane" layoutY="100.0" style="-fx-background-color: aqua;">
          <children>
-            <Pane fx:id="modePane" prefHeight="200.0" prefWidth="200.0" styleClass="mainPane">
+            <Pane fx:id="modePane" prefHeight="200.0" prefWidth="200.0" styleClass="mainPane" visible="false">
                <children>
                   <GridPane alignment="TOP_LEFT" layoutX="25.0" layoutY="25.0" prefHeight="620.0" prefWidth="550.0">
                     <columnConstraints>
@@ -35,7 +35,7 @@
                         <Label alignment="TOP_LEFT" contentDisplay="TOP" text="FIRST BOAT TO FINISH ALL LEGS WINS. UP TO 20 PLAYERS" wrapText="true" GridPane.columnIndex="1" />
                         <Label alignment="TOP_LEFT" text="ARCADE RACE" GridPane.rowIndex="1" />
                         <Label alignment="TOP_LEFT" text="CHALLENGE MODE" GridPane.rowIndex="2" />
-                        <Label alignment="TOP_LEFT" text="BUMPER BOATS" GridPane.rowIndex="3" />
+                        <Label alignment="TOP_LEFT" text="ARENA MODE" GridPane.rowIndex="3" />
                         <Label alignment="TOP_LEFT" text="SPECTATOR" GridPane.rowIndex="4" />
                         <Label text="FIRST BOAT TO FINISH ALL LEGS WINS. SAIL OVER POWER UPS TO ACCESS SPECIAL ABILITIES. UP TO 20 PLAYERS." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="SINGLE OR 2 PLAYER VERSUS MODE. RACE THROUGH RANDOMLY POSITIONED GATES AND TRY TO MAKE IT TO THE END" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -47,7 +47,7 @@
                   </GridPane>
                </children>
             </Pane>
-            <Pane fx:id="controlsPane" layoutY="50.0" prefHeight="670.0" prefWidth="600.0" styleClass="mainPane" visible="false">
+            <Pane fx:id="controlsPane" layoutY="50.0" prefHeight="670.0" prefWidth="600.0" styleClass="mainPane">
                <children>
                   <GridPane layoutX="25.0" layoutY="25.0" prefHeight="620.0" prefWidth="550.0">
                     <columnConstraints>
@@ -58,6 +58,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -84,9 +85,11 @@
                         <Label text="X" GridPane.rowIndex="7" />
                         <Label text="ZOOM CAMERA OUT" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                         <Label text="TAB" GridPane.rowIndex="8" />
-                        <Label text="SHOW / HIDE EXTRA RACE INFO" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <Label text="HOLD TO SHOW LEADERBOARD" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                         <Label text="ESC" GridPane.rowIndex="9" />
-                        <Label text="SHOW / HIDE ESCAPE MENU" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <Label text="SHOW / HIDE OPTIONS MENU" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <Label text="C" GridPane.rowIndex="10" />
+                        <Label text="SHOW / HIDE KEYBOARD CONTROLS" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="10" />
                      </children>
                   </GridPane>
                </children>

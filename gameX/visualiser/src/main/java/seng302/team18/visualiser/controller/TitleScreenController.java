@@ -12,9 +12,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
-import seng302.team18.visualiser.sound.ThemeTunePlayer;
 
 import java.io.IOException;
 
@@ -22,12 +22,9 @@ import java.io.IOException;
  * Controller for when the application first starts up
  */
 public class TitleScreenController {
-    @FXML
-    private Label errorText;
-    @FXML
-    private AnchorPane pane;
-    @FXML
-    private AnchorPane paneInner;
+    @FXML private Label errorText;
+    @FXML private AnchorPane pane;
+    @FXML private AnchorPane paneInner;
 
     private Pane helpMenuPane;
 
@@ -35,7 +32,7 @@ public class TitleScreenController {
     private SoundEffectPlayer soundPlayer;
 
 
-    public void initialize() {
+    public void initialize()  {
         registerListeners();
         initialiseHostButton();
         initialiseHelpButton();
@@ -49,6 +46,14 @@ public class TitleScreenController {
 
         errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());
         errorText.setLayoutY((600 / 2) + 300);
+
+
+    }
+
+    public void setup(){
+        stage.setOnCloseRequest((event) -> {
+            System.exit(0);
+        });
     }
 
 
@@ -201,9 +206,8 @@ public class TitleScreenController {
         tutorialLabel.setLayoutY((600 / 2) + 200);
         tutorialLabel.setOnMouseClicked(event -> {
             buttonClickedAction();
-            GameConnection connection = new GameConnection(errorText.textProperty(), paneInner, RaceMode.CONTROLS_TUTORIAL, Color.RED);
-            connection.setSoundPlayer(soundPlayer);
-            connection.startGame("127.0.0.1", "5010", true);
+            new GameConnection(errorText.textProperty(), paneInner, RaceMode.CONTROLS_TUTORIAL, Color.RED)
+                    .startGame("127.0.0.1", "5010", true);
         });
         tutorialLabel.setOnMouseEntered(event1 -> buttonEnteredAction());
     }

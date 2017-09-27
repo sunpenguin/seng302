@@ -82,7 +82,7 @@ public class PickUp {
     }
 
 
-    public boolean hasExpired() {
+    public synchronized boolean hasExpired() {
         return System.currentTimeMillis() > timeout;
     }
 

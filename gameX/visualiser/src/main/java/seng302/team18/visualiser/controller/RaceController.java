@@ -132,6 +132,10 @@ public class RaceController implements Observer {
         background = new RaceBackground(raceViewPane, "/images/water.gif");
         tabView.setVisible(false);
         initialiseFadeTransition();
+
+        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer();
+        themeTunePlayer.playSound("audio/Ocean_Waves-Mike_Koenig-980635527.mp3");
+
     }
 
 
@@ -192,10 +196,8 @@ public class RaceController implements Observer {
                 if (pixelMapper.getZoomLevel() > 0) {
                     pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() + 1);
                 } else {
-                    Boat boat = race.getBoat(race.getStartingList().get(0).getId());
-                    pixelMapper.setZoomLevel(1);
-                    pixelMapper.track(boat);
                     pixelMapper.setTracking(true);
+                    pixelMapper.setZoomLevel(1);
                 }
                 break;
             case X:
@@ -624,6 +626,12 @@ public class RaceController implements Observer {
         loadEventMenu();
 
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
+
+        if (race.getMode() != RaceMode.SPECTATION) {
+            pixelMapper.track(race.getBoat(race.getPlayerId()));
+        } else {
+            pixelMapper.track(race.getBoat(race.getStartingList().get(0).getId()));
+        }
     }
 
 

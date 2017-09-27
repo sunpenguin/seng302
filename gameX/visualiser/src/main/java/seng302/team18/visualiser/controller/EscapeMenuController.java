@@ -137,6 +137,7 @@ public class EscapeMenuController {
         themeTunePlayer.stopTrack();
 
         try {
+            ThemeTunePlayer.stopTrack();
             Parent root = loader.load();
             TitleScreenController controller = loader.getController();
             Stage stage = (Stage) group.getScene().getWindow();
