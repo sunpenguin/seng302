@@ -1,6 +1,5 @@
 package seng302.team18.visualiser.controller;
 
-import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,7 +22,6 @@ import seng302.team18.visualiser.sound.AudioPlayer;
 import seng302.team18.visualiser.sound.SoundEffect;
 
 import java.io.IOException;
-import java.lang.management.PlatformLoggingMXBean;
 import java.util.Arrays;
 import java.util.List;
 
@@ -56,7 +54,7 @@ public class GameSelectionController {
 
     private boolean isIpFirstFocus = true;
     private boolean isPortFirstFocus = true;
-    private Boolean clickedPlay = false;
+    private boolean clickedPlay = false;
 
     private RaceMode mode;
     private Boolean isHosting;
