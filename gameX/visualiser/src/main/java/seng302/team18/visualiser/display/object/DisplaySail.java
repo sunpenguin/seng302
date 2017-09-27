@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
 import seng302.team18.model.Coordinate;
 import seng302.team18.util.GPSCalculator;
 import seng302.team18.util.XYPair;
@@ -20,6 +21,7 @@ public class DisplaySail extends DisplayBoatDecorator {
     private double heading;
     private PixelMapper pixelMapper;
     private final Rotate rotation = new Rotate(0, 0, 0);
+    private final Scale scale = new Scale(1, 1);
     private final static double POWERED_UP_ANGLE = 60;
     private final double strokeWidth;
 
@@ -43,6 +45,7 @@ public class DisplaySail extends DisplayBoatDecorator {
 
         sail.setVisible(true);
         sailView.setVisible(true);
+        sailView.getTransforms().addAll(scale);
     }
 
 
@@ -108,6 +111,7 @@ public class DisplaySail extends DisplayBoatDecorator {
     public void setHeading(double heading) {
         this.heading = heading;
         super.setHeading(heading);
+        setSailSide();
     }
 
 
@@ -115,6 +119,7 @@ public class DisplaySail extends DisplayBoatDecorator {
     public void setApparentWindDirection(double apparentWind) {
         this.windDirection = apparentWind;
         super.setApparentWindDirection(apparentWind);
+        setSailSide();
     }
 
 
@@ -151,6 +156,16 @@ public class DisplaySail extends DisplayBoatDecorator {
             return maxDeviation + heading;
         }
         return sailAngle;
+    }
+
+
+    private void setSailSide() {
+        double flippedSail = (heading + 180) % 360;
+        if (flippedSail > windDirection) {
+//            System.out.print(1);
+        } else {
+//            System.out.print(2);
+        }
     }
 
 }
