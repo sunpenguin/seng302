@@ -34,11 +34,6 @@ public class TitleScreenController {
     private SoundEffectPlayer soundPlayer;
     private ThemeTunePlayer themeTunePlayer;
 
-    private Image soundEffectsOnImage = new Image("/images/title_screen/sound_effects_on.png");
-    private Image soundEffectsOffImage = new Image("/images/title_screen/sound_effects_off.png");
-    private Image musicOnImage = new Image("/images/title_screen/music_on.png");
-    private Image musicOffImage = new Image("/images/title_screen/music_off.png");
-
     private ToggleButton soundEffectsButton = new ToggleButton();
     private ToggleButton musicButton = new ToggleButton();
 
