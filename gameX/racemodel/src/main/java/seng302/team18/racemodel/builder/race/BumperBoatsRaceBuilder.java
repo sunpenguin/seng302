@@ -33,7 +33,7 @@ public class BumperBoatsRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new BoatsUpdater());
         updaters.add(new BoatCollisionUpdater());
         updaters.add(new BumperBoatHealthUpdater());
-        updaters.add(new BumperCourseShrinker(new Coordinate(5.00150, 4.0005), 200, 34, 0.0000025));
+        updaters.add(new BumperCourseShrinker(new Coordinate(5.00150, 4.0005), 200, 34, 0.000002));
         updaters.add(new PowerUpUpdater(makePickUp(), 4));
         updaters.add(new ProjectileUpdater());
         updaters.add(new BumperBoatsHitUpdater());

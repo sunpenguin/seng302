@@ -377,4 +377,5 @@ public class AC35XMLBoatMessage implements XmlMessage {
     public void setDefaultFlagZ(double defaultFlagZ) {
         this.defaultFlagZ = defaultFlagZ;
     }
+
 }

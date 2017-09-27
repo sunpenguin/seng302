@@ -66,6 +66,8 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Label text="UP" />
@@ -78,18 +80,22 @@
                         <Label text="ADJUST BOAT'S HEADING CLOCKWISE" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label text="SHIFT" GridPane.rowIndex="4" />
                         <Label text="SAILS IN / OUT" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <Label text="S" GridPane.rowIndex="5" />
-                        <Label text="ACTIVATE POWER UP" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <Label text="Z" GridPane.rowIndex="6" />
-                        <Label text="ZOOM CAMERA IN" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <Label text="X" GridPane.rowIndex="7" />
-                        <Label text="ZOOM CAMERA OUT" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                        <Label text="TAB" GridPane.rowIndex="8" />
-                        <Label text="HOLD TO SHOW LEADERBOARD" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                        <Label text="ESC" GridPane.rowIndex="9" />
-                        <Label text="SHOW / HIDE OPTIONS MENU" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                        <Label text="C" GridPane.rowIndex="10" />
-                        <Label text="SHOW / HIDE KEYBOARD CONTROLS" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <Label text="S" GridPane.rowIndex="7" />
+                        <Label text="ACTIVATE POWER UP" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <Label text="Z" GridPane.rowIndex="8" />
+                        <Label text="ZOOM CAMERA IN" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <Label text="X" GridPane.rowIndex="9" />
+                        <Label text="ZOOM CAMERA OUT" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <Label text="TAB" GridPane.rowIndex="10" />
+                        <Label text="HOLD TO SHOW LEADERBOARD" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <Label text="ESC" GridPane.rowIndex="11" />
+                        <Label text="SHOW / HIDE OPTIONS MENU" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                        <Label text="C" GridPane.rowIndex="12" />
+                        <Label text="SHOW / HIDE KEYBOARD CONTROLS" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                        <Label text="ENTER" GridPane.rowIndex="5" />
+                        <Label text="SPACE" GridPane.rowIndex="6" />
+                        <Label text="TACK / GYBE" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label text="SET HEADING TO OPTIMAL VMG (VELOCITY MADE GOOD)" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                      </children>
                   </GridPane>
                </children>

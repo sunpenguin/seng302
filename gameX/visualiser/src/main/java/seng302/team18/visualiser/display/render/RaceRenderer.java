@@ -70,6 +70,7 @@ public class RaceRenderer implements Renderable {
     public void render() {
         drawBoats();
         renderShark();
+
         if (hasTrails) {
             drawTrails();
         }
@@ -94,7 +95,7 @@ public class RaceRenderer implements Renderable {
 
 
     private boolean isValidCode(BoatStatus status) {
-        return ! (BoatStatus.DSQ.equals(status) || BoatStatus.DNF.equals(status));
+        return !(BoatStatus.DSQ.equals(status) || BoatStatus.DNF.equals(status));
     }
 
 
@@ -134,7 +135,6 @@ public class RaceRenderer implements Renderable {
                 shark.removeFrom(group);
                 sharksMap.remove(shark.getProjectile().getId());
             }
-
         }
     }
 
