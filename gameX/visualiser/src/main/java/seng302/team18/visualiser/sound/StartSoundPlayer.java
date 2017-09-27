@@ -43,9 +43,9 @@ public class StartSoundPlayer implements Runnable {
                 soundPlayer.playEffect(SoundEffect.RACE_START_LEAD_IN);
             } else {
                 long millisSincePlayStart = ChronoUnit.MILLIS.between(playTime, race.getCurrentTime());
-                System.out.println("millisSincePlayStart = " + millisSincePlayStart);
                 MediaPlayer player = soundPlayer.getEffectPlayer(SoundEffect.RACE_START_LEAD_IN);
                 player.setStartTime(new Duration(millisSincePlayStart));
+                player.setOnEndOfMedia(player::dispose);
                 player.play();
             }
 

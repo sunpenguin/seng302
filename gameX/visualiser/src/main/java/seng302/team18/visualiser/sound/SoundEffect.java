@@ -24,12 +24,10 @@ public enum SoundEffect {
 
     SoundEffect(String url) {
         this.url = getClass().getClassLoader().getResource(url);
-//        this.url = (resource == null) ? "" : resource.toString();
     }
 
 
     public URL getUrl() {
-//        System.out.println(url.toString());
         return url;
     }
 }

@@ -73,7 +73,6 @@ public class PreRaceController {
         this.sender = sender;
         this.race = race;
         this.themeTunePlayer = themeTunePlayer;
-        System.out.println(race.getRegatta().getName());
         raceNameText.setText(race.getRegatta().getName());
         displayTimeZone(race.getStartTime());
 
