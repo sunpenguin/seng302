@@ -12,7 +12,7 @@ public class ThemeTunePlayer {
 
     private static boolean playing = false;
     private static MediaPlayer mediaPlayer;
-    private String path = "audio/theme.wav";
+    private String path = "audio/theme.mp3";
 
 
     /**
