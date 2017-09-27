@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import seng302.team18.model.*;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.AnnotationType;
-import seng302.team18.visualiser.display.DisplayRoundingArrow;
 import seng302.team18.visualiser.display.object.*;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
@@ -96,7 +95,7 @@ public class RaceRenderer implements Renderable {
 
 
     private boolean isValidCode(BoatStatus status) {
-        return ! (BoatStatus.DSQ.equals(status) || BoatStatus.DNF.equals(status));
+        return !(BoatStatus.DSQ.equals(status) || BoatStatus.DNF.equals(status));
     }
 
 

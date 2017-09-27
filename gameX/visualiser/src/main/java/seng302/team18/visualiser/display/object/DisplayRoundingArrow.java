@@ -1,4 +1,4 @@
-package seng302.team18.visualiser.display;
+package seng302.team18.visualiser.display.object;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -35,6 +35,12 @@ public class DisplayRoundingArrow {
     private PixelMapper pixelMapper;
 
 
+    /**
+     * Creates a mark rounding arrow
+     *
+     * @param pixelMapper  the mapper to use to map geographic coordinates to the screen
+     * @param markRounding the mark rounding to create arrows for
+     */
     public DisplayRoundingArrow(PixelMapper pixelMapper, MarkRounding markRounding) {
         this.pixelMapper = pixelMapper;
 
@@ -50,6 +56,12 @@ public class DisplayRoundingArrow {
     }
 
 
+    /**
+     * Draw semi-circular arrows around each mark in the gate
+     *
+     * @param rounding      a gate rounding
+     * @param isDirReversed true if the gate entry direction is reversed
+     */
     private void drawRoundGateArrows(MarkRounding rounding, boolean isDirReversed) {
         XYPair mark1 = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(0).getCoordinate());
         XYPair mark2 = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(1).getCoordinate());
@@ -68,6 +80,12 @@ public class DisplayRoundingArrow {
     }
 
 
+    /**
+     * Draw two straight arrows between the gate
+     *
+     * @param rounding      a gate rounding
+     * @param isDirReversed true if the gate entry direction is reversed
+     */
     private void drawStraightGateArrows(MarkRounding rounding, boolean isDirReversed) {
         XYPair mark1 = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(0).getCoordinate());
         XYPair mark2 = pixelMapper.mapToPane(rounding.getCompoundMark().getMarks().get(1).getCoordinate());
@@ -85,15 +103,20 @@ public class DisplayRoundingArrow {
 
         endPos = polarToCartesian(mark1, offset, bearing1to2);
         endPos = polarToCartesian(endPos, scaleValue(0, markSize * STRAIGHT_ARROW_LENGTH) / -2, arrowHeading);
-        drawStraightArrow(endPos, markSize, arrowHeading, is1Clockwise);
+        drawStraightArrow(endPos, markSize, arrowHeading);
 
         endPos = polarToCartesian(mark2, -offset, bearing1to2);
         endPos = polarToCartesian(endPos, scaleValue(0, markSize * STRAIGHT_ARROW_LENGTH) / -2, arrowHeading);
-        drawStraightArrow(endPos, markSize, arrowHeading, is1Clockwise);
+        drawStraightArrow(endPos, markSize, arrowHeading);
 
     }
 
 
+    /**
+     * Draw a curved guide arrow for a mark
+     *
+     * @param rounding a mark rounding
+     */
     private void drawMarkArrow(MarkRounding rounding) {
         boolean isClockwise = rounding.getRoundingDirection().equals(MarkRounding.Direction.STARBOARD);
         double offset = MARK_ARROW_ARC_LENGTH / (isClockwise ? 2 : -2);
@@ -105,7 +128,13 @@ public class DisplayRoundingArrow {
 
 
     /**
-     * Create the rounding arrow.
+     * Draw a single arrow, that follows a circular path around a point
+     *
+     * @param center      the location of the origin of the circle on screen
+     * @param size        the size of the arrow
+     * @param startAngle  the angle to start the arrow at
+     * @param maxLength   the length of the arrow in degrees
+     * @param isClockwise true if the mark rounding direction is clockwise around mark1, else false
      */
     private void drawArcedArrow(XYPair center, double size, double startAngle, double maxLength, boolean isClockwise) {
         Arc tail = makeArcedTail(center, size * CURVED_ARROW_RADIUS, startAngle, maxLength, isClockwise);
@@ -120,7 +149,14 @@ public class DisplayRoundingArrow {
     }
 
 
-    private void drawStraightArrow(XYPair endPos, double markSize, double heading, boolean is1Clockwise) {
+    /**
+     * Draw a straight arrow
+     *
+     * @param endPos   the point at the tail of the arrow
+     * @param markSize the size to use when setting the size of the arrow head
+     * @param heading  the direction the arrow is pointing
+     */
+    private void drawStraightArrow(XYPair endPos, double markSize, double heading) {
         double length = scaleValue(0, getLength(markSize * STRAIGHT_ARROW_LENGTH));
         XYPair headPos = polarToCartesian(endPos, length, heading);
 
@@ -139,6 +175,15 @@ public class DisplayRoundingArrow {
     }
 
 
+    /**
+     * Draw the tail of an arrow, that follows a circular path around a point
+     *
+     * @param center      the location of the origin of the circle on screen
+     * @param radius      the radius to draw the arrow at
+     * @param startAngle  the angle to start the arrow at
+     * @param maxLength   the length of the arrow in degrees
+     * @param isClockwise true if the mark rounding direction is clockwise around mark1, else false
+     */
     private Arc makeArcedTail(XYPair center, double radius, double startAngle, double maxLength, boolean isClockwise) {
         radius *= pixelMapper.mappingRatio();
         maxLength *= (isClockwise ? -1 : 1);
@@ -152,11 +197,24 @@ public class DisplayRoundingArrow {
     }
 
 
+    /**
+     * Returns a length between 0 and {@code maxLength}/. Changes over time.
+     *
+     * @param maxLength the maximum length
+     * @return the length
+     */
     private double getLength(double maxLength) {
         return (System.currentTimeMillis() % PERIOD_MILLIS) * maxLength / PERIOD_MILLIS;
     }
 
 
+    /**
+     * Scales a value based on the zoom level
+     *
+     * @param min   the minimum value to return
+     * @param value the value to scale
+     * @return the scaled value, or {@code min} if the scaled value is less than {@code min}
+     */
     private double scaleValue(double min, double value) {
         return Math.max(min, value * Math.pow(pixelMapper.mappingRatio(), ARROW_SCALING_FACTOR));
     }
@@ -205,24 +263,40 @@ public class DisplayRoundingArrow {
 
     /**
      * Sends the existing arrow to the back of the group.
-     *
-     * @param group arrow to be sent back on.
      */
-    public void sendToBack(Group group) {
+    public void sendToBack() {
         shapes.forEach(Node::toBack);
     }
 
 
+    /**
+     * Calculate the x-position of the arrow head on screen
+     *
+     * @param tail a circular arc arrow tail
+     * @return the x position of the head of the arc in pixels
+     */
     private double calculateHeadX(Arc tail) {
         return polarX(tail.getCenterX(), tail.getRadiusX(), Math.toRadians(tail.getStartAngle() + tail.getLength()));
     }
 
 
+    /**
+     * Calculate the y-position of the arrow head on screen
+     *
+     * @param tail a circular arc arrow tail
+     * @return the y position of the head of the arc in pixels
+     */
     private double calculateHeadY(Arc tail) {
         return polarY(tail.getCenterY(), tail.getRadiusY(), Math.toRadians(tail.getStartAngle() + tail.getLength()));
     }
 
 
+    /**
+     * Get the tangent of the arc at the head end
+     *
+     * @param tail a circular arc arrow tail
+     * @return the tangent in degrees
+     */
     private double getHeadingAtFinish(Arc tail) {
         double arcDegrees = tail.getStartAngle() + tail.getLength();
         double screenAngle = (720 - arcDegrees) % 360;
@@ -233,17 +307,41 @@ public class DisplayRoundingArrow {
     }
 
 
+    /**
+     * Finds the cartesian coodinate that is {@code radius} units from {@code start}, at a bearing of {@code angleDeg}
+     *
+     * @param start    the start position
+     * @param radius   the distance
+     * @param angleDeg the heading in degrees
+     * @return the new point
+     */
     private XYPair polarToCartesian(XYPair start, double radius, double angleDeg) {
         double angleRad = Math.toRadians(angleDeg);
         return new XYPair(polarX(start.getX(), radius, angleRad), polarY(start.getY(), radius, angleRad));
     }
 
 
+    /**
+     * Finds the x value of the point at an angle of {@code angleRad} and distance of {@code radius} from {@code x}
+     *
+     * @param x        the x-value
+     * @param radius   the distance
+     * @param angleRad the angle in radians
+     * @return the new x-value
+     */
     private double polarX(double x, double radius, double angleRad) {
         return x + radius * Math.cos(angleRad);
     }
 
 
+    /**
+     * Finds the y value of the point at an angle of {@code angleRad} and distance of {@code radius} from {@code y}
+     *
+     * @param y        the y-value
+     * @param radius   the distance
+     * @param angleRad the angle in radians
+     * @return the new y-value
+     */
     private double polarY(double y, double radius, double angleRad) {
         return y - radius * Math.sin(angleRad);
     }

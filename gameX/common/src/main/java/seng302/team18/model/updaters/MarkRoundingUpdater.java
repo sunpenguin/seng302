@@ -7,8 +7,6 @@ import seng302.team18.model.*;
  */
 public class MarkRoundingUpdater implements Updater {
 
-    private boolean hasPassed = false;
-
     @Override
     public void update(Race race, double time) {
         for (Boat boat : race.getStartingList()) {
@@ -23,7 +21,7 @@ public class MarkRoundingUpdater implements Updater {
      * @param boat to update.
      */
     private void checkForRounding(Boat boat, Race race) {
-        hasPassed = race.getDetector().hasPassedDestination(boat, race.getCourse());
+        boolean hasPassed = race.getDetector().hasPassedDestination(boat, race.getCourse());
 
         switch (boat.getStatus()) {
             case RACING:
