@@ -29,7 +29,7 @@ public class SoundEffectPlayer {
      */
     public SoundEffectPlayer() {
         effects = Arrays.stream(SoundEffect.values())
-                .collect(Collectors.toMap(effect -> effect, effect -> new AudioClip(effect.getUrl())));
+                .collect(Collectors.toMap(effect -> effect, effect -> new AudioClip(effect.getUrl().toString())));
     }
 
 
@@ -45,8 +45,9 @@ public class SoundEffectPlayer {
 
 
     public long getDuration(SoundEffect effect) {
-        URL url = this.getClass().getClassLoader().getResource(effect.getUrl());
-        System.out.println("url = " + url);
+//        System.out.println(effect.getUrl());
+        URL url = effect.getUrl();
+//        System.out.println("url = " + url);
         URI uri = null;
         try {
             uri = url.toURI();
