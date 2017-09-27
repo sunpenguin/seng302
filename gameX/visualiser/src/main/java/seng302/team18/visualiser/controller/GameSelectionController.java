@@ -91,6 +91,8 @@ public class GameSelectionController {
         errorLabel.setPrefHeight(height);
 
         registerListeners();
+
+        outerPane.setOnMouseEntered(event -> reDraw());
     }
 
 
