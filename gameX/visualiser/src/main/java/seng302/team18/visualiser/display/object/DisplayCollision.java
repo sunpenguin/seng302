@@ -22,7 +22,7 @@ public class DisplayCollision extends DisplayBoatDecorator {
     /**
      * Minimum number of particles
      */
-    private final static int MIN_SHAPES = 5;
+    private final static int MIN_SHAPES = 10;
     /**
      * Maximum number of particles
      */
