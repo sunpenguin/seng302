@@ -200,10 +200,10 @@ public class GameConnection {
     private MessageInterpreter makeInterpreter(ClientRace race) {
         MessageInterpreter interpreter = new CompositeMessageInterpreter();
         MessageInterpreter acceptanceResponse = new AcceptanceInterpreter(race, this);
-        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
         interpreter.add(AC35MessageType.XML_RACE.getCode(), new XMLRaceInterpreter(race));
         interpreter.add(AC35MessageType.XML_BOATS.getCode(), new XMLBoatInterpreter(race));
         interpreter.add(AC35MessageType.XML_REGATTA.getCode(), new XMLRegattaInterpreter(race));
+        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
 
         return interpreter;
     }

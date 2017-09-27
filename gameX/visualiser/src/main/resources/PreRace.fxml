@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-
 <AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="578.0" prefWidth="777.0" styleClass="background" stylesheets="@stylesheets/titleScreen.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.PreRaceController">
    <children>
       <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -34,14 +31,13 @@
                         <RowConstraints maxHeight="82.0" minHeight="10.0" prefHeight="82.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="83.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="98.0" minHeight="10.0" prefHeight="79.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="97.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
                         <Label fx:id="startTimeLabel" layoutX="268.0" layoutY="23.0" prefHeight="71.0" prefWidth="171.0" styleClass="labelLarge" stylesheets="@stylesheets/helpMenu.css" text="Start time" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <GridPane.margin>
-                              <Insets left="25.0" />
+                               <Insets left="10.0"/>
                            </GridPane.margin>
                            <effect>
                               <DropShadow />
@@ -49,46 +45,41 @@
                         </Label>
                         <Label fx:id="timeLabel" layoutX="268.0" layoutY="118.0" prefHeight="28.0" prefWidth="171.0" styleClass="labelLarge" stylesheets="@stylesheets/helpMenu.css" text="Local time" textFill="WHITE" AnchorPane.rightAnchor="58.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <GridPane.margin>
-                              <Insets left="25.0" />
+                               <Insets left="10.0"/>
                            </GridPane.margin>
                            <effect>
                               <DropShadow />
                            </effect>
                         </Label>
-                        <Label fx:id="timeZoneLabel" layoutX="268.0" layoutY="146.0" prefHeight="30.0" prefWidth="195.0" styleClass="labelSmall" stylesheets="@stylesheets/helpMenu.css" text="Timezone" textFill="WHITE" AnchorPane.rightAnchor="129.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                           <GridPane.margin>
-                              <Insets left="25.0" />
-                           </GridPane.margin>
-                           <effect>
-                              <DropShadow />
-                           </effect>
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="ipLabel" prefHeight="30.0" prefWidth="195.0" styleClass="labelSmall" stylesheets="@stylesheets/helpMenu.css" text="IP" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                         <Label fx:id="ipLabel" prefHeight="30.0" prefWidth="195.0" styleClass="labelSmall"
+                                stylesheets="@stylesheets/helpMenu.css" text="IP" textFill="WHITE"
+                                GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <effect>
                               <DropShadow />
                            </effect>
                            <GridPane.margin>
-                              <Insets left="25.0" />
+                               <Insets left="10.0"/>
                            </GridPane.margin>
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Label fx:id="portLabel" prefHeight="30.0" prefWidth="195.0" styleClass="labelSmall" stylesheets="@stylesheets/helpMenu.css" text="Port" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                         <Label fx:id="portLabel" prefHeight="30.0" prefWidth="195.0" styleClass="labelSmall"
+                                stylesheets="@stylesheets/helpMenu.css" text="Port" textFill="WHITE"
+                                GridPane.columnIndex="1" GridPane.rowIndex="4">
                            <effect>
                               <DropShadow />
                            </effect>
                            <GridPane.margin>
-                              <Insets left="25.0" />
+                               <Insets left="10.0"/>
                            </GridPane.margin>
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Label>
-                        <Label fx:id="raceNameText" styleClass="labelLarge" stylesheets="@stylesheets/helpMenu.css" text="Race Name" textFill="WHITE" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
+                         <Label fx:id="raceNameText" styleClass="labelLarge" stylesheets="@stylesheets/helpMenu.css"
+                                text="Race Name" textFill="WHITE" GridPane.columnSpan="2147483647"
+                                GridPane.halignment="CENTER" GridPane.valignment="BOTTOM">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -96,7 +87,7 @@
                               <DropShadow />
                            </effect>
                            <GridPane.margin>
-                              <Insets right="8.0" />
+                               <Insets/>
                            </GridPane.margin>
                         </Label>
                         <Label styleClass="labelLarge" stylesheets="@stylesheets/helpMenu.css" text="Race Start Time:" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
@@ -121,7 +112,8 @@
                               <DropShadow />
                            </effect>
                         </Label>
-                        <Label styleClass="labelSmall" stylesheets="@stylesheets/helpMenu.css" text="Local Time Zone:" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                         <Label styleClass="labelSmall" stylesheets="@stylesheets/helpMenu.css" text="IP:"
+                                textFill="WHITE" GridPane.rowIndex="3">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -132,18 +124,8 @@
                               <DropShadow />
                            </effect>
                         </Label>
-                        <Label styleClass="labelSmall" stylesheets="@stylesheets/helpMenu.css" text="IP:" textFill="WHITE" GridPane.rowIndex="4">
-                           <font>
-                              <Font size="18.0" />
-                           </font>
-                           <GridPane.margin>
-                              <Insets right="10.0" />
-                           </GridPane.margin>
-                           <effect>
-                              <DropShadow />
-                           </effect>
-                        </Label>
-                        <Label styleClass="labelSmall" stylesheets="@stylesheets/helpMenu.css" text="Port:" textFill="WHITE" GridPane.rowIndex="5">
+                         <Label styleClass="labelSmall" stylesheets="@stylesheets/helpMenu.css" text="Port:"
+                                textFill="WHITE" GridPane.rowIndex="4">
                            <font>
                               <Font size="18.0" />
                            </font>

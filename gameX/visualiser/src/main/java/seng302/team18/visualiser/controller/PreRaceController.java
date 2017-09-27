@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.encode.Sender;
 import seng302.team18.message.AC35MessageType;
@@ -19,9 +18,6 @@ import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.interpret.americascup.BoatListInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceTimeInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceToMainRaceInterpreter;
-import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
-import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
-import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
 import seng302.team18.visualiser.sound.ThemeTunePlayer;
@@ -43,8 +39,6 @@ public class PreRaceController {
     private Label startTimeLabel;
     @FXML
     private ListView<Boat> listView;
-    @FXML
-    private Label timeZoneLabel;
     @FXML
     private Label raceNameText;
     @FXML
@@ -77,21 +71,22 @@ public class PreRaceController {
     public void setUp(ClientRace race, Sender sender, Interpreter interpreter) {
         this.sender = sender;
         this.race = race;
-        System.out.println(race.getRegatta().getName());
-        raceNameText.setText(race.getRegatta().getName());
-        displayTimeZone(race.getStartTime());
+        this.interpreter = interpreter;
 
+        addInterpreters();
         setUpStartSound();
-
         setUpLists();
+
         listView.setItems(FXCollections.observableList(race.getStartingList()));
-        PreRaceTimes preRaceTimes = new PreRaceTimes(startTimeLabel, timeZoneLabel, timeLabel, race);
+        PreRaceTimes preRaceTimes = new PreRaceTimes(startTimeLabel, timeLabel, race);
         preRaceTimes.start();
 
         Stage stage = (Stage) listView.getScene().getWindow();
-        this.interpreter = interpreter;
-        addInterpreters();
+
         showNetWorkInfo();
+
+        raceNameText.setText(race.getMode().toString());
+        raceNameText.setStyle("-fx-font-size: 42pt");
 
         stage.setOnCloseRequest((event) -> {
             interpreter.close();
@@ -100,16 +95,6 @@ public class PreRaceController {
             System.out.println("shutting down");
             System.exit(0);
         });
-    }
-
-
-    /**
-     * Shows the time zone of the race
-     *
-     * @param zoneTime USED TO GET THE UTC OFFSET
-     */
-    private void displayTimeZone(ZonedDateTime zoneTime) {
-        timeZoneLabel.setText("UTC " + zoneTime.getOffset().toString());
     }
 
 
@@ -133,15 +118,10 @@ public class PreRaceController {
 
     /**
      * Set up and initialise interpreter variables, adding interpreters of each relevant type to the global interpreter.
-     *
-     * @return the message interpreter
      */
     private void addInterpreters() {
-
-        //interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), new AcceptanceInterpreter(race, new GameConnection()));
         interpreter.getInterpreter().add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceToMainRaceInterpreter(this));
         interpreter.getInterpreter().add(AC35MessageType.XML_BOATS.getCode(), new BoatListInterpreter(this));
-
         interpreter.getInterpreter().add(AC35MessageType.RACE_STATUS.getCode(), new PreRaceTimeInterpreter(race));
 
     }
@@ -205,10 +185,8 @@ public class PreRaceController {
                     // pass
                 }
             }
-            System.out.println("Start " + race.getStartTime().toInstant().toEpochMilli());
             SoundEffect startLeadIn = SoundEffect.RACE_START_LEAD_IN;
             long duration = soundPlayer.getDuration(startLeadIn);
-            System.out.println("duration = " + duration);
             ZonedDateTime playTime = race.getStartTime().minus(duration, ChronoUnit.MILLIS);
 
             while (race.getCurrentTime().isBefore(playTime)) {
@@ -218,10 +196,6 @@ public class PreRaceController {
                     // pass
                 }
             }
-
-            System.out.println("Start " + race.getStartTime().toInstant().toEpochMilli());
-            System.out.println("Now " + race.getCurrentTime().toInstant().toEpochMilli());
-            System.out.println(race.getStartTime().toInstant().toEpochMilli() - race.getCurrentTime().toInstant().toEpochMilli());
 
             soundPlayer.playEffect(startLeadIn);
         }).start();
