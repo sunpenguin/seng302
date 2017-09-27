@@ -6,7 +6,7 @@ import java.net.URL;
  * Long-running sounds
  */
 public enum Ambient {
-    WAVES_1("audio/Ocean_Waves-Mike_Koenig-980635527.mp3");
+    WAVES_1("audio/wave_sounds.mp3");
 
 
     private final String url;

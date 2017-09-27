@@ -91,7 +91,7 @@ public class GameConnection {
             }
 
             try {
-                Thread.sleep(400); // This is to give time for the process to start
+                Thread.sleep(1500); // This is to give time for the process to start
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -250,7 +250,7 @@ public class GameConnection {
 
 
     /**
-     * Returns if the connection has fialed or not
+     * Returns if the connection has failed or not
      *
      * @return
      */
