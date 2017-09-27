@@ -6,36 +6,29 @@ import seng302.team18.util.GPSCalculator;
 import java.util.List;
 
 public abstract class CollisionUpdater implements Updater {
+
     private double totalPushBack;
 
+    public CollisionUpdater(double totalPushBack) {
+        this.totalPushBack = totalPushBack;
+    }
 
     @Override
     public void update(Race race, double time) {
-        for (Boat boat : race.getStartingList()) {
-            detectCollision(boat, race);
+        for (Boat boat : race.getCompetitors()) {
+            collisionStuff(boat, race);
         }
     }
 
 
     /**
-     * Detects if there has been a collision between the boat and another boat
+     * does collision stuff
      *
      * @param boat to be collision stuffed
      */
-    private void detectCollision(Boat boat, Race race) {
-        if (boat.getStatus().equals(BoatStatus.FINISHED)) return;
-
+    private void collisionStuff(Boat boat, Race race) {
         for (AbstractBoat object : getObstacles(boat, race)) {
             if (boat.hasCollided(object.getBodyMass())) {
-
-                if (race.getMode() == RaceMode.BUMPER_BOATS) {
-                    totalPushBack = 100; // meters
-                } else if (race.getMode() == RaceMode.CHALLENGE_MODE) {
-                    totalPushBack = 15; // meters
-                } else {
-                    totalPushBack = 25; // meters
-                }
-
                 handleCollision(boat.getBodyMass(), object.getBodyMass());
                 notifyCollision(race, boat, object);
             }
@@ -48,7 +41,7 @@ public abstract class CollisionUpdater implements Updater {
      * @param race the race the collision occurs in
      * @return a list of obstacles
      */
-    abstract protected List<AbstractBoat> getObstacles(AbstractBoat boat, Race race);
+    protected abstract List<AbstractBoat> getObstacles(AbstractBoat boat, Race race);
 
 
     /**

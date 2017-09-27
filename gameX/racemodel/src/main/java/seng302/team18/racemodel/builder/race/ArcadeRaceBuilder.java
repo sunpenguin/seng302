@@ -34,8 +34,8 @@ public class ArcadeRaceBuilder extends AbstractRaceBuilder {
     protected List<Updater> getUpdaters() {
         List<Updater> updaters = new ArrayList<>();
         updaters.add(new BoatsUpdater());
-        updaters.add(new BoatCollisionUpdater());
-        updaters.add(new MarkCollisionUpdater());
+        updaters.add(new BoatCollisionUpdater(25));
+        updaters.add(new MarkCollisionUpdater(25));
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());
         updaters.add(new PowerUpUpdater(makePickUp(), 4));

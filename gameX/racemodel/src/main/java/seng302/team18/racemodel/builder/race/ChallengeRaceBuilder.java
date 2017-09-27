@@ -30,8 +30,7 @@ public class ChallengeRaceBuilder extends AbstractRaceBuilder {
     protected List<Updater> getUpdaters() {
         List<Updater> updaters = new ArrayList<>();
         updaters.add(new BoatsUpdater());
-        updaters.add(new BoatCollisionUpdater());
-        updaters.add(new MarkCollisionUpdater());
+        updaters.add(new MarkCollisionUpdater(20));
         updaters.add(new OutOfBoundsUpdater());
         updaters.add(new MarkRoundingUpdater());
         updaters.add(new SpeedUpdater(34, 0.00025, 1));
