@@ -2,6 +2,15 @@ package seng302.team18.visualiser.sound;
 
 import javafx.scene.media.AudioClip;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -32,5 +41,33 @@ public class SoundEffectPlayer {
      */
     public void playEffect(SoundEffect effect) {
         effects.get(effect).play();
+    }
+
+
+    public long getDuration(SoundEffect effect) {
+        URL url = this.getClass().getClassLoader().getResource(effect.getUrl());
+        System.out.println("url = " + url);
+        URI uri = null;
+        try {
+            uri = url.toURI();
+        } catch (URISyntaxException | NullPointerException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        File file = new File(uri);
+        AudioInputStream audioInputStream;
+        try {
+            audioInputStream = AudioSystem.getAudioInputStream(url);
+        } catch (UnsupportedAudioFileException | IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        AudioFormat format = audioInputStream.getFormat();
+        long audioFileLength = file.length();
+        int frameSize = format.getFrameSize();
+        float frameRate = format.getFrameRate();
+        Float durationInSeconds = (audioFileLength / (frameSize * frameRate));
+        Float durationInMillis = durationInSeconds * 1000;
+        return durationInMillis.longValue();
     }
 }

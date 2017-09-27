@@ -457,8 +457,9 @@ public class GameSelectionController {
         label.getStyleClass().add("playImage");
         label.setOnMouseClicked(event -> {
             buttonClickedAction();
-            new GameConnection(errorLabel.textProperty(), outerPane, mode, boatColours.get(colourIndex))
-                    .startGame(ipStrProp.get(), portStrProp.get(), isHosting);
+            GameConnection connection = new GameConnection(errorLabel.textProperty(), outerPane, mode, boatColours.get(colourIndex));
+            connection.setSoundPlayer(soundPlayer);
+            connection.startGame(ipStrProp.get(), portStrProp.get(), isHosting);
         });
         label.setOnMouseEntered(event1 -> buttonEnteredAction());
         return label;

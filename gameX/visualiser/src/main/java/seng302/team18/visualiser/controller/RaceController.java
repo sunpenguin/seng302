@@ -101,7 +101,7 @@ public class RaceController implements Observer {
     private CourseRenderer courseRenderer;
     private PixelMapper pixelMapper;
     private Sender sender;
-    private SoundEffectPlayer soundPlayer = new SoundEffectPlayer();
+    private SoundEffectPlayer soundPlayer;
 
     private Interpreter interpreter;
     private RaceBackground background;
@@ -892,5 +892,13 @@ public class RaceController implements Observer {
                 sender.close();
             });
         }
+    }
+
+
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setSoundPlayer(SoundEffectPlayer player) {
+        this.soundPlayer = player;
     }
 }
