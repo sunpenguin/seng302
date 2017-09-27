@@ -49,4 +49,7 @@ public abstract class PowerUp {
 
     public abstract PowerType getType();
 
+
+    public abstract PowerUp clone();
+
 }

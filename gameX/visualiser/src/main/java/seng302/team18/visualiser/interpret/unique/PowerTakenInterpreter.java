@@ -29,10 +29,11 @@ public class PowerTakenInterpreter extends MessageInterpreter {
                 if (boat.getId() == takenMessage.getBoatId()) {
                     boat.setPowerUp(race.getPowerUp(takenMessage.getPowerId()));
                     PowerUp powerUp = boat.getPowerUp();
-                    powerUp.setDuration(takenMessage.getDuration());
+                    if (null != powerUp) {
+                        powerUp.setDuration(takenMessage.getDuration());
+                    }
                 }
             }
-
             race.removePickUp(takenMessage.getPowerId());
         }
     }

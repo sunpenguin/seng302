@@ -23,10 +23,9 @@ import java.util.stream.Collectors;
  */
 public class CourseRenderer implements Renderable {
 
-    private final Color MARK_COLOR = Color.color(0.502, 0.4078, 0.4);
     private final Color BOUNDARY_FILL_COLOR = Color.ALICEBLUE;
     private Polyline border = new Polyline();
-    private Map<Integer, Circle> marks = new HashMap<>();
+    private Map<Integer, ImageView> marks = new HashMap<>();
     private Map<String, Line> gates = new HashMap<>();
     private Map<Integer, ImageView> pickUps = new HashMap<>();
     private Course course;
@@ -34,8 +33,9 @@ public class CourseRenderer implements Renderable {
     private PixelMapper pixelMapper;
     private RaceMode mode;
 
-    private static final Image SPEED_POWER_UP = new Image("/images/race_view/Arrow2_no_back.gif");
-    private static final Image SHARK_POWER_UP = new Image("/images/race_view/reefShark_no_back.gif");
+    private static final Image SPEED_POWER_UP_IMAGE = new Image("/images/race_view/Arrow2_no_back.gif");
+    private static final Image SHARK_POWER_UP_IMAGE = new Image("/images/race_view/reefShark_no_back.gif");
+    private static final Image MARK_IMAGE = new Image("/images/race_view/mark.gif");
 
 
     public CourseRenderer(PixelMapper pixelMapper, Course course, Group group, RaceMode mode) {
@@ -94,8 +94,6 @@ public class CourseRenderer implements Renderable {
                 renderBoundary(border, course.getLimits().get(0));
                 group.getChildren().add(border);
             } catch (IndexOutOfBoundsException e) {
-                System.out.println("course limit = " + course.getLimits());
-                System.out.println("course limit size = " + course.getLimits().size());
                 e.printStackTrace();
             }
         }
@@ -120,40 +118,52 @@ public class CourseRenderer implements Renderable {
 
 
     /**
-     * Reset a point for a mark due to resizing
+     * Position and scale an ImageView for the given mark to be the exact size in pixels of the mark's length.
+     * If an ImageView has not been created for the given mark yet, calls makeMark() to do so first.
      *
-     * @param mark Mark to reset
-     * @return the circle on screen
+     * @param mark to position and scale ImageView for
      */
-    private Circle renderMark(Mark mark) {
-        Circle circle = marks.get(mark.getId());
-        if (circle == null) {
-            circle = makeMark(mark);
+    private void renderMark(Mark mark) {
+        ImageView imageView = marks.get(mark.getId());
+
+        if (imageView == null) {
+            imageView = makeMark(mark);
         }
 
-        circle.setRadius(mark.getLength() * pixelMapper.mappingRatio() / 2);
         Coordinate coordinate = mark.getCoordinate();
         XYPair pixelCoordinates = pixelMapper.mapToPane(coordinate);
-        circle.setCenterX(pixelCoordinates.getX());
-        circle.setCenterY(pixelCoordinates.getY());
 
-        return circle;
+        double markSize = pixelMapper.mappingRatio() * mark.getLength();
+        double markImageSize = MARK_IMAGE.getHeight();
+        double imageRatio = markImageSize / (markSize);  // Ratio for scaling image to correct size
+
+        imageView.setScaleX(1 / imageRatio);
+        imageView.setScaleY(1 / imageRatio);
+
+        imageView.setLayoutX(pixelCoordinates.getX() - (markImageSize / 2));
+        imageView.setLayoutY(pixelCoordinates.getY() - (markImageSize / 2));
     }
 
 
-    private Circle makeMark(Mark mark) {
-        Circle circle = new Circle(mark.getLength() * pixelMapper.mappingRatio() / 2, MARK_COLOR);
+    /**
+     * Creates a new ImageView to represent the given mark, and adds it to the group.
+     *
+     * @param mark mark to create an ImageView for
+     * @return the created ImageView
+     */
+    private ImageView makeMark(Mark mark) {
+        ImageView imageView = new ImageView(MARK_IMAGE);
 
-        circle.setOnMouseClicked((event) -> {
+        imageView.setOnMouseClicked((event) -> {
             pixelMapper.setZoomLevel(4);
             pixelMapper.setViewPortCenter(mark.getCoordinate());
         });
 
-        marks.put(mark.getId(), circle);
-        group.getChildren().addAll(circle);
-        circle.toBack();
+        marks.put(mark.getId(), imageView);
+        group.getChildren().addAll(imageView);
+        imageView.toBack();
 
-        return circle;
+        return imageView;
     }
 
 
@@ -185,9 +195,8 @@ public class CourseRenderer implements Renderable {
         List<XYPair> endPoints = new ArrayList<>();
         for (int i = 0; i < compoundMark.getMarks().size(); i++) {
             Mark mark = compoundMark.getMarks().get(i);
-            Circle circle = renderMark(mark);
-            XYPair pixelCoordinates = new XYPair(circle.getCenterX(), circle.getCenterY());
-            endPoints.add(pixelCoordinates);
+            renderMark(mark);
+            endPoints.add(pixelMapper.mapToPane(mark.getCoordinate()));
         }
         renderGateConnection(endPoints, compoundMark);
     }
@@ -298,10 +307,10 @@ public class CourseRenderer implements Renderable {
 
             switch (type) {
                 case SPEED:
-                    pickUpVisual = new ImageView(SPEED_POWER_UP);
+                    pickUpVisual = new ImageView(SPEED_POWER_UP_IMAGE);
                     break;
                 case SHARK:
-                    pickUpVisual = new ImageView(SHARK_POWER_UP);
+                    pickUpVisual = new ImageView(SHARK_POWER_UP_IMAGE);
                     break;
                 default:
                     return;
@@ -317,7 +326,7 @@ public class CourseRenderer implements Renderable {
             pickUps.put(pickUp.getId(), pickUpVisual);
         }
 
-        double powerImageSize = pickUp.getType().equals(PowerType.SPEED) ? SPEED_POWER_UP.getWidth() : SHARK_POWER_UP.getWidth();
+        double powerImageSize = pickUp.getType().equals(PowerType.SPEED) ? SPEED_POWER_UP_IMAGE.getWidth() : SHARK_POWER_UP_IMAGE.getWidth();
 
         double imageRatio = powerImageSize / (pickUpSize * 2);  // Ratio for scaling image to correct size
         pickUpVisual.setScaleX(1 / imageRatio);

@@ -6,27 +6,30 @@ import java.net.URL;
  * 'Fire-and-forget' sound effects
  */
 public enum SoundEffect {
-    COLLISION("audio/collision.wav"),
-    FIRE_BULLET("audio/fire_bullet.wav"),
-    BUTTON_MOUSE_ENTER("audio/button_hover.wav"),
-    BUTTON_MOUSE_CLICK("audio/button_click.wav"),
-    PLAYER_DISQUALIFIED("audio/fail.wav"),
-    LOSE_LIFE("audio/lose_life.wav"),
-    RACE_START("audio/button_click.wav"), // TODO create sound effect
-    ACTIVATE_SPEED_BOOST("audio/button_click.wav") // TODO create sound effect
-    ;
+    COLLISION("audio/collision.mp3"),
+    FIRE_BULLET("audio/fire_bullet.mp3"),
+    BUTTON_MOUSE_ENTER("audio/button_hover.mp3"),
+    BUTTON_MOUSE_CLICK("audio/button_click.mp3"),
+    PLAYER_DISQUALIFIED("audio/fail.mp3"),
+    LOSE_LIFE("audio/lose_life.mp3"), //Check
+    RACE_START_LEAD_IN("audio/start_lead_in.mp3"),
+    RACE_START("audio/start_blip.mp3"),
+    ACTIVATE_SPEED_BOOST("audio/activate_speed_boost.mp3"),
+    CROSS_FINISH_LINE("audio/finish_race.mp3"), //Check
+    PICK_UP_POWER_UP("audio/pickup.mp3"); //Implement
 
 
-    private final String url;
+    private final URL url;
 
 
     SoundEffect(String url) {
-        URL resource = getClass().getClassLoader().getResource(url);
-        this.url = (resource == null) ? "" : resource.toString();
+        this.url = getClass().getClassLoader().getResource(url);
+//        this.url = (resource == null) ? "" : resource.toString();
     }
 
 
-    public String getUrl() {
+    public URL getUrl() {
+//        System.out.println(url.toString());
         return url;
     }
 }

@@ -16,6 +16,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
         Parent root = loader.load(); // throws IOException
         TitleScreenController controller = loader.getController();

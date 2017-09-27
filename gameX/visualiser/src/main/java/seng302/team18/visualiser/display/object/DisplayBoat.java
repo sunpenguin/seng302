@@ -43,7 +43,6 @@ public class DisplayBoat implements GeographicLocation {
     private final Rotate rotation = new Rotate(0, 0, 0);
 
     private Text annotation;
-    private Long estimatedTime = 0L;
     private final static int DECIMAL_PLACES = 1; // for speed annotation
     private Map<AnnotationType, Boolean> visibleAnnotations;
     private final static int ANNOTATION_OFFSET_X = 10;
@@ -126,11 +125,6 @@ public class DisplayBoat implements GeographicLocation {
     }
 
 
-    public void setEstimatedTime(Long estimatedTime) {
-        this.estimatedTime = estimatedTime;
-    }
-
-
     public void addToGroup(Group group) {
         group.getChildren().add(boatPoly);
         group.getChildren().add(annotation);
@@ -168,12 +162,7 @@ public class DisplayBoat implements GeographicLocation {
                     String formatSpecSpeed = "%." + DECIMAL_PLACES + "f";
                     annotationText.append(String.format(formatSpecSpeed, speed.get()))
                             .append(" knots\n");
-                } else if (AnnotationType.ESTIMATED_TIME_NEXT_MARK.equals(entry.getKey()) && estimatedTime > 0) {
-                    annotationText.append(estimatedTime)
-                            .append("\n");
-                } else if (AnnotationType.TIME_SINCE_LAST_MARK.equals(entry.getKey()))
-                    annotationText.append(timeSinceLastMark)
-                            .append("\n");
+                }
             }
         }
         annotation.setText(annotationText.toString());
@@ -194,11 +183,6 @@ public class DisplayBoat implements GeographicLocation {
 
     public Color getColor() {
         return boatColor;
-    }
-
-
-    public void setTimeSinceLastMark(Long timeSinceLastMark) {
-        this.timeSinceLastMark = timeSinceLastMark;
     }
 
 

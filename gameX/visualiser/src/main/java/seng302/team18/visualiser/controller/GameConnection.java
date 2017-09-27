@@ -6,12 +6,21 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import seng302.team18.parse.AC35MessageParserFactory;
-import seng302.team18.parse.Receiver;
-import seng302.team18.model.RaceMode;
 import seng302.team18.encode.ControllerMessageFactory;
 import seng302.team18.encode.Sender;
+import seng302.team18.interpret.CompositeMessageInterpreter;
+import seng302.team18.interpret.MessageInterpreter;
+import seng302.team18.message.AC35MessageType;
+import seng302.team18.message.ColourMessage;
+import seng302.team18.message.RequestMessage;
+import seng302.team18.message.RequestType;
+import seng302.team18.model.RaceMode;
+import seng302.team18.parse.AC35MessageParserFactory;
+import seng302.team18.parse.Receiver;
 import seng302.team18.visualiser.ClientRace;
+import seng302.team18.visualiser.interpret.Interpreter;
+import seng302.team18.visualiser.interpret.unique.AcceptanceInterpreter;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 import seng302.team18.visualiser.util.ModelLoader;
 
 import javax.net.SocketFactory;
@@ -28,6 +37,11 @@ public class GameConnection {
     private final Node node;
     private final RaceMode mode;
     private final Color color;
+    private Interpreter interpreter;
+    private Receiver receiver;
+    private Sender sender;
+    private ClientRace race;
+    private SoundEffectPlayer soundPlayer;
 
 
     /**
@@ -58,11 +72,13 @@ public class GameConnection {
     public boolean startGame(String hostString, String portString, boolean isHosting) {
         String hostAddress = parseHostAddress(hostString);
         int port = parsePort(portString);
-        if (port < 0 || hostAddress == null) return false;
+        if (port < 0 || hostAddress == null) {
+            return false;
+        }
 
         if (isHosting) {
             try {
-                (new ModelLoader()).startModel(port);
+                new ModelLoader().startModel(port);
             } catch (IOException e) {
                 errorText.set("Unable to initiate server!");
                 e.printStackTrace();
@@ -70,13 +86,14 @@ public class GameConnection {
             }
 
             try {
-                Thread.sleep(400);
+                Thread.sleep(400); // This is to give time for the process to start
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        return openStream(hostAddress, port);
+        openStream(hostAddress, port);
+        return true;
     }
 
 
@@ -125,23 +142,64 @@ public class GameConnection {
      * @param receiver a reciver
      * @param sender   a sender
      * @return true if the operation is successful, else false
-     * @throws Exception if the next scene cannot be loaded
      */
-    private boolean startConnection(Receiver receiver, Sender sender) throws Exception {
-        Stage stage = (Stage) node.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
-        Parent root = loader.load();
-        PreRaceController controller = loader.getController();
-        stage.setTitle("High Seas");
-        node.getScene().setRoot(root);
-        stage.show();
-
-        ClientRace race = new ClientRace();
+    private void startConnection(Receiver receiver, Sender sender) {
+        this.receiver = receiver;
+        this.sender = sender;
+        race = new ClientRace();
         race.setMode(mode);
-        controller.setUp(race, receiver, sender);
-        controller.initConnection(color);
-        return true;
-        // TODO afj19 14/09 here(probably) we should be checking the response from the server and returning false if it is rejected
+        attemptConnection();
+    }
+
+
+    /**
+     * Method to attempt to connection with server
+     */
+    private void attemptConnection() {
+        interpreter = new Interpreter(receiver);
+        interpreter.setInterpreter(makeInterpreter(race));
+        interpreter.start();
+
+        RequestType requestType;
+        switch (race.getMode()) {
+            case RACE:
+                requestType = RequestType.RACING;
+                break;
+            case CONTROLS_TUTORIAL:
+                requestType = RequestType.CONTROLS_TUTORIAL;
+                break;
+            case CHALLENGE_MODE:
+                requestType = RequestType.CHALLENGE_MODE;
+                break;
+            case ARCADE:
+                requestType = RequestType.ARCADE;
+                break;
+            case BUMPER_BOATS:
+                requestType = RequestType.BUMPER_BOATS;
+                break;
+            case SPECTATION:
+                requestType = RequestType.VIEWING;
+                break;
+            default:
+                requestType = RequestType.RACING;
+        }
+
+
+        try {
+            sender.send(new RequestMessage(requestType));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private MessageInterpreter makeInterpreter(ClientRace race) {
+        MessageInterpreter interpreter = new CompositeMessageInterpreter();
+        MessageInterpreter acceptanceResponse = new AcceptanceInterpreter(race, this);
+        interpreter.add(AC35MessageType.ACCEPTANCE.getCode(), acceptanceResponse);
+
+        return interpreter;
     }
 
 
@@ -151,13 +209,41 @@ public class GameConnection {
      * @param host The host IP address for the socket
      * @param port The port number used for the socket
      */
-    private boolean openStream(String host, int port) {
+    private void openStream(String host, int port) {
         try {
             Socket socket = SocketFactory.getDefault().createSocket(host, port);
-            return startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
+            startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
         } catch (Exception e) {
             errorText.set("Failed to connect to " + host + ":" + port + "!");
         }
-        return false;
     }
+
+
+    public void goToPreRace() throws IOException {
+        sender.send(new ColourMessage(color, race.getPlayerId()));
+
+        Stage stage = (Stage) node.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("PreRace.fxml"));
+        Parent root = loader.load();
+        PreRaceController controller = loader.getController();
+        stage.setTitle("High Seas");
+        node.getScene().setRoot(root);
+        stage.show();
+
+        controller.setSoundPlayer(soundPlayer);
+        controller.setUp(race, sender, interpreter);
+    }
+
+    public void setFailedConnection() {
+        errorText.set("Failed to connect to server:\nServer rejected connection");
+    }
+
+
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setSoundPlayer(SoundEffectPlayer player) {
+        this.soundPlayer = player;
+    }
+
 }
