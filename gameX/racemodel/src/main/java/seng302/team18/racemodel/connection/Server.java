@@ -4,7 +4,6 @@ import javax.net.ServerSocketFactory;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -17,7 +16,7 @@ import java.util.concurrent.Executors;
 public class Server extends Observable {
     private final List<ClientConnection> clients = new ArrayList<>();
     private final ServerConnectionListener listener = new ServerConnectionListener();
-    private final int maxClients = 6;
+    private static final int MAX_CLIENTS = 6;
 
     private ServerSocket serverSocket;
     private final int port;
@@ -25,14 +24,18 @@ public class Server extends Observable {
 
     public Server(int port) {
         this.port = port;
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                Server.deathClose(port);
-            }
-        });
 
         try {
             serverSocket = ServerSocketFactory.getDefault().createServerSocket(port);
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    serverSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }));
+
         } catch (IOException e) {
             System.err.println("Could not listen on port " + port);
             System.err.println("Exiting program");
@@ -65,9 +68,7 @@ public class Server extends Observable {
             System.out.println("Player " + clients.size() + " joined!");
             setChanged();
             notifyObservers(client);
-        } catch (SocketTimeoutException e) {
-            // The time out expired, no big deal
-        } catch(IOException e) {
+        } catch (IOException e) {
             // close();
         }
     }
@@ -152,7 +153,6 @@ public class Server extends Observable {
     }
 
 
-
     /**
      * Thread that listens for incoming connections.
      */
@@ -168,7 +168,7 @@ public class Server extends Observable {
             }
 
             while (listening) {
-                if (clients.size() < maxClients) {
+                if (clients.size() < MAX_CLIENTS) {
                     acceptClientConnection();
                 } else {
                     listening = false;
@@ -184,22 +184,6 @@ public class Server extends Observable {
 
     public ServerState getState() {
         return state;
-    }
-
-
-    /**
-     * Method used for special exit cases
-     * If user force quits, this method makes sure the server socket is closed
-     *
-     * @param port the port number of the server socket
-     */
-    private static void deathClose(int port) {
-        try {
-            ServerSocket serverSocket = ServerSocketFactory.getDefault().createServerSocket(port);
-            serverSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }
