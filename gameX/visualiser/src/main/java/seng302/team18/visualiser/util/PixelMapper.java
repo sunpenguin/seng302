@@ -305,4 +305,6 @@ public class PixelMapper {
     public void setMinZoom(double minZoom) {
         this.minZoom = minZoom;
     }
+
+
 }

@@ -97,10 +97,4 @@ public enum AC35MessageType {
     }
 
 
-    @Override
-    public String toString() {
-        return "AC35MessageType{" +
-                "code=" + code +
-                '}';
-    }
 }
