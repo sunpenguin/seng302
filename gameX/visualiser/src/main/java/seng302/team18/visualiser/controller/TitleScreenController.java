@@ -267,4 +267,6 @@ public class TitleScreenController {
     private void buttonClickedAction() {
         soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
     }
+
+
 }
