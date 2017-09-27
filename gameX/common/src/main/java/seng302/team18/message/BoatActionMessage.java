@@ -77,4 +77,24 @@ public class BoatActionMessage implements MessageBody {
     public int getId() {
         return id;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BoatActionMessage that = (BoatActionMessage) o;
+
+        if (action != that.action) return false;
+        return id == that.id;
+    }
+
+
+    @Override
+    public int hashCode() {
+        int result = (int) action;
+        result = 31 * result + id;
+        return result;
+    }
 }

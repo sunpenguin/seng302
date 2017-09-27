@@ -54,6 +54,7 @@ import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
+import seng302.team18.visualiser.util.CheatyControlManipulator;
 import seng302.team18.visualiser.util.PixelMapper;
 
 import java.io.IOException;
@@ -110,6 +111,7 @@ public class RaceController implements Observer {
     private Map<String, Color> colours;
 
     private ControlsTutorial controlsTutorial;
+    private CheatyControlManipulator controlManipulator = new CheatyControlManipulator();
 
     private Clock clock;
     private HBox timeBox;
@@ -138,42 +140,56 @@ public class RaceController implements Observer {
      *
      * @param keyEvent event for a particular key press
      */
-    private MessageBody handlePlayerKeyPress(KeyEvent keyEvent) {
+    private List<MessageBody> handlePlayerKeyPress(KeyEvent keyEvent) {
+        List<MessageBody> messages = new ArrayList<>();
         if (race.getMode() != RaceMode.SPECTATION) {
+            Boat playerBoat = getPlayerBoat();
+            controlManipulator.setPlayerId(playerBoat.getId());
             BoatActionMessage message = new BoatActionMessage(race.getPlayerId());
+
             switch (keyEvent.getCode()) {
                 case SPACE:
                     message.setAutoPilot();
+                    messages.add(message);
                     break;
                 case ENTER:
                     message.setTackGybe();
+                    messages.add(message);
                     break;
                 case PAGE_UP:
                 case UP:
-                    message.setUpwind();
+                    messages.addAll(controlManipulator.generateUpwind(race.getWindDirection(), getPlayerBoat().getHeading()));
                     break;
                 case PAGE_DOWN:
                 case DOWN:
-                    message.setDownwind();
+                    messages.addAll(controlManipulator.generateDownwind(race.getWindDirection(), getPlayerBoat().getHeading()));
+                    break;
+                case LEFT:
+                    messages.addAll(controlManipulator.generateCounterClockwise(race.getWindDirection(), playerBoat.getHeading()));
+                    break;
+                case RIGHT:
+                    messages.addAll(controlManipulator.generateClockwise(race.getWindDirection(), playerBoat.getHeading()));
                     break;
                 case SHIFT:
-                    if (null != getPlayerBoat()) {
-                        if (getPlayerBoat().isSailOut()) {
+                    if (null != playerBoat) {
+                        if (playerBoat.isSailOut()) {
                             message.setSailIn();
                         } else {
                             message.setSailOut();
                         }
+                        messages.add(message);
                     }
                     break;
                 case S:
                     message.setConsume();
                     race.activatePowerUp();
+                    messages.add(message);
                     break;
                 default:
                     return null;
             }
             keyEvent.consume();
-            return message;
+            return messages;
         }
         return null;
     }
@@ -225,22 +241,18 @@ public class RaceController implements Observer {
                 keyEvent -> {
                     if (keyEvent.getCode() != null) {
 
-                        MessageBody message = handlePlayerKeyPress(keyEvent);
+                        List<MessageBody> messages = handlePlayerKeyPress(keyEvent);
 
                         handleBasicKeyPress(keyEvent);
 
-                        if (message != null) {
+                        if (messages != null) {
+                            sendMessages(messages);
                             if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
                                 controlsTutorial.setBoat(getPlayerBoat());
                                 controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
                                 if (controlsTutorial.checkIfProgressed(keyEvent.getCode())) {
                                     controlsTutorial.displayNext();
                                 }
-                            }
-                            try {
-                                sender.send(message);
-                            } catch (IOException e) {
-                                openEscapeMenu("You have been disconnected!", eventMenuPane);
                             }
                         }
                     }
@@ -250,6 +262,17 @@ public class RaceController implements Observer {
         raceViewPane.setFocusTraversable(true);
         raceViewPane.requestFocus();
         raceViewPane.focusedProperty().addListener((observable, oldValue, newValue) -> Platform.runLater(() -> raceViewPane.requestFocus()));
+    }
+
+
+    private void sendMessages(List<MessageBody> messages) {
+        for (MessageBody message : messages) {
+            try {
+                sender.send(message);
+            } catch (IOException e) {
+                openEscapeMenu("You have been disconnected!", eventMenuPane);
+            }
+        }
     }
 
 
@@ -583,7 +606,7 @@ public class RaceController implements Observer {
         raceViewPane.resize(raceViewPane.getPrefWidth(), raceViewPane.getPrefHeight());
 
         pixelMapper = new PixelMapper(
-                bounds.get(0), bounds.get(1), race.getCourse().getCenter(),
+                bounds.get(0), bounds.get(1), race.getCenter(),
                 raceViewPane.heightProperty(), raceViewPane.widthProperty()
         );
 

@@ -503,4 +503,13 @@ public class Race {
         return status == RaceStatus.STARTED || status.isAfter(RaceStatus.STARTED);
     }
 
+
+    public Boat getBoat(int id) {
+        for (Boat boat : startingList) {
+            if (boat.getId() == id) {
+                return boat;
+            }
+        }
+        return null;
+    }
 }

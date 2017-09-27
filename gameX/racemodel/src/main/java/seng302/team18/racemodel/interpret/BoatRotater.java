@@ -3,28 +3,22 @@ package seng302.team18.racemodel.interpret;
 import seng302.team18.model.Boat;
 import seng302.team18.util.VMGAngles;
 
-import java.util.List;
-
 
 /**
  * Rotates boats based as commanded by a boat action message
  */
 public class BoatRotater {
 
-    private List<Boat> boats;
-    private double angle;
-    private Boolean clockwise;
-    private Boolean upwind;
+    private Boat boat;
+    private boolean fromLeft = false;
 
     /**
      * Constructor for BoatRotater.
      *
-     * @param boats boats to rotate.
-     * @param angle to rotate them
+     * @param boat boats to rotate.
      */
-    public BoatRotater(List<Boat> boats, double angle) {
-        this.boats = boats;
-        this.angle = angle;
+    public BoatRotater(Boat boat) {
+        this.boat = boat;
     }
 
 
@@ -35,23 +29,29 @@ public class BoatRotater {
      * @param windSpeed     in knots
      */
     public void rotateUpwind(double windDirection, double windSpeed) {
-        if (upwind == null) {
-            upwind = false;
-        }
-        for (Boat boat : boats) {
-            double oldHeading = boat.getHeading();
-            double flippedWindDirection = (windDirection + 180) % 360; // flipping wind direction
-            double newHeading = headTowardsWind(boat.getHeading(), flippedWindDirection, angle);
-            boolean clockwise = isClockwiseRotation(oldHeading, newHeading);
-            if (upwind && clockwise != this.clockwise) {
-                newHeading = this.clockwise ? oldHeading + angle : oldHeading - angle;
-                newHeading = (newHeading + 360) % 360;
-            }
-            this.clockwise = clockwise;
-            upwind = true;
-            boat.setHeading((newHeading + 360) % 360);
+        double flippedWind = (windDirection + 180) % 360;
+        double heading = (boat.getHeading() - windDirection + 360) % 360;
+
+        if (Math.abs(boat.getHeading() - windDirection) < 3.5) {
+            boat.setHeading(windDirection);
             boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
+
+        } else if (Math.abs(boat.getHeading() - flippedWind) < 2.5) {
+            if (fromLeft) {
+                boat.setHeading((windDirection + 177) % 360);
+            } else {
+                boat.setHeading((windDirection + 183) % 360);
+            }
+        } else if (heading > 180 && heading < 360) {
+            boat.setHeading((boat.getHeading() + 3) % 360);
+            boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
+            fromLeft = true;
+        } else {
+            boat.setHeading((boat.getHeading() - 3 + 360) % 360);
+            boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
+            fromLeft = false;
         }
+
     }
 
 
@@ -62,67 +62,27 @@ public class BoatRotater {
      * @param windSpeed     in knots
      */
     public void rotateDownwind(double windDirection, double windSpeed) {
-        if (upwind == null) {
-            upwind = true;
-        }
-        for (Boat boat : boats) {
-            double oldHeading = boat.getHeading();
-            double newHeading = headTowardsWind(boat.getHeading(), windDirection, angle);
-            boolean clockwise = isClockwiseRotation(oldHeading, newHeading);
-            if (!upwind && clockwise != this.clockwise) {
-                newHeading = this.clockwise ? oldHeading + angle : oldHeading - angle;
-                newHeading = (newHeading + 360) % 360;
+        double flippedWind = (windDirection + 180) % 360;
+        double heading = (boat.getHeading() - windDirection + 360) % 360;
+
+        if (Math.abs(boat.getHeading() - windDirection) < 2.5) {
+            if (fromLeft) {
+                boat.setHeading((windDirection + 3) % 360);
+            } else {
+                boat.setHeading((windDirection + 357) % 360);
             }
-            this.clockwise = clockwise;
-            upwind = false;
-            boat.setHeading(newHeading);
+        } else if (Math.abs(boat.getHeading() - flippedWind) < 3.5) {
+            boat.setHeading(flippedWind);
             boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
+        } else if (heading > 0 && heading < 180) {
+            boat.setHeading((boat.getHeading() + 3 + 360) % 360);
+            boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
+            fromLeft = false;
+        } else {
+            boat.setHeading((boat.getHeading() - 3) % 360);
+            boat.setSpeed(boat.getBoatTWS(windSpeed, windDirection));
+            fromLeft = true;
         }
-    }
-
-
-    /**
-     * Determines if a boat has turned clockwise.
-     * Assumes rotations are less than 180 degrees.
-     *
-     * @param oldHeading of the boat.
-     * @param newHeading of the boat.
-     * @return if the boat has rotated clockwise.
-     */
-    private boolean isClockwiseRotation(double oldHeading, double newHeading) {
-        double clockwiseChange = oldHeading - newHeading;
-        clockwiseChange = (clockwiseChange + 360) % 360;
-        return clockwiseChange > 180;
-    }
-
-
-    /**
-     * Finds the new angle a boat should travel at to move towards the wind if headingChange is positive
-     * or away from the wind if headingChange is negative.
-     *
-     * @param boatHeading   the boats current heading.
-     * @param windHeading   heading of the wind.
-     * @param headingChange how much the boat should head towards the boat.
-     * @return double, the new angle.
-     */
-    private double headTowardsWind(double boatHeading, double windHeading, double headingChange) {
-        double boatToWindClockwiseAngle = boatHeading - windHeading;
-
-        if (boatToWindClockwiseAngle < 0) {
-            boatToWindClockwiseAngle += 360;
-        }
-
-        if (boatToWindClockwiseAngle < 180) {
-            return boatHeading + headingChange;
-        }
-
-        double newHeading = boatHeading - headingChange;
-
-        if (newHeading < 0) {
-            newHeading += 360;
-        }
-
-        return newHeading;
     }
 
 
@@ -137,14 +97,13 @@ public class BoatRotater {
     public void setVMG(double windDirection, double windSpeed, double deadZone) {
         final double right = VMGAngles.RIGHT.getValue();
         final double left = VMGAngles.LEFT.getValue();
-        for (Boat boat : boats) {
-            double relativeHeading = (boat.getHeading() - windDirection + 360) % 360;
-            if (left - deadZone > relativeHeading && relativeHeading > right + deadZone) {
-                boat.optimalDownWind(windSpeed, windDirection);
-            } else if (left + deadZone < relativeHeading || relativeHeading < right - deadZone) {
-                boat.optimalUpWind(windSpeed, windDirection);
-            }
+        double relativeHeading = (boat.getHeading() - windDirection + 360) % 360;
+        if (left - deadZone > relativeHeading && relativeHeading > right + deadZone) {
+            boat.optimalDownWind(windSpeed, windDirection);
+        } else if (left + deadZone < relativeHeading || relativeHeading < right - deadZone) {
+            boat.optimalUpWind(windSpeed, windDirection);
         }
+
     }
 
 
@@ -157,5 +116,12 @@ public class BoatRotater {
     public void setTackGybe(double windDirection, Boat boat) {
         double newHeading = (2 * windDirection - boat.getHeading() + 360) % 360;
         boat.setHeading(newHeading);
+    }
+
+
+    public void setBoat(Boat boat) {
+        if (boat != null) {
+            this.boat = boat;
+        }
     }
 }
