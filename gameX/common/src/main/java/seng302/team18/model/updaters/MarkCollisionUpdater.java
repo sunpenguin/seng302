@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
 public class MarkCollisionUpdater extends CollisionUpdater {
 
 
+    public MarkCollisionUpdater(double totalPushBack) {
+        super(totalPushBack);
+    }
+
+
     @Override
     protected List<AbstractBoat> getObstacles(AbstractBoat boat, Race race) {
         return race.getCourse().getMarks()

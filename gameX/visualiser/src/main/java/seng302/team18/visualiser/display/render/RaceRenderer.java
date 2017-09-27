@@ -232,6 +232,7 @@ public class RaceRenderer implements Renderable {
             DisplayTrail trail = trailMap.get(boat.getShortName());
             if (trail != null) {
                 trail.removeFrom(group);
+                trailMap.remove(boat.getShortName());
             }
         } else {
             DisplayTrail trail = trailMap.get(boat.getShortName());

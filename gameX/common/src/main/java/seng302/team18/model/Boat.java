@@ -191,24 +191,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     }
 
 
-    @Override
-    public String toString() {
-        return "Boat{" +
-                "boatName=" + getName() +
-                ", shortName='" + getShortName() + '\'' +
-                ", speed=" + speed +
-                ", leg=" + legNumber +
-                ", id=" + getId() +
-                ", heading=" + heading +
-                ", coordinate=" + getCoordinate() +
-                ", place=" + place +
-                ", timeTilNextMark=" + timeTilNextMark +
-                ", timeSinceLastMark=" + timeSinceLastMark +
-                ", timeAtLastMark=" + timeAtLastMark +
-                '}';
-    }
-
-
     public BoatStatus getStatus() {
         return status;
     }
@@ -478,5 +460,33 @@ public class Boat extends AbstractBoat implements GeographicLocation {
 
     public boolean isRacing() {
         return status.isRacing();
+    }
+
+
+    @Override
+    public String toString() {
+        return "Boat{" +
+                "polar=" + polar +
+                ", speed=" + speed +
+                ", legNumber=" + legNumber +
+                ", heading=" + heading +
+                ", previousCoordinate=" + previousCoordinate +
+                ", place=" + place +
+                ", timeTilNextMark=" + timeTilNextMark +
+                ", timeSinceLastMark=" + timeSinceLastMark +
+                ", timeAtLastMark=" + timeAtLastMark +
+                ", status=" + status +
+                ", statusStringProperty=" + statusStringProperty +
+                ", isControlled=" + isControlled +
+                ", sailOut=" + sailOut +
+                ", roundZone=" + roundZone +
+                ", powerUp=" + powerUp +
+                ", isPowerActive=" + isPowerActive +
+                ", powerDurationEnd=" + powerDurationEnd +
+                ", updater=" + updater +
+                ", lives=" + lives +
+                ", livesIntegerProperty=" + livesIntegerProperty +
+                ", hasCollided=" + hasCollided +
+                '}';
     }
 }

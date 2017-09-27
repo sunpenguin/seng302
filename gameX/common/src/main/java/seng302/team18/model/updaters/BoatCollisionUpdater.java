@@ -13,14 +13,15 @@ import java.util.stream.Collectors;
 public class BoatCollisionUpdater extends CollisionUpdater {
 
 
+    public BoatCollisionUpdater(double totalPushBack) {
+        super(totalPushBack);
+    }
+
+
     @Override
     protected List<AbstractBoat> getObstacles(AbstractBoat boat, Race race) {
-        return race.getStartingList().stream()
+        return race.getCompetitors().stream()
                 .filter(b -> !b.getId().equals(boat.getId()))
-                .filter(b -> !b.getStatus().equals(BoatStatus.FINISHED))
-                .filter(b -> !b.getStatus().equals(BoatStatus.DNF))
-                .filter(b -> !b.getStatus().equals(BoatStatus.DNS))
-                .filter(b -> !b.getStatus().equals(BoatStatus.DSQ))
                 .collect(Collectors.toList());
     }
 }

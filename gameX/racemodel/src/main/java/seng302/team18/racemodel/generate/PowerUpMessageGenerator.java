@@ -26,9 +26,9 @@ public class PowerUpMessageGenerator extends MessageGenerator {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 
         byte[] sourceID = ByteCheck.intToByteArray(pickUp.getId());
-        Double latitude = (pickUp.getLocation().getLatitude() / BYTE_COORDINATE_TO_DOUBLE);
+        Double latitude = (pickUp.getCoordinate().getLatitude() / BYTE_COORDINATE_TO_DOUBLE);
         int latInt = latitude.intValue();
-        Double longitude = (pickUp.getLocation().getLongitude() / BYTE_COORDINATE_TO_DOUBLE);
+        Double longitude = (pickUp.getCoordinate().getLongitude() / BYTE_COORDINATE_TO_DOUBLE);
         int longInt = longitude.intValue();
         byte[] latitudeBytes = ByteCheck.intToByteArray(latInt);
         byte[] longitudeBytes = ByteCheck.intToByteArray(longInt);
