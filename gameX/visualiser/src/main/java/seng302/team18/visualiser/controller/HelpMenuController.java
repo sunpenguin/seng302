@@ -1,34 +1,34 @@
 package seng302.team18.visualiser.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import seng302.team18.visualiser.sound.SoundEffect;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 public class HelpMenuController {
 
-    @FXML private ToggleButton controlsToggle;
-    @FXML private ToggleButton modesToggle;
-    @FXML private Pane controlsPane;
-    @FXML private Pane modePane;
-    @FXML private Pane outerPane;
-    @FXML private Label closeLabel;
+    @FXML
+    private ToggleButton controlsToggle;
+    @FXML
+    private ToggleButton modesToggle;
+    @FXML
+    private Pane controlsPane;
+    @FXML
+    private Pane modePane;
+    @FXML
+    private Pane outerPane;
+    @FXML
+    private Label closeLabel;
 
     private Pane titleScreenPane;
+    private SoundEffectPlayer soundPlayer;
 
 
-    @FXML public void initialize() {
-        controlsToggle.getStyleClass().add("controlsImage");
-        controlsToggle.setOnMouseClicked(event -> showControlsHelp());
+    @FXML
+    public void initialize() {
 
-        modesToggle.getStyleClass().add("gameModeImage");
-        modesToggle.setOnMouseClicked(event -> showGameModeHelp());
-
-        closeLabel.setOnMouseClicked(event -> close());
-
-        showControlsHelp();
     }
 
 
@@ -52,9 +52,9 @@ public class HelpMenuController {
      * Switch the displayed tab from the previous to the selected tab
      *
      * @param unselected ToggleButton that has been unselected
-     * @param previous previous pane
-     * @param selected ToggleButton that has been selected
-     * @param next next pane (pane to be shown)
+     * @param previous   previous pane
+     * @param selected   ToggleButton that has been selected
+     * @param next       next pane (pane to be shown)
      */
     private void switchTab(ToggleButton unselected, Pane previous, ToggleButton selected, Pane next) {
         unselected.setSelected(false);
@@ -78,5 +78,55 @@ public class HelpMenuController {
 
     public void setup(Pane pane) {
         titleScreenPane = pane;
+
+        controlsToggle.getStyleClass().add("controlsImage");
+        controlsToggle.setOnMouseClicked(event -> {
+            showControlsHelp();
+            buttonClickedAction();
+        });
+        controlsToggle.setOnMouseEntered(event -> buttonEnteredAction());
+
+        modesToggle.getStyleClass().add("gameModeImage");
+        modesToggle.setOnMouseClicked(event -> {
+            showGameModeHelp();
+            buttonClickedAction();
+        });
+        modesToggle.setOnMouseEntered(event -> buttonEnteredAction());
+
+        closeLabel.setOnMouseClicked(event -> {
+            close();
+            buttonClickedAction();
+        });
+        closeLabel.setOnMouseEntered(event -> buttonEnteredAction());
+
+        showControlsHelp();
+    }
+
+
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setSoundPlayer(SoundEffectPlayer player) {
+        this.soundPlayer = player;
+    }
+
+
+    /**
+     * Common actions for OnMouseEntered events of menu buttons.
+     * <p>
+     * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_ENTER SoundEffect#BUTTON_MOUSE_ENTER}
+     */
+    private void buttonEnteredAction() {
+        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
+    }
+
+
+    /**
+     * Common actions for OnMouseClicked events of menu buttons.
+     * <p>
+     * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_CLICK SoundEffect#BUTTON_MOUSE_CLICK}
+     */
+    private void buttonClickedAction() {
+        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
     }
 }

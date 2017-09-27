@@ -27,6 +27,7 @@ public class TitleScreenController {
     @FXML private AnchorPane paneInner;
 
     private Pane helpMenuPane;
+    private HelpMenuController helpMenuController;
 
     private Stage stage;
     private SoundEffectPlayer soundPlayer;
@@ -47,14 +48,11 @@ public class TitleScreenController {
 
         errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());
         errorText.setLayoutY((600 / 2) + 300);
-
-
     }
 
+
     public void setup(){
-        stage.setOnCloseRequest((event) -> {
-            System.exit(0);
-        });
+        stage.setOnCloseRequest((event) -> System.exit(0));
     }
 
 
@@ -151,8 +149,8 @@ public class TitleScreenController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("helpMenu.fxml"));
             helpMenuPane = loader.load();
-            HelpMenuController controller = loader.getController();
-            controller.setup(paneInner);
+            helpMenuController = loader.getController();
+            helpMenuController.setup(paneInner);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -257,6 +255,7 @@ public class TitleScreenController {
      */
     public void setSoundPlayer(SoundEffectPlayer player) {
         this.soundPlayer = player;
+        helpMenuController.setSoundPlayer(player);
     }
 
 
