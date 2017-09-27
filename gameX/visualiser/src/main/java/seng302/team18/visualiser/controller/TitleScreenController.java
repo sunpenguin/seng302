@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -12,9 +13,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
-import seng302.team18.visualiser.sound.ThemeTunePlayer;
+import seng302.team18.visualiser.sound.AudioPlayer;
+import seng302.team18.visualiser.sound.Music;
 import seng302.team18.visualiser.sound.SoundEffect;
-import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 import java.io.IOException;
 
@@ -22,38 +23,63 @@ import java.io.IOException;
  * Controller for when the application first starts up
  */
 public class TitleScreenController {
-    @FXML private Label errorText;
-    @FXML private AnchorPane pane;
-    @FXML private AnchorPane paneInner;
+    @FXML
+    private Label errorText;
+    @FXML
+    private AnchorPane pane;
+    @FXML
+    private AnchorPane paneInner;
 
     private Pane helpMenuPane;
 
     private Stage stage;
-    private SoundEffectPlayer soundPlayer;
+    private AudioPlayer audioPlayer;
+
+    private ToggleButton soundEffectsButton = new ToggleButton();
+    private ToggleButton musicButton = new ToggleButton();
 
 
-    public void initialize()  {
+    public void initialize() {
         registerListeners();
         initialiseHostButton();
         initialiseHelpButton();
-        loadHelpMenu();
         initialiseQuitButton();
         initialiseTutorialButton();
         loadBoatAnimation();
 
-        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer();
-        themeTunePlayer.playSound("audio/theme.mp3");
-
         errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());
         errorText.setLayoutY((600 / 2) + 300);
 
+        paneInner.getChildren().add(soundEffectsButton);
+        paneInner.getChildren().add(musicButton);
 
+        musicButton.setLayoutY(-50);
+        musicButton.setLayoutX(100);
+        soundEffectsButton.setLayoutY(-50);
+
+        musicButton.selectedProperty().addListener((observable, oldValue, newValue) -> audioPlayer.setMusicMuted(newValue));
+        soundEffectsButton.selectedProperty().addListener((observable, oldValue, newValue) -> audioPlayer.setEffectsMuted(newValue));
+
+        musicButton.getStyleClass().add("musicView");
+        soundEffectsButton.getStyleClass().add("soundView");
     }
 
-    public void setup(){
-        stage.setOnCloseRequest((event) -> {
-            System.exit(0);
-        });
+
+    /**
+     * @param stage  the stage for this view
+     * @param player manages the audio playback from this scene
+     */
+    public void setup(Stage stage, AudioPlayer player) {
+        this.stage = stage;
+        this.audioPlayer = player;
+
+        loadHelpMenu(audioPlayer);
+
+        audioPlayer.loopMusic(Music.BEEPBOOP);
+        audioPlayer.stopAllAmbient();
+
+        musicButton.setSelected(audioPlayer.isMusicMuted());
+        soundEffectsButton.setSelected(audioPlayer.isEffectsMuted());
     }
 
 
@@ -72,7 +98,7 @@ public class TitleScreenController {
         }
         GameSelectionController controller = loader.getController();
         controller.setStage(stage);
-        controller.setSoundPlayer(soundPlayer);
+        controller.setup(audioPlayer);
         stage.setTitle("High Seas");
         pane.getScene().setRoot(root);
         stage.setMaximized(true);
@@ -145,12 +171,12 @@ public class TitleScreenController {
     /**
      * Load the associated FXML for the help menu into a Pane object.
      */
-    private void loadHelpMenu() {
+    private void loadHelpMenu(AudioPlayer player) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("helpMenu.fxml"));
             helpMenuPane = loader.load();
-            HelpMenuController controller = loader.getController();
-            controller.setup(paneInner);
+            HelpMenuController helpMenuController = loader.getController();
+            helpMenuController.setup(paneInner, player);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -206,8 +232,8 @@ public class TitleScreenController {
         tutorialLabel.setLayoutY((600 / 2) + 200);
         tutorialLabel.setOnMouseClicked(event -> {
             buttonClickedAction();
-            new GameConnection(errorText.textProperty(), paneInner, RaceMode.CONTROLS_TUTORIAL, Color.RED)
-                    .startGame("127.0.0.1", "5010", true);
+            GameConnection gameConnection = new GameConnection(errorText.textProperty(), paneInner, RaceMode.CONTROLS_TUTORIAL, Color.RED, audioPlayer);
+            gameConnection.startGame("127.0.0.1", "5010", true);
         });
         tutorialLabel.setOnMouseEntered(event1 -> buttonEnteredAction());
     }
@@ -244,26 +270,13 @@ public class TitleScreenController {
     }
 
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
-
-    /**
-     * @param player manages the audio playback from this scene
-     */
-    public void setSoundPlayer(SoundEffectPlayer player) {
-        this.soundPlayer = player;
-    }
-
-
     /**
      * Common actions for OnMouseEntered events of menu buttons.
      * <p>
      * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_ENTER SoundEffect#BUTTON_MOUSE_ENTER}
      */
     private void buttonEnteredAction() {
-        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
+        audioPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
     }
 
 
@@ -273,7 +286,7 @@ public class TitleScreenController {
      * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_CLICK SoundEffect#BUTTON_MOUSE_CLICK}
      */
     private void buttonClickedAction() {
-        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
+        audioPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
     }
 
 
