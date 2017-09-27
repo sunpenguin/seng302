@@ -44,7 +44,7 @@ public class TitleScreenController {
         initialiseTutorialButton();
         loadBoatAnimation();
 
-        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer("audio/BeepBoop.wav");
+        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer("audio/BeepBoop.mp3");
         themeTunePlayer.playTrack();
 
         errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());

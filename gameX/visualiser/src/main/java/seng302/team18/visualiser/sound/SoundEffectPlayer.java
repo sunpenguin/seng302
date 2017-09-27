@@ -60,6 +60,7 @@ public class SoundEffectPlayer {
         try {
             audioInputStream = AudioSystem.getAudioInputStream(url);
         } catch (UnsupportedAudioFileException | IOException e) {
+            System.out.println(effect.getUrl());
             e.printStackTrace();
             return 0;
         }

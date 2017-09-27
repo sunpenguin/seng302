@@ -571,7 +571,7 @@ public class RaceController implements Observer {
         this.sender = sender;
         this.race = race;
 
-        themeTunePlayer = new ThemeTunePlayer("audio/theme.wav");
+        themeTunePlayer = new ThemeTunePlayer("audio/theme.mp3");
         themeTunePlayer.playTrack();
 
         GPSCalculator gps = new GPSCalculator();
