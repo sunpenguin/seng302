@@ -203,10 +203,12 @@ public class RaceController implements Observer {
 
                 break;
             case ESCAPE:
-                if (group.getChildren().contains(escapeMenuPane)) {
-                    group.getChildren().remove(escapeMenuPane);
-                } else {
-                    openEscapeMenu("", escapeMenuPane);
+                if (!(race.getStatus().equals(RaceStatus.FINISHED))) {
+                    if (group.getChildren().contains(escapeMenuPane)) {
+                        group.getChildren().remove(escapeMenuPane);
+                    } else {
+                        openEscapeMenu("MENU", escapeMenuPane);
+                    }
                 }
                 break;
         }
@@ -395,10 +397,16 @@ public class RaceController implements Observer {
         if (!group.getChildren().contains(menuPane)) {
             Label label = new Label(message);
             label.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/style.css").toExternalForm());
-            label.getStyleClass().add("message");
-            HBox box = new HBox(label);
+
+            if (menuPane == eventMenuPane) {
+                label.getStyleClass().add("event");
+            } else {
+                label.getStyleClass().add("message");
+            }
+
+            VBox box = new VBox(label);
             box.setAlignment(Pos.TOP_CENTER);
-            box.setPadding(new Insets(6, 6, 6, 6));
+            box.setPadding(new Insets(50, 6, 6, 12));
             box.setPrefWidth(menuPane.getMinWidth());
             label.setMaxWidth(box.getPrefWidth());
             label.setWrapText(true);
@@ -669,6 +677,14 @@ public class RaceController implements Observer {
     }
 
 
+    private void redrawESCMenu() {
+        escapeMenuPane.setLayoutX((raceViewPane.getWidth() / 2) - escapeMenuPane.getPrefWidth() / 2);
+        escapeMenuPane.setLayoutY((raceViewPane.getHeight() / 2) - escapeMenuPane.getPrefHeight() / 2);
+        eventMenuPane.setLayoutX((raceViewPane.getWidth() / 2) - eventMenuPane.getPrefWidth() / 2);
+        eventMenuPane.setLayoutY((raceViewPane.getHeight() / 2) - eventMenuPane.getPrefHeight() / 2);
+    }
+
+
     /**
      * Register any required listeners.
      */
@@ -763,6 +779,7 @@ public class RaceController implements Observer {
         raceRenderer.refresh();
         redrawTimeLabel();
         redrawTabView();
+        redrawESCMenu();
     }
 
 
@@ -788,7 +805,8 @@ public class RaceController implements Observer {
             finishResultsBox = new VBox(resultLabel);
             finishResultsBox.getStylesheets().addAll(RaceController.class.getResource("/stylesheets/style.css").toExternalForm());
             finishResultsBox.getStyleClass().add("finishTable");
-            raceViewPane.getChildren().add(finishResultsBox);
+            group.getChildren().add(finishResultsBox);
+            eventMenuPane.toFront();
             finishResultsBox.setLayoutX(50);
             finishResultsBox.setLayoutY(200);
         }
@@ -884,14 +902,14 @@ public class RaceController implements Observer {
     @Override
     public void update(java.util.Observable o, Object arg) {
         if (arg instanceof Boolean) {
-            Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST", eventMenuPane));
+            Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST!", eventMenuPane));
         } else if (arg instanceof Boat) {
             soundPlayer.playEffect(SoundEffect.PLAYER_DISQUALIFIED);
             Platform.runLater(() -> {
                 if (race.getMode().equals(RaceMode.CHALLENGE_MODE) || race.getMode().equals(RaceMode.BUMPER_BOATS)) {
-                    openEscapeMenu("GAME OVER", eventMenuPane);
+                    openEscapeMenu("GAME OVER!", eventMenuPane);
                 } else {
-                    openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES", eventMenuPane);
+                    openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES!", eventMenuPane);
                 }
                 sender.close();
             });

@@ -114,7 +114,11 @@ public class Race {
 
     private PowerUp randomPowerUp() {
         PowerUp powerUp = powerUps.get(ThreadLocalRandom.current().nextInt(powerUps.size())).clone();
-        powerUp.setDuration(5000);
+        if (powerUp.getType() == PowerType.SHARK) {
+            powerUp.setDuration(1000);
+        } else {
+            powerUp.setDuration(5000);
+        }
         return powerUp;
     }
 

@@ -31,7 +31,7 @@ public class BoatRotaterTest {
     @Test
     public void setVMGPassTest() {
         double expectedHeading = 43.0d;
-        double expectedSpeed = 12.35d;
+        double expectedSpeed = 12.2d;
         rotater.setVMG(windDirection, windSpeed, deadZone);
         Assert.assertEquals(expectedHeading, boat.getHeading(), 0.1);
         Assert.assertEquals(expectedSpeed, boat.getSpeed(), 0.1);
