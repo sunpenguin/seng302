@@ -33,6 +33,7 @@ public class VisualRoundingArrow implements Renderable {
                 .forEach(boat -> {
                     arrow = new DisplayRoundingArrow(pixelMapper, race.getCourse().getMarkRounding(boat.getLegNumber()));
                     arrow.addToGroup(group);
+                    arrow.sendToBack(group);
                 });
     }
 
