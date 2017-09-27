@@ -15,21 +15,20 @@ public enum SoundEffect {
     RACE_START_LEAD_IN("audio/start_lead_in.mp3"),
     RACE_START("audio/start_blip.mp3"),
     ACTIVATE_SPEED_BOOST("audio/activate_speed_boost.mp3"),
-    CROSS_FINISH_LINE("audio/finish_race.mp3"), //Check
+    CROSS_FINISH_LINE("audio/finish_race.mp3"), //implement
     PICK_UP_POWER_UP("audio/pickup.mp3"); //Implement
 
 
-    private final URL url;
+    private final String url;
 
 
     SoundEffect(String url) {
-        this.url = getClass().getClassLoader().getResource(url);
-//        this.url = (resource == null) ? "" : resource.toString();
+        URL resource = getClass().getClassLoader().getResource(url);
+        this.url = (resource == null) ? "" : resource.toString();
     }
 
 
-    public URL getUrl() {
-//        System.out.println(url.toString());
+    public String getUrl() {
         return url;
     }
 }
