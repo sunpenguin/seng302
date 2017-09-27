@@ -1,6 +1,5 @@
 package seng302.team18.visualiser.controller;
 
-import com.sun.istack.internal.NotNull;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -70,7 +69,7 @@ public class TitleScreenController {
      * @param stage  the stage for this view
      * @param player manages the audio playback from this scene
      */
-    public void setup(Stage stage, @NotNull AudioPlayer player) {
+    public void setup(Stage stage, AudioPlayer player) {
         this.stage = stage;
         this.audioPlayer = player;
 
@@ -172,7 +171,7 @@ public class TitleScreenController {
     /**
      * Load the associated FXML for the help menu into a Pane object.
      */
-    private void loadHelpMenu(@NotNull AudioPlayer player) {
+    private void loadHelpMenu(AudioPlayer player) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("helpMenu.fxml"));
             helpMenuPane = loader.load();

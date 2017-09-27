@@ -1,6 +1,5 @@
 package seng302.team18.visualiser.sound;
 
-import com.sun.istack.internal.NotNull;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -107,7 +106,7 @@ public class AudioPlayer {
     }
 
 
-    public void loopAmbient(@NotNull Ambient track) {
+    public void loopAmbient(Ambient track) {
         if (!ambientPlayers.containsKey(track)) {
             MediaPlayer player = new MediaPlayer(new Media(track.getUrl()));
             player.setVolume(getVolumeAmbient());
