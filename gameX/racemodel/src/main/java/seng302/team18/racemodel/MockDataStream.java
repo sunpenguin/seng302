@@ -5,7 +5,7 @@ import seng302.team18.parse.AC35MessageParserFactory;
 import seng302.team18.racemodel.builder.course.AbstractCourseBuilder;
 import seng302.team18.racemodel.builder.course.CourseBuilderRealistic;
 import seng302.team18.racemodel.builder.participants.AbstractParticipantsBuilder;
-import seng302.team18.racemodel.builder.participants.ParticipantsBuilderSize6;
+import seng302.team18.racemodel.builder.participants.RegularParticipantsBuilder;
 import seng302.team18.racemodel.builder.race.AbstractRaceBuilder;
 import seng302.team18.racemodel.builder.race.RegularRaceBuilder;
 import seng302.team18.racemodel.builder.regatta.AbstractRegattaBuilder;
@@ -26,7 +26,7 @@ public class MockDataStream {
     private static final AbstractRaceBuilder RACE_BUILDER = new RegularRaceBuilder();
     private static final AbstractCourseBuilder COURSE_BUILDER = new CourseBuilderRealistic();
     private static final AbstractRegattaBuilder REGATTA_BUILDER = new RegattaBuilderRealistic();
-    private static final AbstractParticipantsBuilder PARTICIPANTS_BUILDER = new ParticipantsBuilderSize6();
+    private static final AbstractParticipantsBuilder PARTICIPANTS_BUILDER = new RegularParticipantsBuilder();
 
     // Change the XmlDefault implementations to change the default values for the XML messages
     private static final XmlMessageBuilder XML_MESSAGE_BUILDER = new XmlMessageBuilder(new BoatXmlDefaults(), new RaceXmlDefaults());

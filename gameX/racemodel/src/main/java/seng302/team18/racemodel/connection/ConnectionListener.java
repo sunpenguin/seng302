@@ -110,7 +110,6 @@ public class ConnectionListener extends Observable implements Observer {
                 client.close(); // IOException
             }
         }
-
     }
 
 
