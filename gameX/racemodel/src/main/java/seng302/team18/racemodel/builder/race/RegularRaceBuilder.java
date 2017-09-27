@@ -42,7 +42,7 @@ public class RegularRaceBuilder extends AbstractRaceBuilder {
         updaters.add(new MarkRoundingUpdater());
 
         if (statusUpdater == null) {
-            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 2, 2, 2);
+            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 1, 1, 1);
         }
 
         updaters.add(statusUpdater);

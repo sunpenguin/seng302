@@ -56,7 +56,7 @@ public class ClientConnection {
 
 
     /**
-     * Closses the client connection
+     * Closes the client connection
      *
      * @throws IOException
      */
@@ -99,6 +99,18 @@ public class ClientConnection {
 
     public boolean isPlayer() {
         return requestType.isRaceType();
+    }
+
+
+    @Override
+    public String toString() {
+        return "ClientConnection{" +
+                "id=" + id +
+                ", out=" + out +
+                ", socket=" + socket +
+                ", in=" + in +
+                ", requestType=" + requestType +
+                '}';
     }
 }
 
