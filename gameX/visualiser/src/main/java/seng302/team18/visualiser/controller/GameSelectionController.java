@@ -19,8 +19,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
+import seng302.team18.visualiser.sound.AudioPlayer;
 import seng302.team18.visualiser.sound.SoundEffect;
-import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 import java.io.IOException;
 import java.lang.management.PlatformLoggingMXBean;
@@ -48,7 +48,7 @@ public class GameSelectionController {
     private Label arrowRight;
 
     private Stage stage;
-    private SoundEffectPlayer soundPlayer;
+    private AudioPlayer audioPlayer;
 
     private StringProperty ipStrProp;
     private StringProperty portStrProp;
@@ -91,6 +91,14 @@ public class GameSelectionController {
         errorLabel.setPrefHeight(height);
 
         registerListeners();
+    }
+
+
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setup(AudioPlayer player) {
+        this.audioPlayer = player;
     }
 
 
@@ -447,12 +455,10 @@ public class GameSelectionController {
         label.setOnMouseClicked(event -> {
             if (!clickedPlay) {
                 buttonClickedAction();
-                GameConnection connection = new GameConnection(errorLabel.textProperty(), outerPane, mode, boatColours.get(colourIndex));
-                connection.setSoundPlayer(soundPlayer);
+                GameConnection connection = new GameConnection(errorLabel.textProperty(), outerPane, mode, boatColours.get(colourIndex), audioPlayer);
                 connection.startGame(ipStrProp.get(), portStrProp.get(), isHosting);
                 clickedPlay = true;
             }
-
         });
         label.setOnMouseEntered(event1 -> buttonEnteredAction());
         return label;
@@ -488,8 +494,7 @@ public class GameSelectionController {
             System.err.println("Error occurred loading title screen.");
         }
         TitleScreenController controller = loader.getController();
-        controller.setStage(stage);
-        controller.setSoundPlayer(soundPlayer);
+        controller.setup(stage, audioPlayer);
         outerPane.getScene().setRoot(root);
         stage.setMaximized(true);
         stage.show();
@@ -568,21 +573,13 @@ public class GameSelectionController {
 
 
     /**
-     * @param player manages the audio playback from this scene
-     */
-    public void setSoundPlayer(SoundEffectPlayer player) {
-        this.soundPlayer = player;
-    }
-
-
-    /**
      * Common actions for OnMouseEntered events of menu buttons.
      * <p>
      * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_ENTER SoundEffect#BUTTON_MOUSE_ENTER}
      */
     @FXML
     private void buttonEnteredAction() {
-        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
+        audioPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
     }
 
 
@@ -592,6 +589,6 @@ public class GameSelectionController {
      * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_CLICK SoundEffect#BUTTON_MOUSE_CLICK}
      */
     private void buttonClickedAction() {
-        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
+        audioPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
     }
 }

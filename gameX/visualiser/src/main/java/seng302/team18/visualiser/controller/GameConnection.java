@@ -23,7 +23,7 @@ import seng302.team18.visualiser.interpret.unique.AcceptanceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
-import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.AudioPlayer;
 import seng302.team18.visualiser.util.ModelLoader;
 
 import javax.net.SocketFactory;
@@ -44,7 +44,7 @@ public class GameConnection {
     private Receiver receiver;
     private Sender sender;
     private ClientRace race;
-    private SoundEffectPlayer soundPlayer;
+    private AudioPlayer audioPlayer;
 
 
     /**
@@ -54,12 +54,14 @@ public class GameConnection {
      * @param node      a node from the calling scene
      * @param mode      the game type to launch/connect to
      * @param color     the colour of the player's boat
+     * @param player    manages the audio playback from this scene
      */
-    public GameConnection(StringProperty errorText, Node node, RaceMode mode, Color color) {
+    public GameConnection(StringProperty errorText, Node node, RaceMode mode, Color color, AudioPlayer player) {
         this.errorText = errorText;
         this.node = node;
         this.mode = mode;
         this.color = color;
+        this.audioPlayer = player;
         errorText.set("");
     }
 
@@ -142,9 +144,8 @@ public class GameConnection {
     /**
      * Creates a controller manager object and begins an instance of the program.
      *
-     * @param receiver a reciver
+     * @param receiver a receiver
      * @param sender   a sender
-     * @return true if the operation is successful, else false
      */
     private void startConnection(Receiver receiver, Sender sender) {
         this.receiver = receiver;
@@ -236,20 +237,10 @@ public class GameConnection {
         node.getScene().setRoot(root);
         stage.show();
 
-        controller.setSoundPlayer(soundPlayer);
-        controller.setUp(race, sender, interpreter);
+        controller.setUp(race, sender, interpreter, audioPlayer);
     }
 
     public void setFailedConnection() {
         errorText.set("Failed to connect to server:\nServer rejected connection");
     }
-
-
-    /**
-     * @param player manages the audio playback from this scene
-     */
-    public void setSoundPlayer(SoundEffectPlayer player) {
-        this.soundPlayer = player;
-    }
-
 }
