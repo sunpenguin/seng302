@@ -53,6 +53,7 @@ import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -92,6 +93,8 @@ public class RaceController implements Observer {
 
     private Pane escapeMenuPane;
     private Pane eventMenuPane;
+    private ThemeTunePlayer themeTunePlayer;
+    private ThemeTunePlayer wavePlayer;
 
     private boolean annotationsOn;
     private boolean fpsOn;
@@ -130,6 +133,8 @@ public class RaceController implements Observer {
         background = new RaceBackground(raceViewPane, "/images/water.gif");
         tabView.setVisible(false);
         initialiseFadeTransition();
+
+
     }
 
 
@@ -190,10 +195,8 @@ public class RaceController implements Observer {
                 if (pixelMapper.getZoomLevel() > 0) {
                     pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() + 1);
                 } else {
-                    Boat boat = race.getBoat(race.getStartingList().get(0).getId());
-                    pixelMapper.setZoomLevel(1);
-                    pixelMapper.track(boat);
                     pixelMapper.setTracking(true);
+                    pixelMapper.setZoomLevel(1);
                 }
                 break;
             case X:
@@ -366,7 +369,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             EscapeMenuController escapeMenuController = loader.getController();
-            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer);
+            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer, themeTunePlayer, wavePlayer);
         } catch (IOException e) {
             //pass
         }
@@ -383,7 +386,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EventMenu.fxml"));
             eventMenuPane = loader.load();
             EventMenuController eventMenuController = loader.getController();
-            eventMenuController.setup(group, interpreter, sender, soundPlayer);
+            eventMenuController.setup(group, interpreter, sender, soundPlayer, themeTunePlayer, wavePlayer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -569,6 +572,11 @@ public class RaceController implements Observer {
         this.sender = sender;
         this.race = race;
 
+        themeTunePlayer = new ThemeTunePlayer();
+        themeTunePlayer.playSound("audio/theme.mp3", 0.6);
+        wavePlayer = new ThemeTunePlayer();
+        wavePlayer.playSound("audio/Ocean_Waves-Mike_Koenig-980635527.mp3", 0.175);
+
         GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
 
@@ -619,6 +627,12 @@ public class RaceController implements Observer {
         loadEventMenu();
 
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
+
+        if (race.getMode() != RaceMode.SPECTATION) {
+            pixelMapper.track(race.getBoat(race.getPlayerId()));
+        } else {
+            pixelMapper.track(race.getBoat(race.getStartingList().get(0).getId()));
+        }
     }
 
 

@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import seng302.team18.model.RaceMode;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -47,6 +48,7 @@ public class GameSelectionController {
 
     private Stage stage;
     private SoundEffectPlayer soundPlayer;
+    private ThemeTunePlayer themeTunePlayer;
 
     private StringProperty ipStrProp;
     private StringProperty portStrProp;
@@ -457,7 +459,7 @@ public class GameSelectionController {
         label.getStyleClass().add("playImage");
         label.setOnMouseClicked(event -> {
             buttonClickedAction();
-            GameConnection connection = new GameConnection(errorLabel.textProperty(), outerPane, mode, boatColours.get(colourIndex));
+            GameConnection connection = new GameConnection(errorLabel.textProperty(), outerPane, mode, boatColours.get(colourIndex), themeTunePlayer);
             connection.setSoundPlayer(soundPlayer);
             connection.startGame(ipStrProp.get(), portStrProp.get(), isHosting);
         });
@@ -495,6 +497,7 @@ public class GameSelectionController {
             System.err.println("Error occurred loading title screen.");
         }
         TitleScreenController controller = loader.getController();
+        themeTunePlayer.stopTrack();
         controller.setStage(stage);
         controller.setSoundPlayer(soundPlayer);
         outerPane.getScene().setRoot(root);
@@ -580,6 +583,11 @@ public class GameSelectionController {
      */
     public void setSoundPlayer(SoundEffectPlayer player) {
         this.soundPlayer = player;
+    }
+
+
+    public void setThemeTunePlayer(ThemeTunePlayer themeTunePlayer) {
+        this.themeTunePlayer = themeTunePlayer;
     }
 
 

@@ -22,20 +22,18 @@ import java.io.IOException;
  * Controller for when the application first starts up
  */
 public class TitleScreenController {
-    @FXML
-    private Label errorText;
-    @FXML
-    private AnchorPane pane;
-    @FXML
-    private AnchorPane paneInner;
+    @FXML private Label errorText;
+    @FXML private AnchorPane pane;
+    @FXML private AnchorPane paneInner;
 
     private Pane helpMenuPane;
 
     private Stage stage;
     private SoundEffectPlayer soundPlayer;
+    private ThemeTunePlayer themeTunePlayer;
 
 
-    public void initialize() {
+    public void initialize()  {
         registerListeners();
         initialiseHostButton();
         initialiseHelpButton();
@@ -44,11 +42,19 @@ public class TitleScreenController {
         initialiseTutorialButton();
         loadBoatAnimation();
 
-        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer();
-        themeTunePlayer.playTrack();
+        themeTunePlayer = new ThemeTunePlayer();
+        themeTunePlayer.playSound("audio/BeepBoop.mp3", 0.6);
 
         errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());
         errorText.setLayoutY((600 / 2) + 300);
+
+
+    }
+
+    public void setup(){
+        stage.setOnCloseRequest((event) -> {
+            System.exit(0);
+        });
     }
 
 
@@ -68,6 +74,7 @@ public class TitleScreenController {
         GameSelectionController controller = loader.getController();
         controller.setStage(stage);
         controller.setSoundPlayer(soundPlayer);
+        controller.setThemeTunePlayer(themeTunePlayer);
         stage.setTitle("High Seas");
         pane.getScene().setRoot(root);
         stage.setMaximized(true);
@@ -201,9 +208,9 @@ public class TitleScreenController {
         tutorialLabel.setLayoutY((600 / 2) + 200);
         tutorialLabel.setOnMouseClicked(event -> {
             buttonClickedAction();
-            GameConnection connection = new GameConnection(errorText.textProperty(), paneInner, RaceMode.CONTROLS_TUTORIAL, Color.RED);
-            connection.setSoundPlayer(soundPlayer);
-            connection.startGame("127.0.0.1", "5010", true);
+            GameConnection gameConnection = new GameConnection(errorText.textProperty(), paneInner, RaceMode.CONTROLS_TUTORIAL, Color.RED, themeTunePlayer);
+            gameConnection.setSoundPlayer(soundPlayer);
+            gameConnection.startGame("127.0.0.1", "5010", true);
         });
         tutorialLabel.setOnMouseEntered(event1 -> buttonEnteredAction());
     }

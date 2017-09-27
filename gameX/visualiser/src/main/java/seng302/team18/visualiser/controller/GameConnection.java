@@ -21,6 +21,7 @@ import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.interpret.unique.AcceptanceInterpreter;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.util.ModelLoader;
 
 import javax.net.SocketFactory;
@@ -42,6 +43,7 @@ public class GameConnection {
     private Sender sender;
     private ClientRace race;
     private SoundEffectPlayer soundPlayer;
+    private ThemeTunePlayer themeTunePlayer;
 
 
     /**
@@ -52,11 +54,12 @@ public class GameConnection {
      * @param mode      the game type to launch/connect to
      * @param color     the colour of the player's boat
      */
-    public GameConnection(StringProperty errorText, Node node, RaceMode mode, Color color) {
+    public GameConnection(StringProperty errorText, Node node, RaceMode mode, Color color, ThemeTunePlayer themeTunePlayer) {
         this.errorText = errorText;
         this.node = node;
         this.mode = mode;
         this.color = color;
+        this.themeTunePlayer = themeTunePlayer;
         errorText.set("");
     }
 
@@ -231,7 +234,7 @@ public class GameConnection {
         stage.show();
 
         controller.setSoundPlayer(soundPlayer);
-        controller.setUp(race, sender, interpreter);
+        controller.setUp(race, sender, interpreter, themeTunePlayer);
     }
 
     public void setFailedConnection() {
