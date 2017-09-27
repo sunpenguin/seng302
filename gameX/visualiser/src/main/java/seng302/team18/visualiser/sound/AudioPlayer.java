@@ -36,7 +36,6 @@ public class AudioPlayer {
 
     private boolean isMutedMusic = false;
     private boolean isMutedEffect = false;
-    private boolean isMutedAmbient = false;
 
     /**
      * Constructs a new instance of AudioPlayer
@@ -141,6 +140,27 @@ public class AudioPlayer {
 
 
     private double getVolumeAmbient() {
-        return (isMutedAmbient) ? 0 : volumeAmbient * RELATIVE_VOLUME_AMBIENT;
+        return (isMutedMusic) ? 0 : volumeAmbient * RELATIVE_VOLUME_AMBIENT;
+    }
+
+
+    public void setMutedMusic(boolean mutedMusic) {
+        isMutedMusic = mutedMusic;
+        musicPlayer.setVolume(getVolumeMusic());
+    }
+
+
+    public void setMutedEffect(boolean mutedEffect) {
+        isMutedEffect = mutedEffect;
+    }
+
+
+    public boolean isMutedMusic() {
+        return isMutedMusic;
+    }
+
+
+    public boolean isMutedEffect() {
+        return isMutedEffect;
     }
 }

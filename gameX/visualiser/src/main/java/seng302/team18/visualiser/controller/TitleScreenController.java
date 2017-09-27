@@ -39,9 +39,6 @@ public class TitleScreenController {
     private ToggleButton soundEffectsButton = new ToggleButton();
     private ToggleButton musicButton = new ToggleButton();
 
-    private boolean soundOn = true;
-    private boolean musicOn = true;
-
 
     public void initialize() {
         registerListeners();
@@ -61,21 +58,11 @@ public class TitleScreenController {
         musicButton.setLayoutX(100);
         soundEffectsButton.setLayoutY(-50);
 
-        musicButton.setOnMouseClicked(event -> toggleMusic());
-        soundEffectsButton.setOnMouseClicked(event -> toggleSoundEffects());
+        musicButton.selectedProperty().addListener((observable, oldValue, newValue) -> audioPlayer.setMutedMusic(newValue));
+        soundEffectsButton.selectedProperty().addListener((observable, oldValue, newValue) -> audioPlayer.setMutedEffect(newValue));
 
         musicButton.getStyleClass().add("musicView");
         soundEffectsButton.getStyleClass().add("soundView");
-    }
-
-
-    private void toggleMusic() {
-        musicOn = !musicOn;
-    }
-
-
-    private void toggleSoundEffects() {
-        soundOn = !soundOn;
     }
 
 
@@ -91,6 +78,9 @@ public class TitleScreenController {
 
         audioPlayer.loopMusic(Music.BEEPBOOP);
         audioPlayer.stopAllAmbient();
+
+        musicButton.setSelected(audioPlayer.isMutedMusic());
+        soundEffectsButton.setSelected(audioPlayer.isMutedEffect());
     }
 
 
