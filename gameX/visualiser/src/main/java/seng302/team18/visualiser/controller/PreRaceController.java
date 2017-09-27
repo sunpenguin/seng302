@@ -18,17 +18,11 @@ import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.interpret.americascup.BoatListInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceTimeInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceToMainRaceInterpreter;
-import seng302.team18.visualiser.sound.SoundEffect;
-import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
-import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
-import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
-import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.AudioPlayer;
 import seng302.team18.visualiser.sound.StartSoundPlayer;
-import seng302.team18.visualiser.sound.ThemeTunePlayer;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -54,8 +48,7 @@ public class PreRaceController {
     private Sender sender;
     private ClientRace race;
 
-    private SoundEffectPlayer soundPlayer;
-    private ThemeTunePlayer themeTunePlayer;
+    private AudioPlayer audioPlayer;
 
     private boolean hasChanged = false;
 
@@ -65,14 +58,15 @@ public class PreRaceController {
      * duration before the race starts.
      *
      * @param race        The race to be set up in the pre-race.
-     * @param sender      the sender\
+     * @param sender      the sender
      * @param interpreter the interpreter
+     * @param player      manages the audio playback from this scene
      */
-    public void setUp(ClientRace race, Sender sender, Interpreter interpreter, ThemeTunePlayer themeTunePlayer) {
+    public void setUp(ClientRace race, Sender sender, Interpreter interpreter, AudioPlayer player) {
         this.sender = sender;
         this.race = race;
         this.interpreter = interpreter;
-        this.themeTunePlayer = themeTunePlayer;
+        this.audioPlayer = player;
 
         addInterpreters();
         setUpStartSound();
@@ -142,7 +136,6 @@ public class PreRaceController {
         if (hasChanged) {
             return;
         }
-        themeTunePlayer.stopTrack();
         hasChanged = true;
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
         Parent root = loader.load(); // throws IOException
@@ -152,8 +145,7 @@ public class PreRaceController {
         stage.setResizable(true);
         stage.setMaximized(true);
         stage.show();
-        controller.setSoundPlayer(soundPlayer);
-        controller.setUp(race, interpreter, sender);
+        controller.setUp(race, interpreter, sender, audioPlayer);
         controller.updateControlsTutorial();
         controller.updateControlsTutorial();
     }
@@ -175,18 +167,10 @@ public class PreRaceController {
 
 
     /**
-     * @param player manages the audio playback from this scene
-     */
-    public void setSoundPlayer(SoundEffectPlayer player) {
-        this.soundPlayer = player;
-    }
-
-
-    /**
      * Plays the start sound at the appropriate time
      */
     private void setUpStartSound() {
-        new Thread(new StartSoundPlayer(race, soundPlayer)).start();
+        new Thread(new StartSoundPlayer(race, audioPlayer)).start();
     }
 
 

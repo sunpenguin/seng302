@@ -6,8 +6,8 @@ import seng302.team18.model.*;
 import seng302.team18.visualiser.ClientRace;
 import seng302.team18.visualiser.display.AnnotationType;
 import seng302.team18.visualiser.display.object.*;
+import seng302.team18.visualiser.sound.AudioPlayer;
 import seng302.team18.visualiser.sound.SoundEffect;
-import seng302.team18.visualiser.sound.SoundEffectPlayer;
 import seng302.team18.visualiser.util.PixelMapper;
 
 import java.util.HashMap;
@@ -25,7 +25,7 @@ public class RaceRenderer implements Renderable {
     private Map<Integer, DisplayShark> sharksMap = new HashMap<>();
     private PixelMapper pixelMapper;
     private boolean hasTrails;
-    private final SoundEffectPlayer soundPlayer;
+    private final AudioPlayer audioPlayer;
 
 
     /**
@@ -34,13 +34,13 @@ public class RaceRenderer implements Renderable {
      * @param pixelMapper for converting coordinates to pixel coordinates
      * @param race        the race containing the displayBoats to be drawn
      * @param group       the group to be drawn on
-     * @param soundPlayer the manager for audio playback from this scene
+     * @param audioPlayer the manager for audio playback from this scene
      */
-    public RaceRenderer(PixelMapper pixelMapper, ClientRace race, Group group, SoundEffectPlayer soundPlayer) {
+    public RaceRenderer(PixelMapper pixelMapper, ClientRace race, Group group, AudioPlayer audioPlayer) {
         this.race = race;
         this.group = group;
         this.pixelMapper = pixelMapper;
-        this.soundPlayer = soundPlayer;
+        this.audioPlayer = audioPlayer;
         if (race.getMode() == RaceMode.CHALLENGE_MODE) {
             setChallengeModeCourse();
         }
@@ -158,7 +158,7 @@ public class RaceRenderer implements Renderable {
             }
         }
         displayBoat = new DisplaySail(pixelMapper, displayBoat);
-        displayBoat = new DisplayCollision(pixelMapper, displayBoat, (wasPlayerCollided) -> soundPlayer.playEffect(SoundEffect.COLLISION));
+        displayBoat = new DisplayCollision(pixelMapper, displayBoat, (wasPlayerCollided) -> audioPlayer.playEffect(SoundEffect.COLLISION));
         displayBoat.addToGroup(group);
         displayBoats.put(boat.getShortName(), displayBoat);
         return displayBoat;

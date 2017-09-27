@@ -19,15 +19,16 @@ public enum SoundEffect {
     PICK_UP_POWER_UP("audio/pickup.mp3"); //Implement
 
 
-    private final URL url;
+    private final String url;
 
 
     SoundEffect(String url) {
-        this.url = getClass().getClassLoader().getResource(url);
+        URL resource = getClass().getClassLoader().getResource(url);
+        this.url = (resource == null) ? "" : resource.toString();
     }
 
 
-    public URL getUrl() {
+    public String getUrl() {
         return url;
     }
 }

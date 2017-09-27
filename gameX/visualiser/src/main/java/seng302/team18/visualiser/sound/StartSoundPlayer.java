@@ -15,12 +15,12 @@ import java.util.function.BooleanSupplier;
 public class StartSoundPlayer implements Runnable {
 
     private final ClientRace race;
-    private final SoundEffectPlayer soundPlayer;
+    private final AudioPlayer audioPlayer;
 
 
-    public StartSoundPlayer(ClientRace race, SoundEffectPlayer soundPlayer) {
+    public StartSoundPlayer(ClientRace race, AudioPlayer audioPlayer) {
         this.race = race;
-        this.soundPlayer = soundPlayer;
+        this.audioPlayer = audioPlayer;
     }
 
 
@@ -30,7 +30,7 @@ public class StartSoundPlayer implements Runnable {
         waitWhile(() -> race.getStartTime().toInstant().equals(Instant.EPOCH));
 
         // Wait until time to play start sound
-        long durationMillis = ((Double) soundPlayer.getDuration(SoundEffect.RACE_START_LEAD_IN).toMillis()).longValue();
+        long durationMillis = ((Double) audioPlayer.getDuration(SoundEffect.RACE_START_LEAD_IN).toMillis()).longValue();
         ZonedDateTime playTime = race.getStartTime().minus(durationMillis, ChronoUnit.MILLIS);
 
         long millisUntilStart = ChronoUnit.MILLIS.between(race.getCurrentTime(), race.getStartTime());
@@ -40,10 +40,10 @@ public class StartSoundPlayer implements Runnable {
             if (race.getCurrentTime().isBefore(playTime)) {
                 waitWhile(() -> race.getCurrentTime().isBefore(playTime));
 
-                soundPlayer.playEffect(SoundEffect.RACE_START_LEAD_IN);
+                audioPlayer.playEffect(SoundEffect.RACE_START_LEAD_IN);
             } else {
                 long millisSincePlayStart = ChronoUnit.MILLIS.between(playTime, race.getCurrentTime());
-                MediaPlayer player = soundPlayer.getEffectPlayer(SoundEffect.RACE_START_LEAD_IN);
+                MediaPlayer player = audioPlayer.getEffectPlayer(SoundEffect.RACE_START_LEAD_IN);
                 player.setStartTime(new Duration(millisSincePlayStart));
                 player.setOnEndOfMedia(player::dispose);
                 player.play();
@@ -54,7 +54,7 @@ public class StartSoundPlayer implements Runnable {
         final long START_GUN_OFFSET = -750; // millis
         waitWhile(() -> race.getCurrentTime().isBefore(race.getStartTime().plus(START_GUN_OFFSET, ChronoUnit.MILLIS)));
 
-        soundPlayer.playEffect(SoundEffect.RACE_START);
+        audioPlayer.playEffect(SoundEffect.RACE_START);
     }
 
 

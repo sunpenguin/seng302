@@ -51,9 +51,10 @@ import seng302.team18.visualiser.interpret.unique.*;
 import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
+import seng302.team18.visualiser.sound.Ambient;
+import seng302.team18.visualiser.sound.AudioPlayer;
+import seng302.team18.visualiser.sound.Music;
 import seng302.team18.visualiser.sound.SoundEffect;
-import seng302.team18.visualiser.sound.SoundEffectPlayer;
-import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.CheatyControlManipulator;
 import seng302.team18.visualiser.util.PixelMapper;
@@ -94,8 +95,6 @@ public class RaceController implements Observer {
 
     private Pane escapeMenuPane;
     private Pane eventMenuPane;
-    private ThemeTunePlayer themeTunePlayer;
-    private ThemeTunePlayer wavePlayer;
 
     private boolean annotationsOn;
     private boolean fpsOn;
@@ -105,7 +104,7 @@ public class RaceController implements Observer {
     private CourseRenderer courseRenderer;
     private PixelMapper pixelMapper;
     private Sender sender;
-    private SoundEffectPlayer soundPlayer;
+    private AudioPlayer audioPlayer;
 
     private Interpreter interpreter;
     private RaceBackground background;
@@ -394,7 +393,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             EscapeMenuController escapeMenuController = loader.getController();
-            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer, themeTunePlayer, wavePlayer);
+            escapeMenuController.setup(group, interpreter, sender, this, audioPlayer);
         } catch (IOException e) {
             //pass
         }
@@ -411,7 +410,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EventMenu.fxml"));
             eventMenuPane = loader.load();
             EventMenuController eventMenuController = loader.getController();
-            eventMenuController.setup(group, interpreter, sender, soundPlayer, themeTunePlayer, wavePlayer);
+            eventMenuController.setup(group, interpreter, sender, audioPlayer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -599,15 +598,15 @@ public class RaceController implements Observer {
      * @param race        the race which is going to be displayed.
      * @param sender      the sender
      * @param interpreter the interpreter
+     * @param player      manages the audio playback from this scene
      */
-    public void setUp(ClientRace race, Interpreter interpreter, Sender sender) {
+    public void setUp(ClientRace race, Interpreter interpreter, Sender sender, AudioPlayer player) {
         this.sender = sender;
         this.race = race;
+        audioPlayer = player;
 
-        themeTunePlayer = new ThemeTunePlayer();
-        themeTunePlayer.playSound("audio/theme.mp3", 0.6);
-        wavePlayer = new ThemeTunePlayer();
-        wavePlayer.playSound("audio/Ocean_Waves-Mike_Koenig-980635527.mp3", 0.175);
+        audioPlayer.loopMusic(Music.THEME);
+        audioPlayer.loopAmbient(Ambient.WAVES_1);
 
         GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
@@ -623,7 +622,7 @@ public class RaceController implements Observer {
 
         pixelMapper.setMaxZoom(16d);
         pixelMapper.calculateMappingScale();
-        raceRenderer = new RaceRenderer(pixelMapper, race, group, soundPlayer);
+        raceRenderer = new RaceRenderer(pixelMapper, race, group, audioPlayer);
         raceRenderer.render();
         colours = raceRenderer.boatColors();
         courseRenderer = new CourseRenderer(pixelMapper, race.getCourse(), group, race.getMode());
@@ -777,13 +776,13 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new EstimatedTimeInterpreter(race));
         BoatStatusInterpreter boatStatusInterpreter = new BoatStatusInterpreter(race);
         boatStatusInterpreter.addCallback(BoatStatus.DSQ, (isPlayer) -> {
-            if (isPlayer) soundPlayer.playEffect(SoundEffect.PLAYER_DISQUALIFIED);
+            if (isPlayer) audioPlayer.playEffect(SoundEffect.PLAYER_DISQUALIFIED);
         });
         boatStatusInterpreter.addCallback(BoatStatus.DSQ, (isPlayer) -> {
             if (isPlayer) openEscapeMenuOnDsq();
         });
         boatStatusInterpreter.addCallback(BoatStatus.FINISHED, (isPlayer) -> {
-            if (isPlayer) soundPlayer.playEffect(SoundEffect.CROSS_FINISH_LINE);
+            if (isPlayer) audioPlayer.playEffect(SoundEffect.CROSS_FINISH_LINE);
         });
 
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), boatStatusInterpreter);
@@ -791,7 +790,9 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
         interpreter.add(AC35MessageType.MARK_ROUNDING.getCode(), new MarkRoundingInterpreter(race));
         YachtEventInterpreter yachtEventInterpreter = new YachtEventInterpreter(race);
-        yachtEventInterpreter.addCallback(YachtEventCode.ACTIVATED_SPEED_BOOST, isPlayerBoost -> soundPlayer.playEffect(SoundEffect.ACTIVATE_SPEED_BOOST));
+        yachtEventInterpreter.addCallback(YachtEventCode.ACTIVATED_SPEED_BOOST, isPlayerBoost ->
+                audioPlayer.playEffect(SoundEffect.ACTIVATE_SPEED_BOOST)
+        );
         interpreter.add(AC35MessageType.YACHT_EVENT.getCode(), yachtEventInterpreter);
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(clock));
         RaceStatusInterpreter raceStatusInterpreter = new RaceStatusInterpreter(race);
@@ -800,13 +801,17 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.POWER_UP.getCode(), new PowerUpInterpreter(race));
         PowerTakenInterpreter powerTakenInterpreter = new PowerTakenInterpreter(race);
         powerTakenInterpreter.setCallback(isPlayerPickup -> {
-            if (isPlayerPickup) soundPlayer.playEffect(SoundEffect.PICK_UP_POWER_UP);
+            if (isPlayerPickup) audioPlayer.playEffect(SoundEffect.PICK_UP_POWER_UP);
         });
         interpreter.add(AC35MessageType.POWER_TAKEN.getCode(), powerTakenInterpreter);
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
-        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLivesInterpreter(race, (wasPlayerLostLife) -> soundPlayer.playEffect(SoundEffect.LOSE_LIFE)));
+        interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLivesInterpreter(race, (wasPlayerLostLife) ->
+                audioPlayer.playEffect(SoundEffect.LOSE_LIFE)
+        ));
         interpreter.add(AC35MessageType.PROJECTILE_LOCATION.getCode(), new ProjectileLocationInterpreter(race));
-        interpreter.add(AC35MessageType.PROJECTILE_CREATION.getCode(), new ProjectileCreationInterpreter(race, (wasFiredByPlayer) -> soundPlayer.playEffect(SoundEffect.FIRE_BULLET)));
+        interpreter.add(AC35MessageType.PROJECTILE_CREATION.getCode(), new ProjectileCreationInterpreter(race, (wasFiredByPlayer) ->
+                audioPlayer.playEffect(SoundEffect.FIRE_BULLET)
+        ));
         interpreter.add(AC35MessageType.PROJECTILE_GONE.getCode(), new ProjectileGoneInterpreter(race));
 
         return interpreter;
@@ -970,13 +975,5 @@ public class RaceController implements Observer {
             openEscapeMenu("MATCH COMPLETE!", eventMenuPane);
             sender.close();
         });
-    }
-
-
-    /**
-     * @param player manages the audio playback from this scene
-     */
-    public void setSoundPlayer(SoundEffectPlayer player) {
-        this.soundPlayer = player;
     }
 }

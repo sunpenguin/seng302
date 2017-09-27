@@ -4,8 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
+import seng302.team18.visualiser.sound.AudioPlayer;
 import seng302.team18.visualiser.sound.SoundEffect;
-import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 public class HelpMenuController {
 
@@ -23,13 +23,7 @@ public class HelpMenuController {
     private Label closeLabel;
 
     private Pane titleScreenPane;
-    private SoundEffectPlayer soundPlayer;
-
-
-    @FXML
-    public void initialize() {
-
-    }
+    private AudioPlayer audioPlayer;
 
 
     /**
@@ -76,7 +70,12 @@ public class HelpMenuController {
     }
 
 
-    public void setup(Pane pane) {
+    /**
+     * @param pane   encasing pane
+     * @param player manages the audio playback from this scene
+     */
+    public void setup(Pane pane, AudioPlayer player) {
+        this.audioPlayer = player;
         titleScreenPane = pane;
 
         controlsToggle.getStyleClass().add("controlsImage");
@@ -104,20 +103,12 @@ public class HelpMenuController {
 
 
     /**
-     * @param player manages the audio playback from this scene
-     */
-    public void setSoundPlayer(SoundEffectPlayer player) {
-        this.soundPlayer = player;
-    }
-
-
-    /**
      * Common actions for OnMouseEntered events of menu buttons.
      * <p>
      * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_ENTER SoundEffect#BUTTON_MOUSE_ENTER}
      */
     private void buttonEnteredAction() {
-        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
+        audioPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
     }
 
 
@@ -127,6 +118,6 @@ public class HelpMenuController {
      * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_CLICK SoundEffect#BUTTON_MOUSE_CLICK}
      */
     private void buttonClickedAction() {
-        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
+        audioPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
     }
 }

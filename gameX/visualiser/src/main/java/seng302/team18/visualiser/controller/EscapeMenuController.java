@@ -11,9 +11,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import seng302.team18.encode.Sender;
 import seng302.team18.visualiser.interpret.Interpreter;
+import seng302.team18.visualiser.sound.AudioPlayer;
 import seng302.team18.visualiser.sound.SoundEffect;
-import seng302.team18.visualiser.sound.SoundEffectPlayer;
-import seng302.team18.visualiser.sound.ThemeTunePlayer;
 
 import java.io.IOException;
 
@@ -29,13 +28,11 @@ public class EscapeMenuController {
     private Interpreter interpreter;
     private Sender sender;
     private RaceController raceController;
-    private SoundEffectPlayer soundPlayer;
+    private AudioPlayer audioPlayer;
 
     private boolean fpsOn = true;
     private boolean annotationsOn = false;
     private final int BUTTON_LAYOUTX_OFFSET = 9;
-    private ThemeTunePlayer themeTunePlayer;
-    private ThemeTunePlayer waveSoundPlayer;
 
     @FXML
     public void initialize() {
@@ -135,8 +132,6 @@ public class EscapeMenuController {
     @SuppressWarnings("Duplicates")
     private void returnToTitle() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
-        themeTunePlayer.stopTrack();
-        waveSoundPlayer.stopTrack();
 
         try {
             Parent root = loader.load();
@@ -145,8 +140,7 @@ public class EscapeMenuController {
             pane.getScene().setRoot(root);
             stage.setResizable(true);
             stage.setMaximized(true);
-            controller.setStage(stage);
-            controller.setSoundPlayer(soundPlayer);
+            controller.setup(stage, audioPlayer);
             controller.reDraw();
             stage.show();
         } catch (IOException e) {
@@ -168,21 +162,18 @@ public class EscapeMenuController {
     /**
      * Set up the escape menu.
      *
-     * @param group       Group to place menu on
-     * @param interpreter Interpreter to close when we quit the race.
-     * @param sender      Sender to close when we quit the race.
+     * @param group          Group to place menu on
+     * @param interpreter    Interpreter to close when we quit the race.
+     * @param sender         Sender to close when we quit the race.
      * @param raceController to connect the escaoe menu to.
-     * @param player      the manager for audio playback from this scene.
-     * @param themeTunePlayer the player to manage the theme tune
+     * @param player         the manager for audio playback from this scene.
      */
-    public void setup(Group group, Interpreter interpreter, Sender sender, RaceController raceController, SoundEffectPlayer player, ThemeTunePlayer themeTunePlayer, ThemeTunePlayer waveSoundPlayer) {
+    public void setup(Group group, Interpreter interpreter, Sender sender, RaceController raceController, AudioPlayer player) {
         this.group = group;
         this.interpreter = interpreter;
         this.sender = sender;
         this.raceController = raceController;
-        this.soundPlayer = player;
-        this.themeTunePlayer = themeTunePlayer;
-        this.waveSoundPlayer = waveSoundPlayer;
+        this.audioPlayer = player;
     }
 
 
@@ -192,7 +183,7 @@ public class EscapeMenuController {
      * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_ENTER SoundEffect#BUTTON_MOUSE_ENTER}
      */
     private void buttonEnteredAction() {
-        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
+        audioPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
     }
 
 
@@ -202,7 +193,7 @@ public class EscapeMenuController {
      * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_CLICK SoundEffect#BUTTON_MOUSE_CLICK}
      */
     private void buttonClickedAction() {
-        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
+        audioPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
     }
 }
 
