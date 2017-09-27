@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @see AbstractParticipantsBuilder
  */
-public class ParticipantsBuilderSize20 extends AbstractParticipantsBuilder {
+public class RegularParticipantsBuilder extends AbstractParticipantsBuilder {
 
     @Override
     public List<Boat> buildParticipantPool() {

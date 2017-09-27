@@ -15,7 +15,7 @@ public class Mark extends AbstractBoat implements GeographicLocation {
         setId(id);
         setCoordinate(coordinate);
         setWeight(Double.MAX_VALUE);
-        setLength(18.2); // just a random number lol
+        setLength(18); // just a random number lol
     }
 
 
