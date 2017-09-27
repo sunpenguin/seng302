@@ -23,25 +23,25 @@ public class CheatyControlManipulator {
 
         if (Math.abs(heading) < 0.01) {
             if (fromLeft) {
-                addDownwindMessage(actions);
+                actions.add(makeDownwindMessage());
             } else {
-                addDownwindMessage(actions);
-                addUpwindMessage(actions);
-                addDownwindMessage(actions);
+                actions.add(makeDownwindMessage());
+                actions.add(makeUpwindMessage());
+                actions.add(makeDownwindMessage());
             }
         } else if (Math.abs(flippedHeading) < 0.01) {
             if (fromLeft) {
-                addUpwindMessage(actions);
-                addDownwindMessage(actions);
-                addUpwindMessage(actions);
+                actions.add(makeUpwindMessage());
+                actions.add(makeDownwindMessage());
+                actions.add(makeUpwindMessage());
             } else {
-                addUpwindMessage(actions);
+                actions.add(makeUpwindMessage());
             }
         } else if (heading > 0 && heading < 180) {
-            addDownwindMessage(actions);
+            actions.add(makeDownwindMessage());
             fromLeft = false;
         } else {
-            addUpwindMessage(actions);
+            actions.add(makeUpwindMessage());
             fromLeft = true;
         }
 
@@ -56,25 +56,25 @@ public class CheatyControlManipulator {
 
         if (Math.abs(heading) < 0.01) {
             if (fromLeft) {
-                addDownwindMessage(actions);
-                addUpwindMessage(actions);
-                addDownwindMessage(actions);
+                actions.add(makeDownwindMessage());
+                actions.add(makeUpwindMessage());
+                actions.add(makeDownwindMessage());
             } else {
-                addDownwindMessage(actions);
+                actions.add(makeDownwindMessage());
             }
         } else if (Math.abs(flippedHeading) < 0.01) {
             if (fromLeft) {
-                addUpwindMessage(actions);
+                actions.add(makeUpwindMessage());
             } else {
-               addUpwindMessage(actions);
-               addDownwindMessage(actions);
-               addUpwindMessage(actions);
+               actions.add(makeUpwindMessage());
+               actions.add(makeDownwindMessage());
+               actions.add(makeUpwindMessage());
             }
         } else if (heading > 0 && heading < 180) {
-            addUpwindMessage(actions);
+            actions.add(makeUpwindMessage());
             fromLeft = false;
         } else {
-            addDownwindMessage(actions);
+            actions.add(makeDownwindMessage());
             fromLeft = true;
         }
 
@@ -86,7 +86,7 @@ public class CheatyControlManipulator {
         double heading = (boatHeading - windDirection + 360) % 360;
         fromLeft = !(heading > 180 && heading < 360);
         List<MessageBody> actions = new ArrayList<>();
-        addUpwindMessage(actions);
+        actions.add(makeUpwindMessage());
         return actions;
     }
 
@@ -95,7 +95,7 @@ public class CheatyControlManipulator {
         double heading = (boatHeading - windDirection + 360) % 360;
         fromLeft = !(heading > 0 && heading < 180);
         List<MessageBody> actions = new ArrayList<>();
-        addDownwindMessage(actions);
+        actions.add(makeDownwindMessage());
         return actions;
     }
 
@@ -105,16 +105,16 @@ public class CheatyControlManipulator {
     }
 
 
-    private void addUpwindMessage(List<MessageBody> actions) {
+    private MessageBody makeUpwindMessage() {
         BoatActionMessage actionMessage = new BoatActionMessage(playerId);
         actionMessage.setUpwind();
-        actions.add(actionMessage);
+        return actionMessage;
     }
 
-    private void addDownwindMessage(List<MessageBody> actions) {
+    private MessageBody makeDownwindMessage() {
         BoatActionMessage actionMessage = new BoatActionMessage(playerId);
         actionMessage.setDownwind();
-        actions.add(actionMessage);
+        return actionMessage;
     }
 
 }
