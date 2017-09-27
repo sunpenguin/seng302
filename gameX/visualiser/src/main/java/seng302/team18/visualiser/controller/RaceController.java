@@ -432,6 +432,7 @@ public class RaceController implements Observer {
             box.setPadding(new Insets(50, 6, 6, 12));
             box.setPrefWidth(menuPane.getMinWidth());
             label.setMaxWidth(box.getPrefWidth());
+            label.setAlignment(Pos.CENTER);
             label.setWrapText(true);
             menuPane.getChildren().add(box);
             group.getChildren().add(menuPane);
