@@ -16,6 +16,15 @@ public class ThemeTunePlayer {
 
 
     /**
+     * Constructor for a theme player
+     *
+     * @param path the path to the sound file to be played
+     */
+    public ThemeTunePlayer(String path) {
+        this.path = path;
+    }
+
+    /**
      * Method the play the track
      */
     public void playTrack(){
@@ -40,6 +49,7 @@ public class ThemeTunePlayer {
      */
     public static void stopTrack(){
         mediaPlayer.stop();
+        mediaPlayer.dispose();
         playing = false;
     }
 }

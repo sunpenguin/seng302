@@ -53,6 +53,7 @@ import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -92,6 +93,7 @@ public class RaceController implements Observer {
 
     private Pane escapeMenuPane;
     private Pane eventMenuPane;
+    private ThemeTunePlayer themeTunePlayer;
 
     private boolean annotationsOn;
     private boolean fpsOn;
@@ -366,7 +368,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             EscapeMenuController escapeMenuController = loader.getController();
-            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer);
+            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer, themeTunePlayer);
         } catch (IOException e) {
             //pass
         }
@@ -568,6 +570,9 @@ public class RaceController implements Observer {
     public void setUp(ClientRace race, Interpreter interpreter, Sender sender) {
         this.sender = sender;
         this.race = race;
+
+        themeTunePlayer = new ThemeTunePlayer("audio/theme.wav");
+        themeTunePlayer.playTrack();
 
         GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
