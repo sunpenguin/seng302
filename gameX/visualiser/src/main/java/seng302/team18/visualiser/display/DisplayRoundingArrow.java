@@ -1,6 +1,7 @@
 package seng302.team18.visualiser.display;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
@@ -199,6 +200,16 @@ public class DisplayRoundingArrow {
      */
     public void removeFromGroup(Group group) {
         shapes.forEach(shape -> group.getChildren().remove(shape));
+    }
+
+
+    /**
+     * Sends the existing arrow to the back of the group.
+     *
+     * @param group arrow to be sent back on.
+     */
+    public void sendToBack(Group group) {
+        shapes.forEach(Node::toBack);
     }
 
 
