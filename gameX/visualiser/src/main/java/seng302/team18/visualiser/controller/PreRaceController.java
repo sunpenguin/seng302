@@ -28,6 +28,7 @@ import seng302.team18.visualiser.sound.ThemeTunePlayer;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -69,8 +70,8 @@ public class PreRaceController {
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
      * duration before the race starts.
      *
-     * @param race     The race to be set up in the pre-race.
-     * @param sender   the sender\
+     * @param race        The race to be set up in the pre-race.
+     * @param sender      the sender\
      * @param interpreter the interpreter
      */
     public void setUp(ClientRace race, Sender sender, Interpreter interpreter) {
@@ -199,6 +200,14 @@ public class PreRaceController {
 
     private void setUpStartSound() {
         new Thread(() -> {
+            while (race.getStartTime().toInstant().equals(Instant.EPOCH)) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    // pass
+                }
+            }
+            System.out.println("Start " + race.getStartTime().toInstant().toEpochMilli());
             SoundEffect startLeadIn = SoundEffect.RACE_START_LEAD_IN;
             long duration = soundPlayer.getDuration(startLeadIn);
             System.out.println("duration = " + duration);
@@ -211,6 +220,10 @@ public class PreRaceController {
                     // pass
                 }
             }
+
+            System.out.println("Start " + race.getStartTime().toInstant().toEpochMilli());
+            System.out.println("Now " + race.getCurrentTime().toInstant().toEpochMilli());
+            System.out.println(race.getStartTime().toInstant().toEpochMilli() - race.getCurrentTime().toInstant().toEpochMilli());
 
             soundPlayer.playEffect(startLeadIn);
         }).start();
