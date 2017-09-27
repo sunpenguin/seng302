@@ -42,7 +42,7 @@ public class PreRaceController {
     @FXML
     private Label timeZoneLabel;
     @FXML
-    private Text raceNameText;
+    private Label raceNameText;
     @FXML
     private Label ipLabel;
     @FXML

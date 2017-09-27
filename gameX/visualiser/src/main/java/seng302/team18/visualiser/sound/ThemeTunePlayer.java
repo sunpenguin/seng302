@@ -40,6 +40,7 @@ public class ThemeTunePlayer {
      */
     public static void stopTrack(){
         mediaPlayer.stop();
+        mediaPlayer.dispose();
         playing = false;
     }
 }
