@@ -45,6 +45,7 @@ public class GameConnection {
     private Sender sender;
     private ClientRace race;
     private AudioPlayer audioPlayer;
+    private boolean failed = false;
 
 
     /**
@@ -72,13 +73,12 @@ public class GameConnection {
      * @param hostString the address of the host
      * @param portString the port to connect to
      * @param isHosting  true if a server should be started, else false
-     * @return true if the operation succeeded, else false
      */
-    public boolean startGame(String hostString, String portString, boolean isHosting) {
+    public void startGame(String hostString, String portString, boolean isHosting) {
         String hostAddress = parseHostAddress(hostString);
         int port = parsePort(portString);
         if (port < 0 || hostAddress == null) {
-            return false;
+            return;
         }
 
         if (isHosting) {
@@ -87,7 +87,7 @@ public class GameConnection {
             } catch (IOException e) {
                 errorText.set("Unable to initiate server!");
                 e.printStackTrace();
-                return false;
+                return;
             }
 
             try {
@@ -98,7 +98,7 @@ public class GameConnection {
         }
 
         openStream(hostAddress, port);
-        return true;
+        return;
     }
 
 
@@ -220,13 +220,16 @@ public class GameConnection {
         try {
             Socket socket = SocketFactory.getDefault().createSocket(host, port);
             startConnection(new Receiver(socket, new AC35MessageParserFactory()), new Sender(socket, new ControllerMessageFactory()));
+            failed = false;
         } catch (Exception e) {
             errorText.set("Failed to connect to " + host + ":" + port + "!");
+            failed = true;
         }
     }
 
 
     public void goToPreRace() throws IOException {
+        failed = false;
         sender.send(new ColourMessage(color, race.getPlayerId()));
 
         Stage stage = (Stage) node.getScene().getWindow();
@@ -242,5 +245,16 @@ public class GameConnection {
 
     public void setFailedConnection() {
         errorText.set("Failed to connect to server:\nServer rejected connection");
+        failed = true;
+    }
+
+
+    /**
+     * Returns if the connection has fialed or not
+     *
+     * @return
+     */
+    public boolean hasFailed() {
+        return failed;
     }
 }

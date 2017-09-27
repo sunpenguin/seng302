@@ -34,7 +34,6 @@ public class AcceptanceInterpreter extends MessageInterpreter {
             int sourceId = ((AcceptanceMessage) message).getSourceId();
             RequestType requestType =  ((AcceptanceMessage) message).getRequestType();
             if (requestType.getCode() != race.getMode().getCode()) {
-                //TODO inform user of failed connection sbe67 20/9
                 Platform.runLater(() -> {
                     gameConnection.setFailedConnection();
                 });

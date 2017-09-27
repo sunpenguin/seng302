@@ -47,13 +47,14 @@ public class GameSelectionController {
 
     private Stage stage;
     private AudioPlayer audioPlayer;
+    private GameConnection connection;
 
     private StringProperty ipStrProp;
     private StringProperty portStrProp;
 
     private boolean isIpFirstFocus = true;
     private boolean isPortFirstFocus = true;
-    private boolean clickedPlay = false;
+    private Boolean clickedPlay = false;
 
     private RaceMode mode;
     private Boolean isHosting;
@@ -465,11 +466,11 @@ public class GameSelectionController {
         label.getStylesheets().add(this.getClass().getResource("/stylesheets/gameSelection.css").toExternalForm());
         label.getStyleClass().add("playImage");
         label.setOnMouseClicked(event -> {
-            if (!clickedPlay) {
+            if (!clickedPlay || connection.hasFailed()) {
                 buttonClickedAction();
-                GameConnection connection = new GameConnection(errorLabel.textProperty(), outerPane, mode, boatColours.get(colourIndex), audioPlayer);
-                connection.startGame(ipStrProp.get(), portStrProp.get(), isHosting);
                 clickedPlay = true;
+                connection = new GameConnection(errorLabel.textProperty(), outerPane, mode, boatColours.get(colourIndex), audioPlayer);
+                connection.startGame(ipStrProp.get(), portStrProp.get(), isHosting);
             }
         });
         label.setOnMouseEntered(event1 -> buttonEnteredAction());
