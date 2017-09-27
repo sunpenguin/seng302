@@ -17,7 +17,7 @@ import java.util.concurrent.Executors;
 public class Server extends Observable {
     private final List<ClientConnection> clients = new ArrayList<>();
     private final ServerConnectionListener listener = new ServerConnectionListener();
-    private final int maxClients = 20;
+    private final int maxClients = 6;
 
     private ServerSocket serverSocket;
     private final int port;
@@ -53,7 +53,7 @@ public class Server extends Observable {
      * Adding new client to the client list.
      * Increment the number that represents number of connected clients.
      */
-    private synchronized void acceptClientConnection() {
+    private void acceptClientConnection() {
         try {
             ClientConnection client = new ClientConnection(serverSocket.accept());
             clients.add(client);
@@ -63,7 +63,7 @@ public class Server extends Observable {
         } catch (SocketTimeoutException e) {
             // The time out expired, no big deal
         } catch(IOException e) {
-            close();
+            // close();
         }
     }
 
@@ -78,12 +78,9 @@ public class Server extends Observable {
      * (Blocking)
      */
     public void close() {
-//        System.out.println("Server::close");
         stopAcceptingConnections();
         for (ClientConnection client : clients) {
-            try {
-                client.close();
-            } catch (IOException e) {}
+            client.close();
         }
         clients.clear();
         try {
@@ -139,25 +136,16 @@ public class Server extends Observable {
      * @param indices of the clients to remove
      */
     private void removeClients(List<Integer> indices) {
-        for (int i = indices.size() - 1; i >= 0; i--) { // must be done in reverse order or else indices change once removed
-            removeClient(indices.get(i));
+        List<ClientConnection> newClients = new ArrayList<>();
+        for (int i = 0; i < clients.size(); i++) {
+            if (!indices.contains(i)) {
+                newClients.add(clients.get(i));
+            }
         }
+        clients.clear();
+        clients.addAll(newClients);
     }
 
-
-    /**
-     * Removes a client at the given index.
-     *
-     * @param i index of the client to remove.
-     */
-    private void removeClient(int i) {
-        try {
-            clients.get(i).close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        clients.remove(i);
-    }
 
 
     /**
