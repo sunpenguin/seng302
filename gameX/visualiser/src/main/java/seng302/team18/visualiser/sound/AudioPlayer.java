@@ -20,6 +20,7 @@ public class AudioPlayer {
     private final Map<SoundEffect, AudioClip> effectClips;
     private final Map<SoundEffect, MediaPlayer> effectPlayers;
     private MediaPlayer musicPlayer;
+    private Music musicTrack = null;
     private final Map<Ambient, MediaPlayer> ambientPlayers;
 
     private static final double RELATIVE_VOLUME_MUSIC = 0.6;
@@ -90,23 +91,27 @@ public class AudioPlayer {
 
 
     /**
-     * Plays the given music track on a loop.
+     * Plays the given music track on a loop. Does nothing if the track is already playing
      *
      * @param track the track to play. If null, playback stops
      */
     public void loopMusic(Music track) {
+        if (track.equals(musicTrack)) return;
+
         if (musicPlayer != null) {
             musicPlayer.stop();
             musicPlayer.dispose();
             musicPlayer = null;
         }
 
+        //noinspection ConstantConditions
         if (track != null) {
             musicPlayer = new MediaPlayer(new Media(track.getUrl()));
             musicPlayer.setVolume(getVolumeMusic());
             musicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             musicPlayer.play();
         }
+        musicTrack = track;
     }
 
 
