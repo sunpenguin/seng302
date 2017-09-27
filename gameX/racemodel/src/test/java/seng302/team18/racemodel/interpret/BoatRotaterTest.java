@@ -6,8 +6,6 @@ import org.junit.Test;
 import seng302.team18.model.Boat;
 import seng302.team18.util.VMGAngles;
 
-import java.util.Collections;
-
 /**
  * Tests for BoatRotater Class
  */
@@ -15,7 +13,6 @@ public class BoatRotaterTest {
 
     private Boat boat;
     private BoatRotater rotater;
-    private final double rotation = 3.0d;
     private final double deadZone = VMGAngles.DEAD_ZONE.getValue();
     private final double windDirection = 0.0d;
     private final double windSpeed = 10.0d;
@@ -24,7 +21,7 @@ public class BoatRotaterTest {
     public void setUp() {
         boat = new Boat("name", "nm", 10, 14.019);
         boat.setHeading(45.0d);
-        rotater = new BoatRotater(Collections.singletonList(boat), rotation);
+        rotater = new BoatRotater(boat);
     }
 
 
@@ -50,7 +47,7 @@ public class BoatRotaterTest {
 
 
     @Test
-    public void rotateUpwindTest() {
+    public void rotateUpwindTest1() {
         double expectedHeading = 42.0d;
         double expectedSpeed = 11.95d;
         rotater.rotateUpwind(windDirection, windSpeed);
@@ -59,10 +56,66 @@ public class BoatRotaterTest {
     }
 
 
+    /**
+     * Directly into the wind.
+     */
     @Test
-    public void rotateDownwindTest() {
+    public void rotateUpwindTest2() {
+        double expectedHeading = 0d;
+        double expectedSpeed = 0d;
+        boat.setHeading(0);
+        rotater.rotateUpwind(windDirection, windSpeed);
+        Assert.assertEquals(expectedHeading, boat.getHeading(), 0.1);
+        Assert.assertEquals(expectedSpeed, boat.getSpeed(), 0.1);
+    }
+
+
+    /**
+     * Same direction as the wind.
+     */
+    @Test
+    public void rotateUpwindTest3() {
+        double expectedHeading = 183.0d;
+        double expectedSpeed = 0d;
+        boat.setHeading(180);
+        rotater.rotateUpwind(windDirection, windSpeed);
+        Assert.assertEquals(expectedHeading, boat.getHeading(), 0.1);
+        Assert.assertEquals(expectedSpeed, boat.getSpeed(), 0.1);
+    }
+
+
+    @Test
+    public void rotateDownwindTest1() {
         double expectedHeading = 48.0d;
         double expectedSpeed = 12.58d;
+        rotater.rotateDownwind(windDirection, windSpeed);
+        Assert.assertEquals(expectedHeading, boat.getHeading(), 0.1);
+        Assert.assertEquals(expectedSpeed, boat.getSpeed(), 0.1);
+    }
+
+
+    /**
+     * Directly into the wind.
+     */
+    @Test
+    public void rotateDownwindTest2() {
+        double expectedHeading = 357.0d;
+        double expectedSpeed = 0d;
+        boat.setHeading(0);
+        rotater.rotateDownwind(windDirection, windSpeed);
+        Assert.assertEquals(expectedHeading, boat.getHeading(), 0.1);
+        Assert.assertEquals(expectedSpeed, boat.getSpeed(), 0.1);
+    }
+
+
+    /**
+     * Same direction as the wind.
+     */
+    @Test
+    public void rotateDownwindTest3() {
+        double expectedHeading = 180d;
+        double expectedSpeed = 7.0d;
+        boat.setHeading(180);
         rotater.rotateDownwind(windDirection, windSpeed);
         Assert.assertEquals(expectedHeading, boat.getHeading(), 0.1);
         Assert.assertEquals(expectedSpeed, boat.getSpeed(), 0.1);
