@@ -3,6 +3,8 @@ package seng302.team18.visualiser.display.object;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
@@ -47,6 +49,9 @@ public class DisplayBoat implements GeographicLocation {
     private Map<AnnotationType, Boolean> visibleAnnotations;
     private final static int ANNOTATION_OFFSET_X = 10;
 
+    private Image boatImage = new Image("/images/race_view/boat_yellow.png");
+    private ImageView boatView = new ImageView(boatImage);
+
 
     public DisplayBoat() {
     }
@@ -72,6 +77,8 @@ public class DisplayBoat implements GeographicLocation {
         boatPoly.getTransforms().add(rotation);
 
         setUpAnnotations();
+
+        boatPoly.setVisible(false);
     }
 
 
@@ -106,6 +113,17 @@ public class DisplayBoat implements GeographicLocation {
         boatPoly.setLayoutX(pixels.getX());
         boatPoly.setLayoutY(pixels.getY());
         updateAnnotationText();
+
+
+        double boatSize = pixelMapper.mappingRatio() * boatLength;
+        double boatImageSize = boatImage.getHeight();
+        double imageRatio = boatImageSize / (boatSize);  // Ratio for scaling image to correct size
+
+        boatView.setScaleX(1 / imageRatio);
+        boatView.setScaleY(1 / imageRatio);
+
+        boatView.setLayoutX(pixels.getX() - (boatImageSize / 2));
+        boatView.setLayoutY(pixels.getY() - (boatImageSize / 2));
     }
 
 
@@ -130,6 +148,8 @@ public class DisplayBoat implements GeographicLocation {
         group.getChildren().add(annotation);
         annotation.toFront();
         boatPoly.toFront();
+
+        group.getChildren().add(boatView);
     }
 
 
@@ -188,6 +208,8 @@ public class DisplayBoat implements GeographicLocation {
 
     public void setHeading(double heading) {
         rotation.setAngle(heading);
+
+        boatView.setRotate(heading - 90);
     }
 
 

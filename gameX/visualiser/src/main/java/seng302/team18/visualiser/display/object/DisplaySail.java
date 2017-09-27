@@ -1,6 +1,8 @@
 package seng302.team18.visualiser.display.object;
 
 import javafx.scene.Group;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Rotate;
 import seng302.team18.model.Coordinate;
@@ -21,6 +23,9 @@ public class DisplaySail extends DisplayBoatDecorator {
     private final static double POWERED_UP_ANGLE = 60;
     private final double strokeWidth;
 
+    private Image sailImage = new Image("/images/race_view/sail.png");
+    private ImageView sailView = new ImageView(sailImage);
+
 
     /**
      * Creates a new instance of DisplayBoat
@@ -35,6 +40,9 @@ public class DisplaySail extends DisplayBoatDecorator {
         setUpShape(mapper.mappingRatio());
         sail.getTransforms().addAll(rotation);
         sail.toFront();
+
+        sail.setVisible(true);
+        sailView.setVisible(true);
     }
 
 
@@ -58,6 +66,17 @@ public class DisplaySail extends DisplayBoatDecorator {
         sail.setLayoutX(pixels.getX());
         sail.setLayoutY(pixels.getY());
         super.setCoordinate(coordinate);
+
+
+        double boatSize = pixelMapper.mappingRatio() * getBoatLength();
+        double boatImageSize = sailImage.getHeight();
+        double imageRatio = boatImageSize / (boatSize);  // Ratio for scaling image to correct size
+
+        sailView.setScaleX(1 / imageRatio);
+        sailView.setScaleY(1 / imageRatio);
+
+        sailView.setLayoutX(pixels.getX() - (boatImageSize / 2));
+        sailView.setLayoutY(pixels.getY() - (boatImageSize / 2));
     }
 
 
@@ -73,6 +92,8 @@ public class DisplaySail extends DisplayBoatDecorator {
         group.getChildren().add(sail);
         super.addToGroup(group);
         sail.toFront();
+
+        group.getChildren().add(sailView);
     }
 
 
@@ -110,6 +131,8 @@ public class DisplaySail extends DisplayBoatDecorator {
         }
         rotation.setAngle(sailAngle);
         super.setSailOut(sailOut);
+
+        sailView.setRotate(sailAngle - 45);
     }
 
 
