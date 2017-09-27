@@ -25,7 +25,7 @@ public class AudioPlayer {
 
     private static final double RELATIVE_VOLUME_MUSIC = 0.6;
     private static final double RELATIVE_VOLUME_EFFECT = 1.0;
-    private static final double RELATIVE_VOLUME_AMBIENT = 0.1;
+    private static final double RELATIVE_VOLUME_AMBIENT = 0.5;
 
     @SuppressWarnings("FieldCanBeLocal")
     private double volumeMusic = 1;
