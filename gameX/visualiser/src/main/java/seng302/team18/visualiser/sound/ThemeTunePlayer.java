@@ -10,36 +10,31 @@ import java.net.URL;
  */
 public class ThemeTunePlayer {
 
-    private static boolean playing = false;
-    private static MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
 
 
     /**
      * Method the play the track
+     *
+     * @param path URL to the audio file
+     * @param volume volume for the sound to be played at (<1 is preffered)
      */
-    public void playSound(String path){
-        if (ThemeTunePlayer.playing){
-            return;
-        } else {
-            URL resource = getClass().getClassLoader().getResource(path);
-            String songPath = resource.toString();
-            Media song = new Media(songPath);
-            mediaPlayer = new MediaPlayer(song);
-            mediaPlayer.setVolume(0.6);
-            mediaPlayer.play();
-            mediaPlayer.setCycleCount(mediaPlayer.INDEFINITE);
-            playing = true;
-
-        }
+    public void playSound(String path, double volume) {
+        URL resource = getClass().getClassLoader().getResource(path);
+        String songPath = resource.toString();
+        Media song = new Media(songPath);
+        mediaPlayer = new MediaPlayer(song);
+        mediaPlayer.setVolume(volume);
+        mediaPlayer.play();
+        mediaPlayer.setCycleCount(mediaPlayer.INDEFINITE);
     }
 
 
     /**
      * Method to stop the track
      */
-    public static void stopTrack(){
+    public void stopTrack() {
         mediaPlayer.stop();
         mediaPlayer.dispose();
-        playing = false;
     }
 }

@@ -94,6 +94,7 @@ public class RaceController implements Observer {
     private Pane escapeMenuPane;
     private Pane eventMenuPane;
     private ThemeTunePlayer themeTunePlayer;
+    private ThemeTunePlayer wavePlayer;
 
     private boolean annotationsOn;
     private boolean fpsOn;
@@ -133,8 +134,6 @@ public class RaceController implements Observer {
         tabView.setVisible(false);
         initialiseFadeTransition();
 
-        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer();
-        themeTunePlayer.playSound("audio/Ocean_Waves-Mike_Koenig-980635527.mp3");
 
     }
 
@@ -370,7 +369,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             EscapeMenuController escapeMenuController = loader.getController();
-            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer, themeTunePlayer);
+            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer, themeTunePlayer, wavePlayer);
         } catch (IOException e) {
             //pass
         }
@@ -387,7 +386,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EventMenu.fxml"));
             eventMenuPane = loader.load();
             EventMenuController eventMenuController = loader.getController();
-            eventMenuController.setup(group, interpreter, sender, soundPlayer);
+            eventMenuController.setup(group, interpreter, sender, soundPlayer, themeTunePlayer, wavePlayer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -573,8 +572,10 @@ public class RaceController implements Observer {
         this.sender = sender;
         this.race = race;
 
-        themeTunePlayer = new ThemeTunePlayer("audio/theme.mp3");
-        themeTunePlayer.playTrack();
+        themeTunePlayer = new ThemeTunePlayer();
+        themeTunePlayer.playSound("audio/theme.mp3", 0.6);
+        wavePlayer = new ThemeTunePlayer();
+        wavePlayer.playSound("audio/Ocean_Waves-Mike_Koenig-980635527.mp3", 0.175);
 
         GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());

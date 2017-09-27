@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import seng302.team18.encode.Sender;
 import seng302.team18.message.AC35MessageType;
@@ -59,6 +58,7 @@ public class PreRaceController {
     private ClientRace race;
 
     private SoundEffectPlayer soundPlayer;
+    private ThemeTunePlayer themeTunePlayer;
 
     private boolean hasChanged = false;
 
@@ -74,9 +74,10 @@ public class PreRaceController {
      * @param sender      the sender\
      * @param interpreter the interpreter
      */
-    public void setUp(ClientRace race, Sender sender, Interpreter interpreter) {
+    public void setUp(ClientRace race, Sender sender, Interpreter interpreter, ThemeTunePlayer themeTunePlayer) {
         this.sender = sender;
         this.race = race;
+        this.themeTunePlayer = themeTunePlayer;
         System.out.println(race.getRegatta().getName());
         raceNameText.setText(race.getRegatta().getName());
         displayTimeZone(race.getStartTime());
@@ -159,7 +160,7 @@ public class PreRaceController {
         if (hasChanged) {
             return;
         }
-        ThemeTunePlayer.stopTrack();
+        themeTunePlayer.stopTrack();
         hasChanged = true;
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
         Parent root = loader.load(); // throws IOException

@@ -35,6 +35,7 @@ public class EscapeMenuController {
     private boolean annotationsOn = false;
     private final int BUTTON_LAYOUTX_OFFSET = 9;
     private ThemeTunePlayer themeTunePlayer;
+    private ThemeTunePlayer waveSoundPlayer;
 
     @FXML
     public void initialize() {
@@ -135,9 +136,9 @@ public class EscapeMenuController {
     private void returnToTitle() {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
         themeTunePlayer.stopTrack();
+        waveSoundPlayer.stopTrack();
 
         try {
-            ThemeTunePlayer.stopTrack();
             Parent root = loader.load();
             TitleScreenController controller = loader.getController();
             Stage stage = (Stage) group.getScene().getWindow();
@@ -174,13 +175,14 @@ public class EscapeMenuController {
      * @param player      the manager for audio playback from this scene.
      * @param themeTunePlayer the player to manage the theme tune
      */
-    public void setup(Group group, Interpreter interpreter, Sender sender, RaceController raceController, SoundEffectPlayer player, ThemeTunePlayer themeTunePlayer) {
+    public void setup(Group group, Interpreter interpreter, Sender sender, RaceController raceController, SoundEffectPlayer player, ThemeTunePlayer themeTunePlayer, ThemeTunePlayer waveSoundPlayer) {
         this.group = group;
         this.interpreter = interpreter;
         this.sender = sender;
         this.raceController = raceController;
         this.soundPlayer = player;
         this.themeTunePlayer = themeTunePlayer;
+        this.waveSoundPlayer = waveSoundPlayer;
     }
 
 

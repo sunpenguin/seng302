@@ -13,6 +13,7 @@ import seng302.team18.encode.Sender;
 import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 
 import java.io.IOException;
 
@@ -28,6 +29,8 @@ public class EventMenuController {
     private Interpreter interpreter;
     private Sender sender;
     private SoundEffectPlayer soundPlayer;
+    private ThemeTunePlayer themeTunePlayer;
+    private ThemeTunePlayer waveSoundPlayer;
 
     @FXML
     public void initialize() {
@@ -77,6 +80,8 @@ public class EventMenuController {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
 
         try {
+            themeTunePlayer.stopTrack();
+            waveSoundPlayer.stopTrack();
             Parent root = loader.load();
             TitleScreenController controller = loader.getController();
             Stage stage = (Stage) group.getScene().getWindow();
@@ -110,11 +115,13 @@ public class EventMenuController {
      * @param sender      Sender to close when we quit the race.
      * @param player      the manager for audio playback from this scene.
      */
-    public void setup(Group group, Interpreter interpreter, Sender sender, SoundEffectPlayer player) {
+    public void setup(Group group, Interpreter interpreter, Sender sender, SoundEffectPlayer player, ThemeTunePlayer themeTunePlayer, ThemeTunePlayer waveSoundPlayer) {
         this.group = group;
         this.interpreter = interpreter;
         this.sender = sender;
         this.soundPlayer = player;
+        this.themeTunePlayer = themeTunePlayer;
+        this.waveSoundPlayer = waveSoundPlayer;
     }
 
 
