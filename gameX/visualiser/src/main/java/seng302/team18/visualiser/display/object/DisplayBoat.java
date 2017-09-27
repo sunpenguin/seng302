@@ -38,11 +38,8 @@ public class DisplayBoat implements GeographicLocation {
     private BoatStatus status = BoatStatus.UNDEFINED;
 
     private PixelMapper pixelMapper;
-    private Polyline boatPoly;
     private Color boatColor;
     private double boatLength;
-
-    private final Rotate rotation = new Rotate(0, 0, 0);
 
     private Text annotation;
     private final static int DECIMAL_PLACES = 1; // for speed annotation
@@ -63,10 +60,7 @@ public class DisplayBoat implements GeographicLocation {
         this.boatColor = boatColor;
         this.boatLength = boatLength;
 
-        boatPoly = new Polyline();
-        setUpBoatShape(pixelMapper.mappingRatio());
-        boatPoly.setFill(boatColor);
-        boatPoly.setOnMouseClicked(event -> {
+        boatView.setOnMouseClicked(event -> {
             if (location != null) {
                 pixelMapper.track(this);
                 pixelMapper.setTracking(true);
@@ -74,26 +68,8 @@ public class DisplayBoat implements GeographicLocation {
                 pixelMapper.setViewPortCenter(location);
             }
         });
-        boatPoly.getTransforms().add(rotation);
 
         setUpAnnotations();
-
-        boatPoly.setVisible(false);
-    }
-
-
-    private void setUpBoatShape(double mappingRatio) {
-        double pixelLength = boatLength * mappingRatio / 2;
-
-        Double[] boatShape = new Double[]{
-                0.0, -pixelLength,
-                -pixelLength * 0.6667, pixelLength * 0.7454,
-                pixelLength * 0.6667, pixelLength * 0.7454,
-                0.0, -pixelLength
-        };
-
-        boatPoly.getPoints().clear();
-        boatPoly.getPoints().addAll(boatShape);
     }
 
 
@@ -110,8 +86,6 @@ public class DisplayBoat implements GeographicLocation {
     public void setCoordinate(Coordinate coordinate) {
         location = coordinate;
         XYPair pixels = pixelMapper.mapToPane(coordinate);
-        boatPoly.setLayoutX(pixels.getX());
-        boatPoly.setLayoutY(pixels.getY());
         updateAnnotationText();
 
 
@@ -139,17 +113,15 @@ public class DisplayBoat implements GeographicLocation {
 
 
     public void setScale(double scaleFactor) {
-        setUpBoatShape(scaleFactor);
     }
 
 
     public void addToGroup(Group group) {
-        group.getChildren().add(boatPoly);
         group.getChildren().add(annotation);
         annotation.toFront();
-        boatPoly.toFront();
 
         group.getChildren().add(boatView);
+        boatView.toFront();
     }
 
 
@@ -186,8 +158,8 @@ public class DisplayBoat implements GeographicLocation {
             }
         }
         annotation.setText(annotationText.toString());
-        annotation.setLayoutX(boatPoly.getLayoutX() + ANNOTATION_OFFSET_X);
-        annotation.setLayoutY(boatPoly.getLayoutY());
+        annotation.setLayoutX(boatView.getLayoutX() + ANNOTATION_OFFSET_X);
+        annotation.setLayoutY(boatView.getLayoutY());
     }
 
 
@@ -197,7 +169,7 @@ public class DisplayBoat implements GeographicLocation {
      * @param group to remove from.
      */
     public void removeFrom(Group group) {
-        group.getChildren().remove(boatPoly);
+        group.getChildren().remove(boatView);
     }
 
 
@@ -207,14 +179,12 @@ public class DisplayBoat implements GeographicLocation {
 
 
     public void setHeading(double heading) {
-        rotation.setAngle(heading);
-
         boatView.setRotate(heading - 90);
     }
 
 
     public double getHeading() {
-        return rotation.getAngle();
+        return boatView.getRotate() + 90;
     }
 
 
@@ -284,7 +254,7 @@ public class DisplayBoat implements GeographicLocation {
         if (!(status.equals(this.status))) {
             switch (status) {
                 case FINISHED:
-                    boatPoly.setOpacity(0.5);
+                    boatView.setOpacity(0.5);
             }
             this.status = status;
         }
