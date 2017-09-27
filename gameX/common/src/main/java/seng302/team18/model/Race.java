@@ -6,7 +6,10 @@ import seng302.team18.util.GPSCalculator;
 
 import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -436,7 +439,7 @@ public class Race {
         List<PickUp> remaining = new ArrayList<>();
 
         for (PickUp pickUp: pickUps) {
-            if (!gps.isInside(pickUp.getLocation(), course.getLimits())) {
+            if (!gps.isInside(pickUp.getCoordinate(), course.getLimits())) {
                 consumePowerUp(null, pickUp);
             } else if (!pickUp.hasExpired()) {
                 remaining.add(pickUp);

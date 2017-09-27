@@ -59,6 +59,6 @@ public enum BoatStatus {
 
 
     public boolean isRacing() {
-        return this == PRE_START || this == RACING;
+        return this == PRE_START || this == RACING || this == UNDEFINED;
     }
 }
