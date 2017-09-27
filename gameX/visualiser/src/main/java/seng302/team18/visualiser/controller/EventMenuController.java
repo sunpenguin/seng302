@@ -10,8 +10,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import seng302.team18.encode.Sender;
 import seng302.team18.visualiser.interpret.Interpreter;
+import seng302.team18.visualiser.sound.AudioPlayer;
 import seng302.team18.visualiser.sound.SoundEffect;
-import seng302.team18.visualiser.sound.SoundEffectPlayer;
 
 import java.io.IOException;
 
@@ -26,7 +26,7 @@ public class EventMenuController {
     private Group group;
     private Interpreter interpreter;
     private Sender sender;
-    private SoundEffectPlayer soundPlayer;
+    private AudioPlayer audioPlayer;
 
     @FXML
     public void initialize() {
@@ -71,8 +71,7 @@ public class EventMenuController {
             pane.getScene().setRoot(root);
             stage.setResizable(true);
             stage.setMaximized(true);
-            controller.setStage(stage);
-            controller.setSoundPlayer(soundPlayer);
+            controller.setup(stage, audioPlayer);
             controller.reDraw();
             stage.show();
         } catch (IOException e) {
@@ -98,11 +97,11 @@ public class EventMenuController {
      * @param sender      Sender to close when we quit the race.
      * @param player      the manager for audio playback from this scene.
      */
-    public void setup(Group group, Interpreter interpreter, Sender sender, SoundEffectPlayer player) {
+    public void setup(Group group, Interpreter interpreter, Sender sender, AudioPlayer player) {
         this.group = group;
         this.interpreter = interpreter;
         this.sender = sender;
-        this.soundPlayer = player;
+        this.audioPlayer = player;
     }
 
 
@@ -112,7 +111,7 @@ public class EventMenuController {
      * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_ENTER SoundEffect#BUTTON_MOUSE_ENTER}
      */
     private void buttonEnteredAction() {
-        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
+        audioPlayer.playEffect(SoundEffect.BUTTON_MOUSE_ENTER);
     }
 
 
@@ -122,6 +121,6 @@ public class EventMenuController {
      * Plays sound effect defined by {@link SoundEffect#BUTTON_MOUSE_CLICK SoundEffect#BUTTON_MOUSE_CLICK}
      */
     private void buttonClickedAction() {
-        soundPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
+        audioPlayer.playEffect(SoundEffect.BUTTON_MOUSE_CLICK);
     }
 }

@@ -59,3 +59,28 @@
     -fx-font-size: 20;
     -fx-text-fill: darkred;
 }
+
+
+.musicView {
+    -fx-graphic: url('/images/title_screen/music_on.png');
+    -fx-background-color: transparent;
+}
+
+.musicView:selected {
+    -fx-graphic: url('/images/title_screen/music_off.png');
+    -fx-background-color: transparent;
+}
+
+
+.soundView {
+    -fx-graphic: url('/images/title_screen/sound_effects_on.png');
+    -fx-background-color: transparent;
+}
+
+.soundView:selected {
+    -fx-graphic: url('/images/title_screen/sound_effects_off.png');
+    -fx-background-color: transparent;
+}
+
+
+

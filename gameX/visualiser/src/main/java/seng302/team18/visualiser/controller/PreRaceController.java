@@ -18,15 +18,11 @@ import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.interpret.americascup.BoatListInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceTimeInterpreter;
 import seng302.team18.visualiser.interpret.americascup.PreRaceToMainRaceInterpreter;
-import seng302.team18.visualiser.sound.SoundEffect;
-import seng302.team18.visualiser.sound.SoundEffectPlayer;
-import seng302.team18.visualiser.sound.ThemeTunePlayer;
+import seng302.team18.visualiser.sound.AudioPlayer;
+import seng302.team18.visualiser.sound.StartSoundPlayer;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -52,12 +48,9 @@ public class PreRaceController {
     private Sender sender;
     private ClientRace race;
 
-    private SoundEffectPlayer soundPlayer;
+    private AudioPlayer audioPlayer;
 
     private boolean hasChanged = false;
-
-    public void initialize() {
-    }
 
 
     /**
@@ -65,13 +58,15 @@ public class PreRaceController {
      * duration before the race starts.
      *
      * @param race        The race to be set up in the pre-race.
-     * @param sender      the sender\
+     * @param sender      the sender
      * @param interpreter the interpreter
+     * @param player      manages the audio playback from this scene
      */
-    public void setUp(ClientRace race, Sender sender, Interpreter interpreter) {
+    public void setUp(ClientRace race, Sender sender, Interpreter interpreter, AudioPlayer player) {
         this.sender = sender;
         this.race = race;
         this.interpreter = interpreter;
+        this.audioPlayer = player;
 
         addInterpreters();
         setUpStartSound();
@@ -83,7 +78,7 @@ public class PreRaceController {
 
         Stage stage = (Stage) listView.getScene().getWindow();
 
-        showNetWorkInfo();
+        showNetworkInfo();
 
         raceNameText.setText(race.getMode().toString());
         raceNameText.setStyle("-fx-font-size: 42pt");
@@ -91,6 +86,11 @@ public class PreRaceController {
         stage.setOnCloseRequest((event) -> {
             interpreter.close();
             while (!interpreter.closeReceiver()) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    // pass
+                }
             }
             System.out.println("shutting down");
             System.exit(0);
@@ -136,7 +136,6 @@ public class PreRaceController {
         if (hasChanged) {
             return;
         }
-        ThemeTunePlayer.stopTrack();
         hasChanged = true;
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("MainWindow.fxml"));
         Parent root = loader.load(); // throws IOException
@@ -146,8 +145,7 @@ public class PreRaceController {
         stage.setResizable(true);
         stage.setMaximized(true);
         stage.show();
-        controller.setSoundPlayer(soundPlayer);
-        controller.setUp(race, interpreter, sender);
+        controller.setUp(race, interpreter, sender, audioPlayer);
         controller.updateControlsTutorial();
         controller.updateControlsTutorial();
     }
@@ -161,7 +159,7 @@ public class PreRaceController {
     }
 
 
-    private void showNetWorkInfo() {
+    private void showNetworkInfo() {
         Socket socket = interpreter.getSocket();
         ipLabel.setText(socket.getInetAddress().toString());
         portLabel.setText(String.valueOf(socket.getPort()));
@@ -169,36 +167,11 @@ public class PreRaceController {
 
 
     /**
-     * @param player manages the audio playback from this scene
+     * Plays the start sound at the appropriate time
      */
-    public void setSoundPlayer(SoundEffectPlayer player) {
-        this.soundPlayer = player;
-    }
-
-
     private void setUpStartSound() {
-        new Thread(() -> {
-            while (race.getStartTime().toInstant().equals(Instant.EPOCH)) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    // pass
-                }
-            }
-            SoundEffect startLeadIn = SoundEffect.RACE_START_LEAD_IN;
-            long duration = soundPlayer.getDuration(startLeadIn);
-            ZonedDateTime playTime = race.getStartTime().minus(duration, ChronoUnit.MILLIS);
-
-            while (race.getCurrentTime().isBefore(playTime)) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    // pass
-                }
-            }
-
-            soundPlayer.playEffect(startLeadIn);
-        }).start();
+        new Thread(new StartSoundPlayer(race, audioPlayer)).start();
     }
+
 
 }

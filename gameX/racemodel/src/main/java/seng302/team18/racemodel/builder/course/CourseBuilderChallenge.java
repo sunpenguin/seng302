@@ -86,19 +86,19 @@ public class CourseBuilderChallenge extends AbstractCourseBuilder {
                 break;
             }
 
-            Mark mark1 = new Mark(i+1, left);
+            Mark mark1 = new Mark(i+500, left);
             mark1.setHullNumber(i.toString());
             mark1.setStoweName(i.toString());
             mark1.setShortName(i.toString());
             mark1.setBoatName(i.toString());
 
-            Mark mark2 = new Mark(i+100, right);
+            Mark mark2 = new Mark(i+600, right);
             mark2.setHullNumber(i.toString());
             mark2.setStoweName(i.toString());
             mark2.setShortName(i.toString());
             mark2.setBoatName(i.toString());
 
-            CompoundMark gate = new CompoundMark(i.toString(), Arrays.asList(mark1, mark2), i+1000);
+            CompoundMark gate = new CompoundMark(i.toString(), Arrays.asList(mark1, mark2), i+700);
             compoundMarks.add(gate);
 
             previous = left;
