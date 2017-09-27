@@ -1,5 +1,6 @@
 package seng302.team18.visualiser.controller;
 
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,7 @@ import seng302.team18.visualiser.sound.AudioPlayer;
 import seng302.team18.visualiser.sound.SoundEffect;
 
 import java.io.IOException;
+import java.lang.management.PlatformLoggingMXBean;
 import java.util.Arrays;
 import java.util.List;
 
@@ -74,6 +76,8 @@ public class GameSelectionController {
     private List<Color> boatColours = Arrays.asList(Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN,
             Color.CYAN, Color.BLUE, Color.PURPLE, Color.MAGENTA);
 
+    private boolean notAddedtoPane = true;
+
 
     @FXML
     public void initialize() {
@@ -87,6 +91,8 @@ public class GameSelectionController {
         errorLabel.setPrefHeight(height);
 
         registerListeners();
+
+        outerPane.setOnMouseEntered(event -> reDraw());
     }
 
 
@@ -111,47 +117,33 @@ public class GameSelectionController {
      * Reposition the the diplay elements to fit the current screen
      */
     public void reDraw() {
-        // button box
-        //noinspection Duplicates
-        if (buttonBox.getWidth() != 0) {
+        if (outerPane.getScene() != null) {
+            if (notAddedtoPane) {
+                outerPane.getChildren().add(customiseBoatView);
+                outerPane.getChildren().add(selectModeView);
+                boatView.getChildren().add(boat);
+
+                notAddedtoPane = false;
+            }
             buttonBox.setLayoutX((outerPane.getScene().getWidth() / 3) - (buttonBox.getWidth() / 2));
             buttonBox.setLayoutY((outerPane.getScene().getHeight() / 2) + Y_POS_BUTTON_BOX);
             selectModeView.setLayoutX(buttonBox.getLayoutX() + (buttonBox.getWidth() / 2) - (selectModeImage.getWidth() / 2));
             selectModeView.setLayoutY(buttonBox.getLayoutY() - selectModeImage.getHeight() * 3);
-        } else if (stage != null) {
-            buttonBox.setLayoutX((stage.getWidth() / 3) - (buttonBox.getPrefWidth() / 2));
-            selectModeView.setLayoutX(buttonBox.getLayoutX() + (buttonBox.getWidth() / 2) - (selectModeImage.getWidth() / 2));
-            selectModeView.setLayoutY(buttonBox.getLayoutY() - selectModeImage.getHeight() * 3);
-        }
 
-        // error text
-        //noinspection Duplicates
-        if (errorLabel.getWidth() != 0) {
             errorLabel.setLayoutX((outerPane.getScene().getWidth() / 3) - (errorLabel.getWidth() / 2));
             errorLabel.setLayoutY((outerPane.getScene().getHeight() / 2) + Y_POS_ERROR_TEXT);
-        } else if (stage != null) {
-            errorLabel.setLayoutX((stage.getWidth() / 3) - (errorLabel.getPrefWidth() / 2));
-            errorLabel.setLayoutY((stage.getHeight() / 2) + Y_POS_ERROR_TEXT);
-        }
 
-        if (boatView.getWidth() != 0) {
             boatView.setLayoutX((outerPane.getScene().getWidth() / 2) + buttonBox.getWidth() - (0.75 * BOAT_SIZE));
             boatView.setLayoutY((outerPane.getScene().getHeight() / 2) + Y_POS_BUTTON_BOX);
             customiseBoatView.setLayoutX(boatView.getLayoutX() + (boatView.getWidth() / 2) - (customiseImage.getWidth() / 2));
             customiseBoatView.setLayoutY(boatView.getLayoutY() - customiseImage.getHeight() * 3);
 
-        } else if (stage != null) {
-            boatView.setLayoutX((stage.getWidth() / 2) + (300 * 1.75));
-            boatView.setLayoutY((stage.getHeight() / 2) + Y_POS_BUTTON_BOX);
-            customiseBoatView.setLayoutX(boatView.getLayoutX() + (boatView.getWidth() / 2) - (boatView.getWidth() / 2));
-            customiseBoatView.setLayoutY(boatView.getLayoutY() - customiseImage.getHeight() * 3);
+            final double arrowWidth = 55;
+            arrowLeft.setLayoutX(boatView.getLayoutX());
+            arrowLeft.setLayoutY(boatView.getLayoutY() + 267 + ARROW_Y_GAP);
+            arrowRight.setLayoutX(boatView.getLayoutX() + 267 - arrowWidth);
+            arrowRight.setLayoutY(boatView.getLayoutY() + 267 + ARROW_Y_GAP);
         }
-
-        final double arrowWidth = 55;
-        arrowLeft.setLayoutX(boatView.getLayoutX());
-        arrowLeft.setLayoutY(boatView.getLayoutY() + boatView.getHeight() + ARROW_Y_GAP);
-        arrowRight.setLayoutX(boatView.getLayoutX() + boatView.getWidth() - arrowWidth);
-        arrowRight.setLayoutY(boatView.getLayoutY() + boatView.getHeight() + ARROW_Y_GAP);
     }
 
 
@@ -161,11 +153,9 @@ public class GameSelectionController {
     private void initialiseHeaders() {
         customiseImage = new Image("/images/game_selection/customise_boat.gif");
         customiseBoatView = new ImageView(customiseImage);
-        outerPane.getChildren().add(customiseBoatView);
 
         selectModeImage = new Image("/images/game_selection/select_game_mode.gif");
         selectModeView = new ImageView(selectModeImage);
-        outerPane.getChildren().add(selectModeView);
     }
 
 
@@ -529,7 +519,6 @@ public class GameSelectionController {
         boat.setRotate(90);
         boat.setFill(boatColours.get(colourIndex));
         boat.setStrokeWidth(BOAT_SIZE / 40);
-        boatView.getChildren().add(boat);
         boatView.setPadding(new Insets(BOAT_SIZE / 8));
         boat.toFront();
     }
