@@ -7,12 +7,15 @@ import seng302.team18.model.Boat;
 import seng302.team18.model.PowerUp;
 import seng302.team18.visualiser.ClientRace;
 
+import java.util.function.Consumer;
+
 /**
- * Created by dhl25 on 4/09/17.
+ * Interpreter for {@link PowerTakenMessage PowerTakenMessages}
  */
 public class PowerTakenInterpreter extends MessageInterpreter {
 
     private ClientRace race;
+    private Consumer<Boolean> callback;
 
 
     public PowerTakenInterpreter(ClientRace race) {
@@ -30,6 +33,7 @@ public class PowerTakenInterpreter extends MessageInterpreter {
                     boat.setPowerUp(race.getPowerUp(takenMessage.getPowerId()));
                     PowerUp powerUp = boat.getPowerUp();
                     if (null != powerUp) {
+                        processCallbacks(boat.getId() == race.getPlayerId());
                         powerUp.setDuration(takenMessage.getDuration());
                     }
                 }
@@ -38,4 +42,25 @@ public class PowerTakenInterpreter extends MessageInterpreter {
         }
     }
 
+
+    /**
+     * Callback to make when a boat picks up a power up.
+     *
+     * @param callback the callback. Passed true if it was the player that picked up a power-up, else false
+     */
+    public void setCallback(Consumer<Boolean> callback) {
+        this.callback = callback;
+    }
+
+
+    /**
+     * Trigger callbacks
+     *
+     * @param isFromPlayer true if triggered by the player, else false
+     */
+    private void processCallbacks(boolean isFromPlayer) {
+        if (callback != null) {
+            callback.accept(isFromPlayer);
+        }
+    }
 }

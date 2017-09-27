@@ -758,7 +758,11 @@ public class RaceController implements Observer {
         raceStatusInterpreter.addCallback(RaceStatus.FINISHED, aBoolean -> onRaceFinishAction());
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), raceStatusInterpreter);
         interpreter.add(AC35MessageType.POWER_UP.getCode(), new PowerUpInterpreter(race));
-        interpreter.add(AC35MessageType.POWER_TAKEN.getCode(), new PowerTakenInterpreter(race));
+        PowerTakenInterpreter powerTakenInterpreter = new PowerTakenInterpreter(race);
+        powerTakenInterpreter.setCallback(isPlayerPickup -> {
+            if (isPlayerPickup) soundPlayer.playEffect(SoundEffect.PICK_UP_POWER_UP);
+        });
+        interpreter.add(AC35MessageType.POWER_TAKEN.getCode(), powerTakenInterpreter);
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatSailInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLivesInterpreter(race, (wasPlayerLostLife) -> soundPlayer.playEffect(SoundEffect.LOSE_LIFE)));
         interpreter.add(AC35MessageType.PROJECTILE_LOCATION.getCode(), new ProjectileLocationInterpreter(race));
