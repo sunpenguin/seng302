@@ -53,7 +53,9 @@ import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
+import seng302.team18.visualiser.util.CheatyControlManipulator;
 import seng302.team18.visualiser.util.PixelMapper;
 
 import java.io.IOException;
@@ -92,6 +94,7 @@ public class RaceController implements Observer {
 
     private Pane escapeMenuPane;
     private Pane eventMenuPane;
+    private ThemeTunePlayer themeTunePlayer;
 
     private boolean annotationsOn;
     private boolean fpsOn;
@@ -101,7 +104,7 @@ public class RaceController implements Observer {
     private CourseRenderer courseRenderer;
     private PixelMapper pixelMapper;
     private Sender sender;
-    private SoundEffectPlayer soundPlayer = new SoundEffectPlayer();
+    private SoundEffectPlayer soundPlayer;
 
     private Interpreter interpreter;
     private RaceBackground background;
@@ -110,6 +113,7 @@ public class RaceController implements Observer {
     private Map<String, Color> colours;
 
     private ControlsTutorial controlsTutorial;
+    private CheatyControlManipulator controlManipulator = new CheatyControlManipulator();
 
     private Clock clock;
     private HBox timeBox;
@@ -130,6 +134,10 @@ public class RaceController implements Observer {
         background = new RaceBackground(raceViewPane, "/images/water.gif");
         tabView.setVisible(false);
         initialiseFadeTransition();
+
+        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer();
+        themeTunePlayer.playSound("audio/Ocean_Waves-Mike_Koenig-980635527.mp3");
+
     }
 
 
@@ -138,42 +146,56 @@ public class RaceController implements Observer {
      *
      * @param keyEvent event for a particular key press
      */
-    private MessageBody handlePlayerKeyPress(KeyEvent keyEvent) {
+    private List<MessageBody> handlePlayerKeyPress(KeyEvent keyEvent) {
+        List<MessageBody> messages = new ArrayList<>();
         if (race.getMode() != RaceMode.SPECTATION) {
+            Boat playerBoat = getPlayerBoat();
+            controlManipulator.setPlayerId(playerBoat.getId());
             BoatActionMessage message = new BoatActionMessage(race.getPlayerId());
+
             switch (keyEvent.getCode()) {
                 case SPACE:
                     message.setAutoPilot();
+                    messages.add(message);
                     break;
                 case ENTER:
                     message.setTackGybe();
+                    messages.add(message);
                     break;
                 case PAGE_UP:
                 case UP:
-                    message.setUpwind();
+                    messages.addAll(controlManipulator.generateUpwind(race.getWindDirection(), getPlayerBoat().getHeading()));
                     break;
                 case PAGE_DOWN:
                 case DOWN:
-                    message.setDownwind();
+                    messages.addAll(controlManipulator.generateDownwind(race.getWindDirection(), getPlayerBoat().getHeading()));
+                    break;
+                case LEFT:
+                    messages.addAll(controlManipulator.generateCounterClockwise(race.getWindDirection(), playerBoat.getHeading()));
+                    break;
+                case RIGHT:
+                    messages.addAll(controlManipulator.generateClockwise(race.getWindDirection(), playerBoat.getHeading()));
                     break;
                 case SHIFT:
-                    if (null != getPlayerBoat()) {
-                        if (getPlayerBoat().isSailOut()) {
+                    if (null != playerBoat) {
+                        if (playerBoat.isSailOut()) {
                             message.setSailIn();
                         } else {
                             message.setSailOut();
                         }
+                        messages.add(message);
                     }
                     break;
                 case S:
                     message.setConsume();
                     race.activatePowerUp();
+                    messages.add(message);
                     break;
                 default:
                     return null;
             }
             keyEvent.consume();
-            return message;
+            return messages;
         }
         return null;
     }
@@ -190,10 +212,8 @@ public class RaceController implements Observer {
                 if (pixelMapper.getZoomLevel() > 0) {
                     pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() + 1);
                 } else {
-                    Boat boat = race.getBoat(race.getStartingList().get(0).getId());
-                    pixelMapper.setZoomLevel(1);
-                    pixelMapper.track(boat);
                     pixelMapper.setTracking(true);
+                    pixelMapper.setZoomLevel(1);
                 }
                 break;
             case X:
@@ -205,10 +225,12 @@ public class RaceController implements Observer {
 
                 break;
             case ESCAPE:
-                if (group.getChildren().contains(escapeMenuPane)) {
-                    group.getChildren().remove(escapeMenuPane);
-                } else {
-                    openEscapeMenu("", escapeMenuPane);
+                if (!(race.getStatus().equals(RaceStatus.FINISHED))) {
+                    if (group.getChildren().contains(escapeMenuPane)) {
+                        group.getChildren().remove(escapeMenuPane);
+                    } else {
+                        openEscapeMenu("MENU", escapeMenuPane);
+                    }
                 }
                 break;
         }
@@ -225,22 +247,18 @@ public class RaceController implements Observer {
                 keyEvent -> {
                     if (keyEvent.getCode() != null) {
 
-                        MessageBody message = handlePlayerKeyPress(keyEvent);
+                        List<MessageBody> messages = handlePlayerKeyPress(keyEvent);
 
                         handleBasicKeyPress(keyEvent);
 
-                        if (message != null) {
+                        if (messages != null) {
+                            sendMessages(messages);
                             if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
-                                controlsTutorial.setBoat(getPlayerBoat()); //TODO: get sam to change this seb67 17/8
+                                controlsTutorial.setBoat(getPlayerBoat());
                                 controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
                                 if (controlsTutorial.checkIfProgressed(keyEvent.getCode())) {
                                     controlsTutorial.displayNext();
                                 }
-                            }
-                            try {
-                                sender.send(message);
-                            } catch (IOException e) {
-                                openEscapeMenu("You have been disconnected!", eventMenuPane);
                             }
                         }
                     }
@@ -250,6 +268,17 @@ public class RaceController implements Observer {
         raceViewPane.setFocusTraversable(true);
         raceViewPane.requestFocus();
         raceViewPane.focusedProperty().addListener((observable, oldValue, newValue) -> Platform.runLater(() -> raceViewPane.requestFocus()));
+    }
+
+
+    private void sendMessages(List<MessageBody> messages) {
+        for (MessageBody message : messages) {
+            try {
+                sender.send(message);
+            } catch (IOException e) {
+                openEscapeMenu("You have been disconnected!", eventMenuPane);
+            }
+        }
     }
 
 
@@ -366,7 +395,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             EscapeMenuController escapeMenuController = loader.getController();
-            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer);
+            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer, themeTunePlayer);
         } catch (IOException e) {
             //pass
         }
@@ -397,12 +426,19 @@ public class RaceController implements Observer {
         if (!group.getChildren().contains(menuPane)) {
             Label label = new Label(message);
             label.getStylesheets().addAll(ControlsTutorial.class.getResource("/stylesheets/style.css").toExternalForm());
-            label.getStyleClass().add("message");
-            HBox box = new HBox(label);
+
+            if (menuPane == eventMenuPane) {
+                label.getStyleClass().add("event");
+            } else {
+                label.getStyleClass().add("message");
+            }
+
+            VBox box = new VBox(label);
             box.setAlignment(Pos.TOP_CENTER);
-            box.setPadding(new Insets(6, 6, 6, 6));
+            box.setPadding(new Insets(50, 6, 6, 12));
             box.setPrefWidth(menuPane.getMinWidth());
             label.setMaxWidth(box.getPrefWidth());
+            label.setAlignment(Pos.CENTER);
             label.setWrapText(true);
             menuPane.getChildren().add(box);
             group.getChildren().add(menuPane);
@@ -569,6 +605,7 @@ public class RaceController implements Observer {
         this.sender = sender;
         this.race = race;
 
+
         GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
 
@@ -577,7 +614,7 @@ public class RaceController implements Observer {
         raceViewPane.resize(raceViewPane.getPrefWidth(), raceViewPane.getPrefHeight());
 
         pixelMapper = new PixelMapper(
-                bounds.get(0), bounds.get(1), race.getCourse().getCenter(),
+                bounds.get(0), bounds.get(1), race.getCenter(),
                 raceViewPane.heightProperty(), raceViewPane.widthProperty()
         );
 
@@ -625,6 +662,12 @@ public class RaceController implements Observer {
         loadEventMenu();
 
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
+
+        if (race.getMode() != RaceMode.SPECTATION) {
+            pixelMapper.track(race.getBoat(race.getPlayerId()));
+        } else {
+            pixelMapper.track(race.getBoat(race.getStartingList().get(0).getId()));
+        }
     }
 
 
@@ -668,6 +711,14 @@ public class RaceController implements Observer {
         currentRankingsLabel.setLayoutX(tabView.getPrefWidth() / 2 - currentRankingsLabel.getPrefWidth() / 2);
         tabView.setLayoutX((raceViewPane.getWidth() / 2) - tabView.getPrefWidth() / 2);
         tabView.setLayoutY((raceViewPane.getHeight() / 2) - tabView.getPrefHeight() / 2);
+    }
+
+
+    private void redrawESCMenu() {
+        escapeMenuPane.setLayoutX((raceViewPane.getWidth() / 2) - escapeMenuPane.getPrefWidth() / 2);
+        escapeMenuPane.setLayoutY((raceViewPane.getHeight() / 2) - escapeMenuPane.getPrefHeight() / 2);
+        eventMenuPane.setLayoutX((raceViewPane.getWidth() / 2) - eventMenuPane.getPrefWidth() / 2);
+        eventMenuPane.setLayoutY((raceViewPane.getHeight() / 2) - eventMenuPane.getPrefHeight() / 2);
     }
 
 
@@ -765,6 +816,7 @@ public class RaceController implements Observer {
         raceRenderer.refresh();
         redrawTimeLabel();
         redrawTabView();
+        redrawESCMenu();
     }
 
 
@@ -790,7 +842,8 @@ public class RaceController implements Observer {
             finishResultsBox = new VBox(resultLabel);
             finishResultsBox.getStylesheets().addAll(RaceController.class.getResource("/stylesheets/style.css").toExternalForm());
             finishResultsBox.getStyleClass().add("finishTable");
-            raceViewPane.getChildren().add(finishResultsBox);
+            group.getChildren().add(finishResultsBox);
+            eventMenuPane.toFront();
             finishResultsBox.setLayoutX(50);
             finishResultsBox.setLayoutY(200);
         }
@@ -886,17 +939,25 @@ public class RaceController implements Observer {
     @Override
     public void update(java.util.Observable o, Object arg) {
         if (arg instanceof Boolean) {
-            Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST", eventMenuPane));
+            Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST!", eventMenuPane));
         } else if (arg instanceof Boat) {
             soundPlayer.playEffect(SoundEffect.PLAYER_DISQUALIFIED);
             Platform.runLater(() -> {
                 if (race.getMode().equals(RaceMode.CHALLENGE_MODE) || race.getMode().equals(RaceMode.BUMPER_BOATS)) {
-                    openEscapeMenu("GAME OVER", eventMenuPane);
+                    openEscapeMenu("GAME OVER!", eventMenuPane);
                 } else {
-                    openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES", eventMenuPane);
+                    openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES!", eventMenuPane);
                 }
                 sender.close();
             });
         }
+    }
+
+
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setSoundPlayer(SoundEffectPlayer player) {
+        this.soundPlayer = player;
     }
 }
