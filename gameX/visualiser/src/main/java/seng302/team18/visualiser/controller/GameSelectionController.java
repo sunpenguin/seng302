@@ -459,7 +459,7 @@ public class GameSelectionController {
         label.setOnMouseClicked(event -> {
             if (!clickedPlay) {
                 buttonClickedAction();
-                GameConnection connection = new GameConnection(errorLabel.textProperty(), outerPane, mode, boatColours.get(colourIndex))
+                GameConnection connection = new GameConnection(errorLabel.textProperty(), outerPane, mode, boatColours.get(colourIndex));
                 connection.setSoundPlayer(soundPlayer);
                 connection.startGame(ipStrProp.get(), portStrProp.get(), isHosting);
                 clickedPlay = true;
