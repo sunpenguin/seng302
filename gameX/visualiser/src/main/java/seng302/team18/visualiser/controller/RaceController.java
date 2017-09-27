@@ -736,7 +736,16 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new WindSpeedInterpreter(race));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new EstimatedTimeInterpreter(race));
         BoatStatusInterpreter boatStatusInterpreter = new BoatStatusInterpreter(race);
-        boatStatusInterpreter.addObserver(this);
+        boatStatusInterpreter.addCallback(BoatStatus.DSQ, (isPlayer) -> {
+            if (isPlayer) soundPlayer.playEffect(SoundEffect.PLAYER_DISQUALIFIED);
+        });
+        boatStatusInterpreter.addCallback(BoatStatus.DSQ, (isPlayer) -> {
+            if (isPlayer) openEscapeMenuOnDsq();
+        });
+        boatStatusInterpreter.addCallback(BoatStatus.FINISHED, (isPlayer) -> {
+            if (isPlayer) soundPlayer.playEffect(SoundEffect.CROSS_FINISH_LINE);
+        });
+
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), boatStatusInterpreter);
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new BoatLocationInterpreter(race));
         interpreter.add(AC35MessageType.BOAT_LOCATION.getCode(), new MarkLocationInterpreter(race));
@@ -746,7 +755,7 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.YACHT_EVENT.getCode(), yachtEventInterpreter);
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(clock));
         RaceStatusInterpreter raceStatusInterpreter = new RaceStatusInterpreter(race);
-        raceStatusInterpreter.addCallback(RaceStatus.FINISHED, aBoolean -> Platform.runLater(this::showFinishersList));
+        raceStatusInterpreter.addCallback(RaceStatus.FINISHED, aBoolean -> onRaceFinishAction());
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), raceStatusInterpreter);
         interpreter.add(AC35MessageType.POWER_UP.getCode(), new PowerUpInterpreter(race));
         interpreter.add(AC35MessageType.POWER_TAKEN.getCode(), new PowerTakenInterpreter(race));
@@ -894,17 +903,27 @@ public class RaceController implements Observer {
     public void update(java.util.Observable o, Object arg) {
         if (arg instanceof Boolean) {
             Platform.runLater(() -> openEscapeMenu("CONNECTION TO SERVER LOST", eventMenuPane));
-        } else if (arg instanceof Boat) {
-            soundPlayer.playEffect(SoundEffect.PLAYER_DISQUALIFIED);
-            Platform.runLater(() -> {
-                if (race.getMode().equals(RaceMode.CHALLENGE_MODE) || race.getMode().equals(RaceMode.BUMPER_BOATS)) {
-                    openEscapeMenu("GAME OVER", eventMenuPane);
-                } else {
-                    openEscapeMenu("YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES", eventMenuPane);
-                }
-                sender.close();
-            });
         }
+    }
+
+
+    private void openEscapeMenuOnDsq() {
+        boolean boundaryDisqualification = !race.getMode().equals(RaceMode.CHALLENGE_MODE) && !race.getMode().equals(RaceMode.BUMPER_BOATS);
+        String message = (boundaryDisqualification) ? "YOU HAVE BEEN DISQUALIFIED FOR LEAVING THE COURSE BOUNDARIES" : "GAME OVER";
+
+        Platform.runLater(() -> {
+            openEscapeMenu(message, eventMenuPane);
+            sender.close();
+        });
+    }
+
+
+    private void onRaceFinishAction() {
+        Platform.runLater(() -> {
+            showFinishersList();
+            openEscapeMenu("Match Complete", eventMenuPane);
+            sender.close();
+        });
     }
 
 
