@@ -190,10 +190,8 @@ public class RaceController implements Observer {
                 if (pixelMapper.getZoomLevel() > 0) {
                     pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() + 1);
                 } else {
-                    Boat boat = race.getBoat(race.getStartingList().get(0).getId());
-                    pixelMapper.setZoomLevel(1);
-                    pixelMapper.track(boat);
                     pixelMapper.setTracking(true);
+                    pixelMapper.setZoomLevel(1);
                 }
                 break;
             case X:
@@ -233,7 +231,7 @@ public class RaceController implements Observer {
 
                         if (message != null) {
                             if (race.getMode() == RaceMode.CONTROLS_TUTORIAL) {
-                                controlsTutorial.setBoat(getPlayerBoat()); //TODO: get sam to change this seb67 17/8
+                                controlsTutorial.setBoat(getPlayerBoat());
                                 controlsTutorial.setWindDirection(race.getCourse().getWindDirection());
                                 if (controlsTutorial.checkIfProgressed(keyEvent.getCode())) {
                                     controlsTutorial.displayNext();
@@ -627,6 +625,12 @@ public class RaceController implements Observer {
         loadEventMenu();
 
         race.getStartingList().forEach(boat -> boat.setPlace(race.getStartingList().size()));
+
+        if (race.getMode() != RaceMode.SPECTATION) {
+            pixelMapper.track(race.getBoat(race.getPlayerId()));
+        } else {
+            pixelMapper.track(race.getBoat(race.getStartingList().get(0).getId()));
+        }
     }
 
 
