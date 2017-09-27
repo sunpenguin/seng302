@@ -733,7 +733,6 @@ public class RaceController implements Observer {
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), new RaceClockInterpreter(clock));
         RaceStatusInterpreter raceStatusInterpreter = new RaceStatusInterpreter(race);
         raceStatusInterpreter.addCallback(RaceStatus.FINISHED, aBoolean -> Platform.runLater(this::showFinishersList));
-        raceStatusInterpreter.addCallback(RaceStatus.STARTED, aBoolean -> soundPlayer.playEffect(SoundEffect.RACE_START));
         interpreter.add(AC35MessageType.RACE_STATUS.getCode(), raceStatusInterpreter);
         interpreter.add(AC35MessageType.POWER_UP.getCode(), new PowerUpInterpreter(race));
         interpreter.add(AC35MessageType.POWER_TAKEN.getCode(), new PowerTakenInterpreter(race));

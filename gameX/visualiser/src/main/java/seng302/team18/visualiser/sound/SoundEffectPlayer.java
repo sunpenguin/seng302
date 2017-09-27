@@ -1,16 +1,10 @@
 package seng302.team18.visualiser.sound;
 
 import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,12 +16,15 @@ import java.util.stream.Collectors;
 public class SoundEffectPlayer {
 
     private final Map<SoundEffect, AudioClip> effects;
+    private final Map<SoundEffect, MediaPlayer> mediaPlayers;
 
 
     /**
      * Constructs a new instance of SoundPlayer
      */
     public SoundEffectPlayer() {
+        mediaPlayers = Arrays.stream(SoundEffect.values())
+                .collect(Collectors.toMap(effect -> effect, effect -> new MediaPlayer(new Media(effect.getUrl().toString()))));
         effects = Arrays.stream(SoundEffect.values())
                 .collect(Collectors.toMap(effect -> effect, effect -> new AudioClip(effect.getUrl().toString())));
     }
@@ -44,31 +41,32 @@ public class SoundEffectPlayer {
     }
 
 
-    public long getDuration(SoundEffect effect) {
-//        System.out.println(effect.getUrl());
-        URL url = effect.getUrl();
-//        System.out.println("url = " + url);
-        URI uri = null;
-        try {
-            uri = url.toURI();
-        } catch (URISyntaxException | NullPointerException e) {
-            e.printStackTrace();
-            return 0;
+    /**
+     * Gets the duration of the specified sound effect. Returns {@link Duration#UNKNOWN Duration.UNKOWN}
+     * if the media player is not loaded yet
+     *
+     * @param effect the effect
+     * @return the duration of the effect
+     */
+    public Duration getDuration(SoundEffect effect) {
+        if (!mediaPlayers.get(effect).getStatus().equals(MediaPlayer.Status.READY)) {
+            return Duration.UNKNOWN;
         }
-        File file = new File(uri);
-        AudioInputStream audioInputStream;
-        try {
-            audioInputStream = AudioSystem.getAudioInputStream(url);
-        } catch (UnsupportedAudioFileException | IOException e) {
-            e.printStackTrace();
-            return 0;
-        }
-        AudioFormat format = audioInputStream.getFormat();
-        long audioFileLength = file.length();
-        int frameSize = format.getFrameSize();
-        float frameRate = format.getFrameRate();
-        Float durationInSeconds = (audioFileLength / (frameSize * frameRate));
-        Float durationInMillis = durationInSeconds * 1000;
-        return durationInMillis.longValue();
+
+        return mediaPlayers.get(effect).getMedia().getDuration();
+    }
+
+
+    /**
+     * Creates a new MediaPlayer for a given effect.
+     *
+     * @param effect the effect
+     * @return a new instance of MediaPlayer loaded with this effect
+     */
+    public MediaPlayer getEffectPlayer(SoundEffect effect) {
+        // Uses the one from the map so that it is more likely to be in a ready state.
+        MediaPlayer player = mediaPlayers.get(effect);
+        mediaPlayers.put(effect, new MediaPlayer(new Media(effect.getUrl().toString())));
+        return player;
     }
 }

@@ -22,15 +22,13 @@ import seng302.team18.visualiser.interpret.americascup.PreRaceToMainRaceInterpre
 import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
-import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.StartSoundPlayer;
 import seng302.team18.visualiser.sound.ThemeTunePlayer;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -62,9 +60,6 @@ public class PreRaceController {
 
     private boolean hasChanged = false;
 
-    public void initialize() {
-    }
-
 
     /**
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
@@ -90,11 +85,16 @@ public class PreRaceController {
         Stage stage = (Stage) listView.getScene().getWindow();
         this.interpreter = interpreter;
         addInterpreters();
-        showNetWorkInfo();
+        showNetworkInfo();
 
         stage.setOnCloseRequest((event) -> {
             interpreter.close();
             while (!interpreter.closeReceiver()) {
+                try {
+                    Thread.sleep(5);
+                } catch (InterruptedException e) {
+                    // pass
+                }
             }
             System.out.println("shutting down");
             System.exit(0);
@@ -132,8 +132,6 @@ public class PreRaceController {
 
     /**
      * Set up and initialise interpreter variables, adding interpreters of each relevant type to the global interpreter.
-     *
-     * @return the message interpreter
      */
     private void addInterpreters() {
 
@@ -183,7 +181,7 @@ public class PreRaceController {
     }
 
 
-    private void showNetWorkInfo() {
+    private void showNetworkInfo() {
         Socket socket = interpreter.getSocket();
         ipLabel.setText(socket.getInetAddress().toString());
         portLabel.setText(String.valueOf(socket.getPort()));
@@ -198,35 +196,12 @@ public class PreRaceController {
     }
 
 
+    /**
+     * Plays the start sound at the appropriate time
+     */
     private void setUpStartSound() {
-        new Thread(() -> {
-            while (race.getStartTime().toInstant().equals(Instant.EPOCH)) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    // pass
-                }
-            }
-            System.out.println("Start " + race.getStartTime().toInstant().toEpochMilli());
-            SoundEffect startLeadIn = SoundEffect.RACE_START_LEAD_IN;
-            long duration = soundPlayer.getDuration(startLeadIn);
-            System.out.println("duration = " + duration);
-            ZonedDateTime playTime = race.getStartTime().minus(duration, ChronoUnit.MILLIS);
-
-            while (race.getCurrentTime().isBefore(playTime)) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    // pass
-                }
-            }
-
-            System.out.println("Start " + race.getStartTime().toInstant().toEpochMilli());
-            System.out.println("Now " + race.getCurrentTime().toInstant().toEpochMilli());
-            System.out.println(race.getStartTime().toInstant().toEpochMilli() - race.getCurrentTime().toInstant().toEpochMilli());
-
-            soundPlayer.playEffect(startLeadIn);
-        }).start();
+        new Thread(new StartSoundPlayer(race, soundPlayer)).start();
     }
+
 
 }
