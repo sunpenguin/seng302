@@ -7,6 +7,7 @@ import seng302.team18.message.MessageBody;
 import seng302.team18.message.RequestMessage;
 import seng302.team18.message.RequestType;
 import seng302.team18.model.Race;
+import seng302.team18.model.RaceStatus;
 import seng302.team18.parse.MessageParserFactory;
 import seng302.team18.parse.Receiver;
 import seng302.team18.racemodel.generate.AcceptanceMessageGenerator;
@@ -14,10 +15,7 @@ import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 import seng302.team18.racemodel.interpret.ColourInterpreter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -97,7 +95,7 @@ public class ConnectionListener extends Observable implements Observer {
             } else if (!isValidMode(request.getAction())) { // invalid
                 sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
                 client.close(); // IOException
-            } else if (!race.hasStarted()) { // a valid player before the race starts
+            } else if (isJoinable(race.getStatus())) { // a valid player before the race starts
                 addPlayer(receiver, id);
                 sendMessage(client, id, request.getAction());
                 setChanged();
@@ -180,14 +178,22 @@ public class ConnectionListener extends Observable implements Observer {
     }
 
 
-    private PlayerControlsReader removePlayer(int id) {
-        for (int i = players.size() - 1; i >= 0; i--) {
+    private void removePlayer(int id) {
+        int removeIndex = -1;
+        for (int i = 0; i < players.size(); i++) {
             PlayerControlsReader player = players.get(i);
             if (player.getId() == id) {
                 player.close();
-                players.remove(i);
+                removeIndex = i;
             }
         }
-        return null;
+        if (removeIndex != -1) {
+            players.remove(removeIndex);
+        }
     }
+
+    private boolean isJoinable(RaceStatus status) {
+        return status == RaceStatus.WARNING || status.isBefore(RaceStatus.WARNING);
+    }
+
 }
