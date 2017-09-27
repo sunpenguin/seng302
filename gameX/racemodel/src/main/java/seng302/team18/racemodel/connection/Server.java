@@ -25,6 +25,11 @@ public class Server extends Observable {
 
     public Server(int port) {
         this.port = port;
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                Server.deathClose(port);
+            }
+        });
 
         try {
             serverSocket = ServerSocketFactory.getDefault().createServerSocket(port);
@@ -192,4 +197,21 @@ public class Server extends Observable {
     public ServerState getState() {
         return state;
     }
+
+
+    /**
+     * Method used for special exit cases
+     * If user force quits, this method makes sure the server socket is closed
+     *
+     * @param port the port number of the server socket
+     */
+    private static void deathClose(int port) {
+        try {
+            ServerSocket serverSocket = ServerSocketFactory.getDefault().createServerSocket(port);
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
