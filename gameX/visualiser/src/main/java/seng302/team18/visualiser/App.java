@@ -4,10 +4,13 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import seng302.team18.visualiser.controller.TitleScreenController;
-import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+
+import java.io.File;
 
 public class App extends Application {
 
@@ -28,6 +31,7 @@ public class App extends Application {
         primaryStage.setResizable(true);
         primaryStage.setMaximized(true);
         primaryStage.show();
+
     }
 
     public static void main(String[] args) {

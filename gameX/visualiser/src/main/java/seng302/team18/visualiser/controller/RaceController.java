@@ -93,6 +93,7 @@ public class RaceController implements Observer {
 
     private Pane escapeMenuPane;
     private Pane eventMenuPane;
+    private ThemeTunePlayer themeTunePlayer;
 
     private boolean annotationsOn;
     private boolean fpsOn;
@@ -102,7 +103,7 @@ public class RaceController implements Observer {
     private CourseRenderer courseRenderer;
     private PixelMapper pixelMapper;
     private Sender sender;
-    private SoundEffectPlayer soundPlayer = new SoundEffectPlayer();
+    private SoundEffectPlayer soundPlayer;
 
     private Interpreter interpreter;
     private RaceBackground background;
@@ -369,7 +370,7 @@ public class RaceController implements Observer {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EscapeMenu.fxml"));
             escapeMenuPane = loader.load();
             EscapeMenuController escapeMenuController = loader.getController();
-            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer);
+            escapeMenuController.setup(group, interpreter, sender, this, soundPlayer, themeTunePlayer);
         } catch (IOException e) {
             //pass
         }
@@ -571,6 +572,9 @@ public class RaceController implements Observer {
     public void setUp(ClientRace race, Interpreter interpreter, Sender sender) {
         this.sender = sender;
         this.race = race;
+
+        themeTunePlayer = new ThemeTunePlayer("audio/theme.wav");
+        themeTunePlayer.playTrack();
 
         GPSCalculator gps = new GPSCalculator();
         List<Coordinate> bounds = gps.findMinMaxPoints(race.getCourse());
@@ -901,5 +905,13 @@ public class RaceController implements Observer {
                 sender.close();
             });
         }
+    }
+
+
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setSoundPlayer(SoundEffectPlayer player) {
+        this.soundPlayer = player;
     }
 }

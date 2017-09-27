@@ -22,11 +22,15 @@ import seng302.team18.visualiser.interpret.americascup.PreRaceToMainRaceInterpre
 import seng302.team18.visualiser.interpret.xml.XMLBoatInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
+import seng302.team18.visualiser.sound.SoundEffect;
+import seng302.team18.visualiser.sound.SoundEffectPlayer;
 import seng302.team18.visualiser.sound.ThemeTunePlayer;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -54,6 +58,8 @@ public class PreRaceController {
     private Sender sender;
     private ClientRace race;
 
+    private SoundEffectPlayer soundPlayer;
+
     private boolean hasChanged = false;
 
     public void initialize() {
@@ -64,8 +70,8 @@ public class PreRaceController {
      * Initialises the variables associated with the beginning of the race. Shows the pre-race window for a specific
      * duration before the race starts.
      *
-     * @param race     The race to be set up in the pre-race.
-     * @param sender   the sender\
+     * @param race        The race to be set up in the pre-race.
+     * @param sender      the sender\
      * @param interpreter the interpreter
      */
     public void setUp(ClientRace race, Sender sender, Interpreter interpreter) {
@@ -74,6 +80,8 @@ public class PreRaceController {
         System.out.println(race.getRegatta().getName());
         raceNameText.setText(race.getRegatta().getName());
         displayTimeZone(race.getStartTime());
+
+        setUpStartSound();
 
         setUpLists();
         listView.setItems(FXCollections.observableList(race.getStartingList()));
@@ -161,6 +169,7 @@ public class PreRaceController {
         stage.setResizable(true);
         stage.setMaximized(true);
         stage.show();
+        controller.setSoundPlayer(soundPlayer);
         controller.setUp(race, interpreter, sender);
         controller.updateControlsTutorial();
         controller.updateControlsTutorial();
@@ -179,6 +188,46 @@ public class PreRaceController {
         Socket socket = interpreter.getSocket();
         ipLabel.setText(socket.getInetAddress().toString());
         portLabel.setText(String.valueOf(socket.getPort()));
+    }
+
+
+    /**
+     * @param player manages the audio playback from this scene
+     */
+    public void setSoundPlayer(SoundEffectPlayer player) {
+        this.soundPlayer = player;
+    }
+
+
+    private void setUpStartSound() {
+        new Thread(() -> {
+            while (race.getStartTime().toInstant().equals(Instant.EPOCH)) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    // pass
+                }
+            }
+            System.out.println("Start " + race.getStartTime().toInstant().toEpochMilli());
+            SoundEffect startLeadIn = SoundEffect.RACE_START_LEAD_IN;
+            long duration = soundPlayer.getDuration(startLeadIn);
+            System.out.println("duration = " + duration);
+            ZonedDateTime playTime = race.getStartTime().minus(duration, ChronoUnit.MILLIS);
+
+            while (race.getCurrentTime().isBefore(playTime)) {
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    // pass
+                }
+            }
+
+            System.out.println("Start " + race.getStartTime().toInstant().toEpochMilli());
+            System.out.println("Now " + race.getCurrentTime().toInstant().toEpochMilli());
+            System.out.println(race.getStartTime().toInstant().toEpochMilli() - race.getCurrentTime().toInstant().toEpochMilli());
+
+            soundPlayer.playEffect(startLeadIn);
+        }).start();
     }
 
 }
