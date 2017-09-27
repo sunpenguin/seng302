@@ -53,6 +53,7 @@ import seng302.team18.visualiser.interpret.xml.XMLRaceInterpreter;
 import seng302.team18.visualiser.interpret.xml.XMLRegattaInterpreter;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 import seng302.team18.visualiser.userInput.ControlSchemeDisplay;
 import seng302.team18.visualiser.util.PixelMapper;
 
@@ -130,6 +131,10 @@ public class RaceController implements Observer {
         background = new RaceBackground(raceViewPane, "/images/water.gif");
         tabView.setVisible(false);
         initialiseFadeTransition();
+
+        ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer();
+        themeTunePlayer.playSound("audio/Ocean_Waves-Mike_Koenig-980635527.mp3");
+
     }
 
 

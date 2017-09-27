@@ -13,6 +13,7 @@ import seng302.team18.encode.Sender;
 import seng302.team18.visualiser.interpret.Interpreter;
 import seng302.team18.visualiser.sound.SoundEffect;
 import seng302.team18.visualiser.sound.SoundEffectPlayer;
+import seng302.team18.visualiser.sound.ThemeTunePlayer;
 
 import java.io.IOException;
 
@@ -134,6 +135,7 @@ public class EscapeMenuController {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("StartupInterface.fxml"));
 
         try {
+            ThemeTunePlayer.stopTrack();
             Parent root = loader.load();
             TitleScreenController controller = loader.getController();
             Stage stage = (Stage) group.getScene().getWindow();

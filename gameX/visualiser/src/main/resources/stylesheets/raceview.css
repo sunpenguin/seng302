@@ -28,6 +28,7 @@
     -fx-alignment: center;
 }
 
+
 .table-view .column-header {
      -fx-background-color: #00d8ff;
 }
@@ -57,6 +58,7 @@
     -fx-background-color: deepskyblue;
     -fx-border-color: #00d8ff;
 }
+
 
 .list-cell:even{
     -fx-background-color: deepskyblue;

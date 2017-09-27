@@ -42,7 +42,7 @@ public class TitleScreenController {
         loadBoatAnimation();
 
         ThemeTunePlayer themeTunePlayer = new ThemeTunePlayer();
-        themeTunePlayer.playTrack();
+        themeTunePlayer.playSound("audio/theme.wav");
 
         errorText.setLayoutX((600 / 2) - errorText.getPrefWidth());
         errorText.setLayoutY((600 / 2) + 300);
