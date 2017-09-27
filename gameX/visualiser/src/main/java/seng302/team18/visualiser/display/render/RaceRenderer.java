@@ -228,12 +228,15 @@ public class RaceRenderer implements Renderable {
      * @param pixelMapper used to map a coordinate to a point on the screen.
      */
     private void drawTrail(Boat boat, PixelMapper pixelMapper) {
-        if (boat.getStatus().equals(BoatStatus.DSQ)) {
-            trailMap.get(boat.getShortName()).removeFrom(group);
+        if (!boat.isRacing()) {
+            DisplayTrail trail = trailMap.get(boat.getShortName());
+            if (trail != null) {
+                trail.removeFrom(group);
+            }
         } else {
             DisplayTrail trail = trailMap.get(boat.getShortName());
 
-            if (trail == null && !BoatStatus.DSQ.equals(boat.getStatus())) {
+            if (trail == null) {
                 final int MAX_TRAIL_LENGTH = 750;
                 DisplayBoat displayBoat = displayBoats.get(boat.getShortName());
                 trail = new DisplayTrail(displayBoat.getColor(), MAX_TRAIL_LENGTH);

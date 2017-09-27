@@ -56,4 +56,9 @@ public enum BoatStatus {
         }
         return statusMap;
     }
+
+
+    public boolean isRacing() {
+        return this == PRE_START || this == RACING;
+    }
 }
