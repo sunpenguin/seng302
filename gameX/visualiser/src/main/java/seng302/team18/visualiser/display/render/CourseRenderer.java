@@ -157,7 +157,6 @@ public class CourseRenderer implements Renderable {
         imageView.setOnMouseClicked((event) -> {
             pixelMapper.track(mark);
             pixelMapper.setTracking(true);
-            pixelMapper.setZoomLevel(1);
             pixelMapper.setViewPortCenter(mark.getCoordinate());
         });
 
@@ -320,7 +319,6 @@ public class CourseRenderer implements Renderable {
             pickUpVisual.setOnMouseClicked((event) -> {
                 pixelMapper.track(pickUp);
                 pixelMapper.setTracking(true);
-                pixelMapper.setZoomLevel(1);
                 pixelMapper.setViewPortCenter(pickUp.getCoordinate());
             });
 
