@@ -1,8 +1,6 @@
 package seng302.team18.model;
 
-/**
- * Created by dhl25 on 4/09/17.
- */
+
 public class PowerUpEvent {
 
     private int boatId;

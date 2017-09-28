@@ -8,9 +8,7 @@ import seng302.team18.util.ByteCheck;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by dhl25 on 3/09/17.
- */
+
 public class PowerTakenParser implements MessageBodyParser {
     
     @Override

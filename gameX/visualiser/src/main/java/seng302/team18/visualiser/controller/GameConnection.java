@@ -100,7 +100,6 @@ public class GameConnection {
         }
 
         openStream(hostAddress, port);
-        return;
     }
 
 

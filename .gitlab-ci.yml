@@ -13,8 +13,9 @@ generate_artifacts:
     - tar -czf target/site.tar.gz target/site
     - mv gameX/racemodel/target/racemodel-$HIGHSEAS_VERSION.jar high_seas_server-$HIGHSEAS_VERSION.jar
     - mv gameX/visualiser/target/visualiser-$HIGHSEAS_VERSION.jar high_seas-$HIGHSEAS_VERSION.jar
+    - mv target/site.tar.gz highseas_dev_info-$HIGHSEAS_VERSION.tar.gz
   artifacts:
     paths:
       - high_seas_server-$HIGHSEAS_VERSION.jar
       - high_seas-$HIGHSEAS_VERSION.jar
-      - target/site.tar.gz
+      - highseas_dev_info-$HIGHSEAS_VERSION.tar.gz

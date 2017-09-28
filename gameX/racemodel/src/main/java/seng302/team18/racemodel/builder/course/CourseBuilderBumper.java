@@ -4,14 +4,12 @@ package seng302.team18.racemodel.builder.course;
 
 import seng302.team18.model.CompoundMark;
 import seng302.team18.model.Coordinate;
-import seng302.team18.model.Mark;
 import seng302.team18.model.MarkRounding;
 import seng302.team18.util.GPSCalculator;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

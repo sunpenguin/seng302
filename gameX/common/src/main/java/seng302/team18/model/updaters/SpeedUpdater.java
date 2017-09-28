@@ -3,7 +3,7 @@ package seng302.team18.model.updaters;
 import seng302.team18.model.*;
 
 /**
- * Created by dhl25 on 7/09/17.
+ * Updates the speed of participants over time
  */
 public class SpeedUpdater implements Updater {
 

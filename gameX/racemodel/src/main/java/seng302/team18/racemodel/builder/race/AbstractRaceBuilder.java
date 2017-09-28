@@ -3,7 +3,6 @@ package seng302.team18.racemodel.builder.race;
 import seng302.team18.model.*;
 import seng302.team18.model.updaters.Updater;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**

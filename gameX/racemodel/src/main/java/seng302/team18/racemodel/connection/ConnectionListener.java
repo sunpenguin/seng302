@@ -35,7 +35,7 @@ public class ConnectionListener extends Observable implements Observer {
     private Race race;
 
     private int playersJoined = 0;
-    private final int MAX_PLAYERS = 6;
+    private static final int MAX_PLAYERS = 6;
 
     /**
      * Constructs a new ConnectionListener.
