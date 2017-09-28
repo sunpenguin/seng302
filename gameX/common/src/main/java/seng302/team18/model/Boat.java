@@ -269,6 +269,12 @@ public class Boat extends AbstractBoat implements GeographicLocation {
     }
 
 
+    public void setLives(int lives) {
+        this.lives = lives;
+        livesIntegerProperty.setValue(lives);
+    }
+
+
     public IntegerProperty livesIntegerProperty() {
         return livesIntegerProperty;
     }
