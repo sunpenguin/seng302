@@ -114,7 +114,7 @@ public class Server extends Observable {
      */
     public void broadcast(byte[] message) {
         if (message.length == 1) { //Scheduled messages should return {0} if there is an error when constructing them
-            return; // TODO move this out side of server
+            return;
         }
         List<Integer> toRemove = new ArrayList<>();
         for (int i = 0; i < clients.size(); i++) {

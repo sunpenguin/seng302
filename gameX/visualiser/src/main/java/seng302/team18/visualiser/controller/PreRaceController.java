@@ -92,7 +92,7 @@ public class PreRaceController {
                     // pass
                 }
             }
-            System.out.println("shutting down");
+            System.out.println("Shutting down High Seas client application");
             System.exit(0);
         });
     }

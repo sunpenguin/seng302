@@ -22,13 +22,12 @@ public class HeaderGenerator {
 
         byte syncByte1 = 0x47;
 
-        byte syncByte2 = (byte) 0x83;//TODO make sure -125 is okay, might need to be 131
+        byte syncByte2 = (byte) 0x83;
 
         byte messageType = (byte) type;
 
         byte[] timestampBytes = ByteCheck.getCurrentTime6Bytes();
 
-        // TODO: How to make reasonable sourceID?
         byte[] sourceID = new byte[4];
         sourceID[0] = 58;
         sourceID[1] = 94;

@@ -59,7 +59,7 @@ public class MockDataStream {
             try {
                 serverPort = Integer.parseInt(args[0]);
             } catch (NumberFormatException e) {
-                System.err.println("Unable to parse ");
+                System.err.println("Unable to parse port, using default of " + DEFAULT_PORT);
             }
         }
 
