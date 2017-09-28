@@ -150,7 +150,6 @@ public class Race {
 
 
     public void addParticipant(Boat boat) {
-        // check that it is alright to add a boat at this point
         startingList.add(boat);
         setCourseForBoat(boat);
         participantIds.add(boat.getId());
