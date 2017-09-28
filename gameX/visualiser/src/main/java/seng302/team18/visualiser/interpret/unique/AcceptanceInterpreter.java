@@ -34,9 +34,7 @@ public class AcceptanceInterpreter extends MessageInterpreter {
             int sourceId = ((AcceptanceMessage) message).getSourceId();
             RequestType requestType =  ((AcceptanceMessage) message).getRequestType();
             if (requestType.getCode() != race.getMode().getCode()) {
-                Platform.runLater(() -> {
-                    gameConnection.setFailedConnection();
-                });
+                Platform.runLater(() -> gameConnection.setFailedConnection());
             } else {
                 Platform.runLater(() -> {
                     try {
