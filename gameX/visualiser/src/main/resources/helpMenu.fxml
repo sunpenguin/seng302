@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-
 <Pane fx:id="outerPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="600.0" style="-fx-background-color: transparent;" stylesheets="@stylesheets/helpMenu.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="seng302.team18.visualiser.controller.HelpMenuController">
    <children>
       <Label fx:id="closeLabel" layoutX="8.0" layoutY="8.0" styleClass="crossImage" />
@@ -15,7 +13,7 @@
       </HBox>
       <StackPane fx:id="stackPane" layoutY="100.0" style="-fx-background-color: aqua;">
          <children>
-            <Pane fx:id="modePane" prefHeight="200.0" prefWidth="200.0" styleClass="mainPane" visible="false">
+             <Pane fx:id="modePane" prefHeight="200.0" prefWidth="200.0" styleClass="mainPane">
                <children>
                   <GridPane alignment="TOP_LEFT" layoutX="25.0" layoutY="25.0" prefHeight="620.0" prefWidth="550.0">
                     <columnConstraints>
@@ -27,27 +25,35 @@
                       <RowConstraints maxHeight="208.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
                       <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="114.0" vgrow="SOMETIMES" />
                         <RowConstraints maxHeight="278.0" minHeight="10.0" prefHeight="136.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="198.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="158.0" minHeight="10.0" prefHeight="129.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="198.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="171.0" minHeight="10.0" prefHeight="171.0" vgrow="SOMETIMES"/>
                     </rowConstraints>
                      <children>
                         <Label alignment="TOP_LEFT" contentDisplay="TOP" text="RACE" />
-                        <Label alignment="TOP_LEFT" contentDisplay="TOP" text="FIRST BOAT TO FINISH ALL LEGS WINS. UP TO 20 PLAYERS" wrapText="true" GridPane.columnIndex="1" />
+                         <Label alignment="TOP_LEFT" contentDisplay="TOP" text="FIRST BOAT TO FINISH ALL LEGS WINS."
+                                wrapText="true" GridPane.columnIndex="1"/>
                         <Label alignment="TOP_LEFT" text="ARCADE RACE" GridPane.rowIndex="1" />
                         <Label alignment="TOP_LEFT" text="CHALLENGE MODE" GridPane.rowIndex="2" />
                         <Label alignment="TOP_LEFT" text="ARENA MODE" GridPane.rowIndex="3" />
                         <Label alignment="TOP_LEFT" text="SPECTATOR" GridPane.rowIndex="4" />
-                        <Label text="FIRST BOAT TO FINISH ALL LEGS WINS. SAIL OVER POWER UPS TO ACCESS SPECIAL ABILITIES. UP TO 20 PLAYERS." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="SINGLE OR 2 PLAYER VERSUS MODE. RACE THROUGH RANDOMLY POSITIONED GATES AND TRY TO MAKE IT TO THE END" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label text="HIGH INTENSITY BATTLE MODE. STAY ALIVE BY KEEPING WITHIN IN THE EVER SHRINKING BOUNDARIES AND AVOIDING ATTACK SHARKS. LAST PLAYER STANDING WINS THE GAME" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label text="SIT BACK AND RELAX BY SPECTATING A MATCH. YOU HAVE ACCESS TO ALL NON GAME AFFECTING FEATURES" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                         <Label text="FIRST BOAT TO FINISH ALL LEGS WINS. SAIL OVER POWER UPS TO ACCESS SPECIAL ABILITIES."
+                                wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                         <Label text="SINGLE OR MULTI-PLAYER VERSUS MODE. RACE THROUGH RANDOMLY POSITIONED GATES AND TRY TO MAKE IT TO THE END."
+                                wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                         <Label text="HIGH INTENSITY BATTLE MODE. STAY ALIVE BY KEEPING WITHIN IN THE EVER SHRINKING BOUNDARIES AND AVOIDING ATTACK SHARKS. LAST PLAYER STANDING WINS THE GAME."
+                                wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                         <Label text="SPECTATE AN ONGOING MATCH." wrapText="true" GridPane.columnIndex="1"
+                                GridPane.rowIndex="4"/>
                         <Label alignment="TOP_LEFT" text="GENERAL RULES" GridPane.rowIndex="5" />
-                         <Label alignment="TOP_LEFT" text="GOING OUTSIDE THE BOUNDARIES WILL RESULT IN DISQUALIFICATION OR A LIFE LOST. CROSSING THE START LINE BEFORE THE RACE STARTS WILL RESULT IN A PENALTY." wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                         <Label alignment="TOP_LEFT"
+                                text="GOING OUTSIDE THE BOUNDARIES WILL RESULT IN DISQUALIFICATION OR A LIFE LOST. CROSSING THE START LINE BEFORE THE RACE STARTS WILL RESULT IN A PENALTY. MATCHES SUPPORT UP TO 6 PLAYERS."
+                                wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
                      </children>
                   </GridPane>
                </children>
             </Pane>
-            <Pane fx:id="controlsPane" layoutY="50.0" prefHeight="670.0" prefWidth="600.0" styleClass="mainPane">
+             <Pane fx:id="controlsPane" layoutY="50.0" prefHeight="670.0" prefWidth="600.0" styleClass="mainPane"
+                   visible="false">
                <children>
                   <GridPane layoutX="25.0" layoutY="25.0" prefHeight="620.0" prefWidth="550.0">
                     <columnConstraints>
