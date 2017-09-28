@@ -31,6 +31,9 @@ public class ConnectionListener extends Observable implements Observer {
 
     private Race race;
 
+    private int playersJoined = 0;
+    private final int MAX_PLAYERS = 6;
+
     /**
      * Constructs a new ConnectionListener.
      *
@@ -95,11 +98,12 @@ public class ConnectionListener extends Observable implements Observer {
             } else if (!isValidMode(request.getAction())) { // invalid
                 sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
                 client.close(); // IOException
-            } else if (isJoinable(race.getStatus())) { // a valid player before the race starts
+            } else if (playersJoined < MAX_PLAYERS && isJoinable(race.getStatus())) { // a valid player before the race starts
                 addPlayer(receiver, id);
                 sendMessage(client, id, request.getAction());
                 setChanged();
                 notifyObservers(client);
+                playersJoined++;
             } else { // a valid player after the race starts
                 sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
                 client.close(); // IOException

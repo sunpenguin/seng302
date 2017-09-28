@@ -16,7 +16,6 @@ import java.util.concurrent.Executors;
 public class Server extends Observable {
     private final List<ClientConnection> clients = new ArrayList<>();
     private final ServerConnectionListener listener = new ServerConnectionListener();
-    private static final int MAX_CLIENTS = 6;
 
     private ServerSocket serverSocket;
     private final int port;
@@ -173,11 +172,7 @@ public class Server extends Observable {
             }
 
             while (listening) {
-                if (clients.size() < MAX_CLIENTS) {
-                    acceptClientConnection();
-                } else {
-                    listening = false;
-                }
+                acceptClientConnection();
             }
         }
 
