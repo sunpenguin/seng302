@@ -1,8 +1,10 @@
 package seng302.team18.racemodel.connection;
 
 import seng302.team18.interpret.MessageInterpreter;
+import seng302.team18.message.BoatActionMessage;
+import seng302.team18.message.ColourMessage;
 import seng302.team18.message.MessageBody;
-import seng302.team18.parse.*;
+import seng302.team18.parse.Receiver;
 
 import java.io.IOException;
 
@@ -31,11 +33,25 @@ public class PlayerControlsReader implements Runnable {
         while (open) {
             try {
                 MessageBody message = receiver.nextMessage(); // io exception
-                interpreter.interpret(message);
+                if (hasCorrectId(message)) {
+                    interpreter.interpret(message);
+                }
             } catch (IOException e) {
                 close();
             }
         }
+    }
+
+
+    private boolean hasCorrectId(MessageBody message) {
+        if (message instanceof BoatActionMessage) {
+            BoatActionMessage action = (BoatActionMessage) message;
+            return action.getId() == id;
+        } else if (message instanceof ColourMessage) {
+            ColourMessage colourMessage = (ColourMessage) message;
+            return colourMessage.getSourceID() == id;
+        }
+        return true;
     }
 
 
