@@ -302,14 +302,7 @@ public class Course {
 
 
     public synchronized int getStartLineId() {
-        try {
-            return markSequence.get(0).getMarkId();
-        } catch (Exception e) {
-            for (MarkRounding mark : markSequence) {
-                System.out.println(mark);
-            }
-            throw e;
-        }
+        return markSequence.get(0).getMarkId();
     }
 
 

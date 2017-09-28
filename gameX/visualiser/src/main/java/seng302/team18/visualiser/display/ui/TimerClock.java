@@ -2,7 +2,6 @@ package seng302.team18.visualiser.display.ui;
 
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
-import seng302.team18.visualiser.display.ui.Clock;
 
 /**
  * Clock for counting down.
@@ -35,7 +34,6 @@ public class TimerClock extends Clock {
      * To be called when timer reaches 0 seconds.
      */
     private void timeUp() {
-        System.out.println("Time's up! -->  TimerClock::timeUp");
         stop();
     }
 

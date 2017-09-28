@@ -2,6 +2,7 @@ package seng302.team18.encode;
 
 
 import seng302.team18.message.MessageBody;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -50,7 +51,6 @@ public class Sender {
         MessageEncoder composer = factory.getEncoder(body.getType());
         outStream.write(composer.encode(body));
         outStream.flush();
-//        System.out.println("Sender::encode type = " + AC35MessageType.from(body.getType()));
     }
 
 

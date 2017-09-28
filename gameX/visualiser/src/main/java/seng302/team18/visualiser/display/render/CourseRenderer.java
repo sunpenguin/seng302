@@ -183,7 +183,7 @@ public class CourseRenderer implements Renderable {
                 }
             }
         } catch (NullPointerException e) {
-            // TODO david 14/09
+            // pass
         }
     }
 
@@ -289,8 +289,6 @@ public class CourseRenderer implements Renderable {
             case SHARK:
                 renderPickUp(pickUp, PowerType.SHARK);
                 break;
-            default:
-                System.out.println("PowerUpInterpreter::makePowerUp has gone horribly wrong (ask Sunguin for help)");
         }
     }
 

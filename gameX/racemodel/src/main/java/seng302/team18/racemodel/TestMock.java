@@ -14,7 +14,6 @@ import seng302.team18.racemodel.connection.ServerState;
 import seng302.team18.racemodel.encode.XmlMessageBuilder;
 import seng302.team18.racemodel.generate.*;
 
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -270,8 +269,6 @@ public class TestMock implements Observer {
                 }
 
                 updateClients(timeCurr);
-
-//                System.out.println("TestMock SimulationLoop::run");
 
                 // Sleep
                 try {
