@@ -191,7 +191,7 @@ public class RaceRenderer implements Renderable {
         displayBoat.setSpeed(boat.getSpeed());
         displayBoat.setHeading(boat.getHeading());
         displayBoat.setScale(pixelMapper.mappingRatio());
-        displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
+        displayBoat.setWindDirection(race.getWindDirection());
         displayBoat.setSailOut(boat.isSailOut());
         displayBoat.setBoatStatus(boat.getStatus());
         displayBoat.setColour(boat.getColour());
