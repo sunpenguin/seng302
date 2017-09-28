@@ -8,7 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Created by dhl25 on 3/09/17.
+ * Generates powerup messages
  */
 public class PowerUpMessageGenerator extends MessageGenerator {
 

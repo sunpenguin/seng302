@@ -1,6 +1,9 @@
 package seng302.team18.model.updaters;
 
-import seng302.team18.model.*;
+import seng302.team18.model.Coordinate;
+import seng302.team18.model.Course;
+import seng302.team18.model.Race;
+import seng302.team18.model.RaceStatus;
 import seng302.team18.util.GPSCalculator;
 
 import java.util.ArrayList;
@@ -20,8 +23,8 @@ public class ChallengeCourseShrinker implements Updater {
     private double boundaryDistance = 0.5;
     private double speed;
     private double multiplier;
-    private final int COURSE_LENGTH = 1500;
-    private final int COURSE_WIDTH = 300;
+    private static final int COURSE_LENGTH = 1500;
+    private static final int COURSE_WIDTH = 300;
 
 
 

@@ -396,10 +396,7 @@ public class Boat extends AbstractBoat implements GeographicLocation {
      * @return true if a boat can use a PowerUp.
      */
     public boolean canActivatePower() {
-        if (null != powerUp && !isPowerActive) {
-            return true;
-        }
-        return false;
+        return null != powerUp && !isPowerActive;
     }
 
 

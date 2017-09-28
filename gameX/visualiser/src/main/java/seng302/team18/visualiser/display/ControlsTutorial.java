@@ -29,12 +29,12 @@ public class ControlsTutorial {
     private double boatOldTWA;
     private boolean boatOldSailsOut;
 
-    private final int COLUMNS  =   7;
-    private final int COUNT    =  44;
-    private final int OFFSET_X =  0;
-    private final int OFFSET_Y =  0;
-    private final int WIDTH    = 128;
-    private final int HEIGHT   = 128;
+    private static final int COLUMNS = 7;
+    private static final int COUNT = 44;
+    private static final int OFFSET_X = 0;
+    private static final int OFFSET_Y = 0;
+    private static final int WIDTH = 128;
+    private static final int HEIGHT = 128;
 
     private Pane pane;
     private SpriteAnimation animation;
@@ -54,18 +54,18 @@ public class ControlsTutorial {
     private VBox tutorialBox = new VBox(actionPromptBox, controlPromptBox);
 
 
-    private final int INDEX_SAILS1 = 0;
-    private final int INDEX_UP1 = 1;
-    private final int INDEX_UP2 = 2;
-    private final int INDEX_UP3 = 3;
-    private final int INDEX_DOWN1 = 4;
-    private final int INDEX_DOWN2 = 5;
-    private final int INDEX_DOWN3 = 6;
-    private final int INDEX_VMG = 7;
-    private final int INDEX_TACK = 8;
-    private final int INDEX_GYBE = 9;
-    private final int INDEX_SAILS2 = 10;
-    private final int INDEX_ESC = 11;
+    private static final int INDEX_SAILS1 = 0;
+    private static final int INDEX_UP1 = 1;
+    private static final int INDEX_UP2 = 2;
+    private static final int INDEX_UP3 = 3;
+    private static final int INDEX_DOWN1 = 4;
+    private static final int INDEX_DOWN2 = 5;
+    private static final int INDEX_DOWN3 = 6;
+    private static final int INDEX_VMG = 7;
+    private static final int INDEX_TACK = 8;
+    private static final int INDEX_GYBE = 9;
+    private static final int INDEX_SAILS2 = 10;
+    private static final int INDEX_ESC = 11;
 
 
     private List<BoatControls> keyList = Arrays.asList(BoatControls.SAILS,
@@ -136,15 +136,11 @@ public class ControlsTutorial {
      *
      */
     private void registerListeners() {
-        InvalidationListener listenerWidth = observable -> {
-            draw();
-        };
+        InvalidationListener listenerWidth = observable -> draw();
         controlPromptBox.widthProperty().addListener(listenerWidth);
         actionPromptBox.widthProperty().addListener(listenerWidth);
 
-        InvalidationListener listenerHeight = observable -> {
-            draw();
-        };
+        InvalidationListener listenerHeight = observable -> draw();
         controlPromptBox.heightProperty().addListener(listenerHeight);
         actionPromptBox.heightProperty().addListener(listenerHeight);
     }

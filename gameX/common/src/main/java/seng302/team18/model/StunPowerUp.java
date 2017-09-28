@@ -3,7 +3,7 @@ package seng302.team18.model;
 import seng302.team18.message.PowerType;
 
 /**
- * Created by sbe67 on 9/09/17.
+ * Powerup representing a period when the boat cannot move
  */
 public class StunPowerUp extends PowerUp {
 

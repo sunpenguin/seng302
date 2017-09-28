@@ -1,8 +1,5 @@
 package seng302.team18.message;
 
-/**
- * Created by dhl25 on 3/09/17.
- */
 public class PowerTakenMessage implements MessageBody {
 
     private int boatId;
@@ -14,9 +11,6 @@ public class PowerTakenMessage implements MessageBody {
         this.powerId = powerId;
         this.duration = duration;
     }
-
-
-    public PowerTakenMessage() {}
 
 
     @Override

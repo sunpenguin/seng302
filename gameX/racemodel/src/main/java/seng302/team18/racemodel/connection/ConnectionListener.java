@@ -15,7 +15,10 @@ import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 import seng302.team18.racemodel.interpret.ColourInterpreter;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,7 +35,7 @@ public class ConnectionListener extends Observable implements Observer {
     private Race race;
 
     private int playersJoined = 0;
-    private final int MAX_PLAYERS = 6;
+    private static final int MAX_PLAYERS = 6;
 
     /**
      * Constructs a new ConnectionListener.

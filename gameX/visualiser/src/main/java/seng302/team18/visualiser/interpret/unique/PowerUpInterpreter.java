@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Created by dhl25 on 3/09/17.
+ * Interprets power up messages
  */
 public class PowerUpInterpreter extends MessageInterpreter {
 

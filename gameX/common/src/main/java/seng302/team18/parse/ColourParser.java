@@ -9,9 +9,6 @@ import seng302.team18.util.ByteCheck;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by dhl25 on 17/08/17.
- */
 public class ColourParser implements MessageBodyParser {
 
 

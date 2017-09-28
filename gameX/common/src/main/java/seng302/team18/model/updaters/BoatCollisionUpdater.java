@@ -1,7 +1,6 @@
 package seng302.team18.model.updaters;
 
 import seng302.team18.model.AbstractBoat;
-import seng302.team18.model.BoatStatus;
 import seng302.team18.model.Race;
 
 import java.util.List;

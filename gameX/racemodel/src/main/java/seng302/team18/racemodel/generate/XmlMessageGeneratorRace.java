@@ -5,7 +5,7 @@ import seng302.team18.racemodel.encode.RaceXmlEncoder;
 import seng302.team18.racemodel.encode.XmlEncoder;
 
 /**
- * Created by hqi19 on 5/07/17.
+ * Generates a XMLRaceMessage
  */
 public class XmlMessageGeneratorRace extends XMLMessageGenerator<AC35XMLRaceMessage> {
 

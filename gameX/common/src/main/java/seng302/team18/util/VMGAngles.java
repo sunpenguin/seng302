@@ -1,8 +1,5 @@
 package seng302.team18.util;
 
-/**
- * Created by sbe67 on 15/08/17.
- */
 public enum VMGAngles {
     LEFT(270),
     RIGHT(90),
