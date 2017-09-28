@@ -237,7 +237,6 @@ public class Boat extends AbstractBoat implements GeographicLocation {
         double flippedWindDirection = (windHeading + 180) % 360; // flipping wind direction
         double theta = 180 - flippedWindDirection;
         double boatPlusTheta = heading + theta;
-//        double windPlusTheta = windHeading + theta; //will be 180
 
         if (boatPlusTheta > 360) {
             boatPlusTheta = boatPlusTheta - 360;

@@ -30,52 +30,6 @@ public class ByteCheck {
         return result;
     }
 
-    /**
-     * Convert an double to a byte array of length 8. Endianness is big endian
-     *
-     * @param value value to convert
-     * @return converted byte array
-     */
-    // Currently not in use
-    public static byte[] doubleToByteArray(double value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Double.BYTES);
-        buffer.putDouble(value);
-
-        byte[] result = new byte[8];
-        System.arraycopy(buffer.array(), 0, result, 0, 8);
-
-        for (int i = 0; i < result.length / 2; i++) {
-            byte temp = result[i];
-            result[i] = result[result.length - i - 1];
-            result[result.length - i - 1] = temp;
-        }
-
-        return result;
-    }
-
-
-    /**
-     * Convert an long to a byte array of length 8. Endianness is big endian
-     *
-     * @param value value to convert
-     * @return converted byte array
-     */
-    //    Currently not in use
-    public static byte[] longToByteArray(long value) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.putLong(value);
-
-        byte[] result = new byte[8];
-        System.arraycopy(buffer.array(), 0, result, 0, 8);
-
-        for (int i = 0; i < result.length / 2; i++) {
-            byte temp = result[i];
-            result[i] = result[result.length - i - 1];
-            result[result.length - i - 1] = temp;
-        }
-
-        return result;
-    }
 
     /**
      * Convert a short to a byte array of length 2. Endianness is little endian
