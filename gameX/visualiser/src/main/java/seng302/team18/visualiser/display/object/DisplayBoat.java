@@ -65,7 +65,7 @@ public class DisplayBoat implements GeographicLocation {
             if (location != null) {
                 pixelMapper.track(this);
                 pixelMapper.setTracking(true);
-                pixelMapper.setZoomLevel(4);
+                pixelMapper.setZoomLevel(1);
                 pixelMapper.setViewPortCenter(location);
             }
         });
@@ -250,7 +250,7 @@ public class DisplayBoat implements GeographicLocation {
     }
 
 
-    public void setApparentWindDirection(double apparentWind) {
+    public void setWindDirection(double apparentWind) {
     }
 
 

@@ -28,11 +28,16 @@ public class Server extends Observable {
         try {
             serverSocket = ServerSocketFactory.getDefault().createServerSocket(port);
 
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                try {
-                    serverSocket.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+                private ServerSocket socket = serverSocket;
+
+                @Override
+                public void run() {
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }));
 

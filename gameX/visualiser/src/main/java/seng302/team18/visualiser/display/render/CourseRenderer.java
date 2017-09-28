@@ -150,11 +150,14 @@ public class CourseRenderer implements Renderable {
      * @param mark mark to create an ImageView for
      * @return the created ImageView
      */
+    @SuppressWarnings("Duplicates")
     private ImageView makeMark(Mark mark) {
         ImageView imageView = new ImageView(MARK_IMAGE);
 
         imageView.setOnMouseClicked((event) -> {
-            pixelMapper.setZoomLevel(4);
+            pixelMapper.track(mark);
+            pixelMapper.setTracking(true);
+            pixelMapper.setZoomLevel(1);
             pixelMapper.setViewPortCenter(mark.getCoordinate());
         });
 
@@ -298,6 +301,7 @@ public class CourseRenderer implements Renderable {
      *
      * @param pickUp not null.
      */
+    @SuppressWarnings("Duplicates")
     private void renderPickUp(PickUp pickUp, PowerType type) {
         ImageView pickUpVisual = pickUps.get(pickUp.getId());
         double pickUpSize = pixelMapper.mappingRatio() * pickUp.getRadius();
@@ -316,8 +320,10 @@ public class CourseRenderer implements Renderable {
             }
 
             pickUpVisual.setOnMouseClicked((event) -> {
-                pixelMapper.setZoomLevel(4);
-                pixelMapper.setViewPortCenter(pickUp.getLocation());
+                pixelMapper.track(pickUp);
+                pixelMapper.setTracking(true);
+                pixelMapper.setZoomLevel(1);
+                pixelMapper.setViewPortCenter(pickUp.getCoordinate());
             });
 
             group.getChildren().addAll(pickUpVisual);
@@ -331,7 +337,7 @@ public class CourseRenderer implements Renderable {
         pickUpVisual.setScaleX(1 / imageRatio);
         pickUpVisual.setScaleY(1 / imageRatio);
 
-        Coordinate coordinate = pickUp.getLocation();
+        Coordinate coordinate = pickUp.getCoordinate();
         XYPair pixelCoordinates = pixelMapper.mapToPane(coordinate);
         pickUpVisual.setLayoutX(pixelCoordinates.getX() - (powerImageSize / 2));
         pickUpVisual.setLayoutY(pixelCoordinates.getY() - (powerImageSize / 2));

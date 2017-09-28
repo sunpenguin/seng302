@@ -62,7 +62,6 @@ public class PixelMapper {
     }
 
 
-    @SuppressWarnings("unused")
     public void removeViewCenterListener(PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener("viewPortCenter", listener);
     }

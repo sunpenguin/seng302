@@ -191,7 +191,7 @@ public class RaceRenderer implements Renderable {
         displayBoat.setSpeed(boat.getSpeed());
         displayBoat.setHeading(boat.getHeading());
         displayBoat.setScale(pixelMapper.mappingRatio());
-        displayBoat.setApparentWindDirection(race.getCourse().getWindDirection());
+        displayBoat.setWindDirection(race.getWindDirection());
         displayBoat.setSailOut(boat.isSailOut());
         displayBoat.setBoatStatus(boat.getStatus());
         displayBoat.setColour(boat.getColour());
@@ -232,6 +232,7 @@ public class RaceRenderer implements Renderable {
             DisplayTrail trail = trailMap.get(boat.getShortName());
             if (trail != null) {
                 trail.removeFrom(group);
+                trailMap.remove(boat.getShortName());
             }
         } else {
             DisplayTrail trail = trailMap.get(boat.getShortName());

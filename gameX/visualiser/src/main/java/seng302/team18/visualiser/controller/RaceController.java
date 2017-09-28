@@ -210,6 +210,9 @@ public class RaceController implements Observer {
                 if (pixelMapper.getZoomLevel() > 0) {
                     pixelMapper.setZoomLevel(pixelMapper.getZoomLevel() + 1);
                 } else {
+                    if (race.getPlayerId() != 9000) {
+                        pixelMapper.track(race.getBoat(race.getPlayerId()));
+                    }
                     pixelMapper.setTracking(true);
                     pixelMapper.setZoomLevel(1);
                 }
