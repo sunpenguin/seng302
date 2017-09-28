@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import seng302.team18.util.NautiLogger;
 import seng302.team18.visualiser.controller.TitleScreenController;
 import seng302.team18.visualiser.sound.AudioPlayer;
 
@@ -31,6 +32,7 @@ public class App extends Application {
 
 
     public static void main(String[] args) {
+        NautiLogger.setDefaultOutput();
         launch(args);
     }
 

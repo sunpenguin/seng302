@@ -15,6 +15,7 @@ import seng302.team18.racemodel.connection.Server;
 import seng302.team18.racemodel.encode.BoatXmlDefaults;
 import seng302.team18.racemodel.encode.RaceXmlDefaults;
 import seng302.team18.racemodel.encode.XmlMessageBuilder;
+import seng302.team18.util.NautiLogger;
 
 
 /**
@@ -49,6 +50,8 @@ public class MockDataStream {
 
 
     public static void main(String[] args) {
+        NautiLogger.setDefaultOutput();
+
         final int DEFAULT_PORT = 5005;
         int serverPort = DEFAULT_PORT;
 
