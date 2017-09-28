@@ -1,3 +1,6 @@
+variables:
+  HIGHSEAS_VERSION: '1.0.0'
+
 junit:
   stage: test
   script:
@@ -7,10 +10,11 @@ generate_artifacts:
   stage: deploy
   script:
     - mvn -B clean site package
-#    - mvn -B clean package
     - tar -czf target/site.tar.gz target/site
+    - mv gameX/racemodel/target/racemodel-$HIGHSEAS_VERSION.jar high_seas_server-$HIGHSEAS_VERSION.jar
+    - mv gameX/visualiser/target/visualiser-$HIGHSEAS_VERSION.jar high_seas-$HIGHSEAS_VERSION.jar
   artifacts:
     paths:
-      - gameX/racemodel/target/racemodel*.jar
-      - gameX/visualiser/target/visualiser*.jar
+      - high_seas_server-$HIGHSEAS_VERSION.jar
+      - high_seas-$HIGHSEAS_VERSION.jar
       - target/site.tar.gz
