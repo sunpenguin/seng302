@@ -61,6 +61,6 @@ public class VisualPowerUp implements Renderable {
 
     @Override
     public void refresh() {
-
+        render();
     }
 }

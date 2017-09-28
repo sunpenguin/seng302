@@ -56,12 +56,12 @@ public class CourseBuilderSmall extends AbstractCourseBuilder {
 
     @Override
     protected double getWindDirection() {
-        return 200;
+        return 315;
     }
 
     @Override
     protected double getWindSpeed() {
-        return 15;
+        return 45;
     }
 
 
