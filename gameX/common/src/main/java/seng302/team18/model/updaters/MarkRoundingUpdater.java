@@ -2,6 +2,11 @@ package seng302.team18.model.updaters;
 
 import seng302.team18.model.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Class to check if boats have rounded a mark
  */
@@ -9,7 +14,12 @@ public class MarkRoundingUpdater implements Updater {
 
     @Override
     public void update(Race race, double time) {
-        for (Boat boat : race.getStartingList()) {
+        List<BoatStatus> racingCodes = Arrays.asList(BoatStatus.PRE_START, BoatStatus.RACING, BoatStatus.OCS);
+        List<Boat> boatsToUpdate = new ArrayList<>(race.getStartingList()
+                .stream()
+                .filter(boat -> racingCodes.contains(boat.getStatus()))
+                .collect(Collectors.toList()));
+        for (Boat boat : boatsToUpdate) {
             checkForRounding(boat, race);
         }
     }

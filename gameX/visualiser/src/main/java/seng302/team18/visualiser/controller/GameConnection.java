@@ -86,12 +86,13 @@ public class GameConnection {
                 new ModelLoader().startModel(port);
             } catch (IOException e) {
                 errorText.set("Unable to initiate server!");
+                failed = true;
                 e.printStackTrace();
                 return;
             }
 
             try {
-                Thread.sleep(1500); // This is to give time for the process to start
+                Thread.sleep(1000); // This is to give time for the process to start
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -111,6 +112,7 @@ public class GameConnection {
     private String parseHostAddress(String hostAddress) {
         if (hostAddress.isEmpty()) {
             errorText.set(errorText.get() + "\nPlease enter a valid host address!");
+            failed = true;
             return null;
         }
 
@@ -132,9 +134,11 @@ public class GameConnection {
             if (port < 1024 || port > 65535) {
                 port = -1;
                 errorText.set(errorText.get() + "\nPlease enter a port number in the range 1025-65534!");
+                failed = true;
             }
         } catch (NumberFormatException e) {
             errorText.set(errorText.get() + "\nPlease enter a valid port number!");
+            failed = true;
         }
 
         return port;
