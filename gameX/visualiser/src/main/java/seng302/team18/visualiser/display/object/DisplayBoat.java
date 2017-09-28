@@ -250,7 +250,7 @@ public class DisplayBoat implements GeographicLocation {
     }
 
 
-    public void setApparentWindDirection(double apparentWind) {
+    public void setWindDirection(double apparentWind) {
     }
 
 

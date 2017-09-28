@@ -95,17 +95,18 @@ public class AudioPlayer {
      *
      * @param track the track to play. If null, playback stops
      */
-    public void loopMusic(Music track) {
+    public synchronized void loopMusic(Music track) {
         if (track.equals(musicTrack)) return;
 
         if (musicPlayer != null) {
-            musicPlayer.stop();
             musicPlayer.dispose();
-            musicPlayer = null;
         }
 
         //noinspection ConstantConditions
         if (track != null) {
+            while (musicPlayer != null && musicPlayer.getStatus() != MediaPlayer.Status.DISPOSED) {
+                musicPlayer.dispose();
+            }
             musicPlayer = new MediaPlayer(new Media(track.getUrl()));
             musicPlayer.setVolume(getVolumeMusic());
             musicPlayer.setCycleCount(MediaPlayer.INDEFINITE);
@@ -137,7 +138,6 @@ public class AudioPlayer {
         Set<Map.Entry<Ambient, MediaPlayer>> players = ambientPlayers.entrySet();
         players.forEach(entry -> {
             MediaPlayer player = entry.getValue();
-            player.stop();
             player.dispose();
         });
         ambientPlayers.clear();
@@ -161,7 +161,9 @@ public class AudioPlayer {
 
     public void setMusicMuted(boolean musicMuted) {
         isMusicMuted = musicMuted;
-        musicPlayer.setVolume(getVolumeMusic());
+        if (musicPlayer.getStatus() != MediaPlayer.Status.DISPOSED) {
+            musicPlayer.setVolume(getVolumeMusic());
+        }
     }
 
 
