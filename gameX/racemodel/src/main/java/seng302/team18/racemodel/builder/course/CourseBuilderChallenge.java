@@ -8,7 +8,10 @@ import seng302.team18.util.GPSCalculator;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Class for building a course for Challenge Mode.
