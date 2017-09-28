@@ -9,13 +9,12 @@ junit:
 generate_artifacts:
   stage: deploy
   script:
-#    - mvn -B clean site package
-    - mvn -B clean package
-#    - tar -czf target/site.tar.gz target/site
+    - mvn -B clean site package
+    - tar -czf target/site.tar.gz target/site
     - mv gameX/racemodel/target/racemodel-$HIGHSEAS_VERSION.jar high_seas_server-$HIGHSEAS_VERSION.jar
     - mv gameX/visualiser/target/visualiser-$HIGHSEAS_VERSION.jar high_seas-$HIGHSEAS_VERSION.jar
   artifacts:
     paths:
       - high_seas_server-$HIGHSEAS_VERSION.jar
       - high_seas-$HIGHSEAS_VERSION.jar
-#      - target/site.tar.gz
+      - target/site.tar.gz
