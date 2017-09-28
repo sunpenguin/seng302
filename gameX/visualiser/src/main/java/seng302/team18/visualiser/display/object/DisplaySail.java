@@ -91,9 +91,9 @@ public class DisplaySail extends DisplayBoatDecorator {
 
 
     @Override
-    public void setApparentWindDirection(double apparentWind) {
-        this.windDirection = apparentWind;
-        super.setApparentWindDirection(apparentWind);
+    public void setWindDirection(double windDirection) {
+        this.windDirection = windDirection;
+        super.setWindDirection(windDirection);
     }
 
 
@@ -102,7 +102,7 @@ public class DisplaySail extends DisplayBoatDecorator {
         final int MAX_DEVIATION = 90;
         double sailAngle;
         if (sailOut) {
-            sailAngle = getSailAngle(windDirection, MAX_DEVIATION);
+            sailAngle = getLuffAngle(windDirection, MAX_DEVIATION);
         } else if ((windDirection - heading + 360) % 360 > 180) {
             sailAngle = getSailAngle(windDirection + POWERED_UP_ANGLE, MAX_DEVIATION);
         } else {
@@ -122,13 +122,34 @@ public class DisplaySail extends DisplayBoatDecorator {
      */
     private double getSailAngle(double sailAngle, double maxDeviation) {
         GPSCalculator gps = new GPSCalculator();
-        double headingPlus = (heading + maxDeviation) % 360;
-        double headingMinus = (heading - maxDeviation + 360) % 360;
-        if (gps.isBetween(sailAngle, headingPlus, headingMinus)) {
+        double maxSailAngle = (heading + maxDeviation) % 360;
+        double minSailAngle = (heading - maxDeviation + 360) % 360;
+        if (gps.isBetween(sailAngle, maxSailAngle, minSailAngle)) {
             return maxDeviation + heading;
         }
         return sailAngle;
     }
 
+
+    /**
+     * Note: friendly reminder that wind direction is the direction the wind comes from.
+     *
+     * @param windDirection
+     * @param maxDeviation
+     * @return
+     */
+    private double getLuffAngle(double windDirection, double maxDeviation) {
+        GPSCalculator gps = new GPSCalculator();
+        double relativeHeading = (heading - windDirection + 360) % 360;
+        double maxSailAngle = (heading + maxDeviation) % 360;
+        double minSailAngle = (heading - maxDeviation + 360) % 360;
+        if (!gps.isBetween(windDirection, maxSailAngle, minSailAngle)) {
+            return windDirection;
+        } else if (relativeHeading < 180) {
+            return minSailAngle;
+        } else {
+            return maxSailAngle;
+        }
+    }
 }
 

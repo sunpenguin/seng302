@@ -147,8 +147,8 @@ public abstract class DisplayBoatDecorator extends DisplayBoat {
 
 
     @Override
-    public void setApparentWindDirection(double apparentWind) {
-        boat.setApparentWindDirection(apparentWind);
+    public void setWindDirection(double apparentWind) {
+        boat.setWindDirection(apparentWind);
     }
 
 

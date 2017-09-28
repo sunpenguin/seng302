@@ -34,14 +34,6 @@ public class DisplayTrail {
      * @param pixelMapper To create an XY coordinate pair
      */
     public void addPoint(Coordinate coordinate, PixelMapper pixelMapper) {
-        int trailSize = polyline.getPoints().size();
-
-//        if (trailSize >= 4) {
-//            polyline.getPoints().remove(trailSize - 1);
-//            polyline.getPoints().remove(trailSize - 2);
-//            coordinates.remove(coordinates.size() - 1);
-//        }
-
         XYPair pixel = pixelMapper.mapToPane(coordinate);
         polyline.getPoints().addAll(pixel.getX(), pixel.getY());
         coordinates.add(coordinate);
