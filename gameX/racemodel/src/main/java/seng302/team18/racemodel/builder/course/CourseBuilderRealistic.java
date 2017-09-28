@@ -114,7 +114,7 @@ public class CourseBuilderRealistic extends AbstractCourseBuilder {
                 new Coordinate(5.27507, -4.42568),
                 new Coordinate(5.27476, -4.42530),
                 new Coordinate(5.27418, -4.42561),
-                new Coordinate(5.27345, -4.42630),
+                new Coordinate(5.27348, -4.42630),
                 new Coordinate(5.27279, -4.42560),
                 new Coordinate(5.27354, -4.42492),
                 new Coordinate(5.27369, -4.42404),

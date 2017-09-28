@@ -45,7 +45,7 @@ public class ArcadeRaceBuilder extends AbstractRaceBuilder {
 
 
         if (statusUpdater == null) {
-            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 1, 1, 5);
+            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 10, 1, 5);
         }
 
         updaters.add(statusUpdater);
@@ -73,6 +73,6 @@ public class ArcadeRaceBuilder extends AbstractRaceBuilder {
 
     @Override
     protected StartPositionSetter getPositionSetter() {
-        return new StartLineSetter(20);
+        return new RegularStartLineSetter(20);
     }
 }
