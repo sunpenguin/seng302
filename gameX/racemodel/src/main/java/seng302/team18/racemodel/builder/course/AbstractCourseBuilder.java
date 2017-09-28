@@ -17,9 +17,7 @@ import java.util.List;
 public abstract class AbstractCourseBuilder {
 
 
-    private List<Coordinate> boundaryMarks;
     private List<CompoundMark> compoundMarks;
-    private List<MarkRounding> markRoundings;
 
 
     /**
@@ -28,9 +26,9 @@ public abstract class AbstractCourseBuilder {
      * @return the constructed course
      */
     public Course buildCourse() {
-        boundaryMarks = getBoundaryMarks();
+        List<Coordinate> boundaryMarks = getBoundaryMarks();
         compoundMarks = buildCompoundMarks();
-        markRoundings = getMarkRoundings();
+        List<MarkRounding> markRoundings = getMarkRoundings();
 
         Course course = new Course(compoundMarks, boundaryMarks, markRoundings);
 

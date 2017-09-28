@@ -4,9 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by dhl25 on 3/09/17.
- */
+
 public enum PowerType {
     
     SPEED(0),

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by dhl25 on 3/09/17.
+ * Parses power up messages
  */
 public class PowerUpParser implements MessageBodyParser {
 

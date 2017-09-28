@@ -1,7 +1,7 @@
 package seng302.team18.util;
 
 /**
- * Created by David-chan on 30/06/17.
+ * Converts speeds between several units
  */
 public class SpeedConverter {
 

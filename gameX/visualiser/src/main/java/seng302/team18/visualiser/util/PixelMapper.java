@@ -62,11 +62,6 @@ public class PixelMapper {
     }
 
 
-    public void removeViewCenterListener(PropertyChangeListener listener) {
-        propertyChangeSupport.removePropertyChangeListener("viewPortCenter", listener);
-    }
-
-
     /**
      * Update the view port center to a certain GPS coordinate.
      *
@@ -293,11 +288,6 @@ public class PixelMapper {
 
     public void setMaxZoom(double maxZoom) {
         this.maxZoom = maxZoom;
-    }
-
-
-    public double getMinZoom() {
-        return minZoom;
     }
 
 

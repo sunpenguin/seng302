@@ -25,9 +25,9 @@ public class CourseBuilderChallenge extends AbstractCourseBuilder {
     private Coordinate origin = new Coordinate(38.21748,-106.52344);
 
     private int count = 1;
-    private double BOUNDARY_SPEED = 0.85;
-    private final int COURSE_LENGTH = 1500;
-    private final int COURSE_WIDTH = 300;
+    private static final double BOUNDARY_SPEED = 0.85;
+    private static final int COURSE_LENGTH = 1500;
+    private static final int COURSE_WIDTH = 300;
 
 
     @Override

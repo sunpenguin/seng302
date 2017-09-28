@@ -9,16 +9,11 @@ import seng302.team18.model.Projectile;
 import seng302.team18.util.XYPair;
 import seng302.team18.visualiser.util.PixelMapper;
 
-/**
- * Created by cslaven on 10/09/17.
- */
 public class DisplayShark {
 
     private PixelMapper pixelMapper;
     private Polyline sharkLine;
-    private double sharkSize = 5;
-    private Coordinate location;
-    private int id;
+    private static final double SHARK_SIZE = 5;
 
     private final Rotate rotation = new Rotate(0, 0, 0);
 
@@ -28,7 +23,6 @@ public class DisplayShark {
     public DisplayShark(Projectile projectile, PixelMapper pixelMapper) {
         this.projectile = projectile;
         this.pixelMapper = pixelMapper;
-        this.id = projectile.getId();
 
         sharkLine = new Polyline();
         setUpSharkShape(pixelMapper.mappingRatio());
@@ -38,7 +32,7 @@ public class DisplayShark {
     }
 
     private void setUpSharkShape(double mappingRatio) {
-        double pixelLength = sharkSize * mappingRatio / 2;
+        double pixelLength = SHARK_SIZE * mappingRatio / 2;
 
         Double[] sharkShape = new Double[]{
                 0.0, -pixelLength,
@@ -66,7 +60,6 @@ public class DisplayShark {
     }
 
     public void setCoordinate(Coordinate coordinate) {
-        location = coordinate;
         XYPair pixels = pixelMapper.mapToPane(coordinate);
         sharkLine.setLayoutX(pixels.getX());
         sharkLine.setLayoutY(pixels.getY());

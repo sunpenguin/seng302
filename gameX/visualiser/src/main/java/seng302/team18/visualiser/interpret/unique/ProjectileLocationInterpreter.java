@@ -6,7 +6,7 @@ import seng302.team18.message.ProjectileLocationMessage;
 import seng302.team18.visualiser.ClientRace;
 
 /**
- * Created by csl62 on 7/09/17.
+ * Interprets projectile location messages
  */
 public class ProjectileLocationInterpreter extends MessageInterpreter {
 

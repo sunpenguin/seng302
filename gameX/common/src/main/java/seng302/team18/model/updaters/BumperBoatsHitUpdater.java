@@ -5,9 +5,6 @@ import seng302.team18.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by dhl25 on 25/09/17.
- */
 public class BumperBoatsHitUpdater implements Updater {
 
 

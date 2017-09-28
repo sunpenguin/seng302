@@ -8,7 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * Created by csl62 on 7/09/17.
+ * Generates projectile messages
  */
 public class ProjectileMessageGenerator extends ScheduledMessageGenerator{
 

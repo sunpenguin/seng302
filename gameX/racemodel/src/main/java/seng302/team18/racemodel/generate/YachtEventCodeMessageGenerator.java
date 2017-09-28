@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 public class YachtEventCodeMessageGenerator extends MessageGenerator {
     private final static int VERSION_NUMBER = 0x01;
-    private final short ACK_NUMBER = 0x00;
+    private static final short ACK_NUMBER = 0x00;
 
     private final YachtEvent event;
     private final int raceId;

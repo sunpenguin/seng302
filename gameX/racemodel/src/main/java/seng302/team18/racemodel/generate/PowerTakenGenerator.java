@@ -6,9 +6,6 @@ import seng302.team18.util.ByteCheck;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-/**
- * Created by dhl25 on 3/09/17.
- */
 public class PowerTakenGenerator extends MessageGenerator {
 
     private int powerId;

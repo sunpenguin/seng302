@@ -7,7 +7,7 @@ import seng302.team18.util.SpeedConverter;
 import seng302.team18.visualiser.ClientRace;
 
 /**
- * Created by csl62 on 28/06/17.
+ * Interprets wind speed from within race status messages
  */
 public class WindSpeedInterpreter extends MessageInterpreter {
 

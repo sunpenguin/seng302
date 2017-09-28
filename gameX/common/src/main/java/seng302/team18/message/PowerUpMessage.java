@@ -2,9 +2,7 @@ package seng302.team18.message;
 
 import seng302.team18.model.Coordinate;
 
-/**
- * Created by dhl25 on 3/09/17.
- */
+
 public class PowerUpMessage implements MessageBody {
     private int id;
     private Coordinate location = new Coordinate(0, 0);
