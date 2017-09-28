@@ -15,7 +15,10 @@ import seng302.team18.racemodel.interpret.BoatActionInterpreter;
 import seng302.team18.racemodel.interpret.ColourInterpreter;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -92,21 +95,23 @@ public class ConnectionListener extends Observable implements Observer {
             int id = ids.get(players.size());
             client.setRequestType(request.getAction());
             if (request.getAction() == RequestType.VIEWING) { // spectator
-                sendMessage(client, SPECTATOR_ID, request.getAction());
+                client.setId(SPECTATOR_ID);
                 setChanged();
                 notifyObservers(client);
+                sendResponse(client, SPECTATOR_ID, request.getAction());
             } else if (!isValidMode(request.getAction())) { // invalid
-                sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
+                sendResponse(client, id, RequestType.FAILURE_CLIENT_TYPE);
                 client.close(); // IOException
             } else if (playersJoined < MAX_PLAYERS && isJoinable(race.getStatus())) { // a valid player before the race starts
                 addPlayer(receiver, id);
-                sendMessage(client, id, request.getAction());
+                client.setId(id);
                 setChanged();
                 notifyObservers(client);
                 playersJoined++;
+                sendResponse(client, id, request.getAction());
             } else { // a valid player after the race starts
-                sendMessage(client, id, RequestType.FAILURE_CLIENT_TYPE);
-                client.close(); // IOException
+                sendResponse(client, id, RequestType.FAILURE_CLIENT_TYPE);
+                client.close();
             }
         }
     }
@@ -136,10 +141,9 @@ public class ConnectionListener extends Observable implements Observer {
      * @param player the socket to encode player messages to.
      * @param sourceID the assigned id of the player's boat.
      */
-    private void sendMessage(ClientConnection player, int sourceID, RequestType requestType) {
+    private void sendResponse(ClientConnection player, int sourceID, RequestType requestType) {
         byte[] message = new AcceptanceMessageGenerator(sourceID, requestType).getMessage();
         player.send(message);
-        player.setId(sourceID);
     }
 
 
