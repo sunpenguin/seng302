@@ -14,7 +14,10 @@ import javafx.util.Duration;
 import seng302.team18.model.Boat;
 import seng302.team18.util.VMGAngles;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Class to handle running the controls tutorial
@@ -26,7 +29,6 @@ public class ControlsTutorial {
     private double boatOldTWA;
     private boolean boatOldSailsOut;
 
-    // TODO jth102 9/08: Make class for each animation? Store all this + frame time, repetitions, size scale
     private final int COLUMNS  =   7;
     private final int COUNT    =  44;
     private final int OFFSET_X =  0;
@@ -180,7 +182,6 @@ public class ControlsTutorial {
      */
     private void finishTutorial(){
         currentKeyIndex -= 1;
-        System.out.println("tutorial over");
     }
 
 

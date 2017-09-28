@@ -37,7 +37,7 @@
                      <children>
                         <Label fx:id="startTimeLabel" layoutX="268.0" layoutY="23.0" prefHeight="71.0" prefWidth="171.0" styleClass="labelLarge" stylesheets="@stylesheets/helpMenu.css" text="Start time" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <GridPane.margin>
-                               <Insets left="10.0"/>
+                               <Insets left="20.0"/>
                            </GridPane.margin>
                            <effect>
                               <DropShadow />
@@ -45,7 +45,7 @@
                         </Label>
                         <Label fx:id="timeLabel" layoutX="268.0" layoutY="118.0" prefHeight="28.0" prefWidth="171.0" styleClass="labelLarge" stylesheets="@stylesheets/helpMenu.css" text="Local time" textFill="WHITE" AnchorPane.rightAnchor="58.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <GridPane.margin>
-                               <Insets left="10.0"/>
+                               <Insets left="20.0"/>
                            </GridPane.margin>
                            <effect>
                               <DropShadow />
@@ -53,12 +53,12 @@
                         </Label>
                          <Label fx:id="ipLabel" prefHeight="30.0" prefWidth="195.0" styleClass="labelSmall"
                                 stylesheets="@stylesheets/helpMenu.css" text="IP" textFill="WHITE"
-                                GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                GridPane.columnIndex="1" GridPane.rowIndex="4">
                            <effect>
                               <DropShadow />
                            </effect>
                            <GridPane.margin>
-                               <Insets left="10.0"/>
+                               <Insets right="30.0"/>
                            </GridPane.margin>
                            <font>
                               <Font size="18.0" />
@@ -66,12 +66,12 @@
                         </Label>
                          <Label fx:id="portLabel" prefHeight="30.0" prefWidth="195.0" styleClass="labelSmall"
                                 stylesheets="@stylesheets/helpMenu.css" text="Port" textFill="WHITE"
-                                GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                GridPane.columnIndex="1" GridPane.rowIndex="3">
                            <effect>
                               <DropShadow />
                            </effect>
                            <GridPane.margin>
-                               <Insets left="10.0"/>
+                               <Insets right="30.0"/>
                            </GridPane.margin>
                            <font>
                               <Font size="18.0" />
@@ -87,7 +87,7 @@
                               <DropShadow />
                            </effect>
                            <GridPane.margin>
-                               <Insets/>
+                               <Insets left="20.0"/>
                            </GridPane.margin>
                         </Label>
                         <Label styleClass="labelLarge" stylesheets="@stylesheets/helpMenu.css" text="Race Start Time:" textFill="WHITE" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
@@ -95,7 +95,7 @@
                               <Font size="24.0" />
                            </font>
                            <GridPane.margin>
-                              <Insets right="10.0" />
+                               <Insets left="160.0"/>
                            </GridPane.margin>
                            <effect>
                               <DropShadow />
@@ -105,32 +105,32 @@
                            <font>
                               <Font size="24.0" />
                            </font>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
                            <effect>
                               <DropShadow />
                            </effect>
+                            <GridPane.margin>
+                                <Insets left="160.0"/>
+                            </GridPane.margin>
                         </Label>
                          <Label styleClass="labelSmall" stylesheets="@stylesheets/helpMenu.css" text="IP:"
-                                textFill="WHITE" GridPane.rowIndex="3">
+                                textFill="WHITE" GridPane.rowIndex="4">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <GridPane.margin>
-                              <Insets right="10.0" />
+                               <Insets right="70.0"/>
                            </GridPane.margin>
                            <effect>
                               <DropShadow />
                            </effect>
                         </Label>
                          <Label styleClass="labelSmall" stylesheets="@stylesheets/helpMenu.css" text="Port:"
-                                textFill="WHITE" GridPane.rowIndex="4">
+                                textFill="WHITE" GridPane.rowIndex="3">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <GridPane.margin>
-                              <Insets right="10.0" />
+                               <Insets right="70.0"/>
                            </GridPane.margin>
                            <effect>
                               <DropShadow />
@@ -148,7 +148,7 @@
                   <Font size="24.0" />
                </font>
                <GridPane.margin>
-                  <Insets right="24.0" />
+                   <Insets/>
                </GridPane.margin>
             </Label>
             <ListView fx:id="listView" stylesheets="@stylesheets/raceview.css" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />

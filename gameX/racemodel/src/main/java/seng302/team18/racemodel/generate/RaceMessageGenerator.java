@@ -69,10 +69,10 @@ public class RaceMessageGenerator extends ScheduledMessageGenerator {
             byte statusByte = (byte) boat.getStatus().code();
 
             byte legNumberByte = (byte) boat.getLegNumber();
-            byte numPenaltiesAwardedByte = 0; // TODO: Add this field to boat
-            byte numPenaltiesServedByte = 0; // TODO: Add this field to boat
-            byte[] estTimeAtNextMark = ByteCheck.longTo6ByteArray(11111111111L); // TODO: calculate this value
-            byte[] estTimeAtFinish = ByteCheck.longTo6ByteArray(6666666666L); // TODO: calculate this value
+            byte numPenaltiesAwardedByte = 0;
+            byte numPenaltiesServedByte = 0;
+            byte[] estTimeAtNextMark = ByteCheck.longTo6ByteArray(11111111111L);
+            byte[] estTimeAtFinish = ByteCheck.longTo6ByteArray(6666666666L);
 
             outputSteam.write(sourceIDBytes);
             outputSteam.write(statusByte);

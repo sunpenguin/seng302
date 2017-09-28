@@ -91,7 +91,6 @@ public class PowerUpInterpreter extends MessageInterpreter {
                 powerUp.setDuration(message.getDuration());
                 return powerUp;
             default:
-                System.out.println("PowerUpInterpreter::makePowerUp has gone horribly wrong (ask Sunguin for help)");
                 return null;
         }
     }
