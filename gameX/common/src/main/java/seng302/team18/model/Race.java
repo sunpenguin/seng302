@@ -120,7 +120,7 @@ public class Race {
         if (powerUp.getType() == PowerType.SHARK) {
             powerUp.setDuration(1000);
         } else {
-            powerUp.setDuration(5000);
+            powerUp.setDuration(2000);
         }
         return powerUp;
     }
