@@ -74,10 +74,6 @@ public class TestMock implements Observer {
         if (isFirstPlayer) {
             generateRace(client.getRequestType());
             simulationLoop = new SimulationLoop();
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.submit(simulationLoop);
-            executor.shutdown();
-            isFirstPlayer = false;
         } else if (client.getRequestType() == RequestType.CONTROLS_TUTORIAL) {
             byte[] message = new AcceptanceMessageGenerator(client.getId(), RequestType.FAILURE_CLIENT_TYPE).getMessage();
             client.send(message);
@@ -95,6 +91,12 @@ public class TestMock implements Observer {
             sendRegattaXml(client);
             sendRaceXml();
             sendBoatsXml();
+        }
+        if (isFirstPlayer) {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.submit(simulationLoop);
+            executor.shutdown();
+            isFirstPlayer = false;
         }
     }
 
@@ -182,11 +184,9 @@ public class TestMock implements Observer {
                 server.broadcast(generator.getMessage());
             }
         }
-
         for (MarkRoundingEvent rounding : race.popMarkRoundingEvents()) {
             server.broadcast((new MarkRoundingMessageGenerator(rounding, race.getId())).getMessage());
         }
-
         for (YachtEvent event : race.popYachtEvents()) {
             server.broadcast((new YachtEventCodeMessageGenerator(event, race.getId())).getMessage());
         }
@@ -194,17 +194,14 @@ public class TestMock implements Observer {
         for (PickUp pickUp : race.getPickUps()) {
             server.broadcast(new PowerUpMessageGenerator(pickUp).getMessage());
         }
-
         for (PowerUpEvent event : race.popPowerUpEvents()) {
             server.broadcast((new PowerTakenGenerator(event.getBoatId(), event.getPowerId(), event.getPowerDuration()).getMessage()));
         }
-
         for (Projectile projectile : race.popNewProjectileIds()) {
             server.broadcast((new ProjectileCreationMessageGenerator(projectile.getId()).getMessage()));
             ScheduledMessageGenerator newProMessageGen = new ProjectileMessageGenerator(AC35MessageType.PROJECTILE_LOCATION.getCode(), projectile);
             scheduledMessages.add(newProMessageGen);
         }
-
         for (Projectile projectile : race.popRemovedProjectiles()) {
             for (Iterator<ScheduledMessageGenerator> it = scheduledMessages.iterator(); it.hasNext(); ) {
                 ScheduledMessageGenerator sched = it.next();

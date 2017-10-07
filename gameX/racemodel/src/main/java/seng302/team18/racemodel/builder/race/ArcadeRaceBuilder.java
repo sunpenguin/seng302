@@ -45,7 +45,7 @@ public class ArcadeRaceBuilder extends AbstractRaceBuilder {
 
 
         if (statusUpdater == null) {
-            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 10, 1, 5);
+            statusUpdater = new RegularStatusUpdater(ZonedDateTime.now(), 5, 1, 2);
         }
 
         updaters.add(statusUpdater);

@@ -33,7 +33,7 @@ public class TutorialRaceBuilder extends AbstractRaceBuilder {
     protected List<Updater> getUpdaters(){
         List<Updater> updaters = new ArrayList<>();
         updaters.add(new BoatsUpdater());
-        updaters.add(new RegularStatusUpdater(ZonedDateTime.now(), 0, 1, 1));
+        updaters.add(new RegularStatusUpdater(ZonedDateTime.now(), 5, 1, 2));
 
         return updaters;
     }
